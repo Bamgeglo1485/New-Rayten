@@ -21,6 +21,8 @@ using Content.Shared.Administration.Logs;
 using Content.Client.Lobby;
 using Content.Shared.Administration.Managers;
 using Content.Shared.Players.PlayTimeTracking;
+using Content.Client.Vanilla.DiscordAuth;
+using Content.Client.Vanilla.JoinQueue;
 
 namespace Content.Client.IoC
 {
@@ -29,7 +31,8 @@ namespace Content.Client.IoC
         public static void Register()
         {
             var collection = IoCManager.Instance!;
-
+            IoCManager.Register<DiscordAuthManager>(); // Corvax-DiscordAuth
+            IoCManager.Register<JoinQueueManager>(); // Corvax-Queue
             collection.Register<IParallaxManager, ParallaxManager>();
             collection.Register<IChatManager, ChatManager>();
             collection.Register<IClientPreferencesManager, ClientPreferencesManager>();

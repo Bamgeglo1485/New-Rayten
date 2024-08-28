@@ -29,6 +29,8 @@ using Content.Shared.Administration.Managers;
 using Content.Shared.Kitchen;
 using Content.Shared.Players.PlayTimeTracking;
 using Content.Server.Discord.Webhooks;
+using Content.Server.Corvax.JoinQueue;
+using Content.Server.Corvax.DiscordAuth;
 
 namespace Content.Server.IoC
 {
@@ -72,6 +74,8 @@ namespace Content.Server.IoC
             IoCManager.Register<PlayerRateLimitManager>();
             IoCManager.Register<WebhookBans>();// Vanilla station
             IoCManager.Register<MappingManager>();
+            IoCManager.Register<DiscordAuthManager>(); // Corvax-DiscordAuth
+            IoCManager.Register<JoinQueueManager>(); // Corvax-Queue
         }
     }
 }
