@@ -37,6 +37,9 @@ using Robust.Shared.ContentPack;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Replays;
 using Robust.Shared.Timing;
+using Content.Client.Vanilla.DiscordAuth;
+using Content.Client.Vanilla.JoinQueue;
+
 
 namespace Content.Client.Entry
 {
@@ -73,7 +76,8 @@ namespace Content.Client.Entry
         [Dependency] private readonly ILogManager _logManager = default!;
         [Dependency] private readonly ContentReplayPlaybackManager _replayMan = default!;
         [Dependency] private readonly DebugMonitorManager _debugMonitorManager = default!;
-
+        [Dependency] private readonly DiscordAuthManager _discordAuthManager = default!; // Corvax-DiscordAuth
+        [Dependency] private readonly JoinQueueManager _queueManager = default!; // Corvax-Queue
         public override void Init()
         {
             ClientContentIoC.Register();
@@ -162,7 +166,8 @@ namespace Content.Client.Entry
             _userInterfaceManager.SetDefaultTheme("SS14DefaultTheme");
             _userInterfaceManager.SetActiveTheme(_configManager.GetCVar(CVars.InterfaceTheme));
             _documentParsingManager.Initialize();
-
+            _queueManager.Initialize(); // Corvax-Queue
+            _discordAuthManager.Initialize(); // Corvax-DiscordAuth
             _baseClient.RunLevelChanged += (_, args) =>
             {
                 if (args.NewLevel == ClientRunLevel.Initialize)
