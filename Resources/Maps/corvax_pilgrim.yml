@@ -27445,7 +27445,8 @@ entities:
         maxVol: 15
         name: injector
         reagents:
-        - ReagentId: Amatoxin
+        - data: []
+          ReagentId: Amatoxin
           Quantity: 15
     - type: ContainedSolution
       containerName: injector
@@ -37615,14 +37616,6 @@ entities:
     components:
     - type: Transform
       pos: 117.5,20.5
-      parent: 2
-  - uid: 18121
-    components:
-    - type: MetaData
-      desc: Консоль, способная посылать запросы MIA.
-      name: консоль управления MIA
-    - type: Transform
-      pos: -3.5,87.5
       parent: 2
   - uid: 19749
     components:
@@ -80250,11 +80243,6 @@ entities:
       rot: 3.141592653589793 rad
       pos: -94.5,10.5
       parent: 2
-  - uid: 30245
-    components:
-    - type: Transform
-      pos: -5.5,85.5
-      parent: 2
   - uid: 30767
     components:
     - type: Transform
@@ -86061,7 +86049,7 @@ entities:
           occludes: True
           ent: 31022
     - type: InsideEntityStorage
-- proto: ClothingBeltSuspenders
+- proto: ClothingBeltSuspendersRed
   entities:
   - uid: 10480
     components:
@@ -88938,23 +88926,6 @@ entities:
       rot: 3.141592653589793 rad
       pos: -68.5,-25.5
       parent: 2
-  - uid: 30251
-    components:
-    - type: MetaData
-      name: мониторинг экипажа MIA
-    - type: Transform
-      anchored: False
-      pos: -5.5,85.5
-      parent: 2
-    - type: PointLight
-      enabled: True
-    - type: ApcPowerReceiver
-      needsPower: False
-    - type: Physics
-      canCollide: False
-      bodyType: Dynamic
-    - type: Item
-      inhandVisuals: {}
 - proto: ComputerCriminalRecords
   entities:
   - uid: 611
@@ -89297,12 +89268,6 @@ entities:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: -68.5,-10.5
-      parent: 2
-  - uid: 20928
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: -5.5,84.5
       parent: 2
   - uid: 30645
     components:
@@ -91017,17 +90982,6 @@ entities:
     - type: Transform
       pos: 101.5,-0.5
       parent: 2
-  - uid: 30221
-    components:
-    - type: MetaData
-      name: эндоскелет MIA
-    - type: Transform
-      pos: -5.5,85.5625
-      parent: 2
-    - type: Physics
-      canCollide: False
-    missingComponents:
-    - Pullable
 - proto: d6Dice
   entities:
   - uid: 91
@@ -114112,6 +114066,21 @@ entities:
     - type: InsideEntityStorage
 - proto: FoodKebabSkewer
   entities:
+  - uid: 739
+    components:
+    - type: Transform
+      pos: -7.511551,-2.1197176
+      parent: 2
+  - uid: 23037
+    components:
+    - type: Transform
+      pos: -79.54686,-44.21814
+      parent: 2
+  - uid: 23720
+    components:
+    - type: Transform
+      pos: -15.597585,-111.43598
+      parent: 2
   - uid: 30842
     components:
     - type: Transform
@@ -114223,23 +114192,6 @@ entities:
     components:
     - type: Transform
       pos: -0.74634326,-4.4877295
-      parent: 2
-- proto: FoodMeatKebab
-  entities:
-  - uid: 739
-    components:
-    - type: Transform
-      pos: -7.511551,-2.1197176
-      parent: 2
-  - uid: 23037
-    components:
-    - type: Transform
-      pos: -79.54686,-44.21814
-      parent: 2
-  - uid: 23720
-    components:
-    - type: Transform
-      pos: -15.597585,-111.43598
       parent: 2
 - proto: FoodMeatRotten
   entities:
@@ -114632,7 +114584,7 @@ entities:
     - type: Transform
       pos: 10.53448,-18.452978
       parent: 2
-- proto: FoodTacoFish
+- proto: FoodTacoShell
   entities:
   - uid: 23058
     components:
@@ -148464,76 +148416,6 @@ entities:
     - type: Transform
       pos: 113.4375,8.53125
       parent: 2
-- proto: HeadHuman
-  entities:
-  - uid: 30231
-    components:
-    - type: MetaData
-      name: ЦИИ "MIA"
-    - type: Transform
-      noRot: True
-      pos: -5.5,85.435
-      parent: 2
-    - type: ContainerContainer
-      containers:
-        bodypart: !type:Container
-          showEnts: False
-          occludes: True
-          ents: []
-        body_root_part: !type:ContainerSlot
-          showEnts: False
-          occludes: True
-          ent: null
-    - type: Tag
-      tags:
-      - CannotSuicide
-      - InstantDoAfters
-    - type: ContentEye
-    - type: GhostRole
-      description: Вы — невероятно мудрый центральный искусственный интеллект MIA. Ваше общение должно соответствовать этому статусу. К вам могут приходить за советами, или узнать ответы на некоторые вопросы. Но, по большей части, вы просто сидите в одиночестве...
-      name: ЦИИ "MIA"
-    - type: GhostTakeoverAvailable
-    - type: Actions
-      actions: []
-    - type: Hands
-    - type: Body
-      legEntities: []
-      gibSound: !type:SoundCollectionSpecifier
-        collection: gib
-      prototype: Aghost
-    - type: ActiveRadio
-      channels:
-      - Binary
-      - Common
-      - Command
-      - Engineering
-      - Medical
-      - Science
-      - Security
-      - Service
-      - Supply
-    - type: IntrinsicRadioReceiver
-    - type: IntrinsicRadioTransmitter
-      channels:
-      - Binary
-      - Common
-      - Command
-      - Engineering
-      - Medical
-      - Science
-      - Security
-      - Service
-      - Supply
-    - type: TypingIndicator
-      proto: robot
-    - type: TTS
-      voice: Glados
-    missingComponents:
-    - Item
-    - Pullable
-    - Damageable
-    - BodyPart
-    - Gibbable
 - proto: HeadVulpkanin
   entities:
   - uid: 30282
@@ -150787,66 +150669,6 @@ entities:
       rot: -1.9722220547535925 rad
       pos: 100.61597,-1.2934108
       parent: 2
-- proto: LeftArmHuman
-  entities:
-  - uid: 30234
-    components:
-    - type: MetaData
-      name: левая рука MIA
-    - type: Transform
-      pos: -5.53125,85.435
-      parent: 2
-    missingComponents:
-    - Item
-    - Pullable
-    - Damageable
-    - BodyPart
-    - Gibbable
-- proto: LeftFootHuman
-  entities:
-  - uid: 30236
-    components:
-    - type: MetaData
-      name: левая стопа MIA
-    - type: Transform
-      pos: -5.5,85.5
-      parent: 2
-    missingComponents:
-    - Item
-    - Pullable
-    - Damageable
-    - BodyPart
-    - Gibbable
-- proto: LeftHandHuman
-  entities:
-  - uid: 30220
-    components:
-    - type: MetaData
-      name: левая кисть MIA
-    - type: Transform
-      pos: -5.53125,85.435
-      parent: 2
-    missingComponents:
-    - Item
-    - Pullable
-    - Damageable
-    - BodyPart
-    - Gibbable
-- proto: LeftLegHuman
-  entities:
-  - uid: 30229
-    components:
-    - type: MetaData
-      name: левая нога MIA
-    - type: Transform
-      pos: -5.5,85.5
-      parent: 2
-    missingComponents:
-    - Item
-    - Pullable
-    - Damageable
-    - BodyPart
-    - Gibbable
 - proto: Lighter
   entities:
   - uid: 19895
@@ -153685,13 +153507,6 @@ entities:
     components:
     - type: Transform
       pos: 7.5388727,7.533878
-      parent: 2
-- proto: MaterialReclaimer
-  entities:
-  - uid: 12908
-    components:
-    - type: Transform
-      pos: 8.5,-42.5
       parent: 2
 - proto: MaterialWoodPlank
   entities:
@@ -157155,6 +156970,13 @@ entities:
     components:
     - type: Transform
       pos: 0.5,-41.5
+      parent: 2
+- proto: PlayerStationAi
+  entities:
+  - uid: 18121
+    components:
+    - type: Transform
+      pos: -5.5,85.5
       parent: 2
 - proto: PlushieArachind
   entities:
@@ -175761,51 +175583,6 @@ entities:
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
-- proto: RightArmHuman
-  entities:
-  - uid: 30230
-    components:
-    - type: MetaData
-      name: правая рука MIA
-    - type: Transform
-      pos: -5.46875,85.435
-      parent: 2
-    missingComponents:
-    - Item
-    - Pullable
-    - DamageExaminable
-    - BodyPart
-    - Gibbable
-- proto: RightFootHuman
-  entities:
-  - uid: 30237
-    components:
-    - type: MetaData
-      name: правая стопа MIA
-    - type: Transform
-      pos: -5.5,85.5
-      parent: 2
-    missingComponents:
-    - Item
-    - Pullable
-    - Damageable
-    - BodyPart
-    - Gibbable
-- proto: RightHandHuman
-  entities:
-  - uid: 21430
-    components:
-    - type: MetaData
-      name: правая кисть MIA
-    - type: Transform
-      pos: -5.46875,85.435
-      parent: 2
-    missingComponents:
-    - Item
-    - Pullable
-    - Damageable
-    - BodyPart
-    - Gibbable
 - proto: RightLegBorg
   entities:
   - uid: 26612
@@ -175814,21 +175591,6 @@ entities:
       rot: 3.141592653589793 rad
       pos: 102.013336,-0.4066883
       parent: 2
-- proto: RightLegHuman
-  entities:
-  - uid: 30235
-    components:
-    - type: MetaData
-      name: правая нога MIA
-    - type: Transform
-      pos: -5.5,85.5
-      parent: 2
-    missingComponents:
-    - Item
-    - Pullable
-    - DamageExaminable
-    - BodyPart
-    - Gibbable
 - proto: RiotBulletShield
   entities:
   - uid: 1479
@@ -183556,6 +183318,13 @@ entities:
     components:
     - type: Transform
       pos: -47.5,7.5
+      parent: 2
+- proto: StationAiUploadComputer
+  entities:
+  - uid: 12908
+    components:
+    - type: Transform
+      pos: -3.5,87.5
       parent: 2
 - proto: StationMap
   entities:
@@ -227938,43 +227707,10 @@ entities:
       parent: 2
   - uid: 20920
     components:
-    - type: MetaData
-      name: сверхпрочное бронеокно
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: -4.5,84.5
-      parent: 2
-    missingComponents:
-    - Construction
-    - Damageable
-    - RCDDeconstructable
-    - Destructible
-  - uid: 20921
-    components:
-    - type: MetaData
-      name: сверхпрочное бронеокно
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -6.5,84.5
-      parent: 2
-    missingComponents:
-    - Construction
-    - Damageable
-    - RCDDeconstructable
-    - Destructible
-  - uid: 20929
-    components:
-    - type: MetaData
-      name: сверхпрочное бронеокно
     - type: Transform
       rot: 3.141592653589793 rad
-      pos: -5.5,83.5
+      pos: -5.5,84.5
       parent: 2
-    missingComponents:
-    - Construction
-    - Damageable
-    - RCDDeconstructable
-    - Destructible
   - uid: 21434
     components:
     - type: MetaData

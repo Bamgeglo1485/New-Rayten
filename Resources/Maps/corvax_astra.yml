@@ -164671,6 +164671,13 @@ entities:
       rot: 3.141592653589793 rad
       pos: -28.5,-98.5
       parent: 2
+- proto: PlayerStationAi
+  entities:
+  - uid: 29108
+    components:
+    - type: Transform
+      pos: 98.5,-89.5
+      parent: 2
 - proto: Plunger
   entities:
   - uid: 23971
@@ -196458,13 +196465,6 @@ entities:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: -73.056595,0.33326006
-      parent: 2
-- proto: ToyAi
-  entities:
-  - uid: 29108
-    components:
-    - type: Transform
-      pos: 98.46513,-88.92557
       parent: 2
 - proto: ToyAmongPequeno
   entities:
@@ -232927,12 +232927,12 @@ entities:
   - uid: 35501
     components:
     - type: Transform
-      pos: 96.5,-86.5
+      pos: 100.5,-86.5
       parent: 2
   - uid: 35502
     components:
     - type: Transform
-      pos: 100.5,-86.5
+      pos: 96.5,-86.5
       parent: 2
   - uid: 35503
     components:
