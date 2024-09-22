@@ -15,7 +15,7 @@ RELEASE_DIR = "release"
 # Forks should change these to publish to their own infrastructure.
 #
 ROBUST_CDN_URL = "https://build.vanilla-station.ru/"
-FORK_ID = "Vanilla_Station"
+FORK_ID = "Vanilla"
 
 def main():
     session = requests.Session()
