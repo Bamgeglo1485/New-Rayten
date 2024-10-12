@@ -106,6 +106,10 @@
       roleLoadout:
       - RoleSurvivalNukie
       components:
+      - type: Skill
+        MedicineLevel: 3
+        ChemistryLevel: 3
+        RangeWeaponLevel: 3
       - type: NukeOperative
       - type: RandomMetadata
         nameSegments:
@@ -124,6 +128,10 @@
       roleLoadout:
       - RoleSurvivalNukie
       components:
+      - type: Skill
+        MedicineLevel: 3
+        ChemistryLevel: 3
+        RangeWeaponLevel: 3
       - type: NukeOperative
       - type: RandomMetadata
         nameSegments:
@@ -144,6 +152,10 @@
       roleLoadout:
       - RoleSurvivalNukie
       components:
+      - type: Skill
+        MedicineLevel: 3
+        ChemistryLevel: 3
+        RangeWeaponLevel: 3
       - type: NukeOperative
       - type: RandomMetadata
         nameSegments:
@@ -189,6 +201,11 @@
         components:
         - AntagImmune
       lateJoinAdditional: true
+      components:
+      - type: Skill
+        MedicineLevel: 3
+        ChemistryLevel: 3
+        RangeWeaponLevel: 3
       mindComponents:
       - type: TraitorRole
         prototype: Traitor
@@ -211,6 +228,10 @@
         sound: "/Audio/Ambience/Antag/headrev_start.ogg"
       startingGear: HeadRevGear
       components:
+      - type: Skill
+        MedicineLevel: 3
+        ChemistryLevel: 3
+        RangeWeaponLevel: 3
       - type: Revolutionary
       - type: HeadRevolutionary
       mindComponents:
@@ -253,6 +274,10 @@
         color: Plum
         sound: "/Audio/Ambience/Antag/zombie_start.ogg"
       components:
+      - type: Skill
+        MedicineLevel: 3
+        ChemistryLevel: 3
+        RangeWeaponLevel: 3
       - type: PendingZombie
       - type: ZombifyOnDeath
       - type: IncurableZombie

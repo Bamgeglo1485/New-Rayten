@@ -24,8 +24,11 @@
       allowNonHumans: true
       multiAntagSetting: NotExclusive
       startingGear: ThiefGear
-#      components: # Corvax-MRP
-#      - type: Pacified
+      components:
+      - type: Skill
+        MedicineLevel: 3
+        ChemistryLevel: 3
+        RangeWeaponLevel: 1
       mindComponents:
       - type: ThiefRole
         prototype: Thief
