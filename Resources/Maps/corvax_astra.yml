@@ -181822,6 +181822,8 @@ entities:
       rot: 1.5707963267948966 rad
       pos: 0.5,-31.5
       parent: 2
+    - type: AntiAnomalyZone
+      zoneRadius: 20
   - uid: 25733
     components:
     - type: Transform
@@ -191435,12 +191437,11 @@ entities:
       rot: -1.5707963267948966 rad
       pos: 83.5,-91.5
       parent: 2
-- proto: RandomAnomalySpawner
+- proto: RandomAnomalyInjectorSpawner
   entities:
   - uid: 9068
     components:
     - type: Transform
-      rot: -1.5707963267948966 rad
       pos: 14.5,-51.5
       parent: 2
 - proto: RandomArcade
@@ -220091,6 +220092,8 @@ entities:
       rot: 3.141592653589793 rad
       pos: 0.5,-42.5
       parent: 2
+    - type: AntiAnomalyZone
+      zoneRadius: 20
   - uid: 4823
     components:
     - type: Transform
