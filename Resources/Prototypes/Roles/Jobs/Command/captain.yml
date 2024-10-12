@@ -22,6 +22,10 @@
     implants: [ MindShieldImplant ]
   - !type:AddComponentSpecial
     components:
+      - type: Skill
+        MedicineLevel: 3
+        ChemistryLevel: 3
+        RangeWeaponLevel: 2
       - type: CommandStaff
 
 - type: startingGear

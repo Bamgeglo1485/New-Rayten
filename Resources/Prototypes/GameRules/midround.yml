@@ -28,7 +28,7 @@
       - type: Skill
         MedicineLevel: 3
         ChemistryLevel: 3
-        RangeWeaponLevel: 1
+        RangeWeaponLevel: 0
       mindComponents:
       - type: ThiefRole
         prototype: Thief

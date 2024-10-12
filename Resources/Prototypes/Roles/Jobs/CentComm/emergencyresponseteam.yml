@@ -13,6 +13,13 @@
   - AllAccess
   access:
   - CentralCommand
+  special:
+  - !type:AddComponentSpecial
+    components:
+      - type: Skill
+        MedicineLevel: 3
+        ChemistryLevel: 3
+        RangeWeaponLevel: 3
 
 - type: startingGear
   id: ERTLeaderGear
@@ -110,6 +117,10 @@
   - !type:AddComponentSpecial
     components:
     - type: BibleUser #Lets them heal with bibles
+    - type: Skill
+      MedicineLevel: 3
+      ChemistryLevel: 3
+      RangeWeaponLevel: 3
 
 - type: startingGear
   id: ERTChaplainGear
@@ -188,6 +199,13 @@
   - AllAccess
   access:
   - CentralCommand
+  special:
+  - !type:AddComponentSpecial
+    components:
+      - type: Skill
+        MedicineLevel: 3
+        ChemistryLevel: 3
+        RangeWeaponLevel: 2
 
 - type: startingGear
   id: ERTEngineerGear
@@ -260,6 +278,13 @@
   - AllAccess
   access:
   - CentralCommand
+  special:
+  - !type:AddComponentSpecial
+    components:
+      - type: Skill
+        MedicineLevel: 3
+        ChemistryLevel: 3
+        RangeWeaponLevel: 3
 
 - type: startingGear
   id: ERTSecurityGear
@@ -350,6 +375,13 @@
   - AllAccess
   access:
   - CentralCommand
+  special:
+  - !type:AddComponentSpecial
+    components:
+      - type: Skill
+        MedicineLevel: 3
+        ChemistryLevel: 3
+        RangeWeaponLevel: 2
 
 - type: startingGear
   id: ERTMedicalGear
@@ -412,6 +444,13 @@
   - AllAccess
   access:
   - CentralCommand
+  special:
+  - !type:AddComponentSpecial
+    components:
+      - type: Skill
+        MedicineLevel: 3
+        ChemistryLevel: 3
+        RangeWeaponLevel: 2
 
 - type: startingGear
   id: ERTJanitorGear
