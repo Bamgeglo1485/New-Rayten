@@ -17,7 +17,7 @@ using Robust.Shared.GameStates;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Robust.Server.Audio;
-
+using Content.Shared.Vanilla.Skill;//vanilla-skill
 using Content.Shared.Clothing.EntitySystems;
 using Content.Shared.Inventory;
 using Content.Shared.Clothing.Components;
@@ -40,17 +40,34 @@ public sealed class HypospraySystem : SharedHypospraySystem
         SubscribeLocalEvent<HyposprayComponent, UseInHandEvent>(OnUseInHand);
     }
 
-    private bool TryUseHypospray(Entity<HyposprayComponent> entity, EntityUid target, EntityUid user)
+private bool TryUseHypospray(Entity<HyposprayComponent> entity, EntityUid target, EntityUid user)
+{
+    // vanilla-station start
+    // Проверяем, есть ли у пользователя компонент SkillComponent
+    if (EntityManager.TryGetComponent<SkillComponent>(user, out var skillComponent))
     {
-        // if target is ineligible but is a container, try to draw from the container
-        if (!EligibleEntity(target, EntityManager, entity)
-            && _solutionContainers.TryGetDrawableSolution(target, out var drawableSolution, out _))
+        // Если уровень навыка меньше 1, запрещаем использование шприца
+        if (skillComponent.MedicineLevel < 1)
         {
-            return TryDraw(entity, target, drawableSolution.Value, user);
+            _popup.PopupEntity(Loc.GetString("Skill-issue-message-hypospray"), target, user);
+            return false;
         }
-
-        return TryDoInject(entity, target, user);
     }
+    else
+    {
+        // Если у пользователя вообще нет компонента Skill, запрещаем использование
+            _popup.PopupEntity(Loc.GetString("Skill-issue-message-hypospray"), target, user);
+        return false;
+    }
+    // vanilla-station end
+    if (!EligibleEntity(target, EntityManager, entity)
+        && _solutionContainers.TryGetDrawableSolution(target, out var drawableSolution, out _))
+    {
+        return TryDraw(entity, target, drawableSolution.Value, user);
+    }
+
+    return TryDoInject(entity, target, user);
+}
 
     private void OnUseInHand(Entity<HyposprayComponent> entity, ref UseInHandEvent args)
     {

@@ -4,7 +4,7 @@ using Robust.Shared.Serialization;
 namespace Content.Shared.Vanilla.Skill
 {
     [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
-    public sealed partial class ActivatableUIRequiresSkillComponent : Component
+    public sealed partial class RequiresSkillComponent : Component
     {
         [DataField("RequiresChemistryLevel"), AutoNetworkedField]
         public int RequiresChemistryLevel { get; set; } = 0;
@@ -12,6 +12,4 @@ namespace Content.Shared.Vanilla.Skill
         [DataField("RequiresMedicineLevel"), AutoNetworkedField]
         public int RequiresMedicineLevel { get; set; } = 0;
     }
-
-
 }

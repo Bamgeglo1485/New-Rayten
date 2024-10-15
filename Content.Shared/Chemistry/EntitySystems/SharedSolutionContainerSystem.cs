@@ -19,7 +19,7 @@ using Content.Shared.Hands.EntitySystems;
 using Robust.Shared.Map;
 using Robust.Shared.Network;
 using Dependency = Robust.Shared.IoC.DependencyAttribute;
-
+using Content.Shared.Vanilla.Skill;//vanilla-skill
 namespace Content.Shared.Chemistry.EntitySystems;
 
 /// <summary>
@@ -797,6 +797,10 @@ public abstract partial class SharedSolutionContainerSystem : EntitySystem
         var colorHex = solution.GetColor(PrototypeManager)
             .ToHexNoAlpha(); //TODO: If the chem has a dark color, the examine text becomes black on a black background, which is unreadable.
         var messageString = "shared-solution-container-component-on-examine-main-text";
+        //vanilla-station-start
+        if (!EntityManager.TryGetComponent<SkillComponent>(args.Examiner, out var skillComponent) || skillComponent.ChemistryLevel < 2)
+        messageString += "-skill-issue";
+        //vanilla-station-end
 
         using (args.PushGroup(nameof(ExaminableSolutionComponent)))
         {
@@ -864,6 +868,12 @@ public abstract partial class SharedSolutionContainerSystem : EntitySystem
         if (!args.CanInteract || !args.CanAccess)
             return;
 
+        // vanilla-station-skill-issue-start
+        if (!EntityManager.TryGetComponent<SkillComponent>(args.User, out var skill) || skill.ChemistryLevel < 1)
+        {
+            return; // Если у пользователя нет нужного навыка, прерываем выполнение.
+        }
+        // vanilla-station-skill-issue-end
         var scanEvent = new SolutionScanEvent();
         RaiseLocalEvent(args.User, scanEvent);
         if (!scanEvent.CanScan)

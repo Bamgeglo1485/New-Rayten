@@ -7,6 +7,7 @@ using Content.Shared.Implants.Components;
 using Content.Shared.Interaction;
 using Content.Shared.Popups;
 using Robust.Shared.Containers;
+using Content.Shared.Vanilla.Skill;//vanilla-skill
 
 namespace Content.Server.Implants;
 
@@ -35,7 +36,24 @@ public sealed partial class ImplanterSystem : SharedImplanterSystem
         var target = args.Target.Value;
         if (!CheckTarget(target, component.Whitelist, component.Blacklist))
             return;
-
+        //Vanilla-Station-START
+        // Проверяем наличие компонента SkillComponent у пользователя
+        if (EntityManager.TryGetComponent<SkillComponent>(args.User, out var skillComponent))
+        {
+            // Если уровень навыка меньше 3, запрещаем имплантацию
+            if (skillComponent.MedicineLevel < 3)
+            {
+                _popup.PopupEntity(Loc.GetString("Skill-issue-message-implant"), target, args.User);
+                return;
+            }
+        }
+        else
+        {
+            // Если у пользователя нет компонента Skill, запрещаем имплантацию
+            _popup.PopupEntity(Loc.GetString("Skill-issue-message-implant"), target, args.User);
+            return;
+        }
+        //Vanilla-Sttion-END
         //TODO: Rework when surgery is in for implant cases
         if (component.CurrentMode == ImplanterToggleMode.Draw && !component.ImplantOnly)
         {
@@ -95,23 +113,24 @@ public sealed partial class ImplanterSystem : SharedImplanterSystem
     /// <param name="user">The entity using the implanter</param>
     /// <param name="target">The entity being implanted</param>
     /// <param name="implanter">The implanter being used</param>
-    public void TryImplant(ImplanterComponent component, EntityUid user, EntityUid target, EntityUid implanter)
+public void TryImplant(ImplanterComponent component, EntityUid user, EntityUid target, EntityUid implanter)
+{
+    var args = new DoAfterArgs(EntityManager, user, component.ImplantTime, new ImplantEvent(), implanter, target: target, used: implanter)
     {
-        var args = new DoAfterArgs(EntityManager, user, component.ImplantTime, new ImplantEvent(), implanter, target: target, used: implanter)
-        {
-            BreakOnDamage = true,
-            BreakOnMove = true,
-            NeedHand = true,
-        };
+        BreakOnDamage = true,
+        BreakOnMove = true,
+        NeedHand = true,
+    };
 
-        if (!_doAfter.TryStartDoAfter(args))
-            return;
+    if (!_doAfter.TryStartDoAfter(args))
+        return;
 
-        _popup.PopupEntity(Loc.GetString("injector-component-injecting-user"), target, user);
+    _popup.PopupEntity(Loc.GetString("injector-component-injecting-user"), target, user);
 
-        var userName = Identity.Entity(user, EntityManager);
-        _popup.PopupEntity(Loc.GetString("implanter-component-implanting-target", ("user", userName)), user, target, PopupType.LargeCaution);
-    }
+    var userName = Identity.Entity(user, EntityManager);
+    _popup.PopupEntity(Loc.GetString("implanter-component-implanting-target", ("user", userName)), user, target, PopupType.LargeCaution);
+}
+
 
     /// <summary>
     /// Try to remove an implant and store it in an implanter

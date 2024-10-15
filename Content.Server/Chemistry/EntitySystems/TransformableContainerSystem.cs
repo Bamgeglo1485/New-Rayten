@@ -53,7 +53,8 @@ public sealed class TransformableContainerSystem : EntitySystem
 
         //Only reagents with spritePath property can change appearance of transformable containers!
         if (!string.IsNullOrWhiteSpace(reagentId?.Prototype)
-            && _prototypeManager.TryIndex(reagentId.Value.Prototype, out ReagentPrototype? proto))
+            && _prototypeManager.TryIndex(reagentId.Value.Prototype, out ReagentPrototype? proto)
+            && proto.Recognizable) // vanilla-station
         {
             var metadata = MetaData(entity.Owner);
             _metadataSystem.SetEntityDescription(entity.Owner, proto.LocalizedDescription, metadata);
@@ -63,6 +64,7 @@ public sealed class TransformableContainerSystem : EntitySystem
 
         _nameMod.RefreshNameModifiers(entity.Owner);
     }
+
 
     private void OnRefreshNameModifiers(Entity<TransformableContainerComponent> entity, ref RefreshNameModifiersEvent args)
     {
