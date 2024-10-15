@@ -214677,9 +214677,6 @@ entities:
   entities:
   - uid: 24106
     components:
-    - type: MetaData
-      desc: эххх вот би мапери корвака наканецта сделали чота нармальнае
-      name: лазiк
     - type: Transform
       pos: -28.501926,43.515278
       parent: 2
