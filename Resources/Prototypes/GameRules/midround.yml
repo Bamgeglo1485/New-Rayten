@@ -26,8 +26,8 @@
       startingGear: ThiefGear
       components:
       - type: Skill
-        MedicineLevel: 3
-        ChemistryLevel: 3
+        MedicineLevel: 2
+        ChemistryLevel: 2
         RangeWeaponLevel: 0
       mindComponents:
       - type: ThiefRole

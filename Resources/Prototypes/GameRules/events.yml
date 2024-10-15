@@ -220,8 +220,8 @@
         sound: /Audio/Misc/ninja_greeting.ogg
       components:
       - type: Skill
-        MedicineLevel: 3
-        ChemistryLevel: 3
+        MedicineLevel: 2
+        ChemistryLevel: 2
         RangeWeaponLevel: 0
       - type: SpaceNinja
       - type: NpcFactionMember
@@ -497,7 +497,7 @@
       components:
       - type: Skill
         MedicineLevel: 3
-        ChemistryLevel: 3
+        ChemistryLevel: 2
         RangeWeaponLevel: 3
       - type: NukeOperative
       - type: RandomMetadata
@@ -539,8 +539,8 @@
       components:
       - type: Skill
         MedicineLevel: 3
-        ChemistryLevel: 3
-        RangeWeaponLevel: 3
+        ChemistryLevel: 2
+        RangeWeaponLevel: 2
       mindComponents:
       - type: TraitorRole
         prototype: TraitorSleeper

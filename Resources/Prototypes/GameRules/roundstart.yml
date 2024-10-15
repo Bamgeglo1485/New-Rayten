@@ -153,8 +153,8 @@
       - RoleSurvivalNukie
       components:
       - type: Skill
-        MedicineLevel: 3
-        ChemistryLevel: 3
+        MedicineLevel: 2
+        ChemistryLevel: 2
         RangeWeaponLevel: 3
       - type: NukeOperative
       - type: RandomMetadata
@@ -204,8 +204,8 @@
       components:
       - type: Skill
         MedicineLevel: 3
-        ChemistryLevel: 3
-        RangeWeaponLevel: 3
+        ChemistryLevel: 2
+        RangeWeaponLevel: 2
       mindComponents:
       - type: TraitorRole
         prototype: Traitor
@@ -229,8 +229,8 @@
       startingGear: HeadRevGear
       components:
       - type: Skill
-        MedicineLevel: 3
-        ChemistryLevel: 3
+        MedicineLevel: 2
+        ChemistryLevel: 2
         RangeWeaponLevel: 3
       - type: Revolutionary
       - type: HeadRevolutionary

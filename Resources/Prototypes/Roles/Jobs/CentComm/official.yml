@@ -16,8 +16,8 @@
   - !type:AddComponentSpecial
     components:
       - type: Skill
-        MedicineLevel: 3
-        ChemistryLevel: 3
+        MedicineLevel: 1
+        ChemistryLevel: 1
         RangeWeaponLevel: 1
 
 - type: startingGear

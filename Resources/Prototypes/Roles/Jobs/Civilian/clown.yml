@@ -16,8 +16,6 @@
   - !type:AddComponentSpecial
     components:
       - type: Skill
-        MedicineLevel: 3
-        ChemistryLevel: 3
         RangeWeaponLevel: 3
   - !type:AddComponentSpecial
     components:

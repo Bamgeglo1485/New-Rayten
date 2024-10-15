@@ -30,6 +30,8 @@
   - !type:AddComponentSpecial
     components:
       - type: CommandStaff
+      - type: Skill
+        ChemistryLevel: 1
 
 - type: startingGear
   id: ChiefEngineerGear
