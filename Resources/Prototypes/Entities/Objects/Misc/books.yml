@@ -285,9 +285,8 @@
       color: "#f7f7f7"
     - state: icon_medical
       color: "#58abcc"
-  - type: GuideHelp
-    guides:
-    - Medical
+  - type: SkillTrainer
+    skillType: Medicine
 
 - type: entity
   id: BookHowToSurvive
@@ -324,10 +323,8 @@
     - state: decor_wingette
       color: "#2a7b74"
     - state: icon_chemical
-  - type: GuideHelp
-    guides:
-    - Chemicals
-    - Chemist
+  - type: SkillTrainer
+    skillType: Chemistry
 
 - type: entity
   id: BookSpaceLaw

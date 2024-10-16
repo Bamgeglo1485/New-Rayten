@@ -13,5 +13,14 @@ namespace Content.Shared.Vanilla.Skill
 
         [DataField("RangeWeaponLevel"), AutoNetworkedField]
         public int RangeWeaponLevel { get; set; } = 0;
+
+        [DataField("MedicineExp"), AutoNetworkedField]
+        public int MedicineExp { get; set; } = 0;
+
+        [DataField("ChemistryExp"), AutoNetworkedField]
+        public int ChemistryExp { get; set; } = 0;
+
+        [DataField("RangeWeaponExp"), AutoNetworkedField]
+        public int RangeWeaponExp { get; set; } = 0;
     }
 }

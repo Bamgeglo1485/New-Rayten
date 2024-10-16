@@ -26,6 +26,10 @@
     bodyType: Kinematic
   - type: Body
     prototype: Aghost
+  - type: Skill
+    RangeWeaponLevel: 3
+    MedicineLevel: 3
+    ChemistryLevel: 3
   - type: Access
     groups:
     - AllAccess
