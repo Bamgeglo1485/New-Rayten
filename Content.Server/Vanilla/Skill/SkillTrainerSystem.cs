@@ -4,6 +4,8 @@ using Content.Shared.DoAfter;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Audio.Systems;
 using Content.Shared.SkillTrainer;
+using Content.Shared.Mobs.Components;
+using Content.Shared.Ghost;
 
 namespace Content.Server.SkillTrainer;
 
@@ -21,6 +23,9 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
 
     private void OnActivateInWorld(EntityUid uid, SkillTrainerComponent component, ActivateInWorldEvent args)
     {
+        if (!HasComp<MobStateComponent>(args.User) || HasComp<GhostComponent>(args.User))
+        return;
+
         if (!args.Handled)
         {
             StartDoAfter(args.User, component, uid);
