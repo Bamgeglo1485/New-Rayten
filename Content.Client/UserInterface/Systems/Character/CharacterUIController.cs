@@ -18,6 +18,7 @@ using Robust.Shared.Input.Binding;
 using Robust.Shared.Utility;
 using static Content.Client.CharacterInfo.CharacterInfoSystem;
 using static Robust.Client.UserInterface.Controls.BaseButton;
+using Content.Shared.Vanilla.Skill;
 
 namespace Content.Client.UserInterface.Systems.Character;
 
@@ -171,8 +172,41 @@ public sealed class CharacterUIController : UIController, IOnStateEntered<Gamepl
         }
 
         _window.RolePlaceholder.Visible = briefing == null && !controls.Any() && !objectives.Any();
+        if (EntityManager.TryGetComponent<SkillComponent>(entity, out var skillComponent))
+        {
+            UpdateProgressBars(skillComponent.RangeWeaponLevel, skillComponent.RangeWeaponExp, _window.RangeWeapon1, _window.RangeWeapon2, _window.RangeWeapon3);
+            UpdateProgressBars(skillComponent.MedicineLevel, skillComponent.MedicineExp, _window.Medicine1, _window.Medicine2, _window.Medicine3);
+            UpdateProgressBars(skillComponent.ChemistryLevel, skillComponent.ChemistryExp, _window.Chemistry1, _window.Chemistry2, _window.Chemistry3);
+        }
     }
-
+private void UpdateProgressBars(int level, int exp, ProgressBar bar1, ProgressBar bar2, ProgressBar bar3)
+{
+    switch (level)
+    {
+        case 0:
+            bar1.Value = exp;
+            bar2.Value = 0;
+            bar3.Value = 0;
+            break;
+        case 1:
+            bar1.Value = 300;
+            bar2.Value = exp;
+            bar3.Value = 0;
+            break;
+        case 2:
+            bar1.Value = 300;
+            bar2.Value = 900;
+            bar3.Value = 0;
+            break;
+        case 3:
+            bar1.Value = 300;
+            bar2.Value = 900;
+            bar3.Value = 1;
+            break;
+        default:
+            break;
+    }
+}
     private void CharacterDetached(EntityUid uid)
     {
         CloseWindow();

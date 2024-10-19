@@ -85,8 +85,10 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
                     {
                         skillComp.ChemistryLevel++;
                         skillComp.ChemistryExp = 0;
+                        skillComp.Dirty();
                         return true;
                     }
+                    skillComp.Dirty();
                 }
                 break;
 
@@ -100,8 +102,10 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
                     {
                         skillComp.MedicineLevel++;
                         skillComp.MedicineExp = 0;
+                        skillComp.Dirty();
                         return true;
                     }
+                    skillComp.Dirty();
                 }
                 break;
 
@@ -115,8 +119,10 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
                     {
                         skillComp.RangeWeaponLevel++;
                         skillComp.RangeWeaponExp = 0;
+                        skillComp.Dirty();
                         return true;
                     }
+                    skillComp.Dirty();
                 }
                 break;
         }

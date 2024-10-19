@@ -49,13 +49,13 @@ public abstract partial class SharedLabelSystem : EntitySystem
             (skill.ChemistryLevel < requiredChemistryLevel)))
         {
             var obscuredLabel = "!@#$%^*";
-            message.AddText(Loc.GetString("hand-labeler-has-label", ("label", obscuredLabel)));
+            message.AddMarkup(Loc.GetString("hand-labeler-has-label", ("label", obscuredLabel)));
             args.PushMessage(message);
             return;
         }
 
 
-        message.AddText(Loc.GetString("hand-labeler-has-label", ("label", label.CurrentLabel)));
+        message.AddMarkup(Loc.GetString("hand-labeler-has-label", ("label", label.CurrentLabel)));
         args.PushMessage(message);
     }
 

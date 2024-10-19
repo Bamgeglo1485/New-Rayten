@@ -43,6 +43,9 @@ public sealed class InjectorSystem : SharedInjectorSystem
             if (SolutionContainers.TryGetInjectableSolution(target, out var injectableSolution, out _)){
                 //vanilla-station-start
                 // Проверяем наличие компонента SkillComponent у пользователя
+                if(!EntityManager.HasComponent<BloodstreamComponent>(target))
+                return TryInject(injector, target, injectableSolution.Value, user, false);
+
                 if (EntityManager.TryGetComponent<SkillComponent>(user, out var skillComponent))
                 {
                     // Если уровень навыка меньше 2, запрещаем инъекцию
