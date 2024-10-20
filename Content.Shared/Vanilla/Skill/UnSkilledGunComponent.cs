@@ -10,5 +10,9 @@ namespace Content.Shared.Vanilla.Skill
 
         [DataField("MaxAnglePenalty"), AutoNetworkedField]
         public Angle MaxAnglePenalty { get; set; } = Angle.Zero;
+
+        [DataField("AngleIncreasePenalty"), AutoNetworkedField]
+        public Angle AngleIncreasePenalty { get; set; } = Angle.Zero;
+
     }
 }

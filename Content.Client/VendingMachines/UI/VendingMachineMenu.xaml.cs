@@ -9,7 +9,7 @@ using Robust.Client.UserInterface;
 using Content.Client.UserInterface.Controls;
 using Content.Shared.IdentityManagement;
 using Robust.Client.Graphics;
-
+using Content.Shared.Labels.Components;//vanilla
 namespace Content.Client.VendingMachines.UI
 {
     [GenerateTypedNameReferences]
@@ -55,12 +55,20 @@ namespace Content.Client.VendingMachines.UI
 
         private bool DataFilterCondition(string filter, ListData data)
         {
-            if (data is not VendorItemsListData { ItemText: var text })
+            if (data is not VendorItemsListData {ItemProtoID: var protoID, ItemText: var text })
                 return false;
 
             if (string.IsNullOrEmpty(filter))
                 return true;
-
+            //vanilla-station-skills-start
+             if (_dummies.TryGetValue(protoID, out var entityUid))
+                {
+                    if (_entityManager.TryGetComponent<LabelComponent>(entityUid, out var labelComp) && !string.IsNullOrEmpty(labelComp.CurrentLabel))
+                    {
+                        text += $" ({labelComp.CurrentLabel})";
+                    }
+                }
+            //vanilla-station-skills-end
             return text.Contains(filter, StringComparison.CurrentCultureIgnoreCase);
         }
 
@@ -68,7 +76,15 @@ namespace Content.Client.VendingMachines.UI
         {
             if (data is not VendorItemsListData { ItemProtoID: var protoID, ItemText: var text })
                 return;
-
+            //vanilla-station-skills-start
+            if (_dummies.TryGetValue(protoID, out var entityUid))
+            {
+                if (_entityManager.TryGetComponent<LabelComponent>(entityUid, out var labelComp) && !string.IsNullOrEmpty(labelComp.CurrentLabel))
+                {
+                    text += $" ({labelComp.CurrentLabel})";
+                }
+            }
+            //vanilla-station-skills-end
             button.AddChild(new VendingMachineItem(protoID, text));
 
             button.ToolTip = text;
@@ -139,5 +155,4 @@ namespace Content.Client.VendingMachines.UI
         }
     }
 }
-
 public record VendorItemsListData(EntProtoId ItemProtoID, string ItemText, int ItemIndex) : ListData;

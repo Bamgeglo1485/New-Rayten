@@ -34,27 +34,32 @@ public sealed class GunSkillsSystem : SharedGunSkillsSystem
             switch (skillComp.RangeWeaponLevel)
             {
                 case 0:
-                    unskilledComp.MinAnglePenalty = Angle.FromDegrees(180);
-                    unskilledComp.MaxAnglePenalty = Angle.FromDegrees(360);
+                    unskilledComp.MinAnglePenalty = Angle.FromDegrees(60);
+                    unskilledComp.MaxAnglePenalty = Angle.FromDegrees(200);
+                    unskilledComp.AngleIncreasePenalty = Angle.FromDegrees(20);
                     break;
                 case 1:
-                    unskilledComp.MinAnglePenalty = Angle.FromDegrees(45);
-                    unskilledComp.MaxAnglePenalty = Angle.FromDegrees(90);
+                    unskilledComp.MinAnglePenalty = Angle.FromDegrees(0);
+                    unskilledComp.MaxAnglePenalty = Angle.FromDegrees(50);
+                    unskilledComp.AngleIncreasePenalty = Angle.FromDegrees(10);
                     break;
                 case 2:
-                    unskilledComp.MinAnglePenalty = Angle.FromDegrees(11.25);
-                    unskilledComp.MaxAnglePenalty = Angle.FromDegrees(45);
+                    unskilledComp.MinAnglePenalty = Angle.FromDegrees(0);
+                    unskilledComp.MaxAnglePenalty = Angle.FromDegrees(25);
+                    unskilledComp.AngleIncreasePenalty = Angle.FromDegrees(5);
                     break;
                 case 3:
                     unskilledComp.MinAnglePenalty = 0;
                     unskilledComp.MaxAnglePenalty = 0;
+                    unskilledComp.AngleIncreasePenalty = 0;
                     break;
             }
         }
         else
         {
-            unskilledComp.MinAnglePenalty = Angle.FromDegrees(180);
-            unskilledComp.MaxAnglePenalty = Angle.FromDegrees(360);
+            unskilledComp.MinAnglePenalty = Angle.FromDegrees(60);
+            unskilledComp.MaxAnglePenalty = Angle.FromDegrees(120);
+            unskilledComp.AngleIncreasePenalty = Angle.FromDegrees(20);
         }
         _gun.RefreshModifiers(uid);
     }
@@ -66,6 +71,7 @@ public sealed class GunSkillsSystem : SharedGunSkillsSystem
         {
             unskilledComp.MinAnglePenalty = 0;
             unskilledComp.MaxAnglePenalty = 0;
+            unskilledComp.AngleIncreasePenalty = 0;
             _gun.RefreshModifiers(uid);
         }
     }
@@ -76,6 +82,7 @@ public sealed class GunSkillsSystem : SharedGunSkillsSystem
         {
             args.MinAngle += unskilledComp.MinAnglePenalty;
             args.MaxAngle += unskilledComp.MaxAnglePenalty;
+            args.AngleIncrease += unskilledComp.AngleIncreasePenalty;
         }
     }
 }
