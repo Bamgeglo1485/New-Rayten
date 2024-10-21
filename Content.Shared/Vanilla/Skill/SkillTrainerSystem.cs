@@ -21,9 +21,10 @@ public abstract class SharedSkillTrainerSystem : EntitySystem
     }
 }
 
-[Serializable, NetSerializable]
-public sealed partial class TrainEvent : SimpleDoAfterEvent
-{
-    public string SkillType { get; set; } = string.Empty;
-    public int SkillIncreaseAmount { get; set; }
-}
+    [Serializable, NetSerializable]
+    public sealed partial class TrainEvent : SimpleDoAfterEvent
+    {
+        public string SkillType { get; set; } = string.Empty;
+        public int SkillIncreaseAmount { get; set; }
+        public int MaxLevel { get; set; }
+    }

@@ -32,6 +32,7 @@
       - type: Skill
         ChemistryLevel: 1
         RangeWeaponLevel: 1
+        PilotingLevel: 3
 
 - type: startingGear
   id: QuartermasterGear

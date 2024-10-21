@@ -88,8 +88,10 @@
     - state: icon_planet
       color: "#42b6f5"
   - type: GuideHelp
-    guides:
-    - SS14
+    openOnActivation: false
+  - type: SkillTrainer
+    skillType: Piloting
+    MaxLevel: 2
 
 - type: entity
   id: BookTheBookOfControl
@@ -289,6 +291,7 @@
     openOnActivation: false
   - type: SkillTrainer
     skillType: Medicine
+    MaxLevel: 2
 
 
 - type: entity
@@ -330,6 +333,7 @@
     openOnActivation: false
   - type: SkillTrainer
     skillType: Chemistry
+    MaxLevel: 2
 
 - type: entity
   id: BookSpaceLaw

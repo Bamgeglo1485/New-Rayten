@@ -22,5 +22,11 @@ namespace Content.Shared.Vanilla.Skill
 
         [DataField("RangeWeaponExp"), AutoNetworkedField]
         public int RangeWeaponExp { get; set; } = 0;
+
+        [DataField("PilotingLevel"), AutoNetworkedField]
+        public int PilotingLevel { get; set; } = 0;
+
+        [DataField("PilotingExp"), AutoNetworkedField]
+        public int PilotingExp { get; set; } = 0;
     }
 }

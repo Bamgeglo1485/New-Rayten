@@ -29,6 +29,7 @@
         MedicineLevel: 2
         ChemistryLevel: 2
         RangeWeaponLevel: 0
+        PilotingLevel: 1
       mindRoles:
       - MindRoleThief
       briefing:

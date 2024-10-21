@@ -1,4 +1,4 @@
-using Content.Shared.Interaction;
+using Content.Shared.Interaction.Events;
 using Content.Shared.Vanilla.Skill;
 using Content.Shared.DoAfter;
 using Robust.Shared.GameObjects;
@@ -17,11 +17,11 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<SkillTrainerComponent, ActivateInWorldEvent>(OnActivateInWorld);
+        SubscribeLocalEvent<SkillTrainerComponent, UseInHandEvent>(OnActivateInWorld);
         SubscribeLocalEvent<SkillTrainerComponent, TrainEvent>(HandleTrainEvent);
     }
 
-    private void OnActivateInWorld(EntityUid uid, SkillTrainerComponent component, ActivateInWorldEvent args)
+    private void OnActivateInWorld(EntityUid uid, SkillTrainerComponent component, UseInHandEvent args)
     {
         if (!HasComp<MobStateComponent>(args.User) || HasComp<GhostComponent>(args.User))
         return;
@@ -40,6 +40,7 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
         var doAfterArgs = new DoAfterArgs(EntityManager, user, TimeSpan.FromSeconds(component.ReadTime), new TrainEvent
         {
             SkillType = component.SkillType,
+            MaxLevel = component.MaxLevel,
             SkillIncreaseAmount = component.SkillIncreaseAmount
         }, eventTarget: uid)
         {
@@ -59,7 +60,7 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
         if (!EntityManager.TryGetComponent<SkillComponent>(args.User, out var skillComp))
             skillComp = EnsureComp<SkillComponent>(args.User);
 
-        if(AddExperience(skillComp, args.SkillType, args.SkillIncreaseAmount))
+        if(AddExperience(skillComp, args.SkillType, args.SkillIncreaseAmount, args.MaxLevel))
         {
             _audio.PlayPvs("/Audio/Vanilla/SkillSystem/levelup.ogg", args.User);
         }
@@ -69,16 +70,16 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
         args.Handled = true;
     }
 
-    private bool AddExperience(SkillComponent skillComp, string skillType, int experienceAmount)
+    public bool AddExperience(SkillComponent skillComp, string skillType, int experienceAmount, int MaxLevel)
     {
         int requiredExp = 0;
 
         switch (skillType)
         {
             case "Chemistry":
-                if (skillComp.ChemistryLevel < 2)
+                if (skillComp.ChemistryLevel < MaxLevel && skillComp.ChemistryLevel < 3)
                 {
-                    requiredExp = skillComp.ChemistryLevel == 0 ? 300 : 600;
+                    requiredExp = skillComp.ChemistryLevel + 300 + skillComp.ChemistryLevel * 300;
 
                     skillComp.ChemistryExp += experienceAmount;
                     if (skillComp.ChemistryExp >= requiredExp)
@@ -93,10 +94,9 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
                 break;
 
             case "Medicine":
-                if (skillComp.MedicineLevel < 2)
+                if (skillComp.MedicineLevel < MaxLevel  && skillComp.MedicineLevel < 3)
                 {
-                    requiredExp = skillComp.MedicineLevel == 0 ? 300 : 600;
-
+                    requiredExp = skillComp.MedicineLevel + 300 + skillComp.MedicineLevel * 300;
                     skillComp.MedicineExp += experienceAmount;
                     if (skillComp.MedicineExp >= requiredExp)
                     {
@@ -110,10 +110,9 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
                 break;
 
             case "RangeWeapon":
-                if (skillComp.RangeWeaponLevel < 2)
+                if (skillComp.RangeWeaponLevel < MaxLevel && skillComp.RangeWeaponLevel < 3)
                 {
-                    requiredExp = skillComp.RangeWeaponLevel == 0 ? 300 : 600;
-
+                    requiredExp = skillComp.RangeWeaponLevel + 300 + skillComp.RangeWeaponLevel * 300;
                     skillComp.RangeWeaponExp += experienceAmount;
                     if (skillComp.RangeWeaponExp >= requiredExp)
                     {
@@ -125,7 +124,24 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
                     skillComp.Dirty();
                 }
                 break;
+
+            case "Piloting":
+                if (skillComp.PilotingLevel < MaxLevel && skillComp.PilotingLevel < 3)
+                {
+                    requiredExp = skillComp.PilotingLevel + 300 + skillComp.PilotingLevel * 300;
+                    skillComp.PilotingExp += experienceAmount;
+                    if (skillComp.PilotingExp >= requiredExp)
+                    {
+                        skillComp.PilotingLevel++;
+                        skillComp.PilotingExp = 0;
+                        skillComp.Dirty();
+                        return true;
+                    }
+                    skillComp.Dirty();
+                }
+                break;
         }
         return false;
     }
+
 }

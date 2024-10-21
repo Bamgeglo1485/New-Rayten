@@ -110,6 +110,7 @@
         MedicineLevel: 3
         ChemistryLevel: 3
         RangeWeaponLevel: 3
+        PilotingLevel: 3
       - type: NukeOperative
       - type: RandomMetadata
         nameSegments:
@@ -131,6 +132,7 @@
         MedicineLevel: 3
         ChemistryLevel: 3
         RangeWeaponLevel: 3
+        PilotingLevel: 3
       - type: NukeOperative
       - type: RandomMetadata
         nameSegments:
@@ -151,9 +153,10 @@
       - RoleSurvivalNukie
       components:
       - type: Skill
-        MedicineLevel: 2
-        ChemistryLevel: 2
+        MedicineLevel: 3
+        ChemistryLevel: 3
         RangeWeaponLevel: 3
+        PilotingLevel: 3
       - type: NukeOperative
       - type: RandomMetadata
         nameSegments:
@@ -203,6 +206,7 @@
         MedicineLevel: 3
         ChemistryLevel: 2
         RangeWeaponLevel: 2
+        PilotingLevel: 3
       mindRoles:
       - MindRoleTraitor
 
@@ -228,6 +232,7 @@
         MedicineLevel: 2
         ChemistryLevel: 2
         RangeWeaponLevel: 3
+        PilotingLevel: 3
       - type: Revolutionary
       - type: HeadRevolutionary
       mindRoles:
@@ -273,6 +278,7 @@
         MedicineLevel: 3
         ChemistryLevel: 3
         RangeWeaponLevel: 3
+        PilotingLevel: 2
       - type: PendingZombie
       - type: ZombifyOnDeath
       - type: IncurableZombie

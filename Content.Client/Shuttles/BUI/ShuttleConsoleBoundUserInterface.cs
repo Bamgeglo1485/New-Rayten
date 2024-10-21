@@ -21,7 +21,7 @@ public sealed class ShuttleConsoleBoundUserInterface : BoundUserInterface
     {
         base.Open();
         _window = this.CreateWindow<ShuttleConsoleWindow>();
-
+        _window.ObscureMapButtonMap(Owner);    //vanilla-station-skill-issue
         _window.RequestFTL += OnFTLRequest;
         _window.RequestBeaconFTL += OnFTLBeaconRequest;
         _window.DockRequest += OnDockRequest;

@@ -30,22 +30,22 @@
                                    HorizontalExpand="True"
                                    Margin="3"
                                    Name="ReadonlyDisplay">
-                        <controls:Label Text="{controls:Loc 'shuttle-console-position'}"/>
+                        <controls:Label Name="GridPositionLabel" Text="{controls:Loc 'shuttle-console-position'}"/>
                         <controls:Label Name="GridPosition"
                                Text="0.0, 0.0"
                                HorizontalExpand="True"
                                Align="Right"/>
-                        <controls:Label Text="{controls:Loc 'shuttle-console-orientation'}"/>
+                        <controls:Label Name="GridOrientationLabel" Text="{controls:Loc 'shuttle-console-orientation'}"/>
                         <controls:Label Name="GridOrientation"
                                Text="0.0"
                                HorizontalExpand="True"
                                Align="Right"/>
-                        <controls:Label Text="{controls:Loc 'shuttle-console-linear-velocity'}"/>
+                        <controls:Label Name="GridLinearVelocityLabel" Text="{controls:Loc 'shuttle-console-linear-velocity'}"/>
                         <controls:Label Name="GridLinearVelocity"
                                Text="0.0, 0.0"
                                HorizontalExpand="True"
                                Align="Right"/>
-                        <controls:Label Text="{controls:Loc 'shuttle-console-angular-velocity'}"/>
+                        <controls:Label Name="GridAngularVelocityLabel" Text="{controls:Loc 'shuttle-console-angular-velocity'}"/>
                         <controls:Label Name="GridAngularVelocity"
                                Text="0.0"
                                HorizontalExpand="True"

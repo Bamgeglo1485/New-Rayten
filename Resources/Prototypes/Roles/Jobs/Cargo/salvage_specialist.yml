@@ -23,6 +23,7 @@
       - type: Skill
         MedicineLevel: 1
         RangeWeaponLevel: 2
+        PilotingLevel: 3
 
 - type: startingGear
   id: SalvageSpecialistGear

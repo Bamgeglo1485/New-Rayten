@@ -26,9 +26,11 @@ public sealed class RequiresSkillSystem : SharedRequiresSkillSystem
         {
             return false;
         }
-
-        // Проверка уровня медицины
         if (!HasSkillLevel(user, component.RequiresMedicineLevel, skillComponent => skillComponent.MedicineLevel))
+        {
+            return false;
+        }
+        if (!HasSkillLevel(user, component.RequiresPilotingLevel, skillComponent => skillComponent.PilotingLevel))
         {
             return false;
         }

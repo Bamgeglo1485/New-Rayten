@@ -18,5 +18,7 @@ namespace Content.Shared.SkillTrainer
         [DataField("ReadTime")]
         public float ReadTime { get; set; } = 10f; 
 
+        [DataField("MaxLevel")]
+        public int MaxLevel { get; set; } = 0; 
     }
 }

@@ -11,5 +11,14 @@ namespace Content.Shared.Vanilla.Skill
 
         [DataField("RequiresMedicineLevel"), AutoNetworkedField]
         public int RequiresMedicineLevel { get; set; } = 0;
+
+        [DataField("RequiresPilotingLevel"), AutoNetworkedField]
+        public int RequiresPilotingLevel { get; set; } = 0;
+
+        [DataField("RequiresPilotingLevelForMap"), AutoNetworkedField]
+        public int RequiresPilotingLevelForMap { get; set; } = 0;
+
+        [DataField("RequiresPilotingLevelForCoord"), AutoNetworkedField]
+        public int RequiresPilotingLevelForCoord { get; set; } = 0;
     }
 }

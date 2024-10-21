@@ -27,9 +27,10 @@
   - type: Body
     prototype: Aghost
   - type: Skill
-    RangeWeaponLevel: 3
     MedicineLevel: 3
     ChemistryLevel: 3
+    RangeWeaponLevel: 3
+    PilotingLevel: 3
   - type: Access
     groups:
     - AllAccess

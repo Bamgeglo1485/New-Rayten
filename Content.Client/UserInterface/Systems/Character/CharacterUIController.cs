@@ -177,6 +177,7 @@ public sealed class CharacterUIController : UIController, IOnStateEntered<Gamepl
             UpdateProgressBars(skillComponent.RangeWeaponLevel, skillComponent.RangeWeaponExp, _window.RangeWeapon1, _window.RangeWeapon2, _window.RangeWeapon3);
             UpdateProgressBars(skillComponent.MedicineLevel, skillComponent.MedicineExp, _window.Medicine1, _window.Medicine2, _window.Medicine3);
             UpdateProgressBars(skillComponent.ChemistryLevel, skillComponent.ChemistryExp, _window.Chemistry1, _window.Chemistry2, _window.Chemistry3);
+            UpdateProgressBars(skillComponent.PilotingLevel, skillComponent.PilotingExp, _window.Piloting1, _window.Piloting2, _window.Piloting3);
         }
     }
 private void UpdateProgressBars(int level, int exp, ProgressBar bar1, ProgressBar bar2, ProgressBar bar3)
@@ -195,13 +196,13 @@ private void UpdateProgressBars(int level, int exp, ProgressBar bar1, ProgressBa
             break;
         case 2:
             bar1.Value = 300;
-            bar2.Value = 900;
-            bar3.Value = 0;
+            bar2.Value = 600;
+            bar3.Value = exp;
             break;
         case 3:
             bar1.Value = 300;
-            bar2.Value = 900;
-            bar3.Value = 1;
+            bar2.Value = 600;
+            bar3.Value = 900;
             break;
         default:
             break;
