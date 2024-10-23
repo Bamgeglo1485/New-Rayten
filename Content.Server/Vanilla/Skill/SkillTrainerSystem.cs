@@ -3,17 +3,19 @@ using Content.Shared.Vanilla.Skill;
 using Content.Shared.DoAfter;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.Audio;
 using Content.Shared.SkillTrainer;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Ghost;
-
+using Content.Shared.Popups;
+using Content.Shared.Vanilla.Skill;
 namespace Content.Server.SkillTrainer;
 
 public sealed class ServerSkillTrainerSystem : EntitySystem
 {
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
-
+    [Dependency] protected readonly SharedPopupSystem _popup = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -25,6 +27,37 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
     {
         if (!HasComp<MobStateComponent>(args.User) || HasComp<GhostComponent>(args.User))
         return;
+        if(EntityManager.TryGetComponent<SkillComponent>(args.User, out var skillComp)){
+            switch (component.SkillType)
+            {
+                case "Chemistry":
+                    if(skillComp.ChemistryLevel>=component.MaxLevel){
+                        _popup.PopupEntity(Loc.GetString("Skill-train-overtrain-chemistry"), args.User, args.User);
+                        return;
+                    }
+                    break;
+                case "Medicine":
+                    if(skillComp.MedicineLevel>=component.MaxLevel){
+                        _popup.PopupEntity(Loc.GetString("Skill-train-overtrain-medicine"), args.User, args.User);
+                        return;
+                    }
+                    break;
+                case "RangeWeapon":
+                    if(skillComp.RangeWeaponLevel>=component.MaxLevel){
+                        _popup.PopupEntity(Loc.GetString("Skill-train-overtrain-rangeweapon"), args.User, args.User);
+                        return;
+                    }
+                    break;
+                case "Piloting":
+                    if(skillComp.PilotingLevel>=component.MaxLevel){
+                        _popup.PopupEntity(Loc.GetString("Skill-train-overtrain-piloting"), args.User, args.User);
+                        return;
+                    }
+                    break;
+            }
+        }
+        else
+            skillComp = EnsureComp<SkillComponent>(args.User);
 
         if (!args.Handled)
         {
@@ -35,8 +68,7 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
 
     private void StartDoAfter(EntityUid user, SkillTrainerComponent component, EntityUid uid)
     {
-        _audio.PlayPvs("/Audio/Vanilla/SkillSystem/bookpaperswish.ogg", user);
-
+        _audio.PlayPvs("/Audio/Vanilla/SkillSystem/bookpaperswish.ogg", user, AudioParams.Default.WithMaxDistance(2f));
         var doAfterArgs = new DoAfterArgs(EntityManager, user, TimeSpan.FromSeconds(component.ReadTime), new TrainEvent
         {
             SkillType = component.SkillType,
@@ -61,12 +93,9 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
             skillComp = EnsureComp<SkillComponent>(args.User);
 
         if(AddExperience(skillComp, args.SkillType, args.SkillIncreaseAmount, args.MaxLevel))
-        {
-            _audio.PlayPvs("/Audio/Vanilla/SkillSystem/levelup.ogg", args.User);
-        }
-        else{
+            _audio.PlayPvs("/Audio/Vanilla/SkillSystem/levelup.ogg", args.User, AudioParams.Default.WithMaxDistance(3f));
+        else
             StartDoAfter(args.User, component, uid);
-        }
         args.Handled = true;
     }
 
