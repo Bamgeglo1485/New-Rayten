@@ -6,7 +6,6 @@ using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
 using Robust.Shared.Network;
 using Robust.Shared.Timing;
-using Content.Shared.Vanilla.Skill;
 
 namespace Content.Shared.Chemistry.EntitySystems;
 
@@ -55,26 +54,6 @@ public abstract class SharedSolutionContainerMixerSystem : EntitySystem
         var (uid, comp) = entity;
         if (comp.Mixing)
             return;
-
-        // vanilla-station-skill-issue-start
-        if (EntityManager.TryGetComponent<RequiresSkillComponent>(uid, out var skillRequirements))
-        {
-            // Проверяем наличие SkillComponent у пользователя
-            if (user == null || !EntityManager.TryGetComponent<SkillComponent>(user.Value, out var skill))
-            {
-                if(user!=null)
-                _popup.PopupClient(Loc.GetString("solution-container-mixer-skill-too-low"), entity, user.Value);
-                return;
-            }
-
-            // Проверяем уровень навыка ChemistryLevel
-            if (skill.ChemistryLevel < skillRequirements.RequiresChemistryLevel)
-            {
-                _popup.PopupClient(Loc.GetString("solution-container-mixer-skill-too-low"), entity, user.Value);
-                return;
-            }
-        }
-        // vanilla-station-skill-issue-end
 
         if (!HasPower(entity))
         {

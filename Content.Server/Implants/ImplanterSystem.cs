@@ -8,6 +8,7 @@ using Content.Shared.Interaction;
 using Content.Shared.Popups;
 using Robust.Shared.Containers;
 using Content.Shared.Vanilla.Skill;//vanilla-skill
+using Content.Server.Vanilla.Skill;//vanilla-skill
 
 namespace Content.Server.Implants;
 
@@ -16,6 +17,7 @@ public sealed partial class ImplanterSystem : SharedImplanterSystem
     [Dependency] private readonly PopupSystem _popup = default!;
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
     [Dependency] private readonly SharedContainerSystem _container = default!;
+    [Dependency] private readonly RequiresSkillSystem _requiresSkillSystem = default!;
 
     public override void Initialize()
     {
@@ -37,20 +39,9 @@ public sealed partial class ImplanterSystem : SharedImplanterSystem
         if (!CheckTarget(target, component.Whitelist, component.Blacklist))
             return;
         //Vanilla-Station-START
-        // Проверяем наличие компонента SkillComponent у пользователя
-        if (EntityManager.TryGetComponent<SkillComponent>(args.User, out var skillComponent))
+        if (EntityManager.TryGetComponent<RequiresSkillComponent>(uid, out var RequiresSkillComponent))
         {
-            // Если уровень навыка меньше 3, запрещаем имплантацию
-            if (skillComponent.MedicineLevel < 3)
-            {
-                _popup.PopupEntity(Loc.GetString("Skill-issue-message-implant"), target, args.User);
-                return;
-            }
-        }
-        else
-        {
-            // Если у пользователя нет компонента Skill, запрещаем имплантацию
-            _popup.PopupEntity(Loc.GetString("Skill-issue-message-implant"), target, args.User);
+            if(!_requiresSkillSystem.HasRequiredSkills(args.User, RequiresSkillComponent))
             return;
         }
         //Vanilla-Sttion-END

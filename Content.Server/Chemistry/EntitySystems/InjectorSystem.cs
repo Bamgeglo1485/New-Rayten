@@ -13,7 +13,6 @@ using Content.Shared.IdentityManagement;
 using Content.Shared.Interaction;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Stacks;
-using Content.Shared.Vanilla.Skill;//vanilla-skill
 using System.Linq;
 using Content.Shared.Clothing.Components;
 using Content.Shared.Inventory;
@@ -24,7 +23,6 @@ public sealed class InjectorSystem : SharedInjectorSystem
 {
     [Dependency] private readonly BloodstreamSystem _blood = default!;
     [Dependency] private readonly ReactiveSystem _reactiveSystem = default!;
-
     [Dependency] private readonly InventorySystem _invSystem = default!;
 
     public override void Initialize()
@@ -41,27 +39,6 @@ public sealed class InjectorSystem : SharedInjectorSystem
         if (injector.Comp.ToggleState == InjectorToggleMode.Inject)
         {
             if (SolutionContainers.TryGetInjectableSolution(target, out var injectableSolution, out _)){
-                //vanilla-station-start
-                // Проверяем наличие компонента SkillComponent у пользователя
-                if(!EntityManager.HasComponent<BloodstreamComponent>(target))
-                return TryInject(injector, target, injectableSolution.Value, user, false);
-
-                if (EntityManager.TryGetComponent<SkillComponent>(user, out var skillComponent))
-                {
-                    // Если уровень навыка меньше 2, запрещаем инъекцию
-                    if (skillComponent.MedicineLevel < 2)
-                    {
-                        Popup.PopupEntity(Loc.GetString("Skill-issue-message-syringe"), target, user);
-                        return false;
-                    }
-                }
-                else
-                {
-                    // Если у пользователя нет компонента Skill, запрещаем инъекцию
-                    Popup.PopupEntity(Loc.GetString("Skill-issue-message-syringe"), target, user);
-                    return false;
-                }
-                //vanilla-station-end
                 return TryInject(injector, target, injectableSolution.Value, user, false);
             }
 
@@ -133,7 +110,6 @@ public sealed class InjectorSystem : SharedInjectorSystem
             {
                 Popup.PopupEntity(Loc.GetString("injector-component-inject-target-protected"), target, args.User);
                 return;
-
             }
             // vanilla-station end
 

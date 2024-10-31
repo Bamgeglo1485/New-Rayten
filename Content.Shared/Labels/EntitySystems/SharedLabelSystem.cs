@@ -41,22 +41,23 @@ public abstract partial class SharedLabelSystem : EntitySystem
 
         var message = new FormattedMessage();
 
-        int requiredChemistryLevel = EntityManager.TryGetComponent<RequiresSkillComponent>(uid, out var skillRequirements) 
-        ? skillRequirements.RequiresChemistryLevel 
-        : 0;
-
-        if (requiredChemistryLevel!=0 &&(!EntityManager.TryGetComponent<SkillComponent>(args.Examiner, out var skill) || 
-            (skill.ChemistryLevel < requiredChemistryLevel)))
-        {
-            var obscuredLabel = "!@#$%^*";
-            message.AddMarkup(Loc.GetString("hand-labeler-has-label", ("label", obscuredLabel)));
-            args.PushMessage(message);
-            return;
+        //vanilla-station-skill-issue-start
+        if(EntityManager.TryGetComponent<RequiresSkillComponent>(uid, out var skillRequirements) && EntityManager.TryGetComponent<SkillComponent>(args.Examiner, out var skill)){
+            if (!HasSkillLevel(args.Examiner, skillRequirements.RequiresChemistryLevelToRead, skillComponent => skillComponent.ChemistryLevel)
+            || !HasSkillLevel(args.Examiner, skillRequirements.RequiresMedicineLevelToRead, skillComponent => skillComponent.MedicineLevel))
+                return;
         }
-
-
+        //vanilla-station-skill-issue-end
         message.AddMarkup(Loc.GetString("hand-labeler-has-label", ("label", label.CurrentLabel)));
         args.PushMessage(message);
+    }
+
+    //vanilla-station-skill-issue
+    public bool HasSkillLevel(EntityUid user, int requiredLevel, Func<SkillComponent, int> skillSelector)
+    {
+        if (TryComp<SkillComponent>(user, out var skillComponent) && skillSelector(skillComponent) >= requiredLevel)
+            return true;
+        return false;
     }
 
     // private void OnRefreshNameModifiers(Entity<LabelComponent> entity, ref RefreshNameModifiersEvent args)

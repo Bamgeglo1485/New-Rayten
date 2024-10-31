@@ -21,6 +21,8 @@ using Content.Shared.Popups;
 using Content.Shared.Stacks;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Random;
+using Content.Shared.Vanilla.Skill;
+using Content.Server.Vanilla.Skill;
 
 namespace Content.Server.Medical;
 
@@ -37,7 +39,7 @@ public sealed class HealingSystem : EntitySystem
     [Dependency] private readonly MobThresholdSystem _mobThresholdSystem = default!;
     [Dependency] private readonly PopupSystem _popupSystem = default!;
     [Dependency] private readonly SharedSolutionContainerSystem _solutionContainerSystem = default!;
-
+    [Dependency] private readonly RequiresSkillSystem _requiresskill = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -171,7 +173,13 @@ public sealed class HealingSystem : EntitySystem
 
         if (TryComp<StackComponent>(uid, out var stack) && stack.Count < 1)
             return false;
-
+        //vanilla-station-skill-issue-start
+        if (EntityManager.TryGetComponent<RequiresSkillComponent>(uid, out var reqskillComponent))
+        {
+            if(!_requiresskill.HasRequiredSkills(user, reqskillComponent))           
+            return false;
+        }
+        //vanilla-station-skill-issue-end
         var anythingToDo =
             HasDamage(targetDamage, component) ||
             component.ModifyBloodLevel > 0 // Special case if healing item can restore lost blood...
