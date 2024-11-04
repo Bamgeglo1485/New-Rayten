@@ -12,6 +12,8 @@ using Content.Shared.Power;
 using Robust.Shared.Audio.Systems;
 using Content.Shared.Verbs;
 using Robust.Shared.Timing;
+using Content.Server.Vanilla.Skill;
+using Content.Shared.Vanilla.Skill;
 
 namespace Content.Server.Anomaly;
 
@@ -28,6 +30,7 @@ public sealed partial class AnomalySynchronizerSystem : EntitySystem
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly PowerReceiverSystem _power = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly RequiresSkillSystem _requiresSkillSystem = default!;
 
     public override void Initialize()
     {
@@ -134,6 +137,13 @@ public sealed partial class AnomalySynchronizerSystem : EntitySystem
 
     private void OnInteractHand(Entity<AnomalySynchronizerComponent> ent, ref InteractHandEvent args)
     {
+        //vanilla-station-skill-issue-start
+        if (TryComp<RequiresSkillComponent>(ent, out var RequiresSkillComp))
+            if (!_requiresSkillSystem.HasRequiredSkills(args.User, RequiresSkillComp, true))
+            {
+                return;
+            }
+        //vanilla-station-skill-issue-end
         TryAttachNearbyAnomaly(ent, args.User);
     }
 

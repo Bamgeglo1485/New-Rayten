@@ -29,7 +29,7 @@
     id: MedicalInternPDA
     ears: ClothingHeadsetMedical
     belt: ClothingBeltMedicalFilled
-    pocket2: BookMedicalReferenceBook
+    #pocket2: BookMedicalReferenceBook
   #storage:
     #back:
     #- Stuff

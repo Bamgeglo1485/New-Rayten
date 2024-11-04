@@ -6,6 +6,7 @@ using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
 using Robust.Shared.Network;
 using Robust.Shared.Timing;
+using Content.Shared.Vanilla.Skill;
 
 namespace Content.Shared.Chemistry.EntitySystems;
 
@@ -21,7 +22,7 @@ public abstract class SharedSolutionContainerMixerSystem : EntitySystem
     [Dependency] private readonly SharedContainerSystem _container = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly SharedSolutionContainerSystem _solution = default!;
-
+    [Dependency] private readonly SharedRequiresSkillSystem _sharedRequiresSkillSystem = default!;
     /// <inheritdoc/>
     public override void Initialize()
     {
@@ -61,7 +62,17 @@ public abstract class SharedSolutionContainerMixerSystem : EntitySystem
                 _popup.PopupClient(Loc.GetString("solution-container-mixer-no-power"), entity, user.Value);
             return;
         }
-
+        //vanilla-station-skill-issue-start
+        if (user != null)
+            if (TryComp<RequiresSkillComponent>(user.Value, out var RequiresSkillComponent))
+                if (!_sharedRequiresSkillSystem.HasRequiredSkills(user.Value, RequiresSkillComponent))
+                {
+                    _popup.PopupEntity(
+                        Loc.GetString("Skill-issue-message-chemistry-unskilled", ("lvl", RequiresSkillComponent.RequiresChemistryLevel)),
+                        user.Value, user.Value);
+                    return;
+                }
+        //vanilla-station-skill-issue-end
         if (!_container.TryGetContainer(uid, comp.ContainerId, out var container) || container.Count == 0)
         {
             if (user != null)

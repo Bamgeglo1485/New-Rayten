@@ -16,7 +16,8 @@ using Content.Shared.Stacks;
 using System.Linq;
 using Content.Shared.Clothing.Components;
 using Content.Shared.Inventory;
-
+using Content.Server.Vanilla.Skill;
+using Content.Shared.Vanilla.Skill;
 namespace Content.Server.Chemistry.EntitySystems;
 
 public sealed class InjectorSystem : SharedInjectorSystem
@@ -79,7 +80,6 @@ public sealed class InjectorSystem : SharedInjectorSystem
         if (args.Cancelled || args.Handled || args.Args.Target == null)
             return;
 
-
         if (HasInjectionProtection(args.Args.Target.Value))
         {
             Popup.PopupEntity(Loc.GetString("injector-component-inject-target-protected"), args.Args.Target.Value, args.Args.User);
@@ -126,6 +126,17 @@ public sealed class InjectorSystem : SharedInjectorSystem
     /// </summary>
     private void InjectDoAfter(Entity<InjectorComponent> injector, EntityUid target, EntityUid user)
     {
+        //vanilla-station-skill-issue-start
+        //запрещаем ввод шприца если навык меньше запрашиваемого
+        if (EntityManager.TryGetComponent<RequiresSkillComponent>(injector, out var RequiresSkillComp))
+        {
+            if (RequiresSkillComp.SkillDiffMedicineLevel > 0)
+            {
+                Popup.PopupEntity(Loc.GetString("Skill-issue-message-medicine-unskilled", ("lvl", RequiresSkillComp.RequiresMedicineLevel)), user);
+                return;
+            }
+        }
+        //vanilla-station-skill-issue-end
         // Create a pop-up for the user
         if (injector.Comp.ToggleState == InjectorToggleMode.Draw)
         {
@@ -158,8 +169,18 @@ public sealed class InjectorSystem : SharedInjectorSystem
 
         // Ensure that minimum delay before incapacitation checks is 1 seconds
         actualDelay = MathHelper.Max(actualDelay, TimeSpan.FromSeconds(1));
-
-
+        
+        //vanilla-station-skill-issue-start
+        if(RequiresSkillComp != null)
+            switch (RequiresSkillComp.SkillDiffMedicineLevel)
+            {
+                case -1:
+                case -2:
+                case -3:
+                    actualDelay /= 2;
+                    break;
+            }
+        //vanilla-station-skill-issue-end
         var isTarget = user != target;
 
         if (isTarget)

@@ -41,7 +41,7 @@ public sealed partial class ImplanterSystem : SharedImplanterSystem
         //Vanilla-Station-START
         if (EntityManager.TryGetComponent<RequiresSkillComponent>(uid, out var RequiresSkillComponent))
         {
-            if(!_requiresSkillSystem.HasRequiredSkills(args.User, RequiresSkillComponent))
+            if(!_requiresSkillSystem.HasRequiredSkills(args.User, RequiresSkillComponent, true))
             return;
         }
         //Vanilla-Sttion-END

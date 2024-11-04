@@ -54,6 +54,12 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
                         return;
                     }
                     break;
+                case "Research":
+                    if(skillComp.ResearchLevel>=component.MaxLevel){
+                        _popup.PopupEntity(Loc.GetString("Skill-train-overtrain-research"), args.User, args.User);
+                        return;
+                    }
+                    break;
             }
         }
         else
@@ -163,6 +169,21 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
                     {
                         skillComp.PilotingLevel++;
                         skillComp.PilotingExp = 0;
+                        skillComp.Dirty();
+                        return true;
+                    }
+                    skillComp.Dirty();
+                }
+                break;
+            case "Research":
+                if (skillComp.ResearchLevel < MaxLevel && skillComp.ResearchLevel < 3)
+                {
+                    requiredExp = skillComp.ResearchLevel + 300 + skillComp.ResearchLevel * 300;
+                    skillComp.ResearchExp += experienceAmount;
+                    if (skillComp.ResearchExp >= requiredExp)
+                    {
+                        skillComp.ResearchLevel++;
+                        skillComp.ResearchExp = 0;
                         skillComp.Dirty();
                         return true;
                     }

@@ -5,7 +5,8 @@ using Content.Shared.DoAfter;
 using Content.Shared.Interaction;
 using Robust.Shared.Player;
 using Robust.Shared.Utility;
-
+using Content.Server.Vanilla.Skill;
+using Content.Shared.Vanilla.Skill;
 namespace Content.Server.Anomaly;
 
 /// <summary>
@@ -93,8 +94,28 @@ public sealed partial class AnomalySystem
             return;
         if (!args.CanReach)
             return;
-
-        _doAfter.TryStartDoAfter(new DoAfterArgs(EntityManager, args.User, component.ScanDoAfterDuration, new ScannerDoAfterEvent(), uid, target: target, used: uid)
+        //vanilla-station-skill-issue-start
+        float skillduration = component.ScanDoAfterDuration;
+        if (EntityManager.TryGetComponent<RequiresSkillComponent>(uid, out var RequiresSkillComp) && RequiresSkillComp != null)
+        {
+            if (RequiresSkillComp.SkillDiffResearchLevel > 0)
+            {
+                Popup.PopupEntity(Loc.GetString("Skill-issue-message-research-unskilled", ("lvl", RequiresSkillComp.RequiresResearchLevel)), uid);
+                return;
+            }
+            switch (RequiresSkillComp.SkillDiffResearchLevel)
+            {
+                case 0:
+                    skillduration += 15f;
+                    break;
+                case -2:
+                case -3:
+                    skillduration = 0.5f;
+                    break;
+            }
+        }
+        //vanilla-station-skill-issue-end
+        _doAfter.TryStartDoAfter(new DoAfterArgs(EntityManager, args.User, skillduration, new ScannerDoAfterEvent(), uid, target: target, used: uid)
         {
             DistanceThreshold = 2f
         });
@@ -123,7 +144,7 @@ public sealed partial class AnomalySystem
         if (TryComp<AnomalyComponent>(component.ScannedAnomaly, out var anomalyComponent))
             nextPulse = anomalyComponent.NextPulseTime;
 
-        var state = new AnomalyScannerUserInterfaceState(GetScannerMessage(component), nextPulse);
+        var state = new AnomalyScannerUserInterfaceState(GetScannerMessage(uid, component), nextPulse);
         _ui.SetUiState(uid, AnomalyScannerUiKey.Key, state);
     }
 
@@ -136,7 +157,7 @@ public sealed partial class AnomalySystem
         UpdateScannerUi(scanner, scannerComp);
     }
 
-    public FormattedMessage GetScannerMessage(AnomalyScannerComponent component)
+    public FormattedMessage GetScannerMessage(EntityUid scanner, AnomalyScannerComponent component)
     {
         var msg = new FormattedMessage();
         if (component.ScannedAnomaly is not { } anomaly || !TryComp<AnomalyComponent>(anomaly, out var anomalyComp))
@@ -169,12 +190,23 @@ public sealed partial class AnomalySystem
             msg.AddMarkupOrThrow(stateLoc);
         }
         msg.PushNewline();
+        bool show = true;
+        //vanilla-station-skill-issue-start
+        if (EntityManager.TryGetComponent<RequiresSkillComponent>(scanner, out var RequiresSkillComp)){
+            show = RequiresSkillComp.SkillDiffResearchLevel<0? true : false;
+        }
+
+
+        //vanilla-station-skill-issue-end
 
         //Point output
-        if (secret != null && secret.Secret.Contains(AnomalySecretData.OutputPoint))
-            msg.AddMarkupOrThrow(Loc.GetString("anomaly-scanner-point-output-unknown"));
-        else
-            msg.AddMarkupOrThrow(Loc.GetString("anomaly-scanner-point-output", ("point", GetAnomalyPointValue(anomaly, anomalyComp))));
+        if(show)
+        {//vanilla-station-skill-issue
+            if (secret != null && secret.Secret.Contains(AnomalySecretData.OutputPoint))
+                msg.AddMarkupOrThrow(Loc.GetString("anomaly-scanner-point-output-unknown"));
+            else
+                msg.AddMarkupOrThrow(Loc.GetString("anomaly-scanner-point-output", ("point", GetAnomalyPointValue(anomaly, anomalyComp))));
+        }
         msg.PushNewline();
         msg.PushNewline();
 
@@ -209,7 +241,10 @@ public sealed partial class AnomalySystem
         else
             msg.AddMarkupOrThrow(Loc.GetString("anomaly-scanner-particle-transformation", ("type", GetParticleLocale(anomalyComp.TransformationParticleType))));
 
-
+        //vanilla-station-skill-issue-start
+        if(!show)
+            return msg;
+        //vanilla-station-skill-issue-end
         //Behavior
         msg.PushNewline();
         msg.PushNewline();

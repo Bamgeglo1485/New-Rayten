@@ -174,10 +174,15 @@ public sealed class CharacterUIController : UIController, IOnStateEntered<Gamepl
         _window.RolePlaceholder.Visible = briefing == null && !controls.Any() && !objectives.Any();
         if (EntityManager.TryGetComponent<SkillComponent>(entity, out var skillComponent))
         {
+            UpdateProgressBars(skillComponent.PilotingLevel, skillComponent.PilotingExp, _window.Piloting1, _window.Piloting2, _window.Piloting3);
             UpdateProgressBars(skillComponent.RangeWeaponLevel, skillComponent.RangeWeaponExp, _window.RangeWeapon1, _window.RangeWeapon2, _window.RangeWeapon3);
+            UpdateProgressBars(skillComponent.MeleeWeaponLevel, skillComponent.MeleeWeaponExp, _window.MeleeWeapon1, _window.MeleeWeapon2, _window.MeleeWeapon3);
             UpdateProgressBars(skillComponent.MedicineLevel, skillComponent.MedicineExp, _window.Medicine1, _window.Medicine2, _window.Medicine3);
             UpdateProgressBars(skillComponent.ChemistryLevel, skillComponent.ChemistryExp, _window.Chemistry1, _window.Chemistry2, _window.Chemistry3);
-            UpdateProgressBars(skillComponent.PilotingLevel, skillComponent.PilotingExp, _window.Piloting1, _window.Piloting2, _window.Piloting3);
+            UpdateProgressBars(skillComponent.EngineeringLevel, skillComponent.EngineeringExp, _window.Engineering1, _window.Engineering2, _window.Engineering3);
+            UpdateProgressBars(skillComponent.BuildigLevel, skillComponent.BuildigExp, _window.Buildig1, _window.Buildig2, _window.Buildig3);
+            UpdateProgressBars(skillComponent.ResearchLevel, skillComponent.ResearchExp, _window.Research1, _window.Research2, _window.Research3);
+            UpdateProgressBars(skillComponent.RoboticsLevel, skillComponent.RoboticsExp, _window.Robotics1, _window.Robotics2, _window.Robotics3);
         }
     }
 private void UpdateProgressBars(int level, int exp, ProgressBar bar1, ProgressBar bar2, ProgressBar bar3)

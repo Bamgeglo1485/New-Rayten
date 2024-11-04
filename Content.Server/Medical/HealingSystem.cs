@@ -176,7 +176,7 @@ public sealed class HealingSystem : EntitySystem
         //vanilla-station-skill-issue-start
         if (EntityManager.TryGetComponent<RequiresSkillComponent>(uid, out var reqskillComponent))
         {
-            if(!_requiresskill.HasRequiredSkills(user, reqskillComponent))           
+            if(!_requiresskill.HasRequiredSkills(user, reqskillComponent, true))           
             return false;
         }
         //vanilla-station-skill-issue-end

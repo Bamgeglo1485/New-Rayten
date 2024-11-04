@@ -43,8 +43,8 @@ public abstract partial class SharedLabelSystem : EntitySystem
 
         //vanilla-station-skill-issue-start
         if(EntityManager.TryGetComponent<RequiresSkillComponent>(uid, out var skillRequirements) && EntityManager.TryGetComponent<SkillComponent>(args.Examiner, out var skill)){
-            if (!HasSkillLevel(args.Examiner, skillRequirements.RequiresChemistryLevelToRead, skillComponent => skillComponent.ChemistryLevel)
-            || !HasSkillLevel(args.Examiner, skillRequirements.RequiresMedicineLevelToRead, skillComponent => skillComponent.MedicineLevel))
+            if (!HasSkillLevel(args.Examiner, skillRequirements.RequiresChemistryLevel, skillComponent => skillComponent.ChemistryLevel)
+            || !HasSkillLevel(args.Examiner, skillRequirements.RequiresMedicineLevel, skillComponent => skillComponent.MedicineLevel))
                 return;
         }
         //vanilla-station-skill-issue-end
