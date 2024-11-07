@@ -1,6 +1,7 @@
 ﻿using Content.Shared.Construction.Components;
 using Content.Shared.Interaction;
 using Content.Shared.Tag;
+using Content.Shared.Vanilla.Skill;
 using Robust.Shared.Containers;
 
 namespace Content.Shared.Construction;
@@ -12,7 +13,7 @@ public sealed class PartAssemblySystem : EntitySystem
 {
     [Dependency] private readonly SharedContainerSystem _container = default!;
     [Dependency] private readonly TagSystem _tag = default!;
-
+    [Dependency] private readonly SharedRequiresSkillSystem _sharedRequiresSkillSystem = default!;
     /// <inheritdoc/>
     public override void Initialize()
     {
@@ -28,7 +29,7 @@ public sealed class PartAssemblySystem : EntitySystem
 
     private void OnInteractUsing(EntityUid uid, PartAssemblyComponent component, InteractUsingEvent args)
     {
-        if (!TryInsertPart(args.Used, uid, component))
+        if (!TryInsertPart(args.Used, uid, args.User, component))
             return;
         args.Handled = true;
     }
@@ -45,7 +46,7 @@ public sealed class PartAssemblySystem : EntitySystem
     /// <summary>
     /// Attempts to insert a part into the current assembly, starting one if there is none.
     /// </summary>
-    public bool TryInsertPart(EntityUid part, EntityUid uid, PartAssemblyComponent? component = null)
+    public bool TryInsertPart(EntityUid part, EntityUid uid, EntityUid user, PartAssemblyComponent? component = null)
     {
         if (!Resolve(uid, ref component))
             return false;
@@ -75,6 +76,15 @@ public sealed class PartAssemblySystem : EntitySystem
 
         if (!IsPartValid(uid, part, assemblyId, component))
             return false;
+
+        //vanilla-station-start
+        if (EntityManager.TryGetComponent<RequiresSkillComponent>(uid, out var requiresSkillComponent))
+        {
+            // Проверка, есть ли у пользователя нужные навыки для выполнения действия
+            if (!_sharedRequiresSkillSystem.HasRequiredSkillsForCraft(user, requiresSkillComponent))
+                return false; // Если навыков недостаточно, не добавляем в очередь
+        }
+        //vanilla-station-end
 
         component.CurrentAssembly = assemblyId;
         _container.Insert(part, component.PartsContainer);

@@ -180,9 +180,9 @@ public sealed class CharacterUIController : UIController, IOnStateEntered<Gamepl
             UpdateProgressBars(skillComponent.MedicineLevel, skillComponent.MedicineExp, _window.Medicine1, _window.Medicine2, _window.Medicine3);
             UpdateProgressBars(skillComponent.ChemistryLevel, skillComponent.ChemistryExp, _window.Chemistry1, _window.Chemistry2, _window.Chemistry3);
             UpdateProgressBars(skillComponent.EngineeringLevel, skillComponent.EngineeringExp, _window.Engineering1, _window.Engineering2, _window.Engineering3);
-            UpdateProgressBars(skillComponent.BuildigLevel, skillComponent.BuildigExp, _window.Buildig1, _window.Buildig2, _window.Buildig3);
+            UpdateProgressBars(skillComponent.BuildingLevel, skillComponent.BuildingExp, _window.Building1, _window.Building2, _window.Building3);
             UpdateProgressBars(skillComponent.ResearchLevel, skillComponent.ResearchExp, _window.Research1, _window.Research2, _window.Research3);
-            UpdateProgressBars(skillComponent.RoboticsLevel, skillComponent.RoboticsExp, _window.Robotics1, _window.Robotics2, _window.Robotics3);
+            UpdateProgressBars(skillComponent.InstrumentationLevel, skillComponent.InstrumentationExp, _window.Instrumentation1, _window.Instrumentation2, _window.Instrumentation3);
         }
     }
 private void UpdateProgressBars(int level, int exp, ProgressBar bar1, ProgressBar bar2, ProgressBar bar3)

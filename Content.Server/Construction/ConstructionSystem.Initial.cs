@@ -19,7 +19,8 @@ using Robust.Shared.Containers;
 using Robust.Shared.Map;
 using Robust.Shared.Player;
 using Robust.Shared.Timing;
-
+using Content.Shared.Vanilla.Skill;
+using Content.Server.Vanilla.Skill;
 namespace Content.Server.Construction
 {
     public sealed partial class ConstructionSystem
@@ -32,7 +33,7 @@ namespace Content.Server.Construction
         [Dependency] private readonly EntityLookupSystem _lookupSystem = default!;
         [Dependency] private readonly SharedTransformSystem _transformSystem = default!;
         [Dependency] private readonly EntityWhitelistSystem _whitelistSystem = default!;
-
+        [Dependency] private readonly RequiresSkillSystem _requiresSkillSystem = default!;
         // --- WARNING! LEGACY CODE AHEAD! ---
         // This entire file contains the legacy code for initial construction.
         // This is bound to be replaced by a better alternative (probably using dummy entities)
@@ -344,7 +345,20 @@ namespace Content.Server.Construction
                 _popup.PopupEntity(Loc.GetString("construction-system-cannot-start"), user, user);
                 return false;
             }
-
+            //vanilla-station-start
+            //Приборостроение
+            if (!_requiresSkillSystem.HasSkillLevel(user, constructionPrototype.RequiresInstrumentationLevel, skillComponent => skillComponent.InstrumentationLevel))
+            {
+                _popup.PopupEntity(Loc.GetString("Skill-issue-message-instrumentation-unskilled", ("lvl", constructionPrototype.RequiresInstrumentationLevel)), user, user);
+                return false;
+            }
+            //Строительство
+            if (!_requiresSkillSystem.HasSkillLevel(user, constructionPrototype.RequiresBuildingLevel, skillComponent => skillComponent.BuildingLevel))
+            {
+                _popup.PopupEntity(Loc.GetString("Skill-issue-message-builing-unskilled", ("lvl", constructionPrototype.RequiresBuildingLevel)), user, user);
+                return false;
+            }
+            //vanilla-station-end
             var startNode = constructionGraph.Nodes[constructionPrototype.StartNode];
             var targetNode = constructionGraph.Nodes[constructionPrototype.TargetNode];
             var pathFind = constructionGraph.Path(startNode.Name, targetNode.Name);
@@ -435,7 +449,20 @@ namespace Content.Server.Construction
                 _popup.PopupEntity(Loc.GetString("construction-system-inside-container"), user, user);
                 return;
             }
-
+            //vanilla-station-start
+            //Приборостроение
+            if (!_requiresSkillSystem.HasSkillLevel(user, constructionPrototype.RequiresInstrumentationLevel, skillComponent => skillComponent.InstrumentationLevel))
+            {
+                _popup.PopupEntity(Loc.GetString("Skill-issue-message-instrumentation-unskilled", ("lvl", constructionPrototype.RequiresInstrumentationLevel)), user, user);
+                return;
+            }
+            //Строительство
+            if (!_requiresSkillSystem.HasSkillLevel(user, constructionPrototype.RequiresBuildingLevel, skillComponent => skillComponent.BuildingLevel))
+            {
+                _popup.PopupEntity(Loc.GetString("Skill-issue-message-builing-unskilled", ("lvl", constructionPrototype.RequiresBuildingLevel)), user, user);
+                return;
+            }
+            //vanilla-station-end
             var startNode = constructionGraph.Nodes[constructionPrototype.StartNode];
             var targetNode = constructionGraph.Nodes[constructionPrototype.TargetNode];
             var pathFind = constructionGraph.Path(startNode.Name, targetNode.Name);

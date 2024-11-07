@@ -14,6 +14,9 @@ using Content.Shared.Temperature;
 using Content.Shared.Tools.Systems;
 using Robust.Shared.Containers;
 using Robust.Shared.Utility;
+using Content.Shared.Vanilla.Skill;
+using Content.Server.Vanilla.Skill;
+
 #if EXCEPTION_TOLERANCE
 // ReSharper disable once RedundantUsingDirective
 using Robust.Shared.Exceptions;
@@ -27,7 +30,6 @@ namespace Content.Server.Construction
 #if EXCEPTION_TOLERANCE
         [Dependency] private readonly IRuntimeLog _runtimeLog = default!;
 #endif
-
         private readonly Queue<EntityUid> _constructionUpdateQueue = new();
         private readonly HashSet<EntityUid> _queuedUpdates = new();
 
@@ -556,6 +558,19 @@ namespace Content.Server.Construction
                 // If they're already handled, we do nothing.
                 if (handled.Handled)
                     return;
+
+                //vanilla-station-start
+                if (args is InteractUsingEvent interactUsingEvent)
+                {
+                    var user = interactUsingEvent.User; // Получаем пользователя из события
+                    if (EntityManager.TryGetComponent<RequiresSkillComponent>(uid, out var requiresSkillComponent))
+                    {
+                        // Проверка, есть ли у пользователя нужные навыки для выполнения действия
+                        if (!_requiresSkillSystem.HasRequiredSkillsForCraft(user, requiresSkillComponent, true))
+                            return; // Если навыков недостаточно, не добавляем в очередь
+                    }
+                }
+                //vanilla-station-end
 
                 // Otherwise, let's check if this event could be handled by the construction's current state.
                 if (HandleEvent(uid, args, true, construction) != HandleResult.Validated)
