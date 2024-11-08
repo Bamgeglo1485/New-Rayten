@@ -38,6 +38,16 @@ public abstract class SharedRequiresSkillSystem : EntitySystem
         }
         return true;
     }
+
+    public bool HasRequiredSkillsForCraft(EntityUid user, RequiresSkillComponent component)
+    {
+         // Проверка уровня исследования
+        if (!HasSkillLevel(user, component.RequiresInstrumentationLevel, skillComponent => skillComponent.InstrumentationLevel)){
+            return false;
+        }
+        return true;
+    }
+
     public bool HasSkillLevel(EntityUid user, int requiredLevel, Func<SkillComponent, int> skillSelector)
     {
         if (TryComp<SkillComponent>(user, out var skillComponent) && skillSelector(skillComponent) >= requiredLevel)

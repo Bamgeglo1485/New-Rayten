@@ -19,7 +19,7 @@
             <BoxContainer Orientation="Vertical" VerticalAlignment="Top" HorizontalExpand="true">
                 <!-- Пилотирование -->
                 <BoxContainer Orientation="Horizontal" VerticalAlignment="Top">
-                    <Label Text="Пилотирование:" StyleClasses="LabelSubText" MinSize="115 0" Access="Public" />
+                    <Label Text="Пилотирование:" StyleClasses="LabelSubText" MinSize="125 0" Access="Public" />
                     <BoxContainer Orientation="Horizontal" HorizontalExpand="true">
                         <ProgressBar Name="Piloting1" MinValue="0" MaxValue="300" HorizontalExpand="false" Modulate="green" SetSize="75 10" Margin="5,0,0,0" Access="Public"/>
                         <ProgressBar Name="Piloting2" MinValue="0" MaxValue="600" HorizontalExpand="false" Modulate="green" SetSize="75 10" Margin="5,0,0,0" Access="Public"/>
@@ -29,7 +29,7 @@
 
                 <!-- Стрельба -->
                 <BoxContainer Orientation="Horizontal" VerticalAlignment="Top">
-                    <Label Text="Стрельба:" StyleClasses="LabelSubText" MinSize="115 0" Access="Public" />
+                    <Label Text="Стрельба:" StyleClasses="LabelSubText" MinSize="125 0" Access="Public" />
                     <BoxContainer Orientation="Horizontal" HorizontalExpand="true">
                         <ProgressBar Name="RangeWeapon1" MinValue="0" MaxValue="300" HorizontalExpand="false" Modulate="green" SetSize="75 10" Margin="5,0,0,0" Access="Public"/>
                         <ProgressBar Name="RangeWeapon2" MinValue="0" MaxValue="600" HorizontalExpand="false" Modulate="green" SetSize="75 10" Margin="5,0,0,0" Access="Public"/>
@@ -39,7 +39,7 @@
 
                 <!-- Ближний бой -->
                 <BoxContainer Orientation="Horizontal" VerticalAlignment="Top">
-                    <Label Text="Ближний бой:" StyleClasses="LabelSubText" MinSize="115 0" Access="Public" />
+                    <Label Text="Ближний бой:" StyleClasses="LabelSubText" MinSize="125 0" Access="Public" />
                     <BoxContainer Orientation="Horizontal" HorizontalExpand="true">
                         <ProgressBar Name="MeleeWeapon1" MinValue="0" MaxValue="300" HorizontalExpand="false" Modulate="green" SetSize="75 10" Margin="5,0,0,0" Access="Public"/>
                         <ProgressBar Name="MeleeWeapon2" MinValue="0" MaxValue="600" HorizontalExpand="false" Modulate="green" SetSize="75 10" Margin="5,0,0,0" Access="Public"/>
@@ -49,7 +49,7 @@
                 
                 <!-- Медицина -->
                 <BoxContainer Orientation="Horizontal" VerticalAlignment="Top">
-                    <Label Text="Медицина:" StyleClasses="LabelSubText" MinSize="115 0" Access="Public" />
+                    <Label Text="Медицина:" StyleClasses="LabelSubText" MinSize="125 0" Access="Public" />
                     <BoxContainer Orientation="Horizontal" HorizontalExpand="true">
                         <ProgressBar Name="Medicine1" MinValue="0" MaxValue="300" HorizontalExpand="false" Modulate="green" SetSize="75 10" Margin="5,0,0,0" Access="Public"/>
                         <ProgressBar Name="Medicine2" MinValue="0" MaxValue="600" HorizontalExpand="false" Modulate="green" SetSize="75 10" Margin="5,0,0,0" Access="Public"/>
@@ -59,7 +59,7 @@
                 
                 <!-- Химия -->
                 <BoxContainer Orientation="Horizontal" VerticalAlignment="Top">
-                    <Label Text="Химия:" StyleClasses="LabelSubText" MinSize="115 0" Access="Public" />
+                    <Label Text="Химия:" StyleClasses="LabelSubText" MinSize="125 0" Access="Public" />
                     <BoxContainer Orientation="Horizontal" HorizontalExpand="true">
                         <ProgressBar Name="Chemistry1" MinValue="0" MaxValue="300" HorizontalExpand="false" Modulate="green" SetSize="75 10" Margin="5,0,0,0" Access="Public"/>
                         <ProgressBar Name="Chemistry2" MinValue="0" MaxValue="600" HorizontalExpand="false" Modulate="green" SetSize="75 10" Margin="5,0,0,0" Access="Public"/>
@@ -69,7 +69,7 @@
 
                 <!-- Инженерия -->
                 <BoxContainer Orientation="Horizontal" VerticalAlignment="Top">
-                    <Label Text="Инженерия:" StyleClasses="LabelSubText" MinSize="115 0" Access="Public" />
+                    <Label Text="Инженерия:" StyleClasses="LabelSubText" MinSize="125 0" Access="Public" />
                     <BoxContainer Orientation="Horizontal" HorizontalExpand="true">
                         <ProgressBar Name="Engineering1" MinValue="0" MaxValue="300" HorizontalExpand="false" Modulate="green" SetSize="75 10" Margin="5,0,0,0" Access="Public"/>
                         <ProgressBar Name="Engineering2" MinValue="0" MaxValue="600" HorizontalExpand="false" Modulate="green" SetSize="75 10" Margin="5,0,0,0" Access="Public"/>
@@ -79,17 +79,17 @@
 
                 <!-- Строительство -->
                 <BoxContainer Orientation="Horizontal" VerticalAlignment="Top">
-                    <Label Text="Строительство:" StyleClasses="LabelSubText" MinSize="115 0" Access="Public" />
+                    <Label Text="Строительство:" StyleClasses="LabelSubText" MinSize="125 0" Access="Public" />
                     <BoxContainer Orientation="Horizontal" HorizontalExpand="true">
-                        <ProgressBar Name="Buildig1" MinValue="0" MaxValue="300" HorizontalExpand="false" Modulate="green" SetSize="75 10" Margin="5,0,0,0" Access="Public"/>
-                        <ProgressBar Name="Buildig2" MinValue="0" MaxValue="600" HorizontalExpand="false" Modulate="green" SetSize="75 10" Margin="5,0,0,0" Access="Public"/>
-                        <ProgressBar Name="Buildig3" MinValue="0" MaxValue="900" HorizontalExpand="false" Modulate="green" SetSize="75 10" Margin="5,0,0,0" Access="Public"/>
+                        <ProgressBar Name="Building1" MinValue="0" MaxValue="300" HorizontalExpand="false" Modulate="green" SetSize="75 10" Margin="5,0,0,0" Access="Public"/>
+                        <ProgressBar Name="Building2" MinValue="0" MaxValue="600" HorizontalExpand="false" Modulate="green" SetSize="75 10" Margin="5,0,0,0" Access="Public"/>
+                        <ProgressBar Name="Building3" MinValue="0" MaxValue="900" HorizontalExpand="false" Modulate="green" SetSize="75 10" Margin="5,0,0,0" Access="Public"/>
                     </BoxContainer>
                 </BoxContainer>
 
                 <!-- Исследования -->
                 <BoxContainer Orientation="Horizontal" VerticalAlignment="Top">
-                    <Label Text="Исследования:" StyleClasses="LabelSubText" MinSize="115 0" Access="Public" />
+                    <Label Text="Исследования:" StyleClasses="LabelSubText" MinSize="125 0" Access="Public" />
                     <BoxContainer Orientation="Horizontal" HorizontalExpand="true">
                         <ProgressBar Name="Research1" MinValue="0" MaxValue="300" HorizontalExpand="false" Modulate="green" SetSize="75 10" Margin="5,0,0,0" Access="Public"/>
                         <ProgressBar Name="Research2" MinValue="0" MaxValue="600" HorizontalExpand="false" Modulate="green" SetSize="75 10" Margin="5,0,0,0" Access="Public"/>
@@ -97,13 +97,13 @@
                     </BoxContainer>
                 </BoxContainer>
 
-                <!-- Роботехника -->
+                <!-- Приборостроение -->
                 <BoxContainer Orientation="Horizontal" VerticalAlignment="Top">
-                    <Label Text="Роботехника:" StyleClasses="LabelSubText" MinSize="115 0" Access="Public" />
+                    <Label Text="Приборостроение:" StyleClasses="LabelSubText" MinSize="125 0" Access="Public" />
                     <BoxContainer Orientation="Horizontal" HorizontalExpand="true">
-                        <ProgressBar Name="Robotics1" MinValue="0" MaxValue="300" HorizontalExpand="false" Modulate="green" SetSize="75 10" Margin="5,0,0,0" Access="Public"/>
-                        <ProgressBar Name="Robotics2" MinValue="0" MaxValue="600" HorizontalExpand="false" Modulate="green" SetSize="75 10" Margin="5,0,0,0" Access="Public"/>
-                        <ProgressBar Name="Robotics3" MinValue="0" MaxValue="900" HorizontalExpand="false" Modulate="green" SetSize="75 10" Margin="5,0,0,0" Access="Public"/>
+                        <ProgressBar Name="Instrumentation1" MinValue="0" MaxValue="300" HorizontalExpand="false" Modulate="green" SetSize="75 10" Margin="5,0,0,0" Access="Public"/>
+                        <ProgressBar Name="Instrumentation2" MinValue="0" MaxValue="600" HorizontalExpand="false" Modulate="green" SetSize="75 10" Margin="5,0,0,0" Access="Public"/>
+                        <ProgressBar Name="Instrumentation3" MinValue="0" MaxValue="900" HorizontalExpand="false" Modulate="green" SetSize="75 10" Margin="5,0,0,0" Access="Public"/>
                     </BoxContainer>
                 </BoxContainer>
             </BoxContainer>

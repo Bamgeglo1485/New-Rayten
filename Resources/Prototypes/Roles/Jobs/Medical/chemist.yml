@@ -24,9 +24,9 @@
         MedicineLevel: 2
         ChemistryLevel: 3
         EngineeringLevel: 0
-        BuildigLevel: 0
+        BuildingLevel: 0
         ResearchLevel: 0
-        RoboticsLevel: 0
+        InstrumentationLevel: 0
 
 - type: startingGear
   id: ChemistGear

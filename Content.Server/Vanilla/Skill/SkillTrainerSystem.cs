@@ -60,6 +60,12 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
                         return;
                     }
                     break;
+                case "Instrumentation":
+                    if(skillComp.InstrumentationLevel>=component.MaxLevel){
+                        _popup.PopupEntity(Loc.GetString("Skill-train-overtrain-instrumentation"), args.User, args.User);
+                        return;
+                    }
+                    break;
             }
         }
         else

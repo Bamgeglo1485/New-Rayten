@@ -113,9 +113,9 @@
         MedicineLevel: 3
         ChemistryLevel: 3
         EngineeringLevel: 3
-        BuildigLevel: 3
+        BuildingLevel: 3
         ResearchLevel: 3
-        RoboticsLevel: 3
+        InstrumentationLevel: 3
       - type: NukeOperative
       - type: RandomMetadata
         nameSegments:
@@ -140,9 +140,9 @@
         MedicineLevel: 3
         ChemistryLevel: 3
         EngineeringLevel: 3
-        BuildigLevel: 3
+        BuildingLevel: 3
         ResearchLevel: 3
-        RoboticsLevel: 3
+        InstrumentationLevel: 3
       - type: NukeOperative
       - type: RandomMetadata
         nameSegments:
@@ -169,9 +169,9 @@
         MedicineLevel: 3
         ChemistryLevel: 3
         EngineeringLevel: 3
-        BuildigLevel: 3
+        BuildingLevel: 3
         ResearchLevel: 3
-        RoboticsLevel: 3
+        InstrumentationLevel: 3
       - type: NukeOperative
       - type: RandomMetadata
         nameSegments:
@@ -224,9 +224,9 @@
         MedicineLevel: 3
         ChemistryLevel: 3
         EngineeringLevel: 3
-        BuildigLevel: 3
+        BuildingLevel: 3
         ResearchLevel: 3
-        RoboticsLevel: 3
+        InstrumentationLevel: 3
       mindRoles:
       - MindRoleTraitor
 
@@ -264,9 +264,9 @@
         MedicineLevel: 3
         ChemistryLevel: 3
         EngineeringLevel: 3
-        BuildigLevel: 3
+        BuildingLevel: 3
         ResearchLevel: 3
-        RoboticsLevel: 3
+        InstrumentationLevel: 3
       - type: Revolutionary
       - type: HeadRevolutionary
       mindRoles:
@@ -315,9 +315,9 @@
         MedicineLevel: 3
         ChemistryLevel: 3
         EngineeringLevel: 3
-        BuildigLevel: 3
+        BuildingLevel: 3
         ResearchLevel: 3
-        RoboticsLevel: 3
+        InstrumentationLevel: 3
       - type: PendingZombie
       - type: ZombifyOnDeath
       - type: IncurableZombie

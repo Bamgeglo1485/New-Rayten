@@ -27,9 +27,9 @@
       MedicineLevel: 1
       ChemistryLevel: 0
       EngineeringLevel: 1
-      BuildigLevel: 0
+      BuildingLevel: 0
       ResearchLevel: 1
-      RoboticsLevel: 0
+      InstrumentationLevel: 0
     - type: GhostRole
       name: job-name-captain
       description: ghost-role-information-command-description
@@ -48,9 +48,9 @@
       MedicineLevel: 0
       ChemistryLevel: 0
       EngineeringLevel: 3
-      BuildigLevel: 3
+      BuildingLevel: 3
       ResearchLevel: 0
-      RoboticsLevel: 2
+      InstrumentationLevel: 2
     - type: GhostRole
       name: job-name-ce
       description: ghost-role-information-command-description
@@ -69,9 +69,9 @@
       MedicineLevel: 3
       ChemistryLevel: 3
       EngineeringLevel: 0
-      BuildigLevel: 0
+      BuildingLevel: 0
       ResearchLevel: 0
-      RoboticsLevel: 0
+      InstrumentationLevel: 0
     - type: GhostRole
       name: job-name-cmo
       description: ghost-role-information-command-description
@@ -90,9 +90,9 @@
       MedicineLevel: 0
       ChemistryLevel: 0
       EngineeringLevel: 0
-      BuildigLevel: 0
+      BuildingLevel: 0
       ResearchLevel: 0
-      RoboticsLevel: 0
+      InstrumentationLevel: 0
     - type: GhostRole
       name: job-name-hop
       description: ghost-role-information-command-description
@@ -111,9 +111,9 @@
       MedicineLevel: 1
       ChemistryLevel: 0
       EngineeringLevel: 0
-      BuildigLevel: 0
+      BuildingLevel: 0
       ResearchLevel: 0
-      RoboticsLevel: 0
+      InstrumentationLevel: 0
     - type: GhostRole
       name: job-name-hos
       description: ghost-role-information-command-description
@@ -132,9 +132,9 @@
       MedicineLevel: 0
       ChemistryLevel: 1
       EngineeringLevel: 1
-      BuildigLevel: 0
+      BuildingLevel: 0
       ResearchLevel: 3
-      RoboticsLevel: 3
+      InstrumentationLevel: 3
     - type: GhostRole
       name: job-name-rd
       description: ghost-role-information-command-description
@@ -153,9 +153,9 @@
       MedicineLevel: 0
       ChemistryLevel: 1
       EngineeringLevel: 1
-      BuildigLevel: 0
+      BuildingLevel: 0
       ResearchLevel: 0
-      RoboticsLevel: 1
+      InstrumentationLevel: 1
     - type: GhostRole
       name: job-name-qm
       description: ghost-role-information-command-description
@@ -188,9 +188,9 @@
       MedicineLevel: 1
       ChemistryLevel: 0
       EngineeringLevel: 0
-      BuildigLevel: 0
+      BuildingLevel: 0
       ResearchLevel: 0
-      RoboticsLevel: 0
+      InstrumentationLevel: 0
     - type: GhostRole
       name: job-name-cadet
     - type: Loadout
@@ -208,9 +208,9 @@
       MedicineLevel: 1
       ChemistryLevel: 0
       EngineeringLevel: 0
-      BuildigLevel: 0
+      BuildingLevel: 0
       ResearchLevel: 0
-      RoboticsLevel: 0
+      InstrumentationLevel: 0
     - type: GhostRole
       name: job-name-security
     - type: Loadout
@@ -228,9 +228,9 @@
       MedicineLevel: 1
       ChemistryLevel: 2
       EngineeringLevel: 1
-      BuildigLevel: 0
+      BuildingLevel: 0
       ResearchLevel: 1
-      RoboticsLevel: 0
+      InstrumentationLevel: 0
     - type: GhostRole
       name: job-name-detective
     - type: Loadout
@@ -248,9 +248,9 @@
       MedicineLevel: 1
       ChemistryLevel: 0
       EngineeringLevel: 1
-      BuildigLevel: 1
+      BuildingLevel: 1
       ResearchLevel: 0
-      RoboticsLevel: 0
+      InstrumentationLevel: 0
     - type: GhostRole
       name: job-name-warden
     - type: Loadout
@@ -281,9 +281,9 @@
       MedicineLevel: 0
       ChemistryLevel: 1
       EngineeringLevel: 1
-      BuildigLevel: 1
+      BuildingLevel: 1
       ResearchLevel: 1
-      RoboticsLevel: 1
+      InstrumentationLevel: 1
     - type: GhostRole
       name: job-name-cargotech
     - type: Loadout
@@ -301,9 +301,9 @@
       MedicineLevel: 1
       ChemistryLevel: 0
       EngineeringLevel: 1
-      BuildigLevel: 1
+      BuildingLevel: 1
       ResearchLevel: 0
-      RoboticsLevel: 0
+      InstrumentationLevel: 0
     - type: GhostRole
       name: job-name-salvagespec
     - type: Loadout
@@ -334,9 +334,9 @@
       MedicineLevel: 0
       ChemistryLevel: 2
       EngineeringLevel: 3
-      BuildigLevel: 3
+      BuildingLevel: 3
       ResearchLevel: 0
-      RoboticsLevel: 0
+      InstrumentationLevel: 0
     - type: GhostRole
       name: job-name-atmostech
     - type: Loadout
@@ -354,9 +354,9 @@
       MedicineLevel: 0
       ChemistryLevel: 0
       EngineeringLevel: 2
-      BuildigLevel: 2
+      BuildingLevel: 2
       ResearchLevel: 0
-      RoboticsLevel: 0
+      InstrumentationLevel: 0
     - type: GhostRole
       name: job-name-technical-assistant
     - type: Loadout
@@ -374,9 +374,9 @@
       MedicineLevel: 0
       ChemistryLevel: 0
       EngineeringLevel: 3
-      BuildigLevel: 3
+      BuildingLevel: 3
       ResearchLevel: 0
-      RoboticsLevel: 2
+      InstrumentationLevel: 2
     - type: GhostRole
       name: job-name-engineer
     - type: Loadout
@@ -407,9 +407,9 @@
       MedicineLevel: 2
       ChemistryLevel: 2
       EngineeringLevel: 0
-      BuildigLevel: 0
+      BuildingLevel: 0
       ResearchLevel: 0
-      RoboticsLevel: 0
+      InstrumentationLevel: 0
     - type: GhostRole
       name: job-name-intern
     - type: Loadout
@@ -427,9 +427,9 @@
       MedicineLevel: 3
       ChemistryLevel: 2
       EngineeringLevel: 0
-      BuildigLevel: 0
+      BuildingLevel: 0
       ResearchLevel: 0
-      RoboticsLevel: 0
+      InstrumentationLevel: 0
     - type: GhostRole
       name: job-name-doctor
     - type: Loadout
@@ -447,9 +447,9 @@
       MedicineLevel: 2
       ChemistryLevel: 2
       EngineeringLevel: 0
-      BuildigLevel: 0
+      BuildingLevel: 0
       ResearchLevel: 0
-      RoboticsLevel: 0
+      InstrumentationLevel: 0
     - type: GhostRole
       name: job-name-paramedic
     - type: Loadout
@@ -467,9 +467,9 @@
       MedicineLevel: 3
       ChemistryLevel: 3
       EngineeringLevel: 0
-      BuildigLevel: 0
+      BuildingLevel: 0
       ResearchLevel: 0
-      RoboticsLevel: 0
+      InstrumentationLevel: 0
     - type: GhostRole
       name: ghost-role-information-medical-virologist-name
     - type: Loadout
@@ -487,9 +487,9 @@
       MedicineLevel: 3
       ChemistryLevel: 3
       EngineeringLevel: 0
-      BuildigLevel: 0
+      BuildingLevel: 0
       ResearchLevel: 0
-      RoboticsLevel: 0
+      InstrumentationLevel: 0
     - type: GhostRole
       name: ghost-role-information-medical-geneticist-name
     - type: Loadout
@@ -507,9 +507,9 @@
       MedicineLevel: 2
       ChemistryLevel: 1
       EngineeringLevel: 0
-      BuildigLevel: 0
+      BuildingLevel: 0
       ResearchLevel: 0
-      RoboticsLevel: 0
+      InstrumentationLevel: 0
     - type: GhostRole
       name: job-name-psychologist
     - type: Loadout
@@ -527,9 +527,9 @@
       MedicineLevel: 2
       ChemistryLevel: 3
       EngineeringLevel: 0
-      BuildigLevel: 0
+      BuildingLevel: 0
       ResearchLevel: 0
-      RoboticsLevel: 0
+      InstrumentationLevel: 0
     - type: GhostRole
       name: job-name-chemist
     - type: Loadout
@@ -547,9 +547,9 @@
       MedicineLevel: 2
       ChemistryLevel: 0
       EngineeringLevel: 0
-      BuildigLevel: 0
+      BuildingLevel: 0
       ResearchLevel: 0
-      RoboticsLevel: 0
+      InstrumentationLevel: 0
     - type: GhostRole
       name: ghost-role-information-medical-dentist-name
     - type: Loadout
@@ -580,9 +580,9 @@
       MedicineLevel: 0
       ChemistryLevel: 1
       EngineeringLevel: 0
-      BuildigLevel: 0
+      BuildingLevel: 0
       ResearchLevel: 2
-      RoboticsLevel: 2
+      InstrumentationLevel: 2
     - type: GhostRole
       name: job-name-research-assistant
     - type: Loadout
@@ -600,9 +600,9 @@
       MedicineLevel: 0
       ChemistryLevel: 1
       EngineeringLevel: 1
-      BuildigLevel: 0
+      BuildingLevel: 0
       ResearchLevel: 3
-      RoboticsLevel: 3
+      InstrumentationLevel: 3
     - type: GhostRole
       name: job-name-scientist
     - type: Loadout
@@ -860,9 +860,9 @@
       MedicineLevel: 1
       ChemistryLevel: 0
       EngineeringLevel: 1
-      BuildigLevel: 0
+      BuildingLevel: 0
       ResearchLevel: 1
-      RoboticsLevel: 0
+      InstrumentationLevel: 0
     - type: GhostRole
       name: ghost-role-information-lost-challenge-commander-name
       description: ghost-role-information-lost-challenge-commander-description
@@ -890,9 +890,9 @@
       MedicineLevel: 0
       ChemistryLevel: 0
       EngineeringLevel: 3
-      BuildigLevel: 3
+      BuildingLevel: 3
       ResearchLevel: 0
-      RoboticsLevel: 2
+      InstrumentationLevel: 2
     - type: GhostRole
       name: ghost-role-information-lost-challenge-commander-name
       description: ghost-role-information-lost-challenge-commander-description
@@ -920,9 +920,9 @@
       MedicineLevel: 3
       ChemistryLevel: 3
       EngineeringLevel: 0
-      BuildigLevel: 0
+      BuildingLevel: 0
       ResearchLevel: 0
-      RoboticsLevel: 0
+      InstrumentationLevel: 0
     - type: GhostRole
       name: ghost-role-information-lost-challenge-commander-name
       description: ghost-role-information-lost-challenge-commander-description
@@ -950,9 +950,9 @@
       MedicineLevel: 0
       ChemistryLevel: 0
       EngineeringLevel: 0
-      BuildigLevel: 0
+      BuildingLevel: 0
       ResearchLevel: 0
-      RoboticsLevel: 0
+      InstrumentationLevel: 0
     - type: GhostRole
       name: ghost-role-information-lost-challenge-commander-name
       description: ghost-role-information-lost-challenge-commander-description
@@ -979,9 +979,9 @@
       MedicineLevel: 1
       ChemistryLevel: 0
       EngineeringLevel: 0
-      BuildigLevel: 0
+      BuildingLevel: 0
       ResearchLevel: 0
-      RoboticsLevel: 0
+      InstrumentationLevel: 0
     - type: GhostRole
       name: ghost-role-information-lost-challenge-commander-name
       description: ghost-role-information-lost-challenge-commander-description
@@ -1008,9 +1008,9 @@
       MedicineLevel: 0
       ChemistryLevel: 1
       EngineeringLevel: 0
-      BuildigLevel: 0
+      BuildingLevel: 0
       ResearchLevel: 3
-      RoboticsLevel: 3
+      InstrumentationLevel: 3
     - type: GhostRole
       name: ghost-role-information-lost-challenge-commander-name
       description: ghost-role-information-lost-challenge-commander-description
@@ -1102,9 +1102,9 @@
       MedicineLevel: 3
       ChemistryLevel: 2
       EngineeringLevel: 2
-      BuildigLevel: 2
+      BuildingLevel: 2
       ResearchLevel: 2
-      RoboticsLevel: 2
+      InstrumentationLevel: 2
     - type: NpcFactionMember
       factions:
       - Syndicate
@@ -1130,9 +1130,9 @@
       MedicineLevel: 3
       ChemistryLevel: 2
       EngineeringLevel: 2
-      BuildigLevel: 2
+      BuildingLevel: 2
       ResearchLevel: 2
-      RoboticsLevel: 2
+      InstrumentationLevel: 2
     - type: NpcFactionMember
       factions:
       - Syndicate
@@ -1158,9 +1158,9 @@
       MedicineLevel: 3
       ChemistryLevel: 2
       EngineeringLevel: 2
-      BuildigLevel: 2
+      BuildingLevel: 2
       ResearchLevel: 2
-      RoboticsLevel: 2
+      InstrumentationLevel: 2
     - type: NpcFactionMember
       factions:
       - Syndicate
@@ -1185,9 +1185,9 @@
       MedicineLevel: 0
       ChemistryLevel: 0
       EngineeringLevel: 0
-      BuildigLevel: 0
+      BuildingLevel: 0
       ResearchLevel: 0
-      RoboticsLevel: 0
+      InstrumentationLevel: 0
     - type: NpcFactionMember
       factions:
       - Syndicate
@@ -1212,9 +1212,9 @@
       MedicineLevel: 0
       ChemistryLevel: 0
       EngineeringLevel: 0
-      BuildigLevel: 0
+      BuildingLevel: 0
       ResearchLevel: 0
-      RoboticsLevel: 0
+      InstrumentationLevel: 0
     - type: NpcFactionMember
       factions:
       - Syndicate
@@ -1241,9 +1241,9 @@
       MedicineLevel: 1
       ChemistryLevel: 1
       EngineeringLevel: 1
-      BuildigLevel: 1
+      BuildingLevel: 1
       ResearchLevel: 1
-      RoboticsLevel: 1
+      InstrumentationLevel: 1
     - type: GhostRole
       name: ghost-role-information-blackmarketeer-name
       description: ghost-role-information-blackmarketeer-description
@@ -1265,9 +1265,9 @@
       MedicineLevel: 3
       ChemistryLevel: 3
       EngineeringLevel: 3
-      BuildigLevel: 3
+      BuildingLevel: 3
       ResearchLevel: 3
-      RoboticsLevel: 3
+      InstrumentationLevel: 3
     - type: RussianAccent
     - type: ScrambledAccent
     - type: SlurredAccent

@@ -97,7 +97,22 @@ public sealed class RequiresSkillSystem : SharedRequiresSkillSystem
         }
         return true;
     }
-
+    public bool HasRequiredSkillsForCraft(EntityUid user, RequiresSkillComponent component, bool popup)
+    {
+        // Проверка уровня Приборостроения
+        if (!HasSkillLevel(user, component.RequiresInstrumentationLevel, skillComponent => skillComponent.InstrumentationLevel)){
+            if(popup)
+            _popupSystem.PopupEntity(Loc.GetString("Skill-issue-message-instrumentation-unskilled", ("lvl", component.RequiresInstrumentationLevel)), user, user);
+            return false;
+        }
+        //  // Проверка уровня Строительства
+        // if (!HasSkillLevel(user, component.RequiresInstrumentationLevel, skillComponent => skillComponent.InstrumentationLevel)){
+        //     if(popup)
+        //     _popupSystem.PopupEntity(Loc.GetString("Skill-issue-message-building-unskilled", ("lvl", component.RequiresInstrumentationLevel)), user, user);
+        //     return false;
+        // }
+        return true;
+    }
     public bool HasSkillLevel(EntityUid user, int requiredLevel, Func<SkillComponent, int> skillSelector)
     {
         if (TryComp<SkillComponent>(user, out var skillComponent) && skillSelector(skillComponent) >= requiredLevel)
