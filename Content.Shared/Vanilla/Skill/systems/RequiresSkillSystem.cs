@@ -41,8 +41,12 @@ public abstract class SharedRequiresSkillSystem : EntitySystem
 
     public bool HasRequiredSkillsForCraft(EntityUid user, RequiresSkillComponent component)
     {
-         // Проверка уровня исследования
+         // Проверка уровня приборостроения
         if (!HasSkillLevel(user, component.RequiresInstrumentationLevel, skillComponent => skillComponent.InstrumentationLevel)){
+            return false;
+        }
+         // Проверка уровня строительства
+        if (!HasSkillLevel(user, component.RequiresBuildingLevel, skillComponent => skillComponent.BuildingLevel)){
             return false;
         }
         return true;

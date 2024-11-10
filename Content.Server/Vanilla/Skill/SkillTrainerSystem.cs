@@ -66,6 +66,12 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
                         return;
                     }
                     break;
+                case "Building":
+                    if(skillComp.BuildingLevel>=component.MaxLevel){
+                        _popup.PopupEntity(Loc.GetString("Skill-train-overtrain-Building"), args.User, args.User);
+                        return;
+                    }
+                    break;
             }
         }
         else
@@ -190,6 +196,36 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
                     {
                         skillComp.ResearchLevel++;
                         skillComp.ResearchExp = 0;
+                        skillComp.Dirty();
+                        return true;
+                    }
+                    skillComp.Dirty();
+                }
+                break;
+            case "Instrumentation":
+                if (skillComp.InstrumentationLevel < MaxLevel && skillComp.InstrumentationLevel < 3)
+                {
+                    requiredExp = skillComp.InstrumentationLevel + 300 + skillComp.InstrumentationLevel * 300;
+                    skillComp.InstrumentationExp += experienceAmount;
+                    if (skillComp.InstrumentationExp >= requiredExp)
+                    {
+                        skillComp.InstrumentationLevel++;
+                        skillComp.InstrumentationExp = 0;
+                        skillComp.Dirty();
+                        return true;
+                    }
+                    skillComp.Dirty();
+                }
+                break;
+            case "Building":
+                if (skillComp.BuildingLevel < MaxLevel && skillComp.BuildingLevel < 3)
+                {
+                    requiredExp = skillComp.BuildingLevel + 300 + skillComp.BuildingLevel * 300;
+                    skillComp.BuildingExp += experienceAmount;
+                    if (skillComp.BuildingExp >= requiredExp)
+                    {
+                        skillComp.BuildingLevel++;
+                        skillComp.BuildingExp = 0;
                         skillComp.Dirty();
                         return true;
                     }

@@ -4,6 +4,7 @@ using Content.Shared.Database;
 using Content.Shared.Interaction;
 using Content.Shared.Popups;
 using Content.Shared.Repairable;
+using Content.Shared.Vanilla.Skill;
 using SharedToolSystem = Content.Shared.Tools.Systems.SharedToolSystem;
 
 namespace Content.Server.Repairable
@@ -70,6 +71,27 @@ namespace Content.Server.Repairable
 
                 delay *= component.SelfRepairPenalty;
             }
+            if(TryComp<SkillComponent>(args.User, out var SkillComponent))
+            {
+                switch(SkillComponent.BuildingLevel){
+                    case 0:
+                    delay *= 9;
+                    break;
+
+                    case 1:
+                    delay *= 6;
+                    break;
+
+                    case 3:
+                    delay = 0.5f;
+                    break;
+                }
+            }
+            else
+            {
+                delay *= 9;
+            }
+            
 
             // Run the repairing doafter
             args.Handled = _toolSystem.UseTool(args.Used, args.User, uid, delay, component.QualityNeeded, new RepairFinishedEvent(), component.FuelCost);
