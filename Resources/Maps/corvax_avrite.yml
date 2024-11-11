@@ -154514,7 +154514,7 @@ entities:
       pos: -12.5,61.5
       parent: 2
     - type: Door
-      secondsUntilStateChange: -381728.56
+      secondsUntilStateChange: -381750.62
       state: Closing
 - proto: CurtainsPurple
   entities:
@@ -265567,6 +265567,10 @@ entities:
           showEnts: False
           occludes: True
           ent: 19293
+        item_slot: !type:ContainerSlot
+          showEnts: False
+          occludes: True
+          ent: null
   - uid: 8586
     components:
     - type: Transform
@@ -265582,6 +265586,10 @@ entities:
           showEnts: False
           occludes: True
           ent: 8587
+        item_slot: !type:ContainerSlot
+          showEnts: False
+          occludes: True
+          ent: null
   - uid: 28838
     components:
     - type: Transform
@@ -310143,7 +310151,7 @@ entities:
       pos: -61.5,-85.5
       parent: 2
     - type: Door
-      secondsUntilStateChange: -7153.7236
+      secondsUntilStateChange: -7175.7905
       state: Opening
 - proto: SpaceCash
   entities:
@@ -311443,6 +311451,13 @@ entities:
     components:
     - type: Transform
       pos: -31.5,59.5
+      parent: 2
+- proto: SpawnPointBrigmedic
+  entities:
+  - uid: 55572
+    components:
+    - type: Transform
+      pos: -14.5,-20.5
       parent: 2
 - proto: SpawnPointCaptain
   entities:
@@ -390718,7 +390733,7 @@ entities:
       lastSignals:
         DoorStatus: True
     - type: Door
-      secondsUntilStateChange: -142798.73
+      secondsUntilStateChange: -142820.8
       state: Opening
   - uid: 21930
     components:
