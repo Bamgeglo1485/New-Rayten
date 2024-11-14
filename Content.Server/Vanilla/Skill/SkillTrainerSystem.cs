@@ -120,7 +120,6 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
     public bool AddExperience(SkillComponent skillComp, string skillType, int experienceAmount, int MaxLevel)
     {
         int requiredExp = 0;
-
         switch (skillType)
         {
             case "Chemistry":

@@ -5,6 +5,8 @@ using Content.Shared.Interaction;
 using Content.Shared.Popups;
 using Content.Shared.Repairable;
 using Content.Shared.Vanilla.Skill;
+using Robust.Shared.Audio.Systems;
+using Content.Server.SkillTrainer;
 using SharedToolSystem = Content.Shared.Tools.Systems.SharedToolSystem;
 
 namespace Content.Server.Repairable
@@ -15,7 +17,8 @@ namespace Content.Server.Repairable
         [Dependency] private readonly DamageableSystem _damageableSystem = default!;
         [Dependency] private readonly SharedPopupSystem _popup = default!;
         [Dependency] private readonly IAdminLogManager _adminLogger= default!;
-
+        [Dependency] private readonly SharedAudioSystem _audio = default!;
+         [Dependency] private readonly ServerSkillTrainerSystem _skillTrainerSystem = default!;
         public override void Initialize()
         {
             SubscribeLocalEvent<RepairableComponent, InteractUsingEvent>(Repair);
@@ -42,7 +45,12 @@ namespace Content.Server.Repairable
                 _damageableSystem.SetAllDamage(uid, damageable, 0);
                 _adminLogger.Add(LogType.Healed, $"{ToPrettyString(args.User):user} repaired {ToPrettyString(uid):target} back to full health");
             }
+            if (!EntityManager.TryGetComponent<SkillComponent>(args.User, out var skillComp))
+                skillComp = EnsureComp<SkillComponent>(args.User);
 
+            if(_skillTrainerSystem.AddExperience(skillComp, "Building", component.DoAfterDelay * 5, 3)){
+                _audio.PlayPvs("/Audio/Vanilla/SkillSystem/levelup.ogg", args.User);
+            }
             var str = Loc.GetString("comp-repairable-repair",
                 ("target", uid),
                 ("tool", args.Used!));
@@ -71,8 +79,8 @@ namespace Content.Server.Repairable
 
                 delay *= component.SelfRepairPenalty;
             }
+            //vanilla-station-start
             if(TryComp<SkillComponent>(args.User, out var SkillComponent))
-            {
                 switch(SkillComponent.BuildingLevel){
                     case 0:
                     delay *= 9;
@@ -86,12 +94,9 @@ namespace Content.Server.Repairable
                     delay = 0.5f;
                     break;
                 }
-            }
             else
-            {
                 delay *= 9;
-            }
-            
+            //vanilla-station-end
 
             // Run the repairing doafter
             args.Handled = _toolSystem.UseTool(args.Used, args.User, uid, delay, component.QualityNeeded, new RepairFinishedEvent(), component.FuelCost);
