@@ -46,7 +46,6 @@ public sealed class InjectorSystem : SharedInjectorSystem
         {
             if (isOpenOrIgnored && SolutionContainers.TryGetInjectableSolution(target, out var injectableSolution, out _))
                 return TryInject(injector, target, injectableSolution.Value, user, false);
-            }
 
             if (isOpenOrIgnored && SolutionContainers.TryGetRefillableSolution(target, out var refillableSolution, out _))
                 return TryInject(injector, target, refillableSolution.Value, user, true);
@@ -65,9 +64,7 @@ public sealed class InjectorSystem : SharedInjectorSystem
             // Draw from a bloodstream, if the target has that
             if (TryComp<BloodstreamComponent>(target, out var stream) &&
                 SolutionContainers.ResolveSolution(target, stream.BloodSolutionName, ref stream.BloodSolution))
-            {
                 return TryDraw(injector, (target, stream), stream.BloodSolution.Value, user);
-            }
 
             // Draw from an object (food, beaker, etc)
             if (isOpenOrIgnored && SolutionContainers.TryGetDrawableSolution(target, out var drawableSolution, out _))
