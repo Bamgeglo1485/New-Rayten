@@ -7,23 +7,18 @@ using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Events;
 using Content.Shared.Weapons.Ranged.Systems;
 using Content.Shared.Vanilla.Skill;
-using Robust.Shared.Audio.Systems;
-using Robust.Shared.Audio;
 using Content.Server.SkillTrainer;
 using Content.Server.Hands.Systems;
-using Content.Shared.Popups;
+using Robust.Shared.Audio.Systems;
 using Robust.Shared.Random;
-using Content.Shared.Throwing;
+using Robust.Shared.Audio;
 namespace Content.Server.Vanilla.Skill;
 
 public sealed class GunSkillsSystem : SharedGunSkillsSystem
 {
+    [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly SharedGunSystem _gun = default!;
     [Dependency] private readonly HandsSystem _handsSystem = default!;
-    [Dependency] private readonly ThrowingSystem _throwingSystem = default!;
-    [Dependency] protected readonly IRobustRandom Random = default!;
-    [Dependency] protected readonly SharedPopupSystem _popup = default!;
-    [Dependency] protected readonly SharedTransformSystem TransformSystem = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly ServerSkillTrainerSystem _skillTrainerSystem = default!;
 
@@ -70,8 +65,8 @@ public sealed class GunSkillsSystem : SharedGunSkillsSystem
                 unskilledComp.AngleIncreasePenalty = Angle.FromDegrees(20);
                 break;
             case 1:
-                unskilledComp.MinAnglePenalty = Angle.FromDegrees(0);
-                unskilledComp.MaxAnglePenalty = Angle.FromDegrees(50);
+                unskilledComp.MinAnglePenalty = Angle.FromDegrees(20);
+                unskilledComp.MaxAnglePenalty = Angle.FromDegrees(80);
                 unskilledComp.AngleIncreasePenalty = Angle.FromDegrees(10);
                 break;
             case 2:
@@ -117,6 +112,14 @@ public sealed class GunSkillsSystem : SharedGunSkillsSystem
 
         if (skillComp.RangeWeaponLevel < component.RequiresRangeWeaponLevel)
         {
+            float FallChance = component.RequiresRangeWeaponLevel - skillComp.RangeWeaponLevel;
+            
+            FallChance = (FallChance > 0) ? FallChance * component.ChanceToFallPerLevel : 0;
+
+            if (!_random.Prob(FallChance))
+                return;
+
+
             // Получаем трансформацию пользователя
             var userTransform = EntityManager.GetComponent<TransformComponent>(args.User);
 
@@ -124,13 +127,14 @@ public sealed class GunSkillsSystem : SharedGunSkillsSystem
             var angle = userTransform.LocalRotation;
 
             // Расчет смещения
-            var offset = angle.ToWorldVec() * -component.recoil;
+            var offset = angle.ToWorldVec() * -component.Recoil;
 
             // Получаем целевые координаты
             var targetCoordinates = userTransform.Coordinates.Offset(offset);
 
             // Вызываем метод выбрасывания
             _handsSystem.ThrowHeldItem(args.User, targetCoordinates);
+            _audio.PlayPvs("/Audio/Weapons/Guns/Gunshots/bang.ogg", args.User, AudioParams.Default.WithMaxDistance(5f));
         }
     }
 

@@ -8,9 +8,10 @@ namespace Content.Shared.Vanilla.Skill
         [DataField("RequiresRangeWeaponLevel")]
         public int RequiresRangeWeaponLevel { get; set; } = 1;
 
-        [DataField("recoil")]
-        public float recoil { get; set; } = 10f;
+        [DataField("Recoil")]
+        public float Recoil { get; set; } = 10f;
 
-        
+        [DataField("ChanceToFallPerLevel")]
+        public float ChanceToFallPerLevel { get; set; } = 0.5f;
     }
 }
