@@ -160479,16 +160479,6 @@ entities:
     - type: Transform
       pos: 1.3744736,0.22704315
       parent: 56354
-- proto: ClothingNeckTieDet
-  entities:
-  - uid: 30572
-    components:
-    - type: MetaData
-      desc: Иногда может быть использовал для удушения.
-      name: галстук АВД
-    - type: Transform
-      pos: -0.65950525,61.16825
-      parent: 2
 - proto: ClothingOuterAerostaticBomberJacket
   entities:
   - uid: 21945
@@ -161713,6 +161703,26 @@ entities:
     - type: Transform
       pos: -40.501865,-56.44255
       parent: 2
+- proto: ClothingShoesCentcomBlack
+  entities:
+  - uid: 19170
+    components:
+    - type: MetaData
+      desc: Чертовски тяжелая обувь из вольфрамового сплава. Кому вообще могла прийти идея создать их?
+      name: чертовски тяжелая обувь
+    - type: Transform
+      pos: -89.48056,23.553356
+      parent: 2
+    - type: Clothing
+      unequipDelay: 10
+    - type: ClothingSpeedModifier
+      sprintModifier: 0.4
+      walkModifier: 0.4
+    - type: FootstepModifier
+      footstepSoundCollection: !type:SoundPathSpecifier
+        params:
+          variation: 0.14
+        path: /Audio/Effects/Footsteps/largethud.ogg
 - proto: ClothingShoesColorBlack
   entities:
   - uid: 6509
@@ -209457,11 +209467,6 @@ entities:
       rot: 3.141592653589793 rad
       pos: -57.5,18.5
       parent: 2
-  - uid: 32066
-    components:
-    - type: Transform
-      pos: -19.5,-9.5
-      parent: 2
   - uid: 32081
     components:
     - type: Transform
@@ -211988,11 +211993,6 @@ entities:
     - type: Transform
       pos: 24.5,-10.5
       parent: 2
-  - uid: 58195
-    components:
-    - type: Transform
-      pos: -18.5,-9.5
-      parent: 2
   - uid: 58196
     components:
     - type: Transform
@@ -212368,11 +212368,6 @@ entities:
       rot: 3.141592653589793 rad
       pos: 33.5,-20.5
       parent: 2
-  - uid: 58299
-    components:
-    - type: Transform
-      pos: -20.5,-9.5
-      parent: 2
   - uid: 58300
     components:
     - type: Transform
@@ -212420,11 +212415,6 @@ entities:
     components:
     - type: Transform
       pos: -19.5,-6.5
-      parent: 2
-  - uid: 58309
-    components:
-    - type: Transform
-      pos: -21.5,-9.5
       parent: 2
   - uid: 58310
     components:
@@ -294470,9 +294460,14 @@ entities:
       parent: 2
   - uid: 15822
     components:
+    - type: MetaData
+      desc: Выглядит не очень здоровым...
+      name: комнатное растение
     - type: Transform
       pos: 27.5,-56.5
       parent: 2
+    missingComponents:
+    - StealTarget
   - uid: 23688
     components:
     - type: MetaData
