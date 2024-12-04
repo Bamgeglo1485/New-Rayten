@@ -6,6 +6,8 @@ using Content.Server.Power.Components;
 using Content.Server.Power.EntitySystems;
 using Content.Server.Projectiles;
 using Content.Server.Weapons.Ranged.Systems;
+using Content.Server.Vanilla.Skill; //vanilla-station
+using Content.Shared.Vanilla.Skill; //vanilla-station
 using Content.Shared.Database;
 using Content.Shared.Examine;
 using Content.Shared.Interaction;
@@ -38,7 +40,7 @@ namespace Content.Server.Singularity.EntitySystems
         [Dependency] private readonly SharedPopupSystem _popup = default!;
         [Dependency] private readonly ProjectileSystem _projectile = default!;
         [Dependency] private readonly GunSystem _gun = default!;
-
+        [Dependency] private readonly RequiresSkillSystem _requiresSkillSystem = default!; //vanilla-station
         public override void Initialize()
         {
             base.Initialize();
@@ -74,6 +76,11 @@ namespace Content.Server.Singularity.EntitySystems
 
             if (TryComp(uid, out PhysicsComponent? phys) && phys.BodyType == BodyType.Static)
             {
+                //vanilla-station-start
+                if (EntityManager.TryGetComponent<RequiresSkillComponent>(uid, out var RequiresSkillComp) && RequiresSkillComp != null)
+                    if(!_requiresSkillSystem.HasRequiredSkills(args.User, RequiresSkillComp, true))
+                        return;
+                //vanilla-station-end
                 if (!component.IsOn)
                 {
                     SwitchOn(uid, component);

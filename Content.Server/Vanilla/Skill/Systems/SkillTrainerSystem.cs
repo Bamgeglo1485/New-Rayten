@@ -10,7 +10,6 @@ using Content.Shared.Ghost;
 using Content.Shared.Popups;
 using Content.Shared.Vanilla.Skill;
 namespace Content.Server.SkillTrainer;
-
 public sealed class ServerSkillTrainerSystem : EntitySystem
 {
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
@@ -19,11 +18,11 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<SkillTrainerComponent, UseInHandEvent>(OnActivateInWorld);
+        SubscribeLocalEvent<SkillTrainerComponent, UseInHandEvent>(OnUserInHand);
         SubscribeLocalEvent<SkillTrainerComponent, TrainEvent>(HandleTrainEvent);
     }
 
-    private void OnActivateInWorld(EntityUid uid, SkillTrainerComponent component, UseInHandEvent args)
+    private void OnUserInHand(EntityUid uid, SkillTrainerComponent component, UseInHandEvent args)
     {
         if (!HasComp<MobStateComponent>(args.User) || HasComp<GhostComponent>(args.User))
         return;
@@ -72,18 +71,22 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
                         return;
                     }
                     break;
+                case "Engineering":
+                    if(skillComp.EngineeringLevel>=component.MaxLevel){
+                        _popup.PopupEntity(Loc.GetString("Skill-train-overtrain-engineering"), args.User, args.User);
+                        return;
+                    }
+                    break;
             }
         }
         else
             skillComp = EnsureComp<SkillComponent>(args.User);
-
         if (!args.Handled)
         {
             StartDoAfter(args.User, component, uid);
             args.Handled = true;
         }
     }
-
     private void StartDoAfter(EntityUid user, SkillTrainerComponent component, EntityUid uid)
     {
         _audio.PlayPvs("/Audio/Vanilla/SkillSystem/bookpaperswish.ogg", user, AudioParams.Default.WithMaxDistance(2f));
@@ -98,25 +101,20 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
             BreakOnMove = true,
             NeedHand = true,
         };
-
         _doAfter.TryStartDoAfter(doAfterArgs);
     }
-
     private void HandleTrainEvent(EntityUid uid, SkillTrainerComponent component, TrainEvent args)
     {
         if (args.Cancelled || args.Handled)
             return;
-
         if (!EntityManager.TryGetComponent<SkillComponent>(args.User, out var skillComp))
             skillComp = EnsureComp<SkillComponent>(args.User);
-
         if(AddExperience(skillComp, args.SkillType, args.SkillIncreaseAmount, args.MaxLevel))
             _audio.PlayPvs("/Audio/Vanilla/SkillSystem/levelup.ogg", args.User, AudioParams.Default.WithMaxDistance(3f));
         else
             StartDoAfter(args.User, component, uid);
         args.Handled = true;
     }
-
     public bool AddExperience(SkillComponent skillComp, string skillType, int experienceAmount, int MaxLevel)
     {
         int requiredExp = 0;
@@ -126,7 +124,6 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
                 if (skillComp.ChemistryLevel < MaxLevel && skillComp.ChemistryLevel < 3)
                 {
                     requiredExp = skillComp.ChemistryLevel + 300 + skillComp.ChemistryLevel * 300;
-
                     skillComp.ChemistryExp += experienceAmount;
                     if (skillComp.ChemistryExp >= requiredExp)
                     {
@@ -138,7 +135,6 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
                     skillComp.Dirty();
                 }
                 break;
-
             case "Medicine":
                 if (skillComp.MedicineLevel < MaxLevel  && skillComp.MedicineLevel < 3)
                 {
@@ -154,7 +150,6 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
                     skillComp.Dirty();
                 }
                 break;
-
             case "RangeWeapon":
                 if (skillComp.RangeWeaponLevel < MaxLevel && skillComp.RangeWeaponLevel < 3)
                 {
@@ -170,7 +165,6 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
                     skillComp.Dirty();
                 }
                 break;
-
             case "Piloting":
                 if (skillComp.PilotingLevel < MaxLevel && skillComp.PilotingLevel < 3)
                 {
@@ -216,6 +210,21 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
                     skillComp.Dirty();
                 }
                 break;
+            case "Engineering":
+                if (skillComp.EngineeringLevel < MaxLevel && skillComp.EngineeringLevel < 3)
+                {
+                    requiredExp = skillComp.EngineeringLevel + 300 + skillComp.EngineeringLevel * 300;
+                    skillComp.EngineeringExp += experienceAmount;
+                    if (skillComp.EngineeringExp >= requiredExp)
+                    {
+                        skillComp.EngineeringLevel++;
+                        skillComp.InstrumentationExp = 0;
+                        skillComp.Dirty();
+                        return true;
+                    }
+                    skillComp.Dirty();
+                }
+                break;
             case "Building":
                 if (skillComp.BuildingLevel < MaxLevel && skillComp.BuildingLevel < 3)
                 {
@@ -234,5 +243,4 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
         }
         return false;
     }
-
 }

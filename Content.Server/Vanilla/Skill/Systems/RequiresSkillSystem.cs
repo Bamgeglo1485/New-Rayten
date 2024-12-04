@@ -7,25 +7,33 @@ using Content.Server.Popups;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Hands;
 using ActivatableUISystem = Content.Shared.UserInterface.ActivatableUISystem;
-
 namespace Content.Server.Vanilla.Skill;
-
 public sealed class RequiresSkillSystem : SharedRequiresSkillSystem
 {
     [Dependency] private readonly ActivatableUISystem _activatableUI = default!;
     [Dependency] private readonly PopupSystem _popupSystem = default!;
-
     protected override void OnActivate(EntityUid uid, RequiresSkillComponent component, ref ActivatableUIOpenAttemptEvent args)
     {
         if (args.Cancelled || HasRequiredSkills(args.User, component, true))
             return;
         args.Cancel();
     }
+
+    protected override void OnSkillCheckToActivateInWorld(EntityUid uid, RequiresSkillToActivateInWorldComponent component, ref ActivateInWorldEvent args)
+    {
+        if (args.Handled)
+            return;
+        if(!EntityManager.TryGetComponent<RequiresSkillComponent>(uid, out var Reqcomponent))
+            return;
+        if(HasRequiredSkills(args.User, Reqcomponent, true))
+            return;
+        args.Handled = true;
+    }
+
     protected override void OnItemSlotInsertAttempt(EntityUid uid, RequiresSkillComponent component, ref ItemSlotInsertAttemptEvent args)
     {
         if (uid != args.SlotEntity || args.Cancelled || args.User == null)
             return;
-
         if (HasRequiredSkills(args.User.Value, component, true))
             return;
             
@@ -35,7 +43,6 @@ public sealed class RequiresSkillSystem : SharedRequiresSkillSystem
     {
         if (uid != args.SlotEntity || args.Cancelled || args.User == null)
             return;
-
         if (HasRequiredSkills(args.User.Value, component, true))
             return;
             
@@ -58,7 +65,6 @@ public sealed class RequiresSkillSystem : SharedRequiresSkillSystem
         component.SkillDiffMedicineLevel = 0;
         args.Handled = true;
     }
-
     public void solveskilldiff(EntityUid user, RequiresSkillComponent component)
     {
         if (!EntityManager.TryGetComponent<SkillComponent>(user, out var skillComp))
@@ -68,7 +74,6 @@ public sealed class RequiresSkillSystem : SharedRequiresSkillSystem
         //Медицина
         component.SkillDiffMedicineLevel = component.RequiresMedicineLevel - skillComp.MedicineLevel;
     }
-
     public bool HasRequiredSkills(EntityUid user, RequiresSkillComponent component, bool popup)
     {
         // Проверка уровня химии
@@ -93,6 +98,12 @@ public sealed class RequiresSkillSystem : SharedRequiresSkillSystem
         if (!HasSkillLevel(user, component.RequiresResearchLevel, skillComponent => skillComponent.ResearchLevel)){
             if(popup)
             _popupSystem.PopupEntity(Loc.GetString("Skill-issue-message-research-unskilled", ("lvl", component.RequiresResearchLevel)), user, user);
+            return false;
+        }
+        // Проверка уровня инженерии
+        if (!HasSkillLevel(user, component.RequiresEngineeringLevel, skillComponent => skillComponent.EngineeringLevel)){
+            if(popup)
+            _popupSystem.PopupEntity(Loc.GetString("Skill-issue-message-engineering-unskilled", ("lvl", component.RequiresEngineeringLevel)), user, user);
             return false;
         }
         return true;
@@ -120,4 +131,3 @@ public sealed class RequiresSkillSystem : SharedRequiresSkillSystem
         return false;
     }
 }
-
