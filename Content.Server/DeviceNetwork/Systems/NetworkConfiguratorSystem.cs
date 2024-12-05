@@ -2,6 +2,8 @@ using System.Linq;
 using Content.Server.Administration.Logs;
 using Content.Server.DeviceLinking.Systems;
 using Content.Server.DeviceNetwork.Components;
+using Content.Server.Vanilla.Skill; //vanilla-station
+using Content.Shared.Vanilla.Skill; //vanilla-station
 using Content.Shared.Access.Components;
 using Content.Shared.Access.Systems;
 using Content.Shared.Database;
@@ -37,7 +39,7 @@ public sealed class NetworkConfiguratorSystem : SharedNetworkConfiguratorSystem
     [Dependency] private readonly SharedAppearanceSystem _appearanceSystem = default!;
     [Dependency] private readonly IGameTiming _gameTiming = default!;
     [Dependency] private readonly IAdminLogManager _adminLogger = default!;
-
+    [Dependency] private readonly RequiresSkillSystem _requiresSkillSystem = default!; //vanilla-station
     public override void Initialize()
     {
         base.Initialize();
@@ -298,7 +300,11 @@ public sealed class NetworkConfiguratorSystem : SharedNetworkConfiguratorSystem
             return;
 
         DetermineMode(uid, configurator, target, user);
-
+        //vanilla-station-start
+        if (EntityManager.TryGetComponent<RequiresSkillComponent>(uid, out var RequiresSkillComp) && RequiresSkillComp != null)
+            if(!_requiresSkillSystem.HasRequiredSkills(user, RequiresSkillComp, true))
+                return;
+        //vanilla-station-end
         if (configurator.LinkModeActive)
         {
             TryLinkDevice(uid, configurator, target, user);

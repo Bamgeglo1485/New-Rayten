@@ -2,7 +2,6 @@ using Content.Shared.UserInterface;
 using Content.Shared.Interaction;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Interaction.Events;
-using Content.Shared.Chemistry.Components;
 using Content.Shared.Hands;
 namespace Content.Shared.Vanilla.Skill;
 
@@ -14,7 +13,7 @@ public abstract class SharedRequiresSkillSystem : EntitySystem
         SubscribeLocalEvent<RequiresSkillComponent, ActivatableUIOpenAttemptEvent>(OnActivate);//Открытие интерфейса
         SubscribeLocalEvent<RequiresSkillComponent, ItemSlotInsertAttemptEvent>(OnItemSlotInsertAttempt); //попытка вставить что-то
         SubscribeLocalEvent<RequiresSkillComponent, ItemSlotEjectAttemptEvent>(OnItemSlotEjectAttempt); //попытка вытащить что-то
-
+        SubscribeLocalEvent<RequiresSkillToActivateInWorldComponent, ActivateInWorldEvent >(OnSkillCheckToActivateInWorld);
         SubscribeLocalEvent<RequiresSkillComponent, GotEquippedHandEvent>(OnHandPickUp);//Взять в руку
         SubscribeLocalEvent<RequiresSkillComponent, GotUnequippedHandEvent>(OnHandDrop);//Убрать из руки
     }
@@ -36,6 +35,10 @@ public abstract class SharedRequiresSkillSystem : EntitySystem
         if (!HasSkillLevel(user, component.RequiresResearchLevel, skillComponent => skillComponent.ResearchLevel)){
             return false;
         }
+        // Проверка уровня Инженерии
+        if (!HasSkillLevel(user, component.RequiresEngineeringLevel, skillComponent => skillComponent.EngineeringLevel)){
+            return false;
+        }
         return true;
     }
 
@@ -51,14 +54,13 @@ public abstract class SharedRequiresSkillSystem : EntitySystem
         }
         return true;
     }
-
     public bool HasSkillLevel(EntityUid user, int requiredLevel, Func<SkillComponent, int> skillSelector)
     {
         if (TryComp<SkillComponent>(user, out var skillComponent) && skillSelector(skillComponent) >= requiredLevel)
             return true;
         return false;
     }
-    
+
     protected abstract void OnActivate(EntityUid uid, RequiresSkillComponent component, ref ActivatableUIOpenAttemptEvent args);//Открытие интерфейса консоли
     
     protected abstract void OnItemSlotInsertAttempt(EntityUid uid, RequiresSkillComponent component, ref ItemSlotInsertAttemptEvent args);//попытка вставить что-то
@@ -66,4 +68,5 @@ public abstract class SharedRequiresSkillSystem : EntitySystem
 
     protected abstract void OnHandPickUp(EntityUid uid, RequiresSkillComponent component, ref GotEquippedHandEvent args);//взять в руку
     protected abstract void OnHandDrop(EntityUid uid, RequiresSkillComponent component, ref GotUnequippedHandEvent args);//бросить из руки
+    protected abstract void OnSkillCheckToActivateInWorld(EntityUid uid, RequiresSkillToActivateInWorldComponent component, ref ActivateInWorldEvent args);//если есть компонент то обрабатываем активацию
 }
