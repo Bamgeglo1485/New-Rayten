@@ -43,8 +43,9 @@ public sealed class CharacterInfoSystem : EntitySystem
     }
     private void onskillupdateUIEvent(UpdateCharacterSkillsRequestEvent msg, EntitySessionEventArgs args)
     {
-        var entity = GetEntity(msg.NetEntity);
-        onskillupdateUI?.Invoke(entity);
+        var player = _players.LocalEntity;
+        if (player != null)
+            onskillupdateUI?.Invoke(player.Value);
     }
 
     public List<Control> GetCharacterInfoControls(EntityUid uid)

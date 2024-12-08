@@ -7,9 +7,8 @@ namespace Content.Shared.Vanilla.Skill
     {
         public readonly NetEntity NetEntity;
 
-        public UpdateCharacterSkillsRequestEvent(NetEntity netEntity)
+        public UpdateCharacterSkillsRequestEvent()
         {
-            NetEntity = netEntity;
         }
     }
 }

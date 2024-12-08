@@ -52,7 +52,7 @@ namespace Content.Server.Repairable
             if(_skillTrainerSystem.AddExperience(skillComp, "Building", component.DoAfterDelay * 5, 3)){
                 _audio.PlayPvs("/Audio/Vanilla/SkillSystem/levelup.ogg", args.User);
             }
-            RaiseNetworkEvent(new UpdateCharacterSkillsRequestEvent(GetNetEntity(args.User)));
+            RaiseNetworkEvent(new UpdateCharacterSkillsRequestEvent());
             //vanilla-station-end
             var str = Loc.GetString("comp-repairable-repair",
                 ("target", uid),
