@@ -18,7 +18,6 @@ public sealed partial class NavScreen : BoxContainer
 
     private EntityUid? _consoleEntity; // Entity of controlling console
     private EntityUid? _shuttleEntity;
-    private EntityUid? _consoleEntity;
     private bool _obscure = false;
     public NavScreen()
     {
@@ -35,11 +34,6 @@ public sealed partial class NavScreen : BoxContainer
     {
         _shuttleEntity = shuttle;
     }
-    public void SetConsole(EntityUid? console)
-    {
-        _consoleEntity = console;
-    }
-
     public void SetConsole(EntityUid? console)
     {
         _consoleEntity = console;
