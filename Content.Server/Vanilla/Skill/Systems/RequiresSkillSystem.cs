@@ -76,6 +76,9 @@ public sealed class RequiresSkillSystem : SharedRequiresSkillSystem
     }
     public bool HasRequiredSkills(EntityUid user, RequiresSkillComponent component, bool popup)
     {
+        if(!TryComp<SkillComponent>(user, out var skill))
+            skill = EnsureComp<SkillComponent>(user);
+
         // Проверка уровня химии
         if (!HasSkillLevel(user, component.RequiresChemistryLevel, skillComponent => skillComponent.ChemistryLevel)){
             if(popup)

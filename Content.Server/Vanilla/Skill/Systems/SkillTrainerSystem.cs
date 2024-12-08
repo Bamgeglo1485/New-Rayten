@@ -4,6 +4,7 @@ using Content.Shared.DoAfter;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Audio;
+using Robust.Shared.Network;
 using Content.Shared.SkillTrainer;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Ghost;
@@ -18,8 +19,61 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
+        
         SubscribeLocalEvent<SkillTrainerComponent, UseInHandEvent>(OnUserInHand);
         SubscribeLocalEvent<SkillTrainerComponent, TrainEvent>(HandleTrainEvent);
+        SubscribeNetworkEvent<RequestSkillAddEXPEvent>(onSkillAddEXPEvent);
+
+    }
+    private void onSkillAddEXPEvent(RequestSkillAddEXPEvent msg, EntitySessionEventArgs args)
+    {
+        if (!args.SenderSession.AttachedEntity.HasValue||msg.skill==null)
+            return;
+        var entity = args.SenderSession.AttachedEntity.Value;
+
+        if (!EntityManager.TryGetComponent<SkillComponent>(entity, out var skillComp) || skillComp.SkillPoints<1)
+            return;
+        switch (msg.skill)
+            {
+                case "Chemistry":
+                    if(skillComp.ChemistryLevel>=3)
+                        return;
+                    break;
+                case "Medicine":
+                    if(skillComp.MedicineLevel>=3)
+                        return;
+                    break;
+                case "RangeWeapon":
+                    if(skillComp.RangeWeaponLevel>=3)
+                        return;
+                    break;
+                case "Piloting":
+                    if(skillComp.PilotingLevel>=3)
+                        return;
+                    break;
+                case "Research":
+                    if(skillComp.ResearchLevel>=3)
+                        return;
+                    break;
+                case "Instrumentation":
+                    if(skillComp.InstrumentationLevel>=3)
+                        return;
+                    break;
+                case "Building":
+                    if(skillComp.BuildingLevel>=3)
+                        return;
+                    break;
+                case "Engineering":
+                    if(skillComp.EngineeringLevel>=3)
+                        return;
+                    break;
+            }
+        skillComp.SkillPoints--;
+        skillComp.Dirty();
+
+        if(AddExperience(skillComp, msg.skill, 100, 3))
+            _audio.PlayPvs("/Audio/Vanilla/SkillSystem/levelup.ogg", entity, AudioParams.Default.WithMaxDistance(1f));
+        RaiseNetworkEvent(new UpdateCharacterSkillsRequestEvent(GetNetEntity(entity)));
     }
 
     private void OnUserInHand(EntityUid uid, SkillTrainerComponent component, UseInHandEvent args)
@@ -113,134 +167,63 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
             _audio.PlayPvs("/Audio/Vanilla/SkillSystem/levelup.ogg", args.User, AudioParams.Default.WithMaxDistance(3f));
         else
             StartDoAfter(args.User, component, uid);
+        RaiseNetworkEvent(new UpdateCharacterSkillsRequestEvent(GetNetEntity(args.User)));
         args.Handled = true;
     }
-    public bool AddExperience(SkillComponent skillComp, string skillType, int experienceAmount, int MaxLevel)
+    public bool AddExperience(SkillComponent skillComp, string skillType, int experienceAmount, int maxLevel)
     {
-        int requiredExp = 0;
-        switch (skillType)
+
+    var skills = new Dictionary<string, (Func<int> GetLevel, Action<int> SetLevel, Func<int> GetExp, Action<int> SetExp)>
+    {
+        ["Chemistry"] = (() => skillComp.ChemistryLevel, val => skillComp.ChemistryLevel = val,
+                        () => skillComp.ChemistryExp, val => skillComp.ChemistryExp = val),
+        ["Medicine"] = (() => skillComp.MedicineLevel, val => skillComp.MedicineLevel = val,
+                        () => skillComp.MedicineExp, val => skillComp.MedicineExp = val),
+        ["RangeWeapon"] = (() => skillComp.RangeWeaponLevel, val => skillComp.RangeWeaponLevel = val,
+                        () => skillComp.RangeWeaponExp, val => skillComp.RangeWeaponExp = val),
+        ["Piloting"] = (() => skillComp.PilotingLevel, val => skillComp.PilotingLevel = val,
+                        () => skillComp.PilotingExp, val => skillComp.PilotingExp = val),
+        ["Research"] = (() => skillComp.ResearchLevel, val => skillComp.ResearchLevel = val,
+                        () => skillComp.ResearchExp, val => skillComp.ResearchExp = val),
+        ["Instrumentation"] = (() => skillComp.InstrumentationLevel, val => skillComp.InstrumentationLevel = val,
+                            () => skillComp.InstrumentationExp, val => skillComp.InstrumentationExp = val),
+        ["Engineering"] = (() => skillComp.EngineeringLevel, val => skillComp.EngineeringLevel = val,
+                            () => skillComp.EngineeringExp, val => skillComp.EngineeringExp = val),
+        ["Building"] = (() => skillComp.BuildingLevel, val => skillComp.BuildingLevel = val,
+                        () => skillComp.BuildingExp, val => skillComp.BuildingExp = val),
+        ["MeleeWeapon"] = (() => skillComp.MeleeWeaponLevel, val => skillComp.MeleeWeaponLevel = val,
+                        () => skillComp.MeleeWeaponExp, val => skillComp.MeleeWeaponExp = val)
+    };
+
+        // Проверяем, существует ли данный тип навыка
+        if (!skills.TryGetValue(skillType, out var skill))
+            return false;
+
+        var (getLevel, setLevel, getExp, setExp) = skill;
+
+        int level = getLevel();
+        int exp = getExp();
+
+        // Проверка ограничения уровня
+        if (level >= maxLevel || level >= 3)
+            return false;
+
+        // Расчёт необходимого опыта
+        int requiredExp = 300 + level * 300;
+        exp += experienceAmount;
+        setExp(exp);
+
+        // Проверка на повышение уровня
+        if (exp >= requiredExp)
         {
-            case "Chemistry":
-                if (skillComp.ChemistryLevel < MaxLevel && skillComp.ChemistryLevel < 3)
-                {
-                    requiredExp = skillComp.ChemistryLevel + 300 + skillComp.ChemistryLevel * 300;
-                    skillComp.ChemistryExp += experienceAmount;
-                    if (skillComp.ChemistryExp >= requiredExp)
-                    {
-                        skillComp.ChemistryLevel++;
-                        skillComp.ChemistryExp = 0;
-                        skillComp.Dirty();
-                        return true;
-                    }
-                    skillComp.Dirty();
-                }
-                break;
-            case "Medicine":
-                if (skillComp.MedicineLevel < MaxLevel  && skillComp.MedicineLevel < 3)
-                {
-                    requiredExp = skillComp.MedicineLevel + 300 + skillComp.MedicineLevel * 300;
-                    skillComp.MedicineExp += experienceAmount;
-                    if (skillComp.MedicineExp >= requiredExp)
-                    {
-                        skillComp.MedicineLevel++;
-                        skillComp.MedicineExp = 0;
-                        skillComp.Dirty();
-                        return true;
-                    }
-                    skillComp.Dirty();
-                }
-                break;
-            case "RangeWeapon":
-                if (skillComp.RangeWeaponLevel < MaxLevel && skillComp.RangeWeaponLevel < 3)
-                {
-                    requiredExp = skillComp.RangeWeaponLevel + 300 + skillComp.RangeWeaponLevel * 300;
-                    skillComp.RangeWeaponExp += experienceAmount;
-                    if (skillComp.RangeWeaponExp >= requiredExp)
-                    {
-                        skillComp.RangeWeaponLevel++;
-                        skillComp.RangeWeaponExp = 0;
-                        skillComp.Dirty();
-                        return true;
-                    }
-                    skillComp.Dirty();
-                }
-                break;
-            case "Piloting":
-                if (skillComp.PilotingLevel < MaxLevel && skillComp.PilotingLevel < 3)
-                {
-                    requiredExp = skillComp.PilotingLevel + 300 + skillComp.PilotingLevel * 300;
-                    skillComp.PilotingExp += experienceAmount;
-                    if (skillComp.PilotingExp >= requiredExp)
-                    {
-                        skillComp.PilotingLevel++;
-                        skillComp.PilotingExp = 0;
-                        skillComp.Dirty();
-                        return true;
-                    }
-                    skillComp.Dirty();
-                }
-                break;
-            case "Research":
-                if (skillComp.ResearchLevel < MaxLevel && skillComp.ResearchLevel < 3)
-                {
-                    requiredExp = skillComp.ResearchLevel + 300 + skillComp.ResearchLevel * 300;
-                    skillComp.ResearchExp += experienceAmount;
-                    if (skillComp.ResearchExp >= requiredExp)
-                    {
-                        skillComp.ResearchLevel++;
-                        skillComp.ResearchExp = 0;
-                        skillComp.Dirty();
-                        return true;
-                    }
-                    skillComp.Dirty();
-                }
-                break;
-            case "Instrumentation":
-                if (skillComp.InstrumentationLevel < MaxLevel && skillComp.InstrumentationLevel < 3)
-                {
-                    requiredExp = skillComp.InstrumentationLevel + 300 + skillComp.InstrumentationLevel * 300;
-                    skillComp.InstrumentationExp += experienceAmount;
-                    if (skillComp.InstrumentationExp >= requiredExp)
-                    {
-                        skillComp.InstrumentationLevel++;
-                        skillComp.InstrumentationExp = 0;
-                        skillComp.Dirty();
-                        return true;
-                    }
-                    skillComp.Dirty();
-                }
-                break;
-            case "Engineering":
-                if (skillComp.EngineeringLevel < MaxLevel && skillComp.EngineeringLevel < 3)
-                {
-                    requiredExp = skillComp.EngineeringLevel + 300 + skillComp.EngineeringLevel * 300;
-                    skillComp.EngineeringExp += experienceAmount;
-                    if (skillComp.EngineeringExp >= requiredExp)
-                    {
-                        skillComp.EngineeringLevel++;
-                        skillComp.InstrumentationExp = 0;
-                        skillComp.Dirty();
-                        return true;
-                    }
-                    skillComp.Dirty();
-                }
-                break;
-            case "Building":
-                if (skillComp.BuildingLevel < MaxLevel && skillComp.BuildingLevel < 3)
-                {
-                    requiredExp = skillComp.BuildingLevel + 300 + skillComp.BuildingLevel * 300;
-                    skillComp.BuildingExp += experienceAmount;
-                    if (skillComp.BuildingExp >= requiredExp)
-                    {
-                        skillComp.BuildingLevel++;
-                        skillComp.BuildingExp = 0;
-                        skillComp.Dirty();
-                        return true;
-                    }
-                    skillComp.Dirty();
-                }
-                break;
+            setLevel(level + 1);
+            setExp(exp-requiredExp);
+            skillComp.Dirty();
+            return true;
         }
+
+        skillComp.Dirty();
         return false;
     }
+
 }

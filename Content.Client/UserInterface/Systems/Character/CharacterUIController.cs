@@ -8,6 +8,7 @@ using Content.Client.UserInterface.Systems.Character.Windows;
 using Content.Client.UserInterface.Systems.Objectives.Controls;
 using Content.Shared.Input;
 using Content.Shared.Objectives.Systems;
+using Content.Shared.Vanilla.Skill;
 using JetBrains.Annotations;
 using Robust.Client.GameObjects;
 using Robust.Client.Player;
@@ -15,10 +16,11 @@ using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controllers;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Input.Binding;
+using Robust.Shared.Network;
 using Robust.Shared.Utility;
 using static Content.Client.CharacterInfo.CharacterInfoSystem;
 using static Robust.Client.UserInterface.Controls.BaseButton;
-using Content.Shared.Vanilla.Skill;
+
 
 namespace Content.Client.UserInterface.Systems.Character;
 
@@ -28,6 +30,7 @@ public sealed class CharacterUIController : UIController, IOnStateEntered<Gamepl
     [Dependency] private readonly IPlayerManager _player = default!;
     [UISystemDependency] private readonly CharacterInfoSystem _characterInfo = default!;
     [UISystemDependency] private readonly SpriteSystem _sprite = default!;
+    [Dependency] private readonly INetManager _netManager = default!;
 
     private CharacterWindow? _window;
     private MenuButton? CharacterButton => UIManager.GetActiveUIWidgetOrNull<MenuBar.Widgets.GameTopMenuBar>()?.CharacterButton;
@@ -39,34 +42,55 @@ public sealed class CharacterUIController : UIController, IOnStateEntered<Gamepl
         _window = UIManager.CreateWindow<CharacterWindow>();
         LayoutContainer.SetAnchorPreset(_window, LayoutContainer.LayoutPreset.CenterTop);
 
-
+        // Подключение обработчиков к кнопкам
+        _window.PilotingUpgradeButton.OnPressed += _ => _characterInfo.SendSkillExperienceEvent("Piloting");
+        _window.RangeWeaponUpgradeButton.OnPressed += _ => _characterInfo.SendSkillExperienceEvent("RangeWeapon");
+        _window.MeleeWeaponUpgradeButton.OnPressed += _ => _characterInfo.SendSkillExperienceEvent("MeleeWeapon");
+        _window.MedicineUpgradeButton.OnPressed += _ => _characterInfo.SendSkillExperienceEvent("Medicine");
+        _window.ChemistryUpgradeButton.OnPressed += _ => _characterInfo.SendSkillExperienceEvent("Chemistry");
+        _window.EngineeringUpgradeButton.OnPressed += _ => _characterInfo.SendSkillExperienceEvent("Engineering");
+        _window.BuildingUpgradeButton.OnPressed += _ => _characterInfo.SendSkillExperienceEvent("Building");
+        _window.ResearchUpgradeButton.OnPressed += _ => _characterInfo.SendSkillExperienceEvent("Research");
+        _window.InstrumentationUpgradeButton.OnPressed += _ => _characterInfo.SendSkillExperienceEvent("Instrumentation");
 
         CommandBinds.Builder
             .Bind(ContentKeyFunctions.OpenCharacterMenu,
-                 InputCmdHandler.FromDelegate(_ => ToggleWindow()))
-             .Register<CharacterUIController>();
+                InputCmdHandler.FromDelegate(_ => ToggleWindow()))
+            .Register<CharacterUIController>();
     }
 
     public void OnStateExited(GameplayState state)
     {
         if (_window != null)
         {
+            _window.PilotingUpgradeButton.OnPressed -= _ => _characterInfo.SendSkillExperienceEvent("Piloting");
+            _window.RangeWeaponUpgradeButton.OnPressed -= _ => _characterInfo.SendSkillExperienceEvent("RangeWeapon");
+            _window.MeleeWeaponUpgradeButton.OnPressed -= _ => _characterInfo.SendSkillExperienceEvent("MeleeWeapon");
+            _window.MedicineUpgradeButton.OnPressed -= _ => _characterInfo.SendSkillExperienceEvent("Medicine");
+            _window.ChemistryUpgradeButton.OnPressed -= _ => _characterInfo.SendSkillExperienceEvent("Chemistry");
+            _window.EngineeringUpgradeButton.OnPressed -= _ => _characterInfo.SendSkillExperienceEvent("Engineering");
+            _window.BuildingUpgradeButton.OnPressed -= _ => _characterInfo.SendSkillExperienceEvent("Building");
+            _window.ResearchUpgradeButton.OnPressed -= _ => _characterInfo.SendSkillExperienceEvent("Research");
+            _window.InstrumentationUpgradeButton.OnPressed -= _ => _characterInfo.SendSkillExperienceEvent("Instrumentation");
+
             _window.Dispose();
             _window = null;
         }
 
         CommandBinds.Unregister<CharacterUIController>();
     }
-
+    
     public void OnSystemLoaded(CharacterInfoSystem system)
     {
         system.OnCharacterUpdate += CharacterUpdated;
+        system.onskillupdateUI += updateskillUI;
         _player.LocalPlayerDetached += CharacterDetached;
     }
 
     public void OnSystemUnloaded(CharacterInfoSystem system)
     {
         system.OnCharacterUpdate -= CharacterUpdated;
+        system.onskillupdateUI -= updateskillUI;
         _player.LocalPlayerDetached -= CharacterDetached;
     }
 
@@ -172,47 +196,85 @@ public sealed class CharacterUIController : UIController, IOnStateEntered<Gamepl
         }
 
         _window.RolePlaceholder.Visible = briefing == null && !controls.Any() && !objectives.Any();
-        if (EntityManager.TryGetComponent<SkillComponent>(entity, out var skillComponent))
+        updateskillUI(entity);
+
+    }
+    private void updateskillUI(EntityUid user){
+
+        if(_window == null)
+            return;
+
+        if (!EntityManager.TryGetComponent<SkillComponent>(user, out var skillComponent))
+            return;
+
+        UpdateProgressBars(skillComponent.PilotingLevel, skillComponent.PilotingExp, _window.Piloting1, _window.Piloting2, _window.Piloting3);
+        UpdateProgressBars(skillComponent.RangeWeaponLevel, skillComponent.RangeWeaponExp, _window.RangeWeapon1, _window.RangeWeapon2, _window.RangeWeapon3);
+        UpdateProgressBars(skillComponent.MeleeWeaponLevel, skillComponent.MeleeWeaponExp, _window.MeleeWeapon1, _window.MeleeWeapon2, _window.MeleeWeapon3);
+        UpdateProgressBars(skillComponent.MedicineLevel, skillComponent.MedicineExp, _window.Medicine1, _window.Medicine2, _window.Medicine3);
+        UpdateProgressBars(skillComponent.ChemistryLevel, skillComponent.ChemistryExp, _window.Chemistry1, _window.Chemistry2, _window.Chemistry3);
+        UpdateProgressBars(skillComponent.EngineeringLevel, skillComponent.EngineeringExp, _window.Engineering1, _window.Engineering2, _window.Engineering3);
+        UpdateProgressBars(skillComponent.BuildingLevel, skillComponent.BuildingExp, _window.Building1, _window.Building2, _window.Building3);
+        UpdateProgressBars(skillComponent.ResearchLevel, skillComponent.ResearchExp, _window.Research1, _window.Research2, _window.Research3);
+        UpdateProgressBars(skillComponent.InstrumentationLevel, skillComponent.InstrumentationExp, _window.Instrumentation1, _window.Instrumentation2, _window.Instrumentation3);
+
+        if(skillComponent.SkillPoints < 1)
         {
-            UpdateProgressBars(skillComponent.PilotingLevel, skillComponent.PilotingExp, _window.Piloting1, _window.Piloting2, _window.Piloting3);
-            UpdateProgressBars(skillComponent.RangeWeaponLevel, skillComponent.RangeWeaponExp, _window.RangeWeapon1, _window.RangeWeapon2, _window.RangeWeapon3);
-            UpdateProgressBars(skillComponent.MeleeWeaponLevel, skillComponent.MeleeWeaponExp, _window.MeleeWeapon1, _window.MeleeWeapon2, _window.MeleeWeapon3);
-            UpdateProgressBars(skillComponent.MedicineLevel, skillComponent.MedicineExp, _window.Medicine1, _window.Medicine2, _window.Medicine3);
-            UpdateProgressBars(skillComponent.ChemistryLevel, skillComponent.ChemistryExp, _window.Chemistry1, _window.Chemistry2, _window.Chemistry3);
-            UpdateProgressBars(skillComponent.EngineeringLevel, skillComponent.EngineeringExp, _window.Engineering1, _window.Engineering2, _window.Engineering3);
-            UpdateProgressBars(skillComponent.BuildingLevel, skillComponent.BuildingExp, _window.Building1, _window.Building2, _window.Building3);
-            UpdateProgressBars(skillComponent.ResearchLevel, skillComponent.ResearchExp, _window.Research1, _window.Research2, _window.Research3);
-            UpdateProgressBars(skillComponent.InstrumentationLevel, skillComponent.InstrumentationExp, _window.Instrumentation1, _window.Instrumentation2, _window.Instrumentation3);
+            _window.Skillpointslabel.Visible = false;
+
+            _window.PilotingUpgradeButton.Visible = false;
+            _window.RangeWeaponUpgradeButton.Visible = false;
+            _window.MeleeWeaponUpgradeButton.Visible = false;
+            _window.MedicineUpgradeButton.Visible = false;
+            _window.ChemistryUpgradeButton.Visible = false;
+            _window.EngineeringUpgradeButton.Visible = false;
+            _window.BuildingUpgradeButton.Visible = false;
+            _window.ResearchUpgradeButton.Visible = false;
+            _window.InstrumentationUpgradeButton.Visible = false;
+            return;
+        }
+        _window.Skillpointslabel.Visible = true;
+        _window.Skillpointslabel.Text = $"Очков навыков: {skillComponent.SkillPoints}";
+
+        _window.PilotingUpgradeButton.Visible = skillComponent.PilotingLevel < 3;
+        _window.RangeWeaponUpgradeButton.Visible = skillComponent.RangeWeaponLevel < 3;
+        //_window.MeleeWeaponUpgradeButton.Visible = show && skillComponent.MeleeWeaponLevel < 3;
+        _window.MedicineUpgradeButton.Visible  = skillComponent.MedicineLevel < 3;
+        _window.ChemistryUpgradeButton.Visible = skillComponent.ChemistryLevel < 3;
+        _window.EngineeringUpgradeButton.Visible = skillComponent.EngineeringLevel < 3;
+        _window.BuildingUpgradeButton.Visible = skillComponent.BuildingLevel < 3;
+        _window.ResearchUpgradeButton.Visible = skillComponent.ResearchLevel < 3;
+        _window.InstrumentationUpgradeButton.Visible = skillComponent.InstrumentationLevel < 3;
+
+    }
+
+    private void UpdateProgressBars(int level, int exp, ProgressBar bar1, ProgressBar bar2, ProgressBar bar3)
+    {
+        switch (level)
+        {
+            case 0:
+                bar1.Value = exp;
+                bar2.Value = 0;
+                bar3.Value = 0;
+                break;
+            case 1:
+                bar1.Value = 300;
+                bar2.Value = exp;
+                bar3.Value = 0;
+                break;
+            case 2:
+                bar1.Value = 300;
+                bar2.Value = 600;
+                bar3.Value = exp;
+                break;
+            case 3:
+                bar1.Value = 300;
+                bar2.Value = 600;
+                bar3.Value = 900;
+                break;
+            default:
+                break;
         }
     }
-private void UpdateProgressBars(int level, int exp, ProgressBar bar1, ProgressBar bar2, ProgressBar bar3)
-{
-    switch (level)
-    {
-        case 0:
-            bar1.Value = exp;
-            bar2.Value = 0;
-            bar3.Value = 0;
-            break;
-        case 1:
-            bar1.Value = 300;
-            bar2.Value = exp;
-            bar3.Value = 0;
-            break;
-        case 2:
-            bar1.Value = 300;
-            bar2.Value = 600;
-            bar3.Value = exp;
-            break;
-        case 3:
-            bar1.Value = 300;
-            bar2.Value = 600;
-            bar3.Value = 900;
-            break;
-        default:
-            break;
-    }
-}
     private void CharacterDetached(EntityUid uid)
     {
         CloseWindow();

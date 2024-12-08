@@ -150,6 +150,6 @@ public sealed class GunSkillsSystem : SharedGunSkillsSystem
             _gun.RefreshModifiers(uid);
             _audio.PlayPvs("/Audio/Vanilla/SkillSystem/levelup.ogg", args.User, AudioParams.Default.WithMaxDistance(3f));
         }
-
+        RaiseNetworkEvent(new UpdateCharacterSkillsRequestEvent(GetNetEntity(args.User)));
     }
 }

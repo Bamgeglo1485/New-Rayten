@@ -45,12 +45,15 @@ namespace Content.Server.Repairable
                 _damageableSystem.SetAllDamage(uid, damageable, 0);
                 _adminLogger.Add(LogType.Healed, $"{ToPrettyString(args.User):user} repaired {ToPrettyString(uid):target} back to full health");
             }
+            //vanilla-station-start
             if (!EntityManager.TryGetComponent<SkillComponent>(args.User, out var skillComp))
                 skillComp = EnsureComp<SkillComponent>(args.User);
 
             if(_skillTrainerSystem.AddExperience(skillComp, "Building", component.DoAfterDelay * 5, 3)){
                 _audio.PlayPvs("/Audio/Vanilla/SkillSystem/levelup.ogg", args.User);
             }
+            RaiseNetworkEvent(new UpdateCharacterSkillsRequestEvent(GetNetEntity(args.User)));
+            //vanilla-station-end
             var str = Loc.GetString("comp-repairable-repair",
                 ("target", uid),
                 ("tool", args.Used!));

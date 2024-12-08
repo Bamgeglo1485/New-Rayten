@@ -358,6 +358,7 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
         {
             if (_skillTrainerSystem.AddExperience(skillComp, skillTrainerComp.SkillType, skillTrainerComp.SkillIncreaseAmount, skillTrainerComp.MaxLevel))
                 _audio.PlayPvs("/Audio/Vanilla/SkillSystem/levelup.ogg", entity);
+            RaiseNetworkEvent(new UpdateCharacterSkillsRequestEvent(GetNetEntity(entity)));
         }, tokenSource.Token);
         _activePilotingTimers[uid] = tokenSource;
         //vanilla-station-skill-issue-end
