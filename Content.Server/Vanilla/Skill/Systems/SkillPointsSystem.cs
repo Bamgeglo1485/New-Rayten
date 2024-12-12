@@ -1,5 +1,6 @@
 using Content.Shared.Vanilla.Skill;
 using Robust.Shared.GameObjects;
+using Robust.Shared.Player;
 
 namespace Content.Server.Vanilla.Skill
 {
@@ -21,7 +22,9 @@ namespace Content.Server.Vanilla.Skill
             // Добавляем значения
             skillComp.SkillPoints += setterComp.Points;
             skillComp.Dirty();
-            RaiseNetworkEvent(new UpdateCharacterSkillsRequestEvent());
+            if (TryComp<ActorComponent>(uid, out var actor))
+                RaiseNetworkEvent(new UpdateCharacterSkillsRequestEvent(), Filter.SinglePlayer(actor.PlayerSession));
+
             EntityManager.RemoveComponent<AddSkillPointsComponent>(uid);
         }
     }

@@ -20,6 +20,7 @@ using Robust.Shared.Collections;
 using Robust.Shared.GameStates;
 using Robust.Shared.Map;
 using Robust.Shared.Utility;
+using Robust.Shared.Player;
 using Content.Shared.UserInterface;
 using Content.Shared.Vanilla.Skill;
 using Content.Server.SkillTrainer;
@@ -358,7 +359,8 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
         {
             if (_skillTrainerSystem.AddExperience(skillComp, skillTrainerComp.SkillType, skillTrainerComp.SkillIncreaseAmount, skillTrainerComp.MaxLevel))
                 _audio.PlayPvs("/Audio/Vanilla/SkillSystem/levelup.ogg", entity);
-            RaiseNetworkEvent(new UpdateCharacterSkillsRequestEvent());
+            if (TryComp<ActorComponent>(entity, out var actor))
+                RaiseNetworkEvent(new UpdateCharacterSkillsRequestEvent(), Filter.SinglePlayer(actor.PlayerSession));
         }, tokenSource.Token);
         _activePilotingTimers[uid] = tokenSource;
         //vanilla-station-skill-issue-end

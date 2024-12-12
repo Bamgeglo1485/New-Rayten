@@ -1,4 +1,5 @@
 using Content.Server.Administration.Logs;
+using Content.Server.SkillTrainer;
 using Content.Shared.Damage;
 using Content.Shared.Database;
 using Content.Shared.Interaction;
@@ -6,7 +7,8 @@ using Content.Shared.Popups;
 using Content.Shared.Repairable;
 using Content.Shared.Vanilla.Skill;
 using Robust.Shared.Audio.Systems;
-using Content.Server.SkillTrainer;
+using Robust.Shared.Player;
+
 using SharedToolSystem = Content.Shared.Tools.Systems.SharedToolSystem;
 
 namespace Content.Server.Repairable
@@ -52,7 +54,9 @@ namespace Content.Server.Repairable
             if(_skillTrainerSystem.AddExperience(skillComp, "Building", component.DoAfterDelay * 5, 3)){
                 _audio.PlayPvs("/Audio/Vanilla/SkillSystem/levelup.ogg", args.User);
             }
-            RaiseNetworkEvent(new UpdateCharacterSkillsRequestEvent());
+            if (TryComp<ActorComponent>(args.User, out var actor))
+                RaiseNetworkEvent(new UpdateCharacterSkillsRequestEvent(), Filter.SinglePlayer(actor.PlayerSession));
+
             //vanilla-station-end
             var str = Loc.GetString("comp-repairable-repair",
                 ("target", uid),

@@ -5,6 +5,7 @@ using Robust.Shared.GameObjects;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Audio;
 using Robust.Shared.Network;
+using Robust.Shared.Player;
 using Content.Shared.SkillTrainer;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Ghost;
@@ -73,7 +74,7 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
 
         if(AddExperience(skillComp, msg.skill, 100, 3))
             _audio.PlayPvs("/Audio/Vanilla/SkillSystem/levelup.ogg", entity, AudioParams.Default.WithMaxDistance(1f));
-        RaiseNetworkEvent(new UpdateCharacterSkillsRequestEvent());
+        RaiseNetworkEvent(new UpdateCharacterSkillsRequestEvent(), Filter.SinglePlayer(args.SenderSession));
     }
 
     private void OnUserInHand(EntityUid uid, SkillTrainerComponent component, UseInHandEvent args)
@@ -167,7 +168,10 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
             _audio.PlayPvs("/Audio/Vanilla/SkillSystem/levelup.ogg", args.User, AudioParams.Default.WithMaxDistance(3f));
         else
             StartDoAfter(args.User, component, uid);
-        RaiseNetworkEvent(new UpdateCharacterSkillsRequestEvent());
+
+        if (TryComp<ActorComponent>(args.User, out var actor))
+            RaiseNetworkEvent(new UpdateCharacterSkillsRequestEvent(), Filter.SinglePlayer(actor.PlayerSession));
+
         args.Handled = true;
     }
     public bool AddExperience(SkillComponent skillComp, string skillType, int experienceAmount, int maxLevel)

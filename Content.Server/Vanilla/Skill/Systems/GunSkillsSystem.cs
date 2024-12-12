@@ -12,6 +12,7 @@ using Content.Server.Hands.Systems;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Random;
 using Robust.Shared.Audio;
+using Robust.Shared.Player;
 namespace Content.Server.Vanilla.Skill;
 
 public sealed class GunSkillsSystem : SharedGunSkillsSystem
@@ -150,6 +151,7 @@ public sealed class GunSkillsSystem : SharedGunSkillsSystem
             _gun.RefreshModifiers(uid);
             _audio.PlayPvs("/Audio/Vanilla/SkillSystem/levelup.ogg", args.User, AudioParams.Default.WithMaxDistance(3f));
         }
-        RaiseNetworkEvent(new UpdateCharacterSkillsRequestEvent());
+        if (TryComp<ActorComponent>(uid, out var actor))
+            RaiseNetworkEvent(new UpdateCharacterSkillsRequestEvent(), Filter.SinglePlayer(actor.PlayerSession));
     }
 }
