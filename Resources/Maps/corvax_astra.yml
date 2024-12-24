@@ -16076,7 +16076,8 @@ entities:
           4,-6:
             0: 11002
           3,-6:
-            0: 7645
+            0: 3549
+            4: 4096
           5,-8:
             0: 4376
             1: 52224
@@ -16505,7 +16506,8 @@ entities:
           17,-10:
             0: 65535
           17,-13:
-            0: 65520
+            0: 65392
+            5: 128
           18,-12:
             0: 32738
           18,-11:
@@ -16671,7 +16673,7 @@ entities:
             1: 4096
           26,-13:
             0: 48016
-            4: 32
+            5: 32
           27,-12:
             0: 49075
           27,-11:
@@ -17090,28 +17092,28 @@ entities:
           16,-22:
             1: 30169
           8,-24:
-            5: 4353
+            6: 4353
             1: 17476
           8,-25:
-            5: 4096
+            6: 4096
             1: 17476
-            6: 17
+            7: 17
           7,-24:
-            5: 19468
-            7: 32768
+            6: 19468
+            8: 32768
             1: 4369
           8,-23:
-            5: 272
+            6: 272
             1: 17476
           7,-23:
-            5: 3264
+            6: 3264
             1: 4369
           8,-22:
-            5: 17
+            6: 17
             0: 4096
             1: 17476
           7,-22:
-            5: 204
+            6: 204
             0: 57344
             1: 4369
           9,-24:
@@ -17161,8 +17163,8 @@ entities:
             1: 34952
           7,-25:
             1: 4369
-            5: 49152
-            6: 204
+            6: 49152
+            7: 204
           0,-24:
             0: 52509
           0,-25:
@@ -18567,7 +18569,7 @@ entities:
             0: 65512
           -3,-14:
             0: 4368
-            8: 3264
+            9: 3264
           -3,-13:
             0: 56593
           -3,-12:
@@ -18585,7 +18587,7 @@ entities:
           -1,-15:
             0: 65278
           -1,-14:
-            6: 816
+            7: 816
             0: 2184
           -1,-13:
             0: 30583
@@ -18680,7 +18682,8 @@ entities:
           2,-7:
             0: 65295
           2,-6:
-            0: 65535
+            0: 61439
+            10: 4096
           -3,-8:
             0: 16368
           -3,-7:
@@ -18734,10 +18737,10 @@ entities:
           7,-27:
             1: 65527
           8,-26:
-            8: 272
+            9: 272
             1: 17476
           7,-26:
-            8: 3264
+            9: 3264
             1: 4369
           9,-28:
             0: 30464
@@ -19087,7 +19090,7 @@ entities:
             0: 8191
           27,-14:
             0: 4883
-            9: 8192
+            11: 8192
             1: 34952
           27,-17:
             1: 8828
@@ -19293,6 +19296,21 @@ entities:
         - volume: 2500
           temperature: 293.15
           moles:
+          - 21.813705
+          - 82.06108
+          - 0
+          - 0
+          - 0
+          - 0
+          - 0
+          - 0
+          - 0
+          - 0
+          - 0
+          - 0
+        - volume: 2500
+          temperature: 293.15
+          moles:
           - 21.824873
           - 82.1031
           - 0
@@ -19355,6 +19373,21 @@ entities:
           moles:
           - 0
           - 6666.982
+          - 0
+          - 0
+          - 0
+          - 0
+          - 0
+          - 0
+          - 0
+          - 0
+          - 0
+          - 0
+        - volume: 2500
+          temperature: 293.15
+          moles:
+          - 21.824806
+          - 82.102844
           - 0
           - 0
           - 0
@@ -109370,6 +109403,11 @@ entities:
     - type: InsideEntityStorage
 - proto: ClothingHandsGlovesBoxingBlue
   entities:
+  - uid: 2270
+    components:
+    - type: Transform
+      pos: -32.24497,-104.382805
+      parent: 2
   - uid: 15536
     components:
     - type: Transform
@@ -109394,13 +109432,6 @@ entities:
     components:
     - type: Transform
       pos: 79.7888,-3.8955107
-      parent: 2
-- proto: ClothingHandsGlovesBoxingRigged
-  entities:
-  - uid: 15540
-    components:
-    - type: Transform
-      pos: -32.06796,-104.43788
       parent: 2
 - proto: ClothingHandsGlovesBoxingYellow
   entities:
@@ -111100,13 +111131,6 @@ entities:
       parent: 2
 - proto: ClothingOuterArmorBulletproof
   entities:
-  - uid: 2270
-    components:
-    - type: Transform
-      parent: 2268
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
   - uid: 15769
     components:
     - type: Transform
@@ -115009,8 +115033,8 @@ entities:
         immutable: False
         temperature: 293.14673
         moles:
-        - 1.8978093
-        - 7.139378
+        - 1.8978151
+        - 7.1394
         - 0
         - 0
         - 0
@@ -115028,7 +115052,6 @@ entities:
           occludes: True
           ents:
           - 2269
-          - 2270
         paper_label: !type:ContainerSlot
           showEnts: False
           occludes: True
@@ -133422,6 +133445,12 @@ entities:
       parent: 2
 - proto: DrinkBeerBottleFull
   entities:
+  - uid: 15540
+    components:
+    - type: Transform
+      parent: 33672
+    - type: Physics
+      canCollide: False
   - uid: 18717
     components:
     - type: Transform
@@ -134785,13 +134814,6 @@ entities:
       parent: 18963
     - type: Physics
       canCollide: False
-- proto: EnergyDagger
-  entities:
-  - uid: 18965
-    components:
-    - type: Transform
-      pos: -30.604742,-112.2046
-      parent: 2
 - proto: Envelope
   entities:
   - uid: 18966
@@ -195858,8 +195880,8 @@ entities:
         immutable: False
         temperature: 293.14673
         moles:
-        - 1.8856695
-        - 7.0937095
+        - 1.8968438
+        - 7.1357465
         - 0
         - 0
         - 0
@@ -195876,8 +195898,8 @@ entities:
           showEnts: False
           occludes: True
           ents:
-          - 2436
           - 2437
+          - 2436
         paper_label: !type:ContainerSlot
           showEnts: False
           occludes: True
@@ -196044,8 +196066,8 @@ entities:
         immutable: False
         temperature: 293.14673
         moles:
-        - 1.8977377
-        - 7.139109
+        - 1.8978093
+        - 7.139378
         - 0
         - 0
         - 0
@@ -196062,9 +196084,9 @@ entities:
           showEnts: False
           occludes: True
           ents:
-          - 26959
-          - 26961
           - 26957
+          - 26961
+          - 26959
         paper_label: !type:ContainerSlot
           showEnts: False
           occludes: True
@@ -214316,7 +214338,7 @@ entities:
   - uid: 27661
     components:
     - type: Transform
-      pos: -30.418041,12.585741
+      pos: -30.615345,-112.339836
       parent: 2
 - proto: PersonalAI
   entities:
@@ -214754,7 +214776,7 @@ entities:
       pos: 3.5,-52.5
       parent: 2
     - type: Door
-      secondsUntilStateChange: -170854.81
+      secondsUntilStateChange: -171600.53
       state: Opening
     - type: DeviceLinkSource
       lastSignals:
@@ -214765,7 +214787,7 @@ entities:
       pos: 2.5,-52.5
       parent: 2
     - type: Door
-      secondsUntilStateChange: -170855.55
+      secondsUntilStateChange: -171601.27
       state: Opening
     - type: DeviceLinkSource
       lastSignals:
@@ -232559,13 +232581,6 @@ entities:
     components:
     - type: Transform
       pos: -4.6409903,-83.15826
-      parent: 2
-- proto: RubberStampCentcom
-  entities:
-  - uid: 44141
-    components:
-    - type: Transform
-      pos: 47.30582,12.8017025
       parent: 2
 - proto: RubberStampDenied
   entities:
@@ -255929,7 +255944,7 @@ entities:
       parent: 2
     - type: Storage
       storedItems:
-        33673:
+        15540:
           position: 0,0
           _rotation: South
     - type: ContainerContainer
@@ -255938,7 +255953,7 @@ entities:
           showEnts: False
           occludes: True
           ents:
-          - 33673
+          - 15540
 - proto: Vaccinator
   entities:
   - uid: 33674
@@ -290464,14 +290479,6 @@ entities:
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
-- proto: WeaponLaserSvalinn
-  entities:
-  - uid: 33673
-    components:
-    - type: Transform
-      parent: 33672
-    - type: Physics
-      canCollide: False
 - proto: WeaponMinigun
   entities:
   - uid: 16289

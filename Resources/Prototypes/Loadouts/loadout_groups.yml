@@ -66,6 +66,7 @@
   - Glasses
   - GlassesJamjar
   - GlassesJensen
+  - CheapSunglasses
 
 - type: loadoutGroup
   id: GroupTankHarness
@@ -110,6 +111,7 @@
   - CaptainHead
   - CaptainCap
   # Vanilla-Loadouts-Start
+  - CapNavalCap
   - CaptainCapcapWhite
   # Vanilla-Loadouts-end
 
@@ -126,6 +128,7 @@
   - CaptainFormalSuit
   - CaptainFormalSkirt
   # Vanilla-Loadouts-Start
+  - UniformJumpsuitNavalCaptain
   - UniformJumpsuitWhiteCaptain
   - UniformJumpskirtWhiteCaptain
   # Vanilla-Loadouts-end
@@ -139,9 +142,9 @@
   - CaptainCloakFormal
   - CaptainMantle
   # Vanilla-Loadouts-Start
+  - ClothingNeckCaptainWideLoadout
   - CaptainWhiteMantle
   - CaptainCloakRoyal
-  - ClothingNeckCaptainWideLoadout
   # Vanilla-Loadouts-end
 
 - type: loadoutGroup
@@ -151,6 +154,7 @@
   - CaptainBackpack
   - CaptainSatchel
   - CaptainDuffel
+  - NavalCaptainSatchel
 
 - type: loadoutGroup
   id: CaptainOuterClothing
@@ -159,8 +163,11 @@
   - CaptainOuterClothing
   - CaptainWintercoat
   - ClothingOuterCoat
+  # Vanilla-Loadouts-Start
+  - CoatNavalCaptain
   - ClothingOuterCoatCaptainWhite
-  
+  # Vanilla-Loadouts-end
+
 - type: loadoutGroup
   id: HoPHead
   name: loadout-group-hop-head
@@ -1118,6 +1125,7 @@
   - DetectiveArmorVest
   - DetectiveCoat
   - DetectiveCoatGrey
+  - DetectiveCoatDark
 
 - type: loadoutGroup
   id: SecurityCadetJumpsuit
