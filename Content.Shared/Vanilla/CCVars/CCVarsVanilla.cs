@@ -38,9 +38,5 @@ public sealed class CCVarsVanilla
     ///     Secret key of the Discord auth server API
     /// </summary>
     public static readonly CVarDef<string> DiscordAuthApiKey = CVarDef.Create("discord_auth.api_key", "", CVar.SERVERONLY | CVar.CONFIDENTIAL);    
-        
-    /// <summary>
-    /// задержка между вызовами обр
-    /// </summary>
-    public static readonly CVarDef<int> SpecForceDelay = CVarDef.Create("specforce.delay", 2, CVar.SERVERONLY);
+
 }
