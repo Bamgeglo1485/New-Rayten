@@ -3,10 +3,14 @@ using Content.Shared.Interaction;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Hands;
+using Content.Shared.Popups;
+
 namespace Content.Shared.Vanilla.Skill;
 
 public abstract class SharedRequiresSkillSystem : EntitySystem
 {
+    [Dependency] private readonly SharedPopupSystem _popup = default!;
+
     public override void Initialize()
     {
         base.Initialize();
@@ -42,16 +46,23 @@ public abstract class SharedRequiresSkillSystem : EntitySystem
         return true;
     }
 
-    public bool HasRequiredSkillsForCraft(EntityUid user, RequiresSkillComponent component)
+    public bool HasRequiredSkillsForCraft(EntityUid user, RequiresSkillComponent component, bool popup = false)
     {
-         // Проверка уровня приборостроения
+
+        // Проверка уровня Приборостроения
         if (!HasSkillLevel(user, component.RequiresInstrumentationLevel, skillComponent => skillComponent.InstrumentationLevel)){
+            if(popup)
+                _popup.PopupClient(Loc.GetString("Skill-issue-message-instrumentation-unskilled", ("lvl", component.RequiresInstrumentationLevel)), user, user);
             return false;
         }
-         // Проверка уровня строительства
+
+        // Проверка уровня Строительства
         if (!HasSkillLevel(user, component.RequiresBuildingLevel, skillComponent => skillComponent.BuildingLevel)){
+            if(popup)
+                _popup.PopupClient(Loc.GetString("Skill-issue-message-building-unskilled", ("lvl", component.RequiresBuildingLevel)), user, user);
             return false;
         }
+
         return true;
     }
     public bool HasSkillLevel(EntityUid user, int requiredLevel, Func<SkillComponent, int> skillSelector)

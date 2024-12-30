@@ -48,15 +48,16 @@ namespace Content.Server.Repairable
                 _adminLogger.Add(LogType.Healed, $"{ToPrettyString(args.User):user} repaired {ToPrettyString(uid):target} back to full health");
             }
             //vanilla-station-start
-            if (!EntityManager.TryGetComponent<SkillComponent>(args.User, out var skillComp))
-                skillComp = EnsureComp<SkillComponent>(args.User);
-
-            if(_skillTrainerSystem.AddExperience(skillComp, "Building", component.DoAfterDelay * 5, 3)){
-                _audio.PlayPvs("/Audio/Vanilla/SkillSystem/levelup.ogg", args.User);
-            }
             if (TryComp<ActorComponent>(args.User, out var actor))
-                RaiseNetworkEvent(new UpdateCharacterSkillsRequestEvent(), Filter.SinglePlayer(actor.PlayerSession));
+            {
+                if (!EntityManager.TryGetComponent<SkillComponent>(args.User, out var skillComp))
+                    skillComp = EnsureComp<SkillComponent>(args.User);
 
+                if(_skillTrainerSystem.AddExperience(skillComp, "Building", component.DoAfterDelay * 10, 3))
+                        _audio.PlayGlobal("/Audio/Vanilla/SkillSystem/levelup.ogg", actor.PlayerSession);
+
+                RaiseNetworkEvent(new UpdateCharacterSkillsRequestEvent(), Filter.SinglePlayer(actor.PlayerSession));
+            }
             //vanilla-station-end
             var str = Loc.GetString("comp-repairable-repair",
                 ("target", uid),

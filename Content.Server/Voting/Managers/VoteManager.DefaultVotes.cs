@@ -8,6 +8,7 @@ using Content.Server.GameTicking.Presets;
 using Content.Server.Maps;
 using Content.Server.Roles;
 using Content.Server.RoundEnd;
+using Content.Server.Revolutionary.Components;
 using Content.Shared.CCVar;
 using Content.Shared.Chat;
 using Content.Shared.Database;
@@ -15,10 +16,13 @@ using Content.Shared.Ghost;
 using Content.Shared.Players;
 using Content.Shared.Players.PlayTimeTracking;
 using Content.Shared.Voting;
+using Content.Shared.Vanilla.CCVars;
+using Content.Shared.Vanilla.Skill;
 using Robust.Shared.Configuration;
 using Robust.Shared.Enums;
 using Robust.Shared.Player;
 using Robust.Shared.Random;
+
 
 namespace Content.Server.Voting.Managers
 {
@@ -33,9 +37,11 @@ namespace Content.Server.Voting.Managers
         private VotingSystem? _votingSystem;
         private RoleSystem? _roleSystem;
         private GameTicker? _gameTicker;
+        private int _lastEzModeRoundID = 0;
 
         private static readonly Dictionary<StandardVoteType, CVarDef<bool>> _voteTypesToEnableCVars = new()
         {
+            {StandardVoteType.Ezmode, CCVarsVanilla.VoteEzmodeEnabled},
             {StandardVoteType.Restart, CCVars.VoteRestartEnabled},
             {StandardVoteType.Preset, CCVars.VotePresetEnabled},
             {StandardVoteType.Map, CCVars.VoteMapEnabled},
@@ -58,6 +64,11 @@ namespace Content.Server.Voting.Managers
                 case StandardVoteType.Restart:
                     CreateRestartVote(initiator);
                     break;
+                //vanilla-station-start
+                case StandardVoteType.Ezmode:
+                    CreateEzmodeVote(initiator);
+                    break;
+                //vanilla-station-end
                 case StandardVoteType.Preset:
                     CreatePresetVote(initiator);
                     break;
@@ -95,6 +106,101 @@ namespace Content.Server.Voting.Managers
                 NotifyNotEnoughGhostPlayers(ghostVotePercentageRequirement, ghostVoterPercentage);
             }
         }
+
+        //vanilla-station-start
+
+        private void CreateEzmodeVote(ICommonSession? initiator)
+        {
+            _gameTicker = _entityManager.EntitySysManager.GetEntitySystem<GameTicker>();
+            if (_lastEzModeRoundID == _gameTicker.RoundId)
+            {
+                _chatManager.DispatchServerAnnouncement(Loc.GetString("ui-vote-ezmode-already-conducted"));
+                _adminLogger.Add(LogType.Vote, LogImpact.Medium, $"Ezmode vote attempt failed: already conducted this round.");
+                return;
+            }
+            var playerVoteMaximum = _cfg.GetCVar(CCVarsVanilla.VoteEzmodeMaxPlayers);
+            var totalPlayers = _playerManager.Sessions.Count(session => session.Status != SessionStatus.Disconnected);
+
+            if (totalPlayers <= playerVoteMaximum)
+            {
+                _lastEzModeRoundID = _gameTicker.RoundId;
+                StartEzmodeVote(initiator);
+            }
+            else
+            {
+                _adminLogger.Add(LogType.Vote, LogImpact.Medium, $"Ezmode vote failed: Current players:{totalPlayers.ToString()}, need less than {playerVoteMaximum.ToString()}");
+                _chatManager.DispatchServerAnnouncement(
+                    Loc.GetString("ui-vote-ezmode-fail-not-enough-players", ("PlayerRequirement", playerVoteMaximum)));
+            }
+        }
+
+
+        private void StartEzmodeVote(ICommonSession? initiator)
+        {
+            var voteOptions = new VoteOptions
+            {
+                Title = Loc.GetString("ui-vote-ezmode-title"),
+                Options =
+                {
+                    (Loc.GetString("ui-vote-ezmode-yes"), "yes"),
+                    (Loc.GetString("ui-vote-ezmode-no"), "no")
+                },
+                Duration = TimeSpan.FromSeconds(_cfg.GetCVar(CCVarsVanilla.EzmodeTimer)),
+                InitiatorTimeout = TimeSpan.FromMinutes(1)
+            };
+
+            WirePresetVoteInitiator(voteOptions, initiator);
+
+            var vote = CreateVote(voteOptions);
+
+            vote.OnFinished += (_, args) =>
+            {
+                var votesYes = vote.VotesPerOption["yes"];
+                var votesNo = vote.VotesPerOption["no"];
+                var total = votesYes + votesNo;
+
+                if (total > 0 && votesYes / (float)total >= _cfg.GetCVar(CCVarsVanilla.EzmodeRequiredRatio))
+                {
+                    _chatManager.DispatchServerAnnouncement(Loc.GetString("ui-vote-ezmode-succeeded"));
+
+                    // Главы получают все навыки, простые сотрудники 36 о.н.
+                    var query = _entityManager.EntityQueryEnumerator<SkillComponent>();
+                    while (query.MoveNext(out var uid, out var skillComponent))
+                    {
+                        if (_entityManager.TryGetComponent(uid, out CommandStaffComponent? commandStaff))
+                        {
+                            skillComponent.PilotingLevel = 3;
+                            skillComponent.RangeWeaponLevel = 3;
+                            skillComponent.MeleeWeaponLevel = 3;
+                            skillComponent.MedicineLevel = 3;
+                            skillComponent.ChemistryLevel = 3;
+                            skillComponent.EngineeringLevel = 3;
+                            skillComponent.BuildingLevel = 3;
+                            skillComponent.ResearchLevel = 3;
+                            skillComponent.InstrumentationLevel = 3;
+                            skillComponent.SkillPoints = 0;
+                        }
+                        else
+                            skillComponent.SkillPoints += 36;
+
+                        _entityManager.Dirty(skillComponent);
+                    }
+                }
+                else
+                {
+                    _chatManager.DispatchServerAnnouncement(Loc.GetString("ui-vote-ezmode-failed"));
+                }
+            };
+
+
+            if (initiator != null)
+            {
+                vote.CastVote(initiator, 0);
+            }
+        }
+
+
+        //vanilla-station-end
 
         /// <summary>
         /// Gives the current percentage of players eligible to vote, rounded to nearest percentage point.

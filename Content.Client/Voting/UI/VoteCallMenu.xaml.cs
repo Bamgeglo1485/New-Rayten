@@ -38,6 +38,7 @@ namespace Content.Client.Voting.UI
 
         public Dictionary<StandardVoteType, CreateVoteOption> AvailableVoteOptions = new Dictionary<StandardVoteType, CreateVoteOption>()
         {
+            { StandardVoteType.Ezmode, new CreateVoteOption("ui-vote-type-ezmode", new(), false, null) },
             { StandardVoteType.Restart, new CreateVoteOption("ui-vote-type-restart", new(), false, null) },
             { StandardVoteType.Preset, new CreateVoteOption("ui-vote-type-gamemode", new(), false, null) },
             { StandardVoteType.Map, new CreateVoteOption("ui-vote-type-map", new(), false, null) },

@@ -357,10 +357,12 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
 
         uid.SpawnRepeatingTimer(TimeSpan.FromSeconds(1), () =>
         {
-            if (_skillTrainerSystem.AddExperience(skillComp, skillTrainerComp.SkillType, skillTrainerComp.SkillIncreaseAmount, skillTrainerComp.MaxLevel))
-                _audio.PlayPvs("/Audio/Vanilla/SkillSystem/levelup.ogg", entity);
             if (TryComp<ActorComponent>(entity, out var actor))
+            {
+                if (_skillTrainerSystem.AddExperience(skillComp, skillTrainerComp.SkillType, skillTrainerComp.SkillIncreaseAmount, skillTrainerComp.MaxLevel))
+                    _audio.PlayGlobal("/Audio/Vanilla/SkillSystem/levelup.ogg", actor.PlayerSession);
                 RaiseNetworkEvent(new UpdateCharacterSkillsRequestEvent(), Filter.SinglePlayer(actor.PlayerSession));
+            }
         }, tokenSource.Token);
         _activePilotingTimers[uid] = tokenSource;
         //vanilla-station-skill-issue-end

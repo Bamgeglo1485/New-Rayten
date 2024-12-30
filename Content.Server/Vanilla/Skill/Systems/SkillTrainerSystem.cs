@@ -73,7 +73,7 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
         skillComp.Dirty();
 
         if(AddExperience(skillComp, msg.skill, 100, 3))
-            _audio.PlayPvs("/Audio/Vanilla/SkillSystem/levelup.ogg", entity, AudioParams.Default.WithMaxDistance(1f));
+            _audio.PlayGlobal("/Audio/Vanilla/SkillSystem/levelup.ogg", args.SenderSession);
         RaiseNetworkEvent(new UpdateCharacterSkillsRequestEvent(), Filter.SinglePlayer(args.SenderSession));
     }
 
@@ -164,14 +164,16 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
             return;
         if (!EntityManager.TryGetComponent<SkillComponent>(args.User, out var skillComp))
             skillComp = EnsureComp<SkillComponent>(args.User);
-        if(AddExperience(skillComp, args.SkillType, args.SkillIncreaseAmount, args.MaxLevel))
-            _audio.PlayPvs("/Audio/Vanilla/SkillSystem/levelup.ogg", args.User, AudioParams.Default.WithMaxDistance(3f));
-        else
-            StartDoAfter(args.User, component, uid);
+            
+        if(TryComp<ActorComponent>(args.User, out var actor))
+        {
+            if(AddExperience(skillComp, args.SkillType, args.SkillIncreaseAmount, args.MaxLevel))
+                _audio.PlayGlobal("/Audio/Vanilla/SkillSystem/levelup.ogg", actor.PlayerSession);
+            else
+                StartDoAfter(args.User, component, uid);
 
-        if (TryComp<ActorComponent>(args.User, out var actor))
             RaiseNetworkEvent(new UpdateCharacterSkillsRequestEvent(), Filter.SinglePlayer(actor.PlayerSession));
-
+        }
         args.Handled = true;
     }
     public bool AddExperience(SkillComponent skillComp, string skillType, int experienceAmount, int maxLevel)

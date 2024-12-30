@@ -355,7 +355,7 @@ namespace Content.Server.Construction
             //Строительство
             if (!_requiresSkillSystem.HasSkillLevel(user, constructionPrototype.RequiresBuildingLevel, skillComponent => skillComponent.BuildingLevel))
             {
-                _popup.PopupEntity(Loc.GetString("Skill-issue-message-builing-unskilled", ("lvl", constructionPrototype.RequiresBuildingLevel)), user, user);
+                _popup.PopupEntity(Loc.GetString("Skill-issue-message-building-unskilled", ("lvl", constructionPrototype.RequiresBuildingLevel)), user, user);
                 return false;
             }
             //vanilla-station-end
@@ -459,7 +459,7 @@ namespace Content.Server.Construction
             //Строительство
             if (!_requiresSkillSystem.HasSkillLevel(user, constructionPrototype.RequiresBuildingLevel, skillComponent => skillComponent.BuildingLevel))
             {
-                _popup.PopupEntity(Loc.GetString("Skill-issue-message-builing-unskilled", ("lvl", constructionPrototype.RequiresBuildingLevel)), user, user);
+                _popup.PopupEntity(Loc.GetString("Skill-issue-message-building-unskilled", ("lvl", constructionPrototype.RequiresBuildingLevel)), user, user);
                 return;
             }
             //vanilla-station-end

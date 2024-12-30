@@ -142,16 +142,18 @@ public sealed class GunSkillsSystem : SharedGunSkillsSystem
 
     private void RangeWeaponTrainOnShoot(EntityUid uid, GunTrainerComponent component, GunShotEvent args)
     {
-        if (!EntityManager.TryGetComponent<SkillComponent>(args.User, out var skillComp))
-            skillComp = EnsureComp<SkillComponent>(args.User);
+        if (TryComp<ActorComponent>(args.User, out var actor))
+        {
+            if (!EntityManager.TryGetComponent<SkillComponent>(args.User, out var skillComp))
+                skillComp = EnsureComp<SkillComponent>(args.User);
 
-        if (_skillTrainerSystem.AddExperience(skillComp, component.SkillType, component.ExpPerShot, component.MaxLevel)){
-            if(TryComp<UnskilledWeaponComponent>(uid, out var unskilledComp))
-            UnskilledWeaponRefreshModifiers(skillComp, unskilledComp);
-            _gun.RefreshModifiers(uid);
-            _audio.PlayPvs("/Audio/Vanilla/SkillSystem/levelup.ogg", args.User, AudioParams.Default.WithMaxDistance(3f));
-        }
-        if (TryComp<ActorComponent>(uid, out var actor))
+            if (_skillTrainerSystem.AddExperience(skillComp, component.SkillType, component.ExpPerShot, component.MaxLevel)){
+                if(TryComp<UnskilledWeaponComponent>(uid, out var unskilledComp))
+                    UnskilledWeaponRefreshModifiers(skillComp, unskilledComp);
+                _gun.RefreshModifiers(uid);
+                _audio.PlayGlobal("/Audio/Vanilla/SkillSystem/levelup.ogg", actor.PlayerSession);
+            }
             RaiseNetworkEvent(new UpdateCharacterSkillsRequestEvent(), Filter.SinglePlayer(actor.PlayerSession));
+        }
     }
 }

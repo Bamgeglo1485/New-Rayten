@@ -15,6 +15,7 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 using Robust.Shared.Timing;
 using SharedToolSystem = Content.Shared.Tools.Systems.SharedToolSystem;
+using Content.Shared.Vanilla.Skill;
 
 namespace Content.Shared.Radio.EntitySystems;
 
@@ -32,7 +33,8 @@ public sealed partial class EncryptionKeySystem : EntitySystem
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly SharedHandsSystem _hands = default!;
     [Dependency] private readonly SharedWiresSystem _wires = default!;
-
+    [Dependency] private readonly SharedRequiresSkillSystem _requiresSkillSystem = default!;
+    
     public override void Initialize()
     {
         base.Initialize();
@@ -132,7 +134,13 @@ public sealed partial class EncryptionKeySystem : EntitySystem
             _popup.PopupClient(Loc.GetString("encryption-key-slots-already-full"), uid, args.User);
             return;
         }
-
+        //Vanilla-Station-START
+        if (EntityManager.TryGetComponent<RequiresSkillComponent>(uid, out var RequiresSkillComponent))
+        {
+            if(!_requiresSkillSystem.HasRequiredSkillsForCraft(args.User, RequiresSkillComponent, true))
+            return;
+        }
+        //Vanilla-Sttion-END
         if (_container.Insert(args.Used, component.KeyContainer))
         {
             _popup.PopupClient(Loc.GetString("encryption-key-successfully-installed"), uid, args.User);
@@ -162,7 +170,13 @@ public sealed partial class EncryptionKeySystem : EntitySystem
             _popup.PopupClient(Loc.GetString("encryption-keys-no-keys"), uid, args.User);
             return;
         }
-
+        //Vanilla-Station-START
+        if (EntityManager.TryGetComponent<RequiresSkillComponent>(uid, out var RequiresSkillComponent))
+        {
+            if(!_requiresSkillSystem.HasRequiredSkillsForCraft(args.User, RequiresSkillComponent, true))
+            return;
+        }
+        //Vanilla-Sttion-END
         _tool.UseTool(args.Used, args.User, uid, 1f, component.KeysExtractionMethod, new EncryptionRemovalFinishedEvent(), toolComponent: tool);
     }
 
