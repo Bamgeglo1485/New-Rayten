@@ -43,15 +43,16 @@ public sealed class CharacterUIController : UIController, IOnStateEntered<Gamepl
         LayoutContainer.SetAnchorPreset(_window, LayoutContainer.LayoutPreset.CenterTop);
 
         // Подключение обработчиков к кнопкам
-        _window.PilotingUpgradeButton.OnPressed += _ => _characterInfo.SendSkillExperienceEvent("Piloting");
-        _window.RangeWeaponUpgradeButton.OnPressed += _ => _characterInfo.SendSkillExperienceEvent("RangeWeapon");
-        _window.MeleeWeaponUpgradeButton.OnPressed += _ => _characterInfo.SendSkillExperienceEvent("MeleeWeapon");
-        _window.MedicineUpgradeButton.OnPressed += _ => _characterInfo.SendSkillExperienceEvent("Medicine");
-        _window.ChemistryUpgradeButton.OnPressed += _ => _characterInfo.SendSkillExperienceEvent("Chemistry");
-        _window.EngineeringUpgradeButton.OnPressed += _ => _characterInfo.SendSkillExperienceEvent("Engineering");
-        _window.BuildingUpgradeButton.OnPressed += _ => _characterInfo.SendSkillExperienceEvent("Building");
-        _window.ResearchUpgradeButton.OnPressed += _ => _characterInfo.SendSkillExperienceEvent("Research");
-        _window.InstrumentationUpgradeButton.OnPressed += _ => _characterInfo.SendSkillExperienceEvent("Instrumentation");
+        _window.PilotingUpgradeButton.OnPressed += _ => _characterInfo.SendSkillExperienceEvent(skillType.Piloting);
+        _window.RangeWeaponUpgradeButton.OnPressed += _ => _characterInfo.SendSkillExperienceEvent(skillType.RangeWeapon);
+        _window.MeleeWeaponUpgradeButton.OnPressed += _ => _characterInfo.SendSkillExperienceEvent(skillType.MeleeWeapon);
+        _window.MedicineUpgradeButton.OnPressed += _ => _characterInfo.SendSkillExperienceEvent(skillType.Medicine);
+        _window.ChemistryUpgradeButton.OnPressed += _ => _characterInfo.SendSkillExperienceEvent(skillType.Chemistry);
+        _window.EngineeringUpgradeButton.OnPressed += _ => _characterInfo.SendSkillExperienceEvent(skillType.Engineering);
+        _window.BuildingUpgradeButton.OnPressed += _ => _characterInfo.SendSkillExperienceEvent(skillType.Building);
+        _window.ResearchUpgradeButton.OnPressed += _ => _characterInfo.SendSkillExperienceEvent(skillType.Research);
+        _window.InstrumentationUpgradeButton.OnPressed += _ => _characterInfo.SendSkillExperienceEvent(skillType.Instrumentation);
+
 
         CommandBinds.Builder
             .Bind(ContentKeyFunctions.OpenCharacterMenu,
@@ -63,15 +64,16 @@ public sealed class CharacterUIController : UIController, IOnStateEntered<Gamepl
     {
         if (_window != null)
         {
-            _window.PilotingUpgradeButton.OnPressed -= _ => _characterInfo.SendSkillExperienceEvent("Piloting");
-            _window.RangeWeaponUpgradeButton.OnPressed -= _ => _characterInfo.SendSkillExperienceEvent("RangeWeapon");
-            _window.MeleeWeaponUpgradeButton.OnPressed -= _ => _characterInfo.SendSkillExperienceEvent("MeleeWeapon");
-            _window.MedicineUpgradeButton.OnPressed -= _ => _characterInfo.SendSkillExperienceEvent("Medicine");
-            _window.ChemistryUpgradeButton.OnPressed -= _ => _characterInfo.SendSkillExperienceEvent("Chemistry");
-            _window.EngineeringUpgradeButton.OnPressed -= _ => _characterInfo.SendSkillExperienceEvent("Engineering");
-            _window.BuildingUpgradeButton.OnPressed -= _ => _characterInfo.SendSkillExperienceEvent("Building");
-            _window.ResearchUpgradeButton.OnPressed -= _ => _characterInfo.SendSkillExperienceEvent("Research");
-            _window.InstrumentationUpgradeButton.OnPressed -= _ => _characterInfo.SendSkillExperienceEvent("Instrumentation");
+            _window.PilotingUpgradeButton.OnPressed -= _ => _characterInfo.SendSkillExperienceEvent(skillType.Piloting);
+            _window.RangeWeaponUpgradeButton.OnPressed -= _ => _characterInfo.SendSkillExperienceEvent(skillType.RangeWeapon);
+            _window.MeleeWeaponUpgradeButton.OnPressed -= _ => _characterInfo.SendSkillExperienceEvent(skillType.MeleeWeapon);
+            _window.MedicineUpgradeButton.OnPressed -= _ => _characterInfo.SendSkillExperienceEvent(skillType.Medicine);
+            _window.ChemistryUpgradeButton.OnPressed -= _ => _characterInfo.SendSkillExperienceEvent(skillType.Chemistry);
+            _window.EngineeringUpgradeButton.OnPressed -= _ => _characterInfo.SendSkillExperienceEvent(skillType.Engineering);
+            _window.BuildingUpgradeButton.OnPressed -= _ => _characterInfo.SendSkillExperienceEvent(skillType.Building);
+            _window.ResearchUpgradeButton.OnPressed -= _ => _characterInfo.SendSkillExperienceEvent(skillType.Research);
+            _window.InstrumentationUpgradeButton.OnPressed -= _ => _characterInfo.SendSkillExperienceEvent(skillType.Instrumentation);
+
 
             _window.Dispose();
             _window = null;
@@ -217,6 +219,53 @@ public sealed class CharacterUIController : UIController, IOnStateEntered<Gamepl
         UpdateProgressBars(skillComponent.ResearchLevel, skillComponent.ResearchExp, _window.Research1, _window.Research2, _window.Research3);
         UpdateProgressBars(skillComponent.InstrumentationLevel, skillComponent.InstrumentationExp, _window.Instrumentation1, _window.Instrumentation2, _window.Instrumentation3);
 
+        UpdateSkillpoints(skillComponent);
+
+        if (EntityManager.TryGetComponent<SkillAmnesiaComponent>(user, out var SkillAmnesiaComp))
+            UpdateSkillAmnesia(SkillAmnesiaComp);
+        else
+            _window.SkillAmnesia.Visible = false;
+    }
+
+    private void UpdateSkillAmnesia(SkillAmnesiaComponent SkillAmnesiaComp)
+    {
+        if(_window == null)
+            return;
+        // Расчёт оставшегося времени на восстановление
+        int remainingExperience = SkillAmnesiaComp.exptorestore;
+        int totalSecondsToRestore = (remainingExperience / 3) * 2;
+
+        // Форматирование времени
+        var minutes = ((int)totalSecondsToRestore / 60).ToString("00");
+        var seconds = ((int)totalSecondsToRestore % 60).ToString("00");
+
+        // Обновление UI
+        _window.SkillAmnesia.Visible = true;
+
+        string skillName = SkillAmnesiaComp.skilltype switch
+        {
+            skillType.Piloting => "пилотирование",
+            skillType.RangeWeapon => "стрельбу",
+            skillType.MeleeWeapon => "ближний бой",
+            skillType.Medicine => "медицину",
+            skillType.Chemistry => "химию",
+            skillType.Engineering => "инженерию",
+            skillType.Building => "строительство",
+            skillType.Research => "исследования",
+            skillType.Instrumentation => "приборостроение",
+            _ => ""
+        };
+
+        _window.SkillAmnesia.Text = 
+            $"После смерти вы забыли {skillName}!\n" +
+            $"{SkillAmnesiaComp.exptorestore} опыта будет восстановлено в течение {minutes}:{seconds}";
+
+    }
+
+    private void UpdateSkillpoints(SkillComponent skillComponent)
+    {
+        if(_window == null)
+            return;
         if(skillComponent.SkillPoints < 1)
         {
             _window.Skillpointslabel.Visible = false;
@@ -232,6 +281,7 @@ public sealed class CharacterUIController : UIController, IOnStateEntered<Gamepl
             _window.InstrumentationUpgradeButton.Visible = false;
             return;
         }
+
         _window.Skillpointslabel.Visible = true;
         _window.Skillpointslabel.Text = $"Очков навыков: {skillComponent.SkillPoints}";
 
@@ -244,7 +294,6 @@ public sealed class CharacterUIController : UIController, IOnStateEntered<Gamepl
         _window.BuildingUpgradeButton.Visible = skillComponent.BuildingLevel < 3;
         _window.ResearchUpgradeButton.Visible = skillComponent.ResearchLevel < 3;
         _window.InstrumentationUpgradeButton.Visible = skillComponent.InstrumentationLevel < 3;
-
     }
 
     private void UpdateProgressBars(int level, int exp, ProgressBar bar1, ProgressBar bar2, ProgressBar bar3)

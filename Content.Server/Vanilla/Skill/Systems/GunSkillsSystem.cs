@@ -13,9 +13,10 @@ using Robust.Shared.Audio.Systems;
 using Robust.Shared.Random;
 using Robust.Shared.Audio;
 using Robust.Shared.Player;
+
 namespace Content.Server.Vanilla.Skill;
 
-public sealed class GunSkillsSystem : SharedGunSkillsSystem
+public sealed class GunSkillsSystem : EntitySystem
 {
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly SharedGunSystem _gun = default!;
@@ -27,7 +28,6 @@ public sealed class GunSkillsSystem : SharedGunSkillsSystem
     {
         base.Initialize();
         SubscribeLocalEvent<GunComponent, GotEquippedHandEvent>(OnHandPickUp);//обновляет модификаторы при взятии оружия в руки
-        SubscribeLocalEvent<GunComponent, GotUnequippedHandEvent>(OnHandDrop);//Обновляет модификаторы при выкладывании оружия
         SubscribeLocalEvent<GunComponent, GunRefreshModifiersEvent>(OnGunRefreshModifiers);//перегрузка обновления модификаторов
         SubscribeLocalEvent<GunTrainerComponent, GunShotEvent>(RangeWeaponTrainOnShoot);//прокачка навыка при стрельбе
         SubscribeLocalEvent<GunCanBeFallComponent, GunShotEvent>(RangeWeaponFalldownOnShoot);//выпадение оружия при стрельбе
@@ -38,16 +38,11 @@ public sealed class GunSkillsSystem : SharedGunSkillsSystem
         if(HasComp<GunIgnoreSkillComponent>(uid))
         return;
 
-        if (!HasComp<UnskilledWeaponComponent>(uid))
-            AddComp<UnskilledWeaponComponent>(uid);
+        if (!EntityManager.TryGetComponent<UnskilledWeaponComponent>(uid, out var unskilledComp))
+            unskilledComp = EnsureComp<UnskilledWeaponComponent>(uid);
 
-        if (!TryComp<UnskilledWeaponComponent>(uid, out var unskilledComp))
-        return;
-        
-        if (TryComp<SkillComponent>(args.User, out var skillComp))
-        {
+        if (EntityManager.TryGetComponent<SkillComponent>(args.User, out var skillComp))
             UnskilledWeaponRefreshModifiers(skillComp, unskilledComp);
-        }
         else
         {
             unskilledComp.MinAnglePenalty = Angle.FromDegrees(60);
@@ -56,6 +51,7 @@ public sealed class GunSkillsSystem : SharedGunSkillsSystem
         }
         _gun.RefreshModifiers(uid);
     }
+
     private void UnskilledWeaponRefreshModifiers(SkillComponent skillComp, UnskilledWeaponComponent unskilledComp)
     {
         switch (skillComp.RangeWeaponLevel)
@@ -80,17 +76,6 @@ public sealed class GunSkillsSystem : SharedGunSkillsSystem
                 unskilledComp.MaxAnglePenalty = 0;
                 unskilledComp.AngleIncreasePenalty = 0;
                 break;
-        }
-    }
-
-    private void OnHandDrop(EntityUid uid, GunComponent gunComp, GotUnequippedHandEvent args)
-    {
-        if (TryComp<UnskilledWeaponComponent>(uid, out var unskilledComp))
-        {
-            unskilledComp.MinAnglePenalty = 0;
-            unskilledComp.MaxAnglePenalty = 0;
-            unskilledComp.AngleIncreasePenalty = 0;
-            _gun.RefreshModifiers(uid);
         }
     }
 
@@ -147,7 +132,7 @@ public sealed class GunSkillsSystem : SharedGunSkillsSystem
             if (!EntityManager.TryGetComponent<SkillComponent>(args.User, out var skillComp))
                 skillComp = EnsureComp<SkillComponent>(args.User);
 
-            if (_skillTrainerSystem.AddExperience(skillComp, component.SkillType, component.ExpPerShot, component.MaxLevel)){
+            if (_skillTrainerSystem.AddExperience(skillComp, component.SkillType, component.ExpPerShot)){
                 if(TryComp<UnskilledWeaponComponent>(uid, out var unskilledComp))
                     UnskilledWeaponRefreshModifiers(skillComp, unskilledComp);
                 _gun.RefreshModifiers(uid);

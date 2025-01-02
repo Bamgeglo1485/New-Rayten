@@ -350,16 +350,13 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
         if (!EntityManager.TryGetComponent<SkillComponent>(entity, out var skillComp))
             skillComp = EnsureComp<SkillComponent>(entity);
 
-        if(skillComp.PilotingLevel >= skillTrainerComp.MaxLevel)
-        return;
-
         var tokenSource = new CancellationTokenSource();
 
         uid.SpawnRepeatingTimer(TimeSpan.FromSeconds(1), () =>
         {
             if (TryComp<ActorComponent>(entity, out var actor))
             {
-                if (_skillTrainerSystem.AddExperience(skillComp, skillTrainerComp.SkillType, skillTrainerComp.SkillIncreaseAmount, skillTrainerComp.MaxLevel))
+                if (_skillTrainerSystem.AddExperience(skillComp, skillTrainerComp.SkillType, skillTrainerComp.SkillIncreaseAmount))
                     _audio.PlayGlobal("/Audio/Vanilla/SkillSystem/levelup.ogg", actor.PlayerSession);
                 RaiseNetworkEvent(new UpdateCharacterSkillsRequestEvent(), Filter.SinglePlayer(actor.PlayerSession));
             }

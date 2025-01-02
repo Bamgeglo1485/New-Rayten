@@ -3,6 +3,7 @@ using Content.Shared.Objectives;
 using Content.Shared.Vanilla.Skill;
 using Robust.Client.Player;
 using Robust.Client.UserInterface;
+using Content.Shared.Vanilla.Skill;
 
 namespace Content.Client.CharacterInfo;
 
@@ -29,7 +30,7 @@ public sealed class CharacterInfoSystem : EntitySystem
 
         RaiseNetworkEvent(new RequestCharacterInfoEvent(GetNetEntity(entity.Value)));
     }
-    public void SendSkillExperienceEvent(string skill)
+    public void SendSkillExperienceEvent(skillType skill)
     {
         RaiseNetworkEvent(new RequestSkillAddEXPEvent(skill));
     }

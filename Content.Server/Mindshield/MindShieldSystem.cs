@@ -1,3 +1,4 @@
+using Content.Server.Vanilla.MemoryShield;
 using Content.Server.Administration.Logs;
 using Content.Server.Mind;
 using Content.Server.Popups;
@@ -24,7 +25,9 @@ public sealed class MindShieldSystem : EntitySystem
 
     [ValidatePrototypeId<TagPrototype>]
     public const string MindShieldTag = "MindShield";
-
+    [ValidatePrototypeId<TagPrototype>]
+    public const string MemoryShield = "MemoryShield";
+    
     public override void Initialize()
     {
         base.Initialize();
@@ -40,6 +43,10 @@ public sealed class MindShieldSystem : EntitySystem
         {
             EnsureComp<MindShieldComponent>(ev.Implanted.Value);
             MindShieldRemovalCheck(ev.Implanted.Value, ev.Implant);
+        }
+        if (_tag.HasTag(ev.Implant, MemoryShield) && ev.Implanted != null)
+        {
+            EnsureComp<MemoryShieldComponent>(ev.Implanted.Value);
         }
     }
 

@@ -6,11 +6,10 @@ namespace Content.Shared.Vanilla.Skill;
 [Serializable, NetSerializable]
 public sealed class RequestSkillAddEXPEvent : EntityEventArgs
 {
-    public readonly string skill;
+    public readonly skillType skill;
 
-    // Исправляем параметр конструктора
-    public RequestSkillAddEXPEvent(string Skill)
+    public RequestSkillAddEXPEvent(skillType Skill)
     {
-        skill = Skill;  // Обработка null
+        skill = Skill;
     }
 }

@@ -20,7 +20,7 @@ namespace Content.Server.Repairable
         [Dependency] private readonly SharedPopupSystem _popup = default!;
         [Dependency] private readonly IAdminLogManager _adminLogger= default!;
         [Dependency] private readonly SharedAudioSystem _audio = default!;
-         [Dependency] private readonly ServerSkillTrainerSystem _skillTrainerSystem = default!;
+        [Dependency] private readonly ServerSkillTrainerSystem _skillTrainerSystem = default!;
         public override void Initialize()
         {
             SubscribeLocalEvent<RepairableComponent, InteractUsingEvent>(Repair);
@@ -53,7 +53,7 @@ namespace Content.Server.Repairable
                 if (!EntityManager.TryGetComponent<SkillComponent>(args.User, out var skillComp))
                     skillComp = EnsureComp<SkillComponent>(args.User);
 
-                if(_skillTrainerSystem.AddExperience(skillComp, "Building", component.DoAfterDelay * 10, 3))
+                if(_skillTrainerSystem.AddExperience(skillComp, skillType.Building, component.DoAfterDelay * 10))
                         _audio.PlayGlobal("/Audio/Vanilla/SkillSystem/levelup.ogg", actor.PlayerSession);
 
                 RaiseNetworkEvent(new UpdateCharacterSkillsRequestEvent(), Filter.SinglePlayer(actor.PlayerSession));

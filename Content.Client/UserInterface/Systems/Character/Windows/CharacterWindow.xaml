@@ -116,6 +116,7 @@
                     </BoxContainer>
                 </BoxContainer>
             </BoxContainer>
+            <Label Name="SkillAmnesia" Margin="0, 5, 0, 5" Access="Public" />
             <Label Name="ObjectivesLabel" Access="Public" Text="{Loc 'character-info-objectives-label'}" HorizontalAlignment="Center"/>
             <BoxContainer Orientation="Vertical" Name="Objectives" Access="Public"/>
             <cc:Placeholder Name="RolePlaceholder" Access="Public" PlaceholderText="{Loc 'character-info-roles-antagonist-text'}"/>
