@@ -26,7 +26,7 @@ public sealed class MindShieldSystem : EntitySystem
     [ValidatePrototypeId<TagPrototype>]
     public const string MindShieldTag = "MindShield";
     [ValidatePrototypeId<TagPrototype>]
-    public const string MemoryShield = "MemoryShield";
+    public const string MemoryShieldTag = "MemoryShield";
     
     public override void Initialize()
     {
@@ -44,10 +44,12 @@ public sealed class MindShieldSystem : EntitySystem
             EnsureComp<MindShieldComponent>(ev.Implanted.Value);
             MindShieldRemovalCheck(ev.Implanted.Value, ev.Implant);
         }
-        if (_tag.HasTag(ev.Implant, MemoryShield) && ev.Implanted != null)
+        //vanilla-station-start
+        if (_tag.HasTag(ev.Implant, MemoryShieldTag) && ev.Implanted != null)
         {
             EnsureComp<MemoryShieldComponent>(ev.Implanted.Value);
         }
+        //vanilla-station-end
     }
 
     /// <summary>

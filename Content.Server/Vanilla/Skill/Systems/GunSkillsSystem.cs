@@ -9,6 +9,7 @@ using Content.Shared.Weapons.Ranged.Systems;
 using Content.Shared.Vanilla.Skill;
 using Content.Server.SkillTrainer;
 using Content.Server.Hands.Systems;
+using Content.Server.Vanilla.Skill;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Random;
 using Robust.Shared.Audio;
