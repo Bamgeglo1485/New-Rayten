@@ -16,6 +16,7 @@ using Content.Shared.Speech.Components;
 using Content.Shared.StatusEffect;
 using Content.Shared.Weapons.Melee;
 using Content.Shared.Weapons.Melee.Events;
+using Content.Shared.Vanilla.Skill;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
@@ -35,7 +36,6 @@ public sealed class MeleeWeaponSystem : SharedMeleeWeaponSystem
     [Dependency] private readonly LagCompensationSystem _lag = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly SharedColorFlashEffectSystem _color = default!;
-
     public override void Initialize()
     {
         base.Initialize();
@@ -136,7 +136,6 @@ public sealed class MeleeWeaponSystem : SharedMeleeWeaponSystem
             return false;
 
         var chance = CalculateDisarmChance(user, target, inTargetHand, combatMode);
-
         if (_random.Prob(chance))
         {
             // Yknow something tells me this comment is hilariously out of date...
@@ -214,7 +213,12 @@ public sealed class MeleeWeaponSystem : SharedMeleeWeaponSystem
             return 0.0f;
 
         var chance = disarmerComp.BaseDisarmFailChance;
-
+        //vanilla-station-start
+        int disarmerskilllevel = TryComp<SkillComponent>(disarmer, out var disarmerskill) ? disarmerskill.MeleeWeaponLevel : 2;
+        int disarmedskilllevel = TryComp<SkillComponent>(disarmed, out var disarmedskill) ? disarmedskill.MeleeWeaponLevel : 2;
+        float skillDifference = (float)(disarmedskilllevel - disarmerskilllevel); 
+        chance += skillDifference * 0.05f;
+        //vanilla-station-end
         if (inTargetHand != null && TryComp<DisarmMalusComponent>(inTargetHand, out var malus))
         {
             chance += malus.Malus;

@@ -124,9 +124,10 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
 
         if(TryComp<ActorComponent>(args.User, out var actor))
         {
-            DecreaseSkillExpToLearn(skillComp, args.SkillType, args.SkillIncreaseAmount);    
 
-            if(AddExperience(skillComp, args.SkillType, args.SkillIncreaseAmount))
+            int exp = DecreaseSkillExpToLearn(skillComp, args.SkillType, args.SkillIncreaseAmount);    
+
+            if(AddExperience(skillComp, args.SkillType, exp))
                 _audio.PlayGlobal("/Audio/Vanilla/SkillSystem/levelup.ogg", actor.PlayerSession);
             else
                 StartDoAfter(args.User, component, uid);
@@ -196,43 +197,64 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
         }
         skillComp.Dirty();
     }
-    private void DecreaseSkillExpToLearn(SkillComponent skillComp, skillType skill, int exp)
+    private int DecreaseSkillExpToLearn(SkillComponent skillComp, skillType skill, int exp)
     {
-        if (exp < 0) return;
+        if (exp < 0) return 0;
 
         switch (skill)
         {
             case skillType.Piloting:
+
+                if(exp > skillComp.PilotingExpToLearn)
+                    exp = skillComp.PilotingExpToLearn;
                 skillComp.PilotingExpToLearn -= exp;
+
                 break;
             case skillType.RangeWeapon:
+                if(exp > skillComp.RangeWeaponExpToLearn)
+                    exp = skillComp.RangeWeaponExpToLearn;
                 skillComp.RangeWeaponExpToLearn -= exp;
                 break;
             case skillType.MeleeWeapon:
+                if(exp > skillComp.MeleeWeaponExpToLearn)
+                    exp = skillComp.MeleeWeaponExpToLearn;
                 skillComp.MeleeWeaponExpToLearn -= exp;
                 break;
             case skillType.Medicine:
+                if(exp > skillComp.MedicineExpToLearn)
+                    exp = skillComp.MedicineExpToLearn;
                 skillComp.MedicineExpToLearn -= exp;
                 break;
             case skillType.Chemistry:
+                if(exp > skillComp.ChemistryExpToLearn)
+                    exp = skillComp.ChemistryExpToLearn;
                 skillComp.ChemistryExpToLearn -= exp;
                 break;
             case skillType.Engineering:
+                if(exp > skillComp.EngineeringExpToLearn)
+                    exp = skillComp.EngineeringExpToLearn;
                 skillComp.EngineeringExpToLearn -= exp;
                 break;
             case skillType.Building:
+                if(exp > skillComp.BuildingExpToLearn)
+                    exp = skillComp.BuildingExpToLearn;
                 skillComp.BuildingExpToLearn -= exp;
                 break;
             case skillType.Research:
+                if(exp > skillComp.ResearchExpToLearn)
+                    exp = skillComp.ResearchExpToLearn;
                 skillComp.ResearchExpToLearn -= exp;
                 break;
             case skillType.Instrumentation:
+                if(exp > skillComp.InstrumentationExpToLearn)
+                    exp = skillComp.InstrumentationExpToLearn;
                 skillComp.InstrumentationExpToLearn -= exp;
                 break;
             default:
                 break;
         }
         skillComp.Dirty();
+        return exp;
     }
     private void SetSkillExp(SkillComponent skillComp, skillType skill, int exp)
     {

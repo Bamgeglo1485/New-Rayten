@@ -287,7 +287,7 @@ public sealed class CharacterUIController : UIController, IOnStateEntered<Gamepl
 
         _window.PilotingUpgradeButton.Visible = skillComponent.PilotingLevel < 3;
         _window.RangeWeaponUpgradeButton.Visible = skillComponent.RangeWeaponLevel < 3;
-        //_window.MeleeWeaponUpgradeButton.Visible = show && skillComponent.MeleeWeaponLevel < 3;
+        _window.MeleeWeaponUpgradeButton.Visible = skillComponent.MeleeWeaponLevel < 3;
         _window.MedicineUpgradeButton.Visible  = skillComponent.MedicineLevel < 3;
         _window.ChemistryUpgradeButton.Visible = skillComponent.ChemistryLevel < 3;
         _window.EngineeringUpgradeButton.Visible = skillComponent.EngineeringLevel < 3;

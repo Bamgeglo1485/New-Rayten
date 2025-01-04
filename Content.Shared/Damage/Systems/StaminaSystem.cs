@@ -14,6 +14,7 @@ using Content.Shared.Rounding;
 using Content.Shared.Stunnable;
 using Content.Shared.Throwing;
 using Content.Shared.Weapons.Melee.Events;
+using Content.Shared.Vanilla.Skill;
 using JetBrains.Annotations;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
@@ -34,7 +35,7 @@ public sealed partial class StaminaSystem : EntitySystem
     [Dependency] private readonly SharedColorFlashEffectSystem _color = default!;
     [Dependency] private readonly SharedStunSystem _stunSystem = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
-
+    [Dependency] private readonly IRobustRandom _random = default!;
     /// <summary>
     /// How much of a buffer is there between the stun duration and when stuns can be re-applied.
     /// </summary>
@@ -363,11 +364,21 @@ public sealed partial class StaminaSystem : EntitySystem
 
         component.Critical = true;
         component.StaminaDamage = component.CritThreshold;
+        //vanilla-station-start
+        var StunTime = component.StunTime;
+        if(TryComp<SkillComponent>(uid, out var skill) && skill.MeleeWeaponLevel>=2)
+        {
+            StunTime -= TimeSpan.FromSeconds(2f);
+            if(skill.MeleeWeaponLevel == 3 && _random.Prob(0.35f))
+                    StunTime = TimeSpan.FromSeconds(0.25f);
+        }
 
-        _stunSystem.TryParalyze(uid, component.StunTime, true);
+        //vanilla-station-end        
+        _stunSystem.TryParalyze(uid, StunTime, true);
 
         // Give them buffer before being able to be re-stunned
         component.NextUpdate = _timing.CurTime + component.StunTime + StamCritBufferTime;
+
         EnsureComp<ActiveStaminaComponent>(uid);
         Dirty(uid, component);
         _adminLogger.Add(LogType.Stamina, LogImpact.Medium, $"{ToPrettyString(uid):user} entered stamina crit");
