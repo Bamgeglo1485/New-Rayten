@@ -36,7 +36,7 @@ public sealed class SkillAmnesiaSystem : EntitySystem
             return;
 
         // Если память защищена, выходим
-        if (TryComp<MemoryShieldComponent>(ev.Target, out _))
+        if(HasComp<MemoryShieldComponent>(ev.Target))
             return;
 
         // Проверяем компоненты актора и амнезии

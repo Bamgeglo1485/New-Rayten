@@ -94,9 +94,10 @@ public sealed class GunSkillsSystem : EntitySystem
     private void RangeWeaponFalldownOnShoot(EntityUid uid, GunCanBeFallComponent component, GunShotEvent args)
     {
         if (!EntityManager.TryGetComponent<SkillComponent>(args.User, out var skillComp))
-        {
             skillComp = EnsureComp<SkillComponent>(args.User);
-        }
+
+        if(HasComp<GunIgnoreSkillComponent>(uid))
+            return;
 
         if (skillComp.RangeWeaponLevel < component.RequiresRangeWeaponLevel)
         {
@@ -129,6 +130,9 @@ public sealed class GunSkillsSystem : EntitySystem
 
     private void RangeWeaponTrainOnShoot(EntityUid uid, GunTrainerComponent component, GunShotEvent args)
     {
+        if(HasComp<GunIgnoreSkillComponent>(uid))
+            return;
+
         if (TryComp<ActorComponent>(args.User, out var actor))
         {
             if (!EntityManager.TryGetComponent<SkillComponent>(args.User, out var skillComp))
