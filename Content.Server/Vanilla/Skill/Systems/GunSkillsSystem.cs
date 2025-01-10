@@ -59,26 +59,27 @@ public sealed class GunSkillsSystem : EntitySystem
         {
             case 0:
                 unskilledComp.MinAnglePenalty = Angle.FromDegrees(60);
-                unskilledComp.MaxAnglePenalty = Angle.FromDegrees(200);
-                unskilledComp.AngleIncreasePenalty = Angle.FromDegrees(20);
+                unskilledComp.MaxAnglePenalty = Angle.FromDegrees(150);
+                unskilledComp.AngleIncreasePenalty = Angle.FromDegrees(18);
                 break;
             case 1:
-                unskilledComp.MinAnglePenalty = Angle.FromDegrees(20);
-                unskilledComp.MaxAnglePenalty = Angle.FromDegrees(80);
-                unskilledComp.AngleIncreasePenalty = Angle.FromDegrees(10);
+                unskilledComp.MinAnglePenalty = Angle.FromDegrees(30);
+                unskilledComp.MaxAnglePenalty = Angle.FromDegrees(100);
+                unskilledComp.AngleIncreasePenalty = Angle.FromDegrees(12);
                 break;
             case 2:
                 unskilledComp.MinAnglePenalty = Angle.FromDegrees(0);
-                unskilledComp.MaxAnglePenalty = Angle.FromDegrees(25);
-                unskilledComp.AngleIncreasePenalty = Angle.FromDegrees(5);
+                unskilledComp.MaxAnglePenalty = Angle.FromDegrees(50);
+                unskilledComp.AngleIncreasePenalty = Angle.FromDegrees(6);
                 break;
             case 3:
-                unskilledComp.MinAnglePenalty = 0;
-                unskilledComp.MaxAnglePenalty = 0;
-                unskilledComp.AngleIncreasePenalty = 0;
+                unskilledComp.MinAnglePenalty = Angle.FromDegrees(0);
+                unskilledComp.MaxAnglePenalty = Angle.FromDegrees(0);
+                unskilledComp.AngleIncreasePenalty = Angle.FromDegrees(0);
                 break;
         }
     }
+
 
     private void OnGunRefreshModifiers(EntityUid uid, GunComponent gunComp, ref GunRefreshModifiersEvent args)
     {

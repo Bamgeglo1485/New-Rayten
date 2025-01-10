@@ -62,22 +62,10 @@ public sealed class RequiresSkillSystem : SharedRequiresSkillSystem
             
         args.Handled = true;
     }
-    protected override void OnHandDrop(EntityUid uid, RequiresSkillComponent component, ref GotUnequippedHandEvent args)
-    {
-        if (args.Handled || args.User == null)
-            return;
-        //исследования
-        component.SkillDiffResearchLevel = 0;
-        component.SkillDiffMedicineLevel = 0;
-        args.Handled = true;
-    }
     public void solveskilldiff(EntityUid user, RequiresSkillComponent component)
     {
         if (!EntityManager.TryGetComponent<SkillComponent>(user, out var skillComp))
             skillComp = EnsureComp<SkillComponent>(user);
-
-        //исследования
-        component.SkillDiffResearchLevel = component.RequiresResearchLevel - skillComp.ResearchLevel;
         //Медицина
         component.SkillDiffMedicineLevel = component.RequiresMedicineLevel - skillComp.MedicineLevel;
     }

@@ -29,8 +29,6 @@ namespace Content.Shared.Vanilla.Skill
         //Исследования
         [DataField("RequiresResearchLevel"), AutoNetworkedField]
         public int RequiresResearchLevel { get; set; } = 0;
-        [DataField("SkillDiffResearchLevel"), AutoNetworkedField]
-        public int SkillDiffResearchLevel { get; set; } = 0;
 
         //Приборостроение
         [DataField("RequiresInstrumentationLevel"), AutoNetworkedField]

@@ -19,7 +19,6 @@ public abstract class SharedRequiresSkillSystem : EntitySystem
         SubscribeLocalEvent<RequiresSkillComponent, ItemSlotEjectAttemptEvent>(OnItemSlotEjectAttempt); //попытка вытащить что-то
         SubscribeLocalEvent<RequiresSkillToActivateInWorldComponent, ActivateInWorldEvent >(OnSkillCheckToActivateInWorld);
         SubscribeLocalEvent<RequiresSkillComponent, GotEquippedHandEvent>(OnHandPickUp);//Взять в руку
-        SubscribeLocalEvent<RequiresSkillComponent, GotUnequippedHandEvent>(OnHandDrop);//Убрать из руки
     }
     public bool HasRequiredSkills(EntityUid user, RequiresSkillComponent component)
     {
@@ -39,6 +38,30 @@ public abstract class SharedRequiresSkillSystem : EntitySystem
         if (!HasSkillLevel(user, component.RequiresResearchLevel, skillComponent => skillComponent.ResearchLevel)){
             return false;
         }
+        // Проверка уровня Инженерии
+        if (!HasSkillLevel(user, component.RequiresEngineeringLevel, skillComponent => skillComponent.EngineeringLevel)){
+            return false;
+        }
+        return true;
+    }
+    public bool HasRequiredSkills(EntityUid user, RequiresSkillComponent component, bool or = true)
+    {
+        // Проверка уровня химии
+        if (!HasSkillLevel(user, component.RequiresChemistryLevel, skillComponent => skillComponent.ChemistryLevel)){
+            return false;
+        }else
+        // Проверка уровня медицины
+        if (!HasSkillLevel(user, component.RequiresMedicineLevel, skillComponent => skillComponent.MedicineLevel)){
+            return false;
+        }else
+        // Проверка уровня пилотирования
+        if (!HasSkillLevel(user, component.RequiresPilotingLevel, skillComponent => skillComponent.PilotingLevel)){
+            return false;
+        }else
+        // Проверка уровня исследования
+        if (!HasSkillLevel(user, component.RequiresResearchLevel, skillComponent => skillComponent.ResearchLevel)){
+            return false;
+        }else
         // Проверка уровня Инженерии
         if (!HasSkillLevel(user, component.RequiresEngineeringLevel, skillComponent => skillComponent.EngineeringLevel)){
             return false;
@@ -78,6 +101,6 @@ public abstract class SharedRequiresSkillSystem : EntitySystem
     protected abstract void OnItemSlotEjectAttempt(EntityUid uid, RequiresSkillComponent component, ref ItemSlotEjectAttemptEvent args);//попытка вытащить что-то
 
     protected abstract void OnHandPickUp(EntityUid uid, RequiresSkillComponent component, ref GotEquippedHandEvent args);//взять в руку
-    protected abstract void OnHandDrop(EntityUid uid, RequiresSkillComponent component, ref GotUnequippedHandEvent args);//бросить из руки
+
     protected abstract void OnSkillCheckToActivateInWorld(EntityUid uid, RequiresSkillToActivateInWorldComponent component, ref ActivateInWorldEvent args);//если есть компонент то обрабатываем активацию
 }

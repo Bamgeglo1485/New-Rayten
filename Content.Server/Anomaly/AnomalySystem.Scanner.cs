@@ -14,6 +14,7 @@ namespace Content.Server.Anomaly;
 /// </summary>
 public sealed partial class AnomalySystem
 {
+
     private void InitializeScanner()
     {
         SubscribeLocalEvent<AnomalyScannerComponent, BoundUIOpenedEvent>(OnScannerUiOpened);
@@ -94,27 +95,31 @@ public sealed partial class AnomalySystem
             return;
         if (!args.CanReach)
             return;
-        //vanilla-station-skill-issue-start
+
+        //Vanilla-Station-START
         float skillduration = component.ScanDoAfterDuration;
-        if (EntityManager.TryGetComponent<RequiresSkillComponent>(uid, out var RequiresSkillComp) && RequiresSkillComp != null)
+        if (EntityManager.TryGetComponent<RequiresSkillComponent>(uid, out var RequiresSkillComponent))
         {
-            if (RequiresSkillComp.SkillDiffResearchLevel > 0)
-            {
-                Popup.PopupEntity(Loc.GetString("Skill-issue-message-research-unskilled", ("lvl", RequiresSkillComp.RequiresResearchLevel)), uid);
+            if(!_requiresSkillSystem.HasRequiredSkills(args.User, RequiresSkillComponent, true))
                 return;
-            }
-            switch (RequiresSkillComp.SkillDiffResearchLevel)
-            {
-                case 0:
-                    skillduration += 15f;
-                    break;
-                case -2:
-                case -3:
-                    skillduration = 0.5f;
-                    break;
+
+            if(EntityManager.TryGetComponent<SkillComponent>(args.User, out var SkillComp)){
+                switch (SkillComp.ResearchLevel)
+                {
+                    case 0:
+                    case 1:
+                        skillduration *= 10;
+                        break;
+                    case 2:
+                        break;
+                    case 3:
+                        skillduration /= 10;
+                        break;
+                }
             }
         }
-        //vanilla-station-skill-issue-end
+        //Vanilla-Sttion-END
+
         _doAfter.TryStartDoAfter(new DoAfterArgs(EntityManager, args.User, skillduration, new ScannerDoAfterEvent(), uid, target: target, used: uid)
         {
             DistanceThreshold = 2f
@@ -190,23 +195,12 @@ public sealed partial class AnomalySystem
             msg.AddMarkupOrThrow(stateLoc);
         }
         msg.PushNewline();
-        bool show = true;
-        //vanilla-station-skill-issue-start
-        if (EntityManager.TryGetComponent<RequiresSkillComponent>(scanner, out var RequiresSkillComp)){
-            show = RequiresSkillComp.SkillDiffResearchLevel<0? true : false;
-        }
-
-
-        //vanilla-station-skill-issue-end
 
         //Point output
-        if(show)
-        {//vanilla-station-skill-issue
-            if (secret != null && secret.Secret.Contains(AnomalySecretData.OutputPoint))
-                msg.AddMarkupOrThrow(Loc.GetString("anomaly-scanner-point-output-unknown"));
-            else
-                msg.AddMarkupOrThrow(Loc.GetString("anomaly-scanner-point-output", ("point", GetAnomalyPointValue(anomaly, anomalyComp))));
-        }
+        if (secret != null && secret.Secret.Contains(AnomalySecretData.OutputPoint))
+            msg.AddMarkupOrThrow(Loc.GetString("anomaly-scanner-point-output-unknown"));
+        else
+            msg.AddMarkupOrThrow(Loc.GetString("anomaly-scanner-point-output", ("point", GetAnomalyPointValue(anomaly, anomalyComp))));
         msg.PushNewline();
         msg.PushNewline();
 
@@ -241,10 +235,6 @@ public sealed partial class AnomalySystem
         else
             msg.AddMarkupOrThrow(Loc.GetString("anomaly-scanner-particle-transformation", ("type", GetParticleLocale(anomalyComp.TransformationParticleType))));
 
-        //vanilla-station-skill-issue-start
-        if(!show)
-            return msg;
-        //vanilla-station-skill-issue-end
         //Behavior
         msg.PushNewline();
         msg.PushNewline();

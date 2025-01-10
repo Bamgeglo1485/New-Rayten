@@ -20,6 +20,8 @@ public sealed class SkillAmnesiaSystem : EntitySystem
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly ServerSkillTrainerSystem _serverSkillTrainerSystem = default!;
 
+    const int _experienceToRestore = 1;
+
     public override void Initialize()
     {
         base.Initialize();
@@ -27,42 +29,61 @@ public sealed class SkillAmnesiaSystem : EntitySystem
         SubscribeLocalEvent<SkillAmnesiaComponent, ComponentRemove>(OnComponentRemove);
     }
 
-    //точка входа в систему амнезии - срабатывает при смене состояние человека
     private void OnMobStateChanged(MobStateChangedEvent ev)
     {
-        // навыки теряются только если есть что терять
+        // Проверяем наличие компонента навыков
         if (!TryComp<SkillComponent>(ev.Target, out var skill))
             return;
 
-        // Если память защищена - ничего не делаем
-        if (TryComp<MemoryShieldComponent>(ev.Target, out var memshield))
+        // Если память защищена, выходим
+        if (TryComp<MemoryShieldComponent>(ev.Target, out _))
             return;
 
-        //Если сущность умерла - теряет очки навыков и опыт
-        if(ev.NewMobState == MobState.Dead)
-            LoseExperience(skill);
+        // Проверяем компоненты актора и амнезии
+        TryComp<ActorComponent>(ev.Target, out var actor);
+        TryComp<SkillAmnesiaComponent>(ev.Target, out var skillAmnesia);
 
-        // амнезия начинается только при воскрешени
-        if (ev.OldMobState != MobState.Dead)
-            return;
-
-        // навыки теряются только если прошло 3 минуты с момента предыдущей смерти
-        if (TryComp<SkillAmnesiaComponent>(ev.Target, out var SkillWithAmnesia))
+        // Обработка смерти сущности
+        if (ev.NewMobState == MobState.Dead)
         {
-            var timeSinceDeath = _gameTiming.RealTime.Subtract(SkillWithAmnesia.TimeOfDeath);
+            // Если есть амнезия, учитываем её
+            if (skillAmnesia!=null)
+            {
+                var timeSinceDeath = _gameTiming.RealTime - skillAmnesia.TimeOfDeath;
 
-            if(timeSinceDeath.Minutes < 3)
-                return;
+                LoseExperience(skill, skillAmnesia.skilltype);
+                skill.Dirty();
 
-            EntityManager.RemoveComponent<SkillAmnesiaComponent>(ev.Target);
+                // Удаляем амнезию только если прошло более 3 минут
+                if (timeSinceDeath.TotalMinutes >= 3)
+                    EntityManager.RemoveComponent<SkillAmnesiaComponent>(ev.Target);
+            }
+            else
+            {
+                // Удаляем весь опыт, если амнезии нет
+                LoseExperience(skill);
+                skill.Dirty();
+            }
+
+            // Обновляем навыки клиента
+            if (actor != null)
+                RaiseNetworkEvent(new UpdateCharacterSkillsRequestEvent(), Filter.SinglePlayer(actor.PlayerSession));
+
+            return; // Завершаем, так как смерть обработана
         }
 
+        // если чел воскрешается и у него нет амнезии - даём её
+        if (ev.OldMobState == MobState.Dead && skillAmnesia == null)
+        {
+            SkillAmnesia(ev.Target, skill);
+            skill.Dirty();
 
-        SkillAmnesia(ev.Target, skill);
-        skill.Dirty();
-        if(TryComp<ActorComponent>(ev.Target, out var actor))
-            RaiseNetworkEvent(new UpdateCharacterSkillsRequestEvent(), Filter.SinglePlayer(actor.PlayerSession));
+            // Обновляем навыки клиента
+            if (actor != null)
+                RaiseNetworkEvent(new UpdateCharacterSkillsRequestEvent(), Filter.SinglePlayer(actor.PlayerSession));
+        }
     }
+
 
 
     /*
@@ -82,60 +103,29 @@ public sealed class SkillAmnesiaSystem : EntitySystem
             ("Research", skill.ResearchLevel, level => skill.ResearchLevel = level),
             ("Instrumentation", skill.InstrumentationLevel, level => skill.InstrumentationLevel = level)
         };
-        // Оставляем только навыки с уровнем выше 0. Если навыков нет, ничего не делаем
+
         var nonZeroSkills = skillLevels.Where(s => s.Level > 0).ToList();
         if (nonZeroSkills.Count == 0)
             return;
 
-        // Выбираем случайный навык
         var selectedSkill = _random.Pick(nonZeroSkills);
 
-        // Добавляем компонент SkillAmnesiaComponent
-        SkillAmnesiaComponent amnesia = EntityManager.AddComponent<SkillAmnesiaComponent>(user);
+        if (selectedSkill.Level == 1)
+        {
+            selectedSkill.SetLevel(0);
+            return;
+        }
 
-        // Сохраняем тип выбранного навыка
+        SkillAmnesiaComponent amnesia = EntityManager.AddComponent<SkillAmnesiaComponent>(user);
         amnesia.skilltype = Enum.Parse<skillType>(selectedSkill.Name);
 
-        // Потерянный опыт в зависимости от уровня навыка
-        amnesia.exptorestore = selectedSkill.Level == 1 ? 300 : 900;
-        int newLevel = selectedSkill.Level == 2 ? selectedSkill.Level - 2 : selectedSkill.Level - 1 ;
+        int newLevel = selectedSkill.Level == 2 ? 0 : selectedSkill.Level - 1;
+        selectedSkill.SetLevel(newLevel);
 
-        // Забываем уровень
-        switch (selectedSkill.Name)
-        {
-            case "Piloting":
-                skill.PilotingLevel = newLevel;
-                break;
-            case "RangeWeapon":
-                skill.RangeWeaponLevel = newLevel;
-                break;
-            case "MeleeWeapon":
-                skill.MeleeWeaponLevel = newLevel;
-                break;
-            case "Medicine":
-                skill.MedicineLevel = newLevel;
-                break;
-            case "Chemistry":
-                skill.ChemistryLevel = newLevel;
-                break;
-            case "Engineering":
-                skill.EngineeringLevel = newLevel;
-                break;
-            case "Building":
-                skill.BuildingLevel = newLevel;
-                break;
-            case "Research":
-                skill.ResearchLevel = newLevel;
-                break;
-            case "Instrumentation":
-                skill.InstrumentationLevel = newLevel;
-                break;
-            default:
-                break;
-        }
         amnesia.TimeOfDeath = _gameTiming.CurTime;
-        StartRemember(user, skill, amnesia); //стартуем вспоминание навыка
+        StartRemember(user, skill, amnesia);
     }
+
 
     //метод тупа запускает таймер
     private void StartRemember(EntityUid user, SkillComponent skill, SkillAmnesiaComponent amnesia)
@@ -143,24 +133,23 @@ public sealed class SkillAmnesiaSystem : EntitySystem
         amnesia.TokenSource?.Cancel();
         amnesia.TokenSource = new CancellationTokenSource();
 
-        // Запуск таймера, который будет срабатывать каждые 2 секунды
-        user.SpawnRepeatingTimer(TimeSpan.FromSeconds(2), () => Remember(skill, amnesia.skilltype, amnesia, user), amnesia.TokenSource.Token);
+        // Запуск таймера, который будет срабатывать каждую секунду
+        user.SpawnRepeatingTimer(TimeSpan.FromSeconds(1), () => Remember(skill, amnesia.skilltype, amnesia, user), amnesia.TokenSource.Token);
     }
 
     //таймер перекачивает опыт из SkillAmnesiaComponent в SkillComponent
     private void Remember(SkillComponent skill, skillType skillType, SkillAmnesiaComponent amnesia, EntityUid user)
     {
-        int experienceToRestore = (amnesia.exptorestore >= 3) ? 3 : amnesia.exptorestore;
-        amnesia.exptorestore -= experienceToRestore;
+        amnesia.exptorestore -= _experienceToRestore;
         
         amnesia.Dirty();
-        
-        if(TryComp<ActorComponent>(user, out var actor))
-        {
-            if(_serverSkillTrainerSystem.AddExperience(skill, skillType, experienceToRestore))
-                _audio.PlayGlobal("/Audio/Vanilla/SkillSystem/levelup.ogg", actor.PlayerSession);
-            RaiseNetworkEvent(new UpdateCharacterSkillsRequestEvent(), Filter.SinglePlayer(actor.PlayerSession));
-        }
+
+        TryComp<ActorComponent>(user, out var actor);
+        if(_serverSkillTrainerSystem.AddExperience(skill, skillType, _experienceToRestore))
+            if(actor != null) _audio.PlayGlobal("/Audio/Vanilla/SkillSystem/levelup.ogg", actor.PlayerSession);
+
+        if (actor != null) RaiseNetworkEvent(new UpdateCharacterSkillsRequestEvent(), Filter.SinglePlayer(actor.PlayerSession));
+
         if (amnesia.exptorestore <= 0)
             EntityManager.RemoveComponent<SkillAmnesiaComponent>(user);
     }
@@ -177,17 +166,18 @@ public sealed class SkillAmnesiaSystem : EntitySystem
     /*
     Метод отвечает за сброс всего опыта и скиллпоинтов при смерти. Ну и всё.
     */
-    private void LoseExperience(SkillComponent skill)
+    private void LoseExperience(SkillComponent skill, skillType? ignoredSkill = null)
     {
         skill.SkillPoints = 0;
-        skill.PilotingExp = 0;
-        skill.RangeWeaponExp = 0;
-        skill.MeleeWeaponExp = 0;
-        skill.MedicineExp = 0;
-        skill.ChemistryExp = 0;
-        skill.EngineeringExp = 0;
-        skill.BuildingExp = 0;
-        skill.ResearchExp = 0;
-        skill.InstrumentationExp = 0;
+
+        if (ignoredSkill != skillType.Piloting) skill.PilotingExp = 0;
+        if (ignoredSkill != skillType.RangeWeapon) skill.RangeWeaponExp = 0;
+        if (ignoredSkill != skillType.MeleeWeapon) skill.MeleeWeaponExp = 0;
+        if (ignoredSkill != skillType.Medicine) skill.MedicineExp = 0;
+        if (ignoredSkill != skillType.Chemistry) skill.ChemistryExp = 0;
+        if (ignoredSkill != skillType.Engineering) skill.EngineeringExp = 0;
+        if (ignoredSkill != skillType.Building) skill.BuildingExp = 0;
+        if (ignoredSkill != skillType.Research) skill.ResearchExp = 0;
+        if (ignoredSkill != skillType.Instrumentation) skill.InstrumentationExp = 0;
     }
 }

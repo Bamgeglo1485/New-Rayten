@@ -47,7 +47,4 @@ public sealed class RequiresSkillSystem : SharedRequiresSkillSystem
     protected override void OnHandPickUp(EntityUid uid, RequiresSkillComponent component, ref GotEquippedHandEvent args)
     {
     }
-    protected override void OnHandDrop(EntityUid uid, RequiresSkillComponent component, ref GotUnequippedHandEvent args)
-    {
-    }
 }

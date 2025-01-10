@@ -9,6 +9,7 @@ namespace Content.Shared.Labels.EntitySystems;
 public abstract partial class SharedLabelSystem : EntitySystem
 {
     [Dependency] protected readonly NameModifierSystem NameMod = default!;
+    [Dependency] private readonly SharedRequiresSkillSystem _requiresSkillSystem = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -40,25 +41,17 @@ public abstract partial class SharedLabelSystem : EntitySystem
             return;
 
         var message = new FormattedMessage();
-
-        //vanilla-station-skill-issue-start
-        if(EntityManager.TryGetComponent<RequiresSkillComponent>(uid, out var skillRequirements) && EntityManager.TryGetComponent<SkillComponent>(args.Examiner, out var skill)){
-            if (!HasSkillLevel(args.Examiner, skillRequirements.RequiresChemistryLevel, skillComponent => skillComponent.ChemistryLevel)
-            || !HasSkillLevel(args.Examiner, skillRequirements.RequiresMedicineLevel, skillComponent => skillComponent.MedicineLevel))
-                return;
+        //Vanilla-Station-START
+        if (EntityManager.TryGetComponent<RequiresSkillComponent>(uid, out var RequiresSkillComponent))
+        {
+            if(!_requiresSkillSystem.HasRequiredSkills(args.Examiner, RequiresSkillComponent, true))
+            return;
         }
-        //vanilla-station-skill-issue-end
+        //Vanilla-Sttion-END
         message.AddMarkup(Loc.GetString("hand-labeler-has-label", ("label", label.CurrentLabel)));
         args.PushMessage(message);
     }
 
-    //vanilla-station-skill-issue
-    public bool HasSkillLevel(EntityUid user, int requiredLevel, Func<SkillComponent, int> skillSelector)
-    {
-        if (TryComp<SkillComponent>(user, out var skillComponent) && skillSelector(skillComponent) >= requiredLevel)
-            return true;
-        return false;
-    }
 
     // private void OnRefreshNameModifiers(Entity<LabelComponent> entity, ref RefreshNameModifiersEvent args)
     // {

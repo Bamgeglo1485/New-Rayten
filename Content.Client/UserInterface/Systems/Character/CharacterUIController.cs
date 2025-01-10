@@ -231,13 +231,10 @@ public sealed class CharacterUIController : UIController, IOnStateEntered<Gamepl
     {
         if(_window == null)
             return;
-        // Расчёт оставшегося времени на восстановление
-        int remainingExperience = SkillAmnesiaComp.exptorestore;
-        int totalSecondsToRestore = (remainingExperience / 3) * 2;
 
         // Форматирование времени
-        var minutes = ((int)totalSecondsToRestore / 60).ToString("00");
-        var seconds = ((int)totalSecondsToRestore % 60).ToString("00");
+        var minutes = ((int)SkillAmnesiaComp.exptorestore / 60).ToString("00");
+        var seconds = ((int)SkillAmnesiaComp.exptorestore % 60).ToString("00");
 
         // Обновление UI
         _window.SkillAmnesia.Visible = true;
