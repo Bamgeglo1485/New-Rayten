@@ -7,6 +7,7 @@ using Content.Client.Message;
 using Content.Client.Parallax.Managers; // Vanilla-edit
 using Content.Client.UserInterface.Systems.Chat;
 using Content.Client.Voting;
+using Content.Shared.CCVar;
 using Robust.Client;
 using Robust.Client.Console;
 using Robust.Client.ResourceManagement;

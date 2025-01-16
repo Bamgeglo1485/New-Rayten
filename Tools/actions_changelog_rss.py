@@ -29,24 +29,24 @@ CHANGELOG_RSS_KEY = os.environ.get("CHANGELOG_RSS_KEY")
 
 # Change these to suit your server settings
 # https://docs.fabfile.org/en/stable/getting-started.html#run-commands-via-connections-and-run
-SSH_HOST = "moon.spacestation14.com"
+SSH_HOST = "changelog.vanilla-station.ru"
 SSH_USER = "changelog-rss"
 SSH_PORT = 22
 RSS_FILE = "changelog.xml"
 XSL_FILE = "stylesheet.xsl"
 HOST_KEYS = [
-    "AAAAC3NzaC1lZDI1NTE5AAAAIOBpGO/Qc6X0YWuw7z+/WS/65+aewWI29oAyx+jJpCmh"
+    "AAAAC3NzaC1lZDI1NTE5AAAAIHL4N8yo6hTJRiMj9EGS6BejjSF0LXxXu/e6+MF3fWqR"
 ]
 
 # RSS feed parameters, change these
-FEED_TITLE       = "Space Station 14 Changelog"
-FEED_LINK        = "https://github.com/space-wizards/space-station-14/"
-FEED_DESCRIPTION = "Changelog for the official Wizard's Den branch of Space Station 14."
-FEED_LANGUAGE    = "en-US"
-FEED_GUID_PREFIX = "ss14-changelog-wizards-"
-FEED_URL         = "https://central.spacestation14.io/changelog.xml"
+FEED_TITLE       = "Rayten changelog"
+FEED_LINK        = "https://github.com/RaytenCorp/VanillaStation"
+FEED_DESCRIPTION = "Changelog for the Rayten"
+FEED_LANGUAGE    = "ru-RU"
+FEED_GUID_PREFIX = "ss14-changelog-rayten-"
+FEED_URL         = "https://changelog.vanilla-station.ru/changelog.xml"
 
-CHANGELOG_FILE = "Resources/Changelog/Changelog.yml"
+CHANGELOG_FILE = "Resources/Changelog/ChangelogVanilla.yml"
 
 TYPES_TO_EMOJI = {
     "Fix":    "🐛",

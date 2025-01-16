@@ -21,7 +21,7 @@ GITHUB_TOKEN      = os.environ["GITHUB_TOKEN"]
 DISCORD_SPLIT_LIMIT = 2000
 DISCORD_WEBHOOK_URL = os.environ.get("DISCORD_WEBHOOK_URL")
 
-CHANGELOG_FILES = ["Resources/Changelog/Changelog.yml", "Resources/Changelog/ChangelogSyndie.yml"] # Corvax-MultiChangelog
+CHANGELOG_FILES = ["Resources/Changelog/Changelog.yml", "Resources/Changelog/ChangelogSyndie.yml", "Resources/Changelog/ChangelogVanilla.yml"] # Corvax-vanilla-MultiChangelog
 
 TYPES_TO_EMOJI = {
     "Fix":    "🐛",
@@ -185,8 +185,8 @@ def send_to_discord(entries: Iterable[ChangelogEntry]) -> None:
     message_text = message_content.getvalue()
     if len(message_text) > 0:
         print("Sending final changelog to discord")
-        content.seek(0) # Corvax
-        for chunk in iter(lambda: content.read(2000), ''): # Corvax: Split big changelogs messages
+        message_content.seek(0)  # Corvax
+        for chunk in iter(lambda: message_content.read(2000), ''): # Corvax: Split big changelogs messages
             send_discord(chunk)
 
 

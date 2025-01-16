@@ -17,7 +17,6 @@ using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Prototypes;
 using Content.Shared.Station.Components;
-using FastAccessors;
 using Robust.Shared.Utility;
 using YamlDotNet.RepresentationModel;
 
@@ -55,7 +54,7 @@ namespace Content.IntegrationTests.Tests
 			"CorvaxMaus",
 			"CorvaxIshimura",
 			"CorvaxPaper",
-			"CorvaxCuteInstallation",
+			"CorvaxCute",
             "CorvaxPilgrim",
             "CorvaxSplit",
             "CorvaxTerra",
@@ -64,7 +63,6 @@ namespace Content.IntegrationTests.Tests
             "CorvaxTushkan",
             "CorvaxGlacier",
             "CorvaxAwesome",
-            "Origin",
             // Corvax-End
             "Dev",
             "TestTeg",
@@ -86,7 +84,9 @@ namespace Content.IntegrationTests.Tests
             "Cog",
             "Gate",
             "Amber",
-            "Loop"
+            "Loop",
+            "Plasma",
+            "Elkridge"
         };
 
         /// <summary>
