@@ -112,34 +112,45 @@ namespace Content.Server.Voting.Managers
         private void CreateEzmodeVote(ICommonSession? initiator)
         {
             _gameTicker = _entityManager.EntitySysManager.GetEntitySystem<GameTicker>();
+
             if (_lastEzModeRoundID == _gameTicker.RoundId)
             {
-                _chatManager.DispatchServerAnnouncement(Loc.GetString("ui-vote-ezmode-already-conducted"));
-                _adminLogger.Add(LogType.Vote, LogImpact.Medium, $"Ezmode vote attempt failed: already conducted this round.");
+                if (initiator != null)
+                {
+                    var message = Loc.GetString("ui-vote-ezmode-already-conducted");
+                    var wrappedMessage = Loc.GetString("chat-manager-server-wrap-message", ("message", message));
+                    _chatManager.ChatMessageToOne(ChatChannel.Server, message, wrappedMessage, default, false, initiator.Channel);
+                }
                 return;
             }
-            var playerVoteMaximum = _cfg.GetCVar(CCVarsVanilla.VoteEzmodeMaxPlayers);
-            var totalPlayers = _playerManager.Sessions.Count(session => session.Status != SessionStatus.Disconnected);
 
-            if (totalPlayers <= playerVoteMaximum)
+            var playerVoteMaximum = _cfg.GetCVar(CCVarsVanilla.VoteEzmodeMaxPlayers);
+            //расчитываем количество валидных пользователей (не ливнувших + не гостов)
+            var totalPlayers = _playerManager.Sessions.Count(session => session.Status != SessionStatus.Disconnected);
+            int ghostcounter = CalculateEligibleVoterNumber(VoterEligibility.Ghost);
+            int nonGhostPlayersCount = totalPlayers - ghostcounter;
+
+            if (nonGhostPlayersCount <= playerVoteMaximum)
             {
                 _lastEzModeRoundID = _gameTicker.RoundId;
-                StartEzmodeVote(initiator);
+                StartEzmodeVote(initiator, nonGhostPlayersCount);
             }
-            else
+            else if (initiator != null)
             {
-                _adminLogger.Add(LogType.Vote, LogImpact.Medium, $"Ezmode vote failed: Current players:{totalPlayers.ToString()}, need less than {playerVoteMaximum.ToString()}");
-                _chatManager.DispatchServerAnnouncement(
-                    Loc.GetString("ui-vote-ezmode-fail-not-enough-players", ("PlayerRequirement", playerVoteMaximum)));
+                var message = Loc.GetString("ui-vote-ezmode-fail-not-enough-players", ("PlayerRequirement", playerVoteMaximum));
+                var wrappedMessage = Loc.GetString("chat-manager-server-wrap-message", ("message", message));
+                _chatManager.ChatMessageToOne(ChatChannel.Server, message, wrappedMessage, default, false, initiator.Channel);
             }
         }
 
 
-        private void StartEzmodeVote(ICommonSession? initiator)
+        private void StartEzmodeVote(ICommonSession? initiator, int nonGhostPlayersCount)
         {
+            int skillpoints = 9 + (10-nonGhostPlayersCount)*6;
+
             var voteOptions = new VoteOptions
             {
-                Title = Loc.GetString("ui-vote-ezmode-title"),
+                Title = Loc.GetString("ui-vote-ezmode-title", ("skillpoints", skillpoints)),
                 Options =
                 {
                     (Loc.GetString("ui-vote-ezmode-yes"), "yes"),
@@ -159,29 +170,21 @@ namespace Content.Server.Voting.Managers
                 var votesNo = vote.VotesPerOption["no"];
                 var total = votesYes + votesNo;
 
-                if (total > 0 && votesYes / (float)total >= _cfg.GetCVar(CCVarsVanilla.EzmodeRequiredRatio))
+                if (total > 0 && votesYes * 100 >= total * _cfg.GetCVar(CCVarsVanilla.EzmodeRequiredRatio) * 100)
                 {
-                    _chatManager.DispatchServerAnnouncement(Loc.GetString("ui-vote-ezmode-succeeded"));
+                    _chatManager.DispatchServerAnnouncement(Loc.GetString("ui-vote-ezmode-succeeded", ("skillpoints", skillpoints)));
 
-                    // Главы получают все навыки, простые сотрудники 36 о.н.
-                    var query = _entityManager.EntityQueryEnumerator<SkillComponent>();
-                    while (query.MoveNext(out var uid, out var skillComponent))
+                    // выдаем навыки
+                    var query = _entityManager.EntityQueryEnumerator<ActorComponent>();
+                    while (query.MoveNext(out var uid, out var actor))
                     {
-                        if (_entityManager.TryGetComponent(uid, out CommandStaffComponent? commandStaff))
-                        {
-                            skillComponent.PilotingLevel = 3;
-                            skillComponent.RangeWeaponLevel = 3;
-                            skillComponent.MeleeWeaponLevel = 3;
-                            skillComponent.MedicineLevel = 3;
-                            skillComponent.ChemistryLevel = 3;
-                            skillComponent.EngineeringLevel = 3;
-                            skillComponent.BuildingLevel = 3;
-                            skillComponent.ResearchLevel = 3;
-                            skillComponent.InstrumentationLevel = 3;
-                            skillComponent.SkillPoints = 0;
-                        }
-                        else
-                            skillComponent.SkillPoints += 36;
+                        if (_entityManager.HasComponent<GhostComponent>(uid))
+                            continue;
+
+                        if (!_entityManager.TryGetComponent(uid, out SkillComponent? skillComponent))
+                            skillComponent = _entityManager.AddComponent<SkillComponent>(uid);
+
+                        skillComponent.SkillPoints += skillpoints;
 
                         _entityManager.Dirty(skillComponent);
                     }

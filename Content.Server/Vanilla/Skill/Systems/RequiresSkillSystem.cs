@@ -54,23 +54,8 @@ public sealed class RequiresSkillSystem : SharedRequiresSkillSystem
             
         args.Cancelled = true;
     }
-    protected override void OnHandPickUp(EntityUid uid, RequiresSkillComponent component, ref GotEquippedHandEvent args)
-    {
-        if (args.Handled || args.User == null)
-            return;
-        solveskilldiff(args.User, component);
-            
-        args.Handled = true;
-    }
-    public void solveskilldiff(EntityUid user, RequiresSkillComponent component)
-    {
-        if (!EntityManager.TryGetComponent<SkillComponent>(user, out var skillComp))
-            skillComp = EnsureComp<SkillComponent>(user);
-        //Медицина
-        component.SkillDiffMedicineLevel = component.RequiresMedicineLevel - skillComp.MedicineLevel;
-    }
 
-    public bool HasRequiredSkills(EntityUid user, RequiresSkillComponent component, bool popup)
+    public bool HasRequiredSkills(EntityUid user, RequiresSkillComponent component, bool popup, skillType? skillignore = null)
     {
         if(!TryComp<SkillComponent>(user, out var skill))
             skill = EnsureComp<SkillComponent>(user);
@@ -80,7 +65,7 @@ public sealed class RequiresSkillSystem : SharedRequiresSkillSystem
         var session = actor.PlayerSession;
 
         // Проверка уровня химии
-        if (!HasSkillLevel(user, component.RequiresChemistryLevel, skillComponent => skillComponent.ChemistryLevel)){
+        if (skillignore != skillType.Chemistry && !HasSkillLevel(user, component.RequiresChemistryLevel, skillComponent => skillComponent.ChemistryLevel)){
             if(popup)
             {
                 _audio.PlayGlobal("/Audio/Vanilla/SkillSystem/meep-merp.ogg", session);
@@ -90,7 +75,7 @@ public sealed class RequiresSkillSystem : SharedRequiresSkillSystem
             return false;
         }
         // Проверка уровня медицины
-        if (!HasSkillLevel(user, component.RequiresMedicineLevel, skillComponent => skillComponent.MedicineLevel)){
+        if (skillignore != skillType.Medicine && !HasSkillLevel(user, component.RequiresMedicineLevel, skillComponent => skillComponent.MedicineLevel)){
             if(popup)
             {
                 _audio.PlayGlobal("/Audio/Vanilla/SkillSystem/meep-merp.ogg", session);
@@ -100,7 +85,7 @@ public sealed class RequiresSkillSystem : SharedRequiresSkillSystem
             return false;
         }
         // Проверка уровня пилотирования
-        if (!HasSkillLevel(user, component.RequiresPilotingLevel, skillComponent => skillComponent.PilotingLevel)){
+        if (skillignore != skillType.Piloting && !HasSkillLevel(user, component.RequiresPilotingLevel, skillComponent => skillComponent.PilotingLevel)){
             if(popup)
             {
                 _audio.PlayGlobal("/Audio/Vanilla/SkillSystem/meep-merp.ogg", session);
@@ -110,7 +95,7 @@ public sealed class RequiresSkillSystem : SharedRequiresSkillSystem
             return false;
         }
         // Проверка уровня исследования
-        if (!HasSkillLevel(user, component.RequiresResearchLevel, skillComponent => skillComponent.ResearchLevel)){
+        if (skillignore != skillType.Research && !HasSkillLevel(user, component.RequiresResearchLevel, skillComponent => skillComponent.ResearchLevel)){
             if(popup)
             {
                 _audio.PlayGlobal("/Audio/Vanilla/SkillSystem/meep-merp.ogg", session);
@@ -120,7 +105,7 @@ public sealed class RequiresSkillSystem : SharedRequiresSkillSystem
             return false;
         }
         // Проверка уровня инженерии
-        if (!HasSkillLevel(user, component.RequiresEngineeringLevel, skillComponent => skillComponent.EngineeringLevel)){
+        if (skillignore != skillType.Engineering && !HasSkillLevel(user, component.RequiresEngineeringLevel, skillComponent => skillComponent.EngineeringLevel)){
             if(popup)
             {
                 _audio.PlayGlobal("/Audio/Vanilla/SkillSystem/meep-merp.ogg", session);

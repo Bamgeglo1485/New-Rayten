@@ -44,7 +44,4 @@ public sealed class RequiresSkillSystem : SharedRequiresSkillSystem
             
         args.Cancelled = true;
     }
-    protected override void OnHandPickUp(EntityUid uid, RequiresSkillComponent component, ref GotEquippedHandEvent args)
-    {
-    }
 }

@@ -4,6 +4,7 @@ using Content.Server.Body.Systems;
 using Content.Server.Medical.Components;
 using Content.Server.Popups;
 using Content.Server.Stack;
+using Content.Server.Vanilla.Skill;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Audio;
 using Content.Shared.Damage;
@@ -19,10 +20,9 @@ using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
 using Content.Shared.Stacks;
+using Content.Shared.Vanilla.Skill;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Random;
-using Content.Shared.Vanilla.Skill;
-using Content.Server.Vanilla.Skill;
 
 namespace Content.Server.Medical;
 
@@ -39,7 +39,7 @@ public sealed class HealingSystem : EntitySystem
     [Dependency] private readonly MobThresholdSystem _mobThresholdSystem = default!;
     [Dependency] private readonly PopupSystem _popupSystem = default!;
     [Dependency] private readonly SharedSolutionContainerSystem _solutionContainerSystem = default!;
-    [Dependency] private readonly RequiresSkillSystem _requiresskill = default!;
+
     public override void Initialize()
     {
         base.Initialize();
@@ -173,13 +173,7 @@ public sealed class HealingSystem : EntitySystem
 
         if (TryComp<StackComponent>(uid, out var stack) && stack.Count < 1)
             return false;
-        //vanilla-station-skill-issue-start
-        if (EntityManager.TryGetComponent<RequiresSkillComponent>(uid, out var reqskillComponent))
-        {
-            if(!_requiresskill.HasRequiredSkills(user, reqskillComponent, true))           
-            return false;
-        }
-        //vanilla-station-skill-issue-end
+
         var anythingToDo =
             HasDamage(targetDamage, component) ||
             component.ModifyBloodLevel > 0 // Special case if healing item can restore lost blood...
@@ -207,6 +201,34 @@ public sealed class HealingSystem : EntitySystem
         var delay = isNotSelf
             ? component.Delay
             : component.Delay * GetScaledHealingPenalty(user, component);
+        //vanilla-station-skill-issue-start
+        if (EntityManager.TryGetComponent<SkillComponent>(user, out var Skill))
+        {
+            float skillmodifier = 1f;
+
+            switch (Skill.MedicineLevel)
+            {
+                case 0:
+                    skillmodifier = 2f;
+                    break;
+                case 1:
+                    skillmodifier = 1.5f;
+                    break;
+                case 2:
+                    skillmodifier = 1f;
+                    break;
+                case 3:
+                    skillmodifier = 0.5f;
+                    break;
+            }
+
+            delay *= skillmodifier;
+        }
+        else
+        {
+            delay *= 2; // если компонента навыка нет, умножаем на 2
+        }
+        //vanilla-station-skill-issue-end
 
         var doAfterEventArgs =
             new DoAfterArgs(EntityManager, user, delay, new HealingDoAfterEvent(), target, target: target, used: uid)

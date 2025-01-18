@@ -19,7 +19,7 @@ using Content.Shared.Hands.EntitySystems;
 using Robust.Shared.Map;
 using Robust.Shared.Network;
 using Dependency = Robust.Shared.IoC.DependencyAttribute;
-using Content.Shared.Vanilla.Skill;//vanilla-skill
+using Content.Shared.Vanilla.Skill;
 namespace Content.Shared.Chemistry.EntitySystems;
 
 /// <summary>
@@ -68,7 +68,7 @@ public abstract partial class SharedSolutionContainerSystem : EntitySystem
     [Dependency] protected readonly SharedContainerSystem ContainerSystem = default!;
     [Dependency] protected readonly MetaDataSystem MetaDataSys = default!;
     [Dependency] protected readonly INetManager NetManager = default!;
-
+    [Dependency] protected readonly SharedRequiresSkillSystem _requiresskill = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -823,9 +823,13 @@ public abstract partial class SharedSolutionContainerSystem : EntitySystem
             foreach (var keyValuePair in sortedReagentPrototypes)
             {
                 var proto = keyValuePair.Key;
+
                 if (!proto.Recognizable)
                 {
-                    continue;
+                    //vanilla-station
+                    //Человек с 3 химией распознаёт абсолютно всё и ему всё равно
+                    if ( skillComponent == null || skillComponent.ChemistryLevel != 3 ) 
+                        continue;
                 }
 
                 recognized.Add(proto);
@@ -868,12 +872,14 @@ public abstract partial class SharedSolutionContainerSystem : EntitySystem
         if (!args.CanInteract || !args.CanAccess)
             return;
 
-        // vanilla-station-skill-issue-start
-        if (!EntityManager.TryGetComponent<SkillComponent>(args.User, out var skill) || skill.ChemistryLevel < 1)
-        {
-            return; // Если у пользователя нет нужного навыка, прерываем выполнение.
-        }
-        // vanilla-station-skill-issue-end
+        //vanilla-station-skill-issue-start
+        if(!TryComp<SkillComponent>(args.User, out var skill))
+            skill = EnsureComp<SkillComponent>(args.User);
+
+        if(skill.ChemistryLevel <= 2)           
+            return;
+        //vanilla-station-skill-issue-end
+
         var scanEvent = new SolutionScanEvent();
         RaiseLocalEvent(args.User, scanEvent);
         if (!scanEvent.CanScan)

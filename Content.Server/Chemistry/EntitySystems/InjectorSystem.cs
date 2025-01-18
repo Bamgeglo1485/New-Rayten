@@ -29,7 +29,7 @@ public sealed class InjectorSystem : SharedInjectorSystem
     [Dependency] private readonly OpenableSystem _openable = default!;
 
     [Dependency] private readonly InventorySystem _invSystem = default!;
-
+    [Dependency] private readonly RequiresSkillSystem _requiresskill = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -129,14 +129,10 @@ public sealed class InjectorSystem : SharedInjectorSystem
     private void InjectDoAfter(Entity<InjectorComponent> injector, EntityUid target, EntityUid user)
     {
         //vanilla-station-skill-issue-start
-        //запрещаем ввод шприца если навык меньше запрашиваемого
-        if (EntityManager.TryGetComponent<RequiresSkillComponent>(injector, out var RequiresSkillComp))
+        if (EntityManager.TryGetComponent<RequiresSkillComponent>(injector, out var reqskillComponent))
         {
-            if (RequiresSkillComp.SkillDiffMedicineLevel > 0)
-            {
-                Popup.PopupEntity(Loc.GetString("Skill-issue-message-medicine-unskilled", ("lvl", RequiresSkillComp.RequiresMedicineLevel)), user);
+            if(!_requiresskill.HasRequiredSkills(user, reqskillComponent, true, skillType.Chemistry))           
                 return;
-            }
         }
         //vanilla-station-skill-issue-end
         // Create a pop-up for the user
@@ -171,18 +167,7 @@ public sealed class InjectorSystem : SharedInjectorSystem
 
         // Ensure that minimum delay before incapacitation checks is 1 seconds
         actualDelay = MathHelper.Max(actualDelay, TimeSpan.FromSeconds(1));
-        
-        //vanilla-station-skill-issue-start
-        if(RequiresSkillComp != null)
-            switch (RequiresSkillComp.SkillDiffMedicineLevel)
-            {
-                case -1:
-                case -2:
-                case -3:
-                    actualDelay /= 2;
-                    break;
-            }
-        //vanilla-station-skill-issue-end
+
         var isTarget = user != target;
 
         if (isTarget)
@@ -241,6 +226,15 @@ public sealed class InjectorSystem : SharedInjectorSystem
                     $"{EntityManager.ToPrettyString(user):user} is attempting to draw {injector.Comp.TransferAmount.ToString()} units from themselves.");
             }
         }
+
+        //vanilla-station-skill-issue-start
+        if (EntityManager.TryGetComponent<SkillComponent>(user, out var Skill))
+        {
+            // Преобразуем длительность в секунды или миллисекунды
+            double seconds = (Skill.MedicineLevel == 3) ? actualDelay.TotalSeconds * 0.5 : actualDelay.TotalSeconds;
+            actualDelay = TimeSpan.FromSeconds(seconds);
+        }
+        //vanilla-station-skill-issue-end
 
         DoAfter.TryStartDoAfter(new DoAfterArgs(EntityManager, user, actualDelay, new InjectorDoAfterEvent(), injector.Owner, target: target, used: injector.Owner)
         {

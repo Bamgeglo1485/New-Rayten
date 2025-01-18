@@ -7,6 +7,7 @@ using Content.Server.Ghost;
 using Content.Server.Popups;
 using Content.Server.PowerCell;
 using Content.Server.Traits.Assorted;
+using Content.Server.Vanilla.Skill;
 using Content.Shared.Damage;
 using Content.Shared.DoAfter;
 using Content.Shared.Interaction;
@@ -21,6 +22,7 @@ using Content.Shared.Mobs.Systems;
 using Content.Shared.PowerCell;
 using Content.Shared.Timing;
 using Content.Shared.Toggleable;
+using Content.Shared.Vanilla.Skill;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Player;
 
@@ -136,9 +138,41 @@ public sealed class DefibrillatorSystem : EntitySystem
 
         if (!CanZap(uid, target, user, component))
             return false;
+        //vanilla-station-skill-issue-start
+        TimeSpan delay = component.DoAfterDuration;
+        if (EntityManager.TryGetComponent<SkillComponent>(user, out var Skill))
+        {
+            double skillmodifier = 1.0;
+
+            switch (Skill.MedicineLevel)
+            {
+                case 0:
+                    skillmodifier = 2.0;
+                    break;
+                case 1:
+                    skillmodifier = 1.5;
+                    break;
+                case 2:
+                    skillmodifier = 1.0;
+                    break;
+                case 3:
+                    skillmodifier = 0.5;
+                    break;
+            }
+
+            // Преобразуем длительность в секунды или миллисекунды
+            double seconds = delay.TotalSeconds * skillmodifier;
+            delay = TimeSpan.FromSeconds(seconds);
+        }
+        else
+        {
+            delay = TimeSpan.FromSeconds(delay.TotalSeconds * 2); // если компонента навыка нет, умножаем на 2
+        }
+        //vanilla-station-skill-issue-end
 
         _audio.PlayPvs(component.ChargeSound, uid);
-        return _doAfter.TryStartDoAfter(new DoAfterArgs(EntityManager, user, component.DoAfterDuration, new DefibrillatorZapDoAfterEvent(),
+
+        return _doAfter.TryStartDoAfter(new DoAfterArgs(EntityManager, user, delay, new DefibrillatorZapDoAfterEvent(),
             uid, target, uid)
         {
             NeedHand = true,
