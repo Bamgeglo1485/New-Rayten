@@ -231,7 +231,7 @@ public sealed class InjectorSystem : SharedInjectorSystem
         if (EntityManager.TryGetComponent<SkillComponent>(user, out var Skill))
         {
             // Преобразуем длительность в секунды или миллисекунды
-            double seconds = (Skill.MedicineLevel == 3) ? actualDelay.TotalSeconds * 0.5 : actualDelay.TotalSeconds;
+            double seconds = (Skill.MedicineLevel == SkillLevel.Expert) ? actualDelay.TotalSeconds * 0.5 : actualDelay.TotalSeconds;
             actualDelay = TimeSpan.FromSeconds(seconds);
         }
         //vanilla-station-skill-issue-end

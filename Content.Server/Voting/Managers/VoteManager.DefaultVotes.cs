@@ -33,7 +33,7 @@ namespace Content.Server.Voting.Managers
         [Dependency] private readonly IBanManager _bans = default!;
         [Dependency] private readonly IServerDbManager _dbManager = default!;
         [Dependency] private readonly VoteWebhooks _voteWebhooks = default!;
-
+        private const int skillpointpool = 162;//vanilla-station
         private VotingSystem? _votingSystem;
         private RoleSystem? _roleSystem;
         private GameTicker? _gameTicker;
@@ -146,7 +146,7 @@ namespace Content.Server.Voting.Managers
 
         private void StartEzmodeVote(ICommonSession? initiator, int nonGhostPlayersCount)
         {
-            int skillpoints = 9 + (10-nonGhostPlayersCount)*6;
+            int skillpoints = skillpointpool/nonGhostPlayersCount;
 
             var voteOptions = new VoteOptions
             {

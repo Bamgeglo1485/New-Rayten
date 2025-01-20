@@ -57,22 +57,22 @@ public sealed class GunSkillsSystem : EntitySystem
     {
         switch (skillComp.RangeWeaponLevel)
         {
-            case 0:
+            case SkillLevel.None:
                 unskilledComp.MinAnglePenalty = Angle.FromDegrees(60);
                 unskilledComp.MaxAnglePenalty = Angle.FromDegrees(150);
                 unskilledComp.AngleIncreasePenalty = Angle.FromDegrees(18);
                 break;
-            case 1:
+            case SkillLevel.Basic:
                 unskilledComp.MinAnglePenalty = Angle.FromDegrees(30);
                 unskilledComp.MaxAnglePenalty = Angle.FromDegrees(100);
                 unskilledComp.AngleIncreasePenalty = Angle.FromDegrees(12);
                 break;
-            case 2:
+            case SkillLevel.Advanced:
                 unskilledComp.MinAnglePenalty = Angle.FromDegrees(0);
                 unskilledComp.MaxAnglePenalty = Angle.FromDegrees(50);
                 unskilledComp.AngleIncreasePenalty = Angle.FromDegrees(6);
                 break;
-            case 3:
+            case SkillLevel.Expert:
                 unskilledComp.MinAnglePenalty = Angle.FromDegrees(0);
                 unskilledComp.MaxAnglePenalty = Angle.FromDegrees(0);
                 unskilledComp.AngleIncreasePenalty = Angle.FromDegrees(0);

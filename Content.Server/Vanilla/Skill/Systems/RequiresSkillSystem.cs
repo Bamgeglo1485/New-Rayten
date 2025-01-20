@@ -146,10 +146,9 @@ public sealed class RequiresSkillSystem : SharedRequiresSkillSystem
         }
         return true;
     }
-    public bool HasSkillLevel(EntityUid user, int requiredLevel, Func<SkillComponent, int> skillSelector)
+    public bool HasSkillLevel(EntityUid user, SkillLevel requiredLevel, Func<SkillComponent, SkillLevel> skillSelector)
     {
-        if (TryComp<SkillComponent>(user, out var skillComponent) && skillSelector(skillComponent) >= requiredLevel)
-            return true;
-        return false;
+        return TryComp<SkillComponent>(user, out var skillComponent) && skillSelector(skillComponent) >= requiredLevel;
     }
+
 }

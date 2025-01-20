@@ -366,10 +366,10 @@ public sealed partial class StaminaSystem : EntitySystem
         component.StaminaDamage = component.CritThreshold;
         //vanilla-station-start
         var StunTime = component.StunTime;
-        if(TryComp<SkillComponent>(uid, out var skill) && skill.MeleeWeaponLevel>=2)
+        if(TryComp<SkillComponent>(uid, out var skill) && skill.MeleeWeaponLevel>=SkillLevel.Advanced)
         {
             StunTime -= TimeSpan.FromSeconds(2f);
-            if(skill.MeleeWeaponLevel == 3 && _random.Prob(0.35f))
+            if(skill.MeleeWeaponLevel == SkillLevel.Expert && _random.Prob(0.35f))
                     StunTime = TimeSpan.FromSeconds(0.25f);
         }
 

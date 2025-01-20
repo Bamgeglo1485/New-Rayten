@@ -304,37 +304,37 @@ public sealed class CharacterUIController : UIController, IOnStateEntered<Gamepl
         _window.Skillpointslabel.Visible = true;
         _window.Skillpointslabel.Text = $"Очков навыков: {skillComponent.SkillPoints}";
 
-        _window.PilotingUpgradeButton.Visible = skillComponent.PilotingLevel < 3;
-        _window.RangeWeaponUpgradeButton.Visible = skillComponent.RangeWeaponLevel < 3;
-        _window.MeleeWeaponUpgradeButton.Visible = skillComponent.MeleeWeaponLevel < 3;
-        _window.MedicineUpgradeButton.Visible  = skillComponent.MedicineLevel < 3;
-        _window.ChemistryUpgradeButton.Visible = skillComponent.ChemistryLevel < 3;
-        _window.EngineeringUpgradeButton.Visible = skillComponent.EngineeringLevel < 3;
-        _window.BuildingUpgradeButton.Visible = skillComponent.BuildingLevel < 3;
-        _window.ResearchUpgradeButton.Visible = skillComponent.ResearchLevel < 3;
-        _window.InstrumentationUpgradeButton.Visible = skillComponent.InstrumentationLevel < 3;
+        _window.PilotingUpgradeButton.Visible = skillComponent.PilotingLevel < SkillLevel.Expert;
+        _window.RangeWeaponUpgradeButton.Visible = skillComponent.RangeWeaponLevel < SkillLevel.Expert;
+        _window.MeleeWeaponUpgradeButton.Visible = skillComponent.MeleeWeaponLevel < SkillLevel.Expert;
+        _window.MedicineUpgradeButton.Visible  = skillComponent.MedicineLevel < SkillLevel.Expert;
+        _window.ChemistryUpgradeButton.Visible = skillComponent.ChemistryLevel < SkillLevel.Expert;
+        _window.EngineeringUpgradeButton.Visible = skillComponent.EngineeringLevel < SkillLevel.Expert;
+        _window.BuildingUpgradeButton.Visible = skillComponent.BuildingLevel < SkillLevel.Expert;
+        _window.ResearchUpgradeButton.Visible = skillComponent.ResearchLevel < SkillLevel.Expert;
+        _window.InstrumentationUpgradeButton.Visible = skillComponent.InstrumentationLevel < SkillLevel.Expert;
     }
 
-    private void UpdateProgressBars(int level, int exp, ProgressBar bar1, ProgressBar bar2, ProgressBar bar3)
+    private void UpdateProgressBars(SkillLevel level, int exp, ProgressBar bar1, ProgressBar bar2, ProgressBar bar3)
     {
         switch (level)
         {
-            case 0:
+            case SkillLevel.None:
                 bar1.Value = exp;
                 bar2.Value = 0;
                 bar3.Value = 0;
                 break;
-            case 1:
+            case SkillLevel.Basic:
                 bar1.Value = 300;
                 bar2.Value = exp;
                 bar3.Value = 0;
                 break;
-            case 2:
+            case SkillLevel.Advanced:
                 bar1.Value = 300;
                 bar2.Value = 600;
                 bar3.Value = exp;
                 break;
-            case 3:
+            case SkillLevel.Expert:
                 bar1.Value = 300;
                 bar2.Value = 600;
                 bar3.Value = 900;

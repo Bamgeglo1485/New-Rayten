@@ -798,7 +798,7 @@ public abstract partial class SharedSolutionContainerSystem : EntitySystem
             .ToHexNoAlpha(); //TODO: If the chem has a dark color, the examine text becomes black on a black background, which is unreadable.
         var messageString = "shared-solution-container-component-on-examine-main-text";
         //vanilla-station-start
-        if (!EntityManager.TryGetComponent<SkillComponent>(args.Examiner, out var skillComponent) || skillComponent.ChemistryLevel < 2)
+        if (!EntityManager.TryGetComponent<SkillComponent>(args.Examiner, out var skillComponent) || skillComponent.ChemistryLevel < SkillLevel.Advanced)
         messageString += "-skill-issue";
         //vanilla-station-end
 
@@ -828,7 +828,7 @@ public abstract partial class SharedSolutionContainerSystem : EntitySystem
                 {
                     //vanilla-station
                     //Человек с 3 химией распознаёт абсолютно всё и ему всё равно
-                    if ( skillComponent == null || skillComponent.ChemistryLevel != 3 ) 
+                    if ( skillComponent == null || skillComponent.ChemistryLevel != SkillLevel.Expert ) 
                         continue;
                 }
 
@@ -876,7 +876,7 @@ public abstract partial class SharedSolutionContainerSystem : EntitySystem
         if(!TryComp<SkillComponent>(args.User, out var skill))
             skill = EnsureComp<SkillComponent>(args.User);
 
-        if(skill.ChemistryLevel <= 2)           
+        if(skill.ChemistryLevel <= SkillLevel.Advanced)           
             return;
         //vanilla-station-skill-issue-end
 

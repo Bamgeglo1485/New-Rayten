@@ -106,13 +106,13 @@ public sealed partial class AnomalySystem
             if(EntityManager.TryGetComponent<SkillComponent>(args.User, out var SkillComp)){
                 switch (SkillComp.ResearchLevel)
                 {
-                    case 0:
-                    case 1:
+                    case SkillLevel.None:
+                    case SkillLevel.Basic:
                         skillduration *= 10;
                         break;
-                    case 2:
+                    case SkillLevel.Advanced:
                         break;
-                    case 3:
+                    case SkillLevel.Expert:
                         skillduration /= 10;
                         break;
                 }

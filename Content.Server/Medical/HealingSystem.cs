@@ -5,6 +5,7 @@ using Content.Server.Medical.Components;
 using Content.Server.Popups;
 using Content.Server.Stack;
 using Content.Server.Vanilla.Skill;
+using Content.Server.SkillTrainer;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Audio;
 using Content.Shared.Damage;
@@ -23,6 +24,7 @@ using Content.Shared.Stacks;
 using Content.Shared.Vanilla.Skill;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Random;
+using Robust.Shared.Player;
 
 namespace Content.Server.Medical;
 
@@ -39,6 +41,7 @@ public sealed class HealingSystem : EntitySystem
     [Dependency] private readonly MobThresholdSystem _mobThresholdSystem = default!;
     [Dependency] private readonly PopupSystem _popupSystem = default!;
     [Dependency] private readonly SharedSolutionContainerSystem _solutionContainerSystem = default!;
+    [Dependency] private readonly ServerSkillTrainerSystem _skillTrainerSystem = default!;
 
     public override void Initialize()
     {
@@ -64,6 +67,19 @@ public sealed class HealingSystem : EntitySystem
         {
             return;
         }
+
+        //vanilla-station-start
+        if (TryComp<ActorComponent>(args.User, out var actor))
+        {
+            if (!EntityManager.TryGetComponent<SkillComponent>(args.User, out var skillComp))
+                skillComp = EnsureComp<SkillComponent>(args.User);
+
+            if(_skillTrainerSystem.AddExperience(skillComp, skillType.Medicine, 6))
+                    _audio.PlayGlobal("/Audio/Vanilla/SkillSystem/levelup.ogg", actor.PlayerSession);
+
+            RaiseNetworkEvent(new UpdateCharacterSkillsRequestEvent(), Filter.SinglePlayer(actor.PlayerSession));
+        }
+        //vanilla-station-end
 
         // Heal some bloodloss damage.
         if (healing.BloodlossModifier != 0)
@@ -208,16 +224,16 @@ public sealed class HealingSystem : EntitySystem
 
             switch (Skill.MedicineLevel)
             {
-                case 0:
+                case SkillLevel.None:
                     skillmodifier = 2f;
                     break;
-                case 1:
+                case SkillLevel.Basic:
                     skillmodifier = 1.5f;
                     break;
-                case 2:
+                case SkillLevel.Advanced:
                     skillmodifier = 1f;
                     break;
-                case 3:
+                case SkillLevel.Expert:
                     skillmodifier = 0.5f;
                     break;
             }

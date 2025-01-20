@@ -214,8 +214,8 @@ public sealed class MeleeWeaponSystem : SharedMeleeWeaponSystem
 
         var chance = disarmerComp.BaseDisarmFailChance;
         //vanilla-station-start
-        int disarmerskilllevel = TryComp<SkillComponent>(disarmer, out var disarmerskill) ? disarmerskill.MeleeWeaponLevel : 2;
-        int disarmedskilllevel = TryComp<SkillComponent>(disarmed, out var disarmedskill) ? disarmedskill.MeleeWeaponLevel : 2;
+        int disarmerskilllevel = TryComp<SkillComponent>(disarmer, out var disarmerskill) ? (int)disarmerskill.MeleeWeaponLevel : 2;
+        int disarmedskilllevel = TryComp<SkillComponent>(disarmed, out var disarmedskill) ? (int)disarmedskill.MeleeWeaponLevel : 2;
         float skillDifference = (float)(disarmedskilllevel - disarmerskilllevel); 
         chance += skillDifference * 0.05f;
         //vanilla-station-end

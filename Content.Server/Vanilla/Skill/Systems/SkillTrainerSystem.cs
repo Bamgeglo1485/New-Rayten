@@ -1,17 +1,17 @@
 using Content.Shared.Interaction.Events;
 using Content.Shared.Vanilla.Skill;
 using Content.Shared.DoAfter;
-using Robust.Shared.GameObjects;
-using Robust.Shared.Audio.Systems;
-using Robust.Shared.Audio;
-using Robust.Shared.Network;
-using Robust.Shared.Player;
 using Content.Shared.SkillTrainer;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Ghost;
 using Content.Shared.Popups;
 using Content.Shared.Vanilla.Skill;
 using Content.Shared.Examine;
+using Robust.Shared.GameObjects;
+using Robust.Shared.Audio.Systems;
+using Robust.Shared.Audio;
+using Robust.Shared.Network;
+using Robust.Shared.Player;
 
 namespace Content.Server.SkillTrainer;
 
@@ -35,8 +35,8 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
         if (!args.IsInDetailsRange)
             return;
         
-        if(!EntityManager.TryGetComponent<SkillComponent>(args.Examiner, out var skillComp))
-            skillComp = EnsureComp<SkillComponent>(args.Examiner);
+        if(!EntityManager.TryGetComponent<SkillLearnerComponent>(args.Examiner, out var skillComp))
+            skillComp = EnsureComp<SkillLearnerComponent>(args.Examiner);
 
         int SkillExpToLearn = skillComp.GetSkillExpToLearn(component.SkillType);
         args.PushMarkup(Loc.GetString("examine-skilltrainer-part-1", ("skilltype", component.SkillType.ToString())));
@@ -54,12 +54,9 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
         // Получаем компонент навыков
         if (!EntityManager.TryGetComponent<SkillComponent>(entity, out var skillComp) || skillComp.SkillPoints < 1)
             return;
-
-        // Проверяем уровень навыка
-        int skillLevel = skillComp.GetSkillLevel(msg.skill);
         
         // Если уровень навыка уже максимальный, прекращаем выполнение
-        if (skillLevel >= 3)
+        if (skillComp.GetSkillLevel(msg.skill) >= SkillLevel.Expert)
             return;
 
         // Уменьшаем очки навыков
@@ -81,8 +78,11 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
 
         if (!EntityManager.TryGetComponent<SkillComponent>(args.User, out var skillComp))
             skillComp = EnsureComp<SkillComponent>(args.User);
+            
+        if (!EntityManager.TryGetComponent<SkillLearnerComponent>(args.User, out var SkillLearnerComponentComp))
+            SkillLearnerComponentComp = EnsureComp<SkillLearnerComponent>(args.User);
 
-        if (skillComp.GetSkillExpToLearn(component.SkillType) <= 0)
+        if (SkillLearnerComponentComp.GetSkillExpToLearn(component.SkillType) <= 0 || skillComp.GetSkillLevel(component.SkillType) >= SkillLevel.Expert )
         {
             var overtrainKey = $"Skill-train-overtrain-{component.SkillType.ToString().ToLower()}";
             _popup.PopupEntity(Loc.GetString(overtrainKey), args.User, args.User);
@@ -122,15 +122,20 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
         if (!EntityManager.TryGetComponent<SkillComponent>(args.User, out var skillComp))
             skillComp = EnsureComp<SkillComponent>(args.User);
 
+        if (!EntityManager.TryGetComponent<SkillLearnerComponent>(args.User, out var SkillLearnerComp))
+            SkillLearnerComp = EnsureComp<SkillLearnerComponent>(args.User);
+
         if(TryComp<ActorComponent>(args.User, out var actor))
         {
 
-            int exp = DecreaseSkillExpToLearn(skillComp, args.SkillType, args.SkillIncreaseAmount);    
+            int exp = DecreaseSkillExpToLearn(SkillLearnerComp, args.SkillType, args.SkillIncreaseAmount);    
 
             if(AddExperience(skillComp, args.SkillType, exp))
                 _audio.PlayGlobal("/Audio/Vanilla/SkillSystem/levelup.ogg", actor.PlayerSession);
-            else
+            else if (!(SkillLearnerComp.GetSkillExpToLearn(args.SkillType) <= 0 || skillComp.GetSkillLevel(args.SkillType) >= SkillLevel.Expert) )
+            {
                 StartDoAfter(args.User, component, uid);
+            }
 
             RaiseNetworkEvent(new UpdateCharacterSkillsRequestEvent(), Filter.SinglePlayer(actor.PlayerSession));
         }
@@ -140,20 +145,20 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
     public bool AddExperience(SkillComponent skillComp, skillType skillType, int experienceAmount)
     {
         // Получаем уровень и опыт для переданного навыка
-        int level = skillComp.GetSkillLevel(skillType);
+        SkillLevel? level = skillComp.GetSkillLevel(skillType);
         int exp = skillComp.GetSkillExp(skillType);
 
         // Проверка ограничения уровня
-        if (level >= 3) return false;
+        if (level == null ||level >= SkillLevel.Expert) return false;
 
         // Расчёт необходимого опыта
-        int requiredExp = 300 + level * 300;
+        int requiredExp = 300 + (int)level * 300;
         exp += experienceAmount;
         // Проверка на повышение уровня
         if (exp >= requiredExp)
         {
             // Увеличиваем уровень и перераспределяем опыт
-            SetSkillLevel(skillComp, skillType, level + 1);
+            SetSkillLevel(skillComp, skillType, level.Value + 1);
             SetSkillExp(skillComp, skillType, exp - requiredExp);
             return true;
         }
@@ -161,7 +166,7 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
         return false;
     }
 
-    private void SetSkillLevel(SkillComponent skillComp, skillType skill, int level)
+    private void SetSkillLevel(SkillComponent skillComp, skillType skill, SkillLevel level)
     {
         switch (skill)
         {
@@ -197,7 +202,7 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
         }
         skillComp.Dirty();
     }
-    private int DecreaseSkillExpToLearn(SkillComponent skillComp, skillType skill, int exp)
+    private int DecreaseSkillExpToLearn(SkillLearnerComponent skillComp, skillType skill, int exp)
     {
         if (exp < 0) return 0;
 

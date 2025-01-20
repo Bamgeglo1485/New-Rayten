@@ -89,19 +89,20 @@ namespace Content.Server.Repairable
             }
             //vanilla-station-start
             if(TryComp<SkillComponent>(args.User, out var SkillComponent))
+
                 switch(SkillComponent.BuildingLevel){
-                    case 0:
-                    delay *= 9;
-                    break;
 
-                    case 1:
-                    delay *= 6;
-                    break;
-
-                    case 3:
-                    delay = 0.5f;
-                    break;
+                    case SkillLevel.None:
+                        delay *= 9;
+                        break;
+                    case SkillLevel.Basic:
+                        delay *= 6;
+                        break;
+                    case SkillLevel.Expert:
+                        delay = 0.5f;
+                        break;
                 }
+
             else
                 delay *= 9;
             //vanilla-station-end

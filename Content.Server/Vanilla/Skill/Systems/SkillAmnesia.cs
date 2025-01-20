@@ -91,7 +91,7 @@ public sealed class SkillAmnesiaSystem : EntitySystem
     */
     private void SkillAmnesia(EntityUid user, SkillComponent skill)
     {
-        var skillLevels = new List<(string Name, int Level, Action<int> SetLevel)>
+        var skillLevels = new List<(string Name, SkillLevel Level, Action<SkillLevel> SetLevel)>
         {
             ("Piloting", skill.PilotingLevel, level => skill.PilotingLevel = level),
             ("RangeWeapon", skill.RangeWeaponLevel, level => skill.RangeWeaponLevel = level),
@@ -110,16 +110,16 @@ public sealed class SkillAmnesiaSystem : EntitySystem
 
         var selectedSkill = _random.Pick(nonZeroSkills);
 
-        if (selectedSkill.Level == 1)
+        if (selectedSkill.Level == SkillLevel.Basic)
         {
-            selectedSkill.SetLevel(0);
+            selectedSkill.SetLevel(SkillLevel.None);
             return;
         }
 
         SkillAmnesiaComponent amnesia = EntityManager.AddComponent<SkillAmnesiaComponent>(user);
         amnesia.skilltype = Enum.Parse<skillType>(selectedSkill.Name);
 
-        int newLevel = selectedSkill.Level == 2 ? 0 : selectedSkill.Level - 1;
+        SkillLevel newLevel = selectedSkill.Level == SkillLevel.Advanced ? SkillLevel.None : selectedSkill.Level - 1;
         selectedSkill.SetLevel(newLevel);
 
         amnesia.TimeOfDeath = _gameTiming.CurTime;

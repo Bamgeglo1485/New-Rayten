@@ -8,6 +8,7 @@ using Content.Server.Popups;
 using Content.Server.PowerCell;
 using Content.Server.Traits.Assorted;
 using Content.Server.Vanilla.Skill;
+using Content.Server.SkillTrainer;
 using Content.Shared.Damage;
 using Content.Shared.DoAfter;
 using Content.Shared.Interaction;
@@ -47,7 +48,7 @@ public sealed class DefibrillatorSystem : EntitySystem
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly SharedMindSystem _mind = default!;
     [Dependency] private readonly UseDelaySystem _useDelay = default!;
-
+    [Dependency] private readonly ServerSkillTrainerSystem _skillTrainerSystem = default!;
     /// <inheritdoc/>
     public override void Initialize()
     {
@@ -146,16 +147,16 @@ public sealed class DefibrillatorSystem : EntitySystem
 
             switch (Skill.MedicineLevel)
             {
-                case 0:
+                case SkillLevel.None:
                     skillmodifier = 2.0;
                     break;
-                case 1:
+                case SkillLevel.Basic:
                     skillmodifier = 1.5;
                     break;
-                case 2:
+                case SkillLevel.Advanced:
                     skillmodifier = 1.0;
                     break;
-                case 3:
+                case SkillLevel.Expert:
                     skillmodifier = 0.5;
                     break;
             }
@@ -254,6 +255,18 @@ public sealed class DefibrillatorSystem : EntitySystem
                 {
                     _euiManager.OpenEui(new ReturnToBodyEui(mind, _mind), session);
                 }
+                //vanilla-station-start
+                if (TryComp<ActorComponent>(user, out var actor))
+                {
+                    if (!EntityManager.TryGetComponent<SkillComponent>(user, out var skillComp))
+                        skillComp = EnsureComp<SkillComponent>(user);
+
+                    if(_skillTrainerSystem.AddExperience(skillComp, skillType.Medicine, 10))
+                            _audio.PlayGlobal("/Audio/Vanilla/SkillSystem/levelup.ogg", actor.PlayerSession);
+
+                    RaiseNetworkEvent(new UpdateCharacterSkillsRequestEvent(), Filter.SinglePlayer(actor.PlayerSession));
+                }
+                //vanilla-station-end
             }
             else
             {
