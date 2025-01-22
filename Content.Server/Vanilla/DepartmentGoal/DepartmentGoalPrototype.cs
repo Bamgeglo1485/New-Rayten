@@ -16,7 +16,7 @@ public sealed class DepartmentGoalPrototype : IPrototype
 
     [DataField("weight")]
     public float Weight { get; set; } = 1.0f;
-    // [DataField("benefits")] TODO
+    // [DataField("benefits")]
     // public List<BenefitPrototype> Benefits { get; set; } = new();
 }
 
