@@ -1,3 +1,4 @@
+Department-goal-title=NanoTrasen
 Department-goal-text-all=Благодарим { $dep ->
     [RnD]научный отдел
     [MED]медицинский отдел
