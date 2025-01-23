@@ -4,9 +4,14 @@ using Content.Server.GameTicking.Events;
 using Content.Server.Station.Components;
 using Content.Server.Station.Systems;
 using Content.Server.Corvax.StationGoal;
+using Content.Server.Cargo.Components;
+using Content.Server.Cargo.Systems;
+using Content.Server.Station.Components;
 using Content.Shared.Fax.Components;
 using Content.Shared.GameTicking;
 using Content.Shared.Paper;
+using Content.Shared.Research.Components;
+using Content.Server.Chat.Systems;
 using Robust.Server.Player;
 using Robust.Shared.Configuration;
 using Robust.Shared.Prototypes;
@@ -24,14 +29,16 @@ public sealed class DepartmentGoalSystem : EntitySystem
     [Dependency] private readonly IPlayerManager _playerManager = default!;
     [Dependency] private readonly StationSystem _station = default!;
     [Dependency] private readonly IConfigurationManager _cfg = default!;
-    private List<DepartmentGoalPrototype> _depGoals = new();
+    [Dependency] private readonly CargoSystem _cargoSystem = default!;
+    [Dependency] private readonly ChatSystem _chatSystem = default!;
+    public List<DepartmentGoalPrototype> _depGoals = new();
 
     public override void Initialize()
     {
         base.Initialize();
         SubscribeLocalEvent<RoundStartingEvent>(OnRoundStarting);
     }
-
+    #region отправка целей
     private void OnRoundStarting(RoundStartingEvent ev)
     {
         // Очистка старых данных
@@ -156,5 +163,104 @@ public sealed class DepartmentGoalSystem : EntitySystem
 
         return wasSent;
     }
+    #endregion
+    #region принятие целей
+    public bool ApproveGoal(DepartmentGoalPrototype goal)
+    {
+        bool gived = false;
+        bool itemBenefit = false;
+        bool researchBenefit = false;
+        bool allBenefit = false;
+
+        // награда в виде предметов
+        if (goal.ItemBenefits != null && goal.ItemBenefits.Count > 0)
+        {
+            foreach (var itemId in goal.ItemBenefits)
+            {
+                HandleItemBenefit(itemId);
+            }
+            itemBenefit = true;
+            gived = true;
+        }
+
+        // награда в виде очков изучения
+        if(goal.ResearchBenefit > 0 )
+        {
+            HandleResearchBenefit(goal.ResearchBenefit);
+            gived = true;
+            researchBenefit = true;
+        }
+        
+        allBenefit = itemBenefit && researchBenefit;
+            
+        float randomValue = _random.NextFloat(0, 100);
+        randomValue = MathF.Round(randomValue, 2);
+        DispatchAnnouncement(goal.Department, itemBenefit, researchBenefit, allBenefit, randomValue);
+        return gived; 
+    }
+
+    private void DispatchAnnouncement(department dep, bool itemBenefits, bool researcBenefits, bool allBenefit, float randomValue)
+    {
+        if(allBenefit)
+        {
+            _chatSystem.DispatchGlobalAnnouncement(Loc.GetString("Department-goal-text-all", ("dep", dep.ToString()), ("rand", randomValue)),
+                                                   Loc.GetString("Department-goal-title"));
+            return;
+        }
+        if(itemBenefits)
+        {
+            _chatSystem.DispatchGlobalAnnouncement(Loc.GetString("Department-goal-text-item", ("dep", dep.ToString()), ("rand", randomValue)),
+                                                   Loc.GetString("Department-goal-title"));
+            return;
+        }
+        if(researcBenefits)
+        {
+            _chatSystem.DispatchGlobalAnnouncement(Loc.GetString("Department-goal-text-research", ("dep", dep.ToString()), ("rand", randomValue)),
+                                                   Loc.GetString("Department-goal-title"));
+            return;
+        }
+    }
+    private void HandleResearchBenefit(int count)
+    {
+        // Перебираем все сущности с компонентом ResearchServerComponent
+        var query = EntityQueryEnumerator<ResearchServerComponent>();
+        while (query.MoveNext(out var entityUid, out var researchServer))
+        {
+            // Добавляем очки к Points
+            researchServer.Points += count;
+            Dirty(entityUid,researchServer);
+        }
+    }
+
+
+    private void HandleItemBenefit(EntProtoId item)
+    {
+        // Перебираем все станции с компонентом StationGoalComponent
+        var query = EntityQueryEnumerator<StationGoalComponent>();
+        while (query.MoveNext(out var stationUid, out var station))
+        {
+            if (TryComp<StationCargoOrderDatabaseComponent>(stationUid, out var cargoDb) && 
+                TryComp<StationDataComponent>(stationUid, out var stationData))
+            {
+                var product = _proto.Index<EntityPrototype>(item);
+                _cargoSystem.AddAndApproveOrder(
+                    stationUid, 
+                    product.ID, 
+                    product.Name, 
+                    0, // Стоимость
+                    1, // количество
+                    "NanoTrasen", 
+                    "Награда за выполнение цели", 
+                    "Торговый департамент", 
+                    cargoDb,
+                    (stationUid, stationData)
+                );
+            }
+
+        }
+    }
+
+
+#endregion
 
 }

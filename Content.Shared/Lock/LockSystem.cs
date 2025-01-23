@@ -120,6 +120,11 @@ public sealed class LockSystem : EntitySystem
         if (!HasUserAccess(uid, user, quiet: false))
             return false;
 
+        //vanilla-station-start
+        if (lockComp.onlyoneuse && lockComp.used)
+            return false;
+        //vanilla-station-end
+
         if (!skipDoAfter && lockComp.LockTime != TimeSpan.Zero)
         {
             return _doAfter.TryStartDoAfter(
@@ -212,7 +217,6 @@ public sealed class LockSystem : EntitySystem
 
         if (!HasUserAccess(uid, user, quiet: false))
             return false;
-
         if (!skipDoAfter && lockComp.UnlockTime != TimeSpan.Zero)
         {
             return _doAfter.TryStartDoAfter(
@@ -224,6 +228,11 @@ public sealed class LockSystem : EntitySystem
                     BreakOnDropItem = false,
                 });
         }
+
+        //vanilla-station-start
+        if (lockComp.onlyoneuse && !lockComp.used)
+            lockComp.used = true;
+        //vanilla-station-end
 
         Unlock(uid, user, lockComp);
         return true;
