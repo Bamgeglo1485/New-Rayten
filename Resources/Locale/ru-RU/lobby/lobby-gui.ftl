@@ -1,4 +1,4 @@
-ui-lobby-title = Лобби
+ui-lobby-title = Лобби: {$serverName}
 ui-lobby-ahelp-button = AHelp
 ui-lobby-hello-label = Добро пожаловать на Vanilla Station!
 ui-lobby-subhello-label = Ознакомьтесь с правилами и нашей Википедией
