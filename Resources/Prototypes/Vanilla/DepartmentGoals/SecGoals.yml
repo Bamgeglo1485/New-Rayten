@@ -57,31 +57,28 @@
   - BenefitSecEasy
 
 - type: departmentgoal
-  id: SecSafetyRules
+  id: SecSafetyRulesSlime
   text: station-goal-sec-SafetyRulesSlime
   weight: 0.5 #HARD
   department: 4 
   itemBenefits:
-  - BenefitSecSecond 
-  - BenefitSecfirst 
+  - BenefitSecEasy 
 
 - type: departmentgoal
-  id: SecSafetyRules
+  id: SecSafetyRulesNuke
   text: station-goal-sec-SafetyRulesNuke
   weight: 0.5 #HARD
   department: 4 
   itemBenefits:
-  - BenefitSecSecond 
-  - BenefitSecfirst 
+  - BenefitSecEasy
 
 - type: departmentgoal
-  id: SecSafetyRules
+  id: SecSafetyRulesDragon
   text: station-goal-sec-SafetyRulesDragon
   weight: 0.5 #HARD
   department: 4 
   itemBenefits:
-  - BenefitSecSecond 
-  - BenefitSecfirst 
+  - BenefitSecEasy
 
 #### Награды
 - type: entity
