@@ -193,8 +193,7 @@ public sealed class DepartmentGoalSystem : EntitySystem
         
         allBenefit = itemBenefit && researchBenefit;
             
-        float randomValue = _random.NextFloat(0, 100);
-        randomValue = MathF.Round(randomValue, 2);
+        float randomValue = (int)_random.NextFloat(0, 100);
         DispatchAnnouncement(goal.Department, itemBenefit, researchBenefit, allBenefit, randomValue);
         return gived; 
     }
