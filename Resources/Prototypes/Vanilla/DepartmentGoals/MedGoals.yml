@@ -134,9 +134,9 @@
       - id: ClothingNeckMedicalmedal
         amount: 2
       - id: Joint
-        amount: 25
+        amount: 7
       - id: PillSpaceDrugs
-        amount: 25
+        amount: 10
       - id: PaxChemistryBottle
         amount: 10
       - id: CognizineChemistryBottle
