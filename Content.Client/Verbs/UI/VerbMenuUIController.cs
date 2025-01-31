@@ -168,6 +168,10 @@ namespace Content.Client.Verbs.UI
         /// </summary>
         public void AddVerbCategory(VerbCategory category, ContextMenuPopup popup)
         {
+            //если мы наткнулись на категорию-подкатегорию то ничего не делаем
+            if (!category.ShowInHead)
+                return;
+
             // Get a list of the verbs in this category
             List<Verb> verbsInCategory = new();
             var drawIcons = false;
@@ -185,10 +189,18 @@ namespace Content.Client.Verbs.UI
 
             var style = verbsInCategory.FirstOrDefault()?.TextStyleClass ?? Verb.DefaultTextStyleClass;
             var element = new VerbMenuElement(category, style);
-            _context.AddElement(popup, element);
 
-            // Create the pop-up that appears when hovering over this element
+            // Создаем подменю для вложенных категорий
             element.SubMenu = new ContextMenuPopup(_context, element);
+
+            // Если у категории есть подкатегории, обрабатываем их
+            if (category.SubCategories.Any())
+            {
+                // Добавляем подкатегории в подменю
+                AddVerbsubCategory(category, element.SubMenu);
+            }
+
+            // Добавляем вербы в подменю
             foreach (var verb in verbsInCategory)
             {
                 var subElement = new VerbMenuElement(verb)
@@ -199,8 +211,54 @@ namespace Content.Client.Verbs.UI
                 _context.AddElement(element.SubMenu, subElement);
             }
 
+            // Если категория должна отображаться в главном списке, добавляем её в popup
+            _context.AddElement(popup, element);
             element.SubMenu.MenuBody.Columns = category.Columns;
         }
+
+
+        private void AddVerbsubCategory(VerbCategory category, ContextMenuPopup popup)
+        {
+            foreach (var subCategory in category.SubCategories)
+            {
+                // Создаём элемент меню для подкатегории
+                var subCategoryElement = new VerbMenuElement(subCategory, Verb.DefaultTextStyleClass);  // Используем стандартный стиль
+
+                // Добавляем элемент подкатегории в popup
+                _context.AddElement(popup, subCategoryElement);
+
+                // Создаём подменю для подкатегории
+                subCategoryElement.SubMenu = new ContextMenuPopup(_context, subCategoryElement);
+
+                // Получаем вербы для подкатегории
+                var verbsInSubCategory = new List<Verb>();
+                var drawIcons = false;
+                foreach (var verb in CurrentVerbs)
+                {
+                    if (verb.Category?.Text == subCategory.Text)
+                    {
+                        verbsInSubCategory.Add(verb);
+                        drawIcons = drawIcons || verb.Icon != null || verb.IconEntity != null;
+                    }
+                }
+
+                // Добавляем вербы из подкатегории в подменю
+                foreach (var verb in verbsInSubCategory)
+                {
+                    var subElement = new VerbMenuElement(verb)
+                    {
+                        IconVisible = drawIcons,
+                        TextVisible = !subCategory.IconsOnly
+                    };
+                    _context.AddElement(subCategoryElement.SubMenu, subElement);
+                }
+
+                // Рекурсивно добавляем вложенные подкатегории (если они есть)
+                AddVerbsubCategory(subCategory, subCategoryElement.SubMenu);
+            }
+        }
+
+
 
         /// <summary>
         ///     Add verbs from the server to <see cref="CurrentVerbs"/> and update the verb menu.
