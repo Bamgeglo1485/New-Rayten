@@ -40,12 +40,12 @@ internal sealed partial class ChatManager : IChatManager
         { "Администратор", "#FF0000" },
         { "Младший администратор", "#E91E63" },
         { "Старший модератор", "#005AFD" },
-        { "Главный гейм-мастер", "#9C27B0" },
+        { "Главный гейм-мастер", "#C816FF" },
         { "Смотритель", "#2C7CF0" },
-        { "Гейм-мастер", "#9B59B6" },
+        { "Гейм-мастер", "#8D24AF" },
         { "Модератор", "#5D93D1" },
         { "Младший модератор", "#93BFE6" },
-        { "Младший гейм-мастер", "#71368A" }
+        { "Младший гейм-мастер", "#A34DAE" }
     };
     [Dependency] private readonly IReplayRecordingManager _replay = default!;
     [Dependency] private readonly IServerNetManager _netManager = default!;

@@ -551,3 +551,7 @@ LightTree06: LightTree
 
 #2024-12-28
 DrinkIrishCarBomb: DrinkIrishSlammer
+
+#no corvax-printer anymore
+PrinterDoc: null
+PrinterDocMachineCircuitboard: null
