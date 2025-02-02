@@ -26,10 +26,14 @@ namespace Content.Client.Vanilla.Bureaucracy
             // Проверяем, если объект — это бумага
             if (!HasComp<PaperComponent>(args.Target)) 
                 return;
+                
+            if (args.Hands == null || args.Using == null || !args.CanAccess || !args.CanInteract)
+                return;
 
             // Проверяем, если у игрока в руке ручка
             if (!PlayerHasPen(args.User))
                 return;
+
             // Добавляем документы в эти категории
             AddDocumentCategories(args);
         }
