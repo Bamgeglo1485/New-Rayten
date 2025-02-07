@@ -217,10 +217,10 @@ namespace Content.Client.PDA
                 {
                     int minutes = (int)(kvp.Value / 60); // минуты
                     int secs = (int)(kvp.Value % 60);   // секунды
-
+                    string timeString = $"{minutes:D2}:{secs:D2}";
                     // Возвращаем строку с меткой и временем для каждого подуровня
                     string sublvlstr = $"comp-pda-ui-alert-sublevel-withtime-{kvp.Key.ToLower()}";
-                    return Loc.GetString(sublvlstr, ("minutes", minutes), ("secs", secs));
+                    return Loc.GetString(sublvlstr, ("time", timeString));
                 }).ToList();
 
                 // Если есть подуровни, показываем их

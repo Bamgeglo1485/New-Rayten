@@ -782,3 +782,11 @@
   id: 57
   time: '2025-02-02T21:35:48.0000000+00:00'
   url: https://github.com/RaytenCorp/VanillaStation/pull/150
+- author: thefuckmybrain
+  changes:
+  - message: "ALARM!!! update, \u043F\u043E\u0434\u0440\u043E\u0431\u043D\u0435\u0435\
+      \ \u0432 \u0434\u0438\u0441\u043A\u043E\u0440\u0434\u0435"
+    type: Add
+  id: 58
+  time: '2025-02-06T22:28:26.0000000+00:00'
+  url: https://github.com/RaytenCorp/VanillaStation/pull/152

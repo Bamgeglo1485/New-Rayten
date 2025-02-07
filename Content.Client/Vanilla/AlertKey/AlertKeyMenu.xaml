@@ -9,7 +9,7 @@
     <BoxContainer Orientation="Vertical"
         HorizontalExpand="True"
         VerticalExpand="True"
-        Margin="6 6 6 5">
+        Margin="5 5 5 5">
 
         <!-- Контейнер с прокруткой для текста -->
         <ScrollContainer HorizontalExpand="True"
@@ -19,7 +19,7 @@
                         HorizontalExpand="True"
                         VerticalExpand="True"
                         Margin="10 10 10 10"
-                        MaxWidth="420"/>
+                        MaxWidth="460"/>
         </ScrollContainer>
 
         <!-- Контейнер для элементов управления (прижат к нижнему краю) -->
