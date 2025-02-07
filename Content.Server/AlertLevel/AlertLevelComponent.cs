@@ -25,11 +25,20 @@ public sealed partial class AlertLevelComponent : Component
     [ViewVariables(VVAccess.ReadWrite)] public string CurrentLevel = string.Empty;
 
     /// <summary>
+    /// Vanilla-station 
+    /// дополнительные коды
+    /// </summary>
+    [ViewVariables]
+    public Dictionary<string, float> ActiveSubLevels { get; } = new();
+
+
+    /// <summary>
     /// Is current station level can be changed by crew.
     /// </summary>
     [ViewVariables(VVAccess.ReadWrite)] public bool IsLevelLocked = false;
 
     [ViewVariables] public float CurrentDelay = 0;
+    [ViewVariables] public float CurrentTimeToNewCode  = 0;
     [ViewVariables] public bool ActiveDelay;
 
     /// <summary>

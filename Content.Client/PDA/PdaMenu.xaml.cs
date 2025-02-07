@@ -9,6 +9,7 @@ using Robust.Client.Graphics;
 using Robust.Client.UserInterface.XAML;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Timing;
+using System.Linq;
 
 namespace Content.Client.PDA
 {
@@ -39,6 +40,12 @@ namespace Content.Client.PDA
         public event Action<EntityUid>? OnProgramItemPressed;
         public event Action<EntityUid>? OnUninstallButtonPressed;
         public event Action<EntityUid>? OnInstallButtonPressed;
+
+        //vanilla-station-start
+        private float _timetodown =0;
+        private Color _alertColor = Color.White;
+        private Dictionary<string, float> _stationAlertSubLevels = new Dictionary<string, float>();
+        //vanills-stat-end
         public PdaMenu()
         {
             IoCManager.InjectDependencies(this);
@@ -174,14 +181,77 @@ namespace Content.Client.PDA
 
             var alertLevel = state.PdaOwnerInfo.StationAlertLevel;
             var alertColor = state.PdaOwnerInfo.StationAlertColor;
+            _alertColor = alertColor;
             var alertLevelKey = alertLevel != null ? $"alert-level-{alertLevel}" : "alert-level-unknown";
             _alertLevel = Loc.GetString(alertLevelKey);
 
-            StationAlertLevelLabel.SetMarkup(Loc.GetString(
-                "comp-pda-ui-station-alert-level",
-                ("color", alertColor),
-                ("level", _alertLevel)
-            ));
+            //vanilla-station-start
+            _timetodown = state.PdaOwnerInfo.StationAlertTimeToDown;
+            if(_timetodown>0)
+            {
+                int minutes = (int)(_timetodown / 60); // целые минуты
+                int secs = (int)(_timetodown % 60);    // оставшиеся секунды
+                string timeString = $"{minutes:D2}:{secs:D2}";
+                StationAlertLevelLabel.SetMarkup(Loc.GetString(
+                    "comp-pda-ui-station-alert-level-withtime",
+                    ("color", alertColor),
+                    ("level", _alertLevel),
+                    ("time", timeString)
+                ));
+            }
+            else
+            {
+                StationAlertLevelLabel.SetMarkup(Loc.GetString(
+                    "comp-pda-ui-station-alert-level",
+                    ("color", alertColor),
+                    ("level", _alertLevel)
+                ));
+            }
+
+            _stationAlertSubLevels = new Dictionary<string, float>(state.PdaOwnerInfo.StationAlertSubLevels);
+
+            if (_stationAlertSubLevels.Any())
+            {
+                // Перебираем словарь подуровней с временем
+                var subLevelsList = _stationAlertSubLevels.Select(kvp =>
+                {
+                    int minutes = (int)(kvp.Value / 60); // минуты
+                    int secs = (int)(kvp.Value % 60);   // секунды
+
+                    // Возвращаем строку с меткой и временем для каждого подуровня
+                    string sublvlstr = $"comp-pda-ui-alert-sublevel-withtime-{kvp.Key.ToLower()}";
+                    return Loc.GetString(sublvlstr, ("minutes", minutes), ("secs", secs));
+                }).ToList();
+
+                // Если есть подуровни, показываем их
+                if (subLevelsList.Any())
+                {
+                    // Объединяем все строки в одну строку с разделением запятой
+                    var subLevelsString = string.Join(", ", subLevelsList);
+
+                    // Применяем разметку с полученной строкой
+                    StationSubAlertLevelLabel.SetMarkup(Loc.GetString(
+                        "comp-pda-ui-station-sublevels",
+                        ("sublevels", subLevelsString)
+                    ));
+                }
+                else
+                {
+                    // Если подуровней нет, скрываем метку
+                    StationSubAlertLevelLabel.Visible = false;
+                }
+            }
+            else
+            {
+                // Если подуровней нет вообще, скрываем метку
+                StationSubAlertLevelLabel.Visible = false;
+            }
+            // Vanilla-station-end
+
+
+
+
+
             _instructions = Loc.GetString($"{alertLevelKey}-instructions");
             StationAlertLevelInstructions.SetMarkup(Loc.GetString(
                 "comp-pda-ui-station-alert-level-instructions",
@@ -337,14 +407,101 @@ namespace Content.Client.PDA
             }
         }
 
+        private double _lastUpdateTime = 0f;
+
         protected override void Draw(DrawingHandleScreen handle)
         {
             base.Draw(handle);
 
-            var stationTime = _gameTiming.CurTime.Subtract(_gameTicker.RoundStartTimeSpan);
+            // Проверяем, прошло ли больше секунды
+            double deltaTime = _gameTiming.CurTime.TotalSeconds - _lastUpdateTime;
+            if (deltaTime >= 1f)  // если прошло 1 секунда
+            {
+                // Обновляем время
+                _lastUpdateTime = _gameTiming.CurTime.TotalSeconds;
 
+                // Уменьшаем _timetodown на 1
+                if (_timetodown > 0)
+                {
+                    _timetodown -= 1;
+                }
+                
+                foreach (var key in _stationAlertSubLevels.Keys.ToList())
+                {
+                    if (_stationAlertSubLevels[key] > 0)
+                    {
+                        _stationAlertSubLevels[key] -= 1;
+                    }
+                }
+            }
+
+            // Обновление времени на экране
+            var stationTime = _gameTiming.CurTime.Subtract(_gameTicker.RoundStartTimeSpan);
             StationTimeLabel.SetMarkup(Loc.GetString("comp-pda-ui-station-time",
                 ("time", stationTime.ToString("hh\\:mm\\:ss"))));
+
+            // Отображение уровня тревоги с временем
+            if (_timetodown > 0)
+            {
+                int minutes = (int)(_timetodown / 60);
+                int secs = (int)(_timetodown % 60);
+                string timeString = $"{minutes:D2}:{secs:D2}";
+                StationAlertLevelLabel.SetMarkup(Loc.GetString(
+                    "comp-pda-ui-station-alert-level-withtime",
+                    ("color", _alertColor),
+                    ("level", _alertLevel),
+                    ("time", timeString)
+                ));
+            }
+            else
+            {
+                StationAlertLevelLabel.SetMarkup(Loc.GetString(
+                    "comp-pda-ui-station-alert-level",
+                    ("color", _alertColor),
+                    ("level", _alertLevel)
+                ));
+            }
+            if (_stationAlertSubLevels.Any())
+            {
+                // Перебираем словарь подуровней с временем
+                var subLevelsList = _stationAlertSubLevels.Select(kvp =>
+                {
+                    int minutes = (int)(kvp.Value / 60); // минуты
+                    int secs = (int)(kvp.Value % 60);   // секунды
+                    string timeString = $"{minutes:D2}:{secs:D2}";
+                    // Возвращаем строку с меткой и временем для каждого подуровня
+                    string sublvlstr = $"comp-pda-ui-alert-sublevel-withtime-{kvp.Key.ToLower()}";
+                    return Loc.GetString(sublvlstr, ("time", timeString));
+                }).ToList();
+
+                // Если есть подуровни, показываем их
+                if (subLevelsList.Any())
+                {
+                    // Объединяем все строки в одну строку с разделением запятой
+                    var subLevelsString = string.Join(", ", subLevelsList);
+
+                    // Применяем разметку с полученной строкой
+                    StationSubAlertLevelLabel.SetMarkup(Loc.GetString(
+                        "comp-pda-ui-station-sublevels",
+                        ("sublevels", subLevelsString)
+                    ));
+                }
+                else
+                {
+                    // Если подуровней нет, скрываем метку
+                    StationSubAlertLevelLabel.Visible = false;
+                }
+            }
+            else
+            {
+                // Если подуровней нет вообще, скрываем метку
+                StationSubAlertLevelLabel.Visible = false;
+            }
+            // Vanilla-station-end
+
+
+
         }
     }
+
 }

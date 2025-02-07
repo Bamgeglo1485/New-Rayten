@@ -23,6 +23,7 @@ using Robust.Server.GameObjects;
 using Robust.Shared.Containers;
 using Robust.Shared.Player;
 using Robust.Shared.Utility;
+using System.Linq;
 
 namespace Content.Server.PDA
 {
@@ -135,7 +136,6 @@ namespace Content.Server.PDA
         {
             UpdateAllPdaUisOnStation();
         }
-
         private void UpdateAllPdaUisOnStation()
         {
             var query = AllEntityQuery<PdaComponent>();
@@ -205,7 +205,9 @@ namespace Content.Server.PDA
                     IdOwner = id?.FullName,
                     JobTitle = id?.LocalizedJobTitle,
                     StationAlertLevel = pda.StationAlertLevel,
-                    StationAlertColor = pda.StationAlertColor
+                    StationAlertColor = pda.StationAlertColor,
+                    StationAlertTimeToDown = pda.StationAlertTimeToDown,
+                    StationAlertSubLevels = pda.StationAlertSubLevels
                 },
                 pda.StationName,
                 showUplink,
@@ -300,7 +302,23 @@ namespace Content.Server.PDA
                 return;
             pda.StationAlertLevel = alertComp.CurrentLevel;
             if (alertComp.AlertLevels.Levels.TryGetValue(alertComp.CurrentLevel, out var details))
+            {
                 pda.StationAlertColor = details.Color;
+                pda.StationAlertTimeToDown = alertComp.CurrentTimeToNewCode;
+            }
+
+
+            //vanilla-station-start
+            // Обновляем словарь для передачи только времени
+            pda.StationAlertSubLevels = new Dictionary<string, float>();
+
+            foreach (var subLevel in alertComp.ActiveSubLevels)
+            {
+                // Пример передачи времени из ActiveSubLevels
+                pda.StationAlertSubLevels[subLevel.Key] = subLevel.Value;
+            }
+            //vanilla-station-end
+
         }
 
         private string? GetDeviceNetAddress(EntityUid uid)

@@ -1,0 +1,52 @@
+<controls:FancyWindow xmlns="https://spacestation14.io"
+    xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
+    Title="{Loc 'alertkey-menu-title'}"
+    MinSize="500 350"
+    SetSize="500 350"
+    Resizable="False">
+
+
+    <BoxContainer Orientation="Vertical"
+        HorizontalExpand="True"
+        VerticalExpand="True"
+        Margin="6 6 6 5">
+
+        <!-- Контейнер с прокруткой для текста -->
+        <ScrollContainer HorizontalExpand="True"
+                         VerticalExpand="True"
+                         MinHeight="100">
+            <RichTextLabel Name="InfoLabel"
+                        HorizontalExpand="True"
+                        VerticalExpand="True"
+                        Margin="10 10 10 10"
+                        MaxWidth="420"/>
+        </ScrollContainer>
+
+        <!-- Контейнер для элементов управления (прижат к нижнему краю) -->
+        <BoxContainer Orientation="Vertical"
+            HorizontalExpand="True"
+            VerticalExpand="False">
+            
+            <!-- Выпадающий список для выбора основных уровней угроз -->
+            <OptionButton Name="MainSelection"
+                Access="Public"
+                HorizontalExpand="True"
+                Margin="0 5 0 5"
+                StyleClasses="OpenRight"/>
+
+            <!-- Контейнер для динамически добавляемых кнопок дополнительных кодов -->
+            <BoxContainer Name="SubLevelContainer"
+                HorizontalExpand="True"
+                SeparationOverride="5"
+                Orientation="Horizontal"/> <!-- Кнопки будут добавляться динамически -->
+
+            <!-- Кнопка "Применить" -->
+            <Button Name="ApplyButton"
+                Access="Public"
+                Text="{Loc 'alertkey-menu-apply-button'}"
+                HorizontalExpand="True"
+                Margin="0 10 0 0"/>
+        
+        </BoxContainer>
+    </BoxContainer>
+</controls:FancyWindow>

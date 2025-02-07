@@ -51,4 +51,6 @@ public sealed class CCVarsVanilla
     ///     Количество голосов "ЗА" для успешного прохождения
     /// </summary>
     public static readonly CVarDef<float> EzmodeRequiredRatio = CVarDef.Create("ezmode.required_ratio", 0.6f, CVar.SERVERONLY);
+
+    public static readonly CVarDef<int> GameAlertLevelDownDelay = CVarDef.Create("game.alert_level_down_delay", 1200, CVar.SERVERONLY);
 }

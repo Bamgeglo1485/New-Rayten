@@ -37,6 +37,11 @@ namespace Content.Shared.PDA
         [ViewVariables(VVAccess.ReadWrite)] public EntityUid? PdaOwner;
         [ViewVariables] public string? StationName;
         [ViewVariables] public string? StationAlertLevel;
+
+        [ViewVariables]
+        public Dictionary<string, float> StationAlertSubLevels = new();
+        [ViewVariables] public float StationAlertTimeToDown = 0;
+
         [ViewVariables] public Color StationAlertColor = Color.White;
     }
 }

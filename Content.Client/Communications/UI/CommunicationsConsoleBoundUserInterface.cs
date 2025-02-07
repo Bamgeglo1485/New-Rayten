@@ -25,18 +25,18 @@ namespace Content.Client.Communications.UI
             _menu = this.CreateWindow<CommunicationsConsoleMenu>();
             _menu.OnAnnounce += AnnounceButtonPressed;
             _menu.OnBroadcast += BroadcastButtonPressed;
-            _menu.OnAlertLevel += AlertLevelSelected;
+            // _menu.OnAlertLevel += AlertLevelSelected;
             _menu.OnEmergencyLevel += EmergencyShuttleButtonPressed;
         }
 
-        public void AlertLevelSelected(string level)
-        {
-            if (_menu!.AlertLevelSelectable)
-            {
-                _menu.CurrentLevel = level;
-                SendMessage(new CommunicationsConsoleSelectAlertLevelMessage(level));
-            }
-        }
+        // public void AlertLevelSelected(string level)
+        // {
+        //     if (_menu!.AlertLevelSelectable)
+        //     {
+        //         _menu.CurrentLevel = level;
+        //         SendMessage(new CommunicationsConsoleSelectAlertLevelMessage(level));
+        //     }
+        // }
 
         public void EmergencyShuttleButtonPressed()
         {
@@ -86,8 +86,8 @@ namespace Content.Client.Communications.UI
                 _menu.CountdownEnd = commsState.ExpectedCountdownEnd;
 
                 _menu.UpdateCountdown();
-                _menu.UpdateAlertLevels(commsState.AlertLevels, _menu.CurrentLevel);
-                _menu.AlertLevelButton.Disabled = !_menu.AlertLevelSelectable;
+                // _menu.UpdateAlertLevels(commsState.AlertLevels, _menu.CurrentLevel);
+                // _menu.AlertLevelButton.Disabled = !_menu.AlertLevelSelectable;
                 _menu.EmergencyShuttleButton.Disabled = !_menu.CanCall;
                 _menu.AnnounceButton.Disabled = !_menu.CanAnnounce;
                 _menu.BroadcastButton.Disabled = !_menu.CanBroadcast;

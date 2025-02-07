@@ -25,7 +25,7 @@ namespace Content.Client.Communications.UI
         public TimeSpan? CountdownEnd;
 
         public event Action? OnEmergencyLevel;
-        public event Action<string>? OnAlertLevel;
+        // public event Action<string>? OnAlertLevel;
         public event Action<string>? OnAnnounce;
         public event Action<string>? OnBroadcast;
 
@@ -58,17 +58,17 @@ namespace Content.Client.Communications.UI
             BroadcastButton.OnPressed += _ => OnBroadcast?.Invoke(Rope.Collapse(MessageInput.TextRope));
             BroadcastButton.Disabled = !CanBroadcast;
 
-            AlertLevelButton.OnItemSelected += args =>
-            {
-                var metadata = AlertLevelButton.GetItemMetadata(args.Id);
-                if (metadata != null && metadata is string cast)
-                {
-                    OnAlertLevel?.Invoke(cast);
-                }
-            };
+            // AlertLevelButton.OnItemSelected += args =>
+            // {
+            //     var metadata = AlertLevelButton.GetItemMetadata(args.Id);
+            //     if (metadata != null && metadata is string cast)
+            //     {
+            //         OnAlertLevel?.Invoke(cast);
+            //     }
+            // };
 
 
-            AlertLevelButton.Disabled = !AlertLevelSelectable;
+            // AlertLevelButton.Disabled = !AlertLevelSelectable;
 
             EmergencyShuttleButton.OnPressed += _ => OnEmergencyLevel?.Invoke();
             EmergencyShuttleButton.Disabled = !CanCall;
@@ -84,38 +84,38 @@ namespace Content.Client.Communications.UI
         // If the current alert is unselectable, the only item in the alerts list will be
         // the current alert. Otherwise, it will be the list of alerts, with the current alert
         // selected.
-        public void UpdateAlertLevels(List<string>? alerts, string currentAlert)
-        {
-            AlertLevelButton.Clear();
+        // public void UpdateAlertLevels(List<string>? alerts, string currentAlert)
+        // {
+        //     AlertLevelButton.Clear();
 
-            if (alerts == null)
-            {
-                var name = currentAlert;
-                if (Loc.TryGetString($"alert-level-{currentAlert}", out var locName))
-                {
-                    name = locName;
-                }
-                AlertLevelButton.AddItem(name);
-                AlertLevelButton.SetItemMetadata(AlertLevelButton.ItemCount - 1, currentAlert);
-            }
-            else
-            {
-                foreach (var alert in alerts)
-                {
-                    var name = alert;
-                    if (Loc.TryGetString($"alert-level-{alert}", out var locName))
-                    {
-                        name = locName;
-                    }
-                    AlertLevelButton.AddItem(name);
-                    AlertLevelButton.SetItemMetadata(AlertLevelButton.ItemCount - 1, alert);
-                    if (alert == currentAlert)
-                    {
-                        AlertLevelButton.Select(AlertLevelButton.ItemCount - 1);
-                    }
-                }
-            }
-        }
+        //     if (alerts == null)
+        //     {
+        //         var name = currentAlert;
+        //         if (Loc.TryGetString($"alert-level-{currentAlert}", out var locName))
+        //         {
+        //             name = locName;
+        //         }
+        //         AlertLevelButton.AddItem(name);
+        //         AlertLevelButton.SetItemMetadata(AlertLevelButton.ItemCount - 1, currentAlert);
+        //     }
+        //     else
+        //     {
+        //         foreach (var alert in alerts)
+        //         {
+        //             var name = alert;
+        //             if (Loc.TryGetString($"alert-level-{alert}", out var locName))
+        //             {
+        //                 name = locName;
+        //             }
+        //             AlertLevelButton.AddItem(name);
+        //             AlertLevelButton.SetItemMetadata(AlertLevelButton.ItemCount - 1, alert);
+        //             if (alert == currentAlert)
+        //             {
+        //                 AlertLevelButton.Select(AlertLevelButton.ItemCount - 1);
+        //             }
+        //         }
+        //     }
+        // }
 
         public void UpdateCountdown()
         {

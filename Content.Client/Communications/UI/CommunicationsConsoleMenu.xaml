@@ -39,10 +39,10 @@
                     ToolTip="{Loc 'comms-console-menu-broadcast-button-tooltip'}"
                     StyleClasses="OpenBoth"/>
 
-                <OptionButton Name="AlertLevelButton"
+                <!-- <OptionButton Name="AlertLevelButton"
                     Access="Public"
                     ToolTip="{Loc 'comms-console-menu-alert-level-button-tooltip'}"
-                    StyleClasses="OpenRight"/>
+                    StyleClasses="OpenRight"/> -->
 
             </BoxContainer>
 

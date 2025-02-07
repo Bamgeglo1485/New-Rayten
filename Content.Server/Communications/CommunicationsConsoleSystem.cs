@@ -49,7 +49,7 @@ namespace Content.Server.Communications
             SubscribeLocalEvent<AlertLevelDelayFinishedEvent>(_ => OnGenericBroadcastEvent());
 
             // Messages from the BUI
-            SubscribeLocalEvent<CommunicationsConsoleComponent, CommunicationsConsoleSelectAlertLevelMessage>(OnSelectAlertLevelMessage);
+            // SubscribeLocalEvent<CommunicationsConsoleComponent, CommunicationsConsoleSelectAlertLevelMessage>(OnSelectAlertLevelMessage);
             SubscribeLocalEvent<CommunicationsConsoleComponent, CommunicationsConsoleAnnounceMessage>(OnAnnounceMessage);
             SubscribeLocalEvent<CommunicationsConsoleComponent, CommunicationsConsoleBroadcastMessage>(OnBroadcastMessage);
             SubscribeLocalEvent<CommunicationsConsoleComponent, CommunicationsConsoleCallEmergencyShuttleMessage>(OnCallShuttleMessage);
@@ -209,23 +209,23 @@ namespace Content.Server.Communications
             return !(left.TotalSeconds / expected.TotalSeconds < recallThreshold);
         }
 
-        private void OnSelectAlertLevelMessage(EntityUid uid, CommunicationsConsoleComponent comp, CommunicationsConsoleSelectAlertLevelMessage message)
-        {
-            if (message.Actor is not { Valid: true } mob)
-                return;
+        // private void OnSelectAlertLevelMessage(EntityUid uid, CommunicationsConsoleComponent comp, CommunicationsConsoleSelectAlertLevelMessage message)
+        // {
+        //     if (message.Actor is not { Valid: true } mob)
+        //         return;
 
-            if (!CanUse(mob, uid))
-            {
-                _popupSystem.PopupCursor(Loc.GetString("comms-console-permission-denied"), message.Actor, PopupType.Medium);
-                return;
-            }
+        //     if (!CanUse(mob, uid))
+        //     {
+        //         _popupSystem.PopupCursor(Loc.GetString("comms-console-permission-denied"), message.Actor, PopupType.Medium);
+        //         return;
+        //     }
 
-            var stationUid = _stationSystem.GetOwningStation(uid);
-            if (stationUid != null)
-            {
-                _alertLevelSystem.SetLevel(stationUid.Value, message.Level, true, true);
-            }
-        }
+        //     var stationUid = _stationSystem.GetOwningStation(uid);
+        //     if (stationUid != null)
+        //     {
+        //         _alertLevelSystem.SetLevel(stationUid.Value, message.Level, true, true);
+        //     }
+        // }
 
         private void OnAnnounceMessage(EntityUid uid, CommunicationsConsoleComponent comp,
             CommunicationsConsoleAnnounceMessage message)

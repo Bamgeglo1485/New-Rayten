@@ -49,5 +49,8 @@ namespace Content.Shared.PDA
         public string? JobTitle;
         public string? StationAlertLevel;
         public Color StationAlertColor;
+        public Dictionary<string, float> StationAlertSubLevels; 
+        public float StationAlertTimeToDown;
+
     }
 }

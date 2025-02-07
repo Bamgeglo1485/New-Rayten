@@ -1,11 +1,13 @@
-using System.Linq;
+
 using Content.Server.Chat.Systems;
 using Content.Server.Station.Systems;
+using Content.Shared.Vanilla.CCVars;
 using Content.Shared.CCVar;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Configuration;
 using Robust.Shared.Prototypes;
+using System.Linq;
 
 namespace Content.Server.AlertLevel;
 
@@ -17,9 +19,7 @@ public sealed class AlertLevelSystem : EntitySystem
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly StationSystem _stationSystem = default!;
 
-    // Until stations are a prototype, this is how it's going to have to be.
     public const string DefaultAlertLevelSet = "stationAlerts";
-
     public override void Initialize()
     {
         SubscribeLocalEvent<StationInitializedEvent>(OnStationInitialize);
@@ -32,19 +32,59 @@ public sealed class AlertLevelSystem : EntitySystem
 
         while (query.MoveNext(out var station, out var alert))
         {
-            if (alert.CurrentDelay <= 0)
+            if (alert.CurrentDelay > 0)
             {
-                if (alert.ActiveDelay)
+                alert.CurrentDelay -= time;
+                if (alert.CurrentDelay <= 0 && alert.ActiveDelay)
                 {
                     RaiseLocalEvent(new AlertLevelDelayFinishedEvent());
                     alert.ActiveDelay = false;
                 }
-                continue;
             }
 
-            alert.CurrentDelay -= time;
+            if (alert.CurrentTimeToNewCode > 0)
+            {
+                alert.CurrentTimeToNewCode -= time;
+                if (alert.CurrentTimeToNewCode <= 0)
+                {
+                    Downcode(station, alert);
+                }
+            }
+
+            foreach (var subLevel in alert.ActiveSubLevels.Keys.ToArray()) // ToArray() для избежания модификации коллекции во время итерации
+            {
+                if ((alert.ActiveSubLevels[subLevel] -= time) <= 0)
+                    RemSubLevel(station, subLevel, null, alert);
+            }
         }
     }
+
+
+    //метод уменьшает код угрозы на 1 уровень 
+    private void Downcode(EntityUid station, AlertLevelComponent alert)
+    {
+        if (alert.AlertLevels == null)
+            return;
+
+        string currentLevel = alert.CurrentLevel;
+
+        if (!alert.AlertLevels.Levels.TryGetValue(currentLevel, out var detail))
+            return;
+
+        if (!detail.Subcode && detail.Position is int position && position > 0)
+        {
+            var downLevel = alert.AlertLevels.Levels
+                .Where(kvp => kvp.Value.Position == position - 1)
+                .Select(kvp => kvp.Key)
+                .FirstOrDefault();
+
+            if (!string.IsNullOrEmpty(downLevel))
+            {
+                SetLevel(station, downLevel, true, true, true);
+            }
+        }
+    }
+
 
     private void OnStationInitialize(StationInitializedEvent args)
     {
@@ -116,31 +156,21 @@ public sealed class AlertLevelSystem : EntitySystem
         return alert.CurrentDelay;
     }
 
-    /// <summary>
-    /// Set the alert level based on the station's entity ID.
-    /// </summary>
-    /// <param name="station">Station entity UID.</param>
-    /// <param name="level">Level to change the station's alert level to.</param>
-    /// <param name="playSound">Play the alert level's sound.</param>
-    /// <param name="announce">Say the alert level's announcement.</param>
-    /// <param name="force">Force the alert change. This applies if the alert level is not selectable or not.</param>
-    /// <param name="locked">Will it be possible to change level by crew.</param>
     public void SetLevel(EntityUid station, string level, bool playSound, bool announce, bool force = false,
         bool locked = false, MetaDataComponent? dataComponent = null, AlertLevelComponent? component = null)
     {
         if (!Resolve(station, ref component, ref dataComponent)
             || component.AlertLevels == null
             || !component.AlertLevels.Levels.TryGetValue(level, out var detail)
-            || component.CurrentLevel == level)
+            || component.CurrentLevel == level
+            || detail.Subcode) // Игнорируем дополнительные коды
         {
             return;
         }
 
         if (!force)
         {
-            if (!detail.Selectable
-                || component.CurrentDelay > 0
-                || component.IsLevelLocked)
+            if (!detail.Selectable || component.CurrentDelay > 0 || component.IsLevelLocked)
             {
                 return;
             }
@@ -148,28 +178,17 @@ public sealed class AlertLevelSystem : EntitySystem
             component.CurrentDelay = _cfg.GetCVar(CCVars.GameAlertLevelChangeDelay);
             component.ActiveDelay = true;
         }
-
+        if (detail.Position is int position && position > 0)
+            component.CurrentTimeToNewCode = _cfg.GetCVar(CCVarsVanilla.GameAlertLevelDownDelay);
+        else
+            component.CurrentTimeToNewCode = 0;
+            
         component.CurrentLevel = level;
         component.IsLevelLocked = locked;
 
         var stationName = dataComponent.EntityName;
-
-        var name = level.ToLower();
-
-        if (Loc.TryGetString($"alert-level-{level}", out var locName))
-        {
-            name = locName.ToLower();
-        }
-
-        // Announcement text. Is passed into announcementFull.
-        var announcement = detail.Announcement;
-
-        if (Loc.TryGetString(detail.Announcement, out var locAnnouncement))
-        {
-            announcement = locAnnouncement;
-        }
-
-        // The full announcement to be spat out into chat.
+        var name = Loc.TryGetString($"alert-level-{level}", out var locName) ? locName.ToLower() : level.ToLower();
+        var announcement = Loc.TryGetString(detail.Announcement, out var locAnnouncement) ? locAnnouncement : detail.Announcement;
         var announcementFull = Loc.GetString("alert-level-announcement", ("name", name), ("announcement", announcement));
 
         var playDefault = false;
@@ -194,6 +213,89 @@ public sealed class AlertLevelSystem : EntitySystem
 
         RaiseLocalEvent(new AlertLevelChangedEvent(station, level));
     }
+
+    /// <summary>
+    /// Устанавливает дополнительный код угрозы для станции.
+    /// </summary>
+    public void SetSubLevel(EntityUid station, string subLevel, bool playSound, bool announce, bool force = false,
+        bool locked = false, MetaDataComponent? dataComponent = null, AlertLevelComponent? component = null)
+    {
+        if (!Resolve(station, ref component, ref dataComponent)
+            || component.AlertLevels == null
+            || !component.AlertLevels.Levels.TryGetValue(subLevel, out var detail)
+            || component.ActiveSubLevels.ContainsKey(subLevel))
+        {
+            return;
+        }
+
+        if (!force)
+        {
+            if (!detail.Selectable)
+            {
+                return;
+            }
+            component.CurrentDelay = _cfg.GetCVar(CCVars.GameAlertLevelChangeDelay);
+            component.ActiveDelay = true;
+        }
+
+        component.ActiveSubLevels[subLevel] = _cfg.GetCVar(CCVarsVanilla.GameAlertLevelDownDelay);
+
+        var stationName = dataComponent.EntityName;
+        var name = Loc.TryGetString($"alert-level-{subLevel}", out var locName) ? locName.ToLower() : subLevel.ToLower();
+        var announcement = Loc.TryGetString(detail.Announcement, out var locAnnouncement) ? locAnnouncement : detail.Announcement;
+        var announcementFull = Loc.GetString("alert-level-announcement", ("name", name), ("announcement", announcement));
+
+        var playDefault = false;
+        if (playSound)
+        {
+            if (detail.Sound != null)
+            {
+                var filter = _stationSystem.GetInOwningStation(station);
+                _audio.PlayGlobal(detail.Sound, filter, true, detail.Sound.Params);
+            }
+            else
+            {
+                playDefault = true;
+            }
+        }
+
+        if (announce)
+        {
+            _chatSystem.DispatchStationAnnouncement(station, announcementFull, playDefaultSound: playDefault,
+                colorOverride: detail.Color, sender: stationName);
+        }
+
+        RaiseLocalEvent(new AlertLevelChangedEvent(station, subLevel));
+    }
+
+    public void RemSubLevel(EntityUid station, string subLevel, MetaDataComponent? dataComponent = null, AlertLevelComponent? component = null)
+    {
+        if (!Resolve(station, ref component, ref dataComponent) || component == null)
+            return;
+
+        if (!component.ActiveSubLevels.ContainsKey(subLevel) || component.AlertLevels == null)
+            return;
+
+        if (component.AlertLevels.Levels.TryGetValue(subLevel, out var detail))
+        {
+            var stationName = dataComponent?.EntityName ?? "Unknown Station";
+            var name = Loc.TryGetString($"alert-level-{subLevel}", out var locName) ? locName.ToLower() : subLevel.ToLower();
+            var announcement = Loc.TryGetString(detail.AnnouncementDisable, out var locAnnouncement) ? locAnnouncement : detail.Announcement;
+            var announcementFull = Loc.GetString("alert-level-announcement-disable", ("name", name), ("announcement", announcement));
+
+            _chatSystem.DispatchStationAnnouncement(station, announcementFull, playDefaultSound: true,
+                colorOverride: detail.Color, sender: stationName);
+        }
+
+        component.ActiveSubLevels.Remove(subLevel);
+
+        component.CurrentDelay = _cfg.GetCVar(CCVars.GameAlertLevelChangeDelay);
+        component.ActiveDelay = true;
+
+        RaiseLocalEvent(new AlertLevelChangedEvent(station, subLevel));
+    }
+
+
 }
 
 public sealed class AlertLevelDelayFinishedEvent : EntityEventArgs

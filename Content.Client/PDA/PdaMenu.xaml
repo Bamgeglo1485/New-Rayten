@@ -40,6 +40,9 @@
             <ContainerButton Name="StationAlertLevelButton">
                 <RichTextLabel Name="StationAlertLevelLabel" Access="Public"/>
             </ContainerButton>
+            <ContainerButton Name="StationSubAlertLevelButton">
+                <RichTextLabel Name="StationSubAlertLevelLabel" Access="Public"/>
+            </ContainerButton>
             <ContainerButton Name="StationTimeButton">
                 <RichTextLabel Name="StationTimeLabel" Access="Public"/>
             </ContainerButton>

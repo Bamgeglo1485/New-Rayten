@@ -31,16 +31,16 @@ namespace Content.Shared.Communications
         }
     }
 
-    [Serializable, NetSerializable]
-    public sealed class CommunicationsConsoleSelectAlertLevelMessage : BoundUserInterfaceMessage
-    {
-        public readonly string Level;
+    // [Serializable, NetSerializable]
+    // public sealed class CommunicationsConsoleSelectAlertLevelMessage : BoundUserInterfaceMessage
+    // {
+    //     public readonly string Level;
 
-        public CommunicationsConsoleSelectAlertLevelMessage(string level)
-        {
-            Level = level;
-        }
-    }
+    //     public CommunicationsConsoleSelectAlertLevelMessage(string level)
+    //     {
+    //         Level = level;
+    //     }
+    // }
 
     [Serializable, NetSerializable]
     public sealed class CommunicationsConsoleAnnounceMessage : BoundUserInterfaceMessage

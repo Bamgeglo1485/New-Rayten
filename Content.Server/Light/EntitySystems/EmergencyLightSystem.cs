@@ -11,6 +11,7 @@ using Content.Shared.Power;
 using Content.Shared.Station.Components;
 using Robust.Server.GameObjects;
 using Color = Robust.Shared.Maths.Color;
+using System.Linq;
 
 namespace Content.Server.Light.EntitySystems;
 
@@ -63,15 +64,58 @@ public sealed class EmergencyLightSystem : SharedEmergencyLightSystem
                 return;
 
             var name = alerts.CurrentLevel;
-
+            var timetonewcode = alerts.CurrentTimeToNewCode;
             var color = Color.White;
             if (alerts.AlertLevels.Levels.TryGetValue(alerts.CurrentLevel, out var details))
                 color = details.Color;
+            // vanilla-station-start
+            if(timetonewcode>0)
+            {
+                int minutes = (int)(timetonewcode / 60);
+                int seconds = (int)(timetonewcode % 60);
+                string timeString = $"{minutes:D2}:{seconds:D2}";
 
-            args.PushMarkup(
-                Loc.GetString("emergency-light-component-on-examine-alert",
+                args.PushMarkup(Loc.GetString("emergency-light-component-on-examine-alert-withtime",
+                    ("color", color.ToHex()),
+                    ("level", Loc.GetString($"alert-level-{name.ToString().ToLower()}")),
+                    ("time", timeString)));
+            }
+            else
+            {
+                args.PushMarkup(Loc.GetString("emergency-light-component-on-examine-alert",
                     ("color", color.ToHex()),
                     ("level", Loc.GetString($"alert-level-{name.ToString().ToLower()}"))));
+            }
+
+
+
+            foreach (var (subLevel, remainingTime) in alerts.ActiveSubLevels)
+            {
+                // Получаем цвет для подуровня тревоги
+                var subColor = Color.White;
+                if (alerts.AlertLevels.Levels.TryGetValue(subLevel, out var subDetails))
+                    subColor = subDetails.Color;
+
+                int minutes = (int)(remainingTime / 60);
+                int seconds = (int)(remainingTime % 60);
+                string timeString = $"{minutes:D2}:{seconds:D2}";
+
+                if(timetonewcode>0)
+                {
+                    args.PushMarkup(Loc.GetString("emergency-light-component-on-examine-alert-sublevel-withtime",
+                        ("color", subColor.ToHex()),
+                        ("level", Loc.GetString($"alert-level-{subLevel.ToLower()}")),
+                        ("time", timeString)));
+                }
+                else
+                {
+                args.PushMarkup(Loc.GetString("emergency-light-component-on-examine-alert-sublevel",
+                    ("color", subColor.ToHex()),
+                    ("level", Loc.GetString($"alert-level-{subLevel.ToLower()}"))
+                    ));
+                }
+            }
+            // vanilla-station-end
         }
     }
 
