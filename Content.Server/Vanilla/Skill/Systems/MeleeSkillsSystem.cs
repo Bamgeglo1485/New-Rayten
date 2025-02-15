@@ -61,7 +61,6 @@ public sealed class MeleeSkillSystem : EntitySystem
 
             _skillTrainerSystem.AddExperience(skillCompAttacked, component.SkillType, component.ExpPerHit);
             RaiseNetworkEvent(new UpdateCharacterSkillsRequestEvent(), Filter.SinglePlayer(actorattacked.PlayerSession));
-            return;
         }
     }
 
@@ -69,53 +68,26 @@ public sealed class MeleeSkillSystem : EntitySystem
     private void OnMeleeDamage(Entity<MeleeWeaponComponent> entity, ref GetMeleeDamageEvent args)
     {
         // Проверяем, есть ли у игрока компонент скилла
-        if (!TryComp<SkillComponent>(args.User, out var userskill) || userskill.MeleeWeaponLevel==SkillLevel.Advanced)
+        if (!TryComp<SkillComponent>(args.User, out var userskill))
             return;
 
         // Получаем базовый урон
-        var baseDamage = args.Damage.GetTotal();
-
         // Если суммарный урон равен 0, прекращаем выполнение
+        var baseDamage = args.Damage.GetTotal();
         if (baseDamage == 0)
             return;
 
-        // Уровень скилла игрока
-        int lvl = (int)userskill.MeleeWeaponLevel;
-
-        // Расчёт изменения урона
-        var reductionFactor = (baseDamage * FixedPoint2.New(1) / 5) * (2 - lvl);
-
-        // Фактическая сумма изменений
-        FixedPoint2 actualChange = 0;
-
-        // Проходим по каждому типу урона
-        foreach (var key in args.Damage.DamageDict.Keys.ToList())
+        // Определяем множитель в зависимости от уровня
+        FixedPoint2 damageMultiplier = userskill.MeleeWeaponLevel switch
         {
-            var currentDamage = args.Damage.DamageDict[key];
-            var damagePortion = currentDamage / baseDamage;
-            var changeForType = reductionFactor * damagePortion;
+            SkillLevel.None => 0.3f,       // 30% 
+            SkillLevel.Basic => 0.6f, // 60%
+            SkillLevel.Advanced => 0.9f,     // 90%
+            SkillLevel.Expert => 1.2f,       // 120% 
+            _ => 1f
+        };
 
-            // Вычисляем новый урон
-            var newDamage = currentDamage - changeForType;
-
-            // Обновляем урон
-            args.Damage.DamageDict[key] = newDamage;
-
-            // Добавляем в фактическую сумму изменений
-            actualChange += changeForType;
-        }
-
-        // Проверяем разницу между требуемым и фактическим изменением
-        var adjustment = reductionFactor - actualChange;
-
-        // Если есть разница, равномерно распределяем её
-        if (adjustment != 0)
-        {
-            var damageTypes = args.Damage.DamageDict.Keys.ToList();
-            foreach (var key in damageTypes)
-            {
-                args.Damage.DamageDict[key] -= adjustment / damageTypes.Count;
-            }
-        }
+        // Умножаем весь урон на множитель
+        args.Damage *= damageMultiplier;
     }
 }
