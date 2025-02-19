@@ -39,17 +39,12 @@ public sealed class ApproveGoalCommand : IConsoleCommand
             return;
         }
 
-        // Помечаем цель как выполненную (здесь можно добавить логику наград)
+        // выполняем цель!
         if(departmentGoalSystem.ApproveGoal(goal))
-        {
             shell.WriteLine($"Цель '{goal.ID}' выполнена! Слава NT!");
-            
-        }
         else
-        {
             shell.WriteLine($"у цели '{goal.ID}' нет награды");
-        }
-        //удаляем цель из списка
+        //удаляем цель из списка в любом случае
         departmentGoalSystem._depGoals.Remove(goal);
     }
 
