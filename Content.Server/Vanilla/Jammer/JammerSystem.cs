@@ -14,7 +14,7 @@ public sealed class JammerSystem : EntitySystem
     private bool _isJammerActive = false;
     private TimeSpan? _jammerEndTime = null;
     private const string _ertproto = "ERT";
-    private TimeSpan defaultjammertime = TimeSpan.FromMinutes(1);
+    private TimeSpan defaultjammertime = TimeSpan.FromMinutes(35);
 
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly EventTeamSystem _eventteam = default!;

@@ -123,11 +123,16 @@ public sealed class NukeDiskTeleportSystem : EntitySystem
             // Ищем случайный безопасный тайл
             if (_specialRespawn.TryFindRandomTile(largestGrid.Value, stationUid, 10, out var targetCoords))
             {
+                _audio.PlayPvs("/Audio/Magic/blink.ogg", transform.Coordinates);
                 transform.Coordinates = targetCoords;
                 _chat.TrySendInGameICMessage(uid, Loc.GetString("nukediscteleport-teleported"),
                     InGameICChatType.Speak, true);
                 _audio.PlayPvs("/Audio/Magic/blink.ogg", uid);
                 return;
+            }
+            else{
+                _chat.TrySendInGameICMessage(uid, Loc.GetString("nukediscteleport-failurepathfinding"),
+                    InGameICChatType.Speak, true);
             }
         }
     }
