@@ -9,6 +9,7 @@ using Robust.Shared.Player;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
 using Content.Server.Vanilla.EventTeam;
+using Content.Server.Vanilla.Jammer;
 using System.Linq;
 
 namespace Content.Server.vanilla.Administration.Commands;
@@ -26,7 +27,7 @@ public sealed class CallEventTeamCommand : IConsoleCommand
     public void Execute(IConsoleShell shell, string argStr, string[] args)
     {
         var eventTeamSystem = _entitySystemManager.GetEntitySystem<EventTeamSystem>();
-        
+        var jammerSystem = _entitySystemManager.GetEntitySystem<JammerSystem>();
         if (args.Length < 1 || args.Length > 2)
         {
             shell.WriteLine("Укажите id отряда");
@@ -48,8 +49,22 @@ public sealed class CallEventTeamCommand : IConsoleCommand
                 return;
             }
         }
+        
+        if(!ignoreJammer)
+        {
+            TimeSpan timetoremjammer = jammerSystem.CheckJammer();
+            if(timetoremjammer != TimeSpan.Zero)
+            {
+                shell.WriteLine($"Установлена глушилка! Будет снята через: {timetoremjammer}");
+                return;
+            }
+        }
 
-        eventTeamSystem.call(EventTeamId, ignoreJammer);
+        if(!eventTeamSystem.call(EventTeamId, ignoreJammer))
+        {
+            shell.WriteLine($"ошибка.");
+            return;
+        }
 
         _adminLogger.Add(
             LogType.AdminMessage,

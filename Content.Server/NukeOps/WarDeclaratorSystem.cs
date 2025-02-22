@@ -1,6 +1,7 @@
 using Content.Server.Administration.Logs;
 using Content.Server.Chat.Systems;
 using Content.Server.Popups;
+using Content.Server.Vanilla.Jammer;
 using Content.Shared.Access.Systems;
 using Content.Shared.CCVar;
 using Content.Shared.Chat;
@@ -25,6 +26,7 @@ public sealed class WarDeclaratorSystem : EntitySystem
     [Dependency] private readonly ChatSystem _chat = default!;
     [Dependency] private readonly PopupSystem _popupSystem = default!;
     [Dependency] private readonly AccessReaderSystem _accessReaderSystem = default!;
+    [Dependency] private readonly JammerSystem _jammer = default!;
 
     public override void Initialize()
     {
@@ -38,6 +40,12 @@ public sealed class WarDeclaratorSystem : EntitySystem
     {
         ent.Comp.Message = Loc.GetString("war-declarator-default-message");
         ent.Comp.DisableAt = _gameTiming.CurTime + TimeSpan.FromMinutes(ent.Comp.WarDeclarationDelay);
+        //vanilla-station-start
+        Timer.Spawn(TimeSpan.FromMinutes(ent.Comp.WarDeclarationDelay), () =>
+        {
+            _jammer.TrySetJammer();
+        });
+        //vanilla-station-end
     }
 
     private void OnAttemptOpenUI(Entity<WarDeclaratorComponent> ent, ref ActivatableUIOpenAttemptEvent args)

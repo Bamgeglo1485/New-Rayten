@@ -2,18 +2,23 @@ using Content.Server.GameTicking;
 using Content.Server.Station.Systems;
 using Content.Server.Spawners.Components;
 using Content.Server.Ghost.Roles.Components;
+using Content.Server.Chat.Systems;
+using Content.Server.Vanilla.Jammer;
 using Content.Shared.GameTicking;
 using Content.Shared.Ghost.Roles.Components;
+using Content.Shared.Storage;
+using Robust.Server.Maps;
+using Robust.Server.Player;
 using Robust.Server.GameObjects;
 using Robust.Shared.Map;
-using Robust.Server.Maps;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
-using Robust.Server.Player;
-using System.Linq;
-using Content.Shared.Storage;
 using Robust.Shared.Serialization.Manager;
-using Content.Server.Chat.Systems;
+
+using System.Linq;
+
+
+
 
 namespace Content.Server.Vanilla.EventTeam;
 
@@ -28,12 +33,13 @@ public sealed class EventTeamSystem : EntitySystem
     [Dependency] private readonly IComponentFactory _componentFactory = default!;
     [Dependency] private readonly ISerializationManager _serialization = default!;
     [Dependency] private readonly ChatSystem _chatSystem = default!;
+    [Dependency] private readonly JammerSystem _jammer = default!;
     public override void Initialize()
     {
         base.Initialize();
     }
 
-    public bool call(ProtoId<EventTeamPrototype> protoId, bool igonrejammer)
+    public bool call(ProtoId<EventTeamPrototype> protoId, bool igonrejammer = false)
     {
         if (!_prototypes.TryIndex(protoId, out var prototype))
             return false;
@@ -45,19 +51,14 @@ public sealed class EventTeamSystem : EntitySystem
         if (shuttle == null)
             return false;
 
-        // if(!igonrejammer)
-        //     checkjammer();
-        
+        if(!igonrejammer && _jammer.CheckJammer() != TimeSpan.Zero)
+            return false;
+
         SpawnEventRoles(prototype, shuttle.Value);
         DispatchAnnouncement(prototype);
 
         return true;
     }
-
-    // private void checkjammer()
-    // {
-
-    // }
 
     private EntityUid? SpawnShuttle(string shuttlePath)
     {
@@ -135,7 +136,7 @@ public sealed class EventTeamSystem : EntitySystem
         int RegularUnitsCount = 1;
 
         if(playerCount>proto.MaxRegularUnitAmount && proto.MaxRegularUnitAmount>0)
-            RegularUnitsCount = playerCount/proto.MaxRegularUnitAmount;
+            RegularUnitsCount = playerCount/proto.SpawnPerPlayers;
 
         int counter = Math.Min(RegularUnitsCount, proto.MaxRegularUnitAmount);
 
