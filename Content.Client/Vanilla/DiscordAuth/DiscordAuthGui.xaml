@@ -23,6 +23,7 @@
                 <LineEdit Name="UrlEdit" HorizontalExpand="True" Editable="False"></LineEdit>
             </BoxContainer>
             <Button Name="OpenUrlButton" Text="{Loc 'discord-auth-browser-btn'}" HorizontalExpand="True" StyleClasses="OpenRight" />
+            <Button Name="SkipAuthButton" Text="{Loc 'discord-auth-skipauth-btn'}" HorizontalExpand="True" StyleClasses="OpenRight" />
         </BoxContainer>
     </Control>
 </Control>

@@ -46,10 +46,15 @@ public sealed class DiscordAuthManager
 
         _netMgr.RegisterNetMessage<MsgDiscordAuthRequired>();
         _netMgr.RegisterNetMessage<MsgDiscordAuthCheck>(OnAuthCheck);
-
+        _netMgr.RegisterNetMessage<MsgDiscordAuthSkip>(OnAuthskip);
         _playerMgr.PlayerStatusChanged += OnPlayerStatusChanged;
     }
+    private async void OnAuthskip(MsgDiscordAuthSkip message)
+    {
+        var session = _playerMgr.GetSessionById(message.MsgChannel.UserId);
 
+        PlayerVerified?.Invoke(this, session);
+    }
     private async void OnAuthCheck(MsgDiscordAuthCheck message)
     {
         var isVerified = await IsVerified(message.MsgChannel.UserId);

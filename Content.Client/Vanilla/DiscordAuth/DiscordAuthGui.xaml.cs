@@ -20,7 +20,7 @@ public sealed partial class DiscordAuthGui : Control
 
         QuitButton.OnPressed += (_) =>
         {
-            _consoleHost.ExecuteCommand("quit");
+            _discordAuthManager.SkipAuth();
         };
 
         UrlEdit.Text = _discordAuthManager.AuthUrl;
@@ -31,5 +31,10 @@ public sealed partial class DiscordAuthGui : Control
                 IoCManager.Resolve<IUriOpener>().OpenUri(_discordAuthManager.AuthUrl);
             }
         };
+        SkipAuthButton.OnPressed += (_) =>
+        {
+            _discordAuthManager.SkipAuth();
+        };
     }
+
 }
