@@ -936,3 +936,15 @@
   id: 64
   time: '2025-02-22T20:24:02.0000000+00:00'
   url: https://github.com/RaytenCorp/VanillaStation/pull/162
+- author: thefuckmybrain
+  changes:
+  - message: "\u0412\u043E\u0437\u0432\u0440\u0430\u0449\u0435\u043D\u0430 \u0434\u0438\
+      \u0441\u043A\u043E\u0440\u0434 \u0430\u0432\u0442\u043E\u0440\u0438\u0437\u0430\
+      \u0446\u0438\u044F, \u043D\u043E \u0442\u0435\u043F\u0435\u0440\u044C \u043E\
+      \u043D\u0430 \u043D\u0435 \u043E\u0431\u044F\u0437\u0430\u0442\u0435\u043B\u044C\
+      \u043D\u0430 \u0434\u043B\u044F \u0437\u0430\u0445\u043E\u0434\u0430 \u043D\u0430\
+      \ \u0441\u0435\u0440\u0432\u0435\u0440."
+    type: Tweak
+  id: 65
+  time: '2025-02-24T21:31:15.0000000+00:00'
+  url: https://github.com/RaytenCorp/VanillaStation/pull/163
