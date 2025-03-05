@@ -48,16 +48,12 @@ namespace Content.Server.Repairable
                 _adminLogger.Add(LogType.Healed, $"{ToPrettyString(args.User):user} repaired {ToPrettyString(uid):target} back to full health");
             }
             //vanilla-station-start
-            if (TryComp<ActorComponent>(args.User, out var actor))
-            {
-                if (!EntityManager.TryGetComponent<SkillComponent>(args.User, out var skillComp))
-                    skillComp = EnsureComp<SkillComponent>(args.User);
+            TryComp<ActorComponent>(args.User, out var actor);
 
-                if(_skillTrainerSystem.AddExperience(skillComp, skillType.Building, component.DoAfterDelay * 10))
-                        _audio.PlayGlobal("/Audio/Vanilla/SkillSystem/levelup.ogg", actor.PlayerSession);
+            if (!EntityManager.TryGetComponent<SkillComponent>(args.User, out var skillComp))
+                skillComp = EnsureComp<SkillComponent>(args.User);
 
-                RaiseNetworkEvent(new UpdateCharacterSkillsRequestEvent(), Filter.SinglePlayer(actor.PlayerSession));
-            }
+            _skillTrainerSystem.AddExperience(skillComp, skillType.Building, (int)damageable.TotalDamage / 10, player: actor?.PlayerSession);
             //vanilla-station-end
             var str = Loc.GetString("comp-repairable-repair",
                 ("target", uid),
@@ -87,25 +83,6 @@ namespace Content.Server.Repairable
 
                 delay *= component.SelfRepairPenalty;
             }
-            //vanilla-station-start
-            if(TryComp<SkillComponent>(args.User, out var SkillComponent))
-
-                switch(SkillComponent.BuildingLevel){
-
-                    case SkillLevel.None:
-                        delay *= 9;
-                        break;
-                    case SkillLevel.Basic:
-                        delay *= 6;
-                        break;
-                    case SkillLevel.Expert:
-                        delay = 0.5f;
-                        break;
-                }
-
-            else
-                delay *= 9;
-            //vanilla-station-end
 
             // Run the repairing doafter
             args.Handled = _toolSystem.UseTool(args.Used, args.User, uid, delay, component.QualityNeeded, new RepairFinishedEvent(), component.FuelCost);

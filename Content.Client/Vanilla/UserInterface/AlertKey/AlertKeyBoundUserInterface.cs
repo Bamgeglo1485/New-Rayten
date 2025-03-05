@@ -5,7 +5,7 @@ using Robust.Client.UserInterface;
 using Robust.Shared.Configuration;
 using Robust.Shared.Timing;
 
-namespace Content.Client.Vanilla.AlertKey
+namespace Content.Client.Vanilla.UserInterface.AlertKey
 {
     public sealed class AlertKeyBoundUserInterface : BoundUserInterface
     {

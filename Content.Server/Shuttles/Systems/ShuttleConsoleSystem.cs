@@ -3,6 +3,7 @@ using Content.Server.Power.EntitySystems;
 using Content.Server.Shuttles.Components;
 using Content.Server.Shuttles.Events;
 using Content.Server.Station.Systems;
+using Content.Server.Vanilla.Skill;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Alert;
 using Content.Shared.Popups;
@@ -23,14 +24,13 @@ using Robust.Shared.Utility;
 using Robust.Shared.Player;
 using Content.Shared.UserInterface;
 using Content.Shared.Vanilla.Skill;
-using Content.Server.SkillTrainer;
-using Content.Shared.SkillTrainer;
 using Robust.Shared.Audio.Systems;
 using System.Threading;
 namespace Content.Server.Shuttles.Systems;
 
 public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
 {
+    [Dependency] private readonly RequiresSkillSystem _requiresSkillSystem = default!;
     [Dependency] private readonly SharedMapSystem _mapSystem = default!;
     [Dependency] private readonly ActionBlockerSystem _blocker = default!;
     [Dependency] private readonly AlertsSystem _alertsSystem = default!;
@@ -43,7 +43,6 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
     [Dependency] private readonly UserInterfaceSystem _ui = default!;
     [Dependency] private readonly SharedContentEyeSystem _eyeSystem = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly ServerSkillTrainerSystem _skillTrainerSystem = default!;
     private Dictionary<EntityUid, CancellationTokenSource> _activePilotingTimers = new();
     private EntityQuery<MetaDataComponent> _metaQuery;
     private EntityQuery<TransformComponent> _xformQuery;
@@ -196,7 +195,7 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
                 return false;
         }
         //vanilla-station-skills-start
-        if (TryComp<RequiresSkillComponent>(uid, out var requiresSkillComp)&&(!TryComp<SkillComponent>(user, out var skillComp) || skillComp.PilotingLevel < requiresSkillComp.RequiresPilotingLevel))
+        if (!TryComp<RequiresSkillComponent>(uid, out var requiresSkillComp) || !_requiresSkillSystem.HasRequiredSkills(user, requiresSkillComp, false))
             return false;
         //vanilla-station-skills-end
         AddPilot(uid, user, component);
@@ -343,26 +342,6 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
         ActionBlockerSystem.UpdateCanMove(entity);
         pilotComponent.Position = EntityManager.GetComponent<TransformComponent>(entity).Coordinates;
         Dirty(entity, pilotComponent);
-        //vanilla-station-skill-issue-start
-        if (_activePilotingTimers.ContainsKey(uid) || !EntityManager.TryGetComponent<SkillTrainerComponent>(uid, out var skillTrainerComp))
-        return;
-
-        if (!EntityManager.TryGetComponent<SkillComponent>(entity, out var skillComp))
-            skillComp = EnsureComp<SkillComponent>(entity);
-
-        var tokenSource = new CancellationTokenSource();
-
-        uid.SpawnRepeatingTimer(TimeSpan.FromSeconds(1), () =>
-        {
-            if (TryComp<ActorComponent>(entity, out var actor))
-            {
-                if (_skillTrainerSystem.AddExperience(skillComp, skillTrainerComp.SkillType, skillTrainerComp.SkillIncreaseAmount))
-                    _audio.PlayGlobal("/Audio/Vanilla/SkillSystem/levelup.ogg", actor.PlayerSession);
-                RaiseNetworkEvent(new UpdateCharacterSkillsRequestEvent(), Filter.SinglePlayer(actor.PlayerSession));
-            }
-        }, tokenSource.Token);
-        _activePilotingTimers[uid] = tokenSource;
-        //vanilla-station-skill-issue-end
     }
 
     public void RemovePilot(EntityUid pilotUid, PilotComponent pilotComponent)
@@ -384,15 +363,8 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
         if (pilotComponent.LifeStage < ComponentLifeStage.Stopping)
             EntityManager.RemoveComponent<PilotComponent>(pilotUid);
 
-        //vanilla-station-skill-issue-start
-        if (console != null && _activePilotingTimers.TryGetValue(console.Value, out var tokenSource))
-        {
-            tokenSource.Cancel();
-            _activePilotingTimers.Remove(console.Value);
-        }
         pilotComponent.Console = null;
         pilotComponent.Position = null;
-        //vanilla-station-skill-issue-end
     }
 
     public void RemovePilot(EntityUid entity)

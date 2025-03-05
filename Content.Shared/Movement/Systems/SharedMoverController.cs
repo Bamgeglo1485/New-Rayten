@@ -22,6 +22,7 @@ using Robust.Shared.Physics.Controllers;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
+using Content.Shared.Vanilla.Skill;
 using PullableComponent = Content.Shared.Movement.Pulling.Components.PullableComponent;
 
 namespace Content.Shared.Movement.Systems;
@@ -256,9 +257,15 @@ public abstract partial class SharedMoverController : VirtualController
                 TryGetSound(weightless, uid, mover, mobMover, xform, out var sound, tileDef: tileDef))
             {
                 var soundModifier = mover.Sprinting ? 3.5f : 1.5f;
+                var newvolume = sound.Params.Volume + soundModifier;
+                
+                if (TryComp<SkillComponent>(uid, out var skillComp) && skillComp.Stealth)
+                {
+                    newvolume = -6.0f;
+                }
 
                 var audioParams = sound.Params
-                    .WithVolume(sound.Params.Volume + soundModifier)
+                    .WithVolume(newvolume)
                     .WithVariation(sound.Params.Variation ?? mobMover.FootstepVariation);
 
                 // If we're a relay target then predict the sound for all relays.

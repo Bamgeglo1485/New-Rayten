@@ -280,6 +280,12 @@ namespace Content.Server.Construction
                     if (validation)
                         return HandleResult.Validated;
 
+                    if (EntityManager.TryGetComponent<RequiresSkillComponent>(uid, out var requiresSkillComponent) && user != null)
+                    {
+                        if (!_requiresSkillSystem.HasRequiredSkillsForCraft(user.Value, requiresSkillComponent, true))
+                            return HandleResult.False;
+                    }                  
+
                     // If we still haven't completed this step's DoAfter...
                     if (doAfterState == DoAfterState.None && insertStep.DoAfter > 0)
                     {
@@ -356,6 +362,12 @@ namespace Content.Server.Construction
                         return _toolSystem.HasQuality(interactUsing.Used, toolInsertStep.Tool)
                             ? HandleResult.Validated
                             : HandleResult.False;
+                    }
+
+                    if (EntityManager.TryGetComponent<RequiresSkillComponent>(uid, out var requiresSkillComponent) && user != null)
+                    {
+                        if (!_requiresSkillSystem.HasRequiredSkillsForCraft(user.Value, requiresSkillComponent, true))
+                            return HandleResult.False;
                     }
 
                     // If we're handling an event after its DoAfter finished...
@@ -558,19 +570,6 @@ namespace Content.Server.Construction
                 // If they're already handled, we do nothing.
                 if (handled.Handled)
                     return;
-
-                //vanilla-station-start
-                if (args is InteractUsingEvent interactUsingEvent)
-                {
-                    var user = interactUsingEvent.User; // Получаем пользователя из события
-                    if (EntityManager.TryGetComponent<RequiresSkillComponent>(uid, out var requiresSkillComponent))
-                    {
-                        // Проверка, есть ли у пользователя нужные навыки для выполнения действия
-                        if (!_requiresSkillSystem.HasRequiredSkillsForCraft(user, requiresSkillComponent, true))
-                            return; // Если навыков недостаточно, не добавляем в очередь
-                    }
-                }
-                //vanilla-station-end
 
                 // Otherwise, let's check if this event could be handled by the construction's current state.
                 if (HandleEvent(uid, args, true, construction) != HandleResult.Validated)

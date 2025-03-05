@@ -20,8 +20,16 @@ public sealed class RequiresSkillSystem : SharedRequiresSkillSystem
 
     protected override void OnActivate(EntityUid uid, RequiresSkillComponent component, ref ActivatableUIOpenAttemptEvent args)
     {
-        if (args.Cancelled || HasRequiredSkills(args.User, component, true))
+        if (args.Cancelled)
             return;
+
+        var hasSkills = HasRequiredSkills(args.User, component);
+
+        var hasCraftSkills = !component.NeedCraftableSkills || HasRequiredSkillsForCraft(args.User, component);
+
+        if (hasSkills && hasCraftSkills)
+            return;
+
         args.Cancel();
     }
 
@@ -31,8 +39,9 @@ public sealed class RequiresSkillSystem : SharedRequiresSkillSystem
             return;
         if(!EntityManager.TryGetComponent<RequiresSkillComponent>(uid, out var Reqcomponent))
             return;
-        if(HasRequiredSkills(args.User, Reqcomponent, true))
+        if(HasRequiredSkills(args.User, Reqcomponent))
             return;
+            
         args.Handled = true;
     }
 
@@ -40,16 +49,26 @@ public sealed class RequiresSkillSystem : SharedRequiresSkillSystem
     {
         if (uid != args.SlotEntity || args.Cancelled || args.User == null)
             return;
-        if (HasRequiredSkills(args.User.Value, component, true))
+
+        var hasSkills = HasRequiredSkills(args.User.Value, component);
+
+        var hasCraftSkills = !component.NeedCraftableSkills || HasRequiredSkillsForCraft(args.User.Value, component);
+
+        if (hasSkills && hasCraftSkills)
             return;
-            
+
         args.Cancelled = true;
     }
     protected override void OnItemSlotEjectAttempt(EntityUid uid, RequiresSkillComponent component, ref ItemSlotEjectAttemptEvent args)
     {
         if (uid != args.SlotEntity || args.Cancelled || args.User == null)
             return;
-        if (HasRequiredSkills(args.User.Value, component, true))
+
+        var hasSkills = HasRequiredSkills(args.User.Value, component);
+
+        var hasCraftSkills = !component.NeedCraftableSkills || HasRequiredSkillsForCraft(args.User.Value, component);
+
+        if (hasSkills && hasCraftSkills)
             return;
             
         args.Cancelled = true;
@@ -69,7 +88,7 @@ public sealed class RequiresSkillSystem : SharedRequiresSkillSystem
             if(popup)
             {
                 _audio.PlayGlobal("/Audio/Vanilla/SkillSystem/meep-merp.ogg", session);
-                _popupSystem.PopupEntity(Loc.GetString("Skill-issue-message-chemistry-unskilled", ("lvl", component.RequiresChemistryLevel)), user, user);
+                _popupSystem.PopupEntity(Loc.GetString("Skill-issue-message-chemistry-unskilled", ("lvl", (int)component.RequiresChemistryLevel)), user, user);
             }
 
             return false;
@@ -79,17 +98,7 @@ public sealed class RequiresSkillSystem : SharedRequiresSkillSystem
             if(popup)
             {
                 _audio.PlayGlobal("/Audio/Vanilla/SkillSystem/meep-merp.ogg", session);
-                _popupSystem.PopupEntity(Loc.GetString("Skill-issue-message-medicine-unskilled", ("lvl", component.RequiresMedicineLevel)), user, user);
-            }
-
-            return false;
-        }
-        // Проверка уровня пилотирования
-        if (skillignore != skillType.Piloting && !HasSkillLevel(user, component.RequiresPilotingLevel, skillComponent => skillComponent.PilotingLevel)){
-            if(popup)
-            {
-                _audio.PlayGlobal("/Audio/Vanilla/SkillSystem/meep-merp.ogg", session);
-                _popupSystem.PopupEntity(Loc.GetString("Skill-issue-message-piloting-unskilled", ("lvl", component.RequiresPilotingLevel)), user, user);
+                _popupSystem.PopupEntity(Loc.GetString("Skill-issue-message-medicine-unskilled", ("lvl", (int)component.RequiresMedicineLevel)), user, user);
             }
 
             return false;
@@ -99,7 +108,7 @@ public sealed class RequiresSkillSystem : SharedRequiresSkillSystem
             if(popup)
             {
                 _audio.PlayGlobal("/Audio/Vanilla/SkillSystem/meep-merp.ogg", session);
-                _popupSystem.PopupEntity(Loc.GetString("Skill-issue-message-research-unskilled", ("lvl", component.RequiresResearchLevel)), user, user);
+                _popupSystem.PopupEntity(Loc.GetString("Skill-issue-message-research-unskilled", ("lvl", (int)component.RequiresResearchLevel)), user, user);
             }
 
             return false;
@@ -109,11 +118,49 @@ public sealed class RequiresSkillSystem : SharedRequiresSkillSystem
             if(popup)
             {
                 _audio.PlayGlobal("/Audio/Vanilla/SkillSystem/meep-merp.ogg", session);
-                _popupSystem.PopupEntity(Loc.GetString("Skill-issue-message-engineering-unskilled", ("lvl", component.RequiresEngineeringLevel)), user, user);
+                _popupSystem.PopupEntity(Loc.GetString("Skill-issue-message-engineering-unskilled", ("lvl", (int)component.RequiresEngineeringLevel)), user, user);
             }
 
             return false;
         }
+        // Проверка уровня пилотирования
+        if (skillignore != skillType.Piloting && !HasEasySkill(user, component.RequiresPiloting, skillComponent => skillComponent.Piloting)){
+            if(popup)
+            {
+                _audio.PlayGlobal("/Audio/Vanilla/SkillSystem/meep-merp.ogg", session);
+                _popupSystem.PopupEntity(Loc.GetString("Skill-issue-easyskill-message-piloting-unskilled"), user, user);
+            }
+            return false;
+        }
+        // Проверка уровня ботаники
+        if (skillignore != skillType.Botany && !HasEasySkill(user, component.RequiresBotany, skillComponent => skillComponent.Botany)){
+            if(popup)
+            {
+                _audio.PlayGlobal("/Audio/Vanilla/SkillSystem/meep-merp.ogg", session);
+                _popupSystem.PopupEntity(Loc.GetString("Skill-issue-easyskill-message-botany-unskilled"), user, user);
+            }
+            return false;
+        }
+        // Проверка уровня муз. инструментов
+        if (skillignore != skillType.MusInstruments && !HasEasySkill(user, component.RequiresMusInstruments, skillComponent => skillComponent.MusInstruments)){
+            if(popup)
+            {
+                _audio.PlayGlobal("/Audio/Vanilla/SkillSystem/meep-merp.ogg", session);
+                _popupSystem.PopupEntity(Loc.GetString("Skill-issue-easyskill-message-musinstruments-unskilled"), user, user);
+            }
+            return false;
+        }
+        // Проверка уровня воровства
+        if (skillignore != skillType.Thief && !HasEasySkill(user, component.RequiresThief, skillComponent => skillComponent.Thief)){
+            if(popup)
+            {
+                _audio.PlayGlobal("/Audio/Vanilla/SkillSystem/meep-merp.ogg", session);
+                _popupSystem.PopupEntity(Loc.GetString("Skill-issue-easyskill-message-thief-unskilled"), user, user);
+            }
+            return false;
+        }
+
+        
         return true;
     }
 
@@ -131,7 +178,7 @@ public sealed class RequiresSkillSystem : SharedRequiresSkillSystem
             if(popup)
             {
                 _audio.PlayGlobal("/Audio/Vanilla/SkillSystem/meep-merp.ogg", session);
-                _popupSystem.PopupEntity(Loc.GetString("Skill-issue-message-instrumentation-unskilled", ("lvl", component.RequiresInstrumentationLevel)), user, user);
+                _popupSystem.PopupEntity(Loc.GetString("Skill-issue-message-instrumentation-unskilled", ("lvl", (int)component.RequiresInstrumentationLevel)), user, user);
             }
             return false;
         }
@@ -140,15 +187,11 @@ public sealed class RequiresSkillSystem : SharedRequiresSkillSystem
             if(popup)
             {
                 _audio.PlayGlobal("/Audio/Vanilla/SkillSystem/meep-merp.ogg", session);
-                _popupSystem.PopupEntity(Loc.GetString("Skill-issue-message-building-unskilled", ("lvl", component.RequiresBuildingLevel)), user, user);
+                _popupSystem.PopupEntity(Loc.GetString("Skill-issue-message-building-unskilled", ("lvl", (int)component.RequiresBuildingLevel)), user, user);
             }
             return false;
         }
         return true;
-    }
-    public bool HasSkillLevel(EntityUid user, SkillLevel requiredLevel, Func<SkillComponent, SkillLevel> skillSelector)
-    {
-        return TryComp<SkillComponent>(user, out var skillComponent) && skillSelector(skillComponent) >= requiredLevel;
     }
 
 }

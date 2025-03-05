@@ -8,6 +8,8 @@ using Robust.Shared.Utility;
 using Robust.Client.GameObjects;
 using System.Linq;
 using Robust.Shared.Prototypes;
+using Content.Shared.Vanilla.Skill;
+
 namespace Content.Client.Vanilla.Bureaucracy
 {
     public sealed class BureaucracyManager : EntitySystem
@@ -17,24 +19,27 @@ namespace Content.Client.Vanilla.Bureaucracy
         public override void Initialize()
         {
             base.Initialize();
-            // Подписываемся на событие для добавления действия в меню
             SubscribeLocalEvent<GetVerbsEvent<Verb>>(OnGetVerbs);
         }
 
         private void OnGetVerbs(GetVerbsEvent<Verb> args)
         {
             // Проверяем, если объект — это бумага
-            if (!HasComp<PaperComponent>(args.Target)) 
+            if (!TryComp<PaperComponent>(args.Target, out var paper)) 
                 return;
-                
+
             if (args.Hands == null || args.Using == null || !args.CanAccess || !args.CanInteract)
                 return;
 
-            // Проверяем, если у игрока в руке ручка
+            if(paper.StampedBy.Count > 0)
+                return;
+
             if (!PlayerHasPen(args.User))
                 return;
 
-            // Добавляем документы в эти категории
+            if (!PlayerHasSkill(args.User))
+                return;
+
             AddDocumentCategories(args);
         }
 
@@ -119,6 +124,13 @@ namespace Content.Client.Vanilla.Bureaucracy
             }
 
             return false;
+        }
+        private bool PlayerHasSkill(EntityUid user)
+        {
+            if (!TryComp<SkillComponent>(user, out var skillcomp))
+                return false;
+
+            return skillcomp.Bureaucracy;
         }
 
 

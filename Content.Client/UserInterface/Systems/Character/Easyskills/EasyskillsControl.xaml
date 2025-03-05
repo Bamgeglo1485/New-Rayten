@@ -1,0 +1,26 @@
+<Control xmlns="https://spacestation14.io"
+    xmlns:cc="clr-namespace:Content.Client.UserInterface.Controls"
+    xmlns:customControls="clr-namespace:Content.Client.Administration.UI.CustomControls" 
+    HorizontalExpand="True"
+    HorizontalAlignment="Stretch"
+    MinWidth="120">
+<BoxContainer Name="MainContainer" Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True" MinWidth="120" HorizontalAlignment="Stretch">
+        <Button Name="MainButton"
+                Disabled="True"
+                HorizontalExpand="True"
+                VerticalExpand="True"
+                StyleClasses="chatSelectorOptionButton"
+                Margin="0">
+            <GridContainer Columns="2" HorizontalExpand="True" VerticalExpand="True" MinWidth="120" HorizontalAlignment="Stretch">
+                <TextureRect Name="SkillTexture" TextureScale="0.03125 0.03125" VerticalAlignment="Center" HorizontalAlignment="Left" />
+                <BoxContainer Orientation="Vertical" HorizontalExpand="True" HorizontalAlignment="Right" VerticalAlignment="Center" SeparationOverride="0">
+                    <RichTextLabel Name="SkillNameLabel" HorizontalAlignment="Right" VerticalAlignment="Top" HorizontalExpand="True" Margin="0"/>
+                    <BoxContainer Orientation="Horizontal" HorizontalExpand="True" VerticalAlignment="Top" HorizontalAlignment="Right" SeparationOverride="5">
+                        <RichTextLabel Name="InfoLabel" HorizontalAlignment="Center" VerticalAlignment="Top" StyleClasses="LabelSubText" HorizontalExpand="True" Margin="0"/>
+                        <RichTextLabel Name="AmnesiaLabel" HorizontalAlignment="Center" VerticalAlignment="Top" StyleClasses="LabelSubText" Visible="false" HorizontalExpand="True" Margin="0"/>
+                    </BoxContainer>
+                </BoxContainer>
+            </GridContainer>
+        </Button>
+    </BoxContainer>
+</Control>

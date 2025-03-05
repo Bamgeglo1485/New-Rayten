@@ -22,6 +22,8 @@ using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
+using Content.Server.Vanilla.Skill;
+using Content.Shared.Vanilla.Skill;
 
 namespace Content.Server.Botany.Systems;
 
@@ -39,7 +41,7 @@ public sealed class PlantHolderSystem : EntitySystem
     [Dependency] private readonly TagSystem _tagSystem = default!;
     [Dependency] private readonly RandomHelperSystem _randomHelper = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
-
+    [Dependency] private readonly RequiresSkillSystem _requiresSkillSystem = default!;
 
     public const float HydroponicsSpeedMultiplier = 1f;
     public const float HydroponicsConsumptionMultiplier = 2f;
@@ -233,6 +235,15 @@ public sealed class PlantHolderSystem : EntitySystem
         if (_tagSystem.HasTag(args.Used, "PlantSampleTaker"))
         {
             args.Handled = true;
+
+            //Rayten-start
+            if (EntityManager.TryGetComponent<RequiresSkillComponent>(uid, out var RequiresSkillComponent))
+            {
+                if(!_requiresSkillSystem.HasRequiredSkills(args.User, RequiresSkillComponent, true))
+                    return;
+            }
+            //Rayten-end
+
             if (component.Seed == null)
             {
                 _popup.PopupCursor(Loc.GetString("plant-holder-component-nothing-to-sample-message"), args.User);

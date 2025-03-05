@@ -69,16 +69,12 @@ public sealed class HealingSystem : EntitySystem
         }
 
         //vanilla-station-start
-        if (TryComp<ActorComponent>(args.User, out var actor))
-        {
-            if (!EntityManager.TryGetComponent<SkillComponent>(args.User, out var skillComp))
-                skillComp = EnsureComp<SkillComponent>(args.User);
+        TryComp<ActorComponent>(args.User, out var actor);
 
-            if(_skillTrainerSystem.AddExperience(skillComp, skillType.Medicine, 6))
-                    _audio.PlayGlobal("/Audio/Vanilla/SkillSystem/levelup.ogg", actor.PlayerSession);
+        if (!EntityManager.TryGetComponent<SkillComponent>(args.User, out var skillComp))
+            skillComp = EnsureComp<SkillComponent>(args.User);
 
-            RaiseNetworkEvent(new UpdateCharacterSkillsRequestEvent(), Filter.SinglePlayer(actor.PlayerSession));
-        }
+        _skillTrainerSystem.AddExperience(skillComp, skillType.Medicine, 6, player: actor?.PlayerSession);
         //vanilla-station-end
 
         // Heal some bloodloss damage.

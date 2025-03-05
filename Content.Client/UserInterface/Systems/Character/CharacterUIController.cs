@@ -7,8 +7,6 @@ using Content.Client.UserInterface.Systems.Character.Controls;
 using Content.Client.UserInterface.Systems.Character.Windows;
 using Content.Client.UserInterface.Systems.Objectives.Controls;
 using Content.Shared.Input;
-using Content.Shared.Objectives.Systems;
-using Content.Shared.Vanilla.Skill;
 using Content.Shared.Mind;
 using Content.Shared.Mind.Components;
 using Content.Shared.Roles;
@@ -19,12 +17,14 @@ using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controllers;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Input.Binding;
-using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 using static Content.Client.CharacterInfo.CharacterInfoSystem;
 using static Robust.Client.UserInterface.Controls.BaseButton;
-
+using Content.Client.UserInterface.Systems.Character.Basicskills;
+using Content.Client.UserInterface.Systems.Character.Easyskills;
+using System.Numerics;
+using Content.Shared.Vanilla.Skill;
 
 namespace Content.Client.UserInterface.Systems.Character;
 
@@ -38,9 +38,11 @@ public sealed class CharacterUIController : UIController, IOnStateEntered<Gamepl
 
     [UISystemDependency] private readonly CharacterInfoSystem _characterInfo = default!;
     [UISystemDependency] private readonly SpriteSystem _sprite = default!;
-    [Dependency] private readonly INetManager _netManager = default!;
 
     private ISawmill _sawmill = default!;
+
+    private Dictionary<skillType, SkillControl> _skillControls = new Dictionary<skillType, SkillControl>();
+    private Dictionary<skillType, EasyskillsControl> _easyskillsControl = new Dictionary<skillType, EasyskillsControl>();
 
     public override void Initialize()
     {
@@ -60,58 +62,40 @@ public sealed class CharacterUIController : UIController, IOnStateEntered<Gamepl
 
         _window = UIManager.CreateWindow<CharacterWindow>();
         LayoutContainer.SetAnchorPreset(_window, LayoutContainer.LayoutPreset.CenterTop);
-
-        // Подключение обработчиков к кнопкам
-        _window.PilotingUpgradeButton.OnPressed += _ => _characterInfo.SendSkillExperienceEvent(skillType.Piloting);
-        _window.RangeWeaponUpgradeButton.OnPressed += _ => _characterInfo.SendSkillExperienceEvent(skillType.RangeWeapon);
-        _window.MeleeWeaponUpgradeButton.OnPressed += _ => _characterInfo.SendSkillExperienceEvent(skillType.MeleeWeapon);
-        _window.MedicineUpgradeButton.OnPressed += _ => _characterInfo.SendSkillExperienceEvent(skillType.Medicine);
-        _window.ChemistryUpgradeButton.OnPressed += _ => _characterInfo.SendSkillExperienceEvent(skillType.Chemistry);
-        _window.EngineeringUpgradeButton.OnPressed += _ => _characterInfo.SendSkillExperienceEvent(skillType.Engineering);
-        _window.BuildingUpgradeButton.OnPressed += _ => _characterInfo.SendSkillExperienceEvent(skillType.Building);
-        _window.ResearchUpgradeButton.OnPressed += _ => _characterInfo.SendSkillExperienceEvent(skillType.Research);
-        _window.InstrumentationUpgradeButton.OnPressed += _ => _characterInfo.SendSkillExperienceEvent(skillType.Instrumentation);
+        _window.TabSkill.OnPressed += SwitchToSkill;
+        _window.TabInfo.OnPressed += SwitchToInfo;
 
 
         CommandBinds.Builder
             .Bind(ContentKeyFunctions.OpenCharacterMenu,
-                InputCmdHandler.FromDelegate(_ => ToggleWindow()))
-            .Register<CharacterUIController>();
+                 InputCmdHandler.FromDelegate(_ => ToggleWindow()))
+             .Register<CharacterUIController>();
     }
 
     public void OnStateExited(GameplayState state)
     {
         if (_window != null)
         {
-            _window.PilotingUpgradeButton.OnPressed -= _ => _characterInfo.SendSkillExperienceEvent(skillType.Piloting);
-            _window.RangeWeaponUpgradeButton.OnPressed -= _ => _characterInfo.SendSkillExperienceEvent(skillType.RangeWeapon);
-            _window.MeleeWeaponUpgradeButton.OnPressed -= _ => _characterInfo.SendSkillExperienceEvent(skillType.MeleeWeapon);
-            _window.MedicineUpgradeButton.OnPressed -= _ => _characterInfo.SendSkillExperienceEvent(skillType.Medicine);
-            _window.ChemistryUpgradeButton.OnPressed -= _ => _characterInfo.SendSkillExperienceEvent(skillType.Chemistry);
-            _window.EngineeringUpgradeButton.OnPressed -= _ => _characterInfo.SendSkillExperienceEvent(skillType.Engineering);
-            _window.BuildingUpgradeButton.OnPressed -= _ => _characterInfo.SendSkillExperienceEvent(skillType.Building);
-            _window.ResearchUpgradeButton.OnPressed -= _ => _characterInfo.SendSkillExperienceEvent(skillType.Research);
-            _window.InstrumentationUpgradeButton.OnPressed -= _ => _characterInfo.SendSkillExperienceEvent(skillType.Instrumentation);
-
-
+            _window.TabInfo.OnPressed -= SwitchToInfo;
+            _window.TabSkill.OnPressed -= SwitchToSkill;
             _window.Dispose();
             _window = null;
         }
 
         CommandBinds.Unregister<CharacterUIController>();
     }
-    
+
     public void OnSystemLoaded(CharacterInfoSystem system)
     {
         system.OnCharacterUpdate += CharacterUpdated;
-        system.onskillupdateUI += updateskillUI;
+        system.onskillupdateUI += UpdateSkill;
         _player.LocalPlayerDetached += CharacterDetached;
     }
 
     public void OnSystemUnloaded(CharacterInfoSystem system)
     {
         system.OnCharacterUpdate -= CharacterUpdated;
-        system.onskillupdateUI -= updateskillUI;
+        system.onskillupdateUI -= UpdateSkill;
         _player.LocalPlayerDetached -= CharacterDetached;
     }
 
@@ -145,7 +129,24 @@ public sealed class CharacterUIController : UIController, IOnStateEntered<Gamepl
 
     private void DeactivateButton() => CharacterButton!.Pressed = false;
     private void ActivateButton() => CharacterButton!.Pressed = true;
-
+    private void SwitchToSkill(BaseButton.ButtonEventArgs args)
+    {
+        if (_window == null) return;
+        _window.InfoContainer.Visible = false;
+        _window.SkillContainer.Visible = true;
+        _window.TabName.Text = "Навыки";
+        _window.MainScroll.SetScrollValue(Vector2.Zero);
+        
+    }
+    private void SwitchToInfo(BaseButton.ButtonEventArgs args)
+    {
+        if (_window == null) return;
+        _window.InfoContainer.Visible = true;
+        _window.SkillContainer.Visible = false;
+        _window.TabName.Text = "Информация";
+        _window.MainScroll.SetScrollValue(Vector2.Zero);
+    }
+    
     private void CharacterUpdated(CharacterData data)
     {
         if (_window == null)
@@ -220,129 +221,9 @@ public sealed class CharacterUIController : UIController, IOnStateEntered<Gamepl
         }
 
         _window.RolePlaceholder.Visible = briefing == null && !controls.Any() && !objectives.Any();
-        updateskillUI(entity);
-
-    }
-    private void updateskillUI(EntityUid user){
-
-        if(_window == null)
-            return;
-
-        if (!EntityManager.TryGetComponent<SkillComponent>(user, out var skillComponent))
-            return;
-
-        UpdateProgressBars(skillComponent.PilotingLevel, skillComponent.PilotingExp, _window.Piloting1, _window.Piloting2, _window.Piloting3);
-        UpdateProgressBars(skillComponent.RangeWeaponLevel, skillComponent.RangeWeaponExp, _window.RangeWeapon1, _window.RangeWeapon2, _window.RangeWeapon3);
-        UpdateProgressBars(skillComponent.MeleeWeaponLevel, skillComponent.MeleeWeaponExp, _window.MeleeWeapon1, _window.MeleeWeapon2, _window.MeleeWeapon3);
-        UpdateProgressBars(skillComponent.MedicineLevel, skillComponent.MedicineExp, _window.Medicine1, _window.Medicine2, _window.Medicine3);
-        UpdateProgressBars(skillComponent.ChemistryLevel, skillComponent.ChemistryExp, _window.Chemistry1, _window.Chemistry2, _window.Chemistry3);
-        UpdateProgressBars(skillComponent.EngineeringLevel, skillComponent.EngineeringExp, _window.Engineering1, _window.Engineering2, _window.Engineering3);
-        UpdateProgressBars(skillComponent.BuildingLevel, skillComponent.BuildingExp, _window.Building1, _window.Building2, _window.Building3);
-        UpdateProgressBars(skillComponent.ResearchLevel, skillComponent.ResearchExp, _window.Research1, _window.Research2, _window.Research3);
-        UpdateProgressBars(skillComponent.InstrumentationLevel, skillComponent.InstrumentationExp, _window.Instrumentation1, _window.Instrumentation2, _window.Instrumentation3);
-
-        UpdateSkillpoints(skillComponent);
-
-        if (EntityManager.TryGetComponent<SkillAmnesiaComponent>(user, out var SkillAmnesiaComp))
-            UpdateSkillAmnesia(SkillAmnesiaComp);
-        else
-            _window.SkillAmnesia.Visible = false;
+        UpdateSkill(entity);
     }
 
-    private void UpdateSkillAmnesia(SkillAmnesiaComponent SkillAmnesiaComp)
-    {
-        if(_window == null)
-            return;
-
-        // Форматирование времени
-        var minutes = ((int)SkillAmnesiaComp.exptorestore / 60).ToString("00");
-        var seconds = ((int)SkillAmnesiaComp.exptorestore % 60).ToString("00");
-
-        // Обновление UI
-        _window.SkillAmnesia.Visible = true;
-
-        string skillName = SkillAmnesiaComp.skilltype switch
-        {
-            skillType.Piloting => "пилотирование",
-            skillType.RangeWeapon => "стрельбу",
-            skillType.MeleeWeapon => "ближний бой",
-            skillType.Medicine => "медицину",
-            skillType.Chemistry => "химию",
-            skillType.Engineering => "инженерию",
-            skillType.Building => "строительство",
-            skillType.Research => "исследования",
-            skillType.Instrumentation => "приборостроение",
-            _ => ""
-        };
-
-        _window.SkillAmnesia.Text = 
-            $"После смерти вы забыли {skillName}!\n" +
-            $"{SkillAmnesiaComp.exptorestore} опыта будет восстановлено в течение {minutes}:{seconds}";
-
-    }
-
-    private void UpdateSkillpoints(SkillComponent skillComponent)
-    {
-        if(_window == null)
-            return;
-        if(skillComponent.SkillPoints < 1)
-        {
-            _window.Skillpointslabel.Visible = false;
-
-            _window.PilotingUpgradeButton.Visible = false;
-            _window.RangeWeaponUpgradeButton.Visible = false;
-            _window.MeleeWeaponUpgradeButton.Visible = false;
-            _window.MedicineUpgradeButton.Visible = false;
-            _window.ChemistryUpgradeButton.Visible = false;
-            _window.EngineeringUpgradeButton.Visible = false;
-            _window.BuildingUpgradeButton.Visible = false;
-            _window.ResearchUpgradeButton.Visible = false;
-            _window.InstrumentationUpgradeButton.Visible = false;
-            return;
-        }
-
-        _window.Skillpointslabel.Visible = true;
-        _window.Skillpointslabel.Text = $"Очков навыков: {skillComponent.SkillPoints}";
-
-        _window.PilotingUpgradeButton.Visible = skillComponent.PilotingLevel < SkillLevel.Expert;
-        _window.RangeWeaponUpgradeButton.Visible = skillComponent.RangeWeaponLevel < SkillLevel.Expert;
-        _window.MeleeWeaponUpgradeButton.Visible = skillComponent.MeleeWeaponLevel < SkillLevel.Expert;
-        _window.MedicineUpgradeButton.Visible  = skillComponent.MedicineLevel < SkillLevel.Expert;
-        _window.ChemistryUpgradeButton.Visible = skillComponent.ChemistryLevel < SkillLevel.Expert;
-        _window.EngineeringUpgradeButton.Visible = skillComponent.EngineeringLevel < SkillLevel.Expert;
-        _window.BuildingUpgradeButton.Visible = skillComponent.BuildingLevel < SkillLevel.Expert;
-        _window.ResearchUpgradeButton.Visible = skillComponent.ResearchLevel < SkillLevel.Expert;
-        _window.InstrumentationUpgradeButton.Visible = skillComponent.InstrumentationLevel < SkillLevel.Expert;
-    }
-
-    private void UpdateProgressBars(SkillLevel level, int exp, ProgressBar bar1, ProgressBar bar2, ProgressBar bar3)
-    {
-        switch (level)
-        {
-            case SkillLevel.None:
-                bar1.Value = exp;
-                bar2.Value = 0;
-                bar3.Value = 0;
-                break;
-            case SkillLevel.Basic:
-                bar1.Value = 300;
-                bar2.Value = exp;
-                bar3.Value = 0;
-                break;
-            case SkillLevel.Advanced:
-                bar1.Value = 300;
-                bar2.Value = 600;
-                bar3.Value = exp;
-                break;
-            case SkillLevel.Expert:
-                bar1.Value = 300;
-                bar2.Value = 600;
-                bar3.Value = 900;
-                break;
-            default:
-                break;
-        }
-    }
     private void OnRoleTypeChanged(MindRoleTypeChangedEvent ev, EntitySessionEventArgs _)
     {
         UpdateRoleType();
@@ -409,4 +290,133 @@ public sealed class CharacterUIController : UIController, IOnStateEntered<Gamepl
             _window.Open();
         }
     }
+
+    public void UpdateSkill(EntityUid user)
+    {
+        if(_window==null)
+            return;
+        int skillpoints=0;
+        _window.BasicSkillContainer.Children.Clear();
+        _window.EasySkillContainer.Children.Clear();
+
+        var basicskills = new List<(skillType Skill, SkillLevel Level, int Experience)>
+        {
+            (skillType.RangeWeapon, SkillLevel.None, 0),
+            (skillType.MeleeWeapon, SkillLevel.None, 0),
+            (skillType.Medicine, SkillLevel.None, 0),
+            (skillType.Chemistry, SkillLevel.None, 0),
+            (skillType.Engineering, SkillLevel.None, 0),
+            (skillType.Building, SkillLevel.None, 0),
+            (skillType.Research, SkillLevel.None, 0),
+            (skillType.Instrumentation, SkillLevel.None, 0)
+        };
+
+        var easyskills = new List<(skillType Skill, bool have, int Experience)>
+        {
+            (skillType.Piloting, false, 0),
+            (skillType.Botany, false, 0),
+            (skillType.MusInstruments, false, 0),
+            (skillType.Bureaucracy, false, 0),
+            (skillType.Thief, false, 0),
+            (skillType.Stealth, false, 0)
+        };
+
+        if (EntityManager.TryGetComponent<SkillComponent>(user, out var skillComponent))
+        {
+            basicskills = new List<(skillType Skill, SkillLevel Level, int Experience)>
+            {
+                (skillType.RangeWeapon, skillComponent.RangeWeaponLevel, skillComponent.RangeWeaponExp),
+                (skillType.MeleeWeapon, skillComponent.MeleeWeaponLevel, skillComponent.MeleeWeaponExp),
+                (skillType.Medicine, skillComponent.MedicineLevel, skillComponent.MedicineExp),
+                (skillType.Chemistry, skillComponent.ChemistryLevel, skillComponent.ChemistryExp),
+                (skillType.Engineering, skillComponent.EngineeringLevel, skillComponent.EngineeringExp),
+                (skillType.Building, skillComponent.BuildingLevel, skillComponent.BuildingExp),
+                (skillType.Research, skillComponent.ResearchLevel, skillComponent.ResearchExp),
+                (skillType.Instrumentation, skillComponent.InstrumentationLevel, skillComponent.InstrumentationExp)
+            };
+            easyskills = new List<(skillType Skill, bool have, int Experience)>
+            {
+                (skillType.Piloting, skillComponent.Piloting, skillComponent.PilotingExp),
+                (skillType.Botany, skillComponent.Botany, skillComponent.BotanyExp),
+                (skillType.MusInstruments, skillComponent.MusInstruments, skillComponent.MusInstrumentsExp),
+                (skillType.Bureaucracy, skillComponent.Bureaucracy, skillComponent.BureaucracyExp),
+                (skillType.Thief, skillComponent.Thief, skillComponent.ThiefExp),
+                (skillType.Stealth, skillComponent.Stealth, skillComponent.StealthExp)
+            };
+            skillpoints = skillComponent.SkillPoints;
+        }
+        else
+        {
+            _window.Skillpointslabel.Visible = false;
+        }
+
+        gobasicskills(skillpoints, basicskills);
+        goeasyskills(skillpoints, easyskills);
+        if (EntityManager.TryGetComponent<SkillAmnesiaComponent>(user, out var SkillAmnesiaComp))
+            UpdateSkillAmnesia(SkillAmnesiaComp);
+    }
+    private void goeasyskills(int skillpoints, List<(skillType Skill, bool have, int Experience)> easyskills)
+    {
+        if (_window==null)
+            return;
+
+        foreach (var (skillName, have, experience) in easyskills)
+        {
+            var easyskillsControl = new EasyskillsControl(skillName, have, experience, (skillpoints>0) );
+
+            easyskillsControl.OnPressed += () => _characterInfo.SendSkillExperienceEvent(skillName);
+
+            _window.EasySkillContainer.Children.Add(easyskillsControl);
+
+            _easyskillsControl[skillName] = easyskillsControl;
+        }
+    }
+
+    private void gobasicskills(int skillpoints, List<(skillType Skill, SkillLevel Level, int Experience)> basicskills)
+    {
+        if (_window==null)
+            return;
+        bool haveskillpoint = false;
+        if(skillpoints>0)
+        {
+            _window.Skillpointslabel.Visible = true;
+            _window.Skillpointslabel.Text = $"Очков навыков: {skillpoints}";
+            haveskillpoint = true;
+        }
+        else
+        {
+            _window.Skillpointslabel.Visible = false;
+        }
+
+
+
+        foreach (var (skillName, level, experience) in basicskills)
+        {
+            var skillControl = new SkillControl(skillName, level, experience, haveskillpoint);
+            skillControl.OnPressed += () => _characterInfo.SendSkillExperienceEvent(skillName);
+
+            _window.BasicSkillContainer.Children.Add(skillControl);
+            _skillControls[skillName] = skillControl;
+        }
+    }
+
+    private void UpdateSkillAmnesia(SkillAmnesiaComponent SkillAmnesiaComp)
+    {
+        if(_window == null)
+            return;
+        
+        if(_skillControls.ContainsKey(SkillAmnesiaComp.skilltype))
+        {
+            var skillControl = _skillControls[SkillAmnesiaComp.skilltype];
+            skillControl.updateamnesia(SkillAmnesiaComp.skilltype, SkillAmnesiaComp.exptorestore);
+            return;
+        }
+
+        if(_easyskillsControl.ContainsKey(SkillAmnesiaComp.skilltype))
+        {
+            var easyskillsControl = _easyskillsControl[SkillAmnesiaComp.skilltype];
+            easyskillsControl.updateamnesia(SkillAmnesiaComp.skilltype, SkillAmnesiaComp.exptorestore);
+        }
+    }
+
 }

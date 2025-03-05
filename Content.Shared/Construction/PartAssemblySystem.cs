@@ -81,7 +81,7 @@ public sealed class PartAssemblySystem : EntitySystem
         if (EntityManager.TryGetComponent<RequiresSkillComponent>(uid, out var requiresSkillComponent))
         {
             // Проверка, есть ли у пользователя нужные навыки для выполнения действия
-            if (!_sharedRequiresSkillSystem.HasRequiredSkillsForCraft(user, requiresSkillComponent))
+            if (!_sharedRequiresSkillSystem.HasRequiredSkillsForCraft(user, requiresSkillComponent, true))
                 return false; // Если навыков недостаточно, не добавляем в очередь
         }
         //vanilla-station-end

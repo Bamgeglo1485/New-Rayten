@@ -23,9 +23,12 @@ public sealed class StaminaMeleeHitEvent : HandledEntityEventArgs
     /// The flat modifier. Generally, try to use += or -= instead of overwriting.
     /// </summary>
     public float FlatModifier = 0;
-
-    public StaminaMeleeHitEvent(List<(EntityUid Entity, StaminaComponent Component)> hitList)
+    //Rayten-start
+    public EntityUid User;
+    //Rayten-end
+    public StaminaMeleeHitEvent(List<(EntityUid Entity, StaminaComponent Component)> hitList, EntityUid user)
     {
         HitList = hitList;
+        User = user;
     }
 }

@@ -73,6 +73,9 @@ namespace Content.Shared.Chemistry.Reagent
 
         [DataField("color")]
         public Color SubstanceColor { get; private set; } = Color.White;
+        
+        [DataField("fakecolor")]
+        public Color FakeColor { get; private set; } = Color.White;
 
         /// <summary>
         ///     The specific heat of the reagent.

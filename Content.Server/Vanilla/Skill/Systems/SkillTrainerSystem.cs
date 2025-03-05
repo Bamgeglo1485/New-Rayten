@@ -1,12 +1,7 @@
-using Content.Shared.Interaction.Events;
 using Content.Shared.Vanilla.Skill;
-using Content.Shared.DoAfter;
 using Content.Shared.SkillTrainer;
 using Content.Shared.Mobs.Components;
-using Content.Shared.Ghost;
 using Content.Shared.Popups;
-using Content.Shared.Vanilla.Skill;
-using Content.Shared.Examine;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Audio;
@@ -17,33 +12,17 @@ namespace Content.Server.SkillTrainer;
 
 public sealed class ServerSkillTrainerSystem : EntitySystem
 {
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] protected readonly SharedPopupSystem _popup = default!;
 
+    const int _EXPERIENCEFROMSKILLPOINT = 600;
+    const int _EXPERIENCETONEWLVL = 600;
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<SkillTrainerComponent, UseInHandEvent>(OnUserInHand);
-        SubscribeLocalEvent<SkillTrainerComponent, TrainEvent>(HandleTrainEvent);
-        SubscribeLocalEvent<SkillTrainerComponent, ExaminedEvent>(OnExamine);
-        SubscribeNetworkEvent<RequestSkillAddEXPEvent>(onSkillAddEXPEvent);
+        SubscribeNetworkEvent<UseSkillPointEvent>(UseSkillPoint);
     }
 
-    private void OnExamine(EntityUid uid, SkillTrainerComponent component, ExaminedEvent args)
-    {
-        if (!args.IsInDetailsRange)
-            return;
-        
-        if(!EntityManager.TryGetComponent<SkillLearnerComponent>(args.Examiner, out var skillComp))
-            skillComp = EnsureComp<SkillLearnerComponent>(args.Examiner);
-
-        int SkillExpToLearn = skillComp.GetSkillExpToLearn(component.SkillType);
-        args.PushMarkup(Loc.GetString("examine-skilltrainer-part-1", ("skilltype", component.SkillType.ToString())));
-        args.PushMarkup(Loc.GetString("examine-skilltrainer-part-2", ("SkillExpToLearn", SkillExpToLearn)));
-    }
-
-    private void onSkillAddEXPEvent(RequestSkillAddEXPEvent msg, EntitySessionEventArgs args)
+    private void UseSkillPoint(UseSkillPointEvent msg, EntitySessionEventArgs args)
     {
         // Проверяем, что у пользователя есть прикрепленное существо, и что навык задан
         if (!args.SenderSession.AttachedEntity.HasValue || msg.skill == null)
@@ -54,9 +33,17 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
         // Получаем компонент навыков
         if (!EntityManager.TryGetComponent<SkillComponent>(entity, out var skillComp) || skillComp.SkillPoints < 1)
             return;
-        
-        // Если уровень навыка уже максимальный, прекращаем выполнение
-        if (skillComp.GetSkillLevel(msg.skill) >= SkillLevel.Expert)
+
+        //проверка если нам ваще гавно какое-то пришло которое невозможно никак определить
+        if (skillComp.GetSkillLevel(msg.skill)==null && skillComp.GetEasySkill(msg.skill)==null)
+            return;
+
+        //проверка основных скилов
+        if (skillComp.GetSkillLevel(msg.skill)!=null && skillComp.GetSkillLevel(msg.skill) >= SkillLevel.Expert)
+            return;
+
+        //проверка легких скилов
+        if (skillComp.GetEasySkill(msg.skill)!=null && skillComp.GetEasySkill(msg.skill) == true)
             return;
 
         // Уменьшаем очки навыков
@@ -64,115 +51,108 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
         skillComp.Dirty();
 
         // Добавляем опыт
-        if (AddExperience(skillComp, msg.skill, 100))
-            _audio.PlayGlobal("/Audio/Vanilla/SkillSystem/levelup.ogg", args.SenderSession);
-
-        RaiseNetworkEvent(new UpdateCharacterSkillsRequestEvent(), Filter.SinglePlayer(args.SenderSession));
+        AddExperience(skillComp, msg.skill, _EXPERIENCEFROMSKILLPOINT, multiplyed: false, player: args.SenderSession);
     }
 
-    private void OnUserInHand(EntityUid uid, SkillTrainerComponent component, UseInHandEvent args)
+    public bool AddExperience(SkillComponent skillComp, skillType skillType, int experienceAmount, bool multiplyed = true, ICommonSession? player = null)
     {
-        // Проверка на валидность пользователя
-        if (!HasComp<MobStateComponent>(args.User) || HasComp<GhostComponent>(args.User))
-            return;
+        if (multiplyed && (int)skillComp.ResearchLevel == 3)
+            experienceAmount*=2;
 
-        if (!EntityManager.TryGetComponent<SkillComponent>(args.User, out var skillComp))
-            skillComp = EnsureComp<SkillComponent>(args.User);
-            
-        if (!EntityManager.TryGetComponent<SkillLearnerComponent>(args.User, out var SkillLearnerComponentComp))
-            SkillLearnerComponentComp = EnsureComp<SkillLearnerComponent>(args.User);
-
-        if (SkillLearnerComponentComp.GetSkillExpToLearn(component.SkillType) <= 0 || skillComp.GetSkillLevel(component.SkillType) >= SkillLevel.Expert )
+        if (skillType == skillType.Piloting 
+        || skillType == skillType.MusInstruments 
+        || skillType == skillType.Botany 
+        || skillType == skillType.Bureaucracy 
+        || skillType == skillType.Thief 
+        || skillType == skillType.Stealth) 
         {
-            var overtrainKey = $"Skill-train-overtrain-{component.SkillType.ToString().ToLower()}";
-            _popup.PopupEntity(Loc.GetString(overtrainKey), args.User, args.User);
-            return;
-        }
+            bool? lvl = skillComp.GetEasySkill(skillType);
 
-        // Обработка действия
-        if (!args.Handled)
-        {
-            StartDoAfter(args.User, component, uid);
-            args.Handled = true;
-        }
-    }
+            if (lvl != false)
+                return false;
 
+            int exp = skillComp.GetSkillExp(skillType);
 
-    private void StartDoAfter(EntityUid user, SkillTrainerComponent component, EntityUid uid)
-    {
-        _audio.PlayPvs("/Audio/Vanilla/SkillSystem/bookpaperswish.ogg", user, AudioParams.Default.WithMaxDistance(2f));
-        var doAfterArgs = new DoAfterArgs(EntityManager, user, TimeSpan.FromSeconds(component.ReadTime), new TrainEvent
-        {
-            SkillType = component.SkillType,
-            SkillIncreaseAmount = component.SkillIncreaseAmount
-        }, eventTarget: uid)
-        {
-            BreakOnDamage = true,
-            BreakOnMove = true,
-            NeedHand = true,
-        };
-        _doAfter.TryStartDoAfter(doAfterArgs);
-    }
+            exp += experienceAmount;
 
-    private void HandleTrainEvent(EntityUid uid, SkillTrainerComponent component, TrainEvent args)
-    {
-        if (args.Cancelled || args.Handled)
-            return;
-            
-        if (!EntityManager.TryGetComponent<SkillComponent>(args.User, out var skillComp))
-            skillComp = EnsureComp<SkillComponent>(args.User);
-
-        if (!EntityManager.TryGetComponent<SkillLearnerComponent>(args.User, out var SkillLearnerComp))
-            SkillLearnerComp = EnsureComp<SkillLearnerComponent>(args.User);
-
-        if(TryComp<ActorComponent>(args.User, out var actor))
-        {
-
-            int exp = DecreaseSkillExpToLearn(SkillLearnerComp, args.SkillType, args.SkillIncreaseAmount);    
-
-            if(AddExperience(skillComp, args.SkillType, exp))
-                _audio.PlayGlobal("/Audio/Vanilla/SkillSystem/levelup.ogg", actor.PlayerSession);
-            else if (!(SkillLearnerComp.GetSkillExpToLearn(args.SkillType) <= 0 || skillComp.GetSkillLevel(args.SkillType) >= SkillLevel.Expert) )
+            if (exp >= _EXPERIENCETONEWLVL)
             {
-                StartDoAfter(args.User, component, uid);
+                SetEasySkill(skillComp, skillType);
+                SetSkillExp(skillComp, skillType, 0);
+                if (player== null)
+                    return true;
+                _audio.PlayGlobal("/Audio/Vanilla/SkillSystem/levelup.ogg", player, audioParams: AudioParams.Default.WithVolume(-6f));
+                RaiseNetworkEvent(new UpdateCharacterSkillsRequestEvent(), Filter.SinglePlayer(player));
+                return true;
             }
-
-            RaiseNetworkEvent(new UpdateCharacterSkillsRequestEvent(), Filter.SinglePlayer(actor.PlayerSession));
+            SetSkillExp(skillComp, skillType, exp);
+            if (player != null) RaiseNetworkEvent(new UpdateCharacterSkillsRequestEvent(), Filter.SinglePlayer(player));
+            return false;
         }
-        args.Handled = true;
-    }
-
-    public bool AddExperience(SkillComponent skillComp, skillType skillType, int experienceAmount)
-    {
-        // Получаем уровень и опыт для переданного навыка
-        SkillLevel? level = skillComp.GetSkillLevel(skillType);
-        int exp = skillComp.GetSkillExp(skillType);
-
-        // Проверка ограничения уровня
-        if (level == null ||level >= SkillLevel.Expert) return false;
-
-        // Расчёт необходимого опыта
-        int requiredExp = 300 + (int)level * 300;
-        exp += experienceAmount;
-        // Проверка на повышение уровня
-        if (exp >= requiredExp)
+        else
         {
-            // Увеличиваем уровень и перераспределяем опыт
-            SetSkillLevel(skillComp, skillType, level.Value + 1);
-            SetSkillExp(skillComp, skillType, exp - requiredExp);
-            return true;
+            SkillLevel? level = skillComp.GetSkillLevel(skillType);
+            int exp = skillComp.GetSkillExp(skillType);
+
+            if (level == null || level >= SkillLevel.Expert) return false;
+
+            exp += experienceAmount;
+
+            if (exp >= _EXPERIENCETONEWLVL)
+            {
+                SetSkillLevel(skillComp, skillType, level.Value + 1);
+                SetSkillExp(skillComp, skillType, exp - _EXPERIENCETONEWLVL);
+
+                if (player == null)
+                    return true;
+
+                _audio.PlayGlobal("/Audio/Vanilla/SkillSystem/levelup.ogg", player, audioParams: AudioParams.Default.WithVolume(-6f));
+                RaiseNetworkEvent(new UpdateCharacterSkillsRequestEvent(), Filter.SinglePlayer(player));
+
+                if (skillType == skillType.Chemistry)
+                    RaiseNetworkEvent(new UpdateChemicalVisualsOnClient(), Filter.SinglePlayer(player));
+
+                return true;
+            }
+            SetSkillExp(skillComp, skillType, exp);
+            if (player != null) RaiseNetworkEvent(new UpdateCharacterSkillsRequestEvent(), Filter.SinglePlayer(player));
+            return false;
         }
-        SetSkillExp(skillComp, skillType, exp);
-        return false;
+
+    }
+    
+    private void SetEasySkill(SkillComponent skillComp, skillType skill)
+    {
+        switch (skill)
+        {
+            case skillType.Piloting:
+                skillComp.Piloting = true;
+                break;
+            case skillType.Botany:
+                skillComp.Botany = true;
+                break;
+            case skillType.MusInstruments:
+                skillComp.MusInstruments = true;
+                break;
+            case skillType.Bureaucracy:
+                skillComp.Bureaucracy = true;
+                break;
+            case skillType.Thief:
+                skillComp.Thief = true;
+                break;
+            case skillType.Stealth:
+                skillComp.Stealth = true;
+                break;
+            default:
+                break;
+        }
+        skillComp.Dirty();
     }
 
     private void SetSkillLevel(SkillComponent skillComp, skillType skill, SkillLevel level)
     {
         switch (skill)
         {
-            case skillType.Piloting:
-                skillComp.PilotingLevel = level;
-                break;
             case skillType.RangeWeapon:
                 skillComp.RangeWeaponLevel = level;
                 break;
@@ -202,65 +182,7 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
         }
         skillComp.Dirty();
     }
-    private int DecreaseSkillExpToLearn(SkillLearnerComponent skillComp, skillType skill, int exp)
-    {
-        if (exp < 0) return 0;
 
-        switch (skill)
-        {
-            case skillType.Piloting:
-
-                if(exp > skillComp.PilotingExpToLearn)
-                    exp = skillComp.PilotingExpToLearn;
-                skillComp.PilotingExpToLearn -= exp;
-
-                break;
-            case skillType.RangeWeapon:
-                if(exp > skillComp.RangeWeaponExpToLearn)
-                    exp = skillComp.RangeWeaponExpToLearn;
-                skillComp.RangeWeaponExpToLearn -= exp;
-                break;
-            case skillType.MeleeWeapon:
-                if(exp > skillComp.MeleeWeaponExpToLearn)
-                    exp = skillComp.MeleeWeaponExpToLearn;
-                skillComp.MeleeWeaponExpToLearn -= exp;
-                break;
-            case skillType.Medicine:
-                if(exp > skillComp.MedicineExpToLearn)
-                    exp = skillComp.MedicineExpToLearn;
-                skillComp.MedicineExpToLearn -= exp;
-                break;
-            case skillType.Chemistry:
-                if(exp > skillComp.ChemistryExpToLearn)
-                    exp = skillComp.ChemistryExpToLearn;
-                skillComp.ChemistryExpToLearn -= exp;
-                break;
-            case skillType.Engineering:
-                if(exp > skillComp.EngineeringExpToLearn)
-                    exp = skillComp.EngineeringExpToLearn;
-                skillComp.EngineeringExpToLearn -= exp;
-                break;
-            case skillType.Building:
-                if(exp > skillComp.BuildingExpToLearn)
-                    exp = skillComp.BuildingExpToLearn;
-                skillComp.BuildingExpToLearn -= exp;
-                break;
-            case skillType.Research:
-                if(exp > skillComp.ResearchExpToLearn)
-                    exp = skillComp.ResearchExpToLearn;
-                skillComp.ResearchExpToLearn -= exp;
-                break;
-            case skillType.Instrumentation:
-                if(exp > skillComp.InstrumentationExpToLearn)
-                    exp = skillComp.InstrumentationExpToLearn;
-                skillComp.InstrumentationExpToLearn -= exp;
-                break;
-            default:
-                break;
-        }
-        skillComp.Dirty();
-        return exp;
-    }
     private void SetSkillExp(SkillComponent skillComp, skillType skill, int exp)
     {
         if (exp < 0) return;
@@ -293,6 +215,21 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
                 break;
             case skillType.Instrumentation:
                 skillComp.InstrumentationExp = exp;
+                break;
+            case skillType.Botany:
+                skillComp.BotanyExp = exp;
+                break;
+            case skillType.MusInstruments:
+                skillComp.MusInstrumentsExp = exp;
+                break;
+            case skillType.Bureaucracy:
+                skillComp.BureaucracyExp = exp;
+                break;
+            case skillType.Thief:
+                skillComp.ThiefExp = exp;
+                break;
+            case skillType.Stealth:
+                skillComp.StealthExp = exp;
                 break;
             default:
                 break;

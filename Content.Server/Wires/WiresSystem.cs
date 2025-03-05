@@ -16,6 +16,9 @@ using Robust.Server.GameObjects;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
+using Content.Shared.Vanilla.Skill;//vanilla-skill
+using Content.Server.Vanilla.Skill;//vanilla-skill
+using Robust.Shared.Audio.Systems;
 
 namespace Content.Server.Wires;
 
@@ -28,6 +31,8 @@ public sealed class WiresSystem : SharedWiresSystem
     [Dependency] private readonly UserInterfaceSystem _uiSystem = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly ConstructionSystem _construction = default!;
+    [Dependency] private readonly RequiresSkillSystem _requiresSkillSystem = default!;
+    [Dependency] private readonly SharedAudioSystem _audio = default!;
 
     // This is where all the wire layouts are stored.
     [ViewVariables] private readonly Dictionary<string, WireLayout> _layouts = new();
@@ -446,7 +451,24 @@ public sealed class WiresSystem : SharedWiresSystem
         if (Tool.HasQuality(args.Used, "Cutting", tool) ||
             Tool.HasQuality(args.Used, "Pulsing", tool))
         {
-            if (TryComp(args.User, out ActorComponent? actor))
+            TryComp(args.User, out ActorComponent? actor);
+            //Rayten-Start
+
+            if(!_requiresSkillSystem.HasSkillLevel(args.User, SkillLevel.Basic, skillComponent => skillComponent.EngineeringLevel))
+            {
+                if (actor!=null)
+                {
+                    _audio.PlayGlobal("/Audio/Vanilla/SkillSystem/meep-merp.ogg", actor.PlayerSession);
+                    _popupSystem.PopupEntity(Loc.GetString("Skill-issue-message-engineering-unskilled", ("lvl", (int)SkillLevel.Basic)), args.User, args.User);
+                }
+                
+                return;            
+            }
+
+            //Rayten-END
+
+
+            if (actor!=null)
             {
                 _uiSystem.OpenUi(uid, WiresUiKey.Key, actor.PlayerSession);
                 args.Handled = true;

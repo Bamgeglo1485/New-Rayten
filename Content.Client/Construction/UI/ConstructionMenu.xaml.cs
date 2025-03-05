@@ -8,7 +8,8 @@ using Robust.Client.UserInterface.XAML;
 using Robust.Shared.Graphics;
 using Robust.Shared.IoC;
 using Robust.Shared.Localization;
-
+using Robust.Shared.Utility;
+using Content.Shared.Vanilla.Skill;
 
 namespace Content.Client.Construction.UI
 {
@@ -43,7 +44,7 @@ namespace Content.Client.Construction.UI
         event EventHandler ClearAllGhosts;
 
         void ClearRecipeInfo();
-        void SetRecipeInfo(string name, string description, Texture iconTexture, bool isItem, bool isFavorite);
+        void SetRecipeInfo(string name, string description, Texture iconTexture, bool isItem, bool isFavorite, SkillLevel Instrumentation, SkillLevel Building, bool craftable);
         void ResetPlacement();
 
         #region Window Control
@@ -133,9 +134,23 @@ namespace Content.Client.Construction.UI
         }
 
         public void SetRecipeInfo(
-            string name, string description, Texture iconTexture, bool isItem, bool isFavorite)
+            string name, string description, Texture iconTexture, bool isItem, bool isFavorite, SkillLevel Instrumentation, SkillLevel Building,bool craftable)
         {
-            BuildButton.Disabled = false;
+            BuildButton.Disabled = !craftable;
+            if (!craftable)
+                BuildButton.ToolTip = "Навык недостаточен";
+            //Rayten-start
+            ReqInstrumentation.Visible = (int)Instrumentation > 0;
+            ReqBuilding.Visible = (int)Building > 0;
+
+            var Instrumentationmessage = new FormattedMessage();
+            var Buildingmessage = new FormattedMessage();
+            Instrumentationmessage.AddMarkupOrThrow(Loc.GetString("construction-menu-skill-instrumentation", ("lvl", (int)Instrumentation)));
+            Buildingmessage.AddMarkupOrThrow(Loc.GetString("construction-menu-skill-building", ("lvl", (int)Building)));
+            ReqInstrumentation.SetMessage(Instrumentationmessage);
+            ReqBuilding.SetMessage(Buildingmessage);
+            //Rayten-end
+
             BuildButton.Text = Loc.GetString(isItem ? "construction-menu-place-ghost" : "construction-menu-craft");
             TargetName.SetMessage(name);
             TargetDesc.SetMessage(description);
@@ -143,6 +158,7 @@ namespace Content.Client.Construction.UI
             FavoriteButton.Visible = true;
             FavoriteButton.Text = Loc.GetString(
                             isFavorite ? "construction-add-favorite-button" : "construction-remove-from-favorite-button");
+
         }
 
         public void ClearRecipeInfo()

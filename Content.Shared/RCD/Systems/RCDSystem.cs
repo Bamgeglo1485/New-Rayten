@@ -25,6 +25,7 @@ using Robust.Shared.Serialization;
 using Robust.Shared.Timing;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using Content.Shared.Vanilla.Skill; //vanilla-skill
 
 namespace Content.Shared.RCD.Systems;
 
@@ -46,6 +47,7 @@ public class RCDSystem : EntitySystem
     [Dependency] private readonly IPrototypeManager _protoManager = default!;
     [Dependency] private readonly SharedMapSystem _mapSystem = default!;
     [Dependency] private readonly TagSystem _tags = default!;
+    [Dependency] private readonly SharedRequiresSkillSystem _requiresSkillSystem = default!;
 
     private readonly int _instantConstructionDelay = 0;
     private readonly EntProtoId _instantConstructionFx = "EffectRCDConstruct0";
@@ -147,6 +149,14 @@ public class RCDSystem : EntitySystem
 
         if (!_net.IsServer)
             return;
+
+        //Vanilla-Station-START
+        if (EntityManager.TryGetComponent<RequiresSkillComponent>(uid, out var RequiresSkillComponent))
+        {
+            if(!_requiresSkillSystem.HasRequiredSkillsForCraft(args.User, RequiresSkillComponent, popup: true))
+                return;
+        }
+        //Vanilla-Sttion-END
 
         // Get the starting cost, delay, and effect from the prototype
         var cost = component.CachedPrototype.Cost;

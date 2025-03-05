@@ -29,6 +29,8 @@ using Robust.Shared.Containers;
 using Robust.Shared.Player;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
+using Content.Shared.Vanilla.Skill;//vanilla-skill
+using Content.Server.Vanilla.Skill;//vanilla-skill
 
 namespace Content.Server.Silicons.Borgs;
 
@@ -54,7 +56,7 @@ public sealed partial class BorgSystem : SharedBorgSystem
     [Dependency] private readonly UserInterfaceSystem _ui = default!;
     [Dependency] private readonly SharedContainerSystem _container = default!;
     [Dependency] private readonly EntityWhitelistSystem _whitelistSystem = default!;
-
+    [Dependency] private readonly RequiresSkillSystem _requiresSkillSystem = default!;
 
     [ValidatePrototypeId<JobPrototype>]
     public const string BorgJobId = "Borg";
@@ -118,6 +120,14 @@ public sealed partial class BorgSystem : SharedBorgSystem
                     return;
                 }
             }
+
+            //Vanilla-Station-START
+            if (EntityManager.TryGetComponent<RequiresSkillComponent>(uid, out var RequiresSkillComponent))
+            {
+                if(!_requiresSkillSystem.HasRequiredSkillsForCraft(args.User, RequiresSkillComponent, false))
+                    return;
+            }
+            //Vanilla-Sttion-END
 
             _container.Insert(used, component.BrainContainer);
             _adminLog.Add(LogType.Action, LogImpact.Medium,

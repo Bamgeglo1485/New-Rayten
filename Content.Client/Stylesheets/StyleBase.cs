@@ -37,6 +37,7 @@ namespace Content.Client.Stylesheets
         protected StyleBoxTexture BaseButtonOpenRight { get; }
         protected StyleBoxTexture BaseButtonOpenLeft { get; }
         protected StyleBoxTexture BaseButtonOpenBoth { get; }
+        protected StyleBoxTexture SkillRoundedButton { get; }        
         protected StyleBoxTexture BaseButtonSquare { get; }
 
         protected StyleBoxTexture BaseAngleRect { get; }
@@ -101,6 +102,14 @@ namespace Content.Client.Stylesheets
             BaseButtonOpenBoth.SetContentMarginOverride(StyleBox.Margin.Horizontal, 8);
             BaseButtonOpenBoth.SetPadding(StyleBox.Margin.Right, 2);
             BaseButtonOpenBoth.SetPadding(StyleBox.Margin.Left, 1);
+
+            var SkillRoundedButtonTex = resCache.GetTexture("/Textures/Interface/Nano/top_rounded_button.svg.96dpi.png");
+            SkillRoundedButton = new StyleBoxTexture
+            {
+                Texture = SkillRoundedButtonTex,
+            };
+            SkillRoundedButton.SetPatchMargin(StyleBox.Margin.All, 5);
+            SkillRoundedButton.SetPadding(StyleBox.Margin.All, 2);
 
             BaseButtonSquare = new StyleBoxTexture(BaseButton)
             {

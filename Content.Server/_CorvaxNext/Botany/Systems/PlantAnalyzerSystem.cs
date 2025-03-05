@@ -10,6 +10,8 @@ using Robust.Shared.Prototypes;
 using System.Linq;
 using System.Text;
 using Content.Shared.Atmos;
+using Content.Server.Vanilla.Skill;
+using Content.Shared.Vanilla.Skill;
 
 namespace Content.Server.Botany.Systems; // This is how it supposed to be
 
@@ -20,7 +22,7 @@ public sealed class PlantAnalyzerSystem : EntitySystem
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly SharedDoAfterSystem _doAfterSystem = default!;
     [Dependency] private readonly UserInterfaceSystem _uiSystem = default!;
-
+    [Dependency] private readonly RequiresSkillSystem _requiresSkillSystem = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -36,6 +38,15 @@ public sealed class PlantAnalyzerSystem : EntitySystem
 
         if (ent.Comp.DoAfter != null)
             return;
+
+        //Rayten-start
+        if (EntityManager.TryGetComponent<RequiresSkillComponent>(ent, out var requiresSkillComponent))
+        {
+            if(!_requiresSkillSystem.HasRequiredSkills(args.User, requiresSkillComponent, true))
+            return;
+        }
+        //Rayten-end
+
 
         if (HasComp<SeedComponent>(args.Target) || TryComp<PlantHolderComponent>(args.Target, out var plantHolder) && plantHolder.Seed != null)
         {

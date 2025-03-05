@@ -35,9 +35,9 @@ public sealed class GunSkillsSystem : EntitySystem
     }
 
     private void OnHandPickUp(EntityUid uid, GunComponent gunComp, GotEquippedHandEvent args)
-    {   
+    {
         if(HasComp<GunIgnoreSkillComponent>(uid))
-        return;
+            return;
 
         if (!EntityManager.TryGetComponent<UnskilledWeaponComponent>(uid, out var unskilledComp))
             unskilledComp = EnsureComp<UnskilledWeaponComponent>(uid);
@@ -47,8 +47,8 @@ public sealed class GunSkillsSystem : EntitySystem
         else
         {
             unskilledComp.MinAnglePenalty = Angle.FromDegrees(60);
-            unskilledComp.MaxAnglePenalty = Angle.FromDegrees(200);
-            unskilledComp.AngleIncreasePenalty = Angle.FromDegrees(20);
+            unskilledComp.MaxAnglePenalty = Angle.FromDegrees(150);
+            unskilledComp.AngleIncreasePenalty = Angle.FromDegrees(18);
         }
         _gun.RefreshModifiers(uid);
     }
@@ -63,14 +63,14 @@ public sealed class GunSkillsSystem : EntitySystem
                 unskilledComp.AngleIncreasePenalty = Angle.FromDegrees(18);
                 break;
             case SkillLevel.Basic:
-                unskilledComp.MinAnglePenalty = Angle.FromDegrees(30);
+                unskilledComp.MinAnglePenalty = Angle.FromDegrees(15);
                 unskilledComp.MaxAnglePenalty = Angle.FromDegrees(100);
                 unskilledComp.AngleIncreasePenalty = Angle.FromDegrees(12);
                 break;
             case SkillLevel.Advanced:
                 unskilledComp.MinAnglePenalty = Angle.FromDegrees(0);
-                unskilledComp.MaxAnglePenalty = Angle.FromDegrees(50);
-                unskilledComp.AngleIncreasePenalty = Angle.FromDegrees(6);
+                unskilledComp.MaxAnglePenalty = Angle.FromDegrees(40);
+                unskilledComp.AngleIncreasePenalty = Angle.FromDegrees(3);
                 break;
             case SkillLevel.Expert:
                 unskilledComp.MinAnglePenalty = Angle.FromDegrees(0);
@@ -130,21 +130,19 @@ public sealed class GunSkillsSystem : EntitySystem
 
     private void RangeWeaponTrainOnShoot(EntityUid uid, GunTrainerComponent component, GunShotEvent args)
     {
-        if(HasComp<GunIgnoreSkillComponent>(uid))
+        if (HasComp<GunIgnoreSkillComponent>(uid))
             return;
 
-        if (TryComp<ActorComponent>(args.User, out var actor))
-        {
-            if (!EntityManager.TryGetComponent<SkillComponent>(args.User, out var skillComp))
-                skillComp = EnsureComp<SkillComponent>(args.User);
+        TryComp<ActorComponent>(args.User, out var actor);
 
-            if (_skillTrainerSystem.AddExperience(skillComp, component.SkillType, component.ExpPerShot)){
-                if(TryComp<UnskilledWeaponComponent>(uid, out var unskilledComp))
-                    UnskilledWeaponRefreshModifiers(skillComp, unskilledComp);
-                _gun.RefreshModifiers(uid);
-                _audio.PlayGlobal("/Audio/Vanilla/SkillSystem/levelup.ogg", actor.PlayerSession);
-            }
-            RaiseNetworkEvent(new UpdateCharacterSkillsRequestEvent(), Filter.SinglePlayer(actor.PlayerSession));
+        if (!TryComp<SkillComponent>(args.User, out var skillComp))
+            skillComp = EnsureComp<SkillComponent>(args.User);
+
+        if (_skillTrainerSystem.AddExperience(skillComp, component.SkillType, component.ExpPerShot, player: actor?.PlayerSession))
+        {
+            if (TryComp<UnskilledWeaponComponent>(uid, out var unskilledComp))
+                UnskilledWeaponRefreshModifiers(skillComp, unskilledComp);
+            _gun.RefreshModifiers(uid);
         }
     }
 }

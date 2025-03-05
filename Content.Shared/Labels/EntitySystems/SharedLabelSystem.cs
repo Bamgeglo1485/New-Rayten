@@ -44,7 +44,7 @@ public abstract partial class SharedLabelSystem : EntitySystem
         //Vanilla-Station-START
         if (EntityManager.TryGetComponent<RequiresSkillComponent>(uid, out var RequiresSkillComponent))
         {
-            if(!_requiresSkillSystem.HasRequiredSkills(args.Examiner, RequiresSkillComponent, true))
+            if(!_requiresSkillSystem.HasAnyOfRequiredSkills(args.Examiner, RequiresSkillComponent))
             return;
         }
         //Vanilla-Sttion-END

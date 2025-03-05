@@ -43,9 +43,12 @@ public sealed class BureaucracyManager : EntitySystem
 
         var paperUid = GetEntity(msg.paper);
         var Playerent = args.SenderSession.AttachedEntity;
-        if (!TryComp<PaperComponent>(paperUid, out var paperComp) || HasComp<StampComponent>(paperUid))
+        if (!TryComp<PaperComponent>(paperUid, out var paperComp))
             return;
 
+        if(paperComp.StampedBy.Count > 0)
+            return;
+            
         _audio.PlayPvs(paperComp.Sound, paperUid);
 
         string text = Loc.GetString(prototype.Text, 

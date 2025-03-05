@@ -3,124 +3,80 @@
     xmlns:cc="clr-namespace:Content.Client.UserInterface.Controls"
     xmlns:windows="clr-namespace:Content.Client.UserInterface.Systems.Character.Windows"
     xmlns:controls="clr-namespace:Content.Client.UserInterface.Systems.Character.Controls"
+    xmlns:style="clr-namespace:Content.Client.Stylesheets"
     Title="{Loc 'character-info-title'}"
-    MinWidth="500"
-    MinHeight="545">
-    <ScrollContainer>
+    SetWidth="645"
+    MinHeight="820"
+    Resizable="False">
+    <ScrollContainer Name="MainScroll" Access="Public">
         <BoxContainer Orientation="Vertical">
-            <Label Name="RoleType" VerticalAlignment="Top" Margin="0 6 0 10" HorizontalAlignment="Center" StyleClasses="LabelHeading" Access="Public"/>
             <BoxContainer Orientation="Horizontal">
                 <SpriteView OverrideDirection="South" Scale="2 2" Name="SpriteView" Access="Public" SetSize="64 64"/>
                 <BoxContainer Orientation="Vertical" VerticalAlignment="Top">
                     <Label Name="NameLabel" Access="Public"/>
                     <Label Name="SubText" VerticalAlignment="Top" StyleClasses="LabelSubText" Access="Public"/>
+                    <Label Name="RoleType" VerticalAlignment="Top" StyleClasses="LabelSubText" Access="Public"/>
                 </BoxContainer>
             </BoxContainer>
-            <Label Text="Навыки:" Margin="0, 5, 0, 5" Access="Public" />
-            <Label Name="Skillpointslabel" StyleClasses="LabelSubText" MinSize="120 0" Access="Public" />
-            <BoxContainer Orientation="Vertical" VerticalAlignment="Top" HorizontalExpand="true">
-                <BoxContainer Orientation="Horizontal" VerticalAlignment="Top">
-                    <Label Text="Пилотирование:" StyleClasses="LabelSubText" MinSize="120 15" Access="Public" />
-                    <BoxContainer Orientation="Horizontal" HorizontalExpand="true">
-                        <ProgressBar Name="Piloting1" MinValue="0" MaxValue="300" HorizontalExpand="false" Modulate="green" SetSize="60 10" Margin="5,5,0,0" Access="Public"/>
-                        <ProgressBar Name="Piloting2" MinValue="0" MaxValue="600" HorizontalExpand="false" Modulate="green" SetSize="60 10" Margin="5,5,0,0" Access="Public"/>
-                        <ProgressBar Name="Piloting3" MinValue="0" MaxValue="900" HorizontalExpand="false" Modulate="green" SetSize="60 10" Margin="5,5,0,0" Access="Public"/>
-                        <Button Name="PilotingUpgradeButton" Text="+" Margin="5,0,0,0" HorizontalExpand="false" Visible="false" Access="Public" />
-                    </BoxContainer>
-                </BoxContainer>
 
-                <!-- Стрельба -->
-                <BoxContainer Orientation="Horizontal" VerticalAlignment="Top">
-                    <Label Text="Стрельба:" StyleClasses="LabelSubText" MinSize="120 25" Access="Public" />
-                    <BoxContainer Orientation="Horizontal" HorizontalExpand="true">
-                        <ProgressBar Name="RangeWeapon1" MinValue="0" MaxValue="300" HorizontalExpand="false" Modulate="green" SetSize="60 10" Margin="5,5,0,0" Access="Public"/>
-                        <ProgressBar Name="RangeWeapon2" MinValue="0" MaxValue="600" HorizontalExpand="false" Modulate="green" SetSize="60 10" Margin="5,5,0,0" Access="Public"/>
-                        <ProgressBar Name="RangeWeapon3" MinValue="0" MaxValue="900" HorizontalExpand="false" Modulate="green" SetSize="60 10" Margin="5,5,0,0" Access="Public"/>
-                        <Button Name="RangeWeaponUpgradeButton" Text="+" Margin="5,0,0,0" HorizontalExpand="false" Visible="false" Access="Public" />
-                    </BoxContainer>
-                </BoxContainer>
-
-                <!-- Ближний бой -->
-                <BoxContainer Orientation="Horizontal" VerticalAlignment="Top">
-                    <Label Text="Ближний бой:" StyleClasses="LabelSubText" MinSize="120 25" Access="Public" />
-                    <BoxContainer Orientation="Horizontal" HorizontalExpand="true">
-                        <ProgressBar Name="MeleeWeapon1" MinValue="0" MaxValue="300" HorizontalExpand="false" Modulate="green" SetSize="60 10" Margin="5,5,0,0" Access="Public"/>
-                        <ProgressBar Name="MeleeWeapon2" MinValue="0" MaxValue="600" HorizontalExpand="false" Modulate="green" SetSize="60 10" Margin="5,5,0,0" Access="Public"/>
-                        <ProgressBar Name="MeleeWeapon3" MinValue="0" MaxValue="900" HorizontalExpand="false" Modulate="green" SetSize="60 10" Margin="5,5,0,0" Access="Public"/>
-                        <Button Name="MeleeWeaponUpgradeButton" Text="+" Margin="5,0,0,0" HorizontalExpand="false" Visible="false" Access="Public" />
-                    </BoxContainer>
-                </BoxContainer>
-                
-                <!-- Медицина -->
-                <BoxContainer Orientation="Horizontal" VerticalAlignment="Top">
-                    <Label Text="Медицина:" StyleClasses="LabelSubText" MinSize="120 25" Access="Public" />
-                    <BoxContainer Orientation="Horizontal" HorizontalExpand="true">
-                        <ProgressBar Name="Medicine1" MinValue="0" MaxValue="300" HorizontalExpand="false" Modulate="green" SetSize="60 10" Margin="5,5,0,0" Access="Public"/>
-                        <ProgressBar Name="Medicine2" MinValue="0" MaxValue="600" HorizontalExpand="false" Modulate="green" SetSize="60 10" Margin="5,5,0,0" Access="Public"/>
-                        <ProgressBar Name="Medicine3" MinValue="0" MaxValue="900" HorizontalExpand="false" Modulate="green" SetSize="60 10" Margin="5,5,0,0" Access="Public"/>
-                        <Button Name="MedicineUpgradeButton" Text="+" Margin="5,0,0,0" HorizontalExpand="false" Visible="false" Access="Public" />
-                    </BoxContainer>
-                </BoxContainer>
-                
-                <!-- Химия -->
-                <BoxContainer Orientation="Horizontal" VerticalAlignment="Top">
-                    <Label Text="Химия:" StyleClasses="LabelSubText" MinSize="120 25" Access="Public" />
-                    <BoxContainer Orientation="Horizontal" HorizontalExpand="true">
-                        <ProgressBar Name="Chemistry1" MinValue="0" MaxValue="300" HorizontalExpand="false" Modulate="green" SetSize="60 10" Margin="5,5,0,0" Access="Public"/>
-                        <ProgressBar Name="Chemistry2" MinValue="0" MaxValue="600" HorizontalExpand="false" Modulate="green" SetSize="60 10" Margin="5,5,0,0" Access="Public"/>
-                        <ProgressBar Name="Chemistry3" MinValue="0" MaxValue="900" HorizontalExpand="false" Modulate="green" SetSize="60 10" Margin="5,5,0,0" Access="Public"/>
-                        <Button Name="ChemistryUpgradeButton" Text="+" Margin="5,0,0,0" HorizontalExpand="false" Visible="false" Access="Public" />       
-                    </BoxContainer>
-                </BoxContainer>
-
-                <!-- Инженерия -->
-                <BoxContainer Orientation="Horizontal" VerticalAlignment="Top">
-                    <Label Text="Инженерия:" StyleClasses="LabelSubText" MinSize="120 25" Access="Public" />
-                    <BoxContainer Orientation="Horizontal" HorizontalExpand="true">
-                        <ProgressBar Name="Engineering1" MinValue="0" MaxValue="300" HorizontalExpand="false" Modulate="green" SetSize="60 10" Margin="5,5,0,0" Access="Public"/>
-                        <ProgressBar Name="Engineering2" MinValue="0" MaxValue="600" HorizontalExpand="false" Modulate="green" SetSize="60 10" Margin="5,5,0,0" Access="Public"/>
-                        <ProgressBar Name="Engineering3" MinValue="0" MaxValue="900" HorizontalExpand="false" Modulate="green" SetSize="60 10" Margin="5,5,0,0" Access="Public"/>
-                        <Button Name="EngineeringUpgradeButton" Text="+" Margin="5,0,0,0" HorizontalExpand="false" Visible="false" Access="Public" />
-                    </BoxContainer>
-                </BoxContainer>
-
-                <!-- Строительство -->
-                <BoxContainer Orientation="Horizontal" VerticalAlignment="Top">
-                    <Label Text="Строительство:" StyleClasses="LabelSubText" MinSize="120 25" Access="Public" />
-                    <BoxContainer Orientation="Horizontal" HorizontalExpand="true">
-                        <ProgressBar Name="Building1" MinValue="0" MaxValue="300" HorizontalExpand="false" Modulate="green" SetSize="60 10" Margin="5,5,0,0" Access="Public"/>
-                        <ProgressBar Name="Building2" MinValue="0" MaxValue="600" HorizontalExpand="false" Modulate="green" SetSize="60 10" Margin="5,5,0,0" Access="Public"/>
-                        <ProgressBar Name="Building3" MinValue="0" MaxValue="900" HorizontalExpand="false" Modulate="green" SetSize="60 10" Margin="5,5,0,0" Access="Public"/>
-                        <Button Name="BuildingUpgradeButton" Text="+" Margin="5,0,0,0" HorizontalExpand="false" Visible="false" Access="Public" />
-                    </BoxContainer>
-                </BoxContainer>
-
-                <!-- Исследования -->
-                <BoxContainer Orientation="Horizontal" VerticalAlignment="Top">
-                    <Label Text="Исследования:" StyleClasses="LabelSubText" MinSize="120 25" Access="Public" />
-                    <BoxContainer Orientation="Horizontal" HorizontalExpand="true">
-                        <ProgressBar Name="Research1" MinValue="0" MaxValue="300" HorizontalExpand="false" Modulate="green" SetSize="60 10" Margin="5,5,0,0" Access="Public"/>
-                        <ProgressBar Name="Research2" MinValue="0" MaxValue="600" HorizontalExpand="false" Modulate="green" SetSize="60 10" Margin="5,5,0,0" Access="Public"/>
-                        <ProgressBar Name="Research3" MinValue="0" MaxValue="900" HorizontalExpand="false" Modulate="green" SetSize="60 10" Margin="5,5,0,0" Access="Public"/>
-                        <Button Name="ResearchUpgradeButton" Text="+" Margin="5,0,0,0" HorizontalExpand="false" Visible="false" Access="Public" />
-                    </BoxContainer>
-                </BoxContainer>
-
-                <!-- Приборостроение -->
-                <BoxContainer Orientation="Horizontal" VerticalAlignment="Top">
-                    <Label Text="Приборостроение:" StyleClasses="LabelSubText" MinSize="120 25" Access="Public" />
-                    <BoxContainer Orientation="Horizontal" HorizontalExpand="true">
-                        <ProgressBar Name="Instrumentation1" MinValue="0" MaxValue="300" HorizontalExpand="false" Modulate="green" SetSize="60 10" Margin="5,5,0,0" Access="Public"/>
-                        <ProgressBar Name="Instrumentation2" MinValue="0" MaxValue="600" HorizontalExpand="false" Modulate="green" SetSize="60 10" Margin="5,5,0,0" Access="Public"/>
-                        <ProgressBar Name="Instrumentation3" MinValue="0" MaxValue="900" HorizontalExpand="false" Modulate="green" SetSize="60 10" Margin="5,5,0,0" Access="Public"/>
-                        <Button Name="InstrumentationUpgradeButton" Text="+" Margin="5,0,0,0" HorizontalExpand="false" Visible="false" Access="Public" />
-                    </BoxContainer>
-                </BoxContainer>
+            <Label Name="TabName" Text="Навыки" VerticalAlignment="Top" HorizontalAlignment="Center" StyleClasses="LabelHeading" Access="Public"/>
+            <cc:HLine Color="#05014a" Thickness="4" />
+            <cc:HSpacer Spacing="10" />
+            <BoxContainer Orientation="Horizontal" HorizontalExpand="True">
+                <Button Name="TabInfo"
+                        Text="Информация"
+                        Disabled="False"
+                        HorizontalExpand="True"
+                        VerticalExpand="True"
+                        StyleClasses="ButtonSquare"
+                        Margin="0"
+                        Access="Public"/>
+                <Button Name="TabSkill"
+                        Text="Навыки"
+                        Disabled="False"
+                        HorizontalExpand="True"
+                        VerticalExpand="True"
+                        StyleClasses="ButtonSquare"
+                        Margin="0"
+                        Access="Public"/>
+                <Button Name="TabBackground"
+                        Text="Предыстория"
+                        Disabled="True"
+                        HorizontalExpand="True"
+                        VerticalExpand="True"
+                        StyleClasses="ButtonSquare"
+                        Margin="0"
+                        Access="Public"/>
             </BoxContainer>
-            <Label Name="SkillAmnesia" Margin="0, 5, 0, 5" Access="Public" />
-            <Label Name="ObjectivesLabel" Access="Public" Text="{Loc 'character-info-objectives-label'}" HorizontalAlignment="Center"/>
-            <BoxContainer Orientation="Vertical" Name="Objectives" Access="Public"/>
-            <cc:Placeholder Name="RolePlaceholder" Access="Public" PlaceholderText="{Loc 'character-info-roles-antagonist-text'}"/>
+            <cc:HLine Color="#05014a" Thickness="2" />
+            <cc:HSpacer Spacing="10" />
+
+            <BoxContainer Orientation="Vertical" Name="SkillContainer" Access="Public">
+                <Label Text="Основные навыки" VerticalAlignment="Top" HorizontalAlignment="Center"/>
+                <cc:HLine Color="#05014a" Thickness="2" />
+                <cc:HSpacer Spacing="10" />
+                
+                <GridContainer Name="BasicSkillContainer" Rows="2" Columns="4" HorizontalAlignment="Stretch" HorizontalExpand="true" Access="Public" HSeparationOverride="1" VSeparationOverride="1">
+                </GridContainer>
+                <Label Name="Skillpointslabel" MinSize="120 0" Access="Public" />
+
+                <cc:HSpacer Spacing="10" />
+                <Label Text="Лёгкие навыки" VerticalAlignment="Top" HorizontalAlignment="Center"/>
+                <cc:HLine Color="#05014a" Thickness="2" />
+                <cc:HSpacer Spacing="10" />
+
+                <GridContainer Name="EasySkillContainer" Columns="3" HorizontalAlignment="Stretch" HorizontalExpand="true" Access="Public" HSeparationOverride="1" VSeparationOverride="1">
+                </GridContainer>
+
+            </BoxContainer>
+
+
+            <BoxContainer Orientation="Vertical" Name="InfoContainer" Visible="false" Access="Public">
+                <Label Name="ObjectivesLabel" Access="Public" Text="{Loc 'character-info-objectives-label'}" HorizontalAlignment="Center"/>
+                <BoxContainer Orientation="Vertical" Name="Objectives" Access="Public"/>
+                <cc:Placeholder Name="RolePlaceholder" Access="Public" PlaceholderText="{Loc 'character-info-roles-antagonist-text'}"/>
+            </BoxContainer>
+
         </BoxContainer>
     </ScrollContainer>
 </windows:CharacterWindow>

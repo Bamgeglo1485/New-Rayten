@@ -256,16 +256,12 @@ public sealed class DefibrillatorSystem : EntitySystem
                     _euiManager.OpenEui(new ReturnToBodyEui(mind, _mind), session);
                 }
                 //vanilla-station-start
-                if (TryComp<ActorComponent>(user, out var actor))
-                {
-                    if (!EntityManager.TryGetComponent<SkillComponent>(user, out var skillComp))
-                        skillComp = EnsureComp<SkillComponent>(user);
+                TryComp<ActorComponent>(user, out var actor);
+                
+                if (!EntityManager.TryGetComponent<SkillComponent>(user, out var skillComp))
+                    skillComp = EnsureComp<SkillComponent>(user);
 
-                    if(_skillTrainerSystem.AddExperience(skillComp, skillType.Medicine, 10))
-                            _audio.PlayGlobal("/Audio/Vanilla/SkillSystem/levelup.ogg", actor.PlayerSession);
-
-                    RaiseNetworkEvent(new UpdateCharacterSkillsRequestEvent(), Filter.SinglePlayer(actor.PlayerSession));
-                }
+                _skillTrainerSystem.AddExperience(skillComp, skillType.Medicine, 10, player: actor?.PlayerSession);
                 //vanilla-station-end
             }
             else

@@ -9,6 +9,8 @@ using Content.Shared.Item;
 using Content.Shared.Rounding;
 using Robust.Client.GameObjects;
 using Robust.Shared.Prototypes;
+using Robust.Client.Player;
+using Content.Shared.Vanilla.Skill;
 
 namespace Content.Client.Chemistry.Visualizers;
 
@@ -16,7 +18,7 @@ public sealed class SolutionContainerVisualsSystem : VisualizerSystem<SolutionCo
 {
     [Dependency] private readonly IPrototypeManager _prototype = default!;
     [Dependency] private readonly ItemSystem _itemSystem = default!;
-
+    [Dependency] private readonly IPlayerManager _player = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -124,9 +126,22 @@ public sealed class SolutionContainerVisualsSystem : VisualizerSystem<SolutionCo
             args.Sprite.LayerSetState(fillLayer, stateName);
 
             if (changeColor && AppearanceSystem.TryGetData<Color>(uid, SolutionContainerVisuals.Color, out var color, args.Component))
+            {
+                if (AppearanceSystem.TryGetData<string>(uid, SolutionContainerVisuals.BaseOverride, out var baseOverride, args.Component))
+                {
+                    _prototype.TryIndex<ReagentPrototype>(baseOverride, out var reagentProto);
+                    if (reagentProto?.Recognizable == false)
+                        ApplyFakeChemColor(uid, ref color);
+                }
+                else
+                    ApplyFakeChemColor(uid, ref color);
+
                 args.Sprite.LayerSetColor(fillLayer, color);
+            }
             else
+            {
                 args.Sprite.LayerSetColor(fillLayer, Color.White);
+            }
         }
         else
         {
@@ -145,7 +160,21 @@ public sealed class SolutionContainerVisualsSystem : VisualizerSystem<SolutionCo
         // in-hand visuals
         _itemSystem.VisualsChanged(uid);
     }
-
+    private void ApplyFakeChemColor(EntityUid uid, ref Color color)
+    {
+        if (TryComp<FakeChemComponent>(uid, out var fakeChem))
+        {
+            var playerEntity = _player.LocalPlayer?.ControlledEntity;
+            if (playerEntity != null && TryComp<SkillComponent>(playerEntity, out var skillComp))
+            {
+                // Применяем фейковый цвет, если у игрока низкий уровень химии
+                if (skillComp.ChemistryLevel == SkillLevel.None || skillComp.ChemistryLevel == SkillLevel.Basic)
+                {
+                    color = fakeChem.FakeColor;
+                }
+            }
+        }
+    }
     private void OnGetHeldVisuals(EntityUid uid, SolutionContainerVisualsComponent component, GetInhandVisualsEvent args)
     {
         if (component.InHandsFillBaseName == null)

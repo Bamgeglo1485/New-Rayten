@@ -64,6 +64,7 @@ namespace Content.Client.Stylesheets
         public const string StyleClassActionMenuItemRevoked = "actionMenuItemRevoked";
         public const string StyleClassChatLineEdit = "chatLineEdit";
         public const string StyleClassChatChannelSelectorButton = "chatSelectorOptionButton";
+        public const string StyleClassSkillBottomRoundedButton = "SkillBottomRoundedButton";
         public const string StyleClassChatFilterOptionButton = "chatFilterOptionButton";
         public const string StyleClassStorageButton = "storageButton";
 
@@ -335,6 +336,17 @@ namespace Content.Client.Stylesheets
             };
             chatChannelButton.SetPatchMargin(StyleBox.Margin.All, 5);
             chatChannelButton.SetPadding(StyleBox.Margin.All, 2);
+
+            //Rayten-start
+            var SkillBottomRoundedButtonTex = resCache.GetTexture("/Textures/Interface/Nano/bottom_rounded_button.svg.96dpi.png");
+            var skillBottomRoundedButton = new StyleBoxTexture
+            {
+                Texture = SkillBottomRoundedButtonTex,
+            };
+            skillBottomRoundedButton.SetPatchMargin(StyleBox.Margin.All, 5);
+            skillBottomRoundedButton.SetPadding(StyleBox.Margin.All, 2);
+            //Rayten-end
+
 
             var chatFilterButtonTex = resCache.GetTexture("/Textures/Interface/Nano/rounded_button_bordered.svg.96dpi.png");
             var chatFilterButton = new StyleBoxTexture
@@ -1307,6 +1319,10 @@ namespace Content.Client.Stylesheets
                 {
                     new StyleProperty(Button.StylePropertyStyleBox, chatChannelButton),
                 }),
+                new StyleRule(new SelectorElement(typeof(Button), new[] {StyleClassSkillBottomRoundedButton}, null, null), new[]
+                {
+                    new StyleProperty(Button.StylePropertyStyleBox, skillBottomRoundedButton),
+                }),
                 // chat filter button
                 new StyleRule(new SelectorElement(typeof(ContainerButton), new[] {StyleClassChatFilterOptionButton}, null, null), new[]
                 {
@@ -1567,6 +1583,11 @@ namespace Content.Client.Stylesheets
                 Element<PanelContainer>().Class("PdaBackground")
                     .Prop(PanelContainer.StylePropertyPanel, BaseButtonOpenBoth)
                     .Prop(Control.StylePropertyModulateSelf, Color.FromHex("#000000")),
+                //Rayten-start
+                Element<PanelContainer>().Class("SkillTopRoundedBackground")
+                    .Prop(PanelContainer.StylePropertyPanel, SkillRoundedButton)
+                    .Prop(Control.StylePropertyModulateSelf, Color.FromHex("#000000")),
+                //Rayten-end
 
                 Element<PanelContainer>().Class("PdaBackgroundRect")
                     .Prop(PanelContainer.StylePropertyPanel, BaseAngleRect)

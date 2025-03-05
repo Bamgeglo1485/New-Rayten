@@ -8,5 +8,6 @@ namespace Content.Shared.Nuke;
 [RegisterComponent, NetworkedComponent]
 public sealed partial class NukeDiskComponent : Component
 {
-
+    [DataField]
+    public TimeSpan? WillTpAt;
 }

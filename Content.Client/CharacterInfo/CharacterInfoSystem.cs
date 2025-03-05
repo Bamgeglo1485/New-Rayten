@@ -32,7 +32,7 @@ public sealed class CharacterInfoSystem : EntitySystem
     }
     public void SendSkillExperienceEvent(skillType skill)
     {
-        RaiseNetworkEvent(new RequestSkillAddEXPEvent(skill));
+        RaiseNetworkEvent(new UseSkillPointEvent(skill));
     }
 
     private void OnCharacterInfoEvent(CharacterInfoEvent msg, EntitySessionEventArgs args)

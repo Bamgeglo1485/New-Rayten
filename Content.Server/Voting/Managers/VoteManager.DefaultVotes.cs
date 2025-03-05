@@ -1,28 +1,24 @@
 using System.Linq;
+using System.Net;
+using System.Net.Sockets;
 using Content.Server.Administration;
 using Content.Server.Administration.Managers;
-using Content.Server.Database;
 using Content.Server.Discord.WebhookMessages;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Presets;
 using Content.Server.Maps;
 using Content.Server.Roles;
 using Content.Server.RoundEnd;
-using Content.Server.Revolutionary.Components;
 using Content.Shared.CCVar;
 using Content.Shared.Chat;
 using Content.Shared.Database;
-using Content.Shared.Ghost;
 using Content.Shared.Players;
 using Content.Shared.Players.PlayTimeTracking;
 using Content.Shared.Voting;
-using Content.Shared.Vanilla.CCVars;
-using Content.Shared.Vanilla.Skill;
 using Robust.Shared.Configuration;
 using Robust.Shared.Enums;
 using Robust.Shared.Player;
 using Robust.Shared.Random;
-
 
 namespace Content.Server.Voting.Managers
 {
@@ -31,17 +27,14 @@ namespace Content.Server.Voting.Managers
         [Dependency] private readonly IPlayerLocator _locator = default!;
         [Dependency] private readonly ILogManager _logManager = default!;
         [Dependency] private readonly IBanManager _bans = default!;
-        [Dependency] private readonly IServerDbManager _dbManager = default!;
         [Dependency] private readonly VoteWebhooks _voteWebhooks = default!;
-        private const int skillpointpool = 162;//vanilla-station
+
         private VotingSystem? _votingSystem;
         private RoleSystem? _roleSystem;
         private GameTicker? _gameTicker;
-        private int _lastEzModeRoundID = 0;
 
-        private static readonly Dictionary<StandardVoteType, CVarDef<bool>> _voteTypesToEnableCVars = new()
+        private static readonly Dictionary<StandardVoteType, CVarDef<bool>> VoteTypesToEnableCVars = new()
         {
-            {StandardVoteType.Ezmode, CCVarsVanilla.VoteEzmodeEnabled},
             {StandardVoteType.Restart, CCVars.VoteRestartEnabled},
             {StandardVoteType.Preset, CCVars.VotePresetEnabled},
             {StandardVoteType.Map, CCVars.VoteMapEnabled},
@@ -57,6 +50,8 @@ namespace Content.Server.Voting.Managers
             else
                 _adminLogger.Add(LogType.Vote, LogImpact.Medium, $"Initiated a {voteType.ToString()} vote");
 
+            _gameTicker = _entityManager.EntitySysManager.GetEntitySystem<GameTicker>();
+
             bool timeoutVote = true;
 
             switch (voteType)
@@ -64,11 +59,6 @@ namespace Content.Server.Voting.Managers
                 case StandardVoteType.Restart:
                     CreateRestartVote(initiator);
                     break;
-                //vanilla-station-start
-                case StandardVoteType.Ezmode:
-                    CreateEzmodeVote(initiator);
-                    break;
-                //vanilla-station-end
                 case StandardVoteType.Preset:
                     CreatePresetVote(initiator);
                     break;
@@ -82,7 +72,6 @@ namespace Content.Server.Voting.Managers
                 default:
                     throw new ArgumentOutOfRangeException(nameof(voteType), voteType, null);
             }
-            _gameTicker = _entityManager.EntitySysManager.GetEntitySystem<GameTicker>();
             _gameTicker.UpdateInfoText();
             if (timeoutVote)
                 TimeoutStandardVote(voteType);
@@ -106,104 +95,6 @@ namespace Content.Server.Voting.Managers
                 NotifyNotEnoughGhostPlayers(ghostVotePercentageRequirement, ghostVoterPercentage);
             }
         }
-
-        //vanilla-station-start
-
-        private void CreateEzmodeVote(ICommonSession? initiator)
-        {
-            _gameTicker = _entityManager.EntitySysManager.GetEntitySystem<GameTicker>();
-
-            if (_lastEzModeRoundID == _gameTicker.RoundId)
-            {
-                if (initiator != null)
-                {
-                    var message = Loc.GetString("ui-vote-ezmode-already-conducted");
-                    var wrappedMessage = Loc.GetString("chat-manager-server-wrap-message", ("message", message));
-                    _chatManager.ChatMessageToOne(ChatChannel.Server, message, wrappedMessage, default, false, initiator.Channel);
-                }
-                return;
-            }
-
-            var playerVoteMaximum = _cfg.GetCVar(CCVarsVanilla.VoteEzmodeMaxPlayers);
-            //расчитываем количество валидных пользователей (не ливнувших + не гостов)
-            var totalPlayers = _playerManager.Sessions.Count(session => session.Status != SessionStatus.Disconnected);
-            int ghostcounter = CalculateEligibleVoterNumber(VoterEligibility.Ghost);
-            int nonGhostPlayersCount = totalPlayers - ghostcounter;
-
-            if (nonGhostPlayersCount <= playerVoteMaximum)
-            {
-                _lastEzModeRoundID = _gameTicker.RoundId;
-                StartEzmodeVote(initiator, nonGhostPlayersCount);
-            }
-            else if (initiator != null)
-            {
-                var message = Loc.GetString("ui-vote-ezmode-fail-not-enough-players", ("PlayerRequirement", playerVoteMaximum));
-                var wrappedMessage = Loc.GetString("chat-manager-server-wrap-message", ("message", message));
-                _chatManager.ChatMessageToOne(ChatChannel.Server, message, wrappedMessage, default, false, initiator.Channel);
-            }
-        }
-
-
-        private void StartEzmodeVote(ICommonSession? initiator, int nonGhostPlayersCount)
-        {
-            int skillpoints = skillpointpool/nonGhostPlayersCount;
-
-            var voteOptions = new VoteOptions
-            {
-                Title = Loc.GetString("ui-vote-ezmode-title", ("skillpoints", skillpoints)),
-                Options =
-                {
-                    (Loc.GetString("ui-vote-ezmode-yes"), "yes"),
-                    (Loc.GetString("ui-vote-ezmode-no"), "no")
-                },
-                Duration = TimeSpan.FromSeconds(_cfg.GetCVar(CCVarsVanilla.EzmodeTimer)),
-                InitiatorTimeout = TimeSpan.FromMinutes(1)
-            };
-
-            WirePresetVoteInitiator(voteOptions, initiator);
-
-            var vote = CreateVote(voteOptions);
-
-            vote.OnFinished += (_, args) =>
-            {
-                var votesYes = vote.VotesPerOption["yes"];
-                var votesNo = vote.VotesPerOption["no"];
-                var total = votesYes + votesNo;
-
-                if (total > 0 && votesYes * 100 >= total * _cfg.GetCVar(CCVarsVanilla.EzmodeRequiredRatio) * 100)
-                {
-                    _chatManager.DispatchServerAnnouncement(Loc.GetString("ui-vote-ezmode-succeeded", ("skillpoints", skillpoints)));
-
-                    // выдаем навыки
-                    var query = _entityManager.EntityQueryEnumerator<ActorComponent>();
-                    while (query.MoveNext(out var uid, out var actor))
-                    {
-                        if (_entityManager.HasComponent<GhostComponent>(uid))
-                            continue;
-
-                        if (!_entityManager.TryGetComponent(uid, out SkillComponent? skillComponent))
-                            skillComponent = _entityManager.AddComponent<SkillComponent>(uid);
-
-                        skillComponent.SkillPoints += skillpoints;
-
-                        _entityManager.Dirty(skillComponent);
-                    }
-                }
-                else
-                {
-                    _chatManager.DispatchServerAnnouncement(Loc.GetString("ui-vote-ezmode-failed"));
-                }
-            };
-
-
-            if (initiator != null)
-            {
-                vote.CastVote(initiator, 0);
-            }
-        }
-
-
-        //vanilla-station-end
 
         /// <summary>
         /// Gives the current percentage of players eligible to vote, rounded to nearest percentage point.
@@ -480,6 +371,15 @@ namespace Content.Server.Voting.Managers
             }
             var targetUid = located.UserId;
             var targetHWid = located.LastHWId;
+            (IPAddress, int)? targetIP = null;
+
+            if (located.LastAddress is not null)
+            {
+                targetIP = located.LastAddress.AddressFamily is AddressFamily.InterNetwork
+                    ? (located.LastAddress, 32) // People with ipv4 addresses get a /32 address so we ban that
+                    : (located.LastAddress, 64); // This can only be an ipv6 address. People with ipv6 address should get /64 addresses so we ban that.
+            }
+
             if (!_playerManager.TryGetSessionById(located.UserId, out ICommonSession? targetSession))
             {
                 _logManager.GetSawmill("admin.votekick")
@@ -644,7 +544,7 @@ namespace Content.Server.Voting.Managers
 
                         uint minutes = (uint)_cfg.GetCVar(CCVars.VotekickBanDuration);
 
-                        _bans.CreateServerBan(targetUid, target, null, null, targetHWid, minutes, severity, reason);
+                        _bans.CreateServerBan(targetUid, target, null, targetIP, targetHWid, minutes, severity, reason);
                     }
                 }
                 else

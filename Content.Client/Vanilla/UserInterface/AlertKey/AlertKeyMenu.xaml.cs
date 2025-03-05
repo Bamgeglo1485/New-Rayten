@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 
-namespace Content.Client.Vanilla.AlertKey
+namespace Content.Client.Vanilla.UserInterface.AlertKey
 {
     [GenerateTypedNameReferences]
     public sealed partial class AlertKeyMenu : FancyWindow

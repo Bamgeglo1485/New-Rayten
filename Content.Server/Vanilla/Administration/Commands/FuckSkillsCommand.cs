@@ -35,7 +35,7 @@ public sealed class FuckSkillsCommand : IConsoleCommand
                 skillComp = _entityManager.AddComponent<SkillComponent>(uid);
 
             // Присваиваем максимальные уровни всем навыкам
-            skillComp.PilotingLevel = SkillLevel.Expert;
+            skillComp.Piloting = true;
             skillComp.RangeWeaponLevel = SkillLevel.Expert;
             skillComp.MeleeWeaponLevel = SkillLevel.Expert;
             skillComp.MedicineLevel = SkillLevel.Expert;

@@ -6,8 +6,7 @@ using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.XAML;
 using Robust.Shared.Map;
 using Robust.Shared.Physics.Components;
-using Content.Shared.Vanilla.Skill;
-using Robust.Client.Player;
+
 namespace Content.Client.Shuttles.UI;
 
 [GenerateTypedNameReferences]
@@ -18,14 +17,16 @@ public sealed partial class NavScreen : BoxContainer
 
     private EntityUid? _consoleEntity; // Entity of controlling console
     private EntityUid? _shuttleEntity;
-    private bool _obscure = false;
+
     public NavScreen()
     {
         RobustXamlLoader.Load(this);
         IoCManager.InjectDependencies(this);
         _xformSystem = _entManager.System<SharedTransformSystem>();
+
         IFFToggle.OnToggled += OnIFFTogglePressed;
         IFFToggle.Pressed = NavRadar.ShowIFF;
+
         DockToggle.OnToggled += OnDockTogglePressed;
         DockToggle.Pressed = NavRadar.ShowDocks;
     }
@@ -34,6 +35,7 @@ public sealed partial class NavScreen : BoxContainer
     {
         _shuttleEntity = shuttle;
     }
+
     public void SetConsole(EntityUid? console)
     {
         _consoleEntity = console;
@@ -63,21 +65,6 @@ public sealed partial class NavScreen : BoxContainer
         NavRadar.SetMatrix(coordinates, angle);
     }
 
-    private string CorruptNumbers(string input)
-    {
-        return input
-            .Replace('1', '|')
-            .Replace('2', '|')
-            .Replace('3', '|')
-            .Replace('4', '/')
-            .Replace('5', '/')
-            .Replace('6', '/')
-            .Replace('7', '—')
-            .Replace('8', '\\')
-            .Replace('9', '\\')
-            .Replace('0', '\\');
-    }
-
     protected override void Draw(DrawingHandleScreen handle)
     {
         base.Draw(handle);
@@ -90,60 +77,23 @@ public sealed partial class NavScreen : BoxContainer
 
         var (_, worldRot, worldMatrix) = _xformSystem.GetWorldPositionRotationMatrix(gridXform);
         var worldPos = Vector2.Transform(gridBody.LocalCenter, worldMatrix);
+
+        // Get the positive reduced angle.
         var displayRot = -worldRot.Reduced();
+
+        GridPosition.Text = Loc.GetString("shuttle-console-position-value",
+            ("X", $"{worldPos.X:0.0}"),
+            ("Y", $"{worldPos.Y:0.0}"));
+        GridOrientation.Text = Loc.GetString("shuttle-console-orientation-value",
+            ("angle", $"{displayRot.Degrees:0.0}"));
+
         var gridVelocity = gridBody.LinearVelocity;
         gridVelocity = displayRot.RotateVec(gridVelocity);
-        //vanilla-station-skill-issue-start
-        if(_obscure)
-        {
-            GridPosition.Text = CorruptNumbers($"{worldPos.X:0.0}, {worldPos.Y:0.0}");
-            GridOrientation.Text = CorruptNumbers($"{displayRot.Degrees:0.0}");
-            GridLinearVelocity.Text = CorruptNumbers($"{gridVelocity.X + 10f * float.Epsilon:0.0}, {gridVelocity.Y + 10f * float.Epsilon:0.0}");
-            GridAngularVelocity.Text = CorruptNumbers($"{-gridBody.AngularVelocity + 10f * float.Epsilon:0.0}");
-            return;
-        }
-        //vanilla-station-skill-issue-end
-        GridPosition.Text = $"{worldPos.X:0.0}, {worldPos.Y:0.0}";
-        GridOrientation.Text = $"{displayRot.Degrees:0.0}";
-        GridLinearVelocity.Text = $"{gridVelocity.X + 10f * float.Epsilon:0.0}, {gridVelocity.Y + 10f * float.Epsilon:0.0}";
-        GridAngularVelocity.Text = $"{-gridBody.AngularVelocity + 10f * float.Epsilon:0.0}";
+        // Get linear velocity relative to the console entity
+        GridLinearVelocity.Text = Loc.GetString("shuttle-console-linear-velocity-value",
+            ("X", $"{gridVelocity.X + 10f * float.Epsilon:0.0}"),
+            ("Y", $"{gridVelocity.Y + 10f * float.Epsilon:0.0}"));
+        GridAngularVelocity.Text = Loc.GetString("shuttle-console-angular-velocity-value",
+            ("angularVelocity", $"{-MathHelper.RadiansToDegrees(gridBody.AngularVelocity) + 10f * float.Epsilon:0.0}"));
     }
-    //vanilla-station-skill-issue
-    public void CheckObscure()
-    {
-        var player = IoCManager.Resolve<IPlayerManager>().LocalPlayer;
-        if (player != null)
-        {
-            var userEntity = player.ControlledEntity;
-            if (userEntity != null 
-            && _entManager.TryGetComponent<RequiresSkillComponent>(_consoleEntity, out var requiresSkill)
-            && (!(_entManager.TryGetComponent<SkillComponent>(userEntity.Value, out var skillComponent) && skillComponent.PilotingLevel >= requiresSkill.RequiresPilotingLevelForCoord)))
-                _obscure = true;
-            else
-                _obscure = false;
-        }
-    }
-
-    //vanilla-station-skill-issue
-    public void ObscureToggleButtons()
-    {
-        if(_obscure)
-        {
-            NavSettingsLabel.Text = "#$%$&^%$@";
-            GridPositionLabel.Text = "!@@#$%^&:";
-            GridOrientationLabel.Text = "!^&*%$:";
-            NavDisplayLabel.Text = "Д№с%л%й";
-            GridLinearVelocityLabel.Text = "!^&*%$ @#$@:";
-            GridAngularVelocityLabel.Text = "!@#$%^ @#$@:";
-            DockToggle.Text = "!@#$ ?%^&*%$ *^%$%$#@@";
-            IFFToggle.Text = "!@#$ !@#$%^&*()^ *&^%$#";
-            IFFToggle.Disabled = true;
-            DockToggle.Disabled = true;
-            NavRadar.ShowIFF = false;
-            NavRadar.ShowDocks = false;
-        }
-    }
-
-
-
 }

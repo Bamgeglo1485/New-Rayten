@@ -14,6 +14,7 @@ using Robust.Client.Utility;
 using Robust.Shared.Enums;
 using Robust.Shared.Prototypes;
 using static Robust.Client.UserInterface.Controls.BaseButton;
+using Content.Shared.Vanilla.Skill;
 
 namespace Content.Client.Construction.UI
 {
@@ -334,11 +335,20 @@ namespace Content.Client.Construction.UI
         private void PopulateInfo(ConstructionPrototype prototype)
         {
             _constructionView.ClearRecipeInfo();
+            //Rayten-start
+            bool craftable = true;
+            var playerEntity = _playerManager.LocalPlayer?.ControlledEntity;
+            if (playerEntity != null && _entManager.TryGetComponent<SkillComponent>(playerEntity, out var skillComp))
+            {
+                craftable = (skillComp.InstrumentationLevel >= prototype.RequiresInstrumentationLevel) 
+                            &&  ( skillComp.BuildingLevel >= prototype.RequiresBuildingLevel );
+            }
+            //Rayten-end
 
             _constructionView.SetRecipeInfo(
                 prototype.Name, prototype.Description, _spriteSystem.Frame0(prototype.Icon),
                 prototype.Type != ConstructionType.Item,
-                !_favoritedRecipes.Contains(prototype));
+                !_favoritedRecipes.Contains(prototype),prototype.RequiresInstrumentationLevel, prototype.RequiresBuildingLevel, craftable);
 
             var stepList = _constructionView.RecipeStepList;
             GenerateStepList(prototype, stepList);

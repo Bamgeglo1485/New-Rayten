@@ -6,11 +6,6 @@ namespace Content.Shared.Voting;
 public enum StandardVoteType : byte
 {
     /// <summary>
-    /// Vote to ezmode
-    /// </summary>
-    Ezmode,
-
-    /// <summary>
     /// Vote to restart the round.
     /// </summary>
     Restart,

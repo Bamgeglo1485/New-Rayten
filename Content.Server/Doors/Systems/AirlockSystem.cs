@@ -7,12 +7,15 @@ using Content.Shared.Interaction;
 using Content.Shared.Power;
 using Content.Shared.Wires;
 using Robust.Shared.Player;
+using Content.Shared.Vanilla.Skill;//vanilla-skill
+using Content.Server.Vanilla.Skill;//vanilla-skill
 
 namespace Content.Server.Doors.Systems;
 
 public sealed class AirlockSystem : SharedAirlockSystem
 {
     [Dependency] private readonly WiresSystem _wiresSystem = default!;
+    [Dependency] private readonly RequiresSkillSystem _requiresSkillSystem = default!;
 
     public override void Initialize()
     {
@@ -73,18 +76,26 @@ public sealed class AirlockSystem : SharedAirlockSystem
         if (args.Handled || !args.Complex)
             return;
 
-        if (TryComp<WiresPanelComponent>(uid, out var panel) &&
-            panel.Open &&
-            TryComp<ActorComponent>(args.User, out var actor))
-        {
-            if (TryComp<WiresPanelSecurityComponent>(uid, out var wiresPanelSecurity) &&
-                !wiresPanelSecurity.WiresAccessible)
-                return;
+        // if (TryComp<WiresPanelComponent>(uid, out var panel) &&
+        //     panel.Open &&
+        //     TryComp<ActorComponent>(args.User, out var actor))
+        // {
+        //     if (TryComp<WiresPanelSecurityComponent>(uid, out var wiresPanelSecurity) &&
+        //         !wiresPanelSecurity.WiresAccessible)
+        //         return;
+                
+        //     //Rayten-Start
+        //     if (EntityManager.TryGetComponent<RequiresSkillComponent>(uid, out var requiresSkillComponent))
+        //     {
+        //         if(!_requiresSkillSystem.HasRequiredSkills(args.User, requiresSkillComponent, false))
+        //             return;
+        //     }
+        //     //Rayten-END
 
-            _wiresSystem.OpenUserInterface(uid, actor.PlayerSession);
-            args.Handled = true;
-            return;
-        }
+        //     _wiresSystem.OpenUserInterface(uid, actor.PlayerSession);
+        //     args.Handled = true;
+        //     return;
+        // }
 
         if (component.KeepOpenIfClicked && component.AutoClose)
         {
