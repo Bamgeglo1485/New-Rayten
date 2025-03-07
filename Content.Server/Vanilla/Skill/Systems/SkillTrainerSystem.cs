@@ -109,9 +109,6 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
                 _audio.PlayGlobal("/Audio/Vanilla/SkillSystem/levelup.ogg", player, audioParams: AudioParams.Default.WithVolume(-6f));
                 RaiseNetworkEvent(new UpdateCharacterSkillsRequestEvent(), Filter.SinglePlayer(player));
 
-                if (skillType == skillType.Chemistry)
-                    RaiseNetworkEvent(new UpdateChemicalVisualsOnClient(), Filter.SinglePlayer(player));
-
                 return true;
             }
             SetSkillExp(skillComp, skillType, exp);

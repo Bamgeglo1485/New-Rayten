@@ -13,11 +13,3 @@ public sealed class UseSkillPointEvent : EntityEventArgs
         skill = Skill;
     }
 }
-
-[Serializable, NetSerializable]
-public sealed class UpdateChemicalVisualsOnClient : EntityEventArgs
-{
-    public UpdateChemicalVisualsOnClient()
-    {
-    }
-}
