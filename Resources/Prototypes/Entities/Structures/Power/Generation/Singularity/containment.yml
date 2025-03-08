@@ -67,7 +67,10 @@
           True: { visible: true }
           False: { visible: false }
   - type: GuideHelp
-    guides: [ Singularity, Power ]
+    guides:
+    - SingularityTeslaEngine
+    - SingularityEngine
+    - Power
 
 
 - type: entity
@@ -102,6 +105,7 @@
     throwForce: 50
   - type: SyncSprite
   - type: GuideHelp
-    guides: [ Singularity, Power ]
-
-
+    guides:
+    - SingularityTeslaEngine
+    - SingularityEngine
+    - Power

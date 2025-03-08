@@ -948,3 +948,10 @@
   id: 65
   time: '2025-02-24T21:31:15.0000000+00:00'
   url: https://github.com/RaytenCorp/VanillaStation/pull/163
+- author: thefuckmybrain
+  changes:
+  - message: "\u041F\u0430\u0442\u0447 \u043D\u0430\u0432\u044B\u043A\u0438 v0.95.beta"
+    type: Add
+  id: 66
+  time: '2025-03-06T01:46:25.0000000+00:00'
+  url: https://github.com/RaytenCorp/VanillaStation/pull/164

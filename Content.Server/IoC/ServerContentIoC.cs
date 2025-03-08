@@ -83,6 +83,7 @@ namespace Content.Server.IoC
             IoCManager.Register<JoinQueueManager>(); // Corvax-Queue
             IoCManager.Register<IWatchlistWebhookManager, WatchlistWebhookManager>();
             IoCManager.Register<ConnectionManager>();
+            IoCManager.Register<MultiServerKickManager>();
         }
     }
 }

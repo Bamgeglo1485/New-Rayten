@@ -27,6 +27,9 @@
         Bureaucracy: false
       - type: AddSkillPoints
         Points: 1
+  - !type:GiveItemOnHolidaySpecial
+    holiday: BoxingDay
+    prototype: ClothingHandsGlovesBoxingRigged
 
 - type: startingGear
   id: BoxerGear

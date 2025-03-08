@@ -33,6 +33,9 @@
         Bureaucracy: true
       - type: AddSkillPoints
         Points: 1
+  - !type:GiveItemOnHolidaySpecial
+    holiday: DoctorDay
+    prototype: WehMedipen
 
 - type: startingGear
   id: DoctorGear

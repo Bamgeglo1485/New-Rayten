@@ -31,6 +31,9 @@
         Bureaucracy: true
       - type: AddSkillPoints
         Points: 1
+  - !type:GiveItemOnHolidaySpecial
+    holiday: FourTwenty
+    prototype: CannabisSeeds
 
 - type: startingGear
   id: BotanistGear

@@ -815,7 +815,7 @@
 - type: construction
   id: PressureControlledValve
   name: пневматический клапан
-  description: Клапан, регулируемый давлением.
+  description: Двухходовой клапан, управляемый давлением. Открывается, если давление в выходной трубе ниже давления в управляющей трубе на 101,325 кПа.
   graph: GasTrinary
   startNode: start
   targetNode: pneumaticvalve

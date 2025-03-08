@@ -26,8 +26,11 @@
         Botany: false
         Bureaucracy: true
       - type: AddSkillPoints
-        Points: 1
-        
+        Points: 1        
+  - !type:GiveItemOnHolidaySpecial
+    holiday: MonkeyDay
+    prototype: MonkeyCubeBox
+
 - type: startingGear
   id: ZookeeperGear
   equipment:

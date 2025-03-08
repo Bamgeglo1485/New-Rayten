@@ -576,6 +576,7 @@
   - type: Tag
     tags:
     - Wall
+    - Diagonal    
   - type: Sprite
     drawdepth: Walls
     sprite: Structures/Walls/plastitanium_diagonal.rsi
@@ -721,6 +722,9 @@
   components:
   - type: RequiresSkill
     RequiresBuildingLevel: 2
+  - type: Tag
+    tags:
+    - Diagonal
   - type: Sprite
     drawdepth: Walls
     sprite: Structures/Walls/reinforced_diagonal.rsi
@@ -871,6 +875,7 @@
   - type: Tag
     tags:
     - Wall
+    - Diagonal
   - type: Sprite
     drawdepth: Walls
     sprite: Structures/Walls/shuttle_diagonal.rsi
