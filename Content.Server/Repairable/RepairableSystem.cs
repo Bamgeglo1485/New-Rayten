@@ -34,27 +34,26 @@ namespace Content.Server.Repairable
 
             if (!EntityManager.TryGetComponent(uid, out DamageableComponent? damageable) || damageable.TotalDamage == 0)
                 return;
-
-            if (component.Damage != null)
-            {
-                var damageChanged = _damageableSystem.TryChangeDamage(uid, component.Damage, true, false, origin: args.User);
-                _adminLogger.Add(LogType.Healed, $"{ToPrettyString(args.User):user} repaired {ToPrettyString(uid):target} by {damageChanged?.GetTotal()}");
-            }
-
-            else
-            {
-                // Repair all damage
-                _damageableSystem.SetAllDamage(uid, damageable, 0);
-                _adminLogger.Add(LogType.Healed, $"{ToPrettyString(args.User):user} repaired {ToPrettyString(uid):target} back to full health");
-            }
             //vanilla-station-start
             TryComp<ActorComponent>(args.User, out var actor);
 
             if (!EntityManager.TryGetComponent<SkillComponent>(args.User, out var skillComp))
                 skillComp = EnsureComp<SkillComponent>(args.User);
 
-            _skillTrainerSystem.AddExperience(skillComp, skillType.Building, (int)damageable.TotalDamage / 10, player: actor?.PlayerSession);
+            _skillTrainerSystem.AddExperience(skillComp, skillType.Building, (int)damageable.TotalDamage / 5, player: actor?.PlayerSession);
             //vanilla-station-end
+            if (component.Damage != null)
+            {
+                var damageChanged = _damageableSystem.TryChangeDamage(uid, component.Damage, true, false, origin: args.User);
+                _adminLogger.Add(LogType.Healed, $"{ToPrettyString(args.User):user} repaired {ToPrettyString(uid):target} by {damageChanged?.GetTotal()}");
+            }
+            else
+            {
+                // Repair all damage
+                _damageableSystem.SetAllDamage(uid, damageable, 0);
+                _adminLogger.Add(LogType.Healed, $"{ToPrettyString(args.User):user} repaired {ToPrettyString(uid):target} back to full health");
+            }
+
             var str = Loc.GetString("comp-repairable-repair",
                 ("target", uid),
                 ("tool", args.Used!));

@@ -18,7 +18,6 @@ using Content.Shared.Weapons.Melee.Events;
 using Robust.Shared.Random;
 using Content.Shared.Verbs;
 using Robust.Shared.Utility;
-using Content.Shared.Vanilla.Skill;
 
 namespace Content.Server.Forensics
 {
@@ -285,14 +284,6 @@ namespace Content.Server.Forensics
         {
             if (HasComp<IgnoresFingerprintsComponent>(target))
                 return;
-            //Rayten-start
-            //Если у пользователя есть стелс - у него есть 50% шанс не оставить отпечатков при взаимодействии
-            if (TryComp<SkillComponent>(user, out var skill) && skill.Stealth)
-            {
-                if(_random.Prob(0.5f))
-                    return;
-            }
-            //Rayten-end
 
             var component = EnsureComp<ForensicsComponent>(target);
             if (_inventory.TryGetSlotEntity(user, "gloves", out var gloves))

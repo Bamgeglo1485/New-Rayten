@@ -146,9 +146,7 @@ public sealed class SkillAmnesiaSystem : EntitySystem
             (skillType.Piloting, inspectamensiableskill(skill, skillType.Piloting), () => skill.Piloting = false),
             (skillType.MusInstruments, inspectamensiableskill(skill, skillType.MusInstruments), () => skill.MusInstruments = false),
             (skillType.Botany, inspectamensiableskill(skill, skillType.Botany), () => skill.Botany = false),
-            (skillType.Bureaucracy, inspectamensiableskill(skill, skillType.Bureaucracy), () => skill.Bureaucracy = false),
-            (skillType.Thief, inspectamensiableskill(skill, skillType.Thief), () => skill.Thief = false),
-            (skillType.Stealth, inspectamensiableskill(skill, skillType.Stealth), () => skill.Stealth = false)
+            (skillType.Bureaucracy, inspectamensiableskill(skill, skillType.Bureaucracy), () => skill.Bureaucracy = false)
         };
     
         var nonZeroSkills = skillLevels.Where(s => s.amnesiable == true).ToList();
@@ -184,7 +182,5 @@ public sealed class SkillAmnesiaSystem : EntitySystem
         if (ignoredSkill != skillType.Botany) skill.BotanyExp = 0;
         if (ignoredSkill != skillType.MusInstruments) skill.MusInstrumentsExp = 0;
         if (ignoredSkill != skillType.Bureaucracy) skill.BureaucracyExp = 0;
-        if (ignoredSkill != skillType.Thief) skill.ThiefExp = 0;
-        if (ignoredSkill != skillType.Stealth) skill.StealthExp = 0;
     }
 }

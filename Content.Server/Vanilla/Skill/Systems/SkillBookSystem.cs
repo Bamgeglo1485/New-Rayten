@@ -71,14 +71,11 @@ public sealed class SkillBookSystem : EntitySystem
 
     private void StartDoAfter(EntityUid user, SkillBookComponent component, EntityUid uid,SkillComponent skillComp)
     {
-        float readtime = component.BaseReadTime - (int)skillComp.ResearchLevel * 1.5f;
-        readtime = readtime > 0 ? readtime : 0.5f;
-
         _audio.PlayPvs("/Audio/Vanilla/SkillSystem/bookpaperswish.ogg", user, AudioParams.Default.WithMaxDistance(2f));
         var doAfterArgs = new DoAfterArgs(
                                         EntityManager, 
                                         user, 
-                                        TimeSpan.FromSeconds(readtime), 
+                                        TimeSpan.FromSeconds(component.BaseReadTime), 
                                         new SkillBookEvent
                                         {
                                             SkillType = component.SkillType,
@@ -110,7 +107,7 @@ public sealed class SkillBookSystem : EntitySystem
 
             int exp = DecreaseSkillExpToLearn(SkillLearnerComp, args.SkillType, args.SkillIncreaseAmount);
 
-            if (!_skillTrainerSystem.AddExperience(skillComp, args.SkillType, exp, player: actor?.PlayerSession))
+            if (!_skillTrainerSystem.AddExperience(skillComp, args.SkillType, exp, player: actor?.PlayerSession, multiplyed: false))
             {
                 if (!(SkillLearnerComp.GetSkillExpToLearn(args.SkillType) <= 0 || skillComp.GetSkillLevel(args.SkillType) >= SkillLevel.Expert))
                 {

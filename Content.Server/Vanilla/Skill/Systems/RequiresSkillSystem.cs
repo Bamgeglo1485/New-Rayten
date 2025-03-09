@@ -150,16 +150,6 @@ public sealed class RequiresSkillSystem : SharedRequiresSkillSystem
             }
             return false;
         }
-        // Проверка уровня воровства
-        if (skillignore != skillType.Thief && !HasEasySkill(user, component.RequiresThief, skillComponent => skillComponent.Thief)){
-            if(popup)
-            {
-                _audio.PlayGlobal("/Audio/Vanilla/SkillSystem/meep-merp.ogg", session);
-                _popupSystem.PopupEntity(Loc.GetString("Skill-issue-easyskill-message-thief-unskilled"), user, user);
-            }
-            return false;
-        }
-
         
         return true;
     }

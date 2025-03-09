@@ -325,9 +325,7 @@ public sealed class CharacterUIController : UIController, IOnStateEntered<Gamepl
             (skillType.Piloting, false, 0),
             (skillType.Botany, false, 0),
             (skillType.MusInstruments, false, 0),
-            (skillType.Bureaucracy, false, 0),
-            (skillType.Thief, false, 0),
-            (skillType.Stealth, false, 0)
+            (skillType.Bureaucracy, false, 0)
         };
 
         if (EntityManager.TryGetComponent<SkillComponent>(user, out var skillComponent))
@@ -348,9 +346,7 @@ public sealed class CharacterUIController : UIController, IOnStateEntered<Gamepl
                 (skillType.Piloting, skillComponent.Piloting, skillComponent.PilotingExp),
                 (skillType.Botany, skillComponent.Botany, skillComponent.BotanyExp),
                 (skillType.MusInstruments, skillComponent.MusInstruments, skillComponent.MusInstrumentsExp),
-                (skillType.Bureaucracy, skillComponent.Bureaucracy, skillComponent.BureaucracyExp),
-                (skillType.Thief, skillComponent.Thief, skillComponent.ThiefExp),
-                (skillType.Stealth, skillComponent.Stealth, skillComponent.StealthExp)
+                (skillType.Bureaucracy, skillComponent.Bureaucracy, skillComponent.BureaucracyExp)
             };
             skillpoints = skillComponent.SkillPoints;
         }

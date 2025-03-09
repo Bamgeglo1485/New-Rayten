@@ -66,12 +66,6 @@ public abstract class SharedRequiresSkillSystem : EntitySystem
                 _popup.PopupClient(Loc.GetString("Skill-issue-easyskill-message-botany-unskilled"), user, user);
             return false;
         }
-        // Проверка уровня воровства
-        if (!HasEasySkill(user, component.RequiresThief, skillComponent => skillComponent.Thief)){
-            if(popup)
-                _popup.PopupClient(Loc.GetString("Skill-issue-easyskill-message-thief-unskilled"), user, user);
-            return false;
-        }
         
         return true;
     }
@@ -103,10 +97,6 @@ public abstract class SharedRequiresSkillSystem : EntitySystem
         }
         // Проверка уровня ботаники
         if (component.RequiresBotany && HasEasySkill(user, component.RequiresBotany, skillComponent => skillComponent.Botany)){
-            return true;
-        }
-        // Проверка уровня воровства
-        if (component.RequiresThief && HasEasySkill(user, component.RequiresThief, skillComponent => skillComponent.Thief)){
             return true;
         }
         return false;

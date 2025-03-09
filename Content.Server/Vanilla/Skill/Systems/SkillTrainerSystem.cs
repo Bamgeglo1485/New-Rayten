@@ -56,15 +56,20 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
 
     public bool AddExperience(SkillComponent skillComp, skillType skillType, int experienceAmount, bool multiplyed = true, ICommonSession? player = null)
     {
-        if (multiplyed && (int)skillComp.ResearchLevel == 3)
-            experienceAmount*=2;
+        if (multiplyed)
+        {
+            if((int)skillComp.ResearchLevel == 3)
+                experienceAmount*=3;
+
+            if((int)skillComp.ResearchLevel == 2)
+                experienceAmount*=2;
+        }
+
 
         if (skillType == skillType.Piloting 
         || skillType == skillType.MusInstruments 
         || skillType == skillType.Botany 
-        || skillType == skillType.Bureaucracy 
-        || skillType == skillType.Thief 
-        || skillType == skillType.Stealth) 
+        || skillType == skillType.Bureaucracy) 
         {
             bool? lvl = skillComp.GetEasySkill(skillType);
 
@@ -133,12 +138,6 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
                 break;
             case skillType.Bureaucracy:
                 skillComp.Bureaucracy = true;
-                break;
-            case skillType.Thief:
-                skillComp.Thief = true;
-                break;
-            case skillType.Stealth:
-                skillComp.Stealth = true;
                 break;
             default:
                 break;
@@ -221,12 +220,6 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
                 break;
             case skillType.Bureaucracy:
                 skillComp.BureaucracyExp = exp;
-                break;
-            case skillType.Thief:
-                skillComp.ThiefExp = exp;
-                break;
-            case skillType.Stealth:
-                skillComp.StealthExp = exp;
                 break;
             default:
                 break;
