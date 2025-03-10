@@ -8,6 +8,7 @@ using Robust.Shared.IoC;
 using Robust.Shared.Player;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Timing;
 using Content.Server.Vanilla.EventTeam;
 using Content.Server.Vanilla.Jammer;
 using System.Linq;
@@ -20,10 +21,13 @@ public sealed class CallEventTeamCommand : IConsoleCommand
     [Dependency] private readonly IAdminLogManager _adminLogger = default!;
     [Dependency] private readonly IEntitySystemManager _entitySystemManager = default!;
     [Dependency] private readonly IPrototypeManager _prototypes = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
     public string Command => "calleventteam";
     public string Description => "Вызвать отряд на станцию!";
     public string Help => "calleventteam";
 
+    private TimeSpan _cooldown = TimeSpan.FromSeconds(0);
+    private static readonly TimeSpan CooldownDuration = TimeSpan.FromSeconds(10);
     public void Execute(IConsoleShell shell, string argStr, string[] args)
     {
         var eventTeamSystem = _entitySystemManager.GetEntitySystem<EventTeamSystem>();
@@ -55,10 +59,19 @@ public sealed class CallEventTeamCommand : IConsoleCommand
             TimeSpan timetoremjammer = jammerSystem.CheckJammer();
             if(timetoremjammer != TimeSpan.Zero)
             {
-                shell.WriteLine($"Установлена глушилка! Будет снята через: {timetoremjammer}");
+                shell.WriteLine($"Установлена глушилка! Будет снята через: {(int)timetoremjammer.TotalMinutes} минут(ы) и {timetoremjammer.Seconds} секунд(ы)");
                 return;
             }
         }
+
+        if (_cooldown > _timing.CurTime)
+        {
+            TimeSpan remainingTime = _cooldown - _timing.CurTime;
+            shell.WriteLine($"Полегче ковбой! Кулдаун: {remainingTime.TotalSeconds:F1} сек.");
+            return;
+        }
+
+        _cooldown = _timing.CurTime + CooldownDuration;
 
         if(!eventTeamSystem.call(EventTeamId, ignoreJammer))
         {

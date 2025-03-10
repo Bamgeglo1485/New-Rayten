@@ -28,7 +28,7 @@ public sealed class JammerSystem : EntitySystem
 
     private void OnRoundEnd(RoundEndMessageEvent ev)
     {
-        RemoveJammer(true);
+        RemoveJammer();
     }
 
     private void NukeStartjammer(Entity<WarDeclaratorComponent> ent, ref MapInitEvent args)
@@ -55,18 +55,10 @@ public sealed class JammerSystem : EntitySystem
         _jammerEndTime = _timing.CurTime + jammerDuration;
     }
 
-    public void RemoveJammer(bool noert = false)
+    public void RemoveJammer()
     {
         _isJammerActive = false;
         _jammerEndTime = null;
-        if(noert)
-            return;
-        if(!_prototypes.TryIndex<EventTeamPrototype>(_ertproto, out _))
-        {
-            Logger.Error("ERT prototype is incorrect.");
-            return;
-        }
-        _eventteam.call(_ertproto);
     }
 
     public TimeSpan CheckJammer()

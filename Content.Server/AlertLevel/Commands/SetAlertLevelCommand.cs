@@ -74,8 +74,26 @@ namespace Content.Server.AlertLevel.Commands
                 shell.WriteLine(LocalizationManager.GetString("cmd-setalertlevel-invalid-level"));
                 return;
             }
+            // Ryaten-start
+            var entityManager = IoCManager.Resolve<IEntityManager>();
 
-            _entitySystems.GetEntitySystem<AlertLevelSystem>().SetLevel(stationUid.Value, level, true, true, true, locked);
+            if (!entityManager.TryGetComponent<AlertLevelComponent>(stationUid.Value, out var alertLevelComp) ||
+                alertLevelComp.AlertLevels?.Levels == null)
+                return;
+
+            if (!alertLevelComp.AlertLevels.Levels.TryGetValue(level, out var detail))
+                return;
+
+            if (detail?.Subcode == true)
+            {
+                _entitySystems.GetEntitySystem<AlertLevelSystem>().SetSubLevel(stationUid.Value, level, true, true, true, locked);
+            }
+            else
+            {
+                _entitySystems.GetEntitySystem<AlertLevelSystem>().SetLevel(stationUid.Value, level, true, true, true, locked);
+            }
+            // Ryaten-end
+
         }
 
         private string[] GetStationLevelNames(EntityUid station)
