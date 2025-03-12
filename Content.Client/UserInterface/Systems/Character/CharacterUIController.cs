@@ -317,7 +317,7 @@ public sealed class CharacterUIController : UIController, IOnStateEntered<Gamepl
             (skillType.Engineering, SkillLevel.None, 0),
             (skillType.Building, SkillLevel.None, 0),
             (skillType.Research, SkillLevel.None, 0),
-            (skillType.Instrumentation, SkillLevel.None, 0)
+            (skillType.Crime, SkillLevel.None, 0)
         };
 
         var easyskills = new List<(skillType Skill, bool have, int Experience)>
@@ -325,7 +325,8 @@ public sealed class CharacterUIController : UIController, IOnStateEntered<Gamepl
             (skillType.Piloting, false, 0),
             (skillType.Botany, false, 0),
             (skillType.MusInstruments, false, 0),
-            (skillType.Bureaucracy, false, 0)
+            (skillType.Bureaucracy, false, 0),
+            (skillType.Atmosphere, false, 0)
         };
 
         if (EntityManager.TryGetComponent<SkillComponent>(user, out var skillComponent))
@@ -339,14 +340,15 @@ public sealed class CharacterUIController : UIController, IOnStateEntered<Gamepl
                 (skillType.Engineering, skillComponent.EngineeringLevel, skillComponent.EngineeringExp),
                 (skillType.Building, skillComponent.BuildingLevel, skillComponent.BuildingExp),
                 (skillType.Research, skillComponent.ResearchLevel, skillComponent.ResearchExp),
-                (skillType.Instrumentation, skillComponent.InstrumentationLevel, skillComponent.InstrumentationExp)
+                (skillType.Crime, SkillLevel.None, 0)
             };
             easyskills = new List<(skillType Skill, bool have, int Experience)>
             {
                 (skillType.Piloting, skillComponent.Piloting, skillComponent.PilotingExp),
                 (skillType.Botany, skillComponent.Botany, skillComponent.BotanyExp),
                 (skillType.MusInstruments, skillComponent.MusInstruments, skillComponent.MusInstrumentsExp),
-                (skillType.Bureaucracy, skillComponent.Bureaucracy, skillComponent.BureaucracyExp)
+                (skillType.Bureaucracy, skillComponent.Bureaucracy, skillComponent.BureaucracyExp),
+                (skillType.Atmosphere, skillComponent.Atmosphere, skillComponent.AtmosphereExp)
             };
             skillpoints = skillComponent.SkillPoints;
         }

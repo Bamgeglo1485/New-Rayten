@@ -125,11 +125,29 @@ public sealed class SkillBookSystem : EntitySystem
         switch (skill)
         {
             case skillType.Piloting:
-
                 if(exp > skillComp.PilotingExpToLearn)
                     exp = skillComp.PilotingExpToLearn;
                 skillComp.PilotingExpToLearn -= exp;
-
+                break;
+            case skillType.Botany:
+                if(exp > skillComp.BotanyExpToLearn)
+                    exp = skillComp.BotanyExpToLearn;
+                skillComp.BotanyExpToLearn -= exp;
+                break;
+            case skillType.Bureaucracy:
+                if(exp > skillComp.BureaucracyExpToLearn)
+                    exp = skillComp.BureaucracyExpToLearn;
+                skillComp.BureaucracyExpToLearn -= exp;
+                break;
+            case skillType.MusInstruments:
+                if(exp > skillComp.MusInstrumentsExpToLearn)
+                    exp = skillComp.MusInstrumentsExpToLearn;
+                skillComp.MusInstrumentsExpToLearn -= exp;
+                break;
+            case skillType.Atmosphere:
+                if(exp > skillComp.AtmosphereExpToLearn)
+                    exp = skillComp.AtmosphereExpToLearn;
+                skillComp.AtmosphereExpToLearn -= exp;
                 break;
             case skillType.RangeWeapon:
                 if(exp > skillComp.RangeWeaponExpToLearn)
@@ -165,11 +183,6 @@ public sealed class SkillBookSystem : EntitySystem
                 if(exp > skillComp.ResearchExpToLearn)
                     exp = skillComp.ResearchExpToLearn;
                 skillComp.ResearchExpToLearn -= exp;
-                break;
-            case skillType.Instrumentation:
-                if(exp > skillComp.InstrumentationExpToLearn)
-                    exp = skillComp.InstrumentationExpToLearn;
-                skillComp.InstrumentationExpToLearn -= exp;
                 break;
             default:
                 break;

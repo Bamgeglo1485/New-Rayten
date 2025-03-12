@@ -22,8 +22,9 @@
                         <BoxContainer Orientation="Vertical">
                             <RichTextLabel Name="TargetName"/>
                             <RichTextLabel Name="TargetDesc"/>
-                            <RichTextLabel Name="ReqInstrumentation"/>
+                            <RichTextLabel Name="ReqEngineering"/>
                             <RichTextLabel Name="ReqBuilding"/>
+                            <RichTextLabel Name="ReqAtmosphere"/>
                         </BoxContainer>
                     </BoxContainer>
                 </BoxContainer>

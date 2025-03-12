@@ -74,7 +74,7 @@ public sealed class HealingSystem : EntitySystem
         if (!EntityManager.TryGetComponent<SkillComponent>(args.User, out var skillComp))
             skillComp = EnsureComp<SkillComponent>(args.User);
 
-        _skillTrainerSystem.AddExperience(skillComp, skillType.Medicine, 6, player: actor?.PlayerSession);
+        _skillTrainerSystem.AddExperience(skillComp, skillType.Medicine, 12, player: actor?.PlayerSession);
         //vanilla-station-end
 
         // Heal some bloodloss damage.

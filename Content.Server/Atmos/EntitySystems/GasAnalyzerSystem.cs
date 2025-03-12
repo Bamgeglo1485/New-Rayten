@@ -54,17 +54,16 @@ public sealed class GasAnalyzerSystem : EntitySystem
     /// </summary>
     private void OnAfterInteract(Entity<GasAnalyzerComponent> entity, ref AfterInteractEvent args)
     {
+        //vanilla-station-start
+        if (EntityManager.TryGetComponent<RequiresSkillComponent>(entity, out var RequiresSkillComp) && RequiresSkillComp != null)
+            if(!_requiresSkillSystem.HasRequiredSkills(args.User, RequiresSkillComp, false))
+                return;
+        //vanilla-station-end
         var target = args.Target;
         if (target != null && !_interactionSystem.InRangeUnobstructed((args.User, null), (target.Value, null)))
         {
             target = null; // if the target is out of reach, invalidate it
         }
-
-        //vanilla-station-start
-        if (target != null && EntityManager.TryGetComponent<RequiresSkillComponent>(entity, out var RequiresSkillComp) && RequiresSkillComp != null)
-            if(!_requiresSkillSystem.HasRequiredSkills(args.User, RequiresSkillComp, true))
-                return;
-        //vanilla-station-end
 
         // always run the analyzer, regardless of weather or not there is a target
         // since we can always show the local environment.
@@ -76,6 +75,11 @@ public sealed class GasAnalyzerSystem : EntitySystem
     /// </summary>
     private void OnUseInHand(Entity<GasAnalyzerComponent> entity, ref UseInHandEvent args)
     {
+        //vanilla-station-start
+        if (EntityManager.TryGetComponent<RequiresSkillComponent>(entity, out var RequiresSkillComp) && RequiresSkillComp != null)
+            if(!_requiresSkillSystem.HasRequiredSkills(args.User, RequiresSkillComp, false))
+                return;
+        //vanilla-station-end
         if (!entity.Comp.Enabled)
         {
             ActivateAnalyzer(entity, args.User);

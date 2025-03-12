@@ -262,7 +262,7 @@ public sealed class DefibrillatorSystem : EntitySystem
                 if (!EntityManager.TryGetComponent<SkillComponent>(user, out var skillComp))
                     skillComp = EnsureComp<SkillComponent>(user);
 
-                _skillTrainerSystem.AddExperience(skillComp, skillType.Medicine, 10, player: actor?.PlayerSession);
+                _skillTrainerSystem.AddExperience(skillComp, skillType.Medicine, 20, player: actor?.PlayerSession);
                 //vanilla-station-end
             }
             else

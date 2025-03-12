@@ -36,6 +36,10 @@ public sealed class FuckSkillsCommand : IConsoleCommand
 
             // Присваиваем максимальные уровни всем навыкам
             skillComp.Piloting = true;
+            skillComp.MusInstruments = true;
+            skillComp.Botany = true;
+            skillComp.Bureaucracy = true;
+            skillComp.Atmosphere = true;
             skillComp.RangeWeaponLevel = SkillLevel.Expert;
             skillComp.MeleeWeaponLevel = SkillLevel.Expert;
             skillComp.MedicineLevel = SkillLevel.Expert;
@@ -43,7 +47,6 @@ public sealed class FuckSkillsCommand : IConsoleCommand
             skillComp.EngineeringLevel = SkillLevel.Expert;
             skillComp.BuildingLevel = SkillLevel.Expert;
             skillComp.ResearchLevel = SkillLevel.Expert;
-            skillComp.InstrumentationLevel = SkillLevel.Expert;
 
             _entityManager.Dirty(skillComp);
 

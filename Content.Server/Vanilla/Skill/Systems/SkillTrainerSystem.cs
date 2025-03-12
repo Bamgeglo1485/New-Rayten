@@ -59,7 +59,7 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
         if (multiplyed)
         {
             if((int)skillComp.ResearchLevel == 3)
-                experienceAmount*=3;
+                experienceAmount*=4;
 
             if((int)skillComp.ResearchLevel == 2)
                 experienceAmount*=2;
@@ -69,7 +69,9 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
         if (skillType == skillType.Piloting 
         || skillType == skillType.MusInstruments 
         || skillType == skillType.Botany 
-        || skillType == skillType.Bureaucracy) 
+        || skillType == skillType.Bureaucracy
+        || skillType == skillType.Atmosphere       
+        ) 
         {
             bool? lvl = skillComp.GetEasySkill(skillType);
 
@@ -139,6 +141,9 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
             case skillType.Bureaucracy:
                 skillComp.Bureaucracy = true;
                 break;
+            case skillType.Atmosphere:
+                skillComp.Atmosphere = true;
+                break;
             default:
                 break;
         }
@@ -170,8 +175,6 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
             case skillType.Research:
                 skillComp.ResearchLevel = level;
                 break;
-            case skillType.Instrumentation:
-                skillComp.InstrumentationLevel = level;
                 break;
             default:
                 break;
@@ -209,9 +212,6 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
             case skillType.Research:
                 skillComp.ResearchExp = exp;
                 break;
-            case skillType.Instrumentation:
-                skillComp.InstrumentationExp = exp;
-                break;
             case skillType.Botany:
                 skillComp.BotanyExp = exp;
                 break;
@@ -220,6 +220,9 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
                 break;
             case skillType.Bureaucracy:
                 skillComp.BureaucracyExp = exp;
+                break;
+            case skillType.Atmosphere:
+                skillComp.AtmosphereExp = exp;
                 break;
             default:
                 break;

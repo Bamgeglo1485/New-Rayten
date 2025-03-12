@@ -66,7 +66,7 @@ public sealed partial class SkillControl : Control
         ExpLabel.SetMessage(Expmessage);
 
         MainButton.OnPressed += _ => OnPressed?.Invoke();
-        MainButton.Disabled = !haveskillpoint || _lvl == 3 ;
+        MainButton.Disabled = !haveskillpoint || _lvl == 3 || SkillName == skillType.Crime;
         MainButton.ToolTip = Loc.GetString($"skill-system-UI-Tooltip-{SkillName.ToString()}");
         
     }

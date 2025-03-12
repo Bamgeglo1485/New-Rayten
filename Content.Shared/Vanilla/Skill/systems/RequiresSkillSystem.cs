@@ -66,7 +66,12 @@ public abstract class SharedRequiresSkillSystem : EntitySystem
                 _popup.PopupClient(Loc.GetString("Skill-issue-easyskill-message-botany-unskilled"), user, user);
             return false;
         }
-        
+        // Проверка уровня Атмосферы
+        if (!HasEasySkill(user, component.RequiresAtmosphere, skillComponent => skillComponent.Atmosphere)){
+            if(popup)
+                _popup.PopupClient(Loc.GetString("Skill-issue-easyskill-message-atmosphere-unskilled"), user, user);
+            return false;
+        }
         return true;
     }
     public bool HasAnyOfRequiredSkills(EntityUid user, RequiresSkillComponent component)
@@ -99,15 +104,19 @@ public abstract class SharedRequiresSkillSystem : EntitySystem
         if (component.RequiresBotany && HasEasySkill(user, component.RequiresBotany, skillComponent => skillComponent.Botany)){
             return true;
         }
+        // Проверка уровня атмосферы
+        if (component.RequiresAtmosphere && HasEasySkill(user, component.RequiresAtmosphere, skillComponent => skillComponent.Atmosphere)){
+            return true;
+        }
         return false;
     }
 
     public bool HasRequiredSkillsForCraft(EntityUid user, RequiresSkillComponent component, bool popup = false)
     {
-        // Проверка уровня Приборостроения
-        if (!HasSkillLevel(user, component.RequiresInstrumentationLevel, skillComponent => skillComponent.InstrumentationLevel)){
+        // Проверка уровня Инженерии
+        if (!HasSkillLevel(user, component.RequiresEngineeringLevel, skillComponent => skillComponent.EngineeringLevel)){
             if(popup)
-                _popup.PopupClient(Loc.GetString("Skill-issue-message-instrumentation-unskilled", ("lvl", (int)component.RequiresInstrumentationLevel)), user, user);
+                _popup.PopupClient(Loc.GetString("Skill-issue-message-engineering-unskilled", ("lvl", (int)component.RequiresEngineeringLevel)), user, user);
             return false;
         }
         // Проверка уровня Строительства
@@ -116,6 +125,14 @@ public abstract class SharedRequiresSkillSystem : EntitySystem
                 _popup.PopupClient(Loc.GetString("Skill-issue-message-building-unskilled", ("lvl", (int)component.RequiresBuildingLevel)), user, user);
             return false;
         }
+        // Проверка уровня атмосферы
+        if (!HasEasySkill(user, component.RequiresAtmosphere, skillComponent => skillComponent.Atmosphere)){
+            if(popup)
+            {
+                _popup.PopupEntity(Loc.GetString("Skill-issue-easyskill-message-atmosphere-unskilled"), user, user);
+            }
+            return false;
+        }  
         return true;
     }
     

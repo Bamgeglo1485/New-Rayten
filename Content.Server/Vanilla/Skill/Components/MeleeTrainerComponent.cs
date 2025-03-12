@@ -8,7 +8,7 @@ namespace Content.Server.Vanilla.Skill;
 public sealed partial class MeleeTrainerComponent : Component
 {
     [DataField("ExpPerHit")]
-    public int ExpPerHit { get; set; } = 1;
+    public int ExpPerHit { get; set; } = 3;
 
     [DataField("skillType")]
     public skillType SkillType { get; set; } = skillType.MeleeWeapon;

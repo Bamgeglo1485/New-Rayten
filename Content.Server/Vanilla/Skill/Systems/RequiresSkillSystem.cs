@@ -150,7 +150,15 @@ public sealed class RequiresSkillSystem : SharedRequiresSkillSystem
             }
             return false;
         }
-        
+        // Проверка уровня атмосферы
+        if (skillignore != skillType.Atmosphere && !HasEasySkill(user, component.RequiresAtmosphere, skillComponent => skillComponent.Atmosphere)){
+            if(popup)
+            {
+                _audio.PlayGlobal("/Audio/Vanilla/SkillSystem/meep-merp.ogg", session);
+                _popupSystem.PopupEntity(Loc.GetString("Skill-issue-easyskill-message-atmosphere-unskilled"), user, user);
+            }
+            return false;
+        }
         return true;
     }
 
@@ -163,15 +171,6 @@ public sealed class RequiresSkillSystem : SharedRequiresSkillSystem
             return false;
         var session = actor.PlayerSession;
 
-        // Проверка уровня Приборостроения
-        if (!HasSkillLevel(user, component.RequiresInstrumentationLevel, skillComponent => skillComponent.InstrumentationLevel)){
-            if(popup)
-            {
-                _audio.PlayGlobal("/Audio/Vanilla/SkillSystem/meep-merp.ogg", session);
-                _popupSystem.PopupEntity(Loc.GetString("Skill-issue-message-instrumentation-unskilled", ("lvl", (int)component.RequiresInstrumentationLevel)), user, user);
-            }
-            return false;
-        }
         // Проверка уровня Строительства
         if (!HasSkillLevel(user, component.RequiresBuildingLevel, skillComponent => skillComponent.BuildingLevel)){
             if(popup)
@@ -181,6 +180,24 @@ public sealed class RequiresSkillSystem : SharedRequiresSkillSystem
             }
             return false;
         }
+        // Проверка уровня инженерии
+        if (!HasSkillLevel(user, component.RequiresEngineeringLevel, skillComponent => skillComponent.EngineeringLevel)){
+            if(popup)
+            {
+                _audio.PlayGlobal("/Audio/Vanilla/SkillSystem/meep-merp.ogg", session);
+                _popupSystem.PopupEntity(Loc.GetString("Skill-issue-message-engineering-unskilled", ("lvl", (int)component.RequiresEngineeringLevel)), user, user);
+            }
+            return false;
+        }  
+        // Проверка уровня атмосферы
+        if (!HasEasySkill(user, component.RequiresAtmosphere, skillComponent => skillComponent.Atmosphere)){
+            if(popup)
+            {
+                _audio.PlayGlobal("/Audio/Vanilla/SkillSystem/meep-merp.ogg", session);
+                _popupSystem.PopupEntity(Loc.GetString("Skill-issue-easyskill-message-atmosphere-unskilled"), user, user);
+            }
+            return false;
+        }  
         return true;
     }
 
