@@ -142,7 +142,7 @@ entities:
     - type: Transform
       rot: 6.283185307179586 rad
       pos: 189.63681,-655.7612
-      parent: 52
+      parent: invalid
     - type: MapGrid
       chunks:
         0,0:
