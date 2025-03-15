@@ -186085,34 +186085,6 @@ entities:
           ent: 30304
     - type: ApcPowerReceiver
       powerLoad: 0
-- proto: PrinterDoc
-  entities:
-  - uid: 1300
-    components:
-    - type: Transform
-      pos: 7.5,8.5
-      parent: 2
-  - uid: 6222
-    components:
-    - type: Transform
-      pos: -57.5,17.5
-      parent: 2
-  - uid: 7320
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: -70.5,3.5
-      parent: 2
-  - uid: 8358
-    components:
-    - type: Transform
-      pos: -49.5,-32.5
-      parent: 2
-  - uid: 10559
-    components:
-    - type: Transform
-      pos: -6.5,-17.5
-      parent: 2
 - proto: Protolathe
   entities:
   - uid: 14903

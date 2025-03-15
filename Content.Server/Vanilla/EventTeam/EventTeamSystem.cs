@@ -7,26 +7,25 @@ using Content.Server.Vanilla.Jammer;
 using Content.Shared.GameTicking;
 using Content.Shared.Ghost.Roles.Components;
 using Content.Shared.Storage;
-using Robust.Server.Maps;
 using Robust.Server.Player;
 using Robust.Server.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Serialization.Manager;
-
+using Robust.Shared.EntitySerialization;
+using Robust.Shared.EntitySerialization.Systems;
+using Robust.Shared.Map.Components;
+using Robust.Shared.Utility;
 using System.Linq;
-
-
-
-
+using System.Numerics;
 namespace Content.Server.Vanilla.EventTeam;
 
 public sealed class EventTeamSystem : EntitySystem
 {
     [Dependency] private readonly IPrototypeManager _prototypes = default!;
     [Dependency] private readonly IPlayerManager _playerManager = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
+    [Dependency] private readonly MapSystem _mapsystem = default!;
     [Dependency] private readonly GameTicker _gameTicker = default!;
     [Dependency] private readonly MapLoaderSystem _map = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
@@ -62,13 +61,14 @@ public sealed class EventTeamSystem : EntitySystem
 
     private EntityUid? SpawnShuttle(string shuttlePath)
     {
-        var shuttleMap = _mapManager.CreateMap();
-        var options = new MapLoadOptions {LoadMap = true};
-
-        if (!_map.TryLoad(shuttleMap, shuttlePath, out var grids, options))
+        _mapsystem.CreateMap(out var mapId);
+        var opts = DeserializationOptions.Default with {InitializeMaps = true};
+        if (!_map.TryLoadGrid(mapId, new ResPath(shuttlePath), out var grid, opts))
+        {
             return null;
+        }
 
-        return grids.FirstOrDefault();
+        return grid;
     }
 
     private void SpawnEventRoles(EventTeamPrototype proto, EntityUid shuttle)

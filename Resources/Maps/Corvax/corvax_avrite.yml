@@ -13279,7 +13279,6 @@ entities:
             9107: 118,-60
             9111: 119,-60
             9115: 120,-60
-            9117: 121,-60
             9121: 122,-60
         - node:
             zIndex: 90
@@ -194865,7 +194864,6 @@ entities:
           occludes: True
           ents:
           - 6521
-          - 9117
           - 10384
           - 10387
           - 10388
@@ -329347,50 +329345,6 @@ entities:
     - type: Transform
       pos: -89.740776,26.453178
       parent: 2
-- proto: PrinterDoc
-  entities:
-  - uid: 4670
-    components:
-    - type: Transform
-      pos: 69.5,11.5
-      parent: 2
-  - uid: 7555
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -5.5,-3.5
-      parent: 2
-  - uid: 7945
-    components:
-    - type: Transform
-      pos: 59.5,4.5
-      parent: 2
-  - uid: 7979
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: -24.5,-19.5
-      parent: 2
-  - uid: 9863
-    components:
-    - type: Transform
-      pos: -14.5,41.5
-      parent: 2
-  - uid: 9919
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 0.5,58.5
-      parent: 2
-- proto: PrinterDocMachineCircuitboard
-  entities:
-  - uid: 9117
-    components:
-    - type: Transform
-      parent: 6421
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
 - proto: Protolathe
   entities:
   - uid: 3864

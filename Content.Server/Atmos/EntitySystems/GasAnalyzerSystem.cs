@@ -80,14 +80,13 @@ public sealed class GasAnalyzerSystem : EntitySystem
             if(!_requiresSkillSystem.HasRequiredSkills(args.User, RequiresSkillComp, false))
                 return;
         //vanilla-station-end
+        // Not checking for Handled because ActivatableUISystem already marks it as such.
+
         if (!entity.Comp.Enabled)
-        {
             ActivateAnalyzer(entity, args.User);
-        }
         else
-        {
             DisableAnalyzer(entity, args.User);
-        }
+
         args.Handled = true;
     }
     /// <summary>

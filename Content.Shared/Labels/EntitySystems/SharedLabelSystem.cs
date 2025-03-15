@@ -37,6 +37,9 @@ public abstract partial class SharedLabelSystem : EntitySystem
         if (!Resolve(uid, ref label))
             return;
 
+        if (!label.Examinable)
+            return;
+
         if (label.CurrentLabel == null)
             return;
 
