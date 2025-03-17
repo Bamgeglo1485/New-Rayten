@@ -36,10 +36,10 @@ public sealed class DepartmentGoalSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<RoundStartingEvent>(OnRoundStarting);
+        SubscribeLocalEvent<RoundStartedEvent>(OnRoundStarting);
     }
     #region отправка целей
-    private void OnRoundStarting(RoundStartingEvent ev)
+    private void OnRoundStarting(RoundStartedEvent ev)
     {
         // Очистка старых данных
         _depGoals.Clear();
