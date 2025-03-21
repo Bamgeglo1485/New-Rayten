@@ -94,7 +94,19 @@ public abstract partial class SharedToolSystem : EntitySystem
         if (tool.UseSound == null)
             return;
 
-        _audioSystem.PlayPredicted(tool.UseSound, uid, user);
+        if(user == null)
+        {
+            _audioSystem.PlayPredicted(tool.UseSound, uid, user);
+            return;
+        }
+
+        var newvolume = (TryComp<SkillComponent>(user.Value, out var skillComp) && (int)skillComp.CrimeLevel > 0) ? -6.0f  : tool.UseSound.Params.Volume;
+
+        var audioParams = tool.UseSound.Params
+            .WithVolume(newvolume)
+            .WithVariation(tool.UseSound.Params.Variation);
+
+        _audioSystem.PlayPredicted(tool.UseSound, uid, user, audioParams);
     }
 
     /// <summary>

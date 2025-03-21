@@ -2828,7 +2828,7 @@ entities:
       pos: 4.5,-4.5
       parent: 41669
     - type: WarpPoint
-      location: Шаттл ОБР M0-R
+      location: Шаттл эскадрона смерти Silencer
 - proto: WeaponCapacitorRecharger
   entities:
   - uid: 41967

@@ -34,7 +34,7 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Replays;
 using Robust.Shared.Utility;
-
+using Content.Shared.Vanilla.Skill;
 namespace Content.Server.Chat.Systems;
 
 // TODO refactor whatever active warzone this class and chatmanager have become
@@ -66,6 +66,7 @@ public sealed partial class ChatSystem : SharedChatSystem
     // public const int WhisperClearRange = 2; // how far whisper goes while still being understandable, in world units
     // public const int WhisperMuffledRange = 5; // how far whisper goes at all, in world units
     // Corvax-TTS-End
+    public const int SkillWhisperMuffledRange = 2;
     public const string DefaultAnnouncementSound = "/Audio/Corvax/Announcements/announce.ogg"; // Corvax-Announcements
     public const string CentComAnnouncementSound = "/Audio/Corvax/Announcements/centcomm.ogg"; // Corvax-Announcements
 
@@ -528,8 +529,9 @@ public sealed partial class ChatSystem : SharedChatSystem
         var wrappedUnknownMessage = Loc.GetString("chat-manager-entity-whisper-unknown-wrap-message",
             ("message", FormattedMessage.EscapeText(obfuscatedMessage)));
 
+        int rangewithskill = (TryComp<SkillComponent>(source, out var skill) && skill.CrimeLevel > 0) ? SkillWhisperMuffledRange : WhisperMuffledRange;
 
-        foreach (var (session, data) in GetRecipients(source, WhisperMuffledRange))
+        foreach (var (session, data) in GetRecipients(source, rangewithskill))
         {
             EntityUid listener;
 
@@ -543,7 +545,7 @@ public sealed partial class ChatSystem : SharedChatSystem
             if (data.Range <= WhisperClearRange)
                 _chatManager.ChatMessageToOne(ChatChannel.Whisper, message, wrappedMessage, source, false, session.Channel);
             //If listener is too far, they only hear fragments of the message
-            else if (_examineSystem.InRangeUnOccluded(source, listener, WhisperMuffledRange))
+            else if (_examineSystem.InRangeUnOccluded(source, listener, rangewithskill))
                 _chatManager.ChatMessageToOne(ChatChannel.Whisper, obfuscatedMessage, wrappedobfuscatedMessage, source, false, session.Channel);
             //If listener is too far and has no line of sight, they can't identify the whisperer's identity
             else

@@ -184,6 +184,11 @@ public sealed class SkillBookSystem : EntitySystem
                     exp = skillComp.ResearchExpToLearn;
                 skillComp.ResearchExpToLearn -= exp;
                 break;
+            case skillType.Crime:
+                if(exp > skillComp.CrimeExpToLearn)
+                    exp = skillComp.CrimeExpToLearn;
+                skillComp.CrimeExpToLearn -= exp;
+                break;
             default:
                 break;
         }

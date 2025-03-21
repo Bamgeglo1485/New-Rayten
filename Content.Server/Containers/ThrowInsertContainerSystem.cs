@@ -5,7 +5,7 @@ using Content.Shared.Throwing;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
 using Robust.Shared.Random;
-
+using Content.Shared.Vanilla.Skill;
 namespace Content.Server.Containers;
 
 public sealed class ThrowInsertContainerSystem : EntitySystem
@@ -35,14 +35,17 @@ public sealed class ThrowInsertContainerSystem : EntitySystem
 
         if (beforeThrowArgs.Cancelled)
             return;
-
-        if (_random.Prob(ent.Comp.Probability))
-        {
-            _audio.PlayPvs(ent.Comp.MissSound, ent);
-            _popup.PopupEntity(Loc.GetString(ent.Comp.MissLocString), ent);
-            return;
+        //Rayten-start
+        //Если у кидающей сущности есть экспертный уровень стрельбы - бросаем кубики
+        if( !( args.Component.Thrower!=null && TryComp<SkillComponent>(args.Component.Thrower.Value, out var skill) && skill.RangeWeaponLevel == SkillLevel.Expert) ){
+            if (_random.Prob(ent.Comp.Probability))
+            {
+                _audio.PlayPvs(ent.Comp.MissSound, ent);
+                _popup.PopupEntity(Loc.GetString(ent.Comp.MissLocString), ent);
+                return;
+            }
         }
-
+        //Rayten-end
         if (!_containerSystem.Insert(args.Thrown, container))
             throw new InvalidOperationException("Container insertion failed but CanInsert returned true");
 
