@@ -25,7 +25,9 @@ using Robust.Shared.Timing;
 using Content.Server.Vanilla.Skill;
 using Content.Shared.Vanilla.Skill;
 using Content.Server.Labels.Components;
+using Content.Shared.Administration.Logs;
 using Content.Shared.Containers.ItemSlots;
+using Content.Shared.Database;
 
 namespace Content.Server.Botany.Systems;
 
@@ -45,6 +47,7 @@ public sealed class PlantHolderSystem : EntitySystem
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly RequiresSkillSystem _requiresSkillSystem = default!;
     [Dependency] private readonly ItemSlotsSystem _itemSlots = default!;
+    [Dependency] private readonly ISharedAdminLogManager _adminLogger = default!;
 
 
     public const float HydroponicsSpeedMultiplier = 1f;
@@ -190,6 +193,9 @@ public sealed class PlantHolderSystem : EntitySystem
 
                 CheckLevelSanity(uid, component);
                 UpdateSprite(uid, component);
+
+                if (seed.PlantLogImpact != null)
+                    _adminLogger.Add(LogType.Botany, seed.PlantLogImpact.Value, $"{ToPrettyString(args.User):player} planted  {Loc.GetString(seed.Name):seed} at Pos:{Transform(uid).Coordinates}.");
 
                 return;
             }
