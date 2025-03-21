@@ -38,6 +38,9 @@ public sealed partial class SkillLearnerComponent : Component
     //Исследования
     [DataField("ResearchExpToLearn"), AutoNetworkedField]
     public int ResearchExpToLearn { get; set; } = 600;
+    //Преступность
+    [DataField("CrimeExpToLearn"), AutoNetworkedField]
+    public int CrimeExpToLearn { get; set; } = 600;
 
     //Ботаника
     [DataField("BotanyExpToLearn"), AutoNetworkedField]
@@ -68,6 +71,7 @@ public sealed partial class SkillLearnerComponent : Component
             skillType.Research => ResearchExpToLearn,
             skillType.Building => BuildingExpToLearn,
             skillType.Engineering => EngineeringExpToLearn,
+            skillType.Crime => CrimeExpToLearn,
             skillType.Botany => BotanyExpToLearn,
             skillType.Bureaucracy => BureaucracyExpToLearn,
             skillType.MusInstruments => MusInstrumentsExpToLearn,

@@ -340,7 +340,7 @@ public sealed class CharacterUIController : UIController, IOnStateEntered<Gamepl
                 (skillType.Engineering, skillComponent.EngineeringLevel, skillComponent.EngineeringExp),
                 (skillType.Building, skillComponent.BuildingLevel, skillComponent.BuildingExp),
                 (skillType.Research, skillComponent.ResearchLevel, skillComponent.ResearchExp),
-                (skillType.Crime, SkillLevel.None, 0)
+                (skillType.Crime, skillComponent.CrimeLevel, skillComponent.CrimeExp)
             };
             easyskills = new List<(skillType Skill, bool have, int Experience)>
             {
