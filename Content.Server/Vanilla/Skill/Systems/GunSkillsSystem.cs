@@ -14,6 +14,7 @@ using Robust.Shared.Audio.Systems;
 using Robust.Shared.Random;
 using Robust.Shared.Audio;
 using Robust.Shared.Player;
+using Content.Shared.Projectiles;
 
 namespace Content.Server.Vanilla.Skill;
 
@@ -30,8 +31,37 @@ public sealed class GunSkillsSystem : EntitySystem
         base.Initialize();
         SubscribeLocalEvent<GunComponent, GotEquippedHandEvent>(OnHandPickUp);//обновляет модификаторы при взятии оружия в руки
         SubscribeLocalEvent<GunComponent, GunRefreshModifiersEvent>(OnGunRefreshModifiers);//перегрузка обновления модификаторов
-        SubscribeLocalEvent<GunTrainerComponent, GunShotEvent>(RangeWeaponTrainOnShoot);//прокачка навыка при стрельбе
         SubscribeLocalEvent<GunCanBeFallComponent, GunShotEvent>(RangeWeaponFalldownOnShoot);//выпадение оружия при стрельбе
+        SubscribeLocalEvent<ProjectileComponent, ProjectileHitEvent>(TrainOnShoot);
+        
+    }
+
+    private void TrainOnShoot(EntityUid uid, ProjectileComponent component, ref ProjectileHitEvent args)
+    {
+        if(args.Shooter == null)
+            return;
+
+        if(HasComp<ActorComponent>(args.Target) || HasComp<GunTrainerComponent>(args.Target))
+        {
+
+            TryComp<ActorComponent>(args.Shooter.Value, out var actor);
+
+            if (!EntityManager.TryGetComponent<SkillComponent>(args.Shooter.Value, out var skillComp))
+                skillComp = EnsureComp<SkillComponent>(args.Shooter.Value);
+
+            if(_skillTrainerSystem.AddExperience(skillComp, skillType.RangeWeapon, (int)component.Damage.GetTotal(), player: actor?.PlayerSession))
+            {
+                if(component.Weapon == null)
+                    return;
+
+                if(TryComp<UnskilledWeaponComponent>(component.Weapon.Value, out var unskilledComp))
+                {
+                    UnskilledWeaponRefreshModifiers(skillComp, unskilledComp);
+                    _gun.RefreshModifiers(component.Weapon.Value);
+                }
+            }
+
+        }
     }
 
     private void OnHandPickUp(EntityUid uid, GunComponent gunComp, GotEquippedHandEvent args)
@@ -60,17 +90,17 @@ public sealed class GunSkillsSystem : EntitySystem
             case SkillLevel.None:
                 unskilledComp.MinAnglePenalty = Angle.FromDegrees(60);
                 unskilledComp.MaxAnglePenalty = Angle.FromDegrees(150);
-                unskilledComp.AngleIncreasePenalty = Angle.FromDegrees(18);
+                unskilledComp.AngleIncreasePenalty = Angle.FromDegrees(15);
                 break;
             case SkillLevel.Basic:
-                unskilledComp.MinAnglePenalty = Angle.FromDegrees(15);
+                unskilledComp.MinAnglePenalty = Angle.FromDegrees(0);
                 unskilledComp.MaxAnglePenalty = Angle.FromDegrees(100);
-                unskilledComp.AngleIncreasePenalty = Angle.FromDegrees(12);
+                unskilledComp.AngleIncreasePenalty = Angle.FromDegrees(10);
                 break;
             case SkillLevel.Advanced:
                 unskilledComp.MinAnglePenalty = Angle.FromDegrees(0);
-                unskilledComp.MaxAnglePenalty = Angle.FromDegrees(40);
-                unskilledComp.AngleIncreasePenalty = Angle.FromDegrees(3);
+                unskilledComp.MaxAnglePenalty = Angle.FromDegrees(50);
+                unskilledComp.AngleIncreasePenalty = Angle.FromDegrees(5);
                 break;
             case SkillLevel.Expert:
                 unskilledComp.MinAnglePenalty = Angle.FromDegrees(0);
@@ -127,22 +157,4 @@ public sealed class GunSkillsSystem : EntitySystem
         }
     }
 
-
-    private void RangeWeaponTrainOnShoot(EntityUid uid, GunTrainerComponent component, GunShotEvent args)
-    {
-        if (HasComp<GunIgnoreSkillComponent>(uid))
-            return;
-
-        TryComp<ActorComponent>(args.User, out var actor);
-
-        if (!TryComp<SkillComponent>(args.User, out var skillComp))
-            skillComp = EnsureComp<SkillComponent>(args.User);
-
-        if (_skillTrainerSystem.AddExperience(skillComp, component.SkillType, component.ExpPerShot, player: actor?.PlayerSession))
-        {
-            if (TryComp<UnskilledWeaponComponent>(uid, out var unskilledComp))
-                UnskilledWeaponRefreshModifiers(skillComp, unskilledComp);
-            _gun.RefreshModifiers(uid);
-        }
-    }
 }
