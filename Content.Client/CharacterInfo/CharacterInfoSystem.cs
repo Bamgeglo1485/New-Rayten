@@ -4,6 +4,7 @@ using Content.Shared.Vanilla.Skill;
 using Robust.Client.Player;
 using Robust.Client.UserInterface;
 using Content.Shared.Vanilla.Skill;
+using Content.Client.Vanilla.Skill;
 
 namespace Content.Client.CharacterInfo;
 
@@ -17,7 +18,7 @@ public sealed class CharacterInfoSystem : EntitySystem
     {
         base.Initialize();
         SubscribeNetworkEvent<CharacterInfoEvent>(OnCharacterInfoEvent);
-        SubscribeNetworkEvent<UpdateCharacterSkillsRequestEvent>(onskillupdateUIEvent);
+        SubscribeLocalEvent<UpdateSkillUiEvent>(onskillupdateUIEvent);
     }
 
     public void RequestCharacterInfo()
@@ -42,7 +43,7 @@ public sealed class CharacterInfoSystem : EntitySystem
 
         OnCharacterUpdate?.Invoke(data);
     }
-    private void onskillupdateUIEvent(UpdateCharacterSkillsRequestEvent msg, EntitySessionEventArgs args)
+    private void onskillupdateUIEvent(UpdateSkillUiEvent args)
     {
         var player = _players.LocalEntity;
         if (player != null)

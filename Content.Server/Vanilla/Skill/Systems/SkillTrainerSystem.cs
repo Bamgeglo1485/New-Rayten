@@ -3,16 +3,12 @@ using Content.Shared.SkillTrainer;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Popups;
 using Robust.Shared.GameObjects;
-using Robust.Shared.Audio.Systems;
-using Robust.Shared.Audio;
 using Robust.Shared.Network;
-using Robust.Shared.Player;
 
 namespace Content.Server.SkillTrainer;
 
 public sealed class ServerSkillTrainerSystem : EntitySystem
 {
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
 
     const int _EXPERIENCEFROMSKILLPOINT = 600;
     const int _EXPERIENCETONEWLVL = 600;
@@ -35,15 +31,15 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
             return;
 
         //проверка если нам ваще гавно какое-то пришло которое невозможно никак определить
-        if (skillComp.GetSkillLevel(msg.skill)==null && skillComp.GetEasySkill(msg.skill)==null)
+        if (skillComp.GetSkillLevel(msg.skill) == null && skillComp.GetEasySkill(msg.skill) == null)
             return;
 
         //проверка основных скилов
-        if (skillComp.GetSkillLevel(msg.skill)!=null && skillComp.GetSkillLevel(msg.skill) >= SkillLevel.Expert)
+        if (skillComp.GetSkillLevel(msg.skill) != null && skillComp.GetSkillLevel(msg.skill) >= SkillLevel.Expert)
             return;
 
         //проверка легких скилов
-        if (skillComp.GetEasySkill(msg.skill)!=null && skillComp.GetEasySkill(msg.skill) == true)
+        if (skillComp.GetEasySkill(msg.skill) != null && skillComp.GetEasySkill(msg.skill) == true)
             return;
 
         // Уменьшаем очки навыков
@@ -51,27 +47,22 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
         skillComp.Dirty();
 
         // Добавляем опыт
-        AddExperience(skillComp, msg.skill, _EXPERIENCEFROMSKILLPOINT, multiplyed: false, player: args.SenderSession);
+        AddExperience(skillComp, msg.skill, _EXPERIENCEFROMSKILLPOINT, multiplyed: false);
     }
 
-    public bool AddExperience(SkillComponent skillComp, skillType skillType, int experienceAmount, bool multiplyed = true, ICommonSession? player = null)
+    public bool AddExperience(SkillComponent skillComp, skillType skillType, int experienceAmount, bool multiplyed = true)
     {
         if (multiplyed)
         {
-            if((int)skillComp.ResearchLevel == 3)
-                experienceAmount*=4;
+            if ((int)skillComp.ResearchLevel == 3)
+                experienceAmount *= 4;
 
-            if((int)skillComp.ResearchLevel == 2)
-                experienceAmount*=2;
+            if ((int)skillComp.ResearchLevel == 2)
+                experienceAmount *= 2;
         }
 
 
-        if (skillType == skillType.Piloting 
-        || skillType == skillType.MusInstruments 
-        || skillType == skillType.Botany 
-        || skillType == skillType.Bureaucracy
-        || skillType == skillType.Atmosphere       
-        ) 
+        if (skillComp.IsEasySkill(skillType)) 
         {
             bool? lvl = skillComp.GetEasySkill(skillType);
 
@@ -86,14 +77,9 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
             {
                 SetEasySkill(skillComp, skillType);
                 SetSkillExp(skillComp, skillType, 0);
-                if (player== null)
-                    return true;
-                _audio.PlayGlobal("/Audio/Vanilla/SkillSystem/levelup.ogg", player, audioParams: AudioParams.Default.WithVolume(-6f));
-                RaiseNetworkEvent(new UpdateCharacterSkillsRequestEvent(), Filter.SinglePlayer(player));
                 return true;
             }
             SetSkillExp(skillComp, skillType, exp);
-            if (player != null) RaiseNetworkEvent(new UpdateCharacterSkillsRequestEvent(), Filter.SinglePlayer(player));
             return false;
         }
         else
@@ -101,7 +87,8 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
             SkillLevel? level = skillComp.GetSkillLevel(skillType);
             int exp = skillComp.GetSkillExp(skillType);
 
-            if (level == null || level >= SkillLevel.Expert) return false;
+            if (level == null || level >= SkillLevel.Expert) 
+                return false;
 
             exp += experienceAmount;
 
@@ -109,22 +96,14 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
             {
                 SetSkillLevel(skillComp, skillType, level.Value + 1);
                 SetSkillExp(skillComp, skillType, exp - _EXPERIENCETONEWLVL);
-
-                if (player == null)
-                    return true;
-
-                _audio.PlayGlobal("/Audio/Vanilla/SkillSystem/levelup.ogg", player, audioParams: AudioParams.Default.WithVolume(-6f));
-                RaiseNetworkEvent(new UpdateCharacterSkillsRequestEvent(), Filter.SinglePlayer(player));
-
                 return true;
             }
             SetSkillExp(skillComp, skillType, exp);
-            if (player != null) RaiseNetworkEvent(new UpdateCharacterSkillsRequestEvent(), Filter.SinglePlayer(player));
             return false;
         }
 
     }
-    
+
     private void SetEasySkill(SkillComponent skillComp, skillType skill)
     {
         switch (skill)

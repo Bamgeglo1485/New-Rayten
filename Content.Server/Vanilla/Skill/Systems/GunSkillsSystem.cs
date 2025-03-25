@@ -44,12 +44,10 @@ public sealed class GunSkillsSystem : EntitySystem
         if(HasComp<ActorComponent>(args.Target) || HasComp<GunTrainerComponent>(args.Target))
         {
 
-            TryComp<ActorComponent>(args.Shooter.Value, out var actor);
-
             if (!EntityManager.TryGetComponent<SkillComponent>(args.Shooter.Value, out var skillComp))
                 skillComp = EnsureComp<SkillComponent>(args.Shooter.Value);
 
-            if(_skillTrainerSystem.AddExperience(skillComp, skillType.RangeWeapon, (int)component.Damage.GetTotal(), player: actor?.PlayerSession))
+            if(_skillTrainerSystem.AddExperience(skillComp, skillType.RangeWeapon, (int)component.Damage.GetTotal()))
             {
                 if(component.Weapon == null)
                     return;

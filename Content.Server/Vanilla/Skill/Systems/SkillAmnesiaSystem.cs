@@ -52,12 +52,11 @@ public sealed class SkillAmnesiaSystem : EntitySystem
         amnesia.exptorestore -= _experienceToRestore;
 
         Dirty(user, amnesia);
-        TryComp<ActorComponent>(user, out var actor);
 
         if (amnesia.exptorestore <= 0)
             EntityManager.RemoveComponent<SkillAmnesiaComponent>(user);
 
-        _serverSkillTrainerSystem.AddExperience(skill, skillType, _experienceToRestore, multiplyed: false, player: actor?.PlayerSession);
+        _serverSkillTrainerSystem.AddExperience(skill, skillType, _experienceToRestore, multiplyed: false);
     }
 
     private void OnMobStateChanged(MobStateChangedEvent ev)
@@ -67,11 +66,10 @@ public sealed class SkillAmnesiaSystem : EntitySystem
             return;
 
         // Если память защищена, выходим
-        if(HasComp<MemoryShieldComponent>(ev.Target))
+        if (HasComp<MemoryShieldComponent>(ev.Target))
             return;
 
         // Проверяем компоненты актора и амнезии
-        TryComp<ActorComponent>(ev.Target, out var actor);
         TryComp<SkillAmnesiaComponent>(ev.Target, out var skillAmnesia);
 
         // Обработка смерти сущности
@@ -97,11 +95,7 @@ public sealed class SkillAmnesiaSystem : EntitySystem
                 Dirty(ev.Target, skill);
             }
 
-            // Обновляем навыки клиента
-            if (actor != null)
-                RaiseNetworkEvent(new UpdateCharacterSkillsRequestEvent(), Filter.SinglePlayer(actor.PlayerSession));
-
-            return; // Завершаем, так как смерть обработана
+            return;
         }
 
         // если чел воскрешается и у него нет амнезии - даём её
@@ -109,10 +103,6 @@ public sealed class SkillAmnesiaSystem : EntitySystem
         {
             SkillAmnesia(ev.Target, skill);
             Dirty(ev.Target, skill);
-
-            // Обновляем навыки клиента
-            if (actor != null)
-                RaiseNetworkEvent(new UpdateCharacterSkillsRequestEvent(), Filter.SinglePlayer(actor.PlayerSession));
         }
     }
 
@@ -134,13 +124,13 @@ public sealed class SkillAmnesiaSystem : EntitySystem
         var skillLevels = new List<(skillType skill, bool amnesiable, Action DecreaseLvL)>
         {
             //Основные навыки
-            (skillType.RangeWeapon, inspectamensiableskill(skill, skillType.RangeWeapon), () => skill.RangeWeaponLevel--),
-            (skillType.MeleeWeapon, inspectamensiableskill(skill, skillType.MeleeWeapon), () => skill.MeleeWeaponLevel--),
-            (skillType.Medicine, inspectamensiableskill(skill, skillType.Medicine), () => skill.MedicineLevel--),
-            (skillType.Chemistry, inspectamensiableskill(skill, skillType.Chemistry), () => skill.ChemistryLevel--),
-            (skillType.Building, inspectamensiableskill(skill, skillType.Building), () => skill.BuildingLevel--),
-            (skillType.Research, inspectamensiableskill(skill, skillType.Research), () => skill.ResearchLevel--),
-            (skillType.Crime, inspectamensiableskill(skill, skillType.Crime), () => skill.CrimeLevel--),
+            (skillType.RangeWeapon, inspectamensiableskill(skill, skillType.RangeWeapon), () => skill.RangeWeaponLevel = 0),
+            (skillType.MeleeWeapon, inspectamensiableskill(skill, skillType.MeleeWeapon), () => skill.MeleeWeaponLevel = 0),
+            (skillType.Medicine, inspectamensiableskill(skill, skillType.Medicine), () => skill.MedicineLevel = 0),
+            (skillType.Chemistry, inspectamensiableskill(skill, skillType.Chemistry), () => skill.ChemistryLevel = 0),
+            (skillType.Building, inspectamensiableskill(skill, skillType.Building), () => skill.BuildingLevel = 0),
+            (skillType.Research, inspectamensiableskill(skill, skillType.Research), () => skill.ResearchLevel = 0),
+            (skillType.Crime, inspectamensiableskill(skill, skillType.Crime), () => skill.CrimeLevel = 0),
             //Лёгкие навыки
             (skillType.Piloting, inspectamensiableskill(skill, skillType.Piloting), () => skill.Piloting = false),
             (skillType.MusInstruments, inspectamensiableskill(skill, skillType.MusInstruments), () => skill.MusInstruments = false),
@@ -155,8 +145,11 @@ public sealed class SkillAmnesiaSystem : EntitySystem
 
         var selectedSkill = _random.Pick(nonZeroSkills);
 
-        SkillAmnesiaComponent amnesia = EntityManager.AddComponent<SkillAmnesiaComponent>(user);
+        SkillAmnesiaComponent amnesia = AddComp<SkillAmnesiaComponent>(user);
         amnesia.skilltype = selectedSkill.skill;
+
+        //т.к. мы полностью забываем уровень, запоминаем сколько опыта мы должны вспомнить, если GetSkillLevel возвращает нулл - значит мы передали лёгкий навык, значит нам нужно вспомнить 600 опыта.
+        amnesia.exptorestore = (int)skill.GetSkillLevel(selectedSkill.skill).GetValueOrDefault(SkillLevel.Basic) * 600;
 
         selectedSkill.DecreaseLvL();
 

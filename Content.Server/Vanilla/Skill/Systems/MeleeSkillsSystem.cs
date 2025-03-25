@@ -36,7 +36,7 @@ public sealed class MeleeSkillSystem : EntitySystem
             return;
 
         // Проверяем, является ли атакующий игроком
-        if (!TryComp<ActorComponent>(args.User, out var actorAttacker))
+        if (!HasComp<ActorComponent>(args.User))
             return;
 
         // Проверяем, есть ли у атакующего компонент SkillComponent
@@ -46,22 +46,18 @@ public sealed class MeleeSkillSystem : EntitySystem
         // Перебираем всех сущностей, которые были атакованы
         foreach (var target in args.HitEntities)
         {
-            // Проверяем, является ли цель игроком
-            if (!TryComp<ActorComponent>(target, out var actorattacked))
-                continue;
-
             //Проверяем что чел не пиздит сам себя
             if (target == args.User)
                 continue;
 
             // Начисляем опыт за атаку атакующему
-            _skillTrainerSystem.AddExperience(skillCompAttacker, component.SkillType, component.ExpPerHit, player: actorAttacker.PlayerSession);
+            _skillTrainerSystem.AddExperience(skillCompAttacker, component.SkillType, component.ExpPerHit);
 
             // начисляем опыт за атаку атакуемому
             if (!TryComp<SkillComponent>(target, out var skillCompAttacked))
                 skillCompAttacked = EnsureComp<SkillComponent>(target);
 
-            _skillTrainerSystem.AddExperience(skillCompAttacked, component.SkillType, component.ExpPerHit, player: actorattacked.PlayerSession);
+            _skillTrainerSystem.AddExperience(skillCompAttacked, component.SkillType, component.ExpPerHit);
         }
     }
 

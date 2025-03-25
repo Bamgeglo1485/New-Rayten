@@ -68,7 +68,7 @@ public abstract partial class SharedSolutionContainerSystem : EntitySystem
     [Dependency] protected readonly SharedContainerSystem ContainerSystem = default!;
     [Dependency] protected readonly MetaDataSystem MetaDataSys = default!;
     [Dependency] protected readonly INetManager NetManager = default!;
-    [Dependency] protected readonly SharedRequiresSkillSystem _requiresskill = default!;
+    [Dependency] protected readonly RequiresSkillSystem _requiresskill = default!;
     public override void Initialize()
     {
         base.Initialize();

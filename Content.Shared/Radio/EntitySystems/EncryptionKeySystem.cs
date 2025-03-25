@@ -33,7 +33,7 @@ public sealed partial class EncryptionKeySystem : EntitySystem
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly SharedHandsSystem _hands = default!;
     [Dependency] private readonly SharedWiresSystem _wires = default!;
-    [Dependency] private readonly SharedRequiresSkillSystem _requiresSkillSystem = default!;
+    [Dependency] private readonly RequiresSkillSystem _requiresSkillSystem = default!;
     
     public override void Initialize()
     {

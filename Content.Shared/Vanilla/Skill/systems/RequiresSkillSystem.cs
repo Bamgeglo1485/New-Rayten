@@ -4,13 +4,19 @@ using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Hands;
 using Content.Shared.Popups;
+using Robust.Shared.Network;
+using Robust.Shared.Audio.Systems;
+using Robust.Shared.Player;
+using Robust.Shared.Timing;
 
 namespace Content.Shared.Vanilla.Skill;
 
-public abstract class SharedRequiresSkillSystem : EntitySystem
+public sealed class RequiresSkillSystem : EntitySystem
 {
     [Dependency] private readonly SharedPopupSystem _popup = default!;
-
+    [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private readonly INetManager _net = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -19,57 +25,144 @@ public abstract class SharedRequiresSkillSystem : EntitySystem
         SubscribeLocalEvent<RequiresSkillComponent, ItemSlotEjectAttemptEvent>(OnItemSlotEjectAttempt); //попытка вытащить что-то
         SubscribeLocalEvent<RequiresSkillToActivateInWorldComponent, ActivateInWorldEvent >(OnSkillCheckToActivateInWorld);
     }
-    public bool HasRequiredSkills(EntityUid user, RequiresSkillComponent component, bool popup = false)
+    private void OnActivate(EntityUid uid, RequiresSkillComponent component, ref ActivatableUIOpenAttemptEvent args)
+    {
+        if (args.Cancelled)
+            return;
+
+        var hasSkills = HasRequiredSkills(args.User, component, popup: _timing.IsFirstTimePredicted );
+
+        var hasCraftSkills = !component.NeedCraftableSkills || HasRequiredSkillsForCraft(args.User, component);
+
+        if (hasSkills && hasCraftSkills)
+            return;
+
+        args.Cancel();
+    }
+
+    private void OnSkillCheckToActivateInWorld(EntityUid uid, RequiresSkillToActivateInWorldComponent component, ref ActivateInWorldEvent args)
+    {
+        if (args.Handled)
+            return;
+            
+        if(!EntityManager.TryGetComponent<RequiresSkillComponent>(uid, out var Reqcomponent))
+            return;
+
+        if(HasRequiredSkills(args.User, Reqcomponent, popup: _timing.IsFirstTimePredicted ))
+            return;
+            
+        args.Handled = true;
+    }
+
+    private void OnItemSlotInsertAttempt(EntityUid uid, RequiresSkillComponent component, ref ItemSlotInsertAttemptEvent args)
+    {
+        if (uid != args.SlotEntity || args.Cancelled || args.User == null)
+            return;
+
+        var hasSkills = HasRequiredSkills(args.User.Value, component, popup: _timing.IsFirstTimePredicted );
+
+        var hasCraftSkills = !component.NeedCraftableSkills || HasRequiredSkillsForCraft(args.User.Value, component);
+
+        if (hasSkills && hasCraftSkills)
+            return;
+
+        args.Cancelled = true;
+    }
+    private void OnItemSlotEjectAttempt(EntityUid uid, RequiresSkillComponent component, ref ItemSlotEjectAttemptEvent args)
+    {
+        if (uid != args.SlotEntity || args.Cancelled || args.User == null)
+            return;
+            
+        var hasSkills = HasRequiredSkills(args.User.Value, component, popup: _timing.IsFirstTimePredicted );
+
+        var hasCraftSkills = !component.NeedCraftableSkills || HasRequiredSkillsForCraft(args.User.Value, component);
+
+        if (hasSkills && hasCraftSkills)
+            return;
+            
+        args.Cancelled = true;
+    }
+    public bool HasRequiredSkills(EntityUid user, RequiresSkillComponent component, bool popup = true)
     {
         if(!TryComp<SkillComponent>(user, out var skill))
             skill = EnsureComp<SkillComponent>(user);
 
         // Проверка уровня химии
-        if (!HasSkillLevel(user, component.RequiresChemistryLevel, skillComponent => skillComponent.ChemistryLevel)){
+        if (!HasSkillLevel(user, component.RequiresChemistryLevel, skillComponent => skillComponent.ChemistryLevel))
+        {
             if(popup)
-                _popup.PopupClient(Loc.GetString("Skill-issue-message-chemistry-unskilled", ("lvl", (int)component.RequiresChemistryLevel)), user, user);
+            {
+                _popup.PopupCursor(Loc.GetString("Skill-issue-message-chemistry-unskilled", ("lvl", (int)component.RequiresChemistryLevel)));
+                if (_net.IsClient) _audio.PlayGlobal("/Audio/Vanilla/SkillSystem/meep-merp.ogg", Filter.Local(), false);
+            }
+
             return false;
         }
         // Проверка уровня медицины
-        if (!HasSkillLevel(user, component.RequiresMedicineLevel, skillComponent => skillComponent.MedicineLevel)){
+        if (!HasSkillLevel(user, component.RequiresMedicineLevel, skillComponent => skillComponent.MedicineLevel))
+        {
             if(popup)
-                _popup.PopupClient(Loc.GetString("Skill-issue-message-medicine-unskilled", ("lvl", (int)component.RequiresMedicineLevel)), user, user);
+            {
+                _popup.PopupCursor(Loc.GetString("Skill-issue-message-medicine-unskilled", ("lvl", (int)component.RequiresMedicineLevel)));
+                if (_net.IsClient) _audio.PlayGlobal("/Audio/Vanilla/SkillSystem/meep-merp.ogg", Filter.Local(), false);
+            }
             return false;
         }
         // Проверка уровня исследования
-        if (!HasSkillLevel(user, component.RequiresResearchLevel, skillComponent => skillComponent.ResearchLevel)){
+        if (!HasSkillLevel(user, component.RequiresResearchLevel, skillComponent => skillComponent.ResearchLevel))
+        {
             if(popup)
-                _popup.PopupClient(Loc.GetString("Skill-issue-message-research-unskilled", ("lvl", (int)component.RequiresResearchLevel)), user, user);
+            {
+                _popup.PopupCursor(Loc.GetString("Skill-issue-message-research-unskilled", ("lvl", (int)component.RequiresResearchLevel)));
+                if (_net.IsClient) _audio.PlayGlobal("/Audio/Vanilla/SkillSystem/meep-merp.ogg", Filter.Local(), false);
+            }
             return false;
         }
         // Проверка уровня Инженерии
-        if (!HasSkillLevel(user, component.RequiresEngineeringLevel, skillComponent => skillComponent.EngineeringLevel)){
+        if (!HasSkillLevel(user, component.RequiresEngineeringLevel, skillComponent => skillComponent.EngineeringLevel))
+        {
             if(popup)
-                _popup.PopupClient(Loc.GetString("Skill-issue-message-engineering-unskilled", ("lvl", (int)component.RequiresEngineeringLevel)), user, user);
+            {
+                _popup.PopupCursor(Loc.GetString("Skill-issue-message-engineering-unskilled", ("lvl", (int)component.RequiresEngineeringLevel)));
+                if (_net.IsClient) _audio.PlayGlobal("/Audio/Vanilla/SkillSystem/meep-merp.ogg", Filter.Local(), false);
+            }
             return false;
         }
         // Проверка уровня пилотирования
-        if (!HasEasySkill(user, component.RequiresPiloting, skillComponent => skillComponent.Piloting)){
+        if (!HasEasySkill(user, component.RequiresPiloting, skillComponent => skillComponent.Piloting))
+        {
             if(popup)
-                _popup.PopupClient(Loc.GetString("Skill-issue-easyskill-message-piloting-unskilled"), user, user);
+            {
+                _popup.PopupCursor(Loc.GetString("Skill-issue-easyskill-message-piloting-unskilled"));
+                if (_net.IsClient) _audio.PlayGlobal("/Audio/Vanilla/SkillSystem/meep-merp.ogg", Filter.Local(), false);
+            }
             return false;
         }
         // Проверка уровня муз. инструментов
-        if (!HasEasySkill(user, component.RequiresMusInstruments, skillComponent => skillComponent.MusInstruments)){
+        if (!HasEasySkill(user, component.RequiresMusInstruments, skillComponent => skillComponent.MusInstruments))
+        {
             if(popup)
-                _popup.PopupClient(Loc.GetString("Skill-issue-easyskill-message-musinstruments-unskilled"), user, user);
+                _popup.PopupCursor(Loc.GetString("Skill-issue-easyskill-message-musinstruments-unskilled"));
             return false;
         }
         // Проверка уровня ботаники
-        if (!HasEasySkill(user, component.RequiresBotany, skillComponent => skillComponent.Botany)){
+        if (!HasEasySkill(user, component.RequiresBotany, skillComponent => skillComponent.Botany))
+        {
             if(popup)
-                _popup.PopupClient(Loc.GetString("Skill-issue-easyskill-message-botany-unskilled"), user, user);
+            {
+                _popup.PopupCursor(Loc.GetString("Skill-issue-easyskill-message-botany-unskilled"));
+                if (_net.IsClient) _audio.PlayGlobal("/Audio/Vanilla/SkillSystem/meep-merp.ogg", Filter.Local(), false);
+            }
             return false;
         }
         // Проверка уровня Атмосферы
-        if (!HasEasySkill(user, component.RequiresAtmosphere, skillComponent => skillComponent.Atmosphere)){
+        if (!HasEasySkill(user, component.RequiresAtmosphere, skillComponent => skillComponent.Atmosphere))
+        {
             if(popup)
-                _popup.PopupClient(Loc.GetString("Skill-issue-easyskill-message-atmosphere-unskilled"), user, user);
+            {
+                _popup.PopupCursor(Loc.GetString("Skill-issue-easyskill-message-atmosphere-unskilled"));
+                if (_net.IsClient) _audio.PlayGlobal("/Audio/Vanilla/SkillSystem/meep-merp.ogg", Filter.Local(), false);
+            }
             return false;
         }
         return true;
@@ -116,20 +209,29 @@ public abstract class SharedRequiresSkillSystem : EntitySystem
         // Проверка уровня Инженерии
         if (!HasSkillLevel(user, component.RequiresEngineeringLevel, skillComponent => skillComponent.EngineeringLevel)){
             if(popup)
-                _popup.PopupClient(Loc.GetString("Skill-issue-message-engineering-unskilled", ("lvl", (int)component.RequiresEngineeringLevel)), user, user);
+            {
+                _popup.PopupCursor(Loc.GetString("Skill-issue-message-engineering-unskilled", ("lvl", (int)component.RequiresEngineeringLevel)));
+                if (_net.IsClient) _audio.PlayGlobal("/Audio/Vanilla/SkillSystem/meep-merp.ogg", Filter.Local(), false);
+            }
+
             return false;
         }
         // Проверка уровня Строительства
         if (!HasSkillLevel(user, component.RequiresBuildingLevel, skillComponent => skillComponent.BuildingLevel)){
             if(popup)
-                _popup.PopupClient(Loc.GetString("Skill-issue-message-building-unskilled", ("lvl", (int)component.RequiresBuildingLevel)), user, user);
+            {
+                _popup.PopupCursor(Loc.GetString("Skill-issue-message-building-unskilled", ("lvl", (int)component.RequiresBuildingLevel)));
+                if (_net.IsClient) _audio.PlayGlobal("/Audio/Vanilla/SkillSystem/meep-merp.ogg", Filter.Local(), false);
+            }
+
             return false;
         }
         // Проверка уровня атмосферы
         if (!HasEasySkill(user, component.RequiresAtmosphere, skillComponent => skillComponent.Atmosphere)){
             if(popup)
             {
-                _popup.PopupEntity(Loc.GetString("Skill-issue-easyskill-message-atmosphere-unskilled"), user, user);
+                _popup.PopupCursor(Loc.GetString("Skill-issue-easyskill-message-atmosphere-unskilled"));
+                if (_net.IsClient) _audio.PlayGlobal("/Audio/Vanilla/SkillSystem/meep-merp.ogg", Filter.Local(), false);
             }
             return false;
         }  
@@ -140,6 +242,7 @@ public abstract class SharedRequiresSkillSystem : EntitySystem
     {
         return TryComp<SkillComponent>(user, out var skillComponent) && skillSelector(skillComponent) >= requiredLevel;
     }
+
     public bool HasEasySkill(EntityUid user, bool requiredEasySkill, Func<SkillComponent, bool> skillSelector)
     {   
         if(!requiredEasySkill)
@@ -148,8 +251,5 @@ public abstract class SharedRequiresSkillSystem : EntitySystem
         return TryComp<SkillComponent>(user, out var skillComponent) && skillSelector(skillComponent) == requiredEasySkill;
     }
 
-    protected abstract void OnActivate(EntityUid uid, RequiresSkillComponent component, ref ActivatableUIOpenAttemptEvent args);//Открытие интерфейса консоли
-    protected abstract void OnItemSlotInsertAttempt(EntityUid uid, RequiresSkillComponent component, ref ItemSlotInsertAttemptEvent args);//попытка вставить что-то
-    protected abstract void OnItemSlotEjectAttempt(EntityUid uid, RequiresSkillComponent component, ref ItemSlotEjectAttemptEvent args);//попытка вытащить что-то
-    protected abstract void OnSkillCheckToActivateInWorld(EntityUid uid, RequiresSkillToActivateInWorldComponent component, ref ActivateInWorldEvent args);//если есть компонент то обрабатываем активацию
+    
 }

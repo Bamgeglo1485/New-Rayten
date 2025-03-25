@@ -13,7 +13,7 @@ public sealed class PartAssemblySystem : EntitySystem
 {
     [Dependency] private readonly SharedContainerSystem _container = default!;
     [Dependency] private readonly TagSystem _tag = default!;
-    [Dependency] private readonly SharedRequiresSkillSystem _sharedRequiresSkillSystem = default!;
+    [Dependency] private readonly RequiresSkillSystem _requiresSkillSystem = default!;
     /// <inheritdoc/>
     public override void Initialize()
     {
@@ -81,7 +81,7 @@ public sealed class PartAssemblySystem : EntitySystem
         if (EntityManager.TryGetComponent<RequiresSkillComponent>(uid, out var requiresSkillComponent))
         {
             // Проверка, есть ли у пользователя нужные навыки для выполнения действия
-            if (!_sharedRequiresSkillSystem.HasRequiredSkillsForCraft(user, requiresSkillComponent, true))
+            if (!_requiresSkillSystem.HasRequiredSkillsForCraft(user, requiresSkillComponent, true))
                 return false; // Если навыков недостаточно, не добавляем в очередь
         }
         //vanilla-station-end

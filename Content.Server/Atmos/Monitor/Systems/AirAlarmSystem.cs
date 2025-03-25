@@ -268,8 +268,8 @@ public sealed class AirAlarmSystem : EntitySystem
             return;
         }
         //vanilla-station-start
-        if (EntityManager.TryGetComponent<RequiresSkillComponent>(uid, out var RequiresSkillComp) && RequiresSkillComp != null)
-            if(!_requiresSkillSystem.HasRequiredSkills(args.User, RequiresSkillComp, true))
+        if (TryComp<RequiresSkillComponent>(uid, out var RequiresSkillComp))
+            if(!_requiresSkillSystem.HasRequiredSkills(args.User, RequiresSkillComp))
                 return;
         //vanilla-station-end
 

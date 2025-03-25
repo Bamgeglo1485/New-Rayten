@@ -21,9 +21,7 @@ namespace Content.Server.Vanilla.Skill
 
             // Добавляем значения
             skillComp.SkillPoints += setterComp.Points;
-            skillComp.Dirty();
-            if (TryComp<ActorComponent>(uid, out var actor))
-                RaiseNetworkEvent(new UpdateCharacterSkillsRequestEvent(), Filter.SinglePlayer(actor.PlayerSession));
+            Dirty(uid, skillComp);
 
             EntityManager.RemoveComponent<AddSkillPointsComponent>(uid);
         }

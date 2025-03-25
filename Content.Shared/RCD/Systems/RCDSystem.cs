@@ -47,7 +47,7 @@ public class RCDSystem : EntitySystem
     [Dependency] private readonly IPrototypeManager _protoManager = default!;
     [Dependency] private readonly SharedMapSystem _mapSystem = default!;
     [Dependency] private readonly TagSystem _tags = default!;
-    [Dependency] private readonly SharedRequiresSkillSystem _requiresSkillSystem = default!;
+    [Dependency] private readonly RequiresSkillSystem _requiresSkillSystem = default!;
 
     private readonly int _instantConstructionDelay = 0;
     private readonly EntProtoId _instantConstructionFx = "EffectRCDConstruct0";

@@ -9,7 +9,7 @@ namespace Content.Shared.Labels.EntitySystems;
 public abstract partial class SharedLabelSystem : EntitySystem
 {
     [Dependency] protected readonly NameModifierSystem NameMod = default!;
-    [Dependency] private readonly SharedRequiresSkillSystem _requiresSkillSystem = default!;
+    [Dependency] private readonly RequiresSkillSystem _requiresSkillSystem = default!;
     public override void Initialize()
     {
         base.Initialize();

@@ -100,7 +100,7 @@ public sealed partial class AnomalySystem
         float skillduration = component.ScanDoAfterDuration;
         if (EntityManager.TryGetComponent<RequiresSkillComponent>(uid, out var RequiresSkillComponent))
         {
-            if(!_requiresSkillSystem.HasRequiredSkills(args.User, RequiresSkillComponent, true))
+            if(!_requiresSkillSystem.HasRequiredSkills(args.User, RequiresSkillComponent))
                 return;
 
             if(EntityManager.TryGetComponent<SkillComponent>(args.User, out var SkillComp)){

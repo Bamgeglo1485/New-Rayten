@@ -102,19 +102,14 @@ public sealed class SkillBookSystem : EntitySystem
         if (!EntityManager.TryGetComponent<SkillLearnerComponent>(args.User, out var SkillLearnerComp))
             SkillLearnerComp = EnsureComp<SkillLearnerComponent>(args.User);
 
-        if (TryComp<ActorComponent>(args.User, out var actor))
+        int exp = DecreaseSkillExpToLearn(SkillLearnerComp, args.SkillType, args.SkillIncreaseAmount);
+
+        if (!_skillTrainerSystem.AddExperience(skillComp, args.SkillType, exp))
         {
-
-            int exp = DecreaseSkillExpToLearn(SkillLearnerComp, args.SkillType, args.SkillIncreaseAmount);
-
-            if (!_skillTrainerSystem.AddExperience(skillComp, args.SkillType, exp, player: actor?.PlayerSession, multiplyed: false))
+            if (!(SkillLearnerComp.GetSkillExpToLearn(args.SkillType) <= 0 || skillComp.GetSkillLevel(args.SkillType) >= SkillLevel.Expert))
             {
-                if (!(SkillLearnerComp.GetSkillExpToLearn(args.SkillType) <= 0 || skillComp.GetSkillLevel(args.SkillType) >= SkillLevel.Expert))
-                {
-                    StartDoAfter(args.User, component, uid, skillComp);
-                }
+                StartDoAfter(args.User, component, uid, skillComp);
             }
-
         }
         args.Handled = true;
     }

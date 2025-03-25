@@ -67,9 +67,7 @@ public sealed class EmitSkillExperienceSystem : EntitySystem
             if (!TryComp<SkillComponent>(entity, out var SkillComp))
                 continue;
 
-            TryComp<ActorComponent>(entity, out var actor);
-
-            _skillTrainerSystem.AddExperience(SkillComp, SkillType, ExperienceAmount, player: actor?.PlayerSession);
+            _skillTrainerSystem.AddExperience(SkillComp, SkillType, ExperienceAmount);
         }
     }
 }

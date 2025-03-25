@@ -35,12 +35,10 @@ namespace Content.Server.Repairable
             if (!EntityManager.TryGetComponent(uid, out DamageableComponent? damageable) || damageable.TotalDamage == 0)
                 return;
             //vanilla-station-start
-            TryComp<ActorComponent>(args.User, out var actor);
-
             if (!EntityManager.TryGetComponent<SkillComponent>(args.User, out var skillComp))
                 skillComp = EnsureComp<SkillComponent>(args.User);
 
-            _skillTrainerSystem.AddExperience(skillComp, skillType.Building, (int)damageable.TotalDamage / 5, player: actor?.PlayerSession);
+            _skillTrainerSystem.AddExperience(skillComp, skillType.Building, (int)damageable.TotalDamage / 5);
             //vanilla-station-end
             if (component.Damage != null)
             {

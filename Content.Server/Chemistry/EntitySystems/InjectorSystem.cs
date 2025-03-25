@@ -131,7 +131,7 @@ public sealed class InjectorSystem : SharedInjectorSystem
         //vanilla-station-skill-issue-start
         if (EntityManager.TryGetComponent<RequiresSkillComponent>(injector, out var reqskillComponent))
         {
-            if(!_requiresskill.HasRequiredSkills(user, reqskillComponent, true, skillType.Chemistry))           
+            if(!_requiresskill.HasRequiredSkills(user, reqskillComponent))           
                 return;
         }
         //vanilla-station-skill-issue-end

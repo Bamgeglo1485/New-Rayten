@@ -257,12 +257,10 @@ public sealed class DefibrillatorSystem : EntitySystem
                     _euiManager.OpenEui(new ReturnToBodyEui(mind, _mind), session);
                 }
                 //vanilla-station-start
-                TryComp<ActorComponent>(user, out var actor);
-                
                 if (!EntityManager.TryGetComponent<SkillComponent>(user, out var skillComp))
                     skillComp = EnsureComp<SkillComponent>(user);
 
-                _skillTrainerSystem.AddExperience(skillComp, skillType.Medicine, 20, player: actor?.PlayerSession);
+                _skillTrainerSystem.AddExperience(skillComp, skillType.Medicine, 20);
                 //vanilla-station-end
             }
             else
