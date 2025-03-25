@@ -246,7 +246,7 @@ public sealed partial class SkillComponent : Component
     public bool Atmosphere
     {
         get => _ezatmosphere;
-        set => SetSkill(ref _ezbureaucracy, value, skillType.Atmosphere);
+        set => SetSkill(ref _ezatmosphere, value, skillType.Atmosphere);
     }
 
     [AutoNetworkedField]
