@@ -1,7 +1,6 @@
 using Content.Server.Administration;
 using Content.Server.Administration.Logs;
 using Content.Shared.Administration;
-using Content.Server.Audio;
 using Content.Shared.Database;
 using Content.Shared.Vanilla.Skill;
 using Robust.Shared.Console;
@@ -26,9 +25,6 @@ public sealed class FuckSkillsCommand : IConsoleCommand
     {
         // Получаем все сущности под управлением игроков
         var query = _entityManager.EntityQueryEnumerator<ActorComponent>();
-
-        var playerFilter = Filter.Empty();
-
         while (query.MoveNext(out var uid, out var actor))
         {
             if (!_entityManager.TryGetComponent(uid, out SkillComponent? skillComp))
@@ -49,11 +45,7 @@ public sealed class FuckSkillsCommand : IConsoleCommand
             skillComp.ResearchLevel = SkillLevel.Expert;
 
             _entityManager.Dirty(skillComp);
-
-            playerFilter.AddPlayer(actor.PlayerSession);
         }
-        //звуковое сопровождение
-        _entityManager.System<ServerGlobalSoundSystem>().PlayAdminGlobal(playerFilter, "/Audio/Vanilla/SkillSystem/levelup.ogg");
 
 
         _adminLogger.Add(

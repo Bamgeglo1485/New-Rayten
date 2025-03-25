@@ -20,15 +20,38 @@ public sealed class BonusSkillPointsSystem : EntitySystem
     private void OnRoundStarting(RoundStartedEvent ev)
     {
         var query = EntityManager.EntityQueryEnumerator<ActorComponent>();
-        int ActorCount=0;
+        int ActorCount = 7;
         while (query.MoveNext(out _, out _))
         {
             ActorCount++;
         }
-        int skillpoints = ActorCount > 0 ? Math.Max((int)(10 / Math.Pow(ActorCount, 0.5)), 1) : 0;
-
-        if (ActorCount > 10 || ActorCount == 0)
+        if (ActorCount > 10 || ActorCount <= 0)
             return;
+
+        int skillpoints = 0;
+        switch (ActorCount)
+        {
+            case 10:
+            case 9:
+            case 8:
+                skillpoints = 1;
+                break;
+            case 7:
+                skillpoints = 2;
+                break;
+            case 6:
+                skillpoints = 3;
+                break;
+            case 5:
+            case 4:
+            case 3:
+                skillpoints = 6;
+                break;
+            case 2:
+            case 1:
+                skillpoints = 12;
+                break;
+        }
 
         query = EntityManager.EntityQueryEnumerator<ActorComponent>();//как же неприятно но я не нашел другого решения 
         while (query.MoveNext(out var uid, out var actor))
