@@ -18,7 +18,7 @@ public sealed partial class SkillComponent : Component
     private SkillLevel _rangeWeaponLevel = SkillLevel.None;
     private int _rangeWeaponExp = 0;
 
-    [ViewVariables(VVAccess.ReadOnly), AutoNetworkedField]
+    [AutoNetworkedField]
     public SkillLevel RangeWeaponLevel
     {
         get => _rangeWeaponLevel;
@@ -37,7 +37,7 @@ public sealed partial class SkillComponent : Component
     private SkillLevel _meleeWeaponLevel = SkillLevel.None;
     private int _meleeWeaponExp = 0;
 
-    [ViewVariables(VVAccess.ReadOnly), AutoNetworkedField]
+    [AutoNetworkedField]
     public SkillLevel MeleeWeaponLevel
     {
         get => _meleeWeaponLevel;
@@ -56,7 +56,7 @@ public sealed partial class SkillComponent : Component
     private SkillLevel _medicineLevel = SkillLevel.None;
     private int _medicineExp = 0;
 
-    [ViewVariables(VVAccess.ReadOnly), AutoNetworkedField]
+    [AutoNetworkedField]
     public SkillLevel MedicineLevel
     {
         get => _medicineLevel;
@@ -75,7 +75,7 @@ public sealed partial class SkillComponent : Component
     private SkillLevel _chemistryLevel = SkillLevel.None;
     private int _chemistryExp = 0;
 
-    [ViewVariables(VVAccess.ReadOnly), AutoNetworkedField]
+    [AutoNetworkedField]
     public SkillLevel ChemistryLevel
     {
         get => _chemistryLevel;
@@ -94,7 +94,7 @@ public sealed partial class SkillComponent : Component
     private SkillLevel _engineeringLevel = SkillLevel.None;
     private int _engineeringExp = 0;
 
-    [ViewVariables(VVAccess.ReadOnly), AutoNetworkedField]
+    [AutoNetworkedField]
     public SkillLevel EngineeringLevel
     {
         get => _engineeringLevel;
@@ -105,14 +105,14 @@ public sealed partial class SkillComponent : Component
     public int EngineeringExp
     {
         get => _engineeringExp;
-        set => SetSkill(ref _chemistryExp, value, skillType.Engineering);
+        set => SetSkill(ref _engineeringExp, value, skillType.Engineering);
     }
 //Строительство
     [DataField("BuildingLevel")]
     private SkillLevel _buildingLevel = SkillLevel.None;
     private int _buildingExp = 0;
 
-    [ViewVariables(VVAccess.ReadOnly), AutoNetworkedField]
+    [AutoNetworkedField]
     public SkillLevel BuildingLevel
     {
         get => _buildingLevel;
@@ -131,7 +131,7 @@ public sealed partial class SkillComponent : Component
     private SkillLevel _researchLevel = SkillLevel.None;
     private int _researchExp = 0;
 
-    [ViewVariables(VVAccess.ReadOnly), AutoNetworkedField]
+    [AutoNetworkedField]
     public SkillLevel ResearchLevel
     {
         get => _researchLevel;
@@ -149,7 +149,7 @@ public sealed partial class SkillComponent : Component
     private SkillLevel _crimeLevel = SkillLevel.None;
     private int _crimeExp = 0;
 
-    [ViewVariables(VVAccess.ReadOnly), AutoNetworkedField]
+    [AutoNetworkedField]
     public SkillLevel CrimeLevel
     {
         get => _crimeLevel;
@@ -167,7 +167,7 @@ public sealed partial class SkillComponent : Component
     private bool _ezpiloting = false;
     private int _ezpilotingExp = 0;
 
-    [ViewVariables(VVAccess.ReadOnly), AutoNetworkedField]
+    [AutoNetworkedField]
     public bool Piloting
     {
         get => _ezpiloting;
@@ -186,7 +186,7 @@ public sealed partial class SkillComponent : Component
     private bool _ezmusInstruments = false;
     private int _ezmusInstrumentsExp = 0;
 
-    [ViewVariables(VVAccess.ReadOnly), AutoNetworkedField]
+    [AutoNetworkedField]
     public bool MusInstruments
     {
         get => _ezmusInstruments;
@@ -204,7 +204,7 @@ public sealed partial class SkillComponent : Component
     private bool _ezbotany = false;
     private int _ezbotanyExp = 0;
 
-    [ViewVariables(VVAccess.ReadOnly), AutoNetworkedField]
+    [AutoNetworkedField]
     public bool Botany
     {
         get => _ezbotany;
@@ -223,7 +223,7 @@ public sealed partial class SkillComponent : Component
     private bool _ezbureaucracy = false;
     private int _ezbureaucracyExp = 0;
 
-    [ViewVariables(VVAccess.ReadOnly), AutoNetworkedField]
+    [AutoNetworkedField]
     public bool Bureaucracy
     {
         get => _ezbureaucracy;
@@ -242,7 +242,7 @@ public sealed partial class SkillComponent : Component
     private bool _ezatmosphere = false;
     private int _ezatmosphereExp = 0;
 
-    [ViewVariables(VVAccess.ReadOnly), AutoNetworkedField]
+    [AutoNetworkedField]
     public bool Atmosphere
     {
         get => _ezatmosphere;
