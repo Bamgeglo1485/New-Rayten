@@ -20,7 +20,7 @@ public sealed class BonusSkillPointsSystem : EntitySystem
     private void OnRoundStarting(RoundStartedEvent ev)
     {
         var query = EntityManager.EntityQueryEnumerator<ActorComponent>();
-        int ActorCount = 7;
+        int ActorCount = 0;
         while (query.MoveNext(out _, out _))
         {
             ActorCount++;

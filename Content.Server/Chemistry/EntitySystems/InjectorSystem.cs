@@ -129,9 +129,12 @@ public sealed class InjectorSystem : SharedInjectorSystem
     private void InjectDoAfter(Entity<InjectorComponent> injector, EntityUid target, EntityUid user)
     {
         //vanilla-station-skill-issue-start
-        if (EntityManager.TryGetComponent<RequiresSkillComponent>(injector, out var reqskillComponent))
+        if (TryComp<RequiresSkillComponent>(injector, out var reqskillComponent))
         {
-            if(!_requiresskill.HasRequiredSkills(user, reqskillComponent))           
+            if(!TryComp<SkillComponent>(user, out var skill))
+                skill = EnsureComp<SkillComponent>(user);
+
+            if(!_requiresskill.HasSkillLevel(user, reqskillComponent.RequiresMedicineLevel, skillComponent => skillComponent.MedicineLevel))           
                 return;
         }
         //vanilla-station-skill-issue-end
