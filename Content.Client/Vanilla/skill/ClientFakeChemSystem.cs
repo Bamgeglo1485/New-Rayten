@@ -44,18 +44,18 @@ public sealed class FakeChemSystem : EntitySystem
 
             updateallchem(skillComp);
             _globPlayerEntity = playerEntity.Value;
+            _lastlvl = skillComp.ChemistryLevel;
         }
         else
         {
-            if(!TryComp<SkillComponent>(playerEntity, out var skillComp))
-                return;
+            TryComp<SkillComponent>(playerEntity, out var skillComp);
 
             updateallchem(skillComp);
             _globPlayerEntity = playerEntity.Value;
         }
     }
 
-    private void updateallchem(SkillComponent skillComp)
+    private void updateallchem(SkillComponent? skillComp)
     {
         var query = EntityQueryEnumerator<SolutionContainerVisualsComponent, AppearanceComponent>();
         while (query.MoveNext(out var uid, out var component, out var appearance))
@@ -64,7 +64,7 @@ public sealed class FakeChemSystem : EntitySystem
         }  
     }
 
-    private void UpdateVisualsForSolutionContainer(EntityUid uid, SolutionContainerVisualsComponent component, SkillComponent skillComp)
+    private void UpdateVisualsForSolutionContainer(EntityUid uid, SolutionContainerVisualsComponent component, SkillComponent? skillComp)
     {
         // Проверяем, есть ли у объекта компонент спрайта
         if (!TryComp<SpriteComponent>(uid, out var spriteComp))
@@ -83,6 +83,7 @@ public sealed class FakeChemSystem : EntitySystem
         int maxFillLevels = component.MaxFillLevels;
         string? fillBaseName = component.FillBaseName;
         bool changeColor = component.ChangeColor;
+        var fillSprite = component.MetamorphicDefaultSprite;
 
         if (component.Metamorphic)
         {
@@ -104,6 +105,7 @@ public sealed class FakeChemSystem : EntitySystem
                             maxFillLevels = reagentProto.MetamorphicMaxFillLevels;
                             fillBaseName = reagentProto.MetamorphicFillBaseName;
                             changeColor = reagentProto.MetamorphicChangeColor;
+                            fillSprite = sprite;
                         }
                         else
                         {
@@ -139,7 +141,10 @@ public sealed class FakeChemSystem : EntitySystem
             if (fillBaseName != null)
             {
                 var stateName = fillBaseName + fillLevel;
+                if (fillSprite != null)
+                    spriteComp.LayerSetSprite(fillLayer, fillSprite);
                 spriteComp.LayerSetState(fillLayer, stateName);
+
                 if (changeColor && _AppearanceSystem.TryGetData<Color>(uid, SolutionContainerVisuals.Color, out var color))
                 {
                     if (_AppearanceSystem.TryGetData<string>(uid, SolutionContainerVisuals.BaseOverride, out var baseOverride))
@@ -166,11 +171,15 @@ public sealed class FakeChemSystem : EntitySystem
         }
     }
 
-    private void ApplyFakeChemColor(EntityUid uid, ref Color color, SkillComponent skillComp)
+    private void ApplyFakeChemColor(EntityUid uid, ref Color color, SkillComponent? skillComp)
     {
         if (TryComp<FakeChemComponent>(uid, out var fakeChem))
         {
-            if (skillComp.ChemistryLevel == SkillLevel.None || skillComp.ChemistryLevel == SkillLevel.Basic)
+            if(skillComp ==null)
+            {
+                color = fakeChem.FakeColor;
+            }
+            else if (skillComp.ChemistryLevel == SkillLevel.None || skillComp.ChemistryLevel == SkillLevel.Basic)
             {
                 color = fakeChem.FakeColor;
             }
