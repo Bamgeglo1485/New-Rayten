@@ -104,7 +104,7 @@ public sealed class SkillBookSystem : EntitySystem
 
         int exp = DecreaseSkillExpToLearn(SkillLearnerComp, args.SkillType, args.SkillIncreaseAmount);
 
-        if (!_skillTrainerSystem.AddExperience(skillComp, args.SkillType, exp))
+        if (!_skillTrainerSystem.AddExperience(skillComp, args.SkillType, exp, multiplyed: false))
         {
             if (!(SkillLearnerComp.GetSkillExpToLearn(args.SkillType) <= 0 || skillComp.GetSkillLevel(args.SkillType) >= SkillLevel.Expert))
             {
