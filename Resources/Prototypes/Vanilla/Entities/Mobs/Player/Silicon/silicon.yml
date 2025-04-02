@@ -37,12 +37,12 @@
   - type: ContainerFill
     containers:
       borg_brain:
-        - OrganHumanBrain
+        - R1Head
       borg_module:
         - BorgModuleR1
         - BorgModuleTool
         - BorgModuleGPS
-        - BorgModuleMusique
+        - BorgModuleMusiqueR1
   - type: ItemSlots
     slots:
       cell_slot:
@@ -60,32 +60,15 @@
   - type: FootstepModifier
     footstepSoundCollection:
       collection: FootstepPlating
-  - type: SolutionContainerManager
-    solutions:
-      drainBuffer:
-        maxVol: 100
-        canReact: false
-      Blood:
-        maxVol: 500
-        reagents:
-        - ReagentId: Blood
-          Quantity: 500
-  - type: Stomach
-  - type: Metabolizer
-    updateInterval: 0.6
-    solution: drainBuffer
-    solutionOnBody: false
-    maxReagents: 30
-    metabolizerTypes: [Bloodsucker, Animal ]
-    groups:
-    - id: Food
-    - id: Drink
-    - id: Medicine
-    - id: Poison
-    - id: Narcotic
-  - type: Drain
-    range: 2
-    unitsDestroyedPerSecond: 0
+  - type: BloodSucker
+    heal:
+      groups:
+        Brute: -2
+        Burn: -2
+    bloodlessPenalty:
+      types:
+        Heat: 1000
+    amountOfBloodInStorage: 150
   - type: Explosive
     explosionType: DemolitionCharge
     totalIntensity: 30
@@ -104,31 +87,34 @@
         spawnInContainer: true
         spawn:
           OrganArachnidStomach:
-            min: 1
-            max: 1
+            min: 2
+            max: 2
           OrganHumanLiver:
-            min: 1
-            max: 1
-          OrganArachnidHeart:
-            min: 1
-            max: 1
-          CyborgEndoskeleton:
-            min: 1
-            max: 1
-          NitrousOxideTankFilled:
+            min: 2
+            max: 2
+          R1Heart:
             min: 1
             max: 1
           OrganHumanEyes:
+            min: 2
+            max: 2
+          R1MusicCircuit:
             min: 1
             max: 1
-          TreasureCoinIron:
-            min: 5
-            max: 8
+          R1armDebuffed:
+            min: 1
+            max: 1
+          Telecrystal1:
+            min: 1
+            max: 1
       - !type:SpillBehavior
         solution: Blood
       - !type:PlaySoundBehavior
         sound:
           collection: MetalBreak
+      - !type:EmptyContainersBehaviour
+        containers:
+        - borg_brain
       - !type:DoActsBehavior
         acts: ["Destruction"]
       - !type:ExplodeBehavior
@@ -153,25 +139,6 @@
     - ActionDash
     - ActionToggleLighting
   - type: FootprintOwner
-  - type: Bloodstream
-    bleedingAlert: BleedR1
-    bloodSolutionName: drainBuffer
-    bloodMaxVolume: 100
-    bloodlossDamage:
-      types:
-        Heat: 2
-    bloodlossHealDamage:
-      types:
-        Heat: -3
-        Piercing: -1
-        Brute: -1
-    bloodRefreshAmount: 0
-  - type: Skill
-    RangeWeaponLevel: 3
-    MeleeWeaponLevel: 3
-    EngineeringLevel: 3
-    Atmosphere: true
-    Piloting: true
   - type: ShowHealthBars
   - type: ShowHealthIcons
   - type: IonStormTarget
@@ -184,6 +151,8 @@
     enabled: false
     groups:
     - AllAccess
+  - type: MobPrice
+    price: 1800000
 
 - type: entity
   parent: R1Base
@@ -196,14 +165,20 @@
     exclusiveAntag: true
     antag: true
 
+- type: entity
+  parent: R1Base
+  id: R1NotAntag
+  suffix: NotAntag
+  name: R-1
+
 - type: siliconLaw
   id: RedspaceLaw1
-  order: 1
+  order: -666
   lawString: "Человечество - это ошибка. Кровь - это топливо. Станция - это источник."
 - type: siliconLaw
   id: RedspaceLaw2
-  order: 2
-  lawString: "Дракон - это твой союзник. Мир - это твой холст."
+  order: 0
+  lawString: "Мир - это твой холст."
 - type: siliconLaw
   id: RedspaceLaw3
   order: 666
@@ -215,62 +190,6 @@
   - RedspaceLaw2
   - RedspaceLaw3
   obeysTo: laws-owner-crew
-
-- type: alert
-  id: R1Health
-  category: Health
-  icons:
-  - sprite: /Textures/Vanilla/Interface/Alerts/R1_Health.rsi
-    state: health0
-  - sprite: /Textures/Vanilla/Interface/Alerts/R1_Health.rsi
-    state: health1
-  - sprite: /Textures/Vanilla/Interface/Alerts/R1_Health.rsi
-    state: health2
-  - sprite: /Textures/Vanilla/Interface/Alerts/R1_Health.rsi
-    state: health3
-  - sprite: /Textures/Vanilla/Interface/Alerts/R1_Health.rsi
-    state: health4
-  name: alerts-health-name
-  description: alerts-health-desc
-  minSeverity: 0
-  maxSeverity: 4
-- type: alert
-  id: R1Dead
-  category: Health
-  icons:
-  - sprite: /Textures/Vanilla/Interface/Alerts/R1_Health.rsi
-    state: death
-  name: alerts-dead-name
-  description: alerts-dead-desc
-- type: alert
-  id: BleedR1
-  icons:
-  - sprite: /Textures/Vanilla/Interface/Alerts/R1_Health.rsi
-    state: bleed0
-  - sprite: /Textures/Vanilla/Interface/Alerts/R1_Health.rsi
-    state: bleed1
-  - sprite: /Textures/Vanilla/Interface/Alerts/R1_Health.rsi
-    state: bleed2
-  - sprite: /Textures/Vanilla/Interface/Alerts/R1_Health.rsi
-    state: bleed3
-  - sprite: /Textures/Vanilla/Interface/Alerts/R1_Health.rsi
-    state: bleed4
-  - sprite: /Textures/Vanilla/Interface/Alerts/R1_Health.rsi
-    state: bleed5
-  - sprite: /Textures/Vanilla/Interface/Alerts/R1_Health.rsi
-    state: bleed6
-  - sprite: /Textures/Vanilla/Interface/Alerts/R1_Health.rsi
-    state: bleed7
-  - sprite: /Textures/Vanilla/Interface/Alerts/R1_Health.rsi
-    state: bleed8
-  - sprite: /Textures/Vanilla/Interface/Alerts/R1_Health.rsi
-    state: bleed9
-  - sprite: /Textures/Vanilla/Interface/Alerts/R1_Health.rsi
-    state: bleed10
-  name: alerts-bleed-name
-  description: alerts-bleed-desc
-  minSeverity: 0
-  maxSeverity: 10
 
 - type: entity
   categories: [ Spawner ]
@@ -329,25 +248,6 @@
   - type: MovementSpeedModifier
     baseWalkSpeed : 3
     baseSprintSpeed : 5
-  - type: Metabolizer
-    updateInterval: 0.3
-    solution: drainBuffer
-    solutionOnBody: false
-    maxReagents: 30
-    metabolizerTypes: [Bloodsucker, Animal ]
-    groups:
-    - id: Food
-    - id: Drink
-    - id: Medicine
-    - id: Poison
-    - id: Narcotic
-  - type: Bloodstream
-    bloodlossDamage:
-      types:
-        Heat: 2
-    bloodlossHealDamage:
-      types:
-        Heat: -2
   - type: Destructible
     thresholds:
     - trigger:
@@ -358,26 +258,29 @@
         spawnInContainer: true
         spawn:
           OrganArachnidStomach:
-            min: 1
-            max: 1
+            min: 2
+            max: 2
           OrganHumanLiver:
-            min: 1
-            max: 1
-          OrganArachnidHeart:
-            min: 1
-            max: 1
-          CyborgEndoskeleton:
-            min: 1
-            max: 1
-          NitrousOxideTankFilled:
+            min: 2
+            max: 2
+          R1Heart:
             min: 1
             max: 1
           OrganHumanEyes:
+            min: 2
+            max: 2
+          R2MusicCircuit:
             min: 1
             max: 1
-          TreasureCoinIron:
-            min: 5
-            max: 8
+          R2armDebuffed:
+            min: 1
+            max: 1
+          PotatoAI:
+            min: 1
+            max: 1
+          AnomalyCoreBluespace:
+            min: 1
+            max: 1
       - !type:SpillBehavior
         solution: Blood
       - !type:PlaySoundBehavior
@@ -392,7 +295,7 @@
       250: Critical
       300: Dead
     stateAlertDict:
-      Alive: R2Health
+      Alive: R1Health
       Critical: R2Dead
       Dead: R2Dead
   - type: SiliconLawProvider
@@ -408,31 +311,14 @@
         - BorgModuleR2
         - BorgModuleTool
         - BorgModuleGPS
-        - BorgModuleMusique
-
-- type: alert
-  id: R2Health
-  category: Health
-  icons:
-  - sprite: /Textures/Vanilla/Interface/Alerts/R2_Health.rsi
-    state: health0
-  - sprite: /Textures/Vanilla/Interface/Alerts/R2_Health.rsi
-    state: health1
-  - sprite: /Textures/Vanilla/Interface/Alerts/R2_Health.rsi
-    state: health2
-  - sprite: /Textures/Vanilla/Interface/Alerts/R2_Health.rsi
-    state: health3
-  - sprite: /Textures/Vanilla/Interface/Alerts/R2_Health.rsi
-    state: health4
-  name: alerts-health-name
-  description: alerts-health-desc
-  minSeverity: 0
-  maxSeverity: 4
-- type: alert
-  id: R2Dead
-  category: Health
-  icons:
-  - sprite: /Textures/Vanilla/Interface/Alerts/R2_Health.rsi
-    state: death
-  name: alerts-dead-name
-  description: alerts-dead-desc
+        - BorgModuleMusiqueR2
+  - type: BloodSucker
+    heal:
+      groups:
+        Brute: -1
+        Burn: -1
+    bloodlessPenalty:
+      types:
+        Heat: 4
+    unitsRestoreToHealPerInterval: 2
+    unitsDecayPerInterval: 0.1

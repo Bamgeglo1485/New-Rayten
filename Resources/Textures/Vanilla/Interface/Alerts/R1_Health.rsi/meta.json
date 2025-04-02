@@ -23,7 +23,25 @@
             "name": "health4"
         },
         {
+            "name": "blood0"
+        },
+        {
+            "name": "blood1"
+        },
+        {
+            "name": "blood2"
+        },
+        {
+            "name": "blood3"
+        },
+        {
+            "name": "blood4"
+        },
+        {
             "name": "death"
+        },
+        {
+            "name": "death-r2"
         },
         {
             "name": "bleed0"
