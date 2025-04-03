@@ -14,7 +14,7 @@ public sealed class DiscordChatRelaySystem : EntitySystem
 
     private TimeSpan? NextTime;
     private  WebhookPayload? payload;
-    private string _webhookUrl = "https://discord.com/api/webhooks/1272975564566691951/ftKDmGcNDm2wBRq12506ql6gCQ8KX4naTT2C58kdp19HSwPghZhbd3yjfy64GqcpLqkr";
+    private string _webhookUrl = "https://discord.com/api/webhooks/1357298293339717633/5_Z4WPq2DapHxGUR7aJC2Lq2QBR8JZtoDj0jI--_sQ1XGlqXT6TZdy_NxryaZpo_1vKC";
 
     public override void Initialize()
     {
@@ -36,7 +36,7 @@ public sealed class DiscordChatRelaySystem : EntitySystem
 
     private async void OnEntitySpoke(EntitySpokeEvent ev)
     {
-        if (_random.Prob(0.95f))
+        if (_random.Prob(0.9f))
             return;
         
         if (!HasComp<ActorComponent>(ev.Source))
@@ -50,7 +50,7 @@ public sealed class DiscordChatRelaySystem : EntitySystem
                 {
                     var (id, token) = ParseWebhookUrl(_webhookUrl);
                     await _discordWebhook.CreateMessage(new WebhookIdentifier(id, token), payload.Value);
-                    NextTime =  _timing.CurTime + TimeSpan.FromSeconds(_random.NextFloat(240, 480) );
+                    NextTime =  _timing.CurTime + TimeSpan.FromSeconds(_random.NextFloat(120, 300) );
                 }
                 catch (Exception ex)
                 {
@@ -58,14 +58,10 @@ public sealed class DiscordChatRelaySystem : EntitySystem
                 }
             }
 
-
-            // Удаляем опасные символы
             string sanitizedMessage = Regex.Replace(ev.Message, @"[<>@#\*\\\|`]", "");
 
-            // Игнорируем пустые/слишком длинные сообщения
             if (string.IsNullOrEmpty(sanitizedMessage) || sanitizedMessage.Length > 200)
                 return;
-
 
             payload = new WebhookPayload
             {
