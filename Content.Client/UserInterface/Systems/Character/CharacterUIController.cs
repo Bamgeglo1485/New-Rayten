@@ -25,6 +25,8 @@ using Content.Client.UserInterface.Systems.Character.Basicskills;
 using Content.Client.UserInterface.Systems.Character.Easyskills;
 using System.Numerics;
 using Content.Shared.Vanilla.Skill;
+using Content.Shared.Vanilla.Background;
+using Content.Client.Vanilla.UserInterface.Background;
 
 namespace Content.Client.UserInterface.Systems.Character;
 
@@ -64,6 +66,7 @@ public sealed class CharacterUIController : UIController, IOnStateEntered<Gamepl
         LayoutContainer.SetAnchorPreset(_window, LayoutContainer.LayoutPreset.CenterTop);
         _window.TabSkill.OnPressed += SwitchToSkill;
         _window.TabInfo.OnPressed += SwitchToInfo;
+        _window.TabBackground.OnPressed += SwitchToBackground;
 
 
         _window.OnClose += DeactivateButton;
@@ -81,6 +84,7 @@ public sealed class CharacterUIController : UIController, IOnStateEntered<Gamepl
         {
             _window.TabInfo.OnPressed -= SwitchToInfo;
             _window.TabSkill.OnPressed -= SwitchToSkill;
+            _window.TabBackground.OnPressed -= SwitchToBackground;
             _window.Close();
             _window = null;
         }
@@ -145,20 +149,30 @@ public sealed class CharacterUIController : UIController, IOnStateEntered<Gamepl
     {
         if (_window == null) return;
         _window.InfoContainer.Visible = false;
+        _window.BackgroundContainer.Visible = false;
         _window.SkillContainer.Visible = true;
         _window.TabName.Text = "Навыки";
         _window.MainScroll.SetScrollValue(Vector2.Zero);
-        
     }
     private void SwitchToInfo(BaseButton.ButtonEventArgs args)
     {
         if (_window == null) return;
         _window.InfoContainer.Visible = true;
         _window.SkillContainer.Visible = false;
+        _window.BackgroundContainer.Visible = false;
         _window.TabName.Text = "Информация";
         _window.MainScroll.SetScrollValue(Vector2.Zero);
     }
-
+    private void SwitchToBackground(BaseButton.ButtonEventArgs args)
+    {
+        if (_window == null) return;
+        _window.InfoContainer.Visible = false;
+        _window.BackgroundContainer.Visible = true;
+        _window.SkillContainer.Visible = false;
+        _window.TabName.Text = "Предыстория";
+        _window.MainScroll.SetScrollValue(Vector2.Zero);
+        
+    }
     private void CharacterUpdated(CharacterData data)
     {
         if (_window == null)
@@ -234,6 +248,7 @@ public sealed class CharacterUIController : UIController, IOnStateEntered<Gamepl
 
         _window.RolePlaceholder.Visible = briefing == null && !controls.Any() && !objectives.Any();
         UpdateSkill(entity);
+        UpdateBackground(entity);
     }
 
     private void OnRoleTypeChanged(MindRoleTypeChangedEvent ev, EntitySessionEventArgs _)
@@ -299,7 +314,25 @@ public sealed class CharacterUIController : UIController, IOnStateEntered<Gamepl
             _window.Open();
         }
     }
+    private void UpdateBackground(EntityUid user)
+    {
+        if(_window==null)
+            return;
+        _window.BackgroundContainer.Children.Clear();
 
+        if (EntityManager.TryGetComponent<BackgroundComponent>(user, out var BackgroundComp) 
+            && _prototypeManager.TryIndex(BackgroundComp.Background, out var bgProto))
+        {
+            var backgroundControl = new BackgroundControl(bgProto.Name, bgProto.Description);
+
+            _window.BackgroundContainer.Children.Add(backgroundControl);
+            _window.TabBackground.Disabled = false;
+        }
+        else
+        {
+            _window.TabBackground.Disabled = true;
+        }
+    }
     public void UpdateSkill(EntityUid user)
     {
         if(_window==null)

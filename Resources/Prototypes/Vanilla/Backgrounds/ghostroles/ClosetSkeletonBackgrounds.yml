@@ -65,6 +65,7 @@
   skills:
     RangeWeapon: 3
     MeleeWeapon: 1
+    Engineering: 1
   specials:
   - MakeAntag
   easySkills:

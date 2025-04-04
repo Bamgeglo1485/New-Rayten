@@ -5,7 +5,7 @@
     xmlns:controls="clr-namespace:Content.Client.UserInterface.Systems.Character.Controls"
     xmlns:style="clr-namespace:Content.Client.Stylesheets"
     Title="{Loc 'character-info-title'}"
-    SetWidth="675"
+    SetWidth="685"
     MinHeight="850"
     Resizable="False">
     <ScrollContainer Name="MainScroll" Access="Public">
@@ -41,7 +41,7 @@
                         Access="Public"/>
                 <Button Name="TabBackground"
                         Text="Предыстория"
-                        Disabled="True"
+                        Disabled="False"
                         HorizontalExpand="True"
                         VerticalExpand="True"
                         StyleClasses="ButtonSquare"
@@ -75,6 +75,10 @@
                 <Label Name="ObjectivesLabel" Access="Public" Text="{Loc 'character-info-objectives-label'}" HorizontalAlignment="Center"/>
                 <BoxContainer Orientation="Vertical" Name="Objectives" Access="Public"/>
                 <cc:Placeholder Name="RolePlaceholder" Access="Public" PlaceholderText="{Loc 'character-info-roles-antagonist-text'}"/>
+            </BoxContainer>
+
+            <BoxContainer Orientation="Vertical" Name="BackgroundContainer" Visible="false" Access="Public" SetWidth="660">
+
             </BoxContainer>
 
         </BoxContainer>

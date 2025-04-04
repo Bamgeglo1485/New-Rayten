@@ -54,7 +54,7 @@ public sealed partial class BackgroundControl : Control
             );
         }
         string skillsText = string.Join(", ", skillDescriptions);
-        var finalskillsText = Loc.GetString("background-ui-SkillsLabel-prefix", ("specials", skills));
+        var finalskillsText = Loc.GetString("background-ui-SkillsLabel-prefix", ("skills", skillsText));
 
         var skillMsg = new FormattedMessage();
         skillMsg.AddMarkupOrThrow(finalskillsText);
@@ -72,5 +72,16 @@ public sealed partial class BackgroundControl : Control
             SpecialsLabel.SetMessage(specialMsg);
         }
         Button.OnPressed += _ => OnPressed?.Invoke();
+    }
+    public BackgroundControl(string name, string description)
+    {
+        RobustXamlLoader.Load(this);
+        var BackgroundNameMessage = new FormattedMessage();
+        var BackgroundDescMessage = new FormattedMessage();
+        BackgroundNameMessage.AddMarkupOrThrow(Loc.GetString(name));
+        BackgroundDescMessage.AddMarkupOrThrow(Loc.GetString(description));
+        NameLabel.SetMessage(BackgroundNameMessage);
+        DescriptionLabel.SetMessage(BackgroundDescMessage);
+        Button.Visible = false;
     }
 }

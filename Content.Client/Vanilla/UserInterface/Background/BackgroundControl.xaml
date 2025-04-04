@@ -4,7 +4,7 @@
          VerticalExpand="True"
          HorizontalExpand="True"
          HorizontalAlignment="Stretch"
-         SetWidth="920">
+         MaxWidth="920">
     <Button Name="MainButtonContainer"
             Disabled="True"
             HorizontalExpand="True"
@@ -21,7 +21,7 @@
             <cc:HLine Color="#0ec7ec" Thickness="2" />
             <cc:HSpacer Spacing="2" />
             <!-- Описание предыстории -->
-            <RichTextLabel Name="DescriptionLabel" HorizontalExpand="True" VerticalExpand="True" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="4 12"/>
+            <RichTextLabel Name="DescriptionLabel" HorizontalExpand="True" VerticalExpand="True" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="4 12" />
 
             <!-- Список навыков -->
             <RichTextLabel Name="SkillsLabel" HorizontalExpand="True" />

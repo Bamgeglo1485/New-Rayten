@@ -70,7 +70,7 @@
   - type: GhostRole
     name: ghost-role-information-closet-skeleton-name
     description: ghost-role-information-closet-skeleton-description
-    rules: ghost-role-information-freeagent-rules
+    rules: ghost-role-information-awaitbackground-rules
     mindRoles:
     - MindRoleGhostRoleAwaitBackground
     raffle:

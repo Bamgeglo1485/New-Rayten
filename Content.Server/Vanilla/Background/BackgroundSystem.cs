@@ -8,6 +8,7 @@ using Content.Server.Mind;
 using Content.Shared.Mind;
 using Content.Shared.Database;
 using Content.Shared.Roles;
+using Content.Server.Roles;
 
 namespace Content.Server.Vanilla.Background;
 
@@ -17,6 +18,7 @@ public sealed class BackGroundSystem : EntitySystem
     [Dependency] private readonly IPrototypeManager _prototype = default!;
     [Dependency] private readonly MindSystem _mind = default!;
     [Dependency] private readonly IAdminLogManager _adminLogger = default!;
+    [Dependency] private readonly RoleSystem  _role = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -35,10 +37,16 @@ public sealed class BackGroundSystem : EntitySystem
         {
             RemComp<SkillComponent>(uid);      
             var skillComp = EnsureComp<SkillComponent>(uid);
+
             ApplySkillsFromGhostBackground(uid, skillComp, bgProto.Skills);
             ApplyEasySkillsFromGhostBackground(uid, skillComp, bgProto.EasySkills);
             ApplySpecialsFromGhostBackground(uid, bgProto.Specials);
+
             RemComp<AwaitBackgroundComponent>(uid);
+
+            var backgroundcomp = EnsureComp<BackgroundComponent>(uid);
+            backgroundcomp.Background = msg.Background;
+            Dirty(uid, backgroundcomp);
         }
         else
         {
@@ -63,7 +71,7 @@ public sealed class BackGroundSystem : EntitySystem
 
     private void ApplySpecialsFromGhostBackground(EntityUid uid, HashSet<BackgroundSpecial> Specials)
     {
-        if (!_mind.TryGetMind(uid, out var mindId, out _))
+        if (!_mind.TryGetMind(uid, out var mindId, out var mindcomp))
             return;
 
         foreach (var Special in Specials)
@@ -72,12 +80,15 @@ public sealed class BackGroundSystem : EntitySystem
             {
                 case BackgroundSpecial.MakeAntag:
                     SetRoleType(mindId, "SoloAntagonist");
+                    _role.RoleUpdateMessage(mindcomp);
                 break;
                 case BackgroundSpecial.MakeNonAntag:
                     SetRoleType(mindId, "Neutral");
+                    _role.RoleUpdateMessage(mindcomp);
                 break;
                 case BackgroundSpecial.MakeFreeAgent:
                     SetRoleType(mindId, "FreeAgent");
+                    _role.RoleUpdateMessage(mindcomp);
                 break;
                 case BackgroundSpecial.RandomMagic:
                 break;
