@@ -1,6 +1,7 @@
 using Content.Server.Ghost.Roles.Raffles;
 using Content.Server.Mind.Commands;
 using Content.Shared.Roles;
+using Content.Shared.Vanilla.Background;
 using Robust.Shared.Prototypes;
 
 namespace Content.Server.Ghost.Roles.Components;
@@ -110,5 +111,13 @@ public sealed partial class GhostRoleComponent : Component
     [DataField("job")]
     [Access(typeof(GhostRoleSystem), Other = AccessPermissions.ReadWriteExecute)] // also FIXME Friends
     public ProtoId<JobPrototype>? JobProto = null;
+
+    /// <summary>
+    /// RAYTETN-BACKGROUNDS
+    /// Сслыка на группу предысторий, которая будет предложена игроку для выбора при заходе за гостроль
+    /// </summary>
+    [DataField("backgroundgroup")]
+    public ProtoId<BackgroundGroupPrototype>? BackgroundGroup { get; set; } = null;
+
 }
 

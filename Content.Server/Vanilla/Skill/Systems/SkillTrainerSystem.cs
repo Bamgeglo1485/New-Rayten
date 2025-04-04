@@ -104,7 +104,7 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
 
     }
 
-    private void SetEasySkill(SkillComponent skillComp, skillType skill)
+    public void SetEasySkill(SkillComponent skillComp, skillType skill)
     {
         switch (skill)
         {
@@ -129,7 +129,7 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
         skillComp.Dirty();
     }
 
-    private void SetSkillLevel(SkillComponent skillComp, skillType skill, SkillLevel level)
+    public void SetSkillLevel(SkillComponent skillComp, skillType skill, SkillLevel level)
     {
         switch (skill)
         {

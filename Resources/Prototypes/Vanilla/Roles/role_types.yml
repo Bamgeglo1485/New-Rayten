@@ -1,0 +1,5 @@
+- type: roleType
+  id: AwaitBackground
+  name: role-type-awaitbackground-name
+  color: '#6495ed'
+  symbol: "⌗"

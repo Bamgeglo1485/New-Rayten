@@ -1,0 +1,33 @@
+<Control xmlns="https://spacestation14.io"
+         xmlns:customControls="clr-namespace:Content.Client.Administration.UI.CustomControls"
+         xmlns:cc="clr-namespace:Content.Client.UserInterface.Controls"
+         VerticalExpand="True"
+         HorizontalExpand="True"
+         HorizontalAlignment="Stretch"
+         SetWidth="920">
+    <Button Name="MainButtonContainer"
+            Disabled="True"
+            HorizontalExpand="True"
+            VerticalExpand="True"
+            StyleClasses="chatSelectorOptionButton"
+            Margin="0">
+        <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True" HorizontalAlignment="Stretch" Margin="12">
+            <!-- Имя предыстории -->
+                <BoxContainer Orientation="Horizontal">
+                    <RichTextLabel Name="NameLabel" HorizontalExpand="True" />
+                    <Button Name="Button" Text="Выбрать" HorizontalAlignment="Right" StyleClasses="chatSelectorOptionButton" MinWidth="153"/>
+                </BoxContainer>
+            <cc:HSpacer Spacing="2" />
+            <cc:HLine Color="#0ec7ec" Thickness="2" />
+            <cc:HSpacer Spacing="2" />
+            <!-- Описание предыстории -->
+            <RichTextLabel Name="DescriptionLabel" HorizontalExpand="True" VerticalExpand="True" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="4 12"/>
+
+            <!-- Список навыков -->
+            <RichTextLabel Name="SkillsLabel" HorizontalExpand="True" />
+            <!-- Список особого -->
+            <RichTextLabel Name="SpecialsLabel" HorizontalExpand="True" />
+
+        </BoxContainer>
+    </Button>
+</Control>

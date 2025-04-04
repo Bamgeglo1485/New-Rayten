@@ -11,3 +11,11 @@
   - type: R1Role
   - type: RoleBriefing
     briefing: r1-role-briefing
+
+- type: entity
+  parent: MindRoleGhostRoleNeutral
+  id: MindRoleGhostRoleAwaitBackground
+  name: Await Background
+  components:
+  - type: MindRole
+    roleType: AwaitBackground
