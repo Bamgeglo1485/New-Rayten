@@ -1,0 +1,8 @@
+- type: BackgroundSpecial
+  id: Extraskillpointsloneops
+  name: 9 очков навыка
+  addSomeComponents:
+    components:
+    - type: AddSkillPoints
+      Points: 9
+    

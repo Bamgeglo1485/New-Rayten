@@ -2,14 +2,17 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 using Content.Server.Administration.Logs;
 using Content.Shared.Vanilla.Background;
+using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Vanilla.Skill;
+using Content.Shared.Roles;
 using Content.Server.SkillTrainer;
 using Content.Server.Mind;
 using Content.Shared.Mind;
-using Content.Shared.Database;
-using Content.Shared.Roles;
 using Content.Server.Roles;
-
+using Content.Server.Ghost.Roles;
+using Content.Server.Administration.Systems;
+using Content.Shared.Administration;
+using Content.Server.Vanilla.Skill;
 namespace Content.Server.Vanilla.Background;
 
 public sealed class BackGroundSystem : EntitySystem
@@ -17,13 +20,26 @@ public sealed class BackGroundSystem : EntitySystem
     [Dependency] private readonly ServerSkillTrainerSystem _skillTrainer = default!;
     [Dependency] private readonly IPrototypeManager _prototype = default!;
     [Dependency] private readonly MindSystem _mind = default!;
-    [Dependency] private readonly IAdminLogManager _adminLogger = default!;
+    [Dependency] private readonly SharedHandsSystem _hands = default!;
     [Dependency] private readonly RoleSystem  _role = default!;
+    [Dependency] private readonly AdminFrozenSystem _freeze = default!;
     public override void Initialize()
     {
         base.Initialize();
+        SubscribeLocalEvent<AwaitBackgroundComponent, MapInitEvent>(OnMapInit);
+        SubscribeLocalEvent<AwaitBackgroundComponent, ComponentShutdown>(OnShutdown);
         SubscribeNetworkEvent<TakeGhostBackgroundEvent>(OnTakeGhostBackgroundEvent);
     }
+    private void OnMapInit(EntityUid uid, AwaitBackgroundComponent component, MapInitEvent args)
+    {
+        _freeze.FreezeAndMute(uid);
+    }
+
+    private void OnShutdown(EntityUid uid, AwaitBackgroundComponent component, ComponentShutdown args)
+    {
+        RemComp<AdminFrozenComponent>(uid);
+    }
+
     private void OnTakeGhostBackgroundEvent(TakeGhostBackgroundEvent msg, EntitySessionEventArgs args)
     {
         if (!args.SenderSession.AttachedEntity.HasValue)
@@ -40,6 +56,7 @@ public sealed class BackGroundSystem : EntitySystem
 
             ApplySkillsFromGhostBackground(uid, skillComp, bgProto.Skills);
             ApplyEasySkillsFromGhostBackground(uid, skillComp, bgProto.EasySkills);
+            ApplySkillPointsFromGhostBackground(uid, skillComp, bgProto.SkillPoints);
             ApplySpecialsFromGhostBackground(uid, bgProto.Specials);
 
             RemComp<AwaitBackgroundComponent>(uid);
@@ -54,6 +71,11 @@ public sealed class BackGroundSystem : EntitySystem
             RemComp<AwaitBackgroundComponent>(uid);         
         }
     }
+    private void ApplySkillPointsFromGhostBackground(EntityUid uid, SkillComponent skillComp, int SkillPoints)
+    {
+        skillComp.SkillPoints += SkillPoints;
+    }
+    
     private void ApplySkillsFromGhostBackground(EntityUid uid, SkillComponent skillComp, Dictionary<skillType, SkillLevel> Skills)
     {
         foreach (var (skillType, level) in Skills)
@@ -69,73 +91,38 @@ public sealed class BackGroundSystem : EntitySystem
         }
     }
 
-    private void ApplySpecialsFromGhostBackground(EntityUid uid, HashSet<BackgroundSpecial> Specials)
-    {
-        if (!_mind.TryGetMind(uid, out var mindId, out var mindcomp))
-            return;
+private void ApplySpecialsFromGhostBackground(EntityUid uid, HashSet<ProtoId<BackgroundSpecialPrototype>> Specials)
+{
+    if (!_mind.TryGetMind(uid, out var mindId, out var mindcomp))
+        return;
 
-        foreach (var Special in Specials)
+    foreach (var specialId in Specials)
+    {
+        if (!_prototype.TryIndex<BackgroundSpecialPrototype>(specialId, out var special))
         {
-            switch(Special)
+            Log.Error($"прототипа {specialId} не существует");       
+            continue;
+        }
+
+        if (special?.MindRoles is { } mindRoles)
+        {
+            _role.MindTryRemoveRole<MindRoleComponent>(mindId);
+            _role.MindTryRemoveRole<GhostRoleMarkerRoleComponent>(mindId);
+            _role.MindTryRemoveRole<NukeopsRoleComponent>(mindId);
+            _role.MindAddRoles(mindId, mindRoles, mindcomp);
+        }
+
+        if (special?.Items is { } SomeItems)
+        {
+            foreach (var someitem in SomeItems)
             {
-                case BackgroundSpecial.MakeAntag:
-                    SetRoleType(mindId, "SoloAntagonist");
-                    _role.RoleUpdateMessage(mindcomp);
-                break;
-                case BackgroundSpecial.MakeNonAntag:
-                    SetRoleType(mindId, "Neutral");
-                    _role.RoleUpdateMessage(mindcomp);
-                break;
-                case BackgroundSpecial.MakeFreeAgent:
-                    SetRoleType(mindId, "FreeAgent");
-                    _role.RoleUpdateMessage(mindcomp);
-                break;
-                case BackgroundSpecial.RandomMagic:
-                break;
+                var item = Spawn(someitem, Transform(uid).Coordinates);
+                _hands.PickupOrDrop(uid, item);
             }
-
         }
     }
+}
 
 
-    //Нахуя разрабы сделали его приватным блять?
-    private void SetRoleType(EntityUid mind, ProtoId<RoleTypePrototype> roleTypeId)
-    {
-        if (!TryComp<MindComponent>(mind, out var comp))
-        {
-            Log.Error($"Failed to update Role Type of mind entity {ToPrettyString(mind)} to {roleTypeId}. MindComponent not found.");
-            return;
-        }
 
-        if (!_prototype.HasIndex(roleTypeId))
-        {
-            Log.Error($"Failed to change Role Type of {_mind.MindOwnerLoggingString(comp)} to {roleTypeId}. Invalid role");
-            return;
-        }
-
-        comp.RoleType = roleTypeId;
-        Dirty(mind, comp);
-
-        // Update player character window
-        if (_mind.TryGetSession(mind, out var session))
-            RaiseNetworkEvent(new MindRoleTypeChangedEvent(), session.Channel);
-        else
-        {
-            var error = $"The Character Window of {_mind.MindOwnerLoggingString(comp)} potentially did not update immediately : session error";
-            _adminLogger.Add(LogType.Mind, LogImpact.Medium, $"{error}");
-        }
-
-        if (comp.OwnedEntity is null)
-        {
-            Log.Error($"{ToPrettyString(mind)} does not have an OwnedEntity!");
-            _adminLogger.Add(LogType.Mind,
-                LogImpact.Medium,
-                $"Role Type of {ToPrettyString(mind)} changed to {roleTypeId}");
-            return;
-        }
-
-        _adminLogger.Add(LogType.Mind,
-            LogImpact.High,
-            $"Role Type of {ToPrettyString(comp.OwnedEntity)} changed to {roleTypeId}");
-    }
 }

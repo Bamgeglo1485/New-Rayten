@@ -1,0 +1,9 @@
+- type: BackgroundSpecial
+  id: cats
+  name: Котики
+  color: DarkViolet
+  items:
+  - MobCatSyndy
+  - MobCatSyndy
+  - MobCatSyndy
+    

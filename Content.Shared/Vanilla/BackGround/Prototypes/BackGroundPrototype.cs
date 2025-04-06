@@ -5,7 +5,7 @@ using Content.Shared.Vanilla.Skill;
 
 namespace Content.Shared.Vanilla.Background;
 
-[Serializable, Prototype("BackGround")]
+[Serializable, Prototype("Background")]
 public sealed class BackgroundPrototype : IPrototype
 {
     [IdDataField]
@@ -24,15 +24,8 @@ public sealed class BackgroundPrototype : IPrototype
     public HashSet<skillType> EasySkills { get; set; } = new();
 
     [DataField("specials")]
-    public HashSet<BackgroundSpecial> Specials { get; set; } = new();
+    public HashSet<ProtoId<BackgroundSpecialPrototype>> Specials { get; set; } = new();
 
-}
-
-[Serializable, NetSerializable]
-public enum BackgroundSpecial
-{
-    MakeAntag = 0,   
-    MakeNonAntag = 1,   
-    MakeFreeAgent = 2, 
-    RandomMagic = 3 
+    [DataField("skillPoints")]
+    public int SkillPoints { get; set; } = 0;
 }

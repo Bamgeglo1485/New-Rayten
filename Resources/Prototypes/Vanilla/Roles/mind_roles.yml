@@ -12,10 +12,14 @@
   - type: RoleBriefing
     briefing: r1-role-briefing
 
+#### Предысторические бэкраунды
+
 - type: entity
   parent: MindRoleGhostRoleNeutral
-  id: MindRoleGhostRoleAwaitBackground
+  id: MindRoleAwaitBackground
   name: Await Background
   components:
   - type: MindRole
     roleType: AwaitBackground
+    antag: false
+    sortWeight: 900

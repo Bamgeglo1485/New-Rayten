@@ -1,0 +1,29 @@
+- type: BackgroundSpecial
+  id: MakeSoloAntag
+  name: Антагонист
+  color: Red
+  mindRoles: 
+  - MindRoleGhostRoleSoloAntagonist
+
+- type: BackgroundSpecial
+  id: MakeLoneOps
+  name: Антагонист
+  color: Red
+  mindRoles: 
+  - MindRoleNukeops
+  - MindRoleGhostRoleSoloAntagonist
+  
+- type: BackgroundSpecial
+  id: MakeNeutral
+  name: Не антагонист
+  color: Green
+  mindRoles: 
+  - MindRoleGhostRoleNeutral
+
+- type: BackgroundSpecial
+  id: MakeFreeAgent
+  name: Свободный агент
+  color: Yellow
+  mindRoles: 
+  - MindRoleGhostRoleFreeAgent
+

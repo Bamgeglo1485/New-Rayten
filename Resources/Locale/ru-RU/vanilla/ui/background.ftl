@@ -47,17 +47,6 @@ background-ui-Skills= [color={ $skilltype ->
         [Crime] Преступность
        *[other] ???
     }[/color]: { $lvl }
-background-ui-SpecialsLabel-prefix = [bold]Особое:[/bold] { $specials }
-background-ui-SpecialsLabel-special = [color={ $special ->
-        [MakeAntag] #d01212
-        [MakeNonAntag] #12a423
-        [MakeFreeAgent] #ecf000
-        [RandomMagic] #a448e2
-       *[other] white
-    }]{ $special ->
-        [MakeAntag] Антагонист
-        [MakeNonAntag] Не антагонист
-        [MakeFreeAgent] Свободный агент
-        [RandomMagic] Случайное заклинание
-       *[other] ???
-    }[/color]
+background-ui-specials-header = [bold]Особенности:[/bold]
+background-ui-special-entry = [color={ $color }]• { $name }[/color]
+background-ui-SkillPoints = [color=#0073ff] • { $count } очков навыка[/color]

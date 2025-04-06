@@ -48,7 +48,7 @@ public sealed class GhostBackgroundUIController : UIController, IOnStateEntered<
         {
             if (_prototype.TryIndex(backgroundProtoId, out var bgProto))
             {
-                var backgroundControl = new BackgroundControl(bgProto.Name, bgProto.Description, bgProto.Skills, bgProto.Specials, bgProto.EasySkills);
+                var backgroundControl = new BackgroundControl(bgProto.Name, bgProto.Description, bgProto.Skills, bgProto.Specials, bgProto.EasySkills, bgProto.SkillPoints);
                 backgroundControl.OnPressed += () => _backGroundSystem.TakeGhostBackground(bgProto);
                 _window.BackgroundsContainer.Children.Add(backgroundControl);
             }
