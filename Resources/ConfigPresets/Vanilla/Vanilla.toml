@@ -95,3 +95,6 @@ auto_record = true
 
 [discord]
 rich_main_icon_id = "vanilla-station"
+
+[movement]
+mob_pushing = true
