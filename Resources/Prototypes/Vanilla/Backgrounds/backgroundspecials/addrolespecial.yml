@@ -4,14 +4,6 @@
   color: Red
   mindRoles: 
   - MindRoleGhostRoleSoloAntagonist
-
-- type: BackgroundSpecial
-  id: MakeLoneOps
-  name: Антагонист
-  color: Red
-  mindRoles: 
-  - MindRoleNukeops
-  - MindRoleGhostRoleSoloAntagonist
   
 - type: BackgroundSpecial
   id: MakeNeutral

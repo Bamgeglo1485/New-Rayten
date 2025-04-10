@@ -58,7 +58,7 @@
     description: ghost-role-information-closet-skeleton-description
     rules: ghost-role-information-awaitbackground-rules
     mindRoles:
-    - MindRoleAwaitBackground
+    - MindRoleGhostRoleSoloAntagonist
     raffle:
       settings: default
   - type: GhostTakeoverAvailable

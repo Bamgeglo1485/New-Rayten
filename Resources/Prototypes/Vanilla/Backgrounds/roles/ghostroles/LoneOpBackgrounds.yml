@@ -14,8 +14,6 @@
     RangeWeapon: 3
     MeleeWeapon: 3
     Medicine: 3
-  specials:
-  - MakeLoneOps
   easySkills:
   - Piloting
 
@@ -23,8 +21,6 @@
   id: LoneOpsStandartBackground
   name: background-loneops-name-standart
   description: background-loneops-desc-standart
-  specials:
-  - MakeLoneOps
   easySkills:
   - Piloting
   skillPoints: 9
@@ -52,7 +48,6 @@
     Medicine: 3
     Chemistry: 2
   specials:
-  - MakeLoneOps
   - cats
   easySkills:
   - Piloting

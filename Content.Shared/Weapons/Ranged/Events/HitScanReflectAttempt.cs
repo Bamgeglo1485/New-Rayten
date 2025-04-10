@@ -1,5 +1,6 @@
 using System.Numerics;
 using Content.Shared.Weapons.Reflect;
+using Content.Shared.Damage;
 
 namespace Content.Shared.Weapons.Ranged.Events;
 
@@ -9,3 +10,8 @@ namespace Content.Shared.Weapons.Ranged.Events;
 /// </summary>
 [ByRefEvent]
 public record struct HitScanReflectAttemptEvent(EntityUid? Shooter, EntityUid SourceItem, ReflectType Reflective, Vector2 Direction, bool Reflected);
+
+//Rayten-Start
+[ByRefEvent]
+public record struct HitscanHitEvent(EntityUid? Target, EntityUid SourceItem, DamageSpecifier dmg);
+//Rayten-End

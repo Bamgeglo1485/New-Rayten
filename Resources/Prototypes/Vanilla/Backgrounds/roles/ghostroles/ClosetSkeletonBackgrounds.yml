@@ -55,8 +55,6 @@
     MeleeWeapon: 3
     Medicine: 2
     Crime: 1
-  specials:
-  - MakeSoloAntag
 
 - type: Background
   id: ClosetSkeletonSaboteurBackground
@@ -66,7 +64,5 @@
     RangeWeapon: 3
     MeleeWeapon: 1
     Engineering: 1
-  specials:
-  - MakeSoloAntag
   easySkills:
   - Piloting

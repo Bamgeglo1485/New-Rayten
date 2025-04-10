@@ -7,3 +7,16 @@
   - MobCatSyndy
   - MobCatSyndy
     
+- type: BackgroundSpecial
+  id: Newbee
+  name: Новичкам везёт
+  color: Green
+  items:
+  - Telecrystal10
+
+- type: BackgroundSpecial
+  id: Cyborgpet
+  name: Киберпитомец!
+  color: Orange
+  items:
+  - PlayerBorgSyndicateSaboteurGhostRole

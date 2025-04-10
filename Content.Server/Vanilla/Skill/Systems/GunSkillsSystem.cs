@@ -3,6 +3,7 @@ using Content.Shared.Hands;
 using Content.Shared.Interaction;
 using Content.Shared.Interaction.Components;
 using Content.Shared.Item;
+using Content.Shared.Damage;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Events;
 using Content.Shared.Weapons.Ranged.Systems;
@@ -33,12 +34,30 @@ public sealed class GunSkillsSystem : EntitySystem
         SubscribeLocalEvent<GunComponent, GunRefreshModifiersEvent>(OnGunRefreshModifiers);//перегрузка обновления модификаторов
         SubscribeLocalEvent<GunCanBeFallComponent, GunShotEvent>(RangeWeaponFalldownOnShoot);//выпадение оружия при стрельбе
         SubscribeLocalEvent<ProjectileComponent, ProjectileHitEvent>(TrainOnShoot);
-        
+        SubscribeLocalEvent<SkillComponent, HitscanHitEvent>(TrainOnHitscanShoot);
     }
 
+    private void TrainOnHitscanShoot(EntityUid uid, SkillComponent skillComp, ref HitscanHitEvent args)
+    {
+        if(args.Target == null || uid == args.Target)
+            return;
+
+        if(HasComp<ActorComponent>(args.Target) || HasComp<GunTrainerComponent>(args.Target))
+        {
+            if(_skillTrainerSystem.AddExperience(skillComp, skillType.RangeWeapon, (int)args.dmg.GetTotal()))
+            {
+                if(TryComp<UnskilledWeaponComponent>(args.SourceItem, out var unskilledComp))
+                {
+                    UnskilledWeaponRefreshModifiers(skillComp, unskilledComp);
+                    _gun.RefreshModifiers(args.SourceItem);
+                }
+            }
+
+        }
+    }
     private void TrainOnShoot(EntityUid uid, ProjectileComponent component, ref ProjectileHitEvent args)
     {
-        if(args.Shooter == null)
+        if(args.Shooter == null || args.Shooter == args.Target)
             return;
 
         if(HasComp<ActorComponent>(args.Target) || HasComp<GunTrainerComponent>(args.Target))

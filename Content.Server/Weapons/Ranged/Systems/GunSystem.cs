@@ -230,6 +230,10 @@ public sealed partial class GunSystem : SharedGunSystem
 
                             if (user != null)
                             {
+                                //Rayten-Start
+                                var ev = new HitscanHitEvent(hitEntity, gunUid, dmg);
+                                RaiseLocalEvent(user.Value, ref ev);
+                                //Rayten-End
                                 Logs.Add(LogType.HitScanHit,
                                     $"{ToPrettyString(user.Value):user} hit {hitName:target} using hitscan and dealt {dmg.GetTotal():damage} damage");
                             }

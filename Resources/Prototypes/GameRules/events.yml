@@ -647,7 +647,7 @@
         - Syndicate
       mindRoles:
       - MindRoleNukeops
-      - MindRoleAwaitBackground
+      - MindRoleGhostRoleSoloAntagonist
 
 - type: entity
   parent: BaseTraitorRule

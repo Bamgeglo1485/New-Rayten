@@ -50,6 +50,10 @@ public sealed class MeleeSkillSystem : EntitySystem
             if (target == args.User)
                 continue;
 
+            //Проверяем что цель живой игрок
+            if(!HasComp<ActorComponent>(target))
+                continue;
+
             // Начисляем опыт за атаку атакующему
             _skillTrainerSystem.AddExperience(skillCompAttacker, component.SkillType, component.ExpPerHit);
 
