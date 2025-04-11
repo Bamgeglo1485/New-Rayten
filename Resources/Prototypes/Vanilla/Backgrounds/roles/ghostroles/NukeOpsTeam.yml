@@ -70,8 +70,8 @@
   easySkills:
   - Piloting
   - Atmosphere
-  specials:
-  - SmartJammer
+  # specials:
+  # - SmartJammer
 
 - type: Background
   id: NukeOpComanderGreedyBackground
