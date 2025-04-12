@@ -1,11 +1,10 @@
 using Content.Server.Communications;
-using Content.Server.Vanilla.EventTeam;
-using Content.Server.NukeOps;
 using Content.Shared.GameTicking;
-using Content.Shared.NukeOps;
+using Content.Shared.Vanilla.Background;
 using Robust.Server.GameObjects;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
+using Content.Shared.Vanilla.Jammer;
 
 namespace Content.Server.Vanilla.Jammer;
 
@@ -13,46 +12,28 @@ public sealed class JammerSystem : EntitySystem
 {
     private bool _isJammerActive = false;
     private TimeSpan? _jammerEndTime = null;
-    private const string _ertproto = "ERT";
     private TimeSpan defaultjammertime = TimeSpan.FromMinutes(35);
-
+    private TimeSpan jammertime = TimeSpan.FromMinutes(35);
     [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly EventTeamSystem _eventteam = default!;
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
     public override void Initialize()
     {
         base.Initialize();
         SubscribeLocalEvent<RoundEndMessageEvent>(OnRoundEnd);
+        SubscribeLocalEvent<OverrideJammerTimeEvent>(Onoverride);
         SubscribeLocalEvent<CommunicationConsoleCallShuttleAttemptEvent>(OnShuttleCallAttempt);
     }
 
-    private void OnRoundEnd(RoundEndMessageEvent ev)
-    {
-        RemoveJammer();
-    }
-
-    private void NukeStartjammer(Entity<WarDeclaratorComponent> ent, ref MapInitEvent args)
-    {
-        float timer = ent.Comp.WarDeclarationDelay;
-
-    }
     public void TrySetJammer()
     {
         if(_isJammerActive)
             return;
-        _isJammerActive = true;
-        _jammerEndTime = _timing.CurTime + defaultjammertime;
+            
+        SetJammer();
     }
     public void SetJammer()
     {
         _isJammerActive = true;
-        _jammerEndTime = _timing.CurTime + defaultjammertime;
-    }
-
-    public void SetJammer(TimeSpan jammerDuration)
-    {
-        _isJammerActive = true;
-        _jammerEndTime = _timing.CurTime + jammerDuration;
+        _jammerEndTime = _timing.CurTime + jammertime;
     }
 
     public void RemoveJammer()
@@ -76,11 +57,20 @@ public sealed class JammerSystem : EntitySystem
         return remainingTime.Value;
     }
 
+    private void Onoverride(OverrideJammerTimeEvent ev)
+    {
+        jammertime = TimeSpan.FromMinutes(ev.Minutes);
+    }
+
+    private void OnRoundEnd(RoundEndMessageEvent ev)
+    {
+        RemoveJammer();
+        jammertime = defaultjammertime;
+    }
     private void OnShuttleCallAttempt(ref CommunicationConsoleCallShuttleAttemptEvent ev)
     {
         if (CheckJammer() == TimeSpan.Zero)
             return;
-
         ev.Cancelled = true;
         ev.Reason = Loc.GetString("jammer-shuttle-call-unavailable");
     }

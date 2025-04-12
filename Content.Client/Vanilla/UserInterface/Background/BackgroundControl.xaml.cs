@@ -15,7 +15,7 @@ public sealed partial class BackgroundControl : Control
 {
     public Action? OnPressed;
     [Dependency] private readonly IPrototypeManager _prototype = default!;
-    public BackgroundControl(string name, string description, Dictionary<skillType, SkillLevel> skills, HashSet<ProtoId<BackgroundSpecialPrototype>> Specials, HashSet<skillType> EasySkills, int skillpoints)
+    public BackgroundControl(string name, string description, List<string>? SpecialDesc, Dictionary<skillType, SkillLevel> skills, HashSet<skillType> EasySkills, int skillpoints)
     {
         IoCManager.InjectDependencies(this);
         RobustXamlLoader.Load(this);
@@ -64,33 +64,20 @@ public sealed partial class BackgroundControl : Control
         var skillMsg = new FormattedMessage();
         skillMsg.AddMarkupOrThrow(finalskillsText);
         SkillsLabel.SetMessage(skillMsg);
+
+
         //Особое
-        if (Specials.Count > 0)
+        if (SpecialDesc != null && SpecialDesc.Count > 0)
         {
-            var specialsList = new List<string>();
-            
-            foreach (var specialId in Specials)
+            var specialMsg = new FormattedMessage();
+            specialMsg.PushMarkup(Loc.GetString("background-ui-specials-header"));
+            foreach (var specialText in SpecialDesc)
             {
-                if (!_prototype.TryIndex<BackgroundSpecialPrototype>(specialId, out var special))
-                    continue;
-
-                var specialText = Loc.GetString("background-ui-special-entry",
-                    ("name", special.Name),
-                    ("color", special.color));
-                    
-                specialsList.Add(specialText);
+                specialMsg.PushMarkup(specialText);
             }
-
-            if (specialsList.Count > 0)
-            {
-                var formattedSpecials = string.Join(" ", specialsList);
-                var finalSpecialsText = Loc.GetString("background-ui-specials-header") + formattedSpecials;
-                
-                var specialMsg = new FormattedMessage();
-                specialMsg.PushMarkup(finalSpecialsText);
-                SpecialsLabel.SetMessage(specialMsg);
-            }
+            SpecialsLabel.SetMessage(specialMsg);
         }
+
         Button.OnPressed += _ => OnPressed?.Invoke();
     }
     public BackgroundControl(string name, string description)

@@ -13,6 +13,8 @@ using Content.Server.Ghost.Roles;
 using Content.Server.Administration.Systems;
 using Content.Shared.Administration;
 using Content.Server.Vanilla.Skill;
+using Content.Shared.Vanilla.Jammer;
+
 namespace Content.Server.Vanilla.Background;
 
 public sealed class BackGroundSystem : EntitySystem
@@ -23,6 +25,7 @@ public sealed class BackGroundSystem : EntitySystem
     [Dependency] private readonly SharedHandsSystem _hands = default!;
     [Dependency] private readonly RoleSystem  _role = default!;
     [Dependency] private readonly AdminFrozenSystem _freeze = default!;
+    [Dependency] private readonly IEntityManager _entMan = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -44,10 +47,13 @@ public sealed class BackGroundSystem : EntitySystem
     {
         if (!args.SenderSession.AttachedEntity.HasValue)
             return;
+
         var uid = args.SenderSession.AttachedEntity.Value;
 
         if (!HasComp<AwaitBackgroundComponent>(uid))
             return;
+
+        RemComp<AwaitBackgroundComponent>(uid);
 
         if (_prototype.TryIndex(msg.Background, out var bgProto))
         {
@@ -59,16 +65,13 @@ public sealed class BackGroundSystem : EntitySystem
             ApplySkillPointsFromGhostBackground(uid, skillComp, bgProto.SkillPoints);
             ApplySpecialsFromGhostBackground(uid, bgProto.Specials);
 
-            RemComp<AwaitBackgroundComponent>(uid);
-
             var backgroundcomp = EnsureComp<BackgroundComponent>(uid);
             backgroundcomp.Background = msg.Background;
             Dirty(uid, backgroundcomp);
         }
         else
         {
-            Log.Error($"Не удалось найти предысторию с ID {msg.Background}");       
-            RemComp<AwaitBackgroundComponent>(uid);         
+            Log.Error($"Не удалось найти предысторию с ID {msg.Background}");            
         }
     }
     private void ApplySkillPointsFromGhostBackground(EntityUid uid, SkillComponent skillComp, int SkillPoints)
@@ -91,38 +94,11 @@ public sealed class BackGroundSystem : EntitySystem
         }
     }
 
-private void ApplySpecialsFromGhostBackground(EntityUid uid, HashSet<ProtoId<BackgroundSpecialPrototype>> Specials)
-{
-    if (!_mind.TryGetMind(uid, out var mindId, out var mindcomp))
-        return;
-
-    foreach (var specialId in Specials)
+    private void ApplySpecialsFromGhostBackground(EntityUid uid, List<BackgroundSpecial> Specials)
     {
-        if (!_prototype.TryIndex<BackgroundSpecialPrototype>(specialId, out var special))
+        foreach (var Special in Specials)
         {
-            Log.Error($"прототипа {specialId} не существует");       
-            continue;
-        }
-
-        if (special?.MindRoles is { } mindRoles)
-        {
-            _role.MindTryRemoveRole<MindRoleComponent>(mindId);
-            _role.MindTryRemoveRole<GhostRoleMarkerRoleComponent>(mindId);
-            _role.MindTryRemoveRole<NukeopsRoleComponent>(mindId);
-            _role.MindAddRoles(mindId, mindRoles, mindcomp);
-        }
-
-        if (special?.Items is { } SomeItems)
-        {
-            foreach (var someitem in SomeItems)
-            {
-                var item = Spawn(someitem, Transform(uid).Coordinates);
-                _hands.PickupOrDrop(uid, item);
-            }
+            Special.apply(uid);
         }
     }
-}
-
-
-
 }

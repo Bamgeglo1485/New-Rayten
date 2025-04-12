@@ -6,6 +6,7 @@ using Robust.Client.Player;
 using Robust.Client.UserInterface;
 using Content.Shared.Vanilla.Background;
 using Content.Client.Vanilla.UserInterface.GhostBackground;
+
 namespace Content.Client.Vanilla.Background;
 
 public sealed class BackgroundSystem : EntitySystem
@@ -18,18 +19,21 @@ public sealed class BackgroundSystem : EntitySystem
         SubscribeLocalEvent<AwaitBackgroundComponent, LocalPlayerAttachedEvent>(OnPlayerAttached);
         SubscribeLocalEvent<AwaitBackgroundComponent, ComponentShutdown>(OnComponentShutdown);
     }
+
     private void OnComponentShutdown(EntityUid uid, AwaitBackgroundComponent component, ComponentShutdown args)
     {
         if (_player.LocalSession?.AttachedEntity == uid)
             _userInterfaceManager.GetUIController<GhostBackgroundUIController>().CloseWindow();
     }
+
     private void OnPlayerAttached(EntityUid uid, AwaitBackgroundComponent component, LocalPlayerAttachedEvent args)
     {
         if (component.BackgroundGroup == null )
             return;
-
-        _userInterfaceManager.GetUIController<GhostBackgroundUIController>().createbackground(component.BackgroundGroup.Value);
+            
+        _userInterfaceManager.GetUIController<GhostBackgroundUIController>().CreateBackground(component.BackgroundGroup.Value);
     }
+
     public void TakeGhostBackground(ProtoId<BackgroundPrototype> background)
     {
         RaiseNetworkEvent(new TakeGhostBackgroundEvent(background));
