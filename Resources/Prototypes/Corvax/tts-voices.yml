@@ -31,31 +31,31 @@
 - type: ttsVoice
   id: Albert
   name: Альберт
-  sex: male
+  sex: Male
   speaker: albert
 
 - type: ttsVoice
   id: Dmitry
   name: Дмитрий
-  sex: male
+  sex: Male
   speaker: dmitry
 
 - type: ttsVoice
   id: Alina
   name: Алина
-  sex: male
+  sex: Female
   speaker: alina
 
 - type: ttsVoice
   id: Bianca
   name: Бьянка
-  sex: male
+  sex: Female
   speaker: bianca
 
 - type: ttsVoice
   id: Kim
   name: Ким
-  sex: male
+  sex: Female
   speaker: kim
 
 - type: ttsVoice
@@ -67,7 +67,7 @@
 - type: ttsVoice
   id: Lama
   name: Лама
-  sex: male
+  sex: Female
   speaker: lama
 
 - type: ttsVoice

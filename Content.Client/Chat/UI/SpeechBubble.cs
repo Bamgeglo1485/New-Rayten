@@ -9,6 +9,10 @@ using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Configuration;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
+using Content.Client.Vanilla.UndertaleSpeech;
+using Robust.Shared.Audio;
+using Content.Shared.Vanilla.UndertaleSpeech;
+using Robust.Shared.Prototypes;
 
 namespace Content.Client.Chat.UI
 {
@@ -62,24 +66,42 @@ namespace Content.Client.Chat.UI
 
         public static SpeechBubble CreateSpeechBubble(SpeechType type, ChatMessage message, EntityUid senderEntity)
         {
-            switch (type)
+            SpeechBubble bubble = type switch
             {
-                case SpeechType.Emote:
-                    return new TextSpeechBubble(message, senderEntity, "emoteBox");
+                SpeechType.Emote => new TextSpeechBubble(message, senderEntity, "emoteBox"),
+                SpeechType.Say => new FancyTextSpeechBubble(message, senderEntity, "sayBox"),
+                SpeechType.Whisper => new FancyTextSpeechBubble(message, senderEntity, "whisperBox"),
+                SpeechType.Looc => new TextSpeechBubble(message, senderEntity, "emoteBox", Color.FromHex("#48d1cc")),
+                _ => throw new ArgumentOutOfRangeException()
+            };
 
-                case SpeechType.Say:
-                    return new FancyTextSpeechBubble(message, senderEntity, "sayBox");
+            if ( type == SpeechType.Say || type == SpeechType.Whisper )
+            {
+                var entMan = IoCManager.Resolve<IEntityManager>();
+                var protoMan = IoCManager.Resolve<IPrototypeManager>();
 
-                case SpeechType.Whisper:
-                    return new FancyTextSpeechBubble(message, senderEntity, "whisperBox");
 
-                case SpeechType.Looc:
-                    return new TextSpeechBubble(message, senderEntity, "emoteBox", Color.FromHex("#48d1cc"));
+                if (!entMan.TryGetComponent<UndertaleSpeechEmitterComponent>(senderEntity, out var undemitcomp) || 
+                    undemitcomp.VoicePrototypeId == null ||
+                    !protoMan.TryIndex<UndertaleSpeechrototype>(undemitcomp.VoicePrototypeId, out var protoVoice))
+                    return bubble;
 
-                default:
-                    throw new ArgumentOutOfRangeException();
+                var timing = IoCManager.Resolve<IGameTiming>();
+
+                var undertale = entMan.EnsureComponent<UndertaleSpeechComponent>(senderEntity);
+                undertale.RemainingText = message.Message.Length > 60
+                    ? message.Message.Substring(0, 60)
+                    : message.Message;
+
+                undertale.NextBeepTime = timing.CurTime;
+                undertale.Sound = protoVoice.Voice;
+
+                if (type == SpeechType.Whisper)
+                    undertale.iswhisper = true;
             }
+            return bubble;
         }
+
 
         public SpeechBubble(ChatMessage message, EntityUid senderEntity, string speechStyleClass, Color? fontColor = null)
         {

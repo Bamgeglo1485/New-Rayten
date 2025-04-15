@@ -1,0 +1,41 @@
+- type: UndertaleSpeech
+  id: Sans
+  name: Санс
+  sex: Male
+  voice:
+    path: /Audio/Vanilla/Effects/undertale/SANS.ogg
+
+- type: UndertaleSpeech
+  id: Toriel
+  name: Ториэль
+  sex: Female
+  voice:
+    path: /Audio/Vanilla/Effects/undertale/Toriel.ogg
+
+- type: UndertaleSpeech
+  id: Asriel
+  name: Азриэль
+  sex: Female
+  voice:
+    path: /Audio/Vanilla/Effects/undertale/Asriel.ogg
+
+- type: UndertaleSpeech
+  id: Asgore
+  name: Азгор
+  sex: Male
+  voice:
+    path: /Audio/Vanilla/Effects/undertale/Asgore.ogg
+
+- type: UndertaleSpeech
+  id: EvilFlowey
+  name: Злой цветочек
+  sex: Male
+  voice:
+    path: /Audio/Vanilla/Effects/undertale/EvilFlowey.ogg
+
+- type: UndertaleSpeech
+  id: Flowey
+  name: Цветочек
+  sex: FeMale
+  voice:
+    path: /Audio/Vanilla/Effects/undertale/Flowey.ogg

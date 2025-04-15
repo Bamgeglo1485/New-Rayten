@@ -5,21 +5,23 @@ using Robust.Shared.Random;
 using Content.Server.Chat.Systems;
 using Robust.Shared.Timing;
 using System.Text.RegularExpressions;
+using Content.Shared.Vanilla.CCVars;
+using Robust.Shared.Configuration;
 
 public sealed class DiscordChatRelaySystem : EntitySystem
 {
     [Dependency] private readonly DiscordWebhook _discordWebhook = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
-
+    [Dependency] private readonly IConfigurationManager _cfg = default!;
+    private string _webhookUrl = "";
     private TimeSpan? NextTime;
     private  WebhookPayload? payload;
-    private string _webhookUrl = "https://discord.com/api/webhooks/1357298293339717633/5_Z4WPq2DapHxGUR7aJC2Lq2QBR8JZtoDj0jI--_sQ1XGlqXT6TZdy_NxryaZpo_1vKC";
-
     public override void Initialize()
     {
         base.Initialize();
         SubscribeLocalEvent<EntitySpokeEvent>(OnEntitySpoke);
+        //_cfg.OnValueChanged(CCVarsVanilla.DiscordBridgeWebhook, v => _webhookUrl = v, true);
     }
     private (string Id, string Token) ParseWebhookUrl(string url)
     {
@@ -38,7 +40,7 @@ public sealed class DiscordChatRelaySystem : EntitySystem
     {
         if (_random.Prob(0.9f))
             return;
-        
+
         if (!HasComp<ActorComponent>(ev.Source))
             return;
 
