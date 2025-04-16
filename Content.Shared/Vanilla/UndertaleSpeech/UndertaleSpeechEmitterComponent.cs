@@ -10,6 +10,6 @@ namespace Content.Shared.Vanilla.UndertaleSpeech;
 public sealed partial class UndertaleSpeechEmitterComponent : Component
 {
     [ViewVariables(VVAccess.ReadWrite),AutoNetworkedField]
-    [DataField("voice", customTypeSerializer: typeof(PrototypeIdSerializer<UndertaleSpeechrototype>))]
+    [DataField("voice", customTypeSerializer: typeof(PrototypeIdSerializer<UndertaleSpeechPrototype>))]
     public string? VoicePrototypeId { get; set; }
 }

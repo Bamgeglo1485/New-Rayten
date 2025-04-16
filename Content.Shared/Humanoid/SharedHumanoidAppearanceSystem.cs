@@ -21,6 +21,7 @@ using Robust.Shared.Serialization.Manager;
 using Robust.Shared.Serialization.Markdown;
 using Robust.Shared.Utility;
 using YamlDotNet.RepresentationModel;
+using Content.Shared.Vanilla.UndertaleSpeech;
 
 namespace Content.Shared.Humanoid;
 
@@ -45,12 +46,12 @@ public abstract class SharedHumanoidAppearanceSystem : EntitySystem
     [ValidatePrototypeId<SpeciesPrototype>]
     public const string DefaultSpecies = "Human";
     // Corvax-TTS-Start
-    public const string DefaultVoice = "Garithos";
+    public const string DefaultVoice = "Papyrus";
     public static readonly Dictionary<Sex, string> DefaultSexVoice = new()
     {
-        {Sex.Male, "Garithos"},
-        {Sex.Female, "Maiev"},
-        {Sex.Unsexed, "Myron"},
+        {Sex.Male, "Papyrus"},
+        {Sex.Female, "Toriel"},
+        {Sex.Unsexed, "Alphys"},
     };
     // Corvax-TTS-End
 
@@ -532,11 +533,11 @@ public abstract class SharedHumanoidAppearanceSystem : EntitySystem
     // ReSharper disable once InconsistentNaming
     public void SetTTSVoice(EntityUid uid, string voiceId, HumanoidAppearanceComponent humanoid)
     {
-        if (!TryComp<TTSComponent>(uid, out var comp))
+        if (!TryComp<UndertaleSpeechEmitterComponent>(uid, out var comp))
             return;
-
         humanoid.Voice = voiceId;
         comp.VoicePrototypeId = voiceId;
+        Dirty(uid, comp);
     }
     // Corvax-TTS-End
 

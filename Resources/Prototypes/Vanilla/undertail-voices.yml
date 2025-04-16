@@ -36,6 +36,50 @@
 - type: UndertaleSpeech
   id: Flowey
   name: Цветочек
-  sex: FeMale
+  sex: Female
   voice:
     path: /Audio/Vanilla/Effects/undertale/Flowey.ogg
+
+- type: UndertaleSpeech
+  id: Megalovania
+  name: МЕГАЛОВАНИЯ
+  sex: Male
+  roundStart: false
+  voice:
+    collection: Megalovania
+
+- type: UndertaleSpeech
+  id: Temmie
+  name: Тимми
+  sex: Male
+  voice:
+    collection: Temmie
+
+- type: UndertaleSpeech
+  id: Alphys
+  name: Альфис
+  sex: Female
+  voice:
+    path: /Audio/Vanilla/Effects/undertale/Alphys.ogg
+
+- type: UndertaleSpeech
+  id: Undyne
+  name: Андайн
+  sex: Female
+  voice:
+    path: /Audio/Vanilla/Effects/undertale/Undyne.ogg
+
+- type: UndertaleSpeech
+  id: Papyrus
+  name: Папирус
+  sex: Male
+  voice:
+    path: /Audio/Vanilla/Effects/undertale/Papyrus.ogg
+
+
+- type: UndertaleSpeech
+  id: Mettaton
+  name: Меттатон
+  sex: Male
+  voice:
+    path: /Audio/Vanilla/Effects/undertale/Mettaton.ogg

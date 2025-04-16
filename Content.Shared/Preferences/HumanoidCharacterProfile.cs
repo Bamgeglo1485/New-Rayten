@@ -16,6 +16,7 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Serialization;
 using Robust.Shared.Utility;
+using Content.Shared.Vanilla.UndertaleSpeech;
 
 namespace Content.Shared.Preferences
 {
@@ -245,12 +246,12 @@ namespace Content.Shared.Preferences
                 age = random.Next(speciesPrototype.MinAge, speciesPrototype.OldAge); // people don't look and keep making 119 year old characters with zero rp, cap it at middle aged
             }
 
-            // Corvax-TTS-Start
+            // Rayten-TTS-Start
             var voiceId = random.Pick(prototypeManager
-                .EnumeratePrototypes<TTSVoicePrototype>()
+                .EnumeratePrototypes<UndertaleSpeechPrototype>()
                 .Where(o => CanHaveVoice(o, sex)).ToArray()
             ).ID;
-            // Corvax-TTS-End
+            // Rayten-TTS-End
 
             var gender = Gender.Epicene;
 
@@ -647,7 +648,7 @@ namespace Content.Shared.Preferences
             _traitPreferences.UnionWith(GetValidTraits(traits, prototypeManager));
 
             // Corvax-TTS-Start
-            prototypeManager.TryIndex<TTSVoicePrototype>(Voice, out var voice);
+            prototypeManager.TryIndex<UndertaleSpeechPrototype>(Voice, out var voice);
             if (voice is null || !CanHaveVoice(voice, Sex))
                 Voice = SharedHumanoidAppearanceSystem.DefaultSexVoice[sex];
             // Corvax-TTS-End
@@ -713,7 +714,7 @@ namespace Content.Shared.Preferences
 
         // Corvax-TTS-Start
         // SHOULD BE NOT PUBLIC, BUT....
-        public static bool CanHaveVoice(TTSVoicePrototype voice, Sex sex)
+        public static bool CanHaveVoice(UndertaleSpeechPrototype voice, Sex sex)
         {
             return voice.RoundStart && sex == Sex.Unsexed || (voice.Sex == sex || voice.Sex == Sex.Unsexed);
         }

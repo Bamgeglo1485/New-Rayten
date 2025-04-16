@@ -9,9 +9,8 @@ using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Configuration;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
-using Content.Client.Vanilla.UndertaleSpeech;
-using Robust.Shared.Audio;
 using Content.Shared.Vanilla.UndertaleSpeech;
+using Content.Client.Vanilla.UndertaleSpeech;
 using Robust.Shared.Prototypes;
 
 namespace Content.Client.Chat.UI
@@ -34,7 +33,7 @@ namespace Content.Client.Chat.UI
         /// <summary>
         ///     The total time a speech bubble stays on screen.
         /// </summary>
-        private const float TotalTime = 4;
+        private const float TotalTime = 5.5f;
 
         /// <summary>
         ///     The amount of time at the end of the bubble's life at which it starts fading.
@@ -60,7 +59,33 @@ namespace Content.Client.Chat.UI
         private float _verticalOffsetAchieved;
 
         public Vector2 ContentSize { get; private set; }
+        //Rayten-start
+        protected RichTextLabel? _textLabel;
+        private string _fullText = "";
+        private int _revealedLength;
+        private const float LetterDelay = 0.05f;
+        private float _accumulatedTime;
+        private Color? _fontColor;
+        private bool _wasBold = false;
+        protected virtual void InitializeText(ChatMessage message, Color? fontColor = null)
+        {
+            _fullText = SharedChatSystem.GetStringInsideTag(message, "BubbleContent");
 
+            if (_fullText.Contains("[bold]") && _fullText.Contains("[/bold]"))
+            {
+                _wasBold = true;
+                _fullText.Replace("[bold]","").Replace("[/bold]","");
+            }
+            _fullText.Replace("[", "");
+            _fontColor = fontColor;
+            _revealedLength = 0;
+            _accumulatedTime = 0;
+            if (_textLabel != null)
+            {
+                _textLabel.SetMessage(FormatSpeech(_fullText, Color.FromHex("#00000000")));
+            }
+        }
+        //Rayten-end
         // man down
         public event Action<EntityUid, SpeechBubble>? OnDied;
 
@@ -80,28 +105,19 @@ namespace Content.Client.Chat.UI
                 var entMan = IoCManager.Resolve<IEntityManager>();
                 var protoMan = IoCManager.Resolve<IPrototypeManager>();
 
-
                 if (!entMan.TryGetComponent<UndertaleSpeechEmitterComponent>(senderEntity, out var undemitcomp) || 
                     undemitcomp.VoicePrototypeId == null ||
-                    !protoMan.TryIndex<UndertaleSpeechrototype>(undemitcomp.VoicePrototypeId, out var protoVoice))
+                    !protoMan.TryIndex<UndertaleSpeechPrototype>(undemitcomp.VoicePrototypeId, out var protoVoice))
                     return bubble;
 
-                var timing = IoCManager.Resolve<IGameTiming>();
-
                 var undertale = entMan.EnsureComponent<UndertaleSpeechComponent>(senderEntity);
-                undertale.RemainingText = message.Message.Length > 60
-                    ? message.Message.Substring(0, 60)
-                    : message.Message;
-
-                undertale.NextBeepTime = timing.CurTime;
                 undertale.Sound = protoVoice.Voice;
-
+                
                 if (type == SpeechType.Whisper)
                     undertale.iswhisper = true;
             }
             return bubble;
         }
-
 
         public SpeechBubble(ChatMessage message, EntityUid senderEntity, string speechStyleClass, Color? fontColor = null)
         {
@@ -112,7 +128,7 @@ namespace Content.Client.Chat.UI
             // Use text clipping so new messages don't overlap old ones being pushed up.
             RectClipContent = true;
 
-            var bubble = BuildBubble(message, speechStyleClass, fontColor);
+            var bubble = BuildBubble(message, speechStyleClass, fontColor, senderEntity);
 
             AddChild(bubble);
 
@@ -123,7 +139,7 @@ namespace Content.Client.Chat.UI
             _verticalOffsetAchieved = -ContentSize.Y;
         }
 
-        protected abstract Control BuildBubble(ChatMessage message, string speechStyleClass, Color? fontColor = null);
+        protected abstract Control BuildBubble(ChatMessage message, string speechStyleClass, Color? fontColor = null, EntityUid? senderEntity = null);
 
         protected override void FrameUpdate(FrameEventArgs args)
         {
@@ -136,6 +152,46 @@ namespace Content.Client.Chat.UI
                 Timer.Spawn(0, Die);
                 return;
             }
+
+            // RAYTEN-START
+            if (_entityManager.HasComponent<UndertaleSpeechEmitterComponent>(_senderEntity))
+            {
+                var entMan = IoCManager.Resolve<IEntityManager>();
+                if (_textLabel != null && _revealedLength < _fullText.Length)
+                {
+                    _accumulatedTime += args.DeltaSeconds;
+
+                    while (_accumulatedTime >= LetterDelay && _revealedLength < _fullText.Length)
+                    {
+                        _accumulatedTime -= LetterDelay;
+
+                        var newChar = _fullText[_revealedLength];
+                        entMan.EventBus.RaiseLocalEvent(_senderEntity, new UndertaleSpeechBeepEvent(newChar));
+
+                        _revealedLength++;
+
+                        if (_revealedLength >= 40)
+                        {
+                            _revealedLength = _fullText.Length;
+                            break;
+                        }
+                    }
+
+                    var visible = _fullText.Substring(0, _revealedLength);
+                    var hidden = _fullText.Substring(_revealedLength);
+                    if (_wasBold)
+                    {
+                        visible = $"[bold]{visible}[/bold]";
+                    }
+
+                    var formatted = FormatSpeech(visible, _fontColor);
+
+                    formatted.AddMarkupOrThrow($"[color=#00000000]{hidden}[/color]");
+
+                    _textLabel.SetMessage(formatted);
+                }
+            }
+            // RAYTEN-END
 
             // Lerp to our new vertical offset if it's been modified.
             if (MathHelper.CloseToPercent(_verticalOffsetAchieved - VerticalOffset, 0, 0.1))
@@ -166,7 +222,7 @@ namespace Content.Client.Chat.UI
 
             var baseOffset = 0f;
 
-           if (_entityManager.TryGetComponent<SpeechComponent>(_senderEntity, out var speech))
+            if (_entityManager.TryGetComponent<SpeechComponent>(_senderEntity, out var speech))
                 baseOffset = speech.SpeechBubbleOffset;
 
             var offset = (-_eyeManager.CurrentEye.Rotation).ToWorldVec() * -(EntityVerticalOffset + baseOffset);
@@ -180,6 +236,7 @@ namespace Content.Client.Chat.UI
 
             var height = MathF.Ceiling(MathHelper.Clamp(lowerCenter.Y - screenPos.Y, 0, ContentSize.Y));
             SetHeight = height;
+
         }
 
         private void Die()
@@ -226,7 +283,7 @@ namespace Content.Client.Chat.UI
         {
         }
 
-        protected override Control BuildBubble(ChatMessage message, string speechStyleClass, Color? fontColor = null)
+        protected override Control BuildBubble(ChatMessage message, string speechStyleClass, Color? fontColor = null, EntityUid? senderEntity = null)
         {
             var label = new RichTextLabel
             {
@@ -254,7 +311,7 @@ namespace Content.Client.Chat.UI
         {
         }
 
-        protected override Control BuildBubble(ChatMessage message, string speechStyleClass, Color? fontColor = null)
+        protected override Control BuildBubble(ChatMessage message, string speechStyleClass, Color? fontColor = null, EntityUid? senderEntity = null)
         {
             if (!ConfigManager.GetCVar(CCVars.ChatEnableFancyBubbles))
             {
@@ -280,7 +337,7 @@ namespace Content.Client.Chat.UI
                 Margin = new Thickness(1, 1, 1, 1),
             };
 
-            var bubbleContent = new RichTextLabel
+            _textLabel = new RichTextLabel
             {
                 ModulateSelfOverride = Color.White.WithAlpha(ConfigManager.GetCVar(CCVars.SpeechBubbleTextOpacity)),
                 MaxWidth = SpeechMaxWidth,
@@ -290,13 +347,19 @@ namespace Content.Client.Chat.UI
 
             //We'll be honest. *Yes* this is hacky. Doing this in a cleaner way would require a bottom-up refactor of how saycode handles sending chat messages. -Myr
             bubbleHeader.SetMessage(ExtractAndFormatSpeechSubstring(message, "BubbleHeader", fontColor));
-            bubbleContent.SetMessage(ExtractAndFormatSpeechSubstring(message, "BubbleContent", fontColor));
+
+            var entMan = IoCManager.Resolve<IEntityManager>();
+
+            if(senderEntity != null && entMan.HasComponent<UndertaleSpeechComponent>(senderEntity))
+                InitializeText(message, fontColor);
+            else
+                _textLabel.SetMessage(ExtractAndFormatSpeechSubstring(message, "BubbleContent", fontColor));
 
             //As for below: Some day this could probably be converted to xaml. But that is not today. -Myr
             var mainPanel = new PanelContainer
             {
                 StyleClasses = { "speechBox", speechStyleClass },
-                Children = { bubbleContent },
+                Children = { _textLabel },
                 ModulateSelfOverride = Color.White.WithAlpha(ConfigManager.GetCVar(CCVars.SpeechBubbleBackgroundOpacity)),
                 HorizontalAlignment = HAlignment.Center,
                 VerticalAlignment = VAlignment.Bottom,

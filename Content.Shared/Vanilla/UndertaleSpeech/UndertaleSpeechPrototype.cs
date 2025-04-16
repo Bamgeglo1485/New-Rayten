@@ -5,7 +5,7 @@ using Robust.Shared.Audio;
 namespace Content.Shared.Vanilla.UndertaleSpeech;
 
 [Prototype("UndertaleSpeech")]
-public sealed class UndertaleSpeechrototype : IPrototype
+public sealed class UndertaleSpeechPrototype : IPrototype
 {
     [IdDataField]
     public string ID { get; } = default!;

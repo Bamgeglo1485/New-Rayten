@@ -4,18 +4,42 @@ using Content.Client.Lobby;
 using Content.Corvax.Interfaces.Shared;
 using Content.Shared.Corvax.TTS;
 using Content.Shared.Preferences;
+using Content.Shared.Vanilla.UndertaleSpeech;
+using Content.Client.Vanilla.UndertaleSpeech;
+using Content.Shared.Audio; 
+using Robust.Shared.Audio.Systems;
+using Robust.Shared.Random;
+using Timer = Robust.Shared.Timing.Timer;
+using Robust.Shared.Player;
+using Robust.Shared.Audio;
 
 namespace Content.Client.Lobby.UI;
 
 public sealed partial class HumanoidProfileEditor
 {
     private ISharedSponsorsManager? _sponsorsMgr;
-    private List<TTSVoicePrototype> _voiceList = new();
-
+    private List<UndertaleSpeechPrototype> _voiceList = new();
+    private readonly List<string> _sampleText =
+        new()
+        {
+            "Съешь же ещё этих мягких французских булок, да выпей чаю.",
+            "Клоун, прекрати разбрасывать банановые кожурки офицерам под ноги!",
+            "Капитан, вы уверены что хотите назначить клоуна на должность главы персонала?",
+            "Эс Бэ! Тут человек в сером костюме, с тулбоксом и в маске! Помогите!!",
+            "Учёные, тут странная аномалия в баре! Она уже съела мима!",
+            "Я надеюсь что инженеры внимательно следят за сингулярностью...",
+            "Вы слышали эти странные крики в техах? Мне кажется туда ходить небезопасно.",
+            "Вы не видели Гамлета? Мне кажется он забегал к вам на кухню.",
+            "Здесь есть доктор? Человек умирает от отравленного пончика! Нужна помощь!",
+            "Вам нужно согласие и печать квартирмейстера, если вы хотите сделать заказ на партию дробовиков.",
+            "Возле эвакуационного шаттла разгерметизация! Инженеры, нам срочно нужна ваша помощь!",
+            "Бармен, налей мне самого крепкого вина, которое есть в твоих запасах!"
+        };
+    private int _previewBeepIndex;
     private void InitializeVoice()
     {
         _voiceList = _prototypeManager
-            .EnumeratePrototypes<TTSVoicePrototype>()
+            .EnumeratePrototypes<UndertaleSpeechPrototype>()
             .Where(o => o.RoundStart)
             .OrderBy(o => Loc.GetString(o.Name))
             .ToList();
@@ -72,7 +96,36 @@ public sealed partial class HumanoidProfileEditor
     {
         if (Profile is null)
             return;
+        var rng = IoCManager.Resolve<IRobustRandom>(); 
+        var entMan = IoCManager.Resolve<IEntityManager>();
+        var _audio = entMan.System<SharedAudioSystem>();
+        var _undsys = entMan.System<UndertaleSpeechSystem>();
+        var previewBeepText = rng.Pick(_sampleText);
 
-        _entManager.System<TTSSystem>().RequestPreviewTTS(Profile.Voice);
+        _previewBeepIndex = 0;
+
+        var voice = Profile.Voice;
+
+        if(!_prototypeManager.TryIndex<UndertaleSpeechPrototype>(voice, out var protoVoice))
+            return;
+
+        var Sound = protoVoice.Voice;
+
+        void BeepStep()
+        {
+            if (_previewBeepIndex >= previewBeepText.Length)
+                return;
+
+            var nextChar = previewBeepText[_previewBeepIndex];
+
+            _audio.PlayGlobal(Sound, Filter.Local(), true, AudioParams.Default.WithVolume(_undsys.AdjustVolume(false)));
+            _previewBeepIndex++;
+
+            if (_previewBeepIndex < previewBeepText.Length && _previewBeepIndex <= 40)
+            { 
+                Timer.Spawn(TimeSpan.FromSeconds(rng.NextFloat(0.05f, 0.2f)), BeepStep);
+            }
+        }
+        Timer.Spawn(TimeSpan.FromSeconds(rng.NextFloat(0.05f, 0.2f)), BeepStep);
     }
 }
