@@ -52,6 +52,9 @@ public sealed class UndertaleSpeechSystem : EntitySystem
 
     private void onBeep(EntityUid uid, UndertaleSpeechEmitterComponent comp, UndertaleSpeechBeepEvent args)
     {
+        if (comp.VoicePrototypeId == null )
+            return;
+
         var sound = comp.Voice;
 
         sound.Params = AudioParams.Default.WithPitchScale(comp.Pitch).WithVolume(AdjustVolume(comp.iswhisper)).WithMaxDistance(AdjustDistance(comp.iswhisper));
@@ -61,7 +64,7 @@ public sealed class UndertaleSpeechSystem : EntitySystem
 
     public float AdjustVolume(bool isWhisper)
     {
-        var volume = -10f + SharedAudioSystem.GainToVolume(_volume/1.5f);
+        var volume = -10f + SharedAudioSystem.GainToVolume(_volume);
 
         if (isWhisper)
             volume -= SharedAudioSystem.GainToVolume(5f);

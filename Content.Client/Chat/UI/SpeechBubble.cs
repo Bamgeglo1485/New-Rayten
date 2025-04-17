@@ -154,7 +154,7 @@ namespace Content.Client.Chat.UI
             }
 
             // RAYTEN-START
-            if (_entityManager.HasComponent<UndertaleSpeechEmitterComponent>(_senderEntity))
+            if (_entityManager.TryGetComponent<UndertaleSpeechEmitterComponent>(_senderEntity, out var comp) && comp.VoicePrototypeId != null)
             {
                 var entMan = IoCManager.Resolve<IEntityManager>();
                 if (_textLabel != null && _revealedLength < _fullText.Length)
