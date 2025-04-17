@@ -6,9 +6,11 @@ using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using System.Linq;
 using Content.Shared.Corvax.CCCVars;
+using Content.Shared.Vanilla.UndertaleSpeech;
 using Content.Client.Examine;
 using Robust.Client.Graphics;
 using Robust.Shared.Configuration;
+using Robust.Shared.Prototypes;
 using Robust.Client.Player;
 using Robust.Client.GameObjects;
 using Robust.Shared.Map;
@@ -19,16 +21,14 @@ public sealed class UndertaleSpeechSystem : EntitySystem
 {
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IEyeManager _eyeManager = default!;
-    [Dependency] private readonly ExamineSystem? _examine = default;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly TransformSystem? _transform = default;
+    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
     public float _volume = 0.0f;
 
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<UndertaleSpeechComponent, UndertaleSpeechBeepEvent>(onBeep);
+        SubscribeLocalEvent<UndertaleSpeechEmitterComponent, UndertaleSpeechBeepEvent>(onBeep);
+        SubscribeLocalEvent<UndertaleSpeechEmitterComponent, MapInitEvent>(onMapInit);
         _cfg.OnValueChanged(CCCVars.TTSVolume, OnTtsVolumeChanged, true);
     }
 
@@ -42,42 +42,23 @@ public sealed class UndertaleSpeechSystem : EntitySystem
     {
         _volume = volume;
     }
-
-    private void onBeep(EntityUid uid, UndertaleSpeechComponent comp, UndertaleSpeechBeepEvent args)
+    private void onMapInit(EntityUid uid, UndertaleSpeechEmitterComponent comp, MapInitEvent args)
     {
-        var player = _player.LocalEntity;
-
-        if (comp.Sound == null || _examine == null)
-        {
-            RemCompDeferred<UndertaleSpeechComponent>(uid);
+        if (comp.VoicePrototypeId == null || !_prototypeManager.TryIndex<UndertaleSpeechPrototype>(comp.VoicePrototypeId, out var proto))
             return;
-        }
 
-        var predicate = static (EntityUid uid, (EntityUid compOwner, EntityUid? attachedEntity) data)
-            => uid == data.compOwner || uid == data.attachedEntity;
-
-        var occluded = player != null && _examine.IsOccluded(player.Value);
-
-        var playerPos = player != null
-            ? _eyeManager.CurrentEye.Position
-            : MapCoordinates.Nullspace;
-
-        var otherPos = _transform?.GetMapCoordinates(uid) ?? MapCoordinates.Nullspace;
-
-        if (occluded && !_examine.InRangeUnOccluded(
-                playerPos,
-                otherPos, 0f,
-                (uid, player), predicate))
-        {
-            return;
-        }
-
-        var sound = comp.Sound;
-
-        sound.Params = AudioParams.Default.WithVolume(AdjustVolume(comp.iswhisper)).WithMaxDistance(AdjustDistance(comp.iswhisper));
-
-        _audio.PlayLocal(comp.Sound, uid, null);
+        comp.Voice = proto.Voice;
     }
+
+    private void onBeep(EntityUid uid, UndertaleSpeechEmitterComponent comp, UndertaleSpeechBeepEvent args)
+    {
+        var sound = comp.Voice;
+
+        sound.Params = AudioParams.Default.WithPitchScale(comp.Pitch).WithVolume(AdjustVolume(comp.iswhisper)).WithMaxDistance(AdjustDistance(comp.iswhisper));
+
+        _audio.PlayLocal(sound, uid, null);
+    }
+
     public float AdjustVolume(bool isWhisper)
     {
         var volume = -10f + SharedAudioSystem.GainToVolume(_volume/1.5f);

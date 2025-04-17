@@ -18,7 +18,7 @@ public sealed class UndertaleSpeechPrototype : IPrototype
 
     [ViewVariables(VVAccess.ReadWrite)]
     [DataField("voice", required: true)]
-    public SoundSpecifier? Voice = new SoundPathSpecifier("/Audio/Vanilla/Effects/R1/undertale_beep.ogg");
+    public SoundSpecifier Voice = new SoundPathSpecifier("/Audio/Vanilla/Effects/undertale/SANS.ogg");
 
     [DataField("roundStart")]
     public bool RoundStart { get; } = true;

@@ -214,7 +214,6 @@ namespace Content.Client.Lobby.UI
             // Rayten-TTS-Start
             #region Voice
 
-            TTSContainer.Visible = true;
             InitializeVoice();
             #endregion
             // Rayten-TTS-End
@@ -1210,6 +1209,11 @@ namespace Content.Client.Lobby.UI
         private void SetVoice(string newVoice)
         {
             Profile = Profile?.WithVoice(newVoice);
+            IsDirty = true;
+        }
+        private void SetVoicePitch(float newVoicePitch)
+        {
+            Profile = Profile?.WithVoicePitch(newVoicePitch);
             IsDirty = true;
         }
         // Corvax-TTS-End

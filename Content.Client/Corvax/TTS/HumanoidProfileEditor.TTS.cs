@@ -44,6 +44,22 @@ public sealed partial class HumanoidProfileEditor
             .OrderBy(o => Loc.GetString(o.Name))
             .ToList();
 
+        Pitch.OnValueChanged += args =>
+        {
+            if (!MathHelper.CloseTo(PitchInput.Value, args.Value))
+                PitchInput.Value = args.Value;
+
+            SetVoicePitch(args.Value);
+        };
+        
+        PitchInput.OnValueChanged += args =>
+        {
+            if (!MathHelper.CloseTo(Pitch.Value, args.Value))
+                Pitch.Value = args.Value;
+
+            SetVoicePitch(args.Value);
+        };
+
         VoiceButton.OnItemSelected += args =>
         {
             VoiceButton.SelectId(args.Id);
@@ -90,6 +106,9 @@ public sealed partial class HumanoidProfileEditor
         {
             SetVoice(_voiceList[firstVoiceChoiceId].ID);
         }
+        Pitch.Value = Profile.VoicePitch;
+        PitchInput.Value = Profile.VoicePitch;
+        PitchInput.IsValid = value => value >= 0.5f && value <= 1.5f;
     }
 
     private void PlayPreviewTTS()
@@ -118,10 +137,10 @@ public sealed partial class HumanoidProfileEditor
 
             var nextChar = previewBeepText[_previewBeepIndex];
 
-            _audio.PlayGlobal(Sound, Filter.Local(), true, AudioParams.Default.WithVolume(_undsys.AdjustVolume(false)));
+            _audio.PlayGlobal(Sound, Filter.Local(), true, AudioParams.Default.WithPitchScale(Profile.VoicePitch).WithVolume(_undsys.AdjustVolume(false)));
             _previewBeepIndex++;
 
-            if (_previewBeepIndex < previewBeepText.Length && _previewBeepIndex <= 40)
+            if (_previewBeepIndex < previewBeepText.Length && _previewBeepIndex <= 55)
             { 
                 Timer.Spawn(TimeSpan.FromSeconds(rng.NextFloat(0.05f, 0.2f)), BeepStep);
             }

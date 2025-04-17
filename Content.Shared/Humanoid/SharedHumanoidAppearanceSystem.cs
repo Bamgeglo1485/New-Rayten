@@ -45,15 +45,16 @@ public abstract class SharedHumanoidAppearanceSystem : EntitySystem
 
     [ValidatePrototypeId<SpeciesPrototype>]
     public const string DefaultSpecies = "Human";
-    // Corvax-TTS-Start
+    // Rayten-TTS-Start
     public const string DefaultVoice = "Papyrus";
+    public const float DefaultVoicePitch = 1.0f;
     public static readonly Dictionary<Sex, string> DefaultSexVoice = new()
     {
         {Sex.Male, "Papyrus"},
         {Sex.Female, "Toriel"},
         {Sex.Unsexed, "Alphys"},
     };
-    // Corvax-TTS-End
+    // Rayten-TTS-End
 
     public override void Initialize()
     {
@@ -449,7 +450,7 @@ public abstract class SharedHumanoidAppearanceSystem : EntitySystem
         }
 
         EnsureDefaultMarkings(uid, humanoid);
-        SetTTSVoice(uid, profile.Voice, humanoid); // Corvax-TTS
+        SetTTSVoice(uid, profile.Voice, profile.VoicePitch, humanoid); // Corvax-TTS
 
         humanoid.Gender = profile.Gender;
         if (TryComp<GrammarComponent>(uid, out var grammar))
@@ -531,10 +532,18 @@ public abstract class SharedHumanoidAppearanceSystem : EntitySystem
 
     // Corvax-TTS-Start
     // ReSharper disable once InconsistentNaming
-    public void SetTTSVoice(EntityUid uid, string voiceId, HumanoidAppearanceComponent humanoid)
+    public void SetTTSVoice(EntityUid uid, string voiceId, float VoicePitch, HumanoidAppearanceComponent humanoid)
     {
         if (!TryComp<UndertaleSpeechEmitterComponent>(uid, out var comp))
             return;
+
+        if ( VoicePitch < 0.5f)
+            VoicePitch = 0.5f;
+        if ( VoicePitch > 1.5f)
+            VoicePitch = 1.5f;
+
+        comp.Pitch = VoicePitch;
+
         humanoid.Voice = voiceId;
         comp.VoicePrototypeId = voiceId;
         Dirty(uid, comp);

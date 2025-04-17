@@ -84,6 +84,9 @@ namespace Content.Shared.Preferences
         public string Voice { get; set; } = SharedHumanoidAppearanceSystem.DefaultVoice;
 
         [DataField]
+        public float VoicePitch { get; set; } = SharedHumanoidAppearanceSystem.DefaultVoicePitch;
+
+        [DataField]
         public int Age { get; set; } = 18;
 
         [DataField]
@@ -135,7 +138,8 @@ namespace Content.Shared.Preferences
             string name,
             string flavortext,
             string species,
-            string voice, // Corvax-TTS
+            string voice, // Rayten-TTS
+            float voicepith,
             int age,
             Sex sex,
             Gender gender,
@@ -150,7 +154,8 @@ namespace Content.Shared.Preferences
             Name = name;
             FlavorText = flavortext;
             Species = species;
-            Voice = voice; // Corvax-TTS
+            Voice = voice; // Rayten-TTS
+            VoicePitch = voicepith;
             Age = age;
             Sex = sex;
             Gender = gender;
@@ -183,6 +188,7 @@ namespace Content.Shared.Preferences
                 other.FlavorText,
                 other.Species,
                 other.Voice,
+                other.VoicePitch,
                 other.Age,
                 other.Sex,
                 other.Gender,
@@ -274,7 +280,8 @@ namespace Content.Shared.Preferences
                 Age = age,
                 Gender = gender,
                 Species = species,
-                Voice = voiceId, // Corvax-TTS
+                Voice = voiceId, // Rayten-TTS
+                VoicePitch = 1.0f,
                 Appearance = HumanoidCharacterAppearance.Random(species, sex),
             };
         }
@@ -309,12 +316,16 @@ namespace Content.Shared.Preferences
             return new(this) { Species = species };
         }
 
-        // Corvax-TTS-Start
+        // Rayten-TTS-Start
         public HumanoidCharacterProfile WithVoice(string voice)
         {
             return new(this) { Voice = voice };
         }
-        // Corvax-TTS-End
+        public HumanoidCharacterProfile WithVoicePitch(float pitch)
+        {
+            return new(this) { VoicePitch = pitch };
+        }
+        // Rayten-TTS-End
 
         public HumanoidCharacterProfile WithCharacterAppearance(HumanoidCharacterAppearance appearance)
         {
@@ -647,11 +658,16 @@ namespace Content.Shared.Preferences
             _traitPreferences.Clear();
             _traitPreferences.UnionWith(GetValidTraits(traits, prototypeManager));
 
-            // Corvax-TTS-Start
+            // Rayten-TTS-Start
             prototypeManager.TryIndex<UndertaleSpeechPrototype>(Voice, out var voice);
             if (voice is null || !CanHaveVoice(voice, Sex))
                 Voice = SharedHumanoidAppearanceSystem.DefaultSexVoice[sex];
-            // Corvax-TTS-End
+
+            if (VoicePitch < 0.5f)
+                VoicePitch = 0.5f;
+            if (VoicePitch > 1.5f)
+                VoicePitch = 1.5f;
+            // Rayten-TTS-End
 
             // Checks prototypes exist for all loadouts and dump / set to default if not.
             var toRemove = new ValueList<string>();

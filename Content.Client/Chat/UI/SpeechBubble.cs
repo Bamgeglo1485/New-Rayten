@@ -33,7 +33,7 @@ namespace Content.Client.Chat.UI
         /// <summary>
         ///     The total time a speech bubble stays on screen.
         /// </summary>
-        private const float TotalTime = 5.5f;
+        private const float TotalTime = 4.0f;
 
         /// <summary>
         ///     The amount of time at the end of the bubble's life at which it starts fading.
@@ -70,16 +70,17 @@ namespace Content.Client.Chat.UI
         protected virtual void InitializeText(ChatMessage message, Color? fontColor = null)
         {
             _fullText = SharedChatSystem.GetStringInsideTag(message, "BubbleContent");
-
             if (_fullText.Contains("[bold]") && _fullText.Contains("[/bold]"))
             {
                 _wasBold = true;
-                _fullText.Replace("[bold]","").Replace("[/bold]","");
+                _fullText = _fullText.Replace("[bold]","").Replace("[/bold]","");
             }
-            _fullText.Replace("[", "");
+            _fullText = _fullText.Replace("[", "");
+
             _fontColor = fontColor;
             _revealedLength = 0;
             _accumulatedTime = 0;
+
             if (_textLabel != null)
             {
                 _textLabel.SetMessage(FormatSpeech(_fullText, Color.FromHex("#00000000")));
@@ -105,16 +106,15 @@ namespace Content.Client.Chat.UI
                 var entMan = IoCManager.Resolve<IEntityManager>();
                 var protoMan = IoCManager.Resolve<IPrototypeManager>();
 
-                if (!entMan.TryGetComponent<UndertaleSpeechEmitterComponent>(senderEntity, out var undemitcomp) || 
-                    undemitcomp.VoicePrototypeId == null ||
-                    !protoMan.TryIndex<UndertaleSpeechPrototype>(undemitcomp.VoicePrototypeId, out var protoVoice))
+                if (!entMan.TryGetComponent<UndertaleSpeechEmitterComponent>(senderEntity, out var undemitcomp)
+                    || undemitcomp.VoicePrototypeId == null
+                    || !protoMan.TryIndex<UndertaleSpeechPrototype>(undemitcomp.VoicePrototypeId, out var protoVoice))
                     return bubble;
 
-                var undertale = entMan.EnsureComponent<UndertaleSpeechComponent>(senderEntity);
-                undertale.Sound = protoVoice.Voice;
+                undemitcomp.Voice = protoVoice.Voice;
                 
                 if (type == SpeechType.Whisper)
-                    undertale.iswhisper = true;
+                    undemitcomp.iswhisper = true;
             }
             return bubble;
         }
@@ -169,14 +169,14 @@ namespace Content.Client.Chat.UI
                         entMan.EventBus.RaiseLocalEvent(_senderEntity, new UndertaleSpeechBeepEvent(newChar));
 
                         _revealedLength++;
-
-                        if (_revealedLength >= 40)
+                        _timeLeft += LetterDelay;
+                        if (_revealedLength >= 55)
                         {
                             _revealedLength = _fullText.Length;
                             break;
                         }
                     }
-
+                    
                     var visible = _fullText.Substring(0, _revealedLength);
                     var hidden = _fullText.Substring(_revealedLength);
                     if (_wasBold)
@@ -350,7 +350,7 @@ namespace Content.Client.Chat.UI
 
             var entMan = IoCManager.Resolve<IEntityManager>();
 
-            if(senderEntity != null && entMan.HasComponent<UndertaleSpeechComponent>(senderEntity))
+            if(senderEntity != null && entMan.HasComponent<UndertaleSpeechEmitterComponent>(senderEntity))
                 InitializeText(message, fontColor);
             else
                 _textLabel.SetMessage(ExtractAndFormatSpeechSubstring(message, "BubbleContent", fontColor));

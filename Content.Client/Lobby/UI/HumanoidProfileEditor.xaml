@@ -91,15 +91,20 @@
                                     <Control HorizontalExpand="True"/>
                                     <OptionButton Name="SpawnPriorityButton" HorizontalAlignment="Right" />
                                 </BoxContainer>
-                                <!-- Vanilla-TTS-Start -->
-                                <BoxContainer HorizontalExpand="True" Visible="False" Name="TTSContainer">
-                                    <Label Text="{Loc 'humanoid-profile-editor-voice-label'}" />
-                                    <Control HorizontalExpand="True"/>
-                                    <OptionButton Name="VoiceButton" HorizontalAlignment="Right" />
-									<Button Name="VoicePlayButton" Text="{Loc 'humanoid-profile-editor-voice-play'}" MaxWidth="80" />
-                                </BoxContainer>
-                                <!-- Vanilla-TTS-End -->
                             </BoxContainer>
+                            <!-- Vanilla-TTS-Start -->
+                            <BoxContainer Margin="10" HorizontalExpand="True" Orientation="Vertical">
+                                <Label Text="{Loc 'humanoid-profile-editor-voice-label'}" />
+                                <BoxContainer Orientation="Horizontal">
+                                    <OptionButton Name="VoiceButton" HorizontalAlignment="Left" MinWidth="140" MaxWidth="240"/>
+                                    <Button Name="VoicePlayButton" HorizontalAlignment="Left" Text="{Loc 'humanoid-profile-editor-voice-play'}" MaxWidth="80" />
+                                </BoxContainer>
+                                <BoxContainer Orientation="Horizontal" HorizontalExpand="True" >
+                                    <Slider HorizontalExpand="True" Name="Pitch" MinValue="0.5" MaxValue="1.5" Value="1"/>
+                                    <FloatSpinBox Name="PitchInput"/>
+                                </BoxContainer>
+                            </BoxContainer>
+                            <!-- Vanilla-TTS-End -->
                             <!-- Skin -->
                             <BoxContainer Margin="10" HorizontalExpand="True" Orientation="Vertical">
                                 <Label Text="{Loc 'humanoid-profile-editor-skin-color-label'}" />

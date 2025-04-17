@@ -50,7 +50,7 @@
 
 - type: UndertaleSpeech
   id: Temmie
-  name: Тимми
+  name: Темми
   sex: Male
   voice:
     collection: Temmie

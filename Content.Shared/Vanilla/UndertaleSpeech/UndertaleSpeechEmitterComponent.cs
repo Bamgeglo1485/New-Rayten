@@ -12,4 +12,11 @@ public sealed partial class UndertaleSpeechEmitterComponent : Component
     [ViewVariables(VVAccess.ReadWrite),AutoNetworkedField]
     [DataField("voice", customTypeSerializer: typeof(PrototypeIdSerializer<UndertaleSpeechPrototype>))]
     public string? VoicePrototypeId { get; set; }
+
+    [DataField("pitch"), AutoNetworkedField]
+    public float Pitch = 1.0f;
+
+    public SoundSpecifier Voice = new SoundPathSpecifier("/Audio/Vanilla/Effects/undertale/SANS.ogg");
+
+    public bool iswhisper = false;
 }
