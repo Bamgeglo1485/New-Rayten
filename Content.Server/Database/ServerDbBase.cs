@@ -206,10 +206,8 @@ namespace Content.Server.Database
                 voice = SharedHumanoidAppearanceSystem.DefaultSexVoice[sex];
 
             var voicePitch = profile.VoicePitch;
-            if (voicePitch < 0.5f)
-                voicePitch = 0.5f;
-            if (voicePitch > 1.5f)
-                voicePitch = 1.5f;
+            if (voicePitch == 0)
+                voicePitch = 1f;
             // Rayten-TTS-End
 
             // ReSharper disable once ConditionalAccessQualifierIsNonNullableAccordingToAPIContract
