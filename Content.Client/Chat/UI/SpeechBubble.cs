@@ -9,8 +9,8 @@ using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Configuration;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
-using Content.Shared.Vanilla.UndertaleSpeech;
-using Content.Client.Vanilla.UndertaleSpeech;
+using Content.Shared.Vanilla.VoiceSpeech;
+using Content.Client.Vanilla.VoiceSpeech;
 using Robust.Shared.Prototypes;
 
 namespace Content.Client.Chat.UI
@@ -106,9 +106,9 @@ namespace Content.Client.Chat.UI
                 var entMan = IoCManager.Resolve<IEntityManager>();
                 var protoMan = IoCManager.Resolve<IPrototypeManager>();
 
-                if (!entMan.TryGetComponent<UndertaleSpeechEmitterComponent>(senderEntity, out var undemitcomp)
+                if (!entMan.TryGetComponent<VoiceEmitterComponent>(senderEntity, out var undemitcomp)
                     || undemitcomp.VoicePrototypeId == null
-                    || !protoMan.TryIndex<UndertaleSpeechPrototype>(undemitcomp.VoicePrototypeId, out var protoVoice))
+                    || !protoMan.TryIndex<VoiceSpeechPrototype>(undemitcomp.VoicePrototypeId, out var protoVoice))
                     return bubble;
 
                 undemitcomp.Voice = protoVoice.Voice;
@@ -154,7 +154,7 @@ namespace Content.Client.Chat.UI
             }
 
             // RAYTEN-START
-            if (_entityManager.TryGetComponent<UndertaleSpeechEmitterComponent>(_senderEntity, out var comp) && comp.VoicePrototypeId != null)
+            if (_entityManager.TryGetComponent<VoiceEmitterComponent>(_senderEntity, out var comp) && comp.VoicePrototypeId != null)
             {
                 var entMan = IoCManager.Resolve<IEntityManager>();
                 if (_textLabel != null && _revealedLength < _fullText.Length)
@@ -166,7 +166,7 @@ namespace Content.Client.Chat.UI
                         _accumulatedTime -= LetterDelay;
 
                         var newChar = _fullText[_revealedLength];
-                        entMan.EventBus.RaiseLocalEvent(_senderEntity, new UndertaleSpeechBeepEvent(newChar));
+                        entMan.EventBus.RaiseLocalEvent(_senderEntity, new VoiceSpeechBeepEvent(newChar));
 
                         _revealedLength++;
                         _timeLeft += LetterDelay;
@@ -350,7 +350,7 @@ namespace Content.Client.Chat.UI
 
             var entMan = IoCManager.Resolve<IEntityManager>();
 
-            if(senderEntity != null && entMan.HasComponent<UndertaleSpeechEmitterComponent>(senderEntity))
+            if(senderEntity != null && entMan.HasComponent<VoiceEmitterComponent>(senderEntity))
                 InitializeText(message, fontColor);
             else
                 _textLabel.SetMessage(ExtractAndFormatSpeechSubstring(message, "BubbleContent", fontColor));

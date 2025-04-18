@@ -4,8 +4,8 @@ using Content.Client.Lobby;
 using Content.Corvax.Interfaces.Shared;
 using Content.Shared.Corvax.TTS;
 using Content.Shared.Preferences;
-using Content.Shared.Vanilla.UndertaleSpeech;
-using Content.Client.Vanilla.UndertaleSpeech;
+using Content.Shared.Vanilla.VoiceSpeech;
+using Content.Client.Vanilla.VoiceSpeech;
 using Content.Shared.Audio; 
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Random;
@@ -18,7 +18,7 @@ namespace Content.Client.Lobby.UI;
 public sealed partial class HumanoidProfileEditor
 {
     private ISharedSponsorsManager? _sponsorsMgr;
-    private List<UndertaleSpeechPrototype> _voiceList = new();
+    private List<VoiceSpeechPrototype> _voiceList = new();
     private readonly List<string> _sampleText =
         new()
         {
@@ -39,7 +39,7 @@ public sealed partial class HumanoidProfileEditor
     private void InitializeVoice()
     {
         _voiceList = _prototypeManager
-            .EnumeratePrototypes<UndertaleSpeechPrototype>()
+            .EnumeratePrototypes<VoiceSpeechPrototype>()
             .Where(o => o.RoundStart)
             .OrderBy(o => Loc.GetString(o.Name))
             .ToList();
@@ -118,14 +118,14 @@ public sealed partial class HumanoidProfileEditor
         var rng = IoCManager.Resolve<IRobustRandom>(); 
         var entMan = IoCManager.Resolve<IEntityManager>();
         var _audio = entMan.System<SharedAudioSystem>();
-        var _undsys = entMan.System<UndertaleSpeechSystem>();
+        var _undsys = entMan.System<VoiceSpeechSystem>();
         var previewBeepText = rng.Pick(_sampleText);
 
         _previewBeepIndex = 0;
 
         var voice = Profile.Voice;
 
-        if(!_prototypeManager.TryIndex<UndertaleSpeechPrototype>(voice, out var protoVoice))
+        if(!_prototypeManager.TryIndex<VoiceSpeechPrototype>(voice, out var protoVoice))
             return;
 
         var Sound = protoVoice.Voice;

@@ -16,7 +16,7 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Serialization;
 using Robust.Shared.Utility;
-using Content.Shared.Vanilla.UndertaleSpeech;
+using Content.Shared.Vanilla.VoiceSpeech;
 
 namespace Content.Shared.Preferences
 {
@@ -254,7 +254,7 @@ namespace Content.Shared.Preferences
 
             // Rayten-TTS-Start
             var voiceId = random.Pick(prototypeManager
-                .EnumeratePrototypes<UndertaleSpeechPrototype>()
+                .EnumeratePrototypes<VoiceSpeechPrototype>()
                 .Where(o => CanHaveVoice(o, sex)).ToArray()
             ).ID;
             // Rayten-TTS-End
@@ -659,7 +659,7 @@ namespace Content.Shared.Preferences
             _traitPreferences.UnionWith(GetValidTraits(traits, prototypeManager));
 
             // Rayten-TTS-Start
-            prototypeManager.TryIndex<UndertaleSpeechPrototype>(Voice, out var voice);
+            prototypeManager.TryIndex<VoiceSpeechPrototype>(Voice, out var voice);
             if (voice is null || !CanHaveVoice(voice, Sex))
                 Voice = SharedHumanoidAppearanceSystem.DefaultSexVoice[sex];
 
@@ -730,7 +730,7 @@ namespace Content.Shared.Preferences
 
         // Corvax-TTS-Start
         // SHOULD BE NOT PUBLIC, BUT....
-        public static bool CanHaveVoice(UndertaleSpeechPrototype voice, Sex sex)
+        public static bool CanHaveVoice(VoiceSpeechPrototype voice, Sex sex)
         {
             return voice.RoundStart && sex == Sex.Unsexed || (voice.Sex == sex || voice.Sex == Sex.Unsexed);
         }

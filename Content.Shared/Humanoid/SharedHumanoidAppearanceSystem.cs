@@ -21,7 +21,7 @@ using Robust.Shared.Serialization.Manager;
 using Robust.Shared.Serialization.Markdown;
 using Robust.Shared.Utility;
 using YamlDotNet.RepresentationModel;
-using Content.Shared.Vanilla.UndertaleSpeech;
+using Content.Shared.Vanilla.VoiceSpeech;
 
 namespace Content.Shared.Humanoid;
 
@@ -534,7 +534,7 @@ public abstract class SharedHumanoidAppearanceSystem : EntitySystem
     // ReSharper disable once InconsistentNaming
     public void SetTTSVoice(EntityUid uid, string voiceId, float VoicePitch, HumanoidAppearanceComponent humanoid)
     {
-        if (!TryComp<UndertaleSpeechEmitterComponent>(uid, out var comp))
+        if (!TryComp<VoiceEmitterComponent>(uid, out var comp))
             return;
 
         if ( VoicePitch < 0.5f)

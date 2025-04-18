@@ -6,7 +6,7 @@ using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using System.Linq;
 using Content.Shared.Corvax.CCCVars;
-using Content.Shared.Vanilla.UndertaleSpeech;
+using Content.Shared.Vanilla.VoiceSpeech;
 using Content.Client.Examine;
 using Robust.Client.Graphics;
 using Robust.Shared.Configuration;
@@ -15,9 +15,9 @@ using Robust.Client.Player;
 using Robust.Client.GameObjects;
 using Robust.Shared.Map;
 
-namespace Content.Client.Vanilla.UndertaleSpeech;
+namespace Content.Client.Vanilla.VoiceSpeech;
 
-public sealed class UndertaleSpeechSystem : EntitySystem
+public sealed class VoiceSpeechSystem : EntitySystem
 {
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly IConfigurationManager _cfg = default!;
@@ -27,8 +27,8 @@ public sealed class UndertaleSpeechSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<UndertaleSpeechEmitterComponent, UndertaleSpeechBeepEvent>(onBeep);
-        SubscribeLocalEvent<UndertaleSpeechEmitterComponent, MapInitEvent>(onMapInit);
+        SubscribeLocalEvent<VoiceEmitterComponent, VoiceSpeechBeepEvent>(onBeep);
+        SubscribeLocalEvent<VoiceEmitterComponent, MapInitEvent>(onMapInit);
         _cfg.OnValueChanged(CCCVars.TTSVolume, OnTtsVolumeChanged, true);
     }
 
@@ -42,15 +42,15 @@ public sealed class UndertaleSpeechSystem : EntitySystem
     {
         _volume = volume;
     }
-    private void onMapInit(EntityUid uid, UndertaleSpeechEmitterComponent comp, MapInitEvent args)
+    private void onMapInit(EntityUid uid, VoiceEmitterComponent comp, MapInitEvent args)
     {
-        if (comp.VoicePrototypeId == null || !_prototypeManager.TryIndex<UndertaleSpeechPrototype>(comp.VoicePrototypeId, out var proto))
+        if (comp.VoicePrototypeId == null || !_prototypeManager.TryIndex<VoiceSpeechPrototype>(comp.VoicePrototypeId, out var proto))
             return;
 
         comp.Voice = proto.Voice;
     }
 
-    private void onBeep(EntityUid uid, UndertaleSpeechEmitterComponent comp, UndertaleSpeechBeepEvent args)
+    private void onBeep(EntityUid uid, VoiceEmitterComponent comp, VoiceSpeechBeepEvent args)
     {
         if (comp.VoicePrototypeId == null )
             return;
@@ -77,11 +77,11 @@ public sealed class UndertaleSpeechSystem : EntitySystem
         return isWhisper ? SharedChatSystem.WhisperMuffledRange : SharedChatSystem.VoiceRange;
     }
 }
-public sealed class UndertaleSpeechBeepEvent : EntityEventArgs
+public sealed class VoiceSpeechBeepEvent : EntityEventArgs
 {
     public char Character { get; }
 
-    public UndertaleSpeechBeepEvent(char character)
+    public VoiceSpeechBeepEvent(char character)
     {
         Character = character;
     }
