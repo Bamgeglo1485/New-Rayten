@@ -21,7 +21,7 @@ public sealed class DiscordChatRelaySystem : EntitySystem
     {
         base.Initialize();
         SubscribeLocalEvent<EntitySpokeEvent>(OnEntitySpoke);
-        //_cfg.OnValueChanged(CCVarsVanilla.DiscordBridgeWebhook, v => _webhookUrl = v, true);
+        _cfg.OnValueChanged(CCVVars.DiscordBridgeWebhook, v => _webhookUrl = v, true);
     }
     private (string Id, string Token) ParseWebhookUrl(string url)
     {
@@ -38,6 +38,8 @@ public sealed class DiscordChatRelaySystem : EntitySystem
 
     private async void OnEntitySpoke(EntitySpokeEvent ev)
     {
+        if (_webhookUrl == "")
+            return;
         if (_random.Prob(0.9f))
             return;
 

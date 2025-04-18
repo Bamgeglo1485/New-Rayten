@@ -4,8 +4,8 @@ using Robust.Shared.Audio;
 
 namespace Content.Shared.Vanilla.UndertaleSpeech;
 
-[Prototype("UndertaleSpeech")]
-public sealed class UndertaleSpeechPrototype : IPrototype
+[Prototype("VoiceSpeech")]
+public sealed class VoiceSpeechPrototype : IPrototype
 {
     [IdDataField]
     public string ID { get; } = default!;
@@ -18,7 +18,7 @@ public sealed class UndertaleSpeechPrototype : IPrototype
 
     [ViewVariables(VVAccess.ReadWrite)]
     [DataField("voice", required: true)]
-    public SoundSpecifier Voice = new SoundPathSpecifier("/Audio/Vanilla/Effects/undertale/SANS.ogg");
+    public SoundSpecifier Voice = new SoundPathSpecifier("/Audio/Vanilla/Effects/Voices/SANS.ogg");
 
     [DataField("roundStart")]
     public bool RoundStart { get; } = true;

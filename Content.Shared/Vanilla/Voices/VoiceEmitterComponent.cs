@@ -7,7 +7,7 @@ using Robust.Shared.Audio;
 namespace Content.Shared.Vanilla.UndertaleSpeech;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
-public sealed partial class UndertaleSpeechEmitterComponent : Component
+public sealed partial class VoiceEmitterComponent : Component
 {
     [ViewVariables(VVAccess.ReadWrite),AutoNetworkedField]
     [DataField("voice", customTypeSerializer: typeof(PrototypeIdSerializer<UndertaleSpeechPrototype>))]
@@ -16,7 +16,7 @@ public sealed partial class UndertaleSpeechEmitterComponent : Component
     [DataField("pitch"), AutoNetworkedField]
     public float Pitch = 1.0f;
 
-    public SoundSpecifier Voice = new SoundPathSpecifier("/Audio/Vanilla/Effects/undertale/SANS.ogg");
+    public SoundSpecifier Voice = new SoundPathSpecifier("/Audio/Vanilla/Effects/Voices/SANS.ogg");
 
     public bool iswhisper = false;
 }
