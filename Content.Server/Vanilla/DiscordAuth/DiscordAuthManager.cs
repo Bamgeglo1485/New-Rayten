@@ -40,9 +40,9 @@ public sealed class DiscordAuthManager
     {
         _sawmill = Logger.GetSawmill("discord_auth");
 
-        _cfg.OnValueChanged(CCVarsVanilla.DiscordAuthEnabled, v => _isEnabled = v, true);
-        _cfg.OnValueChanged(CCVarsVanilla.DiscordAuthApiUrl, v => _apiUrl = v, true);
-        _cfg.OnValueChanged(CCVarsVanilla.DiscordAuthApiKey, v => _apiKey = v, true);
+        _cfg.OnValueChanged(CCVVars.DiscordAuthEnabled, v => _isEnabled = v, true);
+        _cfg.OnValueChanged(CCVVars.DiscordAuthApiUrl, v => _apiUrl = v, true);
+        _cfg.OnValueChanged(CCVVars.DiscordAuthApiKey, v => _apiKey = v, true);
 
         _netMgr.RegisterNetMessage<MsgDiscordAuthRequired>();
         _netMgr.RegisterNetMessage<MsgDiscordAuthCheck>(OnAuthCheck);

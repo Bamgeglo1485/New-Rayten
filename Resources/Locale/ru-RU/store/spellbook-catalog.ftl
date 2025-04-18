@@ -5,6 +5,8 @@ spellbook-blink-name = Прыжок
 spellbook-blink-desc = Не моргайте, иначе вы не заметите, как телепортируетесь.
 spellbook-voidapplause-name = Хлопок пустоты
 spellbook-voidapplause-desc = Поменяйтесь местами с целью, разве вам не захотелось потанцевать буги?
+spellbook-knock-name = Стук
+spellbook-knock-desc = Открывает все замки, шлюзы и ящики поблизости
 spellbook-force-wall-name = Силовой барьер
 spellbook-force-wall-desc = Создайте три стены чистой энергии, через которые вы можете пройти, а другие - нет.
 spellbook-repulse-name = Отталкивание
@@ -50,7 +52,7 @@ spellbook-staff-animation-description = Оживите неодушевлённ�
 # Events
 
 spellbook-event-summon-ghosts-name = Призыв призраков
-spellbook-event-summon-ghosts-description = Who ya gonna call?
+spellbook-event-summon-ghosts-description = Кого ты собираешься призвать?
 spellbook-event-summon-guns-name = Призыв оружия
 spellbook-event-summon-guns-description = АК-47 для всех! Размещает перед каждым случайное огнестрельное оружие. Отключает возврат средств при покупке!
 spellbook-event-summon-magic-name = Призыв магии

@@ -166,3 +166,5 @@ ent-ClothingHeadHatStrawHat = straw hat
     .desc = A fancy hat for hot days! Not recommended to wear near fires.
 ent-ClothingHeadHatBeretMedic = medical beret
     .desc = White beret that encourages you to be clean.
+ent-ClothingHeadHatSolidHeadband = solid headband
+    .desc = You'll feel like you're Invisible while wearing this! (DISCLAIMER: DOES NOT ACTUALLY MAKE THE WEARER INVISIBLE)

@@ -20,3 +20,5 @@ ent-CrateMaterialPaper = paper crate
     .desc = 90 sheets of paper.
 ent-CrateMaterialRandom = surplus materials
     .desc = Surplus materials from somewhere.
+ent-CrateMaterialBasicResource = basic sheet crate
+    .desc = 30 sheets of steel, glass, and plastic.

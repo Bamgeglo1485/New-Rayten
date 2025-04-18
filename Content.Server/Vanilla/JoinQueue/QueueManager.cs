@@ -56,7 +56,7 @@ public sealed class JoinQueueManager
     {
         _netManager.RegisterNetMessage<MsgQueueUpdate>();
 
-        _cfg.OnValueChanged(CCVarsVanilla.QueueEnabled, OnQueueCVarChanged, true);
+        _cfg.OnValueChanged(CCVVars.QueueEnabled, OnQueueCVarChanged, true);
         _playerManager.PlayerStatusChanged += OnPlayerStatusChanged;
         _discordAuthManager.PlayerVerified += OnPlayerVerified;
     }

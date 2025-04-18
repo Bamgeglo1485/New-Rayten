@@ -1,7 +1,6 @@
 using Robust.Shared.GameStates;
 using Content.Shared.Vanilla.Skill;
 using Content.Server.SkillTrainer;
-using Content.Server.Xenoarchaeology.XenoArtifacts.Events;
 using Robust.Shared.GameObjects;
 using Robust.Shared.IoC;
 using Robust.Shared.Player;
@@ -9,7 +8,8 @@ using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
 using Robust.Shared.Timing;
 using Content.Shared.Anomaly.Components;
-using Content.Server.Xenoarchaeology.XenoArtifacts;
+using Content.Shared.Xenoarchaeology.Artifact.Components;
+using Content.Shared.Xenoarchaeology.Artifact;
 
 namespace Content.Server.Vanilla.Skill;
 
@@ -17,7 +17,6 @@ public sealed class EmitSkillExperienceSystem : EntitySystem
 {
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly ServerSkillTrainerSystem _skillTrainerSystem = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly IGameTiming _gameTiming = default!;
     private TimeSpan _nextTick = TimeSpan.Zero;
     private const float Interval = 1.0f; // 1 секунда
@@ -26,7 +25,7 @@ public sealed class EmitSkillExperienceSystem : EntitySystem
     {
         base.Initialize();
         SubscribeLocalEvent<EmitSkillExperienceOnSpawnComponent, MapInitEvent>(OnEntitySpawned);
-        SubscribeLocalEvent<ArtifactComponent, ArtifactActivatedEvent>(OnArtifactActivated);
+        SubscribeLocalEvent<XenoArtifactComponent, XenoArtifactActivatedEvent>(OnArtifactActivated);
     }
 
     public override void Update(float frameTime)
@@ -44,11 +43,11 @@ public sealed class EmitSkillExperienceSystem : EntitySystem
             EmitSkillExperience(coords, 5.0f, 1, skillType.Research);
         }
     }
-    private void OnArtifactActivated(EntityUid uid, ArtifactComponent component, ArtifactActivatedEvent args)
+    private void OnArtifactActivated(EntityUid uid, XenoArtifactComponent component, XenoArtifactActivatedEvent args)
     {
         // Получаем координаты спавна сущности
         var Coords = Transform(uid).Coordinates;
-        EmitSkillExperience(Coords, 5.0f, 30, skillType.Research);
+        EmitSkillExperience(Coords, 5.0f, 10, skillType.Research);
     }
 
 

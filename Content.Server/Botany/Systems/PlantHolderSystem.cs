@@ -24,10 +24,10 @@ using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using Content.Server.Vanilla.Skill;
 using Content.Shared.Vanilla.Skill;
-using Content.Server.Labels.Components;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Database;
+using Content.Shared.Labels.Components;
 
 namespace Content.Server.Botany.Systems;
 
@@ -48,8 +48,7 @@ public sealed class PlantHolderSystem : EntitySystem
     [Dependency] private readonly RequiresSkillSystem _requiresSkillSystem = default!;
     [Dependency] private readonly ItemSlotsSystem _itemSlots = default!;
     [Dependency] private readonly ISharedAdminLogManager _adminLogger = default!;
-
-
+    
     public const float HydroponicsSpeedMultiplier = 1f;
     public const float HydroponicsConsumptionMultiplier = 2f;
 

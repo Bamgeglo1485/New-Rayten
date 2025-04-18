@@ -134038,7 +134038,6 @@ entities:
       parent: 38538
     - type: Physics
       sleepingAllowed: False
-    - type: BiasedArtifact
 - proto: ComputerAlert
   entities:
   - uid: 12002

@@ -246,12 +246,13 @@ public sealed class DepartmentGoalSystem : EntitySystem
                     stationUid, 
                     product.ID, 
                     product.Name, 
-                    0, // Стоимость
+                    1, // Стоимость
                     1, // количество
                     "NanoTrasen", 
                     "Награда за выполнение цели", 
                     "Торговый департамент", 
                     cargoDb,
+                    "Cargo",
                     (stationUid, stationData)
                 );
             }

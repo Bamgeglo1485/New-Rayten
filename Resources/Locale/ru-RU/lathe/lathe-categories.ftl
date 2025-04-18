@@ -1,4 +1,5 @@
 lathe-category-ammo = Боеприпасы
+lathe-category-clothing = Одежда
 lathe-category-circuitry = Электроника
 lathe-category-lights = Лампы
 lathe-category-mechs = Мехи
@@ -9,6 +10,8 @@ lathe-category-weapons = Вооружение
 lathe-category-food = Пища
 lathe-category-chemicals = Химикаты
 lathe-category-materials = Материалы
+lathe-category-boxes = Коробки
+lathe-category-magazines = Магазины
 # Uniform
 lathe-category-bedsheets = Простыни
 lathe-category-carpets = Ковры

@@ -6,6 +6,3 @@ ent-SimpleXenoArtifact = { ent-BaseXenoArtifact }
 ent-MediumXenoArtifact = { ent-BaseXenoArtifact }
     .suffix = Medium
     .desc = { ent-BaseXenoArtifact.desc }
-ent-ComplexXenoArtifact = { ent-BaseXenoArtifact }
-    .suffix = Complex
-    .desc = { ent-BaseXenoArtifact.desc }

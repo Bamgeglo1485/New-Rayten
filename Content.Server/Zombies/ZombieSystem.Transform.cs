@@ -38,6 +38,8 @@ using Robust.Shared.Audio.Systems;
 using Content.Shared.Ghost.Roles.Components;
 using Content.Shared.Damage.Components;
 using Content.Shared.Tag;
+using Content.Shared.Vanilla.Skill;
+
 using Robust.Shared.Prototypes;
 
 namespace Content.Server.Zombies;
@@ -65,7 +67,7 @@ public sealed partial class ZombieSystem
     [Dependency] private readonly NameModifierSystem _nameMod = default!;
 
     private static readonly ProtoId<TagPrototype> InvalidForGlobalSpawnSpellTag = "InvalidForGlobalSpawnSpell";
-
+    private static readonly ProtoId<TagPrototype> CannotSuicideTag = "CannotSuicide";
     /// <summary>
     /// Handles an entity turning into a zombie when they die or go into crit
     /// </summary>
@@ -181,18 +183,12 @@ public sealed partial class ZombieSystem
             _humanoidAppearance.SetBaseLayerId(target, HumanoidVisualLayers.Snout, zombiecomp.BaseLayerExternal, humanoid: huApComp);
 
             //This is done here because non-humanoids shouldn't get baller damage
-            //lord forgive me for the hardcoded damage
-            DamageSpecifier dspec = new()
-            {
-                DamageDict = new()
-                {
-                    { "Slash", 13 },
-                    { "Piercing", 8 },
-                    { "Structural", 20 }
-                }
-            };
-            melee.Damage = dspec;
-
+            melee.Damage = zombiecomp.DamageOnBite;
+            //Rayten-start
+            if(!TryComp<SkillComponent>(target, out var skill))
+                skill = EnsureComp<SkillComponent>(target);
+            skill.MeleeWeaponLevel = SkillLevel.Expert;
+            //Rayten-end
             // humanoid zombies get to pry open doors and shit
             var pryComp = EnsureComp<PryingComponent>(target);
             pryComp.SpeedModifier = 0.75f;
@@ -309,5 +305,6 @@ public sealed partial class ZombieSystem
         //Need to prevent them from getting an item, they have no hands.
         // Also prevents them from becoming a Survivor. They're undead.
         _tag.AddTag(target, InvalidForGlobalSpawnSpellTag);
+        _tag.AddTag(target, CannotSuicideTag);
     }
 }

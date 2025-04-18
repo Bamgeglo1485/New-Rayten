@@ -156,6 +156,29 @@ public sealed class AlertLevelSystem : EntitySystem
         return alert.CurrentDelay;
     }
 
+    /// <summary>
+    /// Get the default alert level for a station entity.
+    /// Returns an empty string if the station has no alert levels defined.
+    /// </summary>
+    /// <param name="station">The station entity.</param>
+    public string GetDefaultLevel(Entity<AlertLevelComponent?> station)
+    {
+        if (!Resolve(station.Owner, ref station.Comp) || station.Comp.AlertLevels == null)
+        {
+            return string.Empty;
+        }
+        return station.Comp.AlertLevels.DefaultLevel;
+    }
+
+    /// <summary>
+    /// Set the alert level based on the station's entity ID.
+    /// </summary>
+    /// <param name="station">Station entity UID.</param>
+    /// <param name="level">Level to change the station's alert level to.</param>
+    /// <param name="playSound">Play the alert level's sound.</param>
+    /// <param name="announce">Say the alert level's announcement.</param>
+    /// <param name="force">Force the alert change. This applies if the alert level is not selectable or not.</param>
+    /// <param name="locked">Will it be possible to change level by crew.</param>
     public void SetLevel(EntityUid station, string level, bool playSound, bool announce, bool force = false,
         bool locked = false, MetaDataComponent? dataComponent = null, AlertLevelComponent? component = null)
     {
@@ -179,7 +202,7 @@ public sealed class AlertLevelSystem : EntitySystem
             component.ActiveDelay = true;
         }
         if (detail.Position is int position && position > 0)
-            component.CurrentTimeToNewCode = _cfg.GetCVar(CCVarsVanilla.GameAlertLevelDownDelay);
+            component.CurrentTimeToNewCode = _cfg.GetCVar(CCVVars.GameAlertLevelDownDelay);
         else
             component.CurrentTimeToNewCode = 0;
             
@@ -238,7 +261,7 @@ public sealed class AlertLevelSystem : EntitySystem
             component.ActiveDelay = true;
         }
 
-        component.ActiveSubLevels[subLevel] = _cfg.GetCVar(CCVarsVanilla.GameAlertLevelDownDelay);
+        component.ActiveSubLevels[subLevel] = _cfg.GetCVar(CCVVars.GameAlertLevelDownDelay);
 
         var stationName = dataComponent.EntityName;
         var name = Loc.TryGetString($"alert-level-{subLevel}", out var locName) ? locName.ToLower() : subLevel.ToLower();
