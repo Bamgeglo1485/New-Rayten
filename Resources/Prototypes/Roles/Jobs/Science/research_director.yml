@@ -7,8 +7,8 @@
     - !type:DepartmentTimeRequirement
       department: Science
       time: 54000 #15 hrs # Vanilla-RoleTime
-#    - !type:OverallPlaytimeRequirement
-#      time: 144000 #40 hrs
+    - !type:AgeRequirement
+      requiredAge: 26 # Vanilla
   weight: 10
   startingGear: ResearchDirectorGear
   icon: "JobIconResearchDirector"

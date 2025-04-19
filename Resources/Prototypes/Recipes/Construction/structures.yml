@@ -246,26 +246,7 @@
     - !type:TileNotBlocked
 
 - type: construction
-  name: внутренняя стена шаттла
-  id: InteriorShuttleWall
-  graph: Girder
-  startNode: start
-  targetNode: shuttleInteriorWall
-  RequiresBuildingLevel: 3
-  category: construction-category-structures
-  description: Удерживает воздух внутри, а ассистентов снаружи.
-  icon:
-    sprite: Structures/Walls/shuttleinterior.rsi
-    state: full
-  objectType: Structure
-  placementMode: SnapgridCenter
-  canRotate: false
-  canBuildInImpassable: false
-  conditions:
-    - !type:TileNotBlocked
-
-- type: construction
-  name: диагональная стена шаттла
+  name: diagonal shuttle wall
   id: DiagonalShuttleWall
   graph: Girder
   startNode: start

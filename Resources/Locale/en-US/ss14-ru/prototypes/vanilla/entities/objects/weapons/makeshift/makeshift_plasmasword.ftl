@@ -3,5 +3,5 @@ ent-MeleeWeaponMakeshiftPlasmaSword = makeshift plasma sword
 ent-MeleeWeaponMakeshiftPlasmaSwordFilled = makeshift plasma sword
     .suffix = Filled
     .desc = { ent-MeleeWeaponMakeshiftPlasmaSword.desc }
-ent-MakeshiftPlasmaSwordUnfinished = unfinished emitter gun
+ent-MakeshiftPlasmaSwordUnfinished = unfinished plasma sword
     .desc = Just a wrapper.

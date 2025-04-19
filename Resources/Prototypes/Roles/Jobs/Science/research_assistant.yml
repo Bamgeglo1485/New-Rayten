@@ -3,6 +3,9 @@
   name: job-name-research-assistant
   description: job-description-research-assistant
   playTimeTracker: JobResearchAssistant
+  requirements:
+  - !type:AgeRequirement
+    requiredAge: 20 # Vanilla
   startingGear: ResearchAssistantGear
   icon: "JobIconResearchAssistant"
   supervisors: job-supervisors-science

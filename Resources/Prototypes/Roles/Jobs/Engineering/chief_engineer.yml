@@ -9,6 +9,12 @@
       time: 36000 #10 hrs # vanilla-RoleTime
     - !type:AgeRequirement
       requiredAge: 26
+    - !type:RoleTimeRequirement
+      role: JobStationEngineer
+      time: 18000 #5 hrs
+    - !type:DepartmentTimeRequirement
+      department: Engineering
+      time: 36000 #10 hrs
   weight: 10
   startingGear: ChiefEngineerGear
   icon: "JobIconChiefEngineer"

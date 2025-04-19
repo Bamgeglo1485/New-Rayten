@@ -1,9 +1,6 @@
 using System.Linq;
 using Content.Server.Administration.Logs;
 using Content.Server.DeviceLinking.Systems;
-using Content.Server.DeviceNetwork.Components;
-using Content.Server.Vanilla.Skill; //vanilla-station
-using Content.Shared.Vanilla.Skill; //vanilla-station
 using Content.Shared.Access.Components;
 using Content.Shared.Access.Systems;
 using Content.Shared.Database;
@@ -23,6 +20,8 @@ using Robust.Shared.Audio;
 using Robust.Shared.Map.Events;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
+using Content.Server.Vanilla.Skill; //vanilla-station
+using Content.Shared.Vanilla.Skill; //vanilla-station
 
 namespace Content.Server.DeviceNetwork.Systems;
 
