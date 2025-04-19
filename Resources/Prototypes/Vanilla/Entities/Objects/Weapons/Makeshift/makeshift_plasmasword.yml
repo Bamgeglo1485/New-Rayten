@@ -55,13 +55,29 @@
             Structural: 18
   - type: ItemToggleSize
     activatedSize: Large
-  - type: ItemToggleHot
   - type: ComponentToggler
     components:
     - type: DisarmMalus
       malus: 0.6
     - type: Execution
       doAfterDuration: 8.0
+    - type: IgniteOnMeleeHit
+      fireStacks: 0.4
+    - type: DamageOnInteract
+      damage:
+        types:
+          Heat: 5
+      throw: true
+      throwSpeed: 3
+      interactTimer: 2
+      ignoreResistances: false
+      popupText: powered-light-component-burn-hand
+      interactSound: /Audio/Effects/lightburn.ogg
+      stunChance: 0.10
+      stunSeconds: 1.5
+  - type: ItemToggleHot
+  - type: IgnitionSource
+    temperature: 900
   - type: ItemToggleActiveSound
     activeSound:
       path: /Audio/Vanilla/Weapons/PlasmaSword/plasmasword_idle.ogg
@@ -79,7 +95,7 @@
         shader: unshaded
   - type: UseDelay
   - type: MeleeWeapon
-    wideAnimationRotation: -90
+    wideAnimationRotation: 180
     damage:
       types:
         Blunt: 2
@@ -99,13 +115,11 @@
   - type: ItemTogglePointLight
   - type: Appearance
   - type: StaticPrice
-    price: 20
-  - type: IgnitionSource
-    temperature: 900
+    price: 1000
   - type: Welder
     fuelReagent: Plasma
     fuelSolutionName: Sword
-    welderUpdateTimer: 0.1
+    welderUpdateTimer: 0.15
   - type: Explosive
     explosionType: FireBomb
     totalIntensity: 100
@@ -118,7 +132,7 @@
     thresholds:
     - trigger:
         !type:DamageTrigger
-        damage: 50
+        damage: 25
       behaviors:
       - !type:DoActsBehavior
         acts: ["Destruction"]
@@ -126,9 +140,6 @@
   - type: Construction
     graph: ImprovisedPlasmaSwordGraph
     node: sword
-  - type: IgniteOnMeleeHit
-    fireStacks: 0.4
-
 
 - type: entity
   name: makeshift plasma sword
@@ -145,7 +156,7 @@
         maxVol: 50
 
 - type: entity
-  name: unfinished emitter gun
+  name: unfinished plasma sword
   parent: BaseItem
   id: MakeshiftPlasmaSwordUnfinished
   description: Just a wrapper.

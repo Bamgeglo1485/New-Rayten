@@ -2,10 +2,10 @@
   id: Meta
   mapName: 'Meta Station'
   mapPath: /Maps/meta.yml
-  # Corvax-start
-  minPlayers: 25
+  # Vanilla-start
+  minPlayers: 20
   maxPlayers: 55
-  # Corvax-end
+  # Vanilla-end
   stations:
     Meta:
       stationProto: StandardNanotrasenStation

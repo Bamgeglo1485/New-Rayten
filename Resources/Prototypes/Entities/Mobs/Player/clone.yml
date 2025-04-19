@@ -15,6 +15,7 @@
   - Fingerprint
   - NpcFactionMember
   - Skill # Rayten
+  - VoiceEmitter # Rayten
   # traits
   # - LegsParalyzed (you get healed)
   - LightweightDrunk

@@ -2,10 +2,10 @@
   id: Saltern
   mapName: 'Saltern'
   mapPath: /Maps/saltern.yml
-  # Corvax-start
+  # Vanilla-start
   minPlayers: 0
   maxPlayers: 25
-  # Corvax-end
+  # Vanilla-end
   fallback: true
   stations:
     Saltern:

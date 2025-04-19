@@ -4,7 +4,7 @@
   mapPath: /Maps/Corvax/corvax_maus.yml
   maxRandomOffset: 0
   randomRotation: false
-  minPlayers: 0
+  minPlayers: 15 # Vanilla
   maxPlayers: 35
   stations:
     Maus:
@@ -68,4 +68,3 @@
             # silicon
             StationAi: [ 1, 1 ]
             Borg: [ 1, 1 ]
-            

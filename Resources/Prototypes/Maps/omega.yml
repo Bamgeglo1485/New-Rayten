@@ -2,10 +2,10 @@
   id: Omega
   mapName: 'Omega'
   mapPath: /Maps/omega.yml
-  # Corvax-start
-  minPlayers: 0
-  maxPlayers: 25
-  # Corvax-end
+  # Vanilla-start
+  minPlayers: 5
+  maxPlayers: 15
+  # Vanilla-end
   stations:
     Omega:
       stationProto: StandardNanotrasenStation

@@ -18,7 +18,6 @@ using Content.Shared.CombatMode.Pacification;
 using Content.Shared.Damage;
 using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
-using Content.Shared.CombatMode.Pacification;
 using Content.Shared.Humanoid;
 using Content.Shared.Interaction.Components;
 using Content.Shared.Mobs;
@@ -36,11 +35,11 @@ using Content.Shared.Prying.Components;
 using Content.Shared.Traits.Assorted;
 using Robust.Shared.Audio.Systems;
 using Content.Shared.Ghost.Roles.Components;
-using Content.Shared.Damage.Components;
+using Content.Shared.Roles;
 using Content.Shared.Tag;
-using Content.Shared.Vanilla.Skill;
-
+using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
+using Content.Shared.Vanilla.Skill;
 
 namespace Content.Server.Zombies;
 
@@ -65,6 +64,8 @@ public sealed partial class ZombieSystem
     [Dependency] private readonly NPCSystem _npc = default!;
     [Dependency] private readonly TagSystem _tag = default!;
     [Dependency] private readonly NameModifierSystem _nameMod = default!;
+    [Dependency] private readonly SharedRoleSystem _roles = default!;
+    [Dependency] private readonly ISharedPlayerManager _player = default!;
 
     private static readonly ProtoId<TagPrototype> InvalidForGlobalSpawnSpellTag = "InvalidForGlobalSpawnSpell";
     private static readonly ProtoId<TagPrototype> CannotSuicideTag = "CannotSuicide";
@@ -114,7 +115,6 @@ public sealed partial class ZombieSystem
         RemComp<ReproductivePartnerComponent>(target);
         RemComp<LegsParalyzedComponent>(target);
         RemComp<ComplexInteractionComponent>(target);
-        RemComp<SlowOnDamageComponent>(target);
 
         //funny voice
         var accentType = "zombie";
@@ -184,11 +184,13 @@ public sealed partial class ZombieSystem
 
             //This is done here because non-humanoids shouldn't get baller damage
             melee.Damage = zombiecomp.DamageOnBite;
+            
             //Rayten-start
             if(!TryComp<SkillComponent>(target, out var skill))
                 skill = EnsureComp<SkillComponent>(target);
             skill.MeleeWeaponLevel = SkillLevel.Expert;
             //Rayten-end
+
             // humanoid zombies get to pry open doors and shit
             var pryComp = EnsureComp<PryingComponent>(target);
             pryComp.SpeedModifier = 0.75f;
@@ -196,18 +198,6 @@ public sealed partial class ZombieSystem
             pryComp.Force = true;
 
             Dirty(target, pryComp);
-
-            // Humanoid zombie now deals stamina damage! ye.
-            AddComp<StaminaDamageOnHitComponent>(target);
-            var staminDamage = EnsureComp<StaminaDamageOnHitComponent>(target);
-            staminDamage.Damage = 15f;
-
-            Dirty(target, staminDamage);
-
-            var staminaHp = EnsureComp<StaminaComponent>(target);
-            staminaHp.CritThreshold = 200f;
-
-            Dirty(target, staminaHp);
         }
 
         Dirty(target, melee);
@@ -255,8 +245,8 @@ public sealed partial class ZombieSystem
         _npc.SleepNPC(target, htn);
 
         //He's gotta have a mind
-        var hasMind = _mind.TryGetMind(target, out var mindId, out _);
-        if (hasMind && _mind.TryGetSession(mindId, out var session))
+        var hasMind = _mind.TryGetMind(target, out var mindId, out var mind);
+        if (hasMind && mind != null && _player.TryGetSessionById(mind.UserId, out var session))
         {
             //Zombie role for player manifest
             _role.MindAddRole(mindId, "MindRoleZombie", mind: null, silent: true);

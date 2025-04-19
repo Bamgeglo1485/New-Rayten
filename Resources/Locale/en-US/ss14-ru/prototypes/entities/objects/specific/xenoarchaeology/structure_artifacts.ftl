@@ -1,5 +1,3 @@
-ent-BaseXenoArtifact = alien artifact
-    .desc = A strange alien device.
 ent-SimpleXenoArtifact = { ent-BaseXenoArtifact }
     .suffix = Simple
     .desc = { ent-BaseXenoArtifact.desc }

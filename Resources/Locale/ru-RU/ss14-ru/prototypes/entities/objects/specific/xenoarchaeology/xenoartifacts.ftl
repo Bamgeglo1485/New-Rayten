@@ -1,3 +1,4 @@
-
-ent-ActionArtifactActivate = Activate Artifact
-    .desc = Activate yourself, causing chaos to those near you.
+ent-BaseXenoArtifact = артефакт
+    .desc = Странный артефакт древних цивилизаций.
+ent-ActionArtifactActivate = Активировать артефакт
+    .desc = Активировать самого себя, погрузив окружающее пространство в хаос!

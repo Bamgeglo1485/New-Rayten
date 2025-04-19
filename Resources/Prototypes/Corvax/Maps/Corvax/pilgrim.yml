@@ -4,7 +4,7 @@
   mapPath: /Maps/Corvax/corvax_pilgrim.yml
   maxRandomOffset: 0
   randomRotation: false
-  minPlayers: 40
+  minPlayers: 25 # Vanilla
   stations:
     Pilgrim:
       stationProto: StandardNanotrasenStation
