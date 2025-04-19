@@ -350,7 +350,7 @@ namespace Content.Client.Chat.UI
 
             var entMan = IoCManager.Resolve<IEntityManager>();
 
-            if(senderEntity != null && entMan.HasComponent<VoiceEmitterComponent>(senderEntity))
+            if(senderEntity != null && entMan.TryGetComponent<VoiceEmitterComponent>(senderEntity, out var comp) && comp.VoicePrototypeId != null)
                 InitializeText(message, fontColor);
             else
                 _textLabel.SetMessage(ExtractAndFormatSpeechSubstring(message, "BubbleContent", fontColor));
