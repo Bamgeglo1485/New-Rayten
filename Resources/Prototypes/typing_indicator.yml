@@ -63,11 +63,11 @@
 - type: typingIndicator
   id: gingerbread
   typingState: gingerbread0
-  idleState: gingerbread3 # Corvax-TypingIndicator
+  idleState: gingerbread2 # Corvax-TypingIndicator
   offset: 0, 0.125
 
 - type: typingIndicator
   id: diona
   typingState: diona0
-  idleState: diona3 # Corvax-TypingIndicator
+  idleState: diona2 # Corvax-TypingIndicator
   offset: 0, 0.125
