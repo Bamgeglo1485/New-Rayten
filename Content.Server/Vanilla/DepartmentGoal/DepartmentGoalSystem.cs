@@ -12,6 +12,7 @@ using Content.Shared.GameTicking;
 using Content.Shared.Paper;
 using Content.Shared.Research.Components;
 using Content.Server.Chat.Systems;
+using Content.Shared.Cargo.Prototypes;
 using Robust.Server.Player;
 using Robust.Shared.Configuration;
 using Robust.Shared.Prototypes;
@@ -26,12 +27,10 @@ public sealed class DepartmentGoalSystem : EntitySystem
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly FaxSystem _fax = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
+    [Dependency] private readonly CargoSystem _cargo = default!;
     [Dependency] private readonly StationSystem _station = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly CargoSystem _cargoSystem = default!;
     [Dependency] private readonly ChatSystem _chatSystem = default!;
-    public List<DepartmentGoalPrototype> _depGoals = new();
+    public Dictionary<EntityUid, List<DepartmentGoalPrototype>> _depGoals = new();
 
     public override void Initialize()
     {
@@ -41,7 +40,6 @@ public sealed class DepartmentGoalSystem : EntitySystem
     #region отправка целей
     private void OnRoundStarting(RoundStartedEvent ev)
     {
-        // Очистка старых данных
         _depGoals.Clear();
 
         // Получаем все прототипы DepartmentGoalPrototype (цели)
@@ -49,62 +47,63 @@ public sealed class DepartmentGoalSystem : EntitySystem
 
         // Группируем цели по отделам
         var goalsByDepartment = allGoals.GroupBy(g => g.Department);
+        
         // Перемешиваем порядок отделов
         goalsByDepartment = goalsByDepartment.OrderBy(_ => _random.Next()).ToList();
-
-        // Локальный список для хранения выбранных целей
-        var departmentGoals = new List<DepartmentGoalPrototype>();
-
-        // Перебираем каждый отдел
-        foreach (var departmentGroup in goalsByDepartment)
-        {
-            var department = departmentGroup.Key;
-
-            // Перемешиваем цели внутри отдела
-            var departmentGoalsList = departmentGroup
-                .OrderBy(_ => _random.Next())
-                .ToList();
-
-            // Суммарный вес целей в отделе
-            var totalWeight = departmentGoalsList.Sum(g => g.Weight);
-            if (totalWeight <= 0)
-            {
-                continue;
-            }
-
-            // Генерируем случайное число от 0 до totalWeight
-            var randomValue = _random.NextFloat(0, totalWeight);
-            float cumulativeWeight = 0;
-            // Выбираем цель случайно с учётом веса
-            foreach (var goal in departmentGoalsList)
-            {
-                cumulativeWeight += goal.Weight;
-                if (randomValue <= cumulativeWeight)
-                {
-                    departmentGoals.Add(goal);
-                    break;
-                }
-            }
-
-            if (departmentGoals.Count == 4)
-                break;
-        }
-
-        // Сохраняем наши цели
-        _depGoals = departmentGoals;
 
         // Перебираем все станции с компонентом StationGoalComponent
         var query = EntityQueryEnumerator<StationGoalComponent>();
         while (query.MoveNext(out var stationUid, out var station))
         {
-            // Отправляем выбранные цели
+            // Локальный список для хранения выбранных целей для текущей станции
+            var departmentGoals = new List<DepartmentGoalPrototype>();
+
+            // Перебираем каждый отдел
+            foreach (var departmentGroup in goalsByDepartment)
+            {
+                var department = departmentGroup.Key;
+
+                // Перемешиваем цели внутри отдела
+                var departmentGoalsList = departmentGroup
+                    .OrderBy(_ => _random.Next())
+                    .ToList();
+
+                // Суммарный вес целей в отделе
+                var totalWeight = departmentGoalsList.Sum(g => g.Weight);
+                if (totalWeight <= 0)
+                {
+                    continue;
+                }
+
+                // Генерируем случайное число от 0 до totalWeight
+                var randomValue = _random.NextFloat(0, totalWeight);
+                float cumulativeWeight = 0;
+
+                // Выбираем цель случайно с учётом веса
+                foreach (var goal in departmentGoalsList)
+                {
+                    cumulativeWeight += goal.Weight;
+                    if (randomValue <= cumulativeWeight)
+                    {
+                        departmentGoals.Add(goal);
+                        break;
+                    }
+                }
+
+                if (departmentGoals.Count == 4)
+                    break;
+            }
+
+            // Добавляем цели для текущей станции в словарь
+            _depGoals[stationUid] = departmentGoals;
+
+            // Отправляем выбранные цели для текущей станции
             foreach (var departmentGoal in departmentGoals)
             {
                 SendStationGoal(stationUid, departmentGoal);
             }
         }
     }
-
     public bool SendStationGoal(EntityUid? ent, ProtoId<DepartmentGoalPrototype> goal)
     {
         return SendStationGoal(ent, _proto.Index(goal));
@@ -167,100 +166,37 @@ public sealed class DepartmentGoalSystem : EntitySystem
     #region принятие целей
     public bool ApproveGoal(DepartmentGoalPrototype goal)
     {
-        bool gived = false;
-        bool itemBenefit = false;
-        bool researchBenefit = false;
-        bool allBenefit = false;
+        // Находим станцию, к которой привязана эта цель
+        var station = _depGoals.FirstOrDefault(x => x.Value.Contains(goal)).Key;
 
-        // награда в виде предметов
-        if (goal.ItemBenefits != null && goal.ItemBenefits.Count > 0)
+        if (station == default)
         {
-            foreach (var itemId in goal.ItemBenefits)
-            {
-                HandleItemBenefit(itemId);
-            }
-            itemBenefit = true;
-            gived = true;
+            Logger.Error($"Не найдена станция для цели: {goal.ID}");
+            return false;
         }
 
-        // награда в виде очков изучения
-        if(goal.ResearchBenefit > 0 )
+        int randomValue = _random.Next(0, 20000);
+        ProtoId<CargoAccountPrototype> account = goal.Department switch
         {
-            HandleResearchBenefit(goal.ResearchBenefit);
-            gived = true;
-            researchBenefit = true;
-        }
+            department.RnD => "Science",
+            department.MED => "Medical",
+            department.CARGO => "Cargo",
+            department.ENG => "Engineering",
+            department.SEC => "Security",
+            department.SRV => "Service",
+            _ => "Cargo" 
+        };
         
-        allBenefit = itemBenefit && researchBenefit;
-            
-        float randomValue = (int)_random.NextFloat(0, 100);
-        DispatchAnnouncement(goal.Department, itemBenefit, researchBenefit, allBenefit, randomValue);
-        return gived; 
+        _cargo.UpdateBankAccount(station, randomValue, account);
+        DispatchAnnouncement(goal.Department, randomValue);
+        return true; 
     }
 
-    private void DispatchAnnouncement(department dep, bool itemBenefits, bool researcBenefits, bool allBenefit, float randomValue)
+    private void DispatchAnnouncement(department dep, int randomValue)
     {
-        if(allBenefit)
-        {
-            _chatSystem.DispatchGlobalAnnouncement(Loc.GetString("Department-goal-text-all", ("dep", dep.ToString()), ("rand", randomValue)),
-                                                   Loc.GetString("Department-goal-title"));
-            return;
-        }
-        if(itemBenefits)
-        {
-            _chatSystem.DispatchGlobalAnnouncement(Loc.GetString("Department-goal-text-item", ("dep", dep.ToString()), ("rand", randomValue)),
-                                                   Loc.GetString("Department-goal-title"));
-            return;
-        }
-        if(researcBenefits)
-        {
-            _chatSystem.DispatchGlobalAnnouncement(Loc.GetString("Department-goal-text-research", ("dep", dep.ToString()), ("rand", randomValue)),
-                                                   Loc.GetString("Department-goal-title"));
-            return;
-        }
+        _chatSystem.DispatchGlobalAnnouncement(Loc.GetString("Department-goal-text", ("dep", dep.ToString()), ("rand", randomValue)),
+                                                Loc.GetString("Department-goal-title"));
     }
-    private void HandleResearchBenefit(int count)
-    {
-        // Перебираем все сущности с компонентом ResearchServerComponent
-        var query = EntityQueryEnumerator<ResearchServerComponent>();
-        while (query.MoveNext(out var entityUid, out var researchServer))
-        {
-            // Добавляем очки к Points
-            researchServer.Points += count;
-            Dirty(entityUid,researchServer);
-        }
-    }
-
-
-    private void HandleItemBenefit(EntProtoId item)
-    {
-        // Перебираем все станции с компонентом StationGoalComponent
-        var query = EntityQueryEnumerator<StationGoalComponent>();
-        while (query.MoveNext(out var stationUid, out var station))
-        {
-            if (TryComp<StationCargoOrderDatabaseComponent>(stationUid, out var cargoDb) && 
-                TryComp<StationDataComponent>(stationUid, out var stationData))
-            {
-                var product = _proto.Index<EntityPrototype>(item);
-                _cargoSystem.AddAndApproveOrder(
-                    stationUid, 
-                    product.ID, 
-                    product.Name, 
-                    1, // Стоимость
-                    1, // количество
-                    "NanoTrasen", 
-                    "Награда за выполнение цели", 
-                    "Торговый департамент", 
-                    cargoDb,
-                    "Cargo",
-                    (stationUid, stationData)
-                );
-            }
-
-        }
-    }
-
-
 #endregion
 
 }

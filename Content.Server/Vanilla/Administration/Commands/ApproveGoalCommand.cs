@@ -2,6 +2,7 @@ using Content.Server.Administration;
 using Content.Server.Administration.Logs;
 using Content.Server.Vanilla.DepartmentGoal;
 using Content.Shared.Administration;
+using Content.Shared.Cargo.Prototypes;
 using Robust.Shared.Console;
 using Robust.Shared.IoC;
 using Robust.Shared.Prototypes;
@@ -31,29 +32,59 @@ public sealed class ApproveGoalCommand : IConsoleCommand
         var goalId = args[0];
         var departmentGoalSystem = _entitySystemManager.GetEntitySystem<DepartmentGoalSystem>();
 
-        // Проверяем, существует ли цель с указанным ID
-        var goal = departmentGoalSystem._depGoals.FirstOrDefault(g => g.ID == goalId);
-        if (goal == null)
+        // Ищем цель во всех станциях
+        DepartmentGoalPrototype? foundGoal = null;
+        EntityUid stationUid = default;
+        foreach (var (station, goals) in departmentGoalSystem._depGoals)
+        {
+            var goal = goals.FirstOrDefault(g => g.ID == goalId);
+            if (goal != null)
+            {
+                foundGoal = goal;
+                stationUid = station;
+                break;
+            }
+        }
+
+        if (foundGoal == null)
         {
             shell.WriteLine($"Цель с ID '{goalId}' не найдена.");
             return;
         }
 
-        // выполняем цель!
-        if(departmentGoalSystem.ApproveGoal(goal))
-            shell.WriteLine($"Цель '{goal.ID}' выполнена! Слава NT!");
+        // Выполняем цель!
+        if (departmentGoalSystem.ApproveGoal(foundGoal))
+        {
+            shell.WriteLine($"Цель '{foundGoal.ID}' выполнена! Слава NT!");
+        }
         else
-            shell.WriteLine($"у цели '{goal.ID}' нет награды");
-        //удаляем цель из списка в любом случае
-        departmentGoalSystem._depGoals.Remove(goal);
-    }
+        {
+            shell.WriteLine($"не получилось :c");
+        }
 
+        // Удаляем цель из списка станции
+        if (departmentGoalSystem._depGoals.TryGetValue(stationUid, out var goalsList))
+        {
+            goalsList.Remove(foundGoal);
+            
+            // Если у станции больше нет целей, можно удалить её из словаря
+            if (goalsList.Count == 0)
+            {
+                departmentGoalSystem._depGoals.Remove(stationUid);
+            }
+        }
+    }
     public CompletionResult GetCompletion(IConsoleShell shell, string[] args)
     {
         if (args.Length == 1)
         {
             var departmentGoalSystem = _entitySystemManager.GetEntitySystem<DepartmentGoalSystem>();
-            var goalIds = departmentGoalSystem._depGoals.Select(g => g.ID).ToArray();
+            
+            var goalIds = departmentGoalSystem._depGoals
+                .SelectMany(kv => kv.Value)  // Выбираем все списки целей
+                .Select(g => g.ID)           // Берём ID каждой цели
+                .Distinct()                  // Убираем дубликаты (если нужно)
+                .ToArray();
 
             return CompletionResult.FromHintOptions(goalIds, "ID доступных целей");
         }
