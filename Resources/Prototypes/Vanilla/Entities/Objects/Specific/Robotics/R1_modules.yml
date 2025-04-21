@@ -9,17 +9,17 @@
     state: R1_Arm
   - type: MeleeWeapon
     wideAnimationRotation: 90
-    attackRate: 1
+    attackRate: 0.5
     damage:
       types:
-        Piercing: 15
-        Structural: 15
+        Piercing: 8
+        Structural: 8
     soundHit:
       collection: MetalThud
   - type: Item
     size: Normal
   - type: Reflect
-    reflectProb: 0.25
+    reflectProb: .25
     spread: 0
     soundOnReflect:
         path: /Audio/Vanilla/Effects/R1/Parry.ogg
@@ -34,8 +34,8 @@
   - type: MeleeWeapon
     damage:
       types:
-        Piercing: 15
-        Structural: 10
+        Piercing: 5
+        Structural: 5
   - type: Reflect
     reflectProb: .1
     spread: 0
@@ -80,8 +80,8 @@
   id: RailPiercer
   damage:
     types:
-      Heat: 18
-      Piercing: 2
+      Heat: 15
+      Piercing: 5
   muzzleFlash:
     sprite: Objects/Weapons/Guns/Projectiles/projectiles.rsi
     state: muzzle_blue

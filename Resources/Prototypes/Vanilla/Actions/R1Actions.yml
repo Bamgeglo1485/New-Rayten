@@ -4,7 +4,7 @@
   description: +Ground Slam
   components:
   - type: RepulseAttract
-    speed: 35
+    speed: 25
     range: 6
     whitelist:
       components:
@@ -26,18 +26,79 @@
   name: Dash
   description: +Tactical Retreat
   components:
-  - type: WorldTargetAction
-    useDelay: 10
-    range: 8
-    sound: !type:SoundPathSpecifier
-      path: /Audio/Vanilla/Effects/R1/Dash.ogg
-    itemIconStyle: BigAction
-    checkCanAccess: false
-    repeat: false
+  - type: InstantAction
+    useDelay: 20
+    event: !type:PolymorphActionEvent
+      protoId: R1Dash
+    itemIconStyle: NoItem
     icon:
       sprite: Vanilla/Actions/R1.rsi
       state: Dash
-    event: !type:TeleportSpellEvent
+
+- type: polymorph
+  id: R1Dash
+  configuration:
+    entity: R1DashEntity
+    transferName: true
+    forced: true
+    revertOnDeath: true
+    revertOnCrit: true
+    allowRepeatedMorphs: false
+    exitPolymorphSound: /Audio/Vanilla/Effects/R1/Slam.ogg
+    duration: 4
+
+- type: entity
+  parent: [BaseMob, Incorporeal]
+  categories: [ HideSpawnMenu ]
+  id: R1DashEntity
+  components:
+  - type: Sprite
+    sprite: Vanilla/Mobs/Silicon/chassis.rsi
+    layers:
+    - state: R1_Dash
+  - type: NpcFactionMember
+    factions:
+    - Dragon
+  - type: MovementSpeedModifier
+    baseWalkSpeed : 7.5
+    baseSprintSpeed : 7.5
+  - type: FootstepModifier
+    footstepSoundCollection:
+      collection: FootstepPlating
+  - type: FootprintOwner
+  - type: ShowHealthBars
+  - type: ShowHealthIcons
+  - type: Access
+    enabled: false
+    groups:
+    - AllAccess
+  - type: TriggerOnSpawn
+  - type: SoundOnTrigger
+    sound: /Audio/Vanilla/Effects/R1/Dash.ogg
+  - type: Input
+    context: "ghost"
+  - type: InputMover
+  - type: SpawnOnTrigger
+    proto: R1DashTrack
+  - type: TimedSpawner
+    prototypes:
+    - R1DashTrack
+    chance: 1
+    intervalSeconds: 1
+    minimumEntitiesSpawned: 1
+    maximumEntitiesSpawned: 1
+
+- type: entity
+  parent: [BaseMob, Incorporeal]
+  categories: [ HideSpawnMenu ]
+  id: R1DashTrack
+  components:
+  - type: Sprite
+    sprite: Vanilla/Mobs/Silicon/chassis.rsi
+    layers:
+    - state: R1_Dash
+  - type: TimedDespawn
+    lifetime: 0.5
 
 - type: entity
   categories: [ HideSpawnMenu ]
@@ -128,7 +189,7 @@
   - type: Projectile
     damage:
       types:
-        Piercing: 19
+        Piercing: 27
     ignoreResistances: true
 
 - type: entity
@@ -263,9 +324,9 @@
   - type: CombatMode
     toggleMouseRotator: false
   - type: HTN
-    planCooldown: 0.1
+    planCooldown: 0.01
     rootTask:
-      task: TurretCompound
+      task: CoinCompound
     blackboard:
       RotateSpeed: !type:Single
         500
@@ -346,3 +407,31 @@
     fireCost: 200
   - type: SpawnOnDespawn
     prototype: ProjectileCoinReflectedCoin
+
+- type: htnCompound
+  id: CoinCompound
+  branches:
+    - tasks:
+        - !type:HTNPrimitiveTask
+          operator: !type:UtilityOperator
+            proto: NearbyGunTargets
+
+        - !type:HTNPrimitiveTask
+          preconditions:
+            - !type:KeyExistsPrecondition
+              key: Target
+            - !type:TargetInRangePrecondition
+              targetKey: Target
+              rangeKey: RangedRange
+            - !type:TargetInLOSPrecondition
+              targetKey: Target
+              rangeKey: RangedRange
+              opaqueKey: true
+          operator: !type:GunOperator
+            targetKey: Target
+            opaqueKey: true
+          services:
+            - !type:UtilityService
+              id: RangedService
+              proto: NearbyGunTargets
+              key: Target

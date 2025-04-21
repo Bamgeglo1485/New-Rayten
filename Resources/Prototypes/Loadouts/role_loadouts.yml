@@ -480,7 +480,7 @@
   - ChiefMedicalOfficerOuterClothing
   - ChiefMedicalOfficerNeck
   - ChiefMedicalOfficerShoes
-  - Glasses
+  - MedicalEyewear
   - SurvivalMedical
   - VanillaLegends # Vanilla-Loadouts
   - Trinkets
@@ -499,7 +499,7 @@
   - MedicalDoctorOuterClothing
   - MedicalShoes
   - MedicalDoctorPDA
-  - Glasses
+  - MedicalEyewear
   - SurvivalMedical
   - VanillaLegends # Vanilla-Loadouts
   - Trinkets
@@ -512,7 +512,7 @@
   - GroupTankHarness
   - MedicalInternJumpsuit
   - MedicalBackpack
-  - Glasses
+  - MedicalEyewear
   - SurvivalMedical
   - VanillaLegends # Vanilla-Loadouts
   - Trinkets
@@ -546,7 +546,7 @@
   - MedicalBackpack
   - ParamedicOuterClothing
   - ParamedicShoes
-  - Glasses
+  - MedicalEyewear
   - SurvivalMedical
   - VanillaLegends # Vanilla-Loadouts
   - Trinkets

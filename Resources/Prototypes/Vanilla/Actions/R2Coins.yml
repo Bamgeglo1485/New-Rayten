@@ -1,4 +1,57 @@
 ﻿- type: entity
+  id: ActionDashR2
+  name: Dash
+  description: +Tactical Retreat
+  components:
+  - type: InstantAction
+    useDelay: 20
+    event: !type:PolymorphActionEvent
+      protoId: R2Dash
+    itemIconStyle: NoItem
+    icon:
+      sprite: Vanilla/Actions/R1.rsi
+      state: Dash
+
+- type: polymorph
+  id: R2Dash
+  configuration:
+    entity: R2DashEntity
+    transferName: true
+    forced: true
+    revertOnDeath: true
+    revertOnCrit: true
+    allowRepeatedMorphs: false
+    exitPolymorphSound: /Audio/Vanilla/Effects/R1/Slam.ogg
+    duration: 4
+
+- type: entity
+  parent: R1DashEntity
+  categories: [ HideSpawnMenu ]
+  id: R2DashEntity
+  components:
+  - type: Sprite
+    layers:
+    - state: R2_Dash
+  - type: SpawnOnTrigger
+    proto: R2DashTrack
+  - type: TimedSpawner
+    prototypes:
+    - R2DashTrack
+    chance: 1
+    intervalSeconds: 1
+    minimumEntitiesSpawned: 1
+    maximumEntitiesSpawned: 1
+
+- type: entity
+  parent: R1DashTrack
+  categories: [ HideSpawnMenu ]
+  id: R2DashTrack
+  components:
+  - type: Sprite
+    layers:
+    - state: R2_Dash
+
+- type: entity
   categories: [ HideSpawnMenu ]
   id: FistfulOfDollarR2
   name: fistful of dollar

@@ -67,8 +67,13 @@
         Burn: -2
     bloodlessPenalty:
       types:
-        Heat: 1000
-    amountOfBloodInStorage: 150
+        Heat: 20
+  - type: SolutionContainerManager
+    solutions:
+      Blood:
+        reagents:
+        - ReagentId: Blood
+          Quantity: 200
   - type: Explosive
     explosionType: DemolitionCharge
     totalIntensity: 30
@@ -129,15 +134,10 @@
       Dead: R1Dead
   - type: SiliconLawProvider
     laws: RedspaceLaw
+  - type: Polymorphable
   - type: ActionGun
     action: FistfulOfDollarAction
     gunProto: FistfulOfDollar
-  - type: ActionGrant
-    actions:
-    - ActionViewLaws
-    - ActionSlam
-    - ActionDash
-    - ActionToggleLighting
   - type: FootprintOwner
   - type: ShowHealthBars
   - type: ShowHealthIcons
@@ -164,12 +164,25 @@
     roleType: SoloAntagonist
     exclusiveAntag: true
     antag: true
+  - type: ActionGrant
+    actions:
+    - ActionViewLaws
+    - ActionSlam
+    - ActionDash
+    - ActionToggleLighting
 
 - type: entity
   parent: R1Base
   id: R1NotAntag
   suffix: NotAntag
   name: R-1
+  components:
+  - type: ActionGrant
+    actions:
+    - ActionViewLaws
+    - ActionSlam
+    - ActionDash
+    - ActionToggleLighting
 
 - type: siliconLaw
   id: RedspaceLaw1
@@ -300,6 +313,12 @@
       Dead: R2Dead
   - type: SiliconLawProvider
     laws: NTDefault
+  - type: ActionGrant
+    actions:
+    - ActionViewLaws
+    - ActionSlam
+    - ActionDashR2
+    - ActionToggleLighting
   - type: ActionGun
     action: FistfulOfDollarActionR2
     gunProto: FistfulOfDollarR2
@@ -320,5 +339,5 @@
     bloodlessPenalty:
       types:
         Heat: 4
-    unitsRestoreToHealPerInterval: 2
-    unitsDecayPerInterval: 0.1
+    unitsRestoreToHealPerInterval: 1
+    unitsDecayPerInterval: 0

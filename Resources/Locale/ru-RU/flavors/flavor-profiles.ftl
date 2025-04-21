@@ -310,6 +310,7 @@ flavor-complex-brave-bull = как будто тебя переехал груз
 flavor-complex-demons-blood = как седьмой круг Ада
 flavor-complex-devils-kiss = как каннибализм
 flavor-complex-driest-martini = как пьяный мим
+flavor-complex-eggnog = как растопленный заварной крем
 flavor-complex-erika-surprise = как будто бармен ошибся
 flavor-complex-gin-fizz = освежающе и лимонно
 flavor-complex-gildlager = как царское золото
