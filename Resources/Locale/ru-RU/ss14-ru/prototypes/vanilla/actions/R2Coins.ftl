@@ -1,3 +1,9 @@
+ent-ActionDashR2 = Dash
+    .desc = +Тактическое отступление
+ent-R2DashEntity = { ent-R1DashEntity }
+    .desc = { ent-R1DashEntity.desc }
+ent-R2DashTrack = { ent-R1DashTrack }
+    .desc = { ent-R1DashTrack.desc }
 ent-FistfulOfDollarR2 = горсть долларов
     .desc = +горсть долларов
 ent-FistfulOfDollarActionR2 = Горсть долларов

@@ -67,7 +67,10 @@ cargo-funding-alloc-console-label-account = [bold]Аккаунт[/bold]
 cargo-funding-alloc-console-label-code = [bold] Код [/bold]
 cargo-funding-alloc-console-label-balance = [bold] Баланс [/bold]
 cargo-funding-alloc-console-label-cut = [bold] Доля дохода (%) [/bold]
-cargo-funding-alloc-console-label-help = Карго получает { $percent }% от всей прибыли. Остальная часть делится, как указано ниже:
+cargo-funding-alloc-console-label-primary-cut = Доля Карго от обычных продаж (%):
+cargo-funding-alloc-console-label-lockbox-cut = Доля Карго от продаж запирающихся ящиков (%):
+cargo-funding-alloc-console-label-help-non-adjustible = Карго получает { $percent }% от всей прибыли. Остальная часть делится, как указано ниже:
+cargo-funding-alloc-console-label-help-adjustible = Оставшиеся средства от продаж распределяются следующим образом:
 cargo-funding-alloc-console-button-save = Сохранить изменения
 cargo-funding-alloc-console-label-save-fail = [bold]Недопустимое распределение доходов![/bold] [color=red]({ $pos ->
         [1] +

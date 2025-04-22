@@ -130,9 +130,6 @@
     - state: decor_wingette
       color: "#006666"
     - state: icon_bar
-  - type: SkillBook
-    skillType:
-      - Building
 
 
 - type: entity
