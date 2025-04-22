@@ -175,7 +175,7 @@ public sealed class DepartmentGoalSystem : EntitySystem
             return false;
         }
 
-        int randomValue = _random.Next(0, 20000);
+        int randomValue = _random.Next(15000, 35000);
         ProtoId<CargoAccountPrototype> account = goal.Department switch
         {
             department.RnD => "Science",
