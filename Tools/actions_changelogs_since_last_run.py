@@ -128,6 +128,23 @@ def send_discord(content: str):
     response = requests.post(DISCORD_WEBHOOK_URL, json=body)
     response.raise_for_status()
 
+# Rayten-Localization-Start
+def translate_to_russian(text: str) -> str:
+    url = "https://translate.argosopentech.com/translate"
+    payload = {
+        "q": text,
+        "source": "en",
+        "target": "ru",
+        "format": "text"
+    }
+    try:
+        resp = requests.post(url, json=payload, timeout=5)
+        resp.raise_for_status()
+        return resp.json().get("translatedText", text)
+    except Exception as e:
+        print(f"Translation failed: {e}")
+        return text  # Fallback to original
+# Rayten-Localization-End
 
 def send_to_discord(entries: Iterable[ChangelogEntry]) -> None:
     if not DISCORD_WEBHOOK_URL:
@@ -149,21 +166,16 @@ def send_to_discord(entries: Iterable[ChangelogEntry]) -> None:
                 emoji = TYPES_TO_EMOJI.get(change['type'], "❓")
                 message = change['message']
                 url = entry.get("url")
-                # Corvax-Localization-Start
-                TRANSLATION_API_URL = os.environ.get("TRANSLATION_API_URL")
-                if TRANSLATION_API_URL:
-                    resp = requests.post(TRANSLATION_API_URL, json={
-                        "text": message,
-                        "source_lang": "EN",
-                        "target_lang": "RU"
-                    })
-                    message = resp.json()['data']
-                # Corvax-Localization-End
+
+                # Rayten-Localization-Start
+                message = translate_to_russian(message)
+                # Rayten-Localization-End
+
                 if url and url.strip():
                     group_content.write(f"{emoji} - {message} [PR]({url}) \n")
                 else:
                     group_content.write(f"{emoji} - {message}\n")
-        group_content.write(f"\n") # Corvax: Better formatting
+        group_content.write(f"\n")  # Corvax: Better formatting
 
         group_text = group_content.getvalue()
         message_text = message_content.getvalue()

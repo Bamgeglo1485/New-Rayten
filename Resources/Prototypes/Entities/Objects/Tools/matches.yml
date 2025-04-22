@@ -102,11 +102,11 @@
     size: Small
   - type: Storage
     grid:
-    - 0,0,2,1
+    - 0,0,4,1
   - type: StorageFill
     contents:
       - id: Matchstick
-        amount: 6
+        amount: 10
   - type: ItemCounter
     count:
       tags: [Matchstick]
