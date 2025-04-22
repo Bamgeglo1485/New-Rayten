@@ -5,7 +5,7 @@ using Content.Shared.NameModifier.EntitySystems;
 using Content.Shared.Paper;
 using Robust.Shared.Containers;
 using Robust.Shared.Utility;
-
+using Content.Shared.Vanilla.Skill;
 namespace Content.Shared.Labels.EntitySystems;
 
 public sealed partial class LabelSystem : EntitySystem
@@ -13,7 +13,7 @@ public sealed partial class LabelSystem : EntitySystem
     [Dependency] private readonly NameModifierSystem _nameModifier = default!;
     [Dependency] private readonly ItemSlotsSystem _itemSlots = default!;
     [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-
+    [Dependency] private readonly RequiresSkillSystem _requiresSkillSystem = default!;
     public const string ContainerName = "paper_label";
 
     public override void Initialize()
@@ -67,6 +67,14 @@ public sealed partial class LabelSystem : EntitySystem
         if (ent.Comp.CurrentLabel == null)
             return;
 
+        //Rayten-Start
+        if (TryComp<RequiresSkillComponent>(ent, out var component))
+        {
+            if(!_requiresSkillSystem.HasSkillLevel(args.Examiner, component.RequiresChemistryLevel, skillComponent => skillComponent.ChemistryLevel))
+                return;
+        }
+        //Rayten-END
+
         var message = new FormattedMessage();
         message.AddText(Loc.GetString("hand-labeler-has-label", ("label", ent.Comp.CurrentLabel)));
         args.PushMessage(message);
@@ -74,8 +82,8 @@ public sealed partial class LabelSystem : EntitySystem
 
     private void OnRefreshNameModifiers(Entity<LabelComponent> entity, ref RefreshNameModifiersEvent args)
     {
-        if (!string.IsNullOrEmpty(entity.Comp.CurrentLabel))
-            args.AddModifier("comp-label-format", extraArgs: ("label", entity.Comp.CurrentLabel));
+        // if (!string.IsNullOrEmpty(entity.Comp.CurrentLabel))
+        //     args.AddModifier("comp-label-format", extraArgs: ("label", entity.Comp.CurrentLabel));
     }
 
     private void OnComponentInit(Entity<PaperLabelComponent> ent, ref ComponentInit args)

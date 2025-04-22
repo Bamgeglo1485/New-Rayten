@@ -6,7 +6,6 @@
   components:
     - type: RequiresSkill
       RequiresChemistryLevel: 2
-      RequiresMedicineLevel: 2
     - type: SolutionContainerManager
       solutions:
         beaker:

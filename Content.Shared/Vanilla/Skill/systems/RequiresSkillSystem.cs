@@ -167,43 +167,6 @@ public sealed class RequiresSkillSystem : EntitySystem
         }
         return true;
     }
-    public bool HasAnyOfRequiredSkills(EntityUid user, RequiresSkillComponent component)
-    {
-        // Проверка уровня химии
-        if (component.RequiresChemistryLevel!=0 && HasSkillLevel(user, component.RequiresChemistryLevel, skillComponent => skillComponent.ChemistryLevel)){
-            return true;
-        }
-        // Проверка уровня медицины
-        if (component.RequiresMedicineLevel!=0 && HasSkillLevel(user, component.RequiresMedicineLevel, skillComponent => skillComponent.MedicineLevel)){
-            return true;
-        }
-        // Проверка уровня исследования
-        if (component.RequiresResearchLevel!=0 && HasSkillLevel(user, component.RequiresResearchLevel, skillComponent => skillComponent.ResearchLevel)){
-            return true;
-        }
-        // Проверка уровня Инженерии
-        if (component.RequiresEngineeringLevel!=0 && HasSkillLevel(user, component.RequiresEngineeringLevel, skillComponent => skillComponent.EngineeringLevel)){
-            return true;
-        }
-        // Проверка уровня пилотирования
-        if (component.RequiresPiloting && HasEasySkill(user, component.RequiresPiloting, skillComponent => skillComponent.Piloting)){
-            return true;
-        }
-        // Проверка уровня муз. инструментов
-        if (component.RequiresMusInstruments && HasEasySkill(user, component.RequiresMusInstruments, skillComponent => skillComponent.MusInstruments)){
-            return true;
-        }
-        // Проверка уровня ботаники
-        if (component.RequiresBotany && HasEasySkill(user, component.RequiresBotany, skillComponent => skillComponent.Botany)){
-            return true;
-        }
-        // Проверка уровня атмосферы
-        if (component.RequiresAtmosphere && HasEasySkill(user, component.RequiresAtmosphere, skillComponent => skillComponent.Atmosphere)){
-            return true;
-        }
-        return false;
-    }
-
     public bool HasRequiredSkillsForCraft(EntityUid user, RequiresSkillComponent component, bool popup = false)
     {
         // Проверка уровня Инженерии

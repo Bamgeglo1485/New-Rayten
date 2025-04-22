@@ -6,6 +6,8 @@
   id: BaseChemistryEmptyVial
   description: A small vial.
   components:
+  - type: RequiresSkill
+    RequiresChemistryLevel: 2
   - type: Tag
     tags:
     - Trash
