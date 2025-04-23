@@ -130,28 +130,22 @@ def send_discord(content: str):
 
 # Rayten-Localization-Start
 def translate_to_russian(text: str) -> str:
-    url = "https://libretranslate.com/translate"
-    payload = {
-        "q": text,
-        "source": "auto",
-        "target": "ru",
-        "format": "text",
-        "api_key": "" 
-    }
-
-    headers = {
-        "Content-Type": "application/json"
-    }
+    if not text.strip():
+        return text
 
     try:
-        response = requests.post(url, json=payload, headers=headers, timeout=5)
-        response.raise_for_status()
-        return response.json().get("translatedText", text)
+        resp = requests.get(
+            "https://api.mymemory.translated.net/get",
+            params={"q": text, "langpair": "en|ru"},
+            timeout=5
+        )
+        resp.raise_for_status()
+        data = resp.json()
+        return data.get("responseData", {}).get("translatedText", text)
     except Exception as e:
         print(f"Translation failed: {e}")
         return text
 # Rayten-Localization-End
-
 
 def send_to_discord(entries: Iterable[ChangelogEntry]) -> None:
     if not DISCORD_WEBHOOK_URL:
