@@ -524,6 +524,20 @@ namespace Content.Shared.Preferences
             }
             // Corvax-Sponsors-End
 
+            //Rayten-start
+            if (!prototypeManager.TryIndex<VoiceSpeechPrototype>(Voice, out var voicePrototype) || voicePrototype.RoundStart == false)
+            {
+                Voice = SharedHumanoidAppearanceSystem.DefaultVoice;
+                voicePrototype = prototypeManager.Index<VoiceSpeechPrototype>(Voice);
+            }
+            //Sponsor
+            if (voicePrototype.SponsorOnly && !sponsorPrototypes.Contains(Voice))
+            {
+                Voice = SharedHumanoidAppearanceSystem.DefaultVoice;
+                voicePrototype = prototypeManager.Index<VoiceSpeechPrototype>(Voice);
+            }
+            // //Rayten-end
+            
             var sex = Sex switch
             {
                 Sex.Male => Sex.Male,

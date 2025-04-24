@@ -33,6 +33,8 @@ using Content.Server.Discord.Webhooks;
 using Content.Server.Corvax.JoinQueue;
 using Content.Server.Corvax.DiscordAuth;
 using Content.Shared.Players.RateLimiting;
+using Content.Server.Vanilla.Sponsor;
+using Content.Shared.Vanilla.Sponsor;
 
 namespace Content.Server.IoC
 {
@@ -81,6 +83,8 @@ namespace Content.Server.IoC
             IoCManager.Register<MappingManager>();
             IoCManager.Register<DiscordAuthManager>(); // Corvax-DiscordAuth
             IoCManager.Register<JoinQueueManager>(); // Corvax-Queue
+            IoCManager.Register<SponsorManager>(); // Rayten-Sponsor
+            IoCManager.Register<SharedSponsorManager>(); // Rayten-Sponsor
             IoCManager.Register<IWatchlistWebhookManager, WatchlistWebhookManager>();
             IoCManager.Register<ConnectionManager>();
             IoCManager.Register<MultiServerKickManager>();

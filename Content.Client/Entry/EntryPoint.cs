@@ -40,7 +40,7 @@ using Robust.Shared.Replays;
 using Robust.Shared.Timing;
 using Content.Client.Vanilla.DiscordAuth;
 using Content.Client.Vanilla.JoinQueue;
-
+using Content.Shared.Vanilla.Sponsor;
 
 namespace Content.Client.Entry
 {
@@ -78,6 +78,7 @@ namespace Content.Client.Entry
         [Dependency] private readonly DebugMonitorManager _debugMonitorManager = default!;
         [Dependency] private readonly DiscordAuthManager _discordAuthManager = default!; // Corvax-DiscordAuth
         [Dependency] private readonly JoinQueueManager _queueManager = default!; // Corvax-Queue
+        [Dependency] private readonly SharedSponsorManager _sponsorManager = default!; // Rayten-Sponsor
         [Dependency] private readonly TitleWindowManager _titleWindowManager = default!;
 
         public override void Init()
@@ -179,6 +180,7 @@ namespace Content.Client.Entry
             _documentParsingManager.Initialize();
             _queueManager.Initialize(); // Corvax-Queue
             _discordAuthManager.Initialize(); // Corvax-DiscordAuth
+            _sponsorManager.Initialize(); // Rayten-sponsor
             _titleWindowManager.Initialize();
 
             _baseClient.RunLevelChanged += (_, args) =>

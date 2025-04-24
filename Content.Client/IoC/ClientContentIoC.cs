@@ -27,6 +27,7 @@ using Content.Shared.Players.PlayTimeTracking;
 using Content.Client.Vanilla.DiscordAuth;
 using Content.Client.Vanilla.JoinQueue;
 using Content.Shared.Players.RateLimiting;
+using Content.Shared.Vanilla.Sponsor;
 
 namespace Content.Client.IoC
 {
@@ -37,6 +38,7 @@ namespace Content.Client.IoC
             var collection = IoCManager.Instance!;
             IoCManager.Register<DiscordAuthManager>(); // Corvax-DiscordAuth
             IoCManager.Register<JoinQueueManager>(); // Corvax-Queue
+            IoCManager.Register<SharedSponsorManager>(); // Rayten-sponsor
             collection.Register<IParallaxManager, ParallaxManager>();
             collection.Register<IChatManager, ChatManager>();
             collection.Register<ISharedChatManager, ChatManager>();

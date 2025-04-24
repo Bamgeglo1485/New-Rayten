@@ -5,7 +5,7 @@ using Robust.Client;
 using Robust.Client.Player;
 using Robust.Shared.Network;
 using Robust.Shared.Utility;
-
+using Content.Shared.Vanilla.Sponsor;
 namespace Content.Client.Lobby
 {
     /// <summary>
@@ -18,7 +18,7 @@ namespace Content.Client.Lobby
         [Dependency] private readonly IClientNetManager _netManager = default!;
         [Dependency] private readonly IBaseClient _baseClient = default!;
         [Dependency] private readonly IPlayerManager _playerManager = default!;
-        private ISharedSponsorsManager? _sponsorsManager; // Corvax-Sponsors
+        [Dependency] private readonly SharedSponsorManager _sponsor = default!;
 
         public event Action? OnServerDataLoaded;
 
@@ -27,7 +27,6 @@ namespace Content.Client.Lobby
 
         public void Initialize()
         {
-            IoCManager.Instance!.TryResolveType(out _sponsorsManager); // Corvax-Sponsors
             _netManager.RegisterNetMessage<MsgPreferencesAndSettings>(HandlePreferencesAndSettings);
             _netManager.RegisterNetMessage<MsgUpdateCharacter>();
             _netManager.RegisterNetMessage<MsgSelectCharacter>();
@@ -64,7 +63,7 @@ namespace Content.Client.Lobby
         {
             var collection = IoCManager.Instance!;
             // Corvax-Sponsors-Start
-            var sponsorPrototypes = _sponsorsManager?.GetClientPrototypes().ToArray() ?? [];
+            var sponsorPrototypes = _sponsor.GetClientPrototypes().ToArray();
             profile.EnsureValid(_playerManager.LocalSession!, collection, sponsorPrototypes);
             // Corvax-Sponsors-End
             var characters = new Dictionary<int, ICharacterProfile>(Preferences.Characters) {[slot] = profile};

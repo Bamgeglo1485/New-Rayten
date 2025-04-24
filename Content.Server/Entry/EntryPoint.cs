@@ -38,6 +38,8 @@ using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 using Content.Server.Corvax.DiscordAuth;
 using Content.Server.Corvax.JoinQueue;
+using Content.Server.Vanilla.Sponsor;
+using Content.Shared.Vanilla.Sponsor;
 
 namespace Content.Server.Entry
 {
@@ -118,7 +120,9 @@ namespace Content.Server.Entry
                 IoCManager.Resolve<ServerApi>().Initialize();
                 IoCManager.Resolve<DiscordAuthManager>().Initialize(); // Corvax-DiscordAuth
                 IoCManager.Resolve<JoinQueueManager>().Initialize(); // Corvax-Queue
-                
+                IoCManager.Resolve<SponsorManager>().Initialize(); // Rayten-Sponsor
+                IoCManager.Resolve<SharedSponsorManager>().Initialize(); // Rayten-Sponsor
+
                 _voteManager.Initialize();
                 _updateManager.Initialize();
                 _playTimeTracking.Initialize();

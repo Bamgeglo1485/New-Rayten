@@ -49,6 +49,7 @@ public sealed class DiscordAuthManager
         _netMgr.RegisterNetMessage<MsgDiscordAuthSkip>(OnAuthskip);
         _playerMgr.PlayerStatusChanged += OnPlayerStatusChanged;
     }
+    
     private async void OnAuthskip(MsgDiscordAuthSkip message)
     {
         var session = _playerMgr.GetSessionById(message.MsgChannel.UserId);

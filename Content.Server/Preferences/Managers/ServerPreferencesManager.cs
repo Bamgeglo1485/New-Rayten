@@ -11,6 +11,7 @@ using Robust.Shared.Configuration;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Utility;
+using Content.Shared.Vanilla.Sponsor;
 
 namespace Content.Server.Preferences.Managers
 {
@@ -27,7 +28,7 @@ namespace Content.Server.Preferences.Managers
         [Dependency] private readonly IDependencyCollection _dependencies = default!;
         [Dependency] private readonly ILogManager _log = default!;
         [Dependency] private readonly UserDbDataManager _userDb = default!;
-        private ISharedSponsorsManager? _sponsors;
+        [Dependency] private readonly SharedSponsorManager _sponsors = default!;
 
         // Cache player prefs on the server so we don't need as much async hell related to them.
         private readonly Dictionary<NetUserId, PlayerPrefData> _cachedPlayerPrefs =
@@ -39,7 +40,6 @@ namespace Content.Server.Preferences.Managers
 
         public void Init()
         {
-            IoCManager.Instance!.TryResolveType(out _sponsors); // Corvax-Sponsors
             _netManager.RegisterNetMessage<MsgPreferencesAndSettings>();
             _netManager.RegisterNetMessage<MsgSelectCharacter>(HandleSelectCharacterMessage);
             _netManager.RegisterNetMessage<MsgUpdateCharacter>(HandleUpdateCharacterMessage);
@@ -105,7 +105,7 @@ namespace Content.Server.Preferences.Managers
             var session = _playerManager.GetSessionById(userId);
 
             // Corvax-Sponsors-Start
-            var sponsorPrototypes = _sponsors != null && _sponsors.TryGetServerPrototypes(session.UserId, out var prototypes)
+            var sponsorPrototypes = _sponsors.TryGetServerPrototypes(session.UserId, out var prototypes)
                 ? prototypes.ToArray()
                 : [];
             profile.EnsureValid(session, _dependencies, sponsorPrototypes);
@@ -250,7 +250,7 @@ namespace Content.Server.Preferences.Managers
         private int GetMaxUserCharacterSlots(NetUserId userId)
         {
             var maxSlots = _cfg.GetCVar(CCVars.GameMaxCharacterSlots);
-            var extraSlots = _sponsors?.GetServerExtraCharSlots(userId) ?? 0;
+            var extraSlots = _sponsors.GetServerExtraCharSlots(userId);
             return maxSlots + extraSlots;
         }
         // Corvax-Sponsors-End

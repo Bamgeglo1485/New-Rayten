@@ -6,6 +6,7 @@ using Content.Shared.Corvax.TTS;
 using Content.Shared.Preferences;
 using Content.Shared.Vanilla.VoiceSpeech;
 using Content.Client.Vanilla.VoiceSpeech;
+using Content.Shared.Vanilla.Sponsor;
 using Content.Shared.Audio; 
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Random;
@@ -17,7 +18,7 @@ namespace Content.Client.Lobby.UI;
 
 public sealed partial class HumanoidProfileEditor
 {
-    private ISharedSponsorsManager? _sponsorsMgr;
+    private SharedSponsorManager? _sponsorsMgr;
     private List<VoiceSpeechPrototype> _voiceList = new();
     private readonly List<string> _sampleText =
         new()
@@ -67,8 +68,7 @@ public sealed partial class HumanoidProfileEditor
         };
 
         VoicePlayButton.OnPressed += _ => PlayPreviewTTS();
-
-        IoCManager.Instance!.TryResolveType(out _sponsorsMgr);
+        _sponsorsMgr = IoCManager.Resolve<SharedSponsorManager>(); 
     }
 
     private void UpdateTTSVoicesControls()
@@ -93,8 +93,8 @@ public sealed partial class HumanoidProfileEditor
 
             if (_sponsorsMgr is null)
                 continue;
-            if (voice.SponsorOnly && _sponsorsMgr != null &&
-                !_sponsorsMgr.GetClientPrototypes().Contains(voice.ID))
+
+            if (voice.SponsorOnly && _sponsorsMgr != null && !_sponsorsMgr.GetClientPrototypes().Contains(voice.ID))
             {
                 VoiceButton.SetItemDisabled(VoiceButton.GetIdx(i), true);
             }

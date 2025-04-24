@@ -44,7 +44,7 @@
   id: Megalovania
   name: МЕГАЛОВАНИЯ
   sex: Male
-  roundStart: false
+  sponsorOnly: true
   voice:
     collection: Megalovania
 
