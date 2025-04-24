@@ -1,5 +1,5 @@
 # TODO: Add descriptions (many)
-# TODO BODY: Part damage
+# TODO BODY: Part damag
 - type: entity
   id: PartFelinid
   parent: [BaseItem, BasePart]
@@ -13,8 +13,8 @@
         Quantity: 3
       - ReagentId: Blood
         Quantity: 10
-#--------------------------------------------------------------------
-#--------------------------Тело--------------------------------------
+#-------------------------------------------------------------------
+#--------------------------Тело-------------------------------------
 - type: body
   name: "Felinid"
   id: Felinid
@@ -84,7 +84,7 @@
     Cold: 0.9
     Heat: 1.1
 #----------------------------------------------------------------------
-#------------------------ВЫБОР-В-СПЕЦИАЛЬНОМ---------------------------   Доделать и переделать надо!
+#------------------------ВЫБОР-В-СПЕЦИАЛЬНОМ---------------------------
 - type: marking
   id: CatEarsFelinid
   bodyPart: HeadTop
@@ -135,7 +135,7 @@
     default:
       type:
         !type:CategoryColoring
-        category: Hair
+         category: Hair
       fallbackTypes:
         - !type:SkinColoring
     layers:
@@ -233,14 +233,40 @@
   id: BaseMobFelinid
   abstract: true
   components:
+  - type: Reactive
+    reactions:
+    - reagents: [ Water ]
+      methods: [ Touch ]
+      effects:
+      - !type:Jitter
+      - !type:Emote
+        emote: Scream
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.35
+        density: 130
+        restitution: 0.0
+        mask:
+          - MobMask
+        layer:
+          - MobLayer
   - type: Sprite
     noRot: true
     drawdepth: Mobs
-    scale: 0.8, 0.8
+    scale: 0.85, 0.85
   # - type: CanEscapeInventory
-  # - type: MultiHandedItem
+  # - type: categories: [ HideSpawnMenu ]
   # - type: Item
   #   size: Huge
+  - type: TemperatureSpeed
+    thresholds:
+      300: 1.05
+      293: 0.8
+      280: 0.6
+      260: 0.4
   - type: HumanoidAppearance
     species: FelinidSpec
   - type: Hunger # on 1.5x more
@@ -303,10 +329,11 @@
   name: Urist McHands the felinid
   parent: MobHumanDummy
   id: MobFelinidDummy
+  categories: [ HideSpawnMenu ]
   description: A dummy Felinid meant to be used in character setup.
   components:
   - type: Sprite
-    scale: 0.8, 0.8
+    scale: 0.85, 0.85
   - type: HumanoidAppearance
     species: FelinidSpec
 
@@ -462,7 +489,7 @@
   name: chat-emote-msg-myaukan
   category: Vocal
   available: false
-  icon: Interface/Emotes/scream.png #ЗАМЕНИТЬ!
+  icon: Interface/Emotes/scream.png
   whitelist:
     components:
     - Vocal
@@ -473,13 +500,12 @@
   chatTriggers:
    - мяукает
 
-
 - type: emote
   id: Meow
   name: chat-emote-msg-murchanie
   category: Vocal
   available: false
-  icon: Interface/Emotes/scream.png #ЗАМЕНИТЬ!
+  icon: Interface/Emotes/scream.png
   whitelist:
     components:
     - Vocal

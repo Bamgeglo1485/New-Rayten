@@ -1,3 +1,5 @@
+ent-BaseXenoborgContraband = { "" }
+    .desc = { "" }
 ent-BaseMagicalContraband = { "" }
     .desc = { "" }
 ent-BaseSyndicateContraband = { "" }
