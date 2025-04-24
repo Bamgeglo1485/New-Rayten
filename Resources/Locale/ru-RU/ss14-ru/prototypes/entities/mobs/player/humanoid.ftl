@@ -1,0 +1,9 @@
+ent-RandomHumanoidSpawnerCentcomOfficial = Представитель Центком
+    .desc = { "" }
+ent-RandomHumanoidSpawnerSyndicateAgent = Агент Синдиката
+    .desc = { "" }
+ent-RandomHumanoidSpawnerNukeOp = Ядерный оперативник
+    .desc = { "" }
+ent-RandomHumanoidSpawnerCluwne = Клувень
+    .suffix = Спавнит клувеня
+    .desc = { "" }

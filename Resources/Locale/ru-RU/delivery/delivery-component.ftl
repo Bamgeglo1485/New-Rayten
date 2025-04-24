@@ -1,0 +1,17 @@
+delivery-recipient-examine = Этот предназначен для { $recipient }, { $job }.
+delivery-already-opened-examine = Он уже был открыт.
+delivery-recipient-no-name = Безымянный
+delivery-recipient-no-job = Неизвестно
+delivery-unlocked-self = Вы открыли { $delivery } с помощью своего отпечатка пальца.
+delivery-opened-self = Вы открыли { $delivery }.
+delivery-unlocked-others = { CAPITALIZE($recipient) } открыл { $delivery } с помощью { POSS-ADJ($possadj) } отпечатка пальца.
+delivery-opened-others = { CAPITALIZE($recipient) } открыл { $delivery }.
+delivery-unlock-verb = Разблокировать
+delivery-open-verb = Открыть
+delivery-teleporter-amount-examine =
+    { $amount ->
+        [one] Содержит [color=yellow]{ $amount }[/color] доставку.
+       *[other] Содержит [color=yellow]{ $amount }[/color] доставок.
+    }
+delivery-teleporter-empty = { $entity } пуст(а).
+delivery-teleporter-empty-verb = Забрать почту
