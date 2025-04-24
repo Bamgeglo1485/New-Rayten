@@ -347,7 +347,7 @@ public sealed class NukeopsRuleSystem : GameRuleSystem<NukeopsRuleComponent>
 
                 DistributeExtraTc((uid, nukeops));
                 //vanilla-station-start
-                _jammer.SetJammer();
+                _jammer.SetJammer(TimeSpan.FromMinutes(35));
                 //vanilla-station-end
             }
         }

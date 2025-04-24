@@ -13,27 +13,34 @@ public sealed class JammerSystem : EntitySystem
     private bool _isJammerActive = false;
     private TimeSpan? _jammerEndTime = null;
     private TimeSpan defaultjammertime = TimeSpan.FromMinutes(35);
-    private TimeSpan jammertime = TimeSpan.FromMinutes(35);
+    private TimeSpan AddictiveTime = TimeSpan.FromMinutes(0);
     [Dependency] private readonly IGameTiming _timing = default!;
+
     public override void Initialize()
     {
         base.Initialize();
         SubscribeLocalEvent<RoundEndMessageEvent>(OnRoundEnd);
         SubscribeLocalEvent<OverrideJammerTimeEvent>(Onoverride);
+        SubscribeLocalEvent<SetJammerOnSpawnComponent, MapInitEvent>(OnMapInit);
         SubscribeLocalEvent<CommunicationConsoleCallShuttleAttemptEvent>(OnShuttleCallAttempt);
+    }
+    private void OnMapInit(EntityUid uid, SetJammerOnSpawnComponent component, MapInitEvent args)
+    {
+        SetJammer(component.Duration);
+        //RemComp<SetJammerOnSpawnComponent>(uid);
     }
 
     public void TrySetJammer()
     {
         if(_isJammerActive)
             return;
-            
-        SetJammer();
+        SetJammer(defaultjammertime);
     }
-    public void SetJammer()
+    
+    public void SetJammer(TimeSpan duration)
     {
         _isJammerActive = true;
-        _jammerEndTime = _timing.CurTime + jammertime;
+        _jammerEndTime = _timing.CurTime + duration + AddictiveTime;
     }
 
     public void RemoveJammer()
@@ -59,13 +66,13 @@ public sealed class JammerSystem : EntitySystem
 
     private void Onoverride(OverrideJammerTimeEvent ev)
     {
-        jammertime = TimeSpan.FromMinutes(ev.Minutes);
+        AddictiveTime = TimeSpan.FromMinutes(ev.Minutes);
     }
 
     private void OnRoundEnd(RoundEndMessageEvent ev)
     {
         RemoveJammer();
-        jammertime = defaultjammertime;
+        AddictiveTime = TimeSpan.FromMinutes(0);
     }
     private void OnShuttleCallAttempt(ref CommunicationConsoleCallShuttleAttemptEvent ev)
     {
