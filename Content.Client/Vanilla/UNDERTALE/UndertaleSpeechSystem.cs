@@ -52,14 +52,19 @@ public sealed class VoiceSpeechSystem : EntitySystem
 
     private void onBeep(EntityUid uid, VoiceEmitterComponent comp, VoiceSpeechBeepEvent args)
     {
-        if (comp.VoicePrototypeId == null )
+        if (comp.VoicePrototypeId == null)
             return;
 
-        var sound = comp.Voice;
+        var audioParams = AudioParams.Default
+            .WithPitchScale(comp.Pitch)
+            .WithVolume(AdjustVolume(comp.iswhisper))
+            .WithMaxDistance(AdjustDistance(comp.iswhisper));
 
-        sound.Params = AudioParams.Default.WithPitchScale(comp.Pitch).WithVolume(AdjustVolume(comp.iswhisper)).WithMaxDistance(AdjustDistance(comp.iswhisper));
-
-        _audio.PlayLocal(sound, uid, null);
+        _audio.PlayLocal(
+            comp.Voice,
+            uid,
+            soundInitiator: uid,
+            audioParams: audioParams);
     }
 
     public float AdjustVolume(bool isWhisper)
