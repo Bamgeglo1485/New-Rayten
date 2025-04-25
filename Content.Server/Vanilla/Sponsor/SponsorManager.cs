@@ -87,7 +87,7 @@ public sealed class SponsorManager
         {
             "None" => sponsorRank.None,
             "GrayTide" =>  sponsorRank.GrayTide,
-            "Revolutionrevolutionary" =>  sponsorRank.Revolutionary,
+            "Revolutionary" =>  sponsorRank.Revolutionary,
             "Syndicate" =>  sponsorRank.Syndicate,
             "SpaceNinja" =>  sponsorRank.SpaceNinja,
             _ => sponsorRank.None

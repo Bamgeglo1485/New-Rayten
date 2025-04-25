@@ -10,35 +10,33 @@ public sealed class SharedSponsorManager
     [Dependency] private readonly INetManager _net = default!;
     private readonly Dictionary<NetUserId, sponsorRank> _ranks = new();
     private sponsorRank _Clientrank = sponsorRank.None;
+    private readonly Dictionary<sponsorRank, string[]> _rankToPrototypes = new();
     public void Initialize()
     {
         if (_net.IsClient)
         {
             _net.RegisterNetMessage<SetSponsorRank>(OnClientSponsorSet);
         }
+        buildmap();
     }
 
-    public void ServerSponsorSet(NetUserId userId, sponsorRank rank, bool remove)
+    #region АПИШКИ
+    public IReadOnlyList<string> GetClientPrototypes()
     {
-        Logger.Info($"Вызван метод");
-        
-        if(remove)
-        {
-            _ranks.Remove(userId);
-        }
-        else
-        {
-            _ranks[userId] = rank;
-            Logger.Info($"[Server] Обновлен спонсорский ранг {rank} для {userId}");
-        }
+        return GetPrototypesForRank(_Clientrank);
     }
 
-    private void OnClientSponsorSet(SetSponsorRank message)
+    public bool TryGetServerPrototypes(NetUserId userId, out string[] prototypes)
     {
-        _Clientrank = message.rank;
-        Logger.Info($"[Client] Получен спонсорский ранг {message.rank}");
-    }
+        if (!_ranks.TryGetValue(userId, out var rank))
+        {
+            prototypes = Array.Empty<string>(); 
+            return false;
+        }
 
+        prototypes = GetPrototypesForRank(rank);
+        return true;
+    }
     public bool TryGetOOCColor(NetUserId userId, out string oocColor)
     {
         if (_net.IsClient)
@@ -63,25 +61,6 @@ public sealed class SharedSponsorManager
         };
         return rank != sponsorRank.None;
     }
-    public IReadOnlyList<string> GetClientPrototypes()
-    {
-        if (_Clientrank == sponsorRank.None)
-            return Array.Empty<string>();
-
-        return getprotos(_Clientrank);
-    }
-
-    public bool TryGetServerPrototypes(NetUserId userId, out string[] prototypes)
-    {
-        if (!_ranks.TryGetValue(userId, out var rank))
-        {
-            prototypes = Array.Empty<string>(); 
-            return false;
-        }
-
-        prototypes = getprotos(rank);
-        return true;
-    }
     public int GetServerExtraCharSlots(NetUserId userId)
     {
         int slots = 0;
@@ -94,25 +73,60 @@ public sealed class SharedSponsorManager
 
         return slots;
     }
-
-    private string[] getprotos(sponsorRank rank)
+    #endregion
+    #region установка словарей
+    public void ServerSponsorSet(NetUserId userId, sponsorRank rank, bool remove)
     {
-        List<string> prototypes = new();
-
-        if (rank >= sponsorRank.GrayTide)
-            prototypes.Add("gray_voice");
-
-        if (rank >= sponsorRank.Revolutionary)
-            prototypes.Add("revo_voice");
-
-        if (rank >= sponsorRank.Syndicate)
-            prototypes.Add("Megalovania");
-
-        if (rank >= sponsorRank.SpaceNinja)
-            prototypes.Add("ninja_voice");
-
-        // Преобразуем список в массив и возвращаем его.
-        return prototypes.ToArray();
+        Logger.Info($"Вызван метод");
+        
+        if(remove)
+        {
+            _ranks.Remove(userId);
+        }
+        else
+        {
+            _ranks[userId] = rank;
+            Logger.Info($"[Server] Обновлен спонсорский ранг {rank} для {userId}");
+        }
     }
 
+    private void OnClientSponsorSet(SetSponsorRank message)
+    {
+        _Clientrank = message.rank;
+        Logger.Info($"[Client] Получен спонсорский ранг {message.rank}");
+    }
+    private string[] GetPrototypesForRank(sponsorRank rank)
+    {
+        return _rankToPrototypes.TryGetValue(rank, out var protos) ? protos : Array.Empty<string>();
+    }
+    #endregion
+    #region Список всех доступных прототипов
+    private void buildmap()
+    {
+        List<string> current = new();
+
+        foreach (sponsorRank rank in Enum.GetValues(typeof(sponsorRank)))
+        {
+            switch (rank)
+            {
+                case sponsorRank.GrayTide:
+                    break;
+                case sponsorRank.Revolutionary:
+                    current.Add("CatEars");
+                    current.Add("CatTail");
+                    break;
+                case sponsorRank.Syndicate:
+                    current.Add("Willow");
+                    current.Add("WX");
+                    break;
+                case sponsorRank.SpaceNinja:
+                    current.Add("Megalovania");
+                    current.Add("Walany");
+                    current.Add("Warly");
+                    break;
+            }
+            _rankToPrototypes[rank] = current.ToArray();
+        }
+    }
+    #endregion
 }
