@@ -51,3 +51,10 @@
   text: Bureaucracy-Report-Analysis
   label: "Отчёт об изучении обьекта"
   category: Report
+
+- type: BureaucracyDocument
+  id: DeathReport
+  text: Bureaucracy-Report-Death
+  label: "Свидетельство о смерти"
+  category: Report
+

@@ -1,5 +1,7 @@
 ent-FireExtinguisher = огнетушитель
     .desc = Он тушит пожары.
+ent-BorgFireExtinguisher = реактивный движок
+    .desc = "Инновационная" технология на базе обычного огнетушителя. Ну... типа улучшенная версия.
 ent-ExtinguisherSpray = струя огнетушителя
     .desc = { ent-Vapor.desc }
 ent-FireExtinguisherMini = карманный огнетушитель

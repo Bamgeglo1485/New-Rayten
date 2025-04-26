@@ -72,3 +72,13 @@ Bureaucracy-Report-Analysis =
     Выявленные свойства объекта:
     
     { Bureaucracy-base-end }
+Bureaucracy-Report-Death =
+    { Bureaucracy-base-start }
+    
+    Имя:
+    
+    Причина смерти:
+    Возможность клонирование/реанимации:
+    Время смерти:
+    
+    { Bureaucracy-base-end }

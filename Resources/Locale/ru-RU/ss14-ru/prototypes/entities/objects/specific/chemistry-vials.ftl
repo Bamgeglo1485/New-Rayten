@@ -1,5 +1,7 @@
 ent-BaseChemistryEmptyVial = пробирка
     .desc = Маленькая пробирка.
+ent-BorgVial = интегрированный контейнер
+    .desc = Встроенный модуль киборга ёмкостью 30 единиц жидкости.
 ent-VestineChemistryVial = { ent-BaseChemistryEmptyVial }
     .suffix = Вестин
     .desc = { ent-BaseChemistryEmptyVial.desc }

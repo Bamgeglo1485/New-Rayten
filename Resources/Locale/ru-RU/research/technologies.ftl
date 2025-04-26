@@ -33,6 +33,7 @@ research-technology-nonlethal-ammunition = Нелетальные боеприп
 research-technology-practice-ammunition = Учебные боеприпасы
 research-technology-concentrated-laser-weaponry = Концентрированное лазерное оружие
 research-technology-wave-particle-harnessing = Применение волновых частиц
+research-technology-kinetic-modifications = Кинетические улучшения
 research-technology-advanced-riot-control = Продвинутое противодействие беспорядкам
 research-technology-portable-microfusion-weaponry = Оруженый портативный микросинтез
 research-technology-thermal-weaponry = Температурное оружие

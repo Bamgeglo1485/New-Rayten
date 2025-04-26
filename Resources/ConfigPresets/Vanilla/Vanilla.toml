@@ -8,7 +8,7 @@ lobbyenabled     = true
 lobbyduration = 285
 map_pool = "VanillaMapPool"
 round_restart_time = 15
-soft_max_players = 40
+soft_max_players = 100
 panic_bunker.enabled = false
 #panic_bunker.disable_with_admins = true
 #panic_bunker.enable_without_admins = true
@@ -16,6 +16,7 @@ panic_bunker.enabled = false
 #panic_bunker.min_overall_minutes = 60
 #panic_bunker.custom_reason = "В настоящий момент нет модераторов, а вы не наиграли достаточного количества минут (60) на нашем сервере."
 contraband_examine = false
+peaceful_end = false
 
 [hub]
 tags = "lang:ru,region:eu_e,rp:med"
@@ -66,6 +67,8 @@ deadmin_on_join = true
 new_player_threshold = 300
 alert.min_players_sharing_connection = 2
 new_player_join_sound = true
+note_stale_days = 90.0
+note_fresh_days = 45.0
 
 [ahelp]
 admin_prefix = 1
@@ -98,3 +101,6 @@ rich_main_icon_id = "vanilla-station"
 
 [movement]
 mob_pushing = true
+
+[events]
+enabled = true

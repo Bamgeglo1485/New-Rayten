@@ -41,7 +41,7 @@
       borg_module:
         - BorgModuleR1
         - BorgModuleTool
-        - BorgModuleGPS
+        - BorgHandheldGPSBasic
         - BorgModuleMusiqueR1
   - type: ItemSlots
     slots:
@@ -329,7 +329,7 @@
       borg_module:
         - BorgModuleR2
         - BorgModuleTool
-        - BorgModuleGPS
+        - BorgHandheldGPSBasic
         - BorgModuleMusiqueR2
   - type: BloodSucker
     heal:

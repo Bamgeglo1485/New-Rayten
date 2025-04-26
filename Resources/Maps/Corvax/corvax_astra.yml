@@ -36804,13 +36804,6 @@ entities:
     - type: Transform
       pos: 39.485535,-35.582695
       parent: 2
-- proto: BorgModuleTreatment
-  entities:
-  - uid: 2358
-    components:
-    - type: Transform
-      pos: 38.516785,-35.57139
-      parent: 2
 - proto: BoxBeaker
   entities:
   - uid: 2361
