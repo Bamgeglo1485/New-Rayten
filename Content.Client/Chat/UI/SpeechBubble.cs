@@ -112,9 +112,8 @@ namespace Content.Client.Chat.UI
                     return bubble;
 
                 undemitcomp.Voice = protoVoice.Voice;
-                
-                if (type == SpeechType.Whisper)
-                    undemitcomp.iswhisper = true;
+                undemitcomp.iswhisper = type == SpeechType.Whisper ? true : false; 
+
             }
             return bubble;
         }
@@ -153,10 +152,27 @@ namespace Content.Client.Chat.UI
                 return;
             }
 
-            // RAYTEN-START
+
+            // Lerp to our new vertical offset if it's been modified.
+            if (MathHelper.CloseToPercent(_verticalOffsetAchieved - VerticalOffset, 0, 0.1))
+            {
+                _verticalOffsetAchieved = VerticalOffset;
+            }
+            else
+            {
+                _verticalOffsetAchieved = MathHelper.Lerp(_verticalOffsetAchieved, VerticalOffset, 10 * args.DeltaSeconds);
+            }
+
+            if (!_entityManager.TryGetComponent<TransformComponent>(_senderEntity, out var xform) || xform.MapID != _eyeManager.CurrentEye.Position.MapId)
+            {
+                Modulate = Color.White.WithAlpha(0);
+                return;
+            }
+                        // RAYTEN-START
             if (_entityManager.TryGetComponent<VoiceEmitterComponent>(_senderEntity, out var comp) && comp.VoicePrototypeId != null)
             {
                 var entMan = IoCManager.Resolve<IEntityManager>();
+
                 if (_textLabel != null && _revealedLength < _fullText.Length)
                 {
                     _accumulatedTime += args.DeltaSeconds;
@@ -192,23 +208,6 @@ namespace Content.Client.Chat.UI
                 }
             }
             // RAYTEN-END
-
-            // Lerp to our new vertical offset if it's been modified.
-            if (MathHelper.CloseToPercent(_verticalOffsetAchieved - VerticalOffset, 0, 0.1))
-            {
-                _verticalOffsetAchieved = VerticalOffset;
-            }
-            else
-            {
-                _verticalOffsetAchieved = MathHelper.Lerp(_verticalOffsetAchieved, VerticalOffset, 10 * args.DeltaSeconds);
-            }
-
-            if (!_entityManager.TryGetComponent<TransformComponent>(_senderEntity, out var xform) || xform.MapID != _eyeManager.CurrentEye.Position.MapId)
-            {
-                Modulate = Color.White.WithAlpha(0);
-                return;
-            }
-
             if (_timeLeft <= FadeTime)
             {
                 // Update alpha if we're fading.
@@ -285,17 +284,17 @@ namespace Content.Client.Chat.UI
 
         protected override Control BuildBubble(ChatMessage message, string speechStyleClass, Color? fontColor = null, EntityUid? senderEntity = null)
         {
-            var label = new RichTextLabel
+            _textLabel = new RichTextLabel
             {
                 MaxWidth = SpeechMaxWidth,
             };
 
-            label.SetMessage(FormatSpeech(message.WrappedMessage, fontColor));
+            InitializeText(message, fontColor);
 
             var panel = new PanelContainer
             {
                 StyleClasses = { "speechBox", speechStyleClass },
-                Children = { label },
+                Children = { _textLabel },
                 ModulateSelfOverride = Color.White.WithAlpha(ConfigManager.GetCVar(CCVars.SpeechBubbleBackgroundOpacity))
             };
 
