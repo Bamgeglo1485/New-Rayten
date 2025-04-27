@@ -1,5 +1,6 @@
 delivery-recipient-examine = Этот предназначен для { $recipient }, { $job }.
 delivery-already-opened-examine = Он уже был открыт.
+delivery-earnings-examine = Доставка принесёт станции [color=yellow]{ $spesos }[/color] кредитов.
 delivery-recipient-no-name = Безымянный
 delivery-recipient-no-job = Неизвестно
 delivery-unlocked-self = Вы открыли { $delivery } с помощью своего отпечатка пальца.

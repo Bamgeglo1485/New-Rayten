@@ -64,6 +64,7 @@
   canBuildInImpassable: true
   conditions:
     - !type:WallmountCondition
+  hide: true #TODO: Fix the lightswitch, issue #34659. Until then, keep hidden so people don't build it and get confused.
 
 - type: construction
   name: переключатель сигнала
@@ -121,6 +122,7 @@
   canBuildInImpassable: true
   conditions:
     - !type:WallmountCondition
+  hide: true #TODO: Fix the lightswitch, issue #34659. Until then, keep hidden so people don't build it and get confused.
 
 - type: construction
   name: направленный переключатель сигнала

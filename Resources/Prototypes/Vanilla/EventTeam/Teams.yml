@@ -23,7 +23,7 @@
   announcementColor: Orange
   sound:
     path: /Audio/Vanilla/StationEvents/ERT_Approved_V1.ogg
-    volume: -2
+    volume: -3
   specialUnits:
     EventTeamERTLeader: SpawnMobERTPeacekeeperLeader
     EventTeamERTMedic: SpawnMobERTPeacekeeperMedic
@@ -38,7 +38,7 @@
   announcementColor: Orange
   sound:
     path: /Audio/Vanilla/StationEvents/ERT_Approved_V3.ogg
-    volume: -2
+    volume: -3
   specialUnits:
     EventTeamERTLeader: SpawnMobERTLeader
     EventTeamERTMedic: SpawnMobERTMedic
@@ -54,7 +54,7 @@
   announcementColor: Orange
   sound:
     path: /Audio/Vanilla/StationEvents/ERT_Approved_V4.ogg
-    volume: -2
+    volume: -3
   specialUnits:
     EventTeamERTLeader: SpawnMobERTPeacekeeperLeader
     EventTeamERTMedic: SpawnMobERTPeacekeeperMedic
@@ -71,7 +71,7 @@
   announcementColor: Violet
   sound:
     path: /Audio/Vanilla/StationEvents/ERT_Approved_V5.ogg
-    volume: -2
+    volume: -4
   specialUnits:
     EventTeamCBURNComander: SpawnMobCBURNComander
   regularUnit: SpawnMobCBURNRegular
@@ -84,7 +84,7 @@
   announcementColor: Orange
   sound:
     path: /Audio/Vanilla/StationEvents/ERT_Approved_V5.ogg
-    volume: -2
+    volume: -4
   specialUnits:
     EventTeamCBURNComander: SpawnMobCBURNComander
   regularUnit: SpawnMobCBURNRegular

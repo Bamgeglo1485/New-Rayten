@@ -1,7 +1,7 @@
 ent-BaseWeaponSniper = BaseWeaponSniper
     .desc = A rooty tooty point and shooty.
 ent-WeaponSniperMosin = Kardashev-Mosin
-    .desc = A weapon for hunting, or endless trench warfare. Uses .30 rifle ammo.
+    .desc = A true relic, the Kardashev-Mosin has served in nearly every armed conflict since its creation 670 years ago. The bolt-action design of the rifle remains virtually identical to its original design, whether used for hunting, sniping, or endless trench warfare. Loads 10 rounds of .30 rifle.
 ent-WeaponSniperHristov = Hristov
     .desc = A portable anti-materiel rifle. Fires armor piercing 14.5mm shells. Uses .60 anti-materiel ammo.
 ent-Musket = musket

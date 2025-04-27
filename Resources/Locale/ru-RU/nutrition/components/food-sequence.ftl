@@ -122,6 +122,40 @@ food-sequence-burger-content-world-pea = миро
 
 # TACO
 
+food-sequence-cotton-burger-gen = { $content }бургер
+food-sequence-cotton-burger-content-cotton-bol = хлопок
+food-sequence-cotton-burger-content-pyrotton-bol = пирохлопок
+food-sequence-cotton-burger-content-plushie-throngler = тронгл
+food-sequence-cotton-burger-content-plushie-ghost = призрак
+food-sequence-cotton-burger-content-plushie-revenant = жуткий
+food-sequence-cotton-burger-content-plushie-bee = жжужащий
+food-sequence-cotton-burger-content-plushie-hamptr = хомпт
+food-sequence-cotton-burger-content-plushie-nukie = нюклер
+food-sequence-cotton-burger-content-plushie-rouny = рауни
+food-sequence-cotton-burger-content-plushie-lamp = лампа
+food-sequence-cotton-burger-content-plushie-arachnid = паук
+food-sequence-cotton-burger-content-plushie-lizard = вех
+food-sequence-cotton-burger-content-plushie-experiment = экспериментальный
+food-sequence-cotton-burger-content-plushie-spacelizard = космоящер
+food-sequence-cotton-burger-content-plushie-lizard-inversed = хев
+food-sequence-cotton-burger-content-plushie-diona = диона
+food-sequence-cotton-burger-content-plushie-shark = шонк
+food-sequence-cotton-burger-content-plushie-ratvar = ратварианский
+food-sequence-cotton-burger-content-plushie-narsie = нар'
+food-sequence-cotton-burger-content-plushie-carp = карп
+food-sequence-cotton-burger-content-plushie-magicarp = магикарп
+food-sequence-cotton-burger-content-plushie-holocarp = голографический карп
+food-sequence-cotton-burger-content-plushie-slime = слайм
+food-sequence-cotton-burger-content-plushie-snake = змейка
+food-sequence-cotton-burger-content-plushie-mouse = мышь
+food-sequence-cotton-burger-content-plushie-vox = скри
+food-sequence-cotton-burger-content-plushie-atmosian = атмос
+food-sequence-cotton-burger-content-plushie-xeno = ксено
+food-sequence-cotton-burger-content-plushie-penguin = пинг
+food-sequence-cotton-burger-content-plushie-human = уристмак
+food-sequence-cotton-burger-content-plushie-moth = пушистик
+food-sequence-cotton-burger-content-plushie-ian = корги
+food-sequence-cotton-burger-content-among-pequeno = сус
 food-sequence-taco-gen = тако с { $content }
 
 # SKEWER
