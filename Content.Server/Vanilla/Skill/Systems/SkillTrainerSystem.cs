@@ -55,9 +55,6 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
         if (multiplyed)
         {
             if ((int)skillComp.ResearchLevel == 3)
-                experienceAmount *= 4;
-
-            if ((int)skillComp.ResearchLevel == 2)
                 experienceAmount *= 2;
         }
 
