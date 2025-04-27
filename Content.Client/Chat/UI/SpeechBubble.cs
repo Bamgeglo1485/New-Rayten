@@ -284,17 +284,17 @@ namespace Content.Client.Chat.UI
 
         protected override Control BuildBubble(ChatMessage message, string speechStyleClass, Color? fontColor = null, EntityUid? senderEntity = null)
         {
-            _textLabel = new RichTextLabel
+            var label = new RichTextLabel
             {
                 MaxWidth = SpeechMaxWidth,
             };
 
-            InitializeText(message, fontColor);
+            label.SetMessage(FormatSpeech(message.WrappedMessage, fontColor));
 
             var panel = new PanelContainer
             {
                 StyleClasses = { "speechBox", speechStyleClass },
-                Children = { _textLabel },
+                Children = { label },
                 ModulateSelfOverride = Color.White.WithAlpha(ConfigManager.GetCVar(CCVars.SpeechBubbleBackgroundOpacity))
             };
 
