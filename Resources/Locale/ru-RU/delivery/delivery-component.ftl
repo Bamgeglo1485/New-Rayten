@@ -17,3 +17,6 @@ delivery-teleporter-amount-examine =
     }
 delivery-teleporter-empty = { $entity } пуст(а).
 delivery-teleporter-empty-verb = Забрать почту
+# modifiers
+delivery-priority-examine = Это [color=orange]приоритетный { $type }[/color]. У вас осталось [color=orange]{ $time }[/color] для доставки, чтобы получить бонус.
+delivery-priority-expired-examine = Это [color=orange]приоритетный { $type }[/color]. Похоже, вы не успели в срок.
