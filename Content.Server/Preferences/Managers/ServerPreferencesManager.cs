@@ -104,12 +104,12 @@ namespace Content.Server.Preferences.Managers
             var curPrefs = prefsData.Prefs!;
             var session = _playerManager.GetSessionById(userId);
 
-            // Corvax-Sponsors-Start
+            // Rayten-Sponsors-Start
             var sponsorPrototypes = _sponsors.TryGetServerPrototypes(session.UserId, out var prototypes)
                 ? prototypes.ToArray()
                 : [];
             profile.EnsureValid(session, _dependencies, sponsorPrototypes);
-            // Corvax-Sponsors-End
+            // Rayten-Sponsors-End
 
             var profiles = new Dictionary<int, ICharacterProfile>(curPrefs.Characters)
             {

@@ -77,8 +77,6 @@ public sealed class SharedSponsorManager
     #region установка словарей
     public void ServerSponsorSet(NetUserId userId, sponsorRank rank, bool remove)
     {
-        Logger.Info($"Вызван метод");
-        
         if(remove)
         {
             _ranks.Remove(userId);
@@ -111,18 +109,66 @@ public sealed class SharedSponsorManager
             {
                 case sponsorRank.GrayTide:
                     break;
+
+
                 case sponsorRank.Revolutionary:
+                //голоса
+                    current.Add("Walany");
+                    current.Add("WX");
+                //импланты
+                current.Add("CyberlimbRArmBishop");current.Add("CyberlimbLArmBishop");current.Add("CyberlimbRHandBishop");
+                current.Add("CyberlimbLHandBishop");current.Add("CyberlimbRLegBishop");current.Add("CyberlimbLLegBishop");
+                current.Add("CyberlimbLFootBishop");current.Add("CyberlimbRFootBishop");current.Add("CyberlimbTorsoBishop");
+                current.Add("CyberlimbRArmHephaestus");current.Add("CyberlimbRHandHephaestus");current.Add("CyberlimbLHandHephaestus");
+                current.Add("CyberlimbRLegHephaestus");current.Add("CyberlimbLLegHephaestus");
+                current.Add("CyberlimbLFootHephaestus");current.Add("CyberlimbRFootHephaestus");current.Add("CyberlimbTorsoHephaestus");
+                current.Add("CyberlimbRArmHephaestusTitan");current.Add("CyberlimbLArmHephaestusTitan");current.Add("CyberlimbRHandHephaestusTitan");
+                current.Add("CyberlimbLHandHephaestusTitan");current.Add("CyberlimbRLegHephaestusTitan");current.Add("CyberlimbLLegHephaestusTitan");
+                current.Add("CyberlimbLFootHephaestusTitan");current.Add("CyberlimbRFootHephaestusTitan");current.Add("CyberlimbTorsoHephaestusTitan");
+                current.Add("CyberlimbRArmMorpheus");current.Add("CyberlimbLArmMorpheus");current.Add("CyberlimbRHandMorpheus");current.Add("CyberlimbLHandMorpheus");
+                current.Add("CyberlimbRLegMorpheus");current.Add("CyberlimbLLegMorpheus");current.Add("CyberlimbLFootMorpheus");
+                current.Add("CyberlimbRFootMorpheus");current.Add("CyberlimbTorsoMorpheus");current.Add("CyberlimbRArmWardtakahashi");
+                current.Add("CyberlimbLArmWardtakahashi");current.Add("CyberlimbRHandWardtakahashi");current.Add("CyberlimbLHandWardtakahashi");
+                current.Add("CyberlimbRLegWardtakahashi");current.Add("CyberlimbLLegWardtakahashi");current.Add("CyberlimbLFootWardtakahashi");
+                current.Add("CyberlimbRFootWardtakahashi");current.Add("CyberlimbTorsoWardtakahashiMale");current.Add("CyberlimbTorsoWardtakahashiFemale");
+                current.Add("CyberlimbRArmZenghu");current.Add("CyberlimbLArmZenghu");current.Add("CyberlimbRHandZenghu");
+                current.Add("CyberlimbLHandZenghu");current.Add("CyberlimbRLegZenghu");current.Add("CyberlimbLLegZenghu");
+                current.Add("CyberlimbLFootZenghu");current.Add("CyberlimbRFootZenghu");current.Add("CyberlimbTorsoZenghu");
+                current.Add("CyberlimbRArmNanotrasen");current.Add("CyberlimbLArmNanotrasen");current.Add("CyberlimbRHandNanotrasen");
+                current.Add("CyberlimbLHandNanotrasen");current.Add("CyberlimbRLegNanotrasen");current.Add("CyberlimbLLegNanotrasen");
+                current.Add("CyberlimbLFootNanotrasen");current.Add("CyberlimbRFootNanotrasen");current.Add("CyberlimbTorsoNanotrasen");
+                current.Add("CyberlimbRArmXion");current.Add("CyberlimbLArmXion");current.Add("CyberlimbRHandXion");
+                current.Add("CyberlimbLHandXion");current.Add("CyberlimbRLegXion");current.Add("CyberlimbTorsoXion");
+                current.Add("CyberlimbLLegXion"); current.Add("CyberlimbLFootXion");current.Add("CyberlimbRFootXion");
+                    break;
+
+
+                case sponsorRank.Syndicate:
+                //кошачие хвосты и прочая срань
+                    current.Add("HumanFoxTailAnimated");
                     current.Add("CatEars");
                     current.Add("CatTail");
-                    break;
-                case sponsorRank.Syndicate:
+                    current.Add("SlimeCatTailStripes");
+                    current.Add("SlimeCatTail");
+                    current.Add("SlimeCatEarsTorn");
+                    current.Add("SlimeCatEarsCurled");
+                    current.Add("SlimeCatEarsStubby");
+                    current.Add("SlimeCatEars");
+                    current.Add("SlimeFoxEars");
+                    current.Add("CatEarsStubby");
+                    current.Add("CatEarsCurled");
+                    current.Add("CatEarsTorn");
+                    current.Add("CatTailStripes");
+                    current.Add("FoxEars");
+                    current.Add("HumanFoxTailAnimated");
+                //голоса
                     current.Add("Willow");
-                    current.Add("WX");
+                    current.Add("Warly");
                     break;
+
+                    
                 case sponsorRank.SpaceNinja:
                     current.Add("Megalovania");
-                    current.Add("Walany");
-                    current.Add("Warly");
                     break;
             }
             _rankToPrototypes[rank] = current.ToArray();
