@@ -6,6 +6,7 @@ using Robust.Client.GameObjects;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.XAML;
 using Robust.Client.Utility;
+using Content.Shared.Vanilla.Sponsor;
 
 namespace Content.Client.Humanoid;
 
@@ -13,9 +14,8 @@ namespace Content.Client.Humanoid;
 public sealed partial class SingleMarkingPicker : BoxContainer
 {
     [Dependency] private readonly MarkingManager _markingManager = default!;
-    private ISharedSponsorsManager? _sponsorsManager; // Corvax-Sponsors
     [Dependency] private readonly IEntityManager _entityManager = default!;
-
+    [Dependency] private readonly SharedSponsorManager _sponsorsManager = default!;
     private readonly SpriteSystem _sprite;
     
     /// <summary>
@@ -128,7 +128,6 @@ public sealed partial class SingleMarkingPicker : BoxContainer
     {
         RobustXamlLoader.Load(this);
         IoCManager.InjectDependencies(this);
-        IoCManager.Instance!.TryResolveType(out _sponsorsManager); // Corvax-Sponsors
 
         _sprite = _entityManager.System<SpriteSystem>();
         MarkingList.OnItemSelected += SelectMarking;
@@ -199,7 +198,7 @@ public sealed partial class SingleMarkingPicker : BoxContainer
             var item = MarkingList.AddItem(Loc.GetString($"marking-{id}"), _sprite.Frame0(marking.Sprites[0]));
             item.Metadata = marking.ID;
             // Corvax-Sponsors-Start
-            if (marking.SponsorOnly && _sponsorsManager != null)
+            if (marking.SponsorOnly)
                 item.Disabled = !_sponsorsManager.GetClientPrototypes().Contains(marking.ID);
             // Corvax-Sponsors-End
 

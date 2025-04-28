@@ -68,8 +68,11 @@ public sealed class SharedSponsorManager
         if (!_ranks.TryGetValue(userId, out var rank))
             return slots;
 
+        if (rank >= sponsorRank.GrayTide)
+            slots += 5;
+
         if (rank >= sponsorRank.Revolutionary)
-            slots = 10;
+            slots += 5;
 
         return slots;
     }
@@ -112,6 +115,19 @@ public sealed class SharedSponsorManager
 
 
                 case sponsorRank.Revolutionary:
+                //прически
+                current.Add("HumanHairCotton");
+                current.Add("HumanHairFingerwave");
+                current.Add("HumanHairFortuneteller");
+                current.Add("HumanHairFortunetellerAlt");
+                current.Add("HumanHairLongdtails");
+                current.Add("HumanHairLooseSlicked");
+                current.Add("HumanHairQuadcurls");
+                current.Add("HumanHairShy");
+                current.Add("HumanHairSpicy");
+                current.Add("HumanHairWife");
+                current.Add("HumanHairNitori");
+                current.Add("HumanHairLongBow");
                 //голоса
                     current.Add("Walany");
                     current.Add("WX");
@@ -145,21 +161,11 @@ public sealed class SharedSponsorManager
 
                 case sponsorRank.Syndicate:
                 //кошачие хвосты и прочая срань
-                    current.Add("HumanFoxTailAnimated");
-                    current.Add("CatEars");
-                    current.Add("CatTail");
-                    current.Add("SlimeCatTailStripes");
-                    current.Add("SlimeCatTail");
-                    current.Add("SlimeCatEarsTorn");
-                    current.Add("SlimeCatEarsCurled");
-                    current.Add("SlimeCatEarsStubby");
-                    current.Add("SlimeCatEars");
-                    current.Add("SlimeFoxEars");
-                    current.Add("CatEarsStubby");
-                    current.Add("CatEarsCurled");
-                    current.Add("CatEarsTorn");
-                    current.Add("CatTailStripes");
-                    current.Add("FoxEars");
+                    current.Add("HumanFoxTailAnimated");current.Add("CatEars");current.Add("CatTail");
+                    current.Add("SlimeCatTailStripes");current.Add("SlimeCatTail");current.Add("SlimeCatEarsTorn");
+                    current.Add("SlimeCatEarsCurled");current.Add("SlimeCatEarsStubby");current.Add("SlimeCatEars");
+                    current.Add("SlimeFoxEars");current.Add("CatEarsStubby");current.Add("CatEarsCurled");
+                    current.Add("CatEarsTorn");current.Add("CatTailStripes");current.Add("FoxEars");
                     current.Add("HumanFoxTailAnimated");
                 //голоса
                     current.Add("Willow");
