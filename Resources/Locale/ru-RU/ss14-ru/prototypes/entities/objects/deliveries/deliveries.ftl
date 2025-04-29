@@ -6,3 +6,5 @@ ent-LetterDelivery = письмо
     .desc = { ent-BaseDelivery.desc }
 ent-DeliveryModifierPriority = { "" }
     .desc = Компоненты, добавляемые при создании приоритетной доставки.
+ent-DeliveryModifierFragile = { "" }
+    .desc = Компоненты, добавляемые при выборе хрупкой доставки.

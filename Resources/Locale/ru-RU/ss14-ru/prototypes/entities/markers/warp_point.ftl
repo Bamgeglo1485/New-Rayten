@@ -1,7 +1,9 @@
-ent-WarpPoint = warp point
+ent-WarpPoint = точка перехода
     .desc = { ent-MarkerBase.desc }
-ent-WarpPointBeacon = warp point (beacon)
+ent-WarpPointBeacon = точка перехода (маяк)
     .desc = { ent-WarpPoint.desc }
-ent-WarpPointBombing = warp point
-    .suffix = Цель взрыва бомбы ниндзя
+ent-GhostWarpPoint = точка перехода (только для призраков)
+    .desc = { ent-MarkerBase.desc }
+ent-WarpPointBombing = точка перехода
+    .suffix = Цель взрыва бомы ниндзя
     .desc = { ent-WarpPoint.desc }

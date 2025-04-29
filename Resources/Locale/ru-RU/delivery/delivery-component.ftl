@@ -20,3 +20,5 @@ delivery-teleporter-empty-verb = Забрать почту
 # modifiers
 delivery-priority-examine = Это [color=orange]приоритетный { $type }[/color]. У вас осталось [color=orange]{ $time }[/color] для доставки, чтобы получить бонус.
 delivery-priority-expired-examine = Это [color=orange]приоритетный { $type }[/color]. Похоже, вы не успели в срок.
+delivery-fragile-examine = Это [color=red]хрупкий { $type }[/color]. Доставьте его в целости, чтобы получить бонус.
+delivery-fragile-broken-examine = Это [color=red]хрупкий { $type }[/color]. Он выглядит сильно повреждённым.
