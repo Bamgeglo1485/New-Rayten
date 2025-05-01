@@ -1,141 +1,105 @@
 ﻿- type: construction
-  name: металлический стержень
   id: MetalRod
   graph: MetalRod
   startNode: start
   targetNode: MetalRod
   category: construction-category-materials
-  description: металлический стержень
-  icon: { sprite: Objects/Materials/parts.rsi, state: rods }
   objectType: Item
 
 - type: construction
-  name: бронестекло
-  description: Лист армированного стекла.
   id: SheetRGlass
   graph: Glass
   startNode: start
   targetNode: SheetRGlass
   RequiresBuildingLevel: 2
   category: construction-category-materials
-  icon: { sprite: Objects/Materials/Sheets/glass.rsi, state: rglass }
   objectType: Item
 
 - type: construction
-  name: заводное стекло
-  description: Лист укреплённного латунью стекла, в основном используемый любителями часовых механизмов и остатками культа Ратвара.
   id: SheetClockworkGlass
   graph: Glass
   startNode: start
   RequiresBuildingLevel: 2
   targetNode: SheetClockworkGlass
   category: construction-category-materials
-  icon: { sprite: Objects/Materials/Sheets/glass.rsi, state: cglass }
   objectType: Item
 
 - type: construction
-  name: плазменное стекло
-  description: Лист полупрозрачной плазмы.
   id: SheetPGlass
   graph: Glass
   startNode: start
   targetNode: SheetPGlass
   RequiresBuildingLevel: 1
   category: construction-category-materials
-  icon: { sprite: Objects/Materials/Sheets/glass.rsi, state: pglass }
   objectType: Item
 
 - type: construction
-  name: плазменное бронестекло
-  description: Лист армированной полупрозрачной плазмы.
   id: SheetRPGlass
   graph: Glass
   startNode: start
   targetNode: SheetRPGlass
   RequiresBuildingLevel: 2
   category: construction-category-materials
-  icon: { sprite: Objects/Materials/Sheets/glass.rsi, state: rpglass }
   objectType: Item
 
 - type: construction
-  name: плазменное бронестекло
-  description: Лист армированной полупрозрачной плазмы.
   id: SheetRPGlass0
   graph: Glass
   startNode: start
   targetNode: SheetRPGlass0
   RequiresBuildingLevel: 2
   category: construction-category-materials
-  icon: { sprite: Objects/Materials/Sheets/glass.rsi, state: rpglass }
   objectType: Item
 
 - type: construction
-  name: плазменное бронестекло
-  description: Лист армированной полупрозрачной плазмы.
   id: SheetRPGlass1
   graph: Glass
   startNode: start
   targetNode: SheetRPGlass1
   RequiresBuildingLevel: 2
   category: construction-category-materials
-  icon: { sprite: Objects/Materials/Sheets/glass.rsi, state: rpglass }
   objectType: Item
 
 - type: construction
-  name: дюраткань
   id: MaterialDurathread
   graph: Durathread
   startNode: start
   targetNode: MaterialDurathread
   category: construction-category-materials
-  description: Сырьё.
-  icon: { sprite: Objects/Materials/materials.rsi, state: durathread }
   objectType: Item
 
 - type: construction
-  name: урановое стекло
-  description: Лист уранового стекла.
   id: SheetUGlass
   graph: Glass
   startNode: start
   targetNode: SheetUGlass
   RequiresBuildingLevel: 1
   category: construction-category-materials
-  icon: { sprite: Objects/Materials/Sheets/glass.rsi, state: uglass }
   objectType: Item
 
 - type: construction
-  name: урановое бронестекло
-  description: Лист армированного уранового стекла.
   id: SheetRUGlass
   graph: Glass
   startNode: start
   targetNode: SheetRUGlass
   RequiresBuildingLevel: 2
   category: construction-category-materials
-  icon: { sprite: Objects/Materials/Sheets/glass.rsi, state: ruglass }
   objectType: Item
 
 - type: construction
-  name: урановое бронестекло
-  description: Лист армированного уранового стекла.
   id: SheetRUGlass0
   graph: Glass
   startNode: start
   targetNode: SheetRUGlass0
   RequiresBuildingLevel: 2
   category: construction-category-materials
-  icon: { sprite: Objects/Materials/Sheets/glass.rsi, state: ruglass }
   objectType: Item
 
 - type: construction
-  name: урановое бронестекло
-  description: Лист армированного уранового стекла.
   id: SheetRUGlass1
   graph: Glass
   startNode: start
   targetNode: SheetRUGlass1
   RequiresBuildingLevel: 2
   category: construction-category-materials
-  icon: { sprite: Objects/Materials/Sheets/glass.rsi, state: ruglass }
   objectType: Item

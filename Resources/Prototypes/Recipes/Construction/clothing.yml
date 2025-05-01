@@ -1,145 +1,106 @@
 - type: construction
-  name: скафандр клоуна
   id: ClownHardsuit
   graph: ClownHardsuit
   startNode: start
   targetNode: clownHardsuit
   category: construction-category-clothing
-  description: Самодельный клоунский скафандр.
-  icon: { sprite: Clothing/OuterClothing/Hardsuits/clown.rsi, state: icon }
   objectType: Item
 
 - type: construction
-  name: скафандр мима
   id: MimeHardsuit
   graph: MimeHardsuit
   startNode: start
   targetNode: mimeHardsuit
   category: construction-category-clothing
-  description: Самодельный мимский скафандр.
-  icon: { sprite: Clothing/OuterClothing/Hardsuits/mime.rsi, state: icon }
   objectType: Item
 
 - type: construction
-  name: костяной доспех
   id: BoneArmor
   graph: BoneArmor
   startNode: start
   targetNode: armor
   category: construction-category-clothing
-  description: Сидит на вас как вторая кожа.
-  icon: { sprite: Clothing/OuterClothing/Armor/bone_armor.rsi, state: icon }
   objectType: Item
 
 - type: construction
-  name: костяной шлем
   id: BoneHelmet
   graph: BoneHelmet
   startNode: start
   targetNode: helmet
   category: construction-category-clothing
-  description: Круто выглядящий шлем, сделанный из черепов ваших врагов.
-  icon: { sprite: Clothing/Head/Helmets/bone_helmet.rsi, state: icon }
   objectType: Item
 
 - type: construction
-  name: банановые маска и парик клоуна
   id: BananaClownMask
   graph: BananaClownMask
   startNode: start
   targetNode: mask
   category: construction-category-clothing
-  description: Лицевой атрибут настоящего приколиста. Клоун неполноценен без своих парика и маски.
-  icon: { sprite: Clothing/Mask/clown_banana.rsi, state: icon }
   objectType: Item
 
 - type: construction
-  name: банановый костюм клоуна
   id: BananaClownJumpsuit
   graph: BananaClownJumpsuit
   startNode: start
   targetNode: jumpsuit
   category: construction-category-clothing
-  description: ХОНК!
-  icon: { sprite: Clothing/Uniforms/Jumpsuit/clown_banana.rsi, state: icon }
   objectType: Item
 
 - type: construction
-  name: банановые клоунские туфли
   id: BananaClownShoes
   graph: BananaClownShoes
   startNode: start
   targetNode: shoes
   category: construction-category-clothing
-  description: Когда юмор и обувь выходят на новый уровень абсурда.
-  icon: { sprite: Clothing/Shoes/Specific/clown_banana.rsi, state: icon }
   objectType: Item
 
 - type: construction
-  name: мед-охранный визор
   id: ClothingEyesHudMedSec
   graph: HudMedSec
   RequiresEngineeringLevel: 2
   startNode: start
   targetNode: medsecHud
   category: construction-category-clothing
-  description: Окуляр с индикатором на стекле, напоминающий сочетание визора охраны с медицинским.
-  icon: { sprite: Clothing/Eyes/Hud/medsec.rsi, state: icon }
   objectType: Item
 
 - type: construction
-  name: тапки-уточки
   id: ClothingShoeSlippersDuck
   graph: ClothingShoeSlippersDuck
   startNode: start
   targetNode: shoes
   category: construction-category-clothing
-  description: Удобные, но преследуемые призраками уток, которых вы кормили хлебом в детстве.
-  icon: { sprite: Clothing/Shoes/Misc/duck-slippers.rsi, state: icon }
   objectType: Item
 
 - type: construction
-  name: плюшевые тапочки в виде ящерицы
   id: ClothingShoeSlippersLizard
   graph: ClothingShoeSlippersLizard
   startNode: start
   targetNode: shoes
   category: construction-category-clothing
-  description: Очаровательная пара тапочек, напоминающих человека-ящерицу. Сочетайте это с другой зеленой одеждой, и вы станете самым крутым членом экипажа на станции!
-  icon: { sprite: Clothing/Shoes/Misc/lizard-slippers.rsi, state: icon }
   objectType: Item
 
 - type: construction
-  name: очки охраны
   id: ClothingEyesGlassesSecurity
   graph: GlassesSecHUD
   RequiresEngineeringLevel: 1
   startNode: start
   targetNode: glassesSec
   category: construction-category-clothing
-  description: Модернизированные солнцезащитные очки с функцией защиты от вспышек и визором СБ.
-  icon: { sprite: Clothing/Eyes/Glasses/secglasses.rsi, state: icon }
   objectType: Item
 
 - type: construction
-  name: колчан
   id: ClothingBeltQuiver
   graph: Quiver
   startNode: start
   targetNode: Quiver
   category: construction-category-clothing
-  description: Вмещает до 15 стрел и плотно прилегает к поясу.
-  icon: { sprite: Clothing/Belt/quiver.rsi, state: icon }
   objectType: Item
 
 - type: construction
-  name: шлем правосудия
   id: ClothingHeadHelmetJustice
   RequiresEngineeringLevel: 1
   graph: HelmetJustice
   startNode: start
   targetNode: helmet
   category: construction-category-clothing
-  description: Продвинутое снаряжение службы безопасности. Защищает станцию от никчёмных сотрудников.
-  icon: { sprite: Clothing/Head/Helmets/justice.rsi, state: icon }
   objectType: Item

@@ -1,35 +1,26 @@
 - type: construction
-  name: картофельная батарея
   id: PowerCellPotato
   graph: PowerCellPotato
   startNode: start
   targetNode: potatobattery
   RequiresEngineeringLevel: 1
   category: construction-category-misc
-  description: Кто-то воткнул два гвоздя и несколько проводов в большую картофелину. Каким-то образом это обеспечивает небольшой заряд. Вы можете запихнуть его в слот среднего размера.
-  icon: { sprite: Objects/Power/power_cells.rsi, state: potato }
   objectType: Item
 
 - type: construction
-  name: картофельный ИИ
   id: PotatoAI
   graph: PotatoAI
   RequiresEngineeringLevel: 2
   startNode: start
   targetNode: potatoai
   category: construction-category-misc
-  description: Это картофелина. Вы заставили её быть разумной, вы, монстр.
-  icon: { sprite: Objects/Fun/pai.rsi, state: icon-potato-off }
   objectType: Item
-  
+
 - type: construction
-  name: сверхкомпактный чип ИИ
   id: PotatoAIChip
   graph: PotatoAIChip
   RequiresEngineeringLevel: 3
   startNode: start
   targetNode: potatoaichip
   category: construction-category-misc
-  description: Для корректной работы этого высокотехнологичного чипа искусственного интеллекта требуется напряжение ровно в 1,1 Вольт.
-  icon: { sprite: Objects/Misc/potatoai_chip.rsi, state: icon }
   objectType: Item

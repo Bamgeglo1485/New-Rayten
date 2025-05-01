@@ -1,59 +1,40 @@
 - type: construction
   id: ClosetSteel
-  name: шкаф
   graph: ClosetSteel
   startNode: start
   targetNode: done
   category: construction-category-storage
-  description: Стандартное хранилище Nanotrasen.
-  icon: { sprite: Structures/Storage/closet.rsi, state: generic_icon }
   objectType: Structure
 
 - type: construction
   id: ClosetSteelSecure
-  name: защищённый шкаф
   graph: ClosetSteelSecure
   startNode: start
   targetNode: done
   RequiresEngineeringLevel: 1
   category: construction-category-storage
-  description: Стальной шкаф, который может быть закрыт на замок
-  icon: { sprite: Structures/Storage/closet.rsi, state: secure_icon }
   objectType: Structure
 
 - type: construction
   id: ClosetFreezer
-  name: холодильник
   graph: ClosetFreezer
   startNode: start
   targetNode: done
   RequiresEngineeringLevel: 1
   category: construction-category-storage
-  description: Стандартное хранилище Nanotrasen.
-  icon: { sprite: Structures/Storage/closet.rsi, state: freezer_icon }
   objectType: Structure
 
 - type: construction
   id: GunSafe
-  name: оружейный сейф
   graph: GunSafe
-  startNode: start
-  targetNode: done
-  RequiresEngineeringLevel: 1
-  category: construction-category-storage
-  description: Стандартное хранилище Nanotrasen.
-  icon: { sprite: Structures/Storage/closet.rsi, state: shotguncase }
   objectType: Structure
 
 - type: construction
   id: ClosetWall
-  name: технический настенный шкаф
   graph: ClosetWall
   startNode: start
   targetNode: done
   category: construction-category-storage
-  description: Это хранилище.
-  icon: { sprite: Structures/Storage/wall_locker.rsi, state: generic_icon }
   objectType: Structure
   placementMode: SnapgridCenter
   canRotate: true

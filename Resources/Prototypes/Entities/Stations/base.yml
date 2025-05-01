@@ -95,6 +95,7 @@
           # - /Maps/Corvax/Ruins/corvax_ussp_asteroid.yml
           # Corvax-Mapping-End
           - /Maps/Ruins/wrecklaimer.yml
+          - /Maps/Ruins/displaced_telescience.yml
         wrecks: !type:DungeonSpawnGroup
           minimumDistance: 150
           maximumDistance: 300

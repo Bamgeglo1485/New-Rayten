@@ -1,58 +1,43 @@
 - type: construction
-  name: факел
   id: LightTorch
   graph: LightTorch
   startNode: start
   targetNode: torch
   category: construction-category-tools
-  description: Сделанный из дерева факел.
-  icon: { sprite: Objects/Misc/torch.rsi, state: icon }
   objectType: Item
 
 - type: construction
-  name: логический элемент
   id: LogicGate
   graph: LogicGate
   RequiresEngineeringLevel: 1
   startNode: start
   targetNode: logic_gate
   category: construction-category-tools
-  description: Логический элемент с двумя портами на вход и одним на выход. Можно изменить логическую операцию с помощью отвёртки.
-  icon: { sprite: Objects/Devices/gates.rsi, state: or_icon }
   objectType: Item
 
 - type: construction
-  name: детектор сигнала
   id: EdgeDetector
   graph: LogicGate
   RequiresEngineeringLevel: 1
   startNode: start
   targetNode: edge_detector
   category: construction-category-tools
-  description: Определяет уровень сигнала и разделяет его. Устройство игнорирует импульсные сигналы.
-  icon: { sprite: Objects/Devices/gates.rsi, state: edge_detector }
   objectType: Item
 
 - type: construction
-  name: датчик питания
   id: PowerSensor
   graph: LogicGate
   RequiresEngineeringLevel: 1
   startNode: start
   targetNode: power_sensor
   category: construction-category-tools
-  description: Генерирует сигналы в ответ на изменение напряжения в сети. Может циклически переключаться между напряжениями кабеля.
-  icon: { sprite: Objects/Devices/gates.rsi, state: power_sensor }
   objectType: Item
 
 - type: construction
-  name: ячейка памяти
   id: MemoryCell
   graph: LogicGate
   RequiresEngineeringLevel: 1
   startNode: start
   targetNode: memory_cell
   category: construction-category-tools
-  description: Схема D-триггер защелки, хранящая сигнал, который может быть изменён в зависимости от входного и разрешающего портов.
-  icon: { sprite: Objects/Devices/gates.rsi, state: memory_cell }
   objectType: Item

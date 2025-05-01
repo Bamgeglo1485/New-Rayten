@@ -1,21 +1,14 @@
 ﻿- type: construction
-  name: компьютер
   id: Computer
   graph: Computer
   startNode: start
   targetNode: computer
   RequiresEngineeringLevel: 2
   category: construction-category-machines
-  description: Строящаяся консоль.
   placementMode: SnapgridCenter
   canBuildInImpassable: false
-  icon:
-    sprite: Structures/Machines/parts.rsi
-    state: 4
 
 - type: construction
-  name: каркас машины
-  description: Строящаяся машина. Требуется больше деталей.
   id: MachineFrame
   graph: Machine
   startNode: start
@@ -24,40 +17,27 @@
   category: construction-category-machines
   placementMode: SnapgridCenter
   canBuildInImpassable: false
-  icon:
-    sprite: Structures/Machines/parts.rsi
-    state: "box_0"
 
 # Switching
 - type: construction
-  name: Двухпозиционный рычаг.
   id: TwoWayLeverRecipe
   graph: LeverGraph
   RequiresEngineeringLevel: 1
   startNode: start
   targetNode: LeverNode
   category: construction-category-machines
-  description: Двухпозиционный рычаг. Имеет 3 позиции
   objectType: Structure
   canBuildInImpassable: false
-  icon:
-    sprite: Structures/conveyor.rsi
-    state: switch-off
   conditions:
     - !type:TileNotBlocked
 
 - type: construction
-  name: переключатель сети ЛКП
   id: LightSwitchRecipe
   graph: LightSwitchGraph
   RequiresEngineeringLevel: 1
   startNode: start
   targetNode: LightSwitchNode
   category: construction-category-machines
-  description: Это переключатель источников света, использующих локальный контроллер питания.
-  icon:
-    sprite: Structures/Wallmounts/switch.rsi
-    state: on
   objectType: Structure
   placementMode: SnapgridCenter
   canRotate: true
@@ -67,17 +47,12 @@
   hide: true #TODO: Fix the lightswitch, issue #34659. Until then, keep hidden so people don't build it and get confused.
 
 - type: construction
-  name: переключатель сигнала
   id: SignalSwitchRecipe
   graph: SignalSwitchGraph
   RequiresEngineeringLevel: 1
   startNode: start
   targetNode: SignalSwitchNode
   category: construction-category-machines
-  description: Это переключатель питания устройств.
-  icon:
-    sprite: Structures/Wallmounts/switch.rsi
-    state: on
   objectType: Structure
   placementMode: SnapgridCenter
   canRotate: true
@@ -86,17 +61,12 @@
     - !type:WallmountCondition
 
 - type: construction
-  name: кнопка сигнала
   id: SignalButtonRecipe
   RequiresEngineeringLevel: 1
   graph: SignalButtonGraph
   startNode: start
   targetNode: SignalButtonNode
   category: construction-category-machines
-  description: Эта кнопка что-то активирует.
-  icon:
-    sprite: Structures/Wallmounts/switch.rsi
-    state: on
   objectType: Structure
   placementMode: SnapgridCenter
   canRotate: true
@@ -105,17 +75,12 @@
     - !type:WallmountCondition
 
 - type: construction
-  name: направленный переключатель сети ЛКП
   id: LightSwitchDirectionalRecipe
   graph: LightSwitchDirectionalGraph
   RequiresEngineeringLevel: 1
   startNode: start
   targetNode: LightSwitchDirectionalNode
   category: construction-category-machines
-  description: Это переключатель источников света, использующих локальный контроллер питания.
-  icon:
-    sprite: Structures/Wallmounts/switch.rsi
-    state: on
   objectType: Structure
   placementMode: SnapgridCenter
   canRotate: true
@@ -125,17 +90,12 @@
   hide: true #TODO: Fix the lightswitch, issue #34659. Until then, keep hidden so people don't build it and get confused.
 
 - type: construction
-  name: направленный переключатель сигнала
   id: SignalSwitchDirectionalRecipe
   graph: SignalSwitchDirectionalGraph
   RequiresEngineeringLevel: 1
   startNode: start
   targetNode: SignalSwitchDirectionalNode
   category: construction-category-machines
-  description: Это переключатель питания устройств.
-  icon:
-    sprite: Structures/Wallmounts/switch.rsi
-    state: on
   objectType: Structure
   placementMode: SnapgridCenter
   canRotate: true
@@ -144,17 +104,12 @@
     - !type:WallmountCondition
 
 - type: construction
-  name: направленная кнопка сигнала
   id: SignalButtonDirectionalRecipe
   graph: SignalButtonDirectionalGraph
   RequiresEngineeringLevel: 1
   startNode: start
   targetNode: SignalButtonDirectionalNode
   category: construction-category-machines
-  description: Эта кнопка что-то активирует.
-  icon:
-    sprite: Structures/Wallmounts/switch.rsi
-    state: on
   objectType: Structure
   placementMode: SnapgridCenter
   canRotate: true

@@ -1,111 +1,76 @@
 - type: construction
-  name: паутинный пол
   id: TileWeb
   graph: WebObjects
   startNode: start
   targetNode: tile
   category: construction-category-tiles
-  description: Может послужить неплохим метательным оружием.
   entityWhitelist:
     tags:
     - SpiderCraft
-  icon:
-    sprite: Objects/Tiles/web.rsi
-    state: icon
   objectType: Item
 
 - type: construction
-  name: паутинная зимняя куртка
   id: ClothingOuterWinterWeb
   graph: WebObjects
   startNode: start
   targetNode: coat
   category: construction-category-clothing
-  description: Даёт ощущение, словно вы внутри кокона, не то чтобы из-за этого вам стало менее страшно оказаться в настоящем.
   entityWhitelist:
     tags:
     - SpiderCraft
-  icon:
-    sprite: Clothing/OuterClothing/WinterCoats/coat.rsi
-    state: WEB-icon
   objectType: Item
 
 - type: construction
-  name: паутинный комбинезон
   id: ClothingUniformJumpsuitWeb
   graph: WebObjects
   startNode: start
   targetNode: jumpsuit
   category: construction-category-clothing
-  description: Даёт понять, что вы едины с паутиной.
   entityWhitelist:
     tags:
     - SpiderCraft
-  icon:
-    sprite: Clothing/Uniforms/Jumpsuit/web.rsi
-    state: icon
   objectType: Item
 
 - type: construction
-  name: паутинная юбка-комбинезон
   id: ClothingUniformJumpskirtWeb
   graph: WebObjects
   startNode: start
   targetNode: jumpskirt
   category: construction-category-clothing
-  description: Даёт понять, что вы едины с паутиной.
   entityWhitelist:
     tags:
     - SpiderCraft
-  icon:
-    sprite: Clothing/Uniforms/Jumpskirt/web.rsi
-    state: icon
   objectType: Item
 
 - type: construction
-  name: ткань
   id: SilkWovenCloth
   graph: WebObjects
   startNode: start
   targetNode: cloth
   category: construction-category-materials
-  description: Сырьё.
   entityWhitelist:
     tags:
     - SpiderCraft
-  icon:
-    sprite: Objects/Materials/materials.rsi
-    state: cloth_3
   objectType: Item
 
 - type: construction
-  name: паутинный щит
   id: WebShield
   graph: WebObjects
   startNode: start
   targetNode: shield
   category: construction-category-clothing
-  description: Нитяной щит. Он слаб и плохо противостоит нагреванию.
   entityWhitelist:
     tags:
     - SpiderCraft
-  icon:
-    sprite: Objects/Weapons/Melee/web-shield.rsi
-    state: icon
   objectType: Item
 
 - type: construction
-  name: зимние ботинки из паутины
   id: ClothingShoesBootsWinterWeb
   graph: WebObjects
   startNode: start
   targetNode: boots
   category: construction-category-clothing
-  description: Ботинки из плотной паутины, которые помогут пережить даже самую холодную зиму.
   entityWhitelist:
     tags:
     - SpiderCraft
-  icon:
-    sprite: Clothing/Shoes/Boots/winterbootsweb.rsi
-    state: icon
   objectType: Item

@@ -1,15 +1,10 @@
 - type: construction
-  name: каркас
   id: Girder
   graph: Girder
   startNode: start
   targetNode: girder
   RequiresBuildingLevel: 1
   category: construction-category-structures
-  description: Большой металлический каркас; Его необходимо покрыть листами металла, чтобы он считался стеной.
-  icon:
-    sprite: /Textures/Structures/Walls/solid.rsi
-    state: wall_girder
   objectType: Structure
   placementMode: SnapgridCenter
   canRotate: false
@@ -18,17 +13,12 @@
     - !type:TileNotBlocked
 
 - type: construction
-  name: укреплённый каркас
   id: ReinforcedGirder
   graph: Girder
   startNode: start
   targetNode: reinforcedGirder
   RequiresBuildingLevel: 2
   category: construction-category-structures
-  description: Большой каркас из металла и пластали; Его необходимо покрыть листами пластали, чтобы он считался укреплённой стеной.
-  icon:
-    sprite: /Textures/Structures/Walls/solid.rsi
-    state: reinforced_wall_girder
   objectType: Structure
   placementMode: SnapgridCenter
   canRotate: false
@@ -37,17 +27,12 @@
     - !type:TileNotBlocked
 
 - type: construction
-  name: каркас-шестерня
   id: ClockworkGirder
   graph: ClockworkGirder
   startNode: start
   targetNode: clockGirder
   RequiresBuildingLevel: 2
   category: construction-category-structures
-  description: Огромная шестерня с кронштейнами для дополнительного покрытия; при помощи листов латуни её можно превратить в стену.
-  icon:
-    sprite: /Textures/Structures/Walls/clock.rsi
-    state: wall_gear
   objectType: Structure
   placementMode: SnapgridCenter
   canRotate: false
@@ -56,17 +41,12 @@
     - !type:TileNotBlocked
 
 - type: construction
-  name: обычная стена
   id: Wall
   graph: Girder
   startNode: start
   targetNode: wall
   RequiresBuildingLevel: 1
   category: construction-category-structures
-  description: Удерживает воздух внутри, а ассистентов снаружи.
-  icon:
-    sprite: Structures/Walls/solid.rsi
-    state: full
   objectType: Structure
   placementMode: SnapgridCenter
   canRotate: false
@@ -75,17 +55,12 @@
     - !type:TileNotBlocked
 
 - type: construction
-  name: укреплённая стена
   id: ReinforcedWall
   graph: Girder
   startNode: start
   targetNode: reinforcedWall
   RequiresBuildingLevel: 2
   category: construction-category-structures
-  description: Удерживает воздух внутри, а ассистентов снаружи.
-  icon:
-    sprite: Structures/Walls/solid.rsi
-    state: rgeneric
   objectType: Structure
   placementMode: SnapgridCenter
   canRotate: false
@@ -94,17 +69,12 @@
     - !type:TileNotBlocked
 
 - type: construction
-  name: заводная стена
   id: WallClock
   graph: ClockworkGirder
   startNode: start
   targetNode: clockworkWall
   RequiresBuildingLevel: 2
   category: construction-category-structures
-  description: Удерживает воздух внутри, а ассистентов снаружи.
-  icon:
-    sprite: Structures/Walls/clock.rsi
-    state: full
   objectType: Structure
   placementMode: SnapgridCenter
   canRotate: false
@@ -113,17 +83,12 @@
     - !type:TileNotBlocked
 
 - type: construction
-  name: деревянная стена
   id: WoodWall
   graph: Barricade
   startNode: start
   targetNode: woodWall
   RequiresBuildingLevel: 1
   category: construction-category-structures
-  description: Удерживает воздух внутри, а ассистентов снаружи.
-  icon:
-    sprite: Structures/Walls/wood.rsi
-    state: full
   objectType: Structure
   placementMode: SnapgridCenter
   canRotate: false
@@ -132,17 +97,12 @@
     - !type:TileNotBlocked
 
 - type: construction
-  name: урановая стена
   id: UraniumWall
   graph: Girder
   startNode: start
   targetNode: uraniumWall
   RequiresBuildingLevel: 1
   category: construction-category-structures
-  description: Удерживает воздух внутри, а ассистентов снаружи.
-  icon:
-    sprite: Structures/Walls/uranium.rsi
-    state: full
   objectType: Structure
   placementMode: SnapgridCenter
   canRotate: false
@@ -151,17 +111,12 @@
     - !type:TileNotBlocked
 
 - type: construction
-  name: серебряная стена
   id: SilverWall
   graph: Girder
   startNode: start
   targetNode: silverWall
   RequiresBuildingLevel: 1
   category: construction-category-structures
-  description: Удерживает воздух внутри, а ассистентов снаружи.
-  icon:
-    sprite: Structures/Walls/silver.rsi
-    state: full
   objectType: Structure
   placementMode: SnapgridCenter
   canRotate: false
@@ -170,17 +125,12 @@
     - !type:TileNotBlocked
 
 - type: construction
-  name: пластиковая стена
   id: PlasticWall
   graph: Girder
   startNode: start
   targetNode: plasticWall
   RequiresBuildingLevel: 1
   category: construction-category-structures
-  description: Удерживает воздух внутри, а ассистентов снаружи.
-  icon:
-    sprite: Structures/Walls/plastic.rsi
-    state: full
   objectType: Structure
   placementMode: SnapgridCenter
   canRotate: false
@@ -189,17 +139,12 @@
     - !type:TileNotBlocked
 
 - type: construction
-  name: плазменная стена
   id: PlasmaWall
   graph: Girder
   startNode: start
   targetNode: plasmaWall
   RequiresBuildingLevel: 1
   category: construction-category-structures
-  description: Удерживает воздух внутри, а ассистентов снаружи.
-  icon:
-    sprite: Structures/Walls/plasma.rsi
-    state: full
   objectType: Structure
   placementMode: SnapgridCenter
   canRotate: false
@@ -208,17 +153,12 @@
     - !type:TileNotBlocked
 
 - type: construction
-  name: золотая стена
   id: GoldWall
   graph: Girder
   startNode: start
   targetNode: goldWall
   RequiresBuildingLevel: 1
   category: construction-category-structures
-  description: Удерживает воздух внутри, а ассистентов снаружи.
-  icon:
-    sprite: Structures/Walls/gold.rsi
-    state: full
   objectType: Structure
   placementMode: SnapgridCenter
   canRotate: false
@@ -227,17 +167,12 @@
     - !type:TileNotBlocked
 
 - type: construction
-  name: стена шаттла
   id: ShuttleWall
   graph: Girder
   startNode: start
   targetNode: shuttleWall
   RequiresBuildingLevel: 3
   category: construction-category-structures
-  description: Удерживает воздух внутри, а ассистентов снаружи.
-  icon:
-    sprite: Structures/Walls/shuttle.rsi
-    state: full
   objectType: Structure
   placementMode: SnapgridCenter
   canRotate: false
@@ -246,17 +181,12 @@
     - !type:TileNotBlocked
 
 - type: construction
-  name: diagonal shuttle wall
   id: DiagonalShuttleWall
   graph: Girder
   startNode: start
   targetNode: diagonalshuttleWall
   RequiresBuildingLevel: 3
   category: construction-category-structures
-  description: Удерживает воздух внутри, а ассистентов снаружи.
-  icon:
-    sprite: Structures/Walls/shuttle_diagonal.rsi
-    state: state0
   objectType: Structure
   placementMode: SnapgridCenter
   canRotate: true
@@ -265,17 +195,12 @@
     - !type:TileNotBlocked
 
 - type: construction
-  name: бананиумовая стена
   id: ClownWall
   graph: Girder
   startNode: start
   targetNode: bananiumWall
   RequiresBuildingLevel: 1
   category: construction-category-structures
-  description: Удерживает воздух внутри, а ассистентов снаружи.
-  icon:
-    sprite: Structures/Walls/clown.rsi
-    state: full
   objectType: Structure
   placementMode: SnapgridCenter
   canRotate: false
@@ -284,17 +209,12 @@
     - !type:TileNotBlocked
 
 - type: construction
-  name: мясная стена
   id: MeatWall
   graph: Girder
   startNode: start
   targetNode: meatWall
   RequiresBuildingLevel: 1
   category: construction-category-structures
-  description: Sticky.
-  icon:
-    sprite: Structures/Walls/meat.rsi
-    state: full
   objectType: Structure
   placementMode: SnapgridCenter
   canRotate: false
@@ -303,214 +223,158 @@
   - !type:TileNotBlocked
 
 - type: construction
-  name: решётка
   id: Grille
   graph: Grille
   startNode: start
   targetNode: grille
   category: construction-category-structures
-  description: Хлипкий каркас из металлических прутьев.
   conditions:
     - !type:TileNotBlocked
       failIfSpace: false
-  icon:
-    sprite: Structures/Walls/grille.rsi
-    state: grille
   objectType: Structure
   placementMode: SnapgridCenter
   canRotate: false
 
 - type: construction
-  name: заводная решётка
   id: ClockGrille
   graph: ClockGrille
   startNode: start
   targetNode: clockGrille
   category: construction-category-structures
-  description: Хлипкий каркас из металлических прутьев, собранный в традиционном Ратварском стиле.
   conditions:
     - !type:TileNotBlocked
       failIfSpace: false
-  icon:
-    sprite: Structures/Walls/clockwork_grille.rsi
-    state: ratvargrille
   objectType: Structure
   placementMode: SnapgridCenter
   canRotate: false
 
 - type: construction
-  name: диагональная решётка
   id: GrilleDiagonal
   graph: GrilleDiagonal
   startNode: start
   targetNode: grilleDiagonal
   category: construction-category-structures
-  description: Хлипкий каркас из металлических прутьев.
   conditions:
     - !type:TileNotBlocked
       failIfSpace: false
-  icon:
-    sprite: Structures/Walls/grille.rsi
-    state: grille_diagonal
   objectType: Structure
   placementMode: SnapgridCenter
 
 - type: construction
-  name: диагональная заводная решётка
   id: ClockworkGrilleDiagonal
   graph: GrilleDiagonal
   startNode: start
   targetNode: clockworkGrilleDiagonal
   category: construction-category-structures
-  description: Хлипкий каркас из металлических прутьев, собранный в традиционном Ратварском стиле.
   conditions:
     - !type:TileNotBlocked
       failIfSpace: false
-  icon:
-    sprite: Structures/Walls/clockwork_grille.rsi
-    state: ratvargrille_diagonal
   objectType: Structure
   placementMode: SnapgridCenter
 
 - type: construction
-  name: окно
   id: Window
   graph: Window
   startNode: start
   targetNode: window
   RequiresBuildingLevel: 1
   category: construction-category-structures
-  description: Смотри не заляпай.
   canBuildInImpassable: true
   conditions:
     - !type:EmptyOrWindowValidInTile
     - !type:NoWindowsInTile
-  icon:
-    sprite: Structures/Windows/window.rsi
-    state: full
   objectType: Structure
   placementMode: SnapgridCenter
   canRotate: false
 
 - type: construction
-  name: диагональное окно
   id: WindowDiagonal
   graph: WindowDiagonal
   startNode: start
   targetNode: windowDiagonal
   RequiresBuildingLevel: 1
   category: construction-category-structures
-  description: Смотри не заляпай.
   canBuildInImpassable: true
   conditions:
     - !type:EmptyOrWindowValidInTile
     - !type:NoWindowsInTile
-  icon:
-    sprite: Structures/Windows/window_diagonal.rsi
-    state: state1
   objectType: Structure
   placementMode: SnapgridCenter
 
 - type: construction
-  name: бронированное окно
   id: ReinforcedWindow
   graph: Window
   startNode: start
   targetNode: reinforcedWindow
   RequiresBuildingLevel: 2
   category: construction-category-structures
-  description: Смотри не заляпай.
   canBuildInImpassable: true
   conditions:
     - !type:EmptyOrWindowValidInTile
     - !type:NoWindowsInTile
-  icon:
-    sprite: Structures/Windows/reinforced_window.rsi
-    state: full
   objectType: Structure
   placementMode: SnapgridCenter
   canRotate: false
 
 - type: construction
-  name: диагональное бронированное окно
   id: ReinforcedWindowDiagonal
   graph: WindowDiagonal
   startNode: start
   targetNode: reinforcedWindowDiagonal
   RequiresBuildingLevel: 2
   category: construction-category-structures
-  description: Смотри не заляпай.
   canBuildInImpassable: true
   conditions:
     - !type:EmptyOrWindowValidInTile
     - !type:NoWindowsInTile
-  icon:
-    sprite: Structures/Windows/reinforced_window_diagonal.rsi
-    state: state1
   objectType: Structure
   placementMode: SnapgridCenter
 
 - type: construction
-  name: матовое окно
   id: TintedWindow
   graph: Window
   startNode: start
   targetNode: tintedWindow
   RequiresBuildingLevel: 1
   category: construction-category-structures
-  description: не прозрачное, но пропускает лазерные лучи
   canBuildInImpassable: true
   conditions:
     - !type:EmptyOrWindowValidInTile
     - !type:NoWindowsInTile
-  icon:
-    sprite: Structures/Windows/tinted_window.rsi
-    state: full
   objectType: Structure
   placementMode: SnapgridCenter
   canRotate: false
 
 - type: construction
-  name: заводное окно
   id: ClockworkWindow
   graph: Window
   startNode: start
   targetNode: clockworkWindow
   RequiresBuildingLevel: 2
   category: construction-category-structures
-  description: Смотри не заляпай латунь.
   canBuildInImpassable: true
   conditions:
     - !type:EmptyOrWindowValidInTile
     - !type:NoWindowsInTile
-  icon:
-    sprite: Structures/Windows/clockwork_window.rsi
-    state: full
   objectType: Structure
   placementMode: SnapgridCenter
   canRotate: false
 
 - type: construction
-  name: диагональное заводное окно
   id: ClockworkWindowDiagonal
   graph: WindowDiagonal
   startNode: start
   targetNode: clockworkWindowDiagonal
   RequiresBuildingLevel: 2
   category: construction-category-structures
-  description: Смотри не заляпай латунь.
   canBuildInImpassable: true
   conditions:
     - !type:EmptyOrWindowValidInTile
     - !type:NoWindowsInTile
-  icon:
-    sprite: Structures/Windows/clockwork_diagonal.rsi
-    state: state0
   objectType: Structure
   placementMode: SnapgridCenter
 
 - type: construction
-  name: плазменное окно
   id: PlasmaWindow
   graph: Window
   startNode: start
@@ -518,19 +382,14 @@
   RequiresBuildingLevel: 1
   category: construction-category-structures
   canBuildInImpassable: true
-  description: Смотри не заляпай.
   conditions:
     - !type:EmptyOrWindowValidInTile
     - !type:NoWindowsInTile
-  icon:
-    sprite: Structures/Windows/plasma_window.rsi
-    state: full
   objectType: Structure
   placementMode: SnapgridCenter
   canRotate: false
 
 - type: construction
-  name: плазменное бронеокно
   id: ReinforcedPlasmaWindow
   graph: Window
   startNode: start
@@ -538,19 +397,14 @@
   RequiresBuildingLevel: 2
   category: construction-category-structures
   canBuildInImpassable: true
-  description: Смотри не заляпай.
   conditions:
     - !type:EmptyOrWindowValidInTile
     - !type:NoWindowsInTile
-  icon:
-    sprite: Structures/Windows/reinforced_plasma_window.rsi
-    state: full
   objectType: Structure
   placementMode: SnapgridCenter
   canRotate: false
 
 - type: construction
-  name: окно шаттла
   id: ShuttleWindow
   graph: Window
   startNode: start
@@ -558,19 +412,14 @@
   RequiresBuildingLevel: 3
   category: construction-category-structures
   canBuildInImpassable: true
-  description: Смотри не заляпай.
   conditions:
     - !type:EmptyOrWindowValidInTile
     - !type:NoWindowsInTile
-  icon:
-    sprite: Structures/Windows/shuttle_window.rsi
-    state: full
   objectType: Structure
   placementMode: SnapgridCenter
   canRotate: false
 
 - type: construction
-  name: диагональное плазменное окно
   id: PlasmaWindowDiagonal
   graph: WindowDiagonal
   startNode: start
@@ -578,18 +427,13 @@
   RequiresBuildingLevel: 1
   category: construction-category-structures
   canBuildInImpassable: true
-  description: Смотри не заляпай.
   conditions:
     - !type:EmptyOrWindowValidInTile
     - !type:NoWindowsInTile
-  icon:
-    sprite: Structures/Windows/plasma_diagonal.rsi
-    state: state1
   objectType: Structure
   placementMode: SnapgridCenter
 
 - type: construction
-  name: диагональное плазменное бронеокно
   id: ReinforcedPlasmaWindowDiagonal
   graph: WindowDiagonal
   startNode: start
@@ -597,75 +441,55 @@
   targetNode: reinforcedPlasmaWindowDiagonal
   category: construction-category-structures
   canBuildInImpassable: true
-  description: Смотри не заляпай.
   conditions:
     - !type:EmptyOrWindowValidInTile
     - !type:NoWindowsInTile
-  icon:
-    sprite: Structures/Windows/reinforced_plasma_diagonal.rsi
-    state: state1
   objectType: Structure
   placementMode: SnapgridCenter
 
 - type: construction
-  name: направленное окно
   id: WindowDirectional
   graph: WindowDirectional
   startNode: start
   targetNode: windowDirectional
   RequiresBuildingLevel: 1
   category: construction-category-structures
-  description: Смотри не заляпай.
   canBuildInImpassable: true
   conditions:
     - !type:EmptyOrWindowValidInTile
     - !type:NoWindowsInTile
-  icon:
-    sprite: Structures/Windows/directional.rsi
-    state: window
   objectType: Structure
   placementMode: SnapgridCenter
 
 - type: construction
-  name: направленное бронеокно
   id: WindowReinforcedDirectional
   graph: WindowDirectional
   startNode: start
   RequiresBuildingLevel: 2
   targetNode: windowReinforcedDirectional
   category: construction-category-structures
-  description: Смотри не заляпай.
   canBuildInImpassable: true
   conditions:
     - !type:EmptyOrWindowValidInTile
     - !type:NoWindowsInTile
-  icon:
-    sprite: Structures/Windows/directional.rsi
-    state: reinforced_window
   objectType: Structure
   placementMode: SnapgridCenter
 
 - type: construction
-  name: направленное заводное окно
   id: WindowClockworkDirectional
   graph: WindowDirectional
   startNode: start
   RequiresBuildingLevel: 2
   targetNode: windowClockworkDirectional
   category: construction-category-structures
-  description: Смотри не заляпай латунь.
   canBuildInImpassable: true
   conditions:
     - !type:EmptyOrWindowValidInTile
     - !type:NoWindowsInTile
-  icon:
-    sprite: Structures/Windows/directional.rsi
-    state: clock_window
   objectType: Structure
   placementMode: SnapgridCenter
 
 - type: construction
-  name: направленное плазменное окно
   id: PlasmaWindowDirectional
   graph: WindowDirectional
   startNode: start
@@ -673,18 +497,13 @@
   targetNode: plasmaWindowDirectional
   category: construction-category-structures
   canBuildInImpassable: true
-  description: Смотри не заляпай.
   conditions:
     - !type:EmptyOrWindowValidInTile
     - !type:NoWindowsInTile
-  icon:
-    sprite: Structures/Windows/directional.rsi
-    state: plasma_window
   objectType: Structure
   placementMode: SnapgridCenter
 
 - type: construction
-  name: направленное плазменное бронеокно
   id: PlasmaReinforcedWindowDirectional
   graph: WindowDirectional
   startNode: start
@@ -692,18 +511,13 @@
   targetNode: plasmaReinforcedWindowDirectional
   category: construction-category-structures
   canBuildInImpassable: true
-  description: Смотри не заляпай.
   conditions:
     - !type:EmptyOrWindowValidInTile
     - !type:NoWindowsInTile
-  icon:
-    sprite: Structures/Windows/directional.rsi
-    state: plasma_reinforced_window
   objectType: Structure
   placementMode: SnapgridCenter
 
 - type: construction
-  name: направленное урановое окно
   id: UraniumWindow
   graph: Window
   startNode: start
@@ -711,19 +525,14 @@
   RequiresBuildingLevel: 1
   category: construction-category-structures
   canBuildInImpassable: true
-  description: Смотри не заляпай.
   conditions:
     - !type:EmptyOrWindowValidInTile
     - !type:NoWindowsInTile
-  icon:
-    sprite: Structures/Windows/uranium_window.rsi
-    state: full
   objectType: Structure
   placementMode: SnapgridCenter
   canRotate: false
 
 - type: construction
-  name: урановое бронеокно
   id: ReinforcedUraniumWindow
   graph: Window
   startNode: start
@@ -731,19 +540,14 @@
   targetNode: reinforcedUraniumWindow
   category: construction-category-structures
   canBuildInImpassable: true
-  description: Смотри не заляпай.
   conditions:
     - !type:EmptyOrWindowValidInTile
     - !type:NoWindowsInTile
-  icon:
-    sprite: Structures/Windows/reinforced_uranium_window.rsi
-    state: full
   objectType: Structure
   placementMode: SnapgridCenter
   canRotate: false
 
 - type: construction
-  name: диагональное урановое окно
   id: UraniumWindowDiagonal
   graph: WindowDiagonal
   startNode: start
@@ -751,18 +555,13 @@
   RequiresBuildingLevel: 1
   category: construction-category-structures
   canBuildInImpassable: true
-  description: Смотри не заляпай.
   conditions:
     - !type:EmptyOrWindowValidInTile
     - !type:NoWindowsInTile
-  icon:
-    sprite: Structures/Windows/uranium_window_diagonal.rsi
-    state: state1
   objectType: Structure
   placementMode: SnapgridCenter
 
 - type: construction
-  name: диагональное урановое бронеокно
   id: ReinforcedUraniumWindowDiagonal
   graph: WindowDiagonal
   startNode: start
@@ -770,28 +569,19 @@
   targetNode: reinforcedUraniumWindowDiagonal
   category: construction-category-structures
   canBuildInImpassable: true
-  description: Смотри не заляпай.
   conditions:
     - !type:EmptyOrWindowValidInTile
     - !type:NoWindowsInTile
-  icon:
-    sprite: Structures/Windows/reinforced_uranium_diagonal.rsi
-    state: state1
   objectType: Structure
   placementMode: SnapgridCenter
 
 - type: construction
-  name: пожарный шлюз
   id: Firelock
   graph: Firelock
   startNode: start
   targetNode: Firelock
   RequiresEngineeringLevel: 2
   category: construction-category-structures
-  description: Примените монтировку.
-  icon:
-    sprite: Structures/Doors/Airlocks/Standard/firelock.rsi
-    state: closed
   objectType: Structure
   placementMode: SnapgridCenter
   canRotate: false
@@ -800,17 +590,12 @@
     - !type:TileNotBlocked
 
 - type: construction
-  name: стеклянный пожарный шлюз
   id: FirelockGlass
   graph: Firelock
   startNode: start
   targetNode: FirelockGlass
   RequiresEngineeringLevel: 2
   category: construction-category-structures
-  description: Примените монтировку.
-  icon:
-    sprite: Structures/Doors/Airlocks/Glass/firelock.rsi
-    state: closed
   objectType: Structure
   placementMode: SnapgridCenter
   canRotate: false
@@ -819,17 +604,12 @@
     - !type:TileNotBlocked
 
 - type: construction
-  name: направленный пожарный шлюз
   id: FirelockEdge
   graph: Firelock
   startNode: start
   targetNode: FirelockEdge
   RequiresEngineeringLevel: 2
   category: construction-category-structures
-  description: Примените монтировку.
-  icon:
-    sprite: Structures/Doors/edge_door_hazard.rsi
-    state: closed
   placementMode: SnapgridCenter
   objectType: Structure
   canBuildInImpassable: false
@@ -837,16 +617,11 @@
     - !type:TileNotBlocked
 
 - type: construction
-  name: турникет
   id: Turnstile
   graph: Turnstile
   startNode: start
   targetNode: turnstile
   category: construction-category-structures
-  description: Механическая дверь, обеспечивающая односторонний доступ и исключающая возможность прохода посторонних лиц.
-  icon:
-    sprite: Structures/Doors/turnstile.rsi
-    state: turnstile
   objectType: Structure
   placementMode: SnapgridCenter
   canBuildInImpassable: false
@@ -854,77 +629,55 @@
   - !type:TileNotBlocked
 
 - type: construction
-  name: ставни
   id: Shutters
   graph: Shutters
   startNode: start
   targetNode: Shutters
   RequiresEngineeringLevel: 2
   category: construction-category-structures
-  description: Страшно подумать, что могут скрывать эти ставни.
-  icon:
-    sprite: Structures/Doors/Shutters/shutters.rsi
-    state: closed
   objectType: Structure
   placementMode: SnapgridCenter
   canBuildInImpassable: true
 
 - type: construction
-  name: оконные ставни
   id: ShuttersWindow
   graph: Shutters
   startNode: start
   targetNode: ShuttersWindow
   RequiresEngineeringLevel: 2
   category: construction-category-structures
-  description: Лучшее (TM) место чтобы поглядеть, как взрываются твои друзья!
-  icon:
-    sprite: Structures/Doors/Shutters/shutters_window.rsi
-    state: closed
   objectType: Structure
   placementMode: SnapgridCenter
   canBuildInImpassable: true
 
 - type: construction
-  name: радиационные ставни
   id: ShuttersRadiation
   graph: Shutters
   startNode: start
   targetNode: ShuttersRadiation
   RequiresEngineeringLevel: 2
   category: construction-category-structures
-  description: Лучшее (TM) место чтобы поглядеть, как взрываются твои друзья!
-  icon:
-    sprite: Structures/Doors/Shutters/shutters_radiation.rsi
-    state: closed
   objectType: Structure
   placementMode: SnapgridCenter
   canBuildInImpassable: true
 
 - type: construction
-  name: гермозатвор
   id: BlastDoor
   graph: BlastDoor
   startNode: start
   targetNode: blastdoor
   RequiresEngineeringLevel: 2
   category: construction-category-structures
-  description: Имеется надпись "ОПАСНОСТЬ ВЗРЫВА".
-  icon:
-    sprite: Structures/Doors/Shutters/blastdoor.rsi
-    state: closed
   objectType: Structure
   placementMode: SnapgridCenter
   canBuildInImpassable: true
 
 - type: construction
-  name: мостик
   id: Catwalk
   graph: Catwalk
   startNode: start
   targetNode: Catwalk
   category: construction-category-structures
-  description: Мостик, облегчающий маневрирование в открытом космосе и прокладку кабеля.
   conditions:
     - !type:TileNotBlocked
       failIfSpace: false
@@ -932,45 +685,32 @@
       targets:
         - Lattice
         - Plating
-  icon:
-    sprite: Structures/catwalk.rsi
-    state: catwalk_preview
   objectType: Structure
   placementMode: SnapgridCenter
   canBuildInImpassable: false
 
 - type: construction
-  name: бананиумовый пол
   id: FloorBananium
   graph: FloorBananium
   startNode: start
   targetNode: BananiumFloor
   category: construction-category-structures
-  description: бананиумовый пол
   conditions:
     - !type:TileNotBlocked
       failIfSpace: false
     - !type:TileType
       targets:
         - Plating
-  icon:
-    sprite: Tiles/Misc/bananium.rsi
-    state: bananium
   objectType: Structure
   placementMode: SnapgridCenter
   canBuildInImpassable: false
 
 - type: construction
-  name: деревянная баррикада
   id: Barricade
   graph: Barricade
   startNode: start
   targetNode: barricadefull
   category: construction-category-structures
-  description: Баррикада из деревянных досок. Выглядит так, будто может выдержать несколько сильных ударов.
-  icon:
-    sprite: Structures/barricades.rsi
-    state: barricade_full
   objectType: Structure
   placementMode: SnapgridCenter
   canBuildInImpassable: false
@@ -978,16 +718,11 @@
     - !type:TileNotBlocked
 
 - type: construction
-  name: направленная деревянная баррикада
   id: BarricadeDirectional
   graph: BarricadeDirectional
   startNode: start
   targetNode: barricadefull
   category: construction-category-structures
-  description: Баррикада из деревянных досок. Выглядит так, будто может выдержать несколько сильных ударов.
-  icon:
-    sprite: Structures/barricades.rsi
-    state: barricade_directional
   objectType: Structure
   placementMode: SnapgridCenter
   canBuildInImpassable: false
@@ -995,16 +730,11 @@
     - !type:TileNotBlocked
 
 - type: construction
-  name: перила
   id: Railing
   graph: Railing
   startNode: start
   targetNode: railing
   category: construction-category-structures
-  description: Простые перила, предназначенные для защиты таких идиотов как вы от падения.
-  icon:
-    sprite: Structures/Walls/railing.rsi
-    state: side
   objectType: Structure
   placementMode: SnapgridCenter
   canBuildInImpassable: false
@@ -1012,16 +742,11 @@
   - !type:TileNotBlocked
 
 - type: construction
-  name: угловые перила
   id: RailingCorner
   graph: Railing
   startNode: start
   targetNode: railingCorner
   category: construction-category-structures
-  description: Простые перила, предназначенные для защиты таких идиотов как вы от падения.
-  icon:
-    sprite: Structures/Walls/railing.rsi
-    state: corner
   objectType: Structure
   placementMode: SnapgridCenter
   canBuildInImpassable: false
@@ -1029,16 +754,11 @@
   - !type:TileNotBlocked
 
 - type: construction
-  name: малые угловые перила
   id: RailingCornerSmall
   graph: Railing
   startNode: start
   targetNode: railingCornerSmall
   category: construction-category-structures
-  description: Простые перила, предназначенные для защиты таких идиотов как вы от падения.
-  icon:
-    sprite: Structures/Walls/railing.rsi
-    state: corner_small
   objectType: Structure
   placementMode: SnapgridCenter
   canBuildInImpassable: false
@@ -1046,16 +766,11 @@
   - !type:TileNotBlocked
 
 - type: construction
-  name: круглые перила
   id: RailingRound
   graph: Railing
   startNode: start
   targetNode: railingRound
   category: construction-category-structures
-  description: Простые перила, предназначенные для защиты таких идиотов как вы от падения.
-  icon:
-    sprite: Structures/Walls/railing.rsi
-    state: round
   objectType: Structure
   placementMode: SnapgridCenter
   canBuildInImpassable: false
@@ -1064,17 +779,12 @@
 
 # Chain link fencing
 - type: construction
-  name: сетка-рябица
   id: FenceMetal
   graph: FenceMetal
   startNode: start
   targetNode: straight
   RequiresBuildingLevel: 1
   category: construction-category-structures
-  description: Вы можете использовать дверь вместо того, чтобы перелезать через неё - если вы ТРУС.
-  icon:
-    sprite: Structures/Walls/fence.rsi
-    state: straight
   objectType: Structure
   placementMode: SnapgridCenter
   canBuildInImpassable: false
@@ -1082,17 +792,12 @@
   - !type:TileNotBlocked
 
 - type: construction
-  name: сетка-рябица [конец]
   id: FenceMetalCorner
   graph: FenceMetal
   startNode: start
   targetNode: corner
   RequiresBuildingLevel: 1
   category: construction-category-structures
-  description: Вы можете использовать дверь вместо того, чтобы перелезать через неё - если вы ТРУС.
-  icon:
-    sprite: Structures/Walls/fence.rsi
-    state: corner
   objectType: Structure
   placementMode: SnapgridCenter
   canBuildInImpassable: false
@@ -1100,17 +805,12 @@
   - !type:TileNotBlocked
 
 - type: construction
-  name: сетка-рябица [конец]
   id: FenceMetalEnd
   graph: FenceMetal
   startNode: start
   targetNode: end
   RequiresBuildingLevel: 1
   category: construction-category-structures
-  description: Вы можете использовать дверь вместо того, чтобы перелезать через неё - если вы ТРУС.
-  icon:
-    sprite: Structures/Walls/fence.rsi
-    state: end
   objectType: Structure
   placementMode: SnapgridCenter
   canBuildInImpassable: false
@@ -1118,17 +818,12 @@
   - !type:TileNotBlocked
 
 - type: construction
-  name: сетка-рябица [ворота]
   id: FenceMetalGate
   graph: FenceMetal
   startNode: start
   targetNode: gate
   RequiresBuildingLevel: 1
   category: construction-category-structures
-  description: Вы можете использовать дверь вместо того, чтобы перелезать через неё - если вы ТРУС.
-  icon:
-    sprite: Structures/Walls/fence.rsi
-    state: door_closed
   objectType: Structure
   placementMode: SnapgridCenter
   canBuildInImpassable: false
@@ -1137,17 +832,12 @@
 
 #Wooden fence high
 - type: construction
-  name: деревянный забор
   id: FenceWood
   graph: FenceWood
   startNode: start
   targetNode: straight
   RequiresBuildingLevel: 1
   category: construction-category-structures
-  description: Часть деревянного забора. Надеюсь, за ним находится бабушкин сад.
-  icon:
-    sprite: Structures/Walls/wooden_fence.rsi
-    state: straight
   objectType: Structure
   placementMode: SnapgridCenter
   canBuildInImpassable: false
@@ -1155,17 +845,12 @@
   - !type:TileNotBlocked
 
 - type: construction
-  name: деревянный забор [конец]
   id: FenceWoodEnd
   graph: FenceWood
   startNode: start
   targetNode: end
   RequiresBuildingLevel: 1
   category: construction-category-structures
-  description: Часть деревянного забора. Надеюсь, за ним находится бабушкин сад.
-  icon:
-    sprite: Structures/Walls/wooden_fence.rsi
-    state: end
   objectType: Structure
   placementMode: SnapgridCenter
   canBuildInImpassable: false
@@ -1173,17 +858,12 @@
   - !type:TileNotBlocked
 
 - type: construction
-  name: деревянный забор [угол]
   id: FenceWoodCorner
   graph: FenceWood
   startNode: start
   targetNode: corner
   RequiresBuildingLevel: 1
   category: construction-category-structures
-  description: Часть деревянного забора. Надеюсь, за ним находится бабушкин сад.
-  icon:
-    sprite: Structures/Walls/wooden_fence.rsi
-    state: corner
   objectType: Structure
   placementMode: SnapgridCenter
   canBuildInImpassable: false
@@ -1191,17 +871,12 @@
   - !type:TileNotBlocked
 
 - type: construction
-  name: деревянный забор [Т-образный]
   id: FenceWoodTJunction
   graph: FenceWood
   startNode: start
   targetNode: tjunction
   RequiresBuildingLevel: 1
   category: construction-category-structures
-  description: Часть деревянного забора. Надеюсь, за ним находится бабушкин сад.
-  icon:
-    sprite: Structures/Walls/wooden_fence.rsi
-    state: tjunction
   objectType: Structure
   placementMode: SnapgridCenter
   canBuildInImpassable: false
@@ -1209,17 +884,12 @@
   - !type:TileNotBlocked
 
 - type: construction
-  name: деревянный забор [Ворота]
   id: FenceWoodGate
   graph: FenceWood
   startNode: start
   targetNode: gate
   RequiresBuildingLevel: 1
   category: construction-category-structures
-  description: Часть деревянного забора. Надеюсь, за ним находится бабушкин сад.
-  icon:
-    sprite: Structures/Walls/wooden_fence.rsi
-    state: door_closed
   objectType: Structure
   placementMode: SnapgridCenter
   canBuildInImpassable: false
@@ -1228,17 +898,12 @@
 
 #Wooden fence small
 - type: construction
-  name: небольшой деревянный забор
   id: FenceWoodSmall
   graph: FenceWood
   startNode: start
   targetNode: straight_small
   RequiresBuildingLevel: 1
   category: construction-category-structures
-  description: Часть деревянного забора. Надеюсь, за ним находится бабушкин сад.
-  icon:
-    sprite: Structures/Walls/wooden_fence.rsi
-    state: straight_small
   objectType: Structure
   placementMode: SnapgridCenter
   canBuildInImpassable: false
@@ -1246,17 +911,12 @@
   - !type:TileNotBlocked
 
 - type: construction
-  name: небольшой деревянный забор [конец]
   id: FenceWoodEndSmall
   graph: FenceWood
   startNode: start
   targetNode: end_small
   RequiresBuildingLevel: 1
   category: construction-category-structures
-  description: Часть деревянного забора. Надеюсь, за ним находится бабушкин сад.
-  icon:
-    sprite: Structures/Walls/wooden_fence.rsi
-    state: end_small
   objectType: Structure
   placementMode: SnapgridCenter
   canBuildInImpassable: false
@@ -1264,17 +924,12 @@
   - !type:TileNotBlocked
 
 - type: construction
-  name: небольшой деревянный забор [угол]
   id: FenceWoodCornerSmall
   graph: FenceWood
   startNode: start
   targetNode: corner_small
   RequiresBuildingLevel: 1
   category: construction-category-structures
-  description: Часть деревянного забора. Надеюсь, за ним находится бабушкин сад.
-  icon:
-    sprite: Structures/Walls/wooden_fence.rsi
-    state: corner_small
   objectType: Structure
   placementMode: SnapgridCenter
   canBuildInImpassable: false
@@ -1282,17 +937,12 @@
   - !type:TileNotBlocked
 
 - type: construction
-  name: небольшой деревянный забор [Т-образный]
   id: FenceWoodTJunctionSmall
   graph: FenceWood
   startNode: start
   targetNode: tjunction_small
   RequiresBuildingLevel: 1
   category: construction-category-structures
-  description: Часть деревянного забора. Надеюсь, за ним находится бабушкин сад.
-  icon:
-    sprite: Structures/Walls/wooden_fence.rsi
-    state: tjunction_small
   objectType: Structure
   placementMode: SnapgridCenter
   canBuildInImpassable: false
@@ -1300,17 +950,12 @@
   - !type:TileNotBlocked
 
 - type: construction
-  name: небольшой деревянный забор [ворота]
   id: FenceWoodGateSmall
   graph: FenceWood
   startNode: start
   targetNode: gate_small
   RequiresBuildingLevel: 1
   category: construction-category-structures
-  description: Часть деревянного забора. Надеюсь, за ним находится бабушкин сад.
-  icon:
-    sprite: Structures/Walls/wooden_fence.rsi
-    state: door_closed_small
   objectType: Structure
   placementMode: SnapgridCenter
   canBuildInImpassable: false
@@ -1319,17 +964,12 @@
 
 #Airlocks
 - type: construction
-  name: шлюз
   id: Airlock
   graph: Airlock
   startNode: start
   targetNode: airlock
   RequiresEngineeringLevel: 2
   category: construction-category-structures
-  description: Он открывается, он закрывается, и он может вас раздавить.
-  icon:
-    sprite: Structures/Doors/Airlocks/Standard/basic.rsi
-    state: assembly
   objectType: Structure
   placementMode: SnapgridCenter
   canBuildInImpassable: false
@@ -1337,17 +977,12 @@
     - !type:TileNotBlocked
 
 - type: construction
-  name: стеклянный шлюз
   id: AirlockGlass
   graph: Airlock
   startNode: start
   targetNode: glassAirlock
   RequiresEngineeringLevel: 2
   category: construction-category-structures
-  description: Он открывается, он закрывается, и он может вас раздавить.
-  icon:
-    sprite: Structures/Doors/Airlocks/Glass/glass.rsi
-    state: assembly
   objectType: Structure
   placementMode: SnapgridCenter
   canBuildInImpassable: false
@@ -1355,17 +990,12 @@
     - !type:TileNotBlocked
 
 - type: construction
-  name: заводной шлюз
   id: PinionAirlock
   graph: PinionAirlock
   startNode: start
   targetNode: airlock
   RequiresEngineeringLevel: 2
   category: construction-category-structures
-  description: Он открывается, он закрывается, и он может вас раздавить.
-  icon:
-    sprite: Structures/Doors/Airlocks/Standard/clockwork_pinion.rsi
-    state: assembly
   objectType: Structure
   placementMode: SnapgridCenter
   canBuildInImpassable: false
@@ -1373,17 +1003,12 @@
     - !type:TileNotBlocked
 
 - type: construction
-  name: стеклянный заводной шлюз
   id: PinionAirlockGlass
   graph: PinionAirlock
   startNode: start
   targetNode: glassAirlock
   RequiresEngineeringLevel: 2
   category: construction-category-structures
-  description: Он открывается, он закрывается, и он может вас раздавить.
-  icon:
-    sprite: Structures/Doors/Airlocks/Glass/clockwork_pinion.rsi
-    state: assembly
   objectType: Structure
   placementMode: SnapgridCenter
   canBuildInImpassable: false
@@ -1391,17 +1016,12 @@
     - !type:TileNotBlocked
 
 - type: construction
-  name: стыковочный шлюз
   id: AirlockShuttle
   graph: AirlockShuttle
   startNode: start
   targetNode: airlock
   RequiresEngineeringLevel: 2
   category: construction-category-structures
-  description: Он открывается, он закрывается, и он может вас раздавить. Necessary for connecting two space craft together.
-  icon:
-    sprite: Structures/Doors/Airlocks/Glass/shuttle.rsi
-    state: closed
   #  state: assembly
   objectType: Structure
   placementMode: SnapgridCenter
@@ -1410,17 +1030,12 @@
   - !type:TileNotBlocked
 
 - type: construction
-  name: стеклянный стыковочный шлюз
   id: AirlockGlassShuttle
   graph: AirlockShuttle
   startNode: start
   targetNode: airlockGlass
   RequiresEngineeringLevel: 2
   category: construction-category-structures
-  description: Он открывается, он закрывается, и он может вас раздавить. Necessary for connecting two space craft together. This one has a window.
-  icon:
-    sprite: Structures/Doors/Airlocks/Glass/shuttle.rsi
-    state: closed
   #  state: assembly
   objectType: Structure
   placementMode: SnapgridCenter
@@ -1429,17 +1044,12 @@
     - !type:TileNotBlocked
 
 - type: construction
-  name: раздвижное окно
   id: Windoor
   graph: Windoor
   startNode: start
   targetNode: windoor
   RequiresEngineeringLevel: 2
   category: construction-category-structures
-  description: Это и окно, и раздвижная дверь. Вот это да!
-  icon:
-    sprite: Structures/Doors/Windoors/windoor.rsi
-    state: closed
   objectType: Structure
   placementMode: SnapgridCenter
   canBuildInImpassable: false
@@ -1447,17 +1057,12 @@
     - !type:TileNotBlocked
 
 - type: construction
-  name: раздвижное бронеокно
   id: SecureWindoor
   graph: Windoor
   startNode: start
   targetNode: windoorSecure
   RequiresEngineeringLevel: 2
   category: construction-category-structures
-  description: Это и прочное окно, и раздвижная дверь. Вот это да!
-  icon:
-    sprite: Structures/Doors/Windoors/windoor.rsi
-    state: closed
   objectType: Structure
   placementMode: SnapgridCenter
   canBuildInImpassable: false
@@ -1465,17 +1070,12 @@
     - !type:TileNotBlocked
 
 - type: construction
-  name: раздвижное заводное окно
   id: ClockworkWindoor
   graph: Windoor
   startNode: start
   targetNode: windoorClockwork
   RequiresEngineeringLevel: 2
   category: construction-category-structures
-  description: Это и прочное окно, и раздвижная дверь. Вот это да!
-  icon:
-    sprite: Structures/Doors/Windoors/clockwork_windoor.rsi
-    state: closed
   objectType: Structure
   placementMode: SnapgridCenter
   canBuildInImpassable: false
@@ -1484,16 +1084,11 @@
 
 #lighting
 - type: construction
-  name: светильник
   id: LightTubeFixture
   graph: LightFixture
   startNode: start
   targetNode: tubeLight
   category: construction-category-structures
-  description: Осветительный прибор. Потребляет энергию и излучает свет, если оснащён лампой-трубкой.
-  icon:
-    sprite: Structures/Wallmounts/Lighting/light_tube.rsi
-    state: base
   objectType: Structure
   placementMode: SnapgridCenter
   canRotate: true
@@ -1504,16 +1099,11 @@
     - !type:TileNotBlocked
 
 - type: construction
-  name: маленький светильник
   id: LightSmallFixture
   graph: LightFixture
   startNode: start
   targetNode: bulbLight
   category: construction-category-structures
-  description: Осветительный прибор. Потребляет энергию и излучает свет, если оснащён лампой накаливания.
-  icon:
-    sprite: Structures/Wallmounts/Lighting/light_small.rsi
-    state: base
   objectType: Structure
   placementMode: SnapgridCenter
   canRotate: true
@@ -1523,16 +1113,11 @@
     - !type:TileNotBlocked
 
 - type: construction
-  name: аварийная лампа
   id: EmergencyLightFixture
   graph: LightFixture
   startNode: start
   targetNode: emergencyLight
   category: construction-category-structures
-  description: Маленькая лампочка с внутренним аккумулятором, которая включается, как только перестаёт получать питание извне. Технология Nanotrasen позволяет ей адаптировать свой цвет для оповещения экипажа об обстановке на станции.
-  icon:
-    sprite: Structures/Wallmounts/Lighting/emergency_light.rsi
-    state: base
   objectType: Structure
   placementMode: SnapgridCenter
   canRotate: true
@@ -1541,16 +1126,11 @@
     - !type:TileNotBlocked
 
 - type: construction
-  name: фонарный столб
   id: LightGroundFixture
   graph: LightFixture
   startNode: start
   targetNode: groundLight
   category: construction-category-structures
-  description: Осветительный прибор. Потребляет энергию и излучает свет, если оснащён лампой-трубкой.
-  icon:
-    sprite: Structures/Lighting/LightPosts/small_light_post.rsi
-    state: base
   objectType: Structure
   placementMode: SnapgridCenter
   canRotate: false
@@ -1559,16 +1139,11 @@
     - !type:TileNotBlocked
 
 - type: construction
-  name: стробоскоп
   id: LightStrobeFixture
   graph: LightFixture
   startNode: start
   targetNode: strobeLight
   category: construction-category-structures
-  description: ЧТО?! Извини, всё, что я слышу, это УИИ-УУУ-УИИ-УУУ!
-  icon:
-    sprite: Structures/Wallmounts/Lighting/strobe_light.rsi
-    state: base
   objectType: Structure
   placementMode: SnapgridCenter
   canRotate: true
@@ -1578,130 +1153,94 @@
 
 #conveyor
 - type: construction
-  name: конвейерная лента
   id: ConveyorBelt
   graph: ConveyorGraph
   startNode: start
   targetNode: entity
   category: construction-category-structures
-  description: Конвейерная лента, обычно используется для быстрой транспортировки большого количества объектов в другое место.
   objectType: Structure
   placementMode: SnapgridCenter
   canBuildInImpassable: false
-  icon:
-    sprite: Structures/conveyor.rsi
-    state: conveyor_stopped_cw
   conditions:
     - !type:TileNotBlocked
 
 - type: construction
-  name: металлическая дверь
   id: MetalDoor
   graph: DoorGraph
   startNode: start
   targetNode: metalDoor
   RequiresBuildingLevel: 1
   category: construction-category-structures
-  description: Дверь, куда она ведёт?
   objectType: Structure
   placementMode: SnapgridCenter
   canBuildInImpassable: false
-  icon:
-    sprite: Structures/Doors/MineralDoors/metal_door.rsi
-    state: closed
   conditions:
     - !type:TileNotBlocked
 
 - type: construction
-  name: деревянная дверь
   id: WoodDoor
   graph: DoorGraph
   startNode: start
   targetNode: woodDoor
   RequiresBuildingLevel: 1
   category: construction-category-structures
-  description: Дверь, куда она ведёт?
   objectType: Structure
   placementMode: SnapgridCenter
   canBuildInImpassable: false
-  icon:
-    sprite: Structures/Doors/MineralDoors/wood_door.rsi
-    state: closed
   conditions:
     - !type:TileNotBlocked
 
 - type: construction
-  name: плазменная дверь
   id: PlasmaDoor
   graph: DoorGraph
   startNode: start
   targetNode: plasmaDoor
   RequiresBuildingLevel: 1
   category: construction-category-structures
-  description: Дверь, куда она ведёт?
   objectType: Structure
   placementMode: SnapgridCenter
   canBuildInImpassable: false
-  icon:
-    sprite: Structures/Doors/MineralDoors/plasma_door.rsi
-    state: closed
   conditions:
     - !type:TileNotBlocked
 
 - type: construction
-  name: золотая дверь
   id: GoldDoor
   graph: DoorGraph
   startNode: start
   targetNode: goldDoor
   RequiresBuildingLevel: 1
   category: construction-category-structures
-  description: Дверь, куда она ведёт?
   objectType: Structure
   placementMode: SnapgridCenter
   canBuildInImpassable: false
-  icon:
-    sprite: Structures/Doors/MineralDoors/gold_door.rsi
-    state: closed
   conditions:
     - !type:TileNotBlocked
 
 - type: construction
-  name: серебрянная дверь
   id: SilverDoor
   graph: DoorGraph
   startNode: start
   targetNode: silverDoor
   RequiresBuildingLevel: 1
   category: construction-category-structures
-  description: Дверь, куда она ведёт?
   objectType: Structure
   placementMode: SnapgridCenter
   canBuildInImpassable: false
-  icon:
-    sprite: Structures/Doors/MineralDoors/silver_door.rsi
-    state: closed
   conditions:
     - !type:TileNotBlocked
 
 - type: construction
-  name: бумажная дверь
   id: PaperDoor
   graph: DoorGraph
   startNode: start
   targetNode: paperDoor
   RequiresBuildingLevel: 1
   category: construction-category-structures
-  description: Дверь, куда она ведёт?
   objectType: Structure
   placementMode: SnapgridCenter
   canBuildInImpassable: false
-  icon:
-    sprite: Structures/Doors/MineralDoors/paper_door.rsi
-    state: closed
 
 - type: construction
-  name: пластиковые шторки
   id: PlasticFlapsClear
   graph: PlasticFlapsGraph
   startNode: start
@@ -1709,17 +1248,12 @@
   RequiresBuildingLevel: 1
   category: construction-category-structures
   placementMode: SnapgridCenter
-  description: Тяжёлые пластиковые шторки. Сквозь них не пройти. Ни за что.
   objectType: Structure
   canBuildInImpassable: false
-  icon:
-    sprite: Structures/plastic_flaps.rsi
-    state: plasticflaps
   conditions:
     - !type:TileNotBlocked
 
 - type: construction
-  name: непрозрачные пластиковые шторки
   id: PlasticFlapsOpaque
   graph: PlasticFlapsGraph
   startNode: start
@@ -1727,17 +1261,12 @@
   RequiresBuildingLevel: 1
   category: construction-category-structures
   placementMode: SnapgridCenter
-  description: Тяжёлые пластиковые шторки. Сквозь них не пройти. Ни за что
   objectType: Structure
   canBuildInImpassable: false
-  icon:
-    sprite: Structures/plastic_flaps.rsi
-    state: plasticflaps
   conditions:
     - !type:TileNotBlocked
 
 - type: construction
-  name: статуя карпа
   id: CarpStatue
   graph: CarpStatue
   startNode: start
@@ -1745,17 +1274,12 @@
   RequiresBuildingLevel: 3
   category: construction-category-structures
   placementMode: SnapgridCenter
-  description: Статуя одного из храбрых карпов, благодаря которому мы находимся там, где находимся. С настоящими зубами!
   objectType: Structure
   canBuildInImpassable: false
-  icon:
-    sprite: Structures/Specific/carp_statue.rsi
-    state: icon
   conditions:
   - !type:TileNotBlocked
 
 - type: construction
-  name: бананиумовая статуя спасителя
   id: BananiumClownStatue
   graph: BananiumStatueClown
   startNode: start
@@ -1763,45 +1287,31 @@
   RequiresBuildingLevel: 3
   category: construction-category-structures
   placementMode: SnapgridCenter
-  description: Бананиумовая статуя. Она символизирует пришествие спасителя, который восстанет и поведёт клоунов к великому хонку.
   objectType: Structure
   canBuildInImpassable: false
-  icon:
-    sprite: Structures/Decoration/statues.rsi
-    state: bananium_clown
   conditions:
     - !type:TileNotBlocked
 
 - type: construction
-  name: бананиумовая дверь
   id: BananiumDoor
   graph: DoorGraph
   startNode: start
   targetNode: bananiumDoor
   RequiresBuildingLevel: 1
   category: construction-category-structures
-  description: Дверь, куда она ведёт?
   objectType: Structure
   placementMode: SnapgridCenter
   canBuildInImpassable: false
-  icon:
-    sprite: Structures/Doors/MineralDoors/bananium_door.rsi
-    state: closed
   conditions:
     - !type:TileNotBlocked
 
 - type: construction
-  name: алтарь Хонкоматери
   id: BananiumAltar
   graph: BananiumAltarGraph
   startNode: start
   targetNode: bananiumAltar
   RequiresBuildingLevel: 3
   category: construction-category-structures
-  description: Бананиумовый алтарь, посвящённый Хонкоматери.
-  icon:
-    sprite: Structures/Furniture/Altars/Cults/bananium.rsi
-    state: full
   objectType: Structure
   placementMode: SnapgridCenter
   canRotate: false
@@ -1810,19 +1320,16 @@
     - !type:TileNotBlocked
 
 - type: construction
-  name: секретная дверь
   id: SolidSecretDoor
+  name: recipes-secret-door-name
+  description: recipes-secret-door-desc
   graph: SecretDoor
   startNode: start
   targetNode: solidSecretDoor
   RequiresBuildingLevel: 3
   category: construction-category-structures
-  description: Удерживает воздух внутри, а ассистентов снаружи.
   objectType: Structure
   placementMode: SnapgridCenter
   canBuildInImpassable: false
-  icon:
-    sprite: Structures/Doors/secret_door.rsi
-    state: closed
   conditions:
     - !type:TileNotBlocked
