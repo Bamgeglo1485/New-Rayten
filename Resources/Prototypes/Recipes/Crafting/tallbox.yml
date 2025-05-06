@@ -27,6 +27,10 @@
 - type: construction
   id: GunSafe
   graph: GunSafe
+  startNode: start
+  targetNode: done
+  RequiresEngineeringLevel: 1
+  category: construction-category-storage
   objectType: Structure
 
 - type: construction

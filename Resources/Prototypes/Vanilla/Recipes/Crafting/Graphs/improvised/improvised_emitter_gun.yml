@@ -16,25 +16,25 @@
               icon:
                 sprite: Structures/Piping/Atmospherics/pipe.rsi
                 state: pipeStraight
-              name: труба
+              name: construction-graph-tag-pipe
             - tag: Handcuffs
               icon:
                 sprite: Objects/Misc/cablecuffs.rsi
                 state: cuff
                 color: red
-              name: кабельные стяжки
+              name: construction-graph-tag-cuffs
     - node: electronics
       entity: EmitterGunUnfinished
       edges:
       - to: finish
         steps:
         - tag: PowerCellSmall
-          name: маленькую батарею
+          name: construction-graph-tag-power-cell-small
           icon:
             sprite: Objects/Power/power_cells.rsi
             state: small
         - tag: PowerCellSmall
-          name: маленькую батарею
+          name: construction-graph-tag-power-cell-small
           icon:
             sprite: Objects/Power/power_cells.rsi
             state: small
@@ -54,7 +54,7 @@
           doAfter: 0.5
         - tag: EmitterCircuitboard
           store: board
-          name: "плату эмиттера"
+          name: construction-graph-tag-emittercircuitboard
           icon:
             sprite: "Objects/Misc/module.rsi"
             state: "engineering"

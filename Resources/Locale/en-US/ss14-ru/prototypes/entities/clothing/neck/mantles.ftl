@@ -1,7 +1,7 @@
 ent-ClothingNeckMantleCap = captain's mantle
     .desc = A formal mantle to drape around the shoulders. Others stand on the shoulders of giants. You're the giant they stand on.
-ent-ClothingNeckMantleCE = chief engineer's manica
-    .desc = A segmented arm covering for the experienced Chief Engineer, to signify the hazards of the job and the dangers faced to earn it.
+ent-ClothingNeckMantleCE = chief engineer's mantle
+    .desc = High visibility, check. RIG system, check. High capacity cell, check. Everything a chief engineer could need in a stylish mantle.
 ent-ClothingNeckMantleCMO = chief medical officer's mantle
     .desc = A light blue shoulder draping for THE medical professional. Contrasts well with blood.
 ent-ClothingNeckMantleHOP = head of personnel's mantle

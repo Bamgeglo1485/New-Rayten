@@ -16,23 +16,23 @@
               icon:
                 sprite: Objects/Weapons/Melee/shields.rsi
                 state: makeshift-icon
-              name: импровизированный щит
+              name: construction-graph-tag-handmadeshield
             - tag: HandmadeShield
               icon:
                 sprite: Objects/Weapons/Melee/shields.rsi
                 state: makeshift-icon
-              name: импровизированный щит
+              name: construction-graph-tag-handmadeshield
             - tag: Handcuffs
               icon:
                 sprite: Objects/Misc/cablecuffs.rsi
                 state: cuff
                 color: red
-              name: кабельные стяжки
+              name: construction-graph-tag-cuffs
             - tag: Handcuffs
               icon:
                 sprite: Objects/Misc/cablecuffs.rsi
                 state: cuff
                 color: red
-              name: кабельные стяжки
+              name: construction-graph-tag-cuffs
     - node: vest
       entity: ClothingOuterArmorMakeshift

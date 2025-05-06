@@ -34,6 +34,10 @@ public sealed partial class ConstructionPrototype : IPrototype
     [DataField("RequiresBuildingLevel")]    
     public SkillLevel RequiresBuildingLevel = 0;
     //Rayten-end
+    /// <summary>
+    ///     "Useful" description displayed in the construction GUI.
+    /// </summary>
+    [DataField("description")]
     public LocId? SetDescription;
 
     public string? Description;

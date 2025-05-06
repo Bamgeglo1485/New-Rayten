@@ -11,29 +11,29 @@
           sprite: Objects/Misc/cablecuffs.rsi
           state: cuff
           color: red
-        name: кабельные стяжки
+        name: construction-graph-tag-cuffs
       - tag: Handcuffs
         icon:
           sprite: Objects/Misc/cablecuffs.rsi
           state: cuff
           color: red
-        name: кабельные стяжки
+        name: construction-graph-tag-cuffs
       - tag: Handcuffs
         icon:
           sprite: Objects/Misc/cablecuffs.rsi
           state: cuff
           color: red
-        name: кабельные стяжки
+        name: construction-graph-tag-cuffs
       - tag: HandmadeShotgun
         icon:
           sprite: Objects/Weapons/Guns/Shotguns/improvised_shotgun.rsi
           state: icon
-        name: самодельный дробовик
+        name: construction-graph-tag-improvisedshotgun
       - tag: HandmadeShotgun
         icon:
           sprite: Objects/Weapons/Guns/Shotguns/improvised_shotgun.rsi
           state: icon
-        name: самодельный дробовик
+        name: construction-graph-tag-improvisedshotgun
       - material: Steel
         amount: 1
         doAfter: 2

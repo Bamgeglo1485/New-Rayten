@@ -8,29 +8,23 @@ construction-graph-tag-clown-bike-horn = велосипедный клаксон
 construction-graph-tag-clowne-horn = сломанный клаксон
 construction-graph-tag-happy-honk-meal = "Хэппи Хонк" меню
 construction-graph-tag-woeful-cluwne-meal = "Грустный Клун" меню
-
 # Мим
 construction-graph-tag-suspenders = подтяжки
 construction-graph-tag-mime-meal = "Мим" версия Хэппи Хонк
-
 # Карандаши
 construction-graph-tag-purple-crayon = фиолетовый мелок
 construction-graph-tag-red-crayon = красный мелок
 construction-graph-tag-yellow-crayon = жёлтый мелок
 construction-graph-tag-black-crayon = чёрный мелок
-
 # Скафандры
 construction-graph-tag-eva-suit = скафандр ВКД
 construction-graph-tag-eva-helmet = шлем ВКД
-
 # Интерфейсы
 construction-graph-tag-security-hud = HUD охраны
 construction-graph-tag-medical-hud = медицинский HUD
-
 # Безопасность
 construction-graph-tag-sun-glasses = солнцезащитные очки
 construction-graph-tag-security-helmet = шлем охраны
-
 # Материалы
 construction-graph-tag-capacitor = конденсатор
 construction-graph-tag-voice-trigger = голосовой триггер
@@ -42,16 +36,15 @@ construction-graph-tag-uranium-glass-shard = осколок уранового �
 construction-graph-tag-reinforced-glass-shard = осколок армированного стекла
 construction-graph-tag-grey-flatcap = серая кепка
 construction-graph-tag-brown-flatcap = коричневая кепка
-construction-graph-tag-cuffs = наручники
+construction-graph-tag-cuffs = кабельные стяжки
 construction-graph-tag-payload = полезная нагрузка
 construction-graph-tag-empty-can = пустая банка
 construction-graph-tag-igniter = воспламенитель
 construction-graph-tag-modular-receiver = модульный приёмник
-construction-graph-tag-power-cell-small = малая энергоячейка
-construction-graph-tag-power-cell = энергоячейка
+construction-graph-tag-power-cell-small = батарея малой ёмкости
+construction-graph-tag-power-cell = батарея
 construction-graph-tag-potato-battery = картофельная батарейка
 construction-graph-tag-super-compact-ai-chip = сверхкомпактный ИИ-чип
-
 # Прочее
 construction-graph-tag-light-bulb = лампочка
 construction-graph-tag-radio = рация
@@ -68,13 +61,11 @@ construction-graph-tag-match-stick = спичка
 construction-graph-tag-potato = картофелина
 construction-graph-tag-wheat-bushel = сноп пшеницы
 construction-graph-tag-corgi-hide = шкура корги
-
 # Игрушки
 construction-graph-tag-rubber-ducky = резиновая уточка
 construction-graph-tag-ghost = плюшевый призрак
 construction-graph-tag-ectoplasm = эктоплазма
 construction-graph-tag-lizard-plushie = плюшевый ящер
-
 # Ковры
 construction-graph-tag-black-carpet = чёрный ковёр
 construction-graph-tag-blue-carpet = синий ковёр
@@ -85,7 +76,6 @@ construction-graph-tag-pink-carpet = розовый ковёр
 construction-graph-tag-purple-carpet = фиолетовый ковёр
 construction-graph-tag-red-carpet = красный ковёр
 construction-graph-tag-white-carpet = белый ковёр
-
 # Мехи
 construction-graph-tag-hamtr-central-control-module = центральный модуль управления HAMTR
 construction-graph-tag-hamtr-peripherals-control-module = модуль управления периферией HAMTR
@@ -94,16 +84,13 @@ construction-graph-tag-honk-peripherals-control-module = модуль управ
 construction-graph-tag-honk-weapon-control-and-targeting-module = модуль управления оружием H.O.N.K.
 construction-graph-tag-ripley-central-control-module = центральный модуль управления "Рипли"
 construction-graph-tag-ripley-peripherals-control-module = модуль управления периферией "Рипли"
-
 # Конструкции
 construction-graph-tag-door-electronics-circuit-board = микросхема шлюза
 construction-graph-tag-firelock-electronics-circuit-board = микросхема пожарного шлюза
 construction-graph-tag-conveyor-belt-assembly = конвейерная лента
-
 # Инструменты
 construction-graph-tag-multitool = мультитул
 construction-graph-tag-health-analyzer = медицинский сканер
-
 # Компоненты
 construction-graph-tag-air-alarm-electronics = микросхема датчика воздуха
 construction-graph-tag-fire-alarm-electronics = микросхема пожарной сигнализации
@@ -121,7 +108,6 @@ construction-graph-tag-wallmount-substation-circuit-board = плата наст�
 construction-graph-tag-surveillance-camera-monitor-board = плата монитора камер наблюдения
 construction-graph-tag-television-board = плата телевизора
 construction-graph-tag-freezer-electronics = плата холодильника
-
 # Кристаллы
 construction-graph-tag-cyan-crystal-shard = осколок бирюзового кристалла
 construction-graph-tag-blue-crystal-shard = осколок синего кристалла
@@ -131,14 +117,11 @@ construction-graph-tag-red-crystal-shard = осколок красного кр�
 construction-graph-tag-green-crystal-shard = осколок зелёного кристалла
 construction-graph-tag-yellow-crystal-shard = осколок жёлтого кристалла
 construction-graph-tag-black-crystal-shard = осколок чёрного кристалла
-
 # Разное
 construction-graph-tag-weapon-pistol-chimp-upgrade-kit = набор апгрейда для М.А.Р.Т.Ы.Х.
 construction-graph-tag-torch = факел
-
 # Атмос
 construction-graph-tag-fire-extinguisher = огнетушитель
 construction-graph-tag-fire-helmet = пожарный шлем
-
 # Спасоборудование
 construction-graph-tag-spationaut-hardsuit = скафандр космонавта

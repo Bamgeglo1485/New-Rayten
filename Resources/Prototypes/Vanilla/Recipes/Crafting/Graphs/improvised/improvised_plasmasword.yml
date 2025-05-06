@@ -11,29 +11,29 @@
           sprite: Objects/Misc/cablecuffs.rsi
           state: cuff
           color: red
-        name: кабельные стяжки
+        name: construction-graph-tag-cuffs
       - tag: Handcuffs
         icon:
           sprite: Objects/Misc/cablecuffs.rsi
           state: cuff
           color: red
-        name: кабельные стяжки
+        name: construction-graph-tag-cuffs
       - tag: Handcuffs
         icon:
           sprite: Objects/Misc/cablecuffs.rsi
           state: cuff
           color: red
-        name: кабельные стяжки
+        name: construction-graph-tag-cuffs
       - tag: Igniter
         icon:
           sprite: Objects/Devices/igniter.rsi
           state: icon
-        name: воспламенитель
+        name: construction-graph-tag-igniter
       - tag: GasTank
         icon:
           sprite: Objects/Tanks/plasma.rsi
           state: icon
-        name: баллон плазмы
+        name: construction-graph-tag-plasma-baloon
       - material: Steel
         amount: 2
         doAfter: 2
@@ -59,7 +59,7 @@
       - tool: Cutting
         doAfter: 0.5
       - tag: PowerCellSmall
-        name: маленькую батарею
+        name: construction-graph-tag-power-cell-small
         icon:
           sprite: Objects/Power/power_cells.rsi
           state: small

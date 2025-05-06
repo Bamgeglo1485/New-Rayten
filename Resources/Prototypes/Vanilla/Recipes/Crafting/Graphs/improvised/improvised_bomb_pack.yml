@@ -10,37 +10,37 @@
               amount: 5
               doAfter: 0.5
             - tag: HandmadeBomb
-              name: зажигательная бомба
+              name: construction-graph-tag-firebomb
               icon:
                 sprite: Objects/Weapons/Bombs/ied.rsi
                 state: base
               doAfter: 0.5
             - tag: HandmadeBomb
-              name: зажигательная бомба
+              name: construction-graph-tag-firebomb
               icon:
                 sprite: Objects/Weapons/Bombs/ied.rsi
                 state: base
               doAfter: 0.5
             - tag: HandmadeBomb
-              name: зажигательная бомба
+              name: construction-graph-tag-firebomb
               icon:
                 sprite: Objects/Weapons/Bombs/ied.rsi
                 state: base
               doAfter: 0.5
             - tag: HandmadeBomb
-              name: зажигательная бомба
+              name: construction-graph-tag-firebomb
               icon:
                 sprite: Objects/Weapons/Bombs/ied.rsi
                 state: base
               doAfter: 0.5
             - tag: HandmadeBomb
-              name: зажигательная бомба
+              name: construction-graph-tag-firebomb
               icon:
                 sprite: Objects/Weapons/Bombs/ied.rsi
                 state: base
               doAfter: 0.5
             - tag: HandmadeBomb
-              name: зажигательная бомба
+              name: construction-graph-tag-firebomb
               icon:
                 sprite: Objects/Weapons/Bombs/ied.rsi
                 state: base
