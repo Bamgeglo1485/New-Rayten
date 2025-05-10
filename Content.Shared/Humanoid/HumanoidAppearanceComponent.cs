@@ -8,6 +8,7 @@ using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 using Robust.Shared.Utility;
+using Content.Shared.Vanilla.VoiceSpeech;
 
 namespace Content.Shared.Humanoid;
 
@@ -54,7 +55,7 @@ public sealed partial class HumanoidAppearanceComponent : Component
     ///     Current voice. Used for correct cloning.
     /// </summary>
     [DataField("voice")]
-    public ProtoId<TTSVoicePrototype> Voice { get; set; } = SharedHumanoidAppearanceSystem.DefaultVoice;
+    public ProtoId<VoiceSpeechPrototype> Voice { get; set; } = SharedHumanoidAppearanceSystem.DefaultVoice;
     // Corvax-TTS-End
 
     /// <summary>
