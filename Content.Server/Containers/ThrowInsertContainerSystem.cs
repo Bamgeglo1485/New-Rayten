@@ -38,8 +38,9 @@ public sealed class ThrowInsertContainerSystem : EntitySystem
             return;
         //Rayten-start
         //Если у кидающей сущности есть экспертный уровень стрельбы - бросаем кубики
-        if( !( args.Component.Thrower!=null && TryComp<SkillComponent>(args.Component.Thrower.Value, out var skill) && skill.RangeWeaponLevel == SkillLevel.Expert) ){
-            if (_random.Prob(ent.Comp.Probability))
+        if(! ( args.Component.Thrower != null && TryComp<SkillComponent>(args.Component.Thrower.Value, out var skill) && skill.RangeWeaponLevel == SkillLevel.Expert) )
+        {
+            if (!_random.Prob(ent.Comp.Probability))
             {
                 _audio.PlayPvs(ent.Comp.MissSound, ent);
                 _popup.PopupEntity(Loc.GetString(ent.Comp.MissLocString), ent);

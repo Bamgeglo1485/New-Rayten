@@ -76,3 +76,14 @@ cargo-funding-alloc-console-label-save-fail = [bold]Недопустимое р�
         [1] +
        *[-1] -
     }{ $val }%)[/color]
+# Slip template
+cargo-acquisition-slip-body = [head=3]Детали заказа[/head]
+    { "[bold]Товар:[/bold]" } { $product }
+    { "[bold]Описание:[/bold]" } { $description }
+    { "[bold]Цена за единицу:[/bold]" } ${ $unit }
+    { "[bold]Количество:[/bold]" } { $amount }
+    { "[bold]Стоимость:[/bold]" } ${ $cost }
+    
+    { "[head=3]Детали оформления[/head]" }
+    { "[bold]Заказчик:[/bold]" } { $orderer }
+    { "[bold]Причина заказа:[/bold]" } { $reason }

@@ -1,0 +1,173 @@
+# Роли
+- type: entity
+  id: MobERTImplantedBase
+  abstract: true
+  components:
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      150: Critical
+      250: Dead
+  - type: AutoImplant
+    implants:
+    - RadioImplantCentcomm
+    - MemoryShieldImplant
+    - EmpImplant
+    - ScramImplant
+    - FreedomImplant
+  - type: SlowOnDamage
+    speedModifierThresholds:
+      100: 0.85
+      130: 0.7
+  - type: MobPrice
+    price: 70000
+
+- type: entity
+  name: Лидер ОБР
+  parent: [MobERTImplantedBase, MobEventTeamComanderBase]
+  suffix: "ОБР-Л, Генномодифицированный"
+  id: MobERTImplantedLeader
+  components:
+  - type: GhostRole
+    allowMovement: true
+    allowSpeech: true
+    makeSentient: true
+    name: eventteam-ert-leader-name
+    description: eventteam-ert-leader-desc
+    raffle:
+      settings: default
+    requirements:
+      - !type:DepartmentTimeRequirement
+        department: Security
+        time: 18000
+      - !type:OverallPlaytimeRequirement
+        time: 36000
+  - type: Loadout
+    prototypes: [ERTImplantedLeaderLoot]
+  - type: Skill
+    RangeWeaponLevel: 2
+    MeleeWeaponLevel: 1
+    MedicineLevel: 3
+    ChemistryLevel: 3
+    EngineeringLevel: 0
+    BuildingLevel: 0
+    ResearchLevel: 0
+    Atmosphere: false
+    Piloting: false
+    MusInstruments: true
+    Botany: true
+    Bureaucracy: true
+
+- type: entity
+  name: медик ОБР
+  parent: [MobERTImplantedBase, MobEventTeamBase]
+  suffix: "ОБР-М, Генномодифицированный"
+  id: MobERTImplantedMedic
+  components:
+  - type: GhostRole
+    allowMovement: true
+    allowSpeech: true
+    makeSentient: true
+    name: eventteam-ert-medic-name
+    description: eventteam-ert-medic-desc
+    rules: ghost-role-information-nonantagonist-rules
+    raffle:
+      settings: default
+    requirements:
+      - !type:DepartmentTimeRequirement
+        department: Security
+        time: 18000
+      - !type:OverallPlaytimeRequirement
+        time: 36000
+  - type: Loadout
+    prototypes: [ERTImplantedMedicLoot]
+  - type: Skill
+    RangeWeaponLevel: 2
+    MeleeWeaponLevel: 1
+    MedicineLevel: 3
+    ChemistryLevel: 3
+    EngineeringLevel: 0
+    BuildingLevel: 0
+    ResearchLevel: 0
+    Atmosphere: false
+    Piloting: false
+    MusInstruments: true
+    Botany: true
+    Bureaucracy: true
+
+# Экипировка
+
+- type: startingGear
+  id: ERTImplantedLeaderLoot
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitERTLeader
+    back: ClothingBackpackERTLeader
+    shoes: ClothingShoesTacticalBoots
+    mask: ClothingMaskGasERT
+    eyes: ClothingEyesHudMedSec
+    neck: ClothingNeckMantleERTLeader # Corvax-Clothing
+    gloves: ClothingHandsGlovesCombat
+    outerClothing: ClothingOuterHardsuitERTLeader
+    id: ERTLeaderPDA
+    belt: ClothingBeltMedicalFilled
+    pocket1: WeaponPistolN1984
+    pocket2: DoorRemoteCommand
+  storage:
+    back:
+    - Hypospray
+    - MedkitCombatFilled
+    - MedkitCombatFilled
+    - CrowbarRed
+    - ChemistryBottleOmnizine
+    - ChemistryBottleEpinephrine
+    - ChemistryBottleEpinephrine
+    - MedkitCombatFilled
+    - MedkitCombatFilled
+    - AntiPoisonMedipen
+    - AntiPoisonMedipen
+    - RadAutoInjector
+    - RadAutoInjector
+    - PyraAutoInjector
+    - PyraAutoInjector
+    - PunctAutoInjector
+    - PunctAutoInjector
+    - DoorRemoteMedical
+    - DoubleEmergencyOxygenTankFilled
+    - PinpointerNuclear
+
+- type: startingGear
+  id: ERTImplantedMedicLoot
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitERTMedic
+    back: ClothingBackpackERTMedical
+    shoes: ClothingShoesTacticalBoots
+    mask: ClothingMaskGasERT
+    eyes: ClothingEyesHudMedSec
+    gloves: ClothingHandsGlovesCombat
+    outerClothing: ClothingOuterHardsuitERTMedical
+    id: ERTMedicPDA
+    belt: ClothingBeltMedicalFilled
+    pocket1: WeaponPulsePistol
+    pocket2: GlowstickPurple
+  storage:
+    back:
+    - Hypospray
+    - MedkitCombatFilled
+    - MedkitCombatFilled
+    - CrowbarRed
+    - ChemistryBottleOmnizine
+    - ChemistryBottleEpinephrine
+    - ChemistryBottleEpinephrine
+    - MedkitCombatFilled
+    - MedkitCombatFilled
+    - AntiPoisonMedipen
+    - AntiPoisonMedipen
+    - RadAutoInjector
+    - RadAutoInjector
+    - PyraAutoInjector
+    - PyraAutoInjector
+    - PunctAutoInjector
+    - PunctAutoInjector
+    - DoorRemoteMedical
+    - DoubleEmergencyOxygenTankFilled
+    - PinpointerNuclear

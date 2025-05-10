@@ -6,3 +6,7 @@
   id: HandmadeBomb
 - type: Tag
   id: EmitterCircuitboard
+- type: Tag
+  id: CartridgeFlamethrower
+- type: Tag
+  id: MagazineFlamethrower

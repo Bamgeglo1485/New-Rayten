@@ -10,7 +10,7 @@ import itertools
 import os
 import requests
 import yaml
-from typing import Any, Iterable
+import time
 
 GITHUB_API_URL    = os.environ.get("GITHUB_API_URL", "https://api.github.com")
 GITHUB_REPOSITORY = os.environ["GITHUB_REPOSITORY"]
@@ -124,9 +124,23 @@ def get_discord_body(content: str):
 
 def send_discord(content: str):
     body = get_discord_body(content)
+    retry_attempt = 0
 
-    response = requests.post(DISCORD_WEBHOOK_URL, json=body)
-    response.raise_for_status()
+    try:
+        response = requests.post(DISCORD_WEBHOOK_URL, json=body, timeout=10)
+        while response.status_code == 429:
+            retry_attempt += 1
+            if retry_attempt > 20:
+                print("Too many retries on a single request despite following retry_after header... giving up")
+                exit(1)
+            retry_after = response.json().get("retry_after", 5)
+            print(f"Rate limited, retrying after {retry_after} seconds")
+            time.sleep(retry_after)
+            response = requests.post(DISCORD_WEBHOOK_URL, json=body, timeout=10)
+        response.raise_for_status()
+    except requests.exceptions.RequestException as e:
+        print(f"Failed to send message: {e}")
+        exit(1)
 
 # Rayten-Localization-Start
 def translate_to_russian(text: str) -> str:

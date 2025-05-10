@@ -36,16 +36,18 @@ public sealed class HypospraySystem : SharedHypospraySystem
         SubscribeLocalEvent<HyposprayComponent, UseInHandEvent>(OnUseInHand);
     }
 
-private bool TryUseHypospray(Entity<HyposprayComponent> entity, EntityUid target, EntityUid user)
-{
-    if (!EligibleEntity(target, EntityManager, entity)
-        && _solutionContainers.TryGetDrawableSolution(target, out var drawableSolution, out _))
+    private bool TryUseHypospray(Entity<HyposprayComponent> entity, EntityUid target, EntityUid user)
     {
-        return TryDraw(entity, target, drawableSolution.Value, user);
-    }
+        // if target is ineligible but is a container, try to draw from the container if allowed
+        if (entity.Comp.CanContainerDraw
+            && !EligibleEntity(target, EntityManager, entity)
+            && _solutionContainers.TryGetDrawableSolution(target, out var drawableSolution, out _))
+        {
+            return TryDraw(entity, target, drawableSolution.Value, user);
+        }
 
-    return TryDoInject(entity, target, user);
-}
+        return TryDoInject(entity, target, user);
+    }
 
     private void OnUseInHand(Entity<HyposprayComponent> entity, ref UseInHandEvent args)
     {

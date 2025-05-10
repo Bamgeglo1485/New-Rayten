@@ -1,0 +1,18 @@
+- type: entity
+  parent: BaseCartridgeCaselessRifle
+  id: CartridgeFlamethrower
+  name: flamepill
+  components:
+  - type: Tag
+    tags:
+    - Cartridge
+    - CartridgeFlamethrower
+  - type: CartridgeAmmo
+    proto: ProjectileFlame
+  - type: Sprite
+    sprite: Vanilla/Objects/Weapons/Guns/Ammunition/Casings/flamethrower.rsi
+    layers:
+    - state: base
+      map: ["enum.AmmoVisualLayers.Base"]
+  - type: StaticPrice
+    price: 20

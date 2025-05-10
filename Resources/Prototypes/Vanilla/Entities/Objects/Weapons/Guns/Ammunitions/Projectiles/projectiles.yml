@@ -1,0 +1,73 @@
+# Flamethrower
+
+- type: entity
+  categories: [ HideSpawnMenu ]
+  parent: BaseBulletTrigger
+  id: ProjectileFlame
+  name: flame
+  description: Try not to get toasted.
+  components:
+  - type: PointLight
+    color: "#e29522"
+    radius: 3.0
+    energy: 5.0
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Projectiles/magic.rsi
+    layers:
+    - state: fireball
+      shader: unshaded
+  - type: Projectile
+    damage:
+      types:
+        Heat: 15
+    deleteOnCollide: true
+  - type: IgnitionSource
+    temperature: 1000
+    ignited: true
+  - type: TimedDespawn
+    lifetime: .8
+  - type: IgniteOnCollide
+    fireStacks: .25
+  - type: RepeatingTrigger
+    delay: .15
+  - type: SpawnOnTrigger
+    proto: FloorFire
+  - type: Fixtures
+    fixtures:
+      projectile:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.4
+        density: 100
+        hard: false
+        mask:
+        - Impassable
+        - BulletImpassable
+      trigger:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.4
+        density: 100
+        hard: false
+        layer:
+        - WallLayer
+  - type: Reactive
+    groups:
+      Extinguish: [Touch]
+    reactions:
+    - reagents: [Water, SoapReagent]
+      methods: [Touch]
+      effects:
+      - !type:HealthChange
+        scaleByQuantity: true
+        damage:
+          types:
+            Blunt: 10
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 10
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]

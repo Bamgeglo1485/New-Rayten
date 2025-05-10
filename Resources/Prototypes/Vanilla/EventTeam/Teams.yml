@@ -8,7 +8,8 @@
   announcementColor: Orange
   sound:
     path: /Audio/Vanilla/StationEvents/ERT_Approved_V2.ogg
-    volume: -2
+    params:
+      volume: -3
   specialUnits:
     EventTeamERTLeader: SpawnMobERTLeader
     EventTeamERTMedic: SpawnMobERTMedic
@@ -23,7 +24,8 @@
   announcementColor: Orange
   sound:
     path: /Audio/Vanilla/StationEvents/ERT_Approved_V1.ogg
-    volume: -3
+    params:
+      volume: -3
   specialUnits:
     EventTeamERTLeader: SpawnMobERTPeacekeeperLeader
     EventTeamERTMedic: SpawnMobERTPeacekeeperMedic
@@ -38,7 +40,8 @@
   announcementColor: Orange
   sound:
     path: /Audio/Vanilla/StationEvents/ERT_Approved_V3.ogg
-    volume: -3
+    params:
+      volume: -3
   specialUnits:
     EventTeamERTLeader: SpawnMobERTLeader
     EventTeamERTMedic: SpawnMobERTMedic
@@ -54,37 +57,86 @@
   announcementColor: Orange
   sound:
     path: /Audio/Vanilla/StationEvents/ERT_Approved_V4.ogg
-    volume: -3
+    params:
+      volume: -3
   specialUnits:
     EventTeamERTLeader: SpawnMobERTPeacekeeperLeader
     EventTeamERTMedic: SpawnMobERTPeacekeeperMedic
   regularUnit: SpawnMobERTPeacekeeperRegular
   maxRegularUnitAmount: 3
 
+- type: eventteam
+  id: ERT_NukeArmers
+  shuttlePath: Maps/Vanilla/Knocker_ERT_NukeArmers.yml
+  announcementText: eventteam-ert-nukearmers-announcement-text
+  sender: eventteam-ert-announcement-sender
+  announcementColor: Orange
+  sound:
+    path: /Audio/Vanilla/StationEvents/ERT_Approved_V7.ogg
+    params:
+      volume: -3
+  specialUnits:
+    EventTeamERTLeader: SpawnMobERTSploderLeader
+  regularUnit: SpawnMobERTSploderRegular
+  maxRegularUnitAmount: 3
+
+- type: eventteam
+  id: ERT_Universal_Demomans
+  shuttlePath: Maps/Vanilla/Knocker_ERT_Universal_Demomans
+  announcementText: eventteam-ert-demomans-announcement-text
+  sender: eventteam-ert-announcement-sender
+  announcementColor: Orange
+  sound:
+    path: /Audio/Vanilla/StationEvents/ERT_Approved_V7_Short.ogg
+    params:
+      volume: -3
+  specialUnits:
+    EventTeamERTLeader: SpawnMobERTSploderLeader
+  regularUnit: SpawnMobERTSploderRegular
+  maxRegularUnitAmount: 3
+
+- type: eventteam
+  id: ERT_Universal_Implanted_Medics
+  shuttlePath: Maps/Vanilla/Knocker_CBURN_Universal_Medics_Implanted
+  announcementText: eventteam-ert-implanted-medics-announcement-text
+  sender: eventteam-ert-announcement-sender
+  announcementColor: Orange
+  sound:
+    path: /Audio/Vanilla/StationEvents/ERT_Approved_V7.ogg
+    params:
+      volume: -3
+  specialUnits:
+    EventTeamERTLeader: SpawnMobERTImplantedLeader
+  regularUnit: SpawnMobERTImplantedRegular
+  maxRegularUnitAmount: 1
+
 # CBURN GROUPS
 
 - type: eventteam
   id: CBURN_Zombie
-  shuttlePath: Maps/Vanilla/Purifier.yml
+  shuttlePath: Maps/Vanilla/Knocker_CBURN_Zombie.yml
   announcementText: eventteam-cburn-announcement-text
   sender: eventteam-cburn-announcement-sender
   announcementColor: Violet
   sound:
-    path: /Audio/Vanilla/StationEvents/ERT_Approved_V5.ogg
-    volume: -4
+    path: /Audio/Vanilla/StationEvents/ERT_Approved_V6.ogg
+    params:
+      volume: -3
   specialUnits:
     EventTeamCBURNComander: SpawnMobCBURNComander
   regularUnit: SpawnMobCBURNRegular
+  maxRegularUnitAmount: 3
 
 - type: eventteam
   id: CBURN_Fauna
-  shuttlePath: Maps/Vanilla/Knocker_CBURN.yml
+  shuttlePath: Maps/Vanilla/Knocker_CBURN_Fauna.yml
   announcementText: eventteam-cburn-fauna-announcement-text
   sender: eventteam-cburn-announcement-sender
   announcementColor: Orange
   sound:
     path: /Audio/Vanilla/StationEvents/ERT_Approved_V5.ogg
-    volume: -4
+    params:
+      volume: -3
   specialUnits:
     EventTeamCBURNComander: SpawnMobCBURNComander
   regularUnit: SpawnMobCBURNRegular

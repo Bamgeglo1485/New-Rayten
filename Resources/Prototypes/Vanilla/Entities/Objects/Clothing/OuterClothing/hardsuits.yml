@@ -1,4 +1,4 @@
-#CENTCOMM / ERT HARDSUITS
+# ERT HARDSUITS /// PEACEKEEPER
 #ERT Leader Hardsuit
 - type: entity
   parent: ClothingOuterHardsuitERTLeader
@@ -54,3 +54,43 @@
     sprite: Vanilla/Objects/Clothing/OuterClothing/Hardsuits/ERTSuits/peacekeeper.rsi
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitERTSecurityPeacekeeper
+
+# ERT HARDSUITS /// SPLODER
+
+#ERT Leader Hardsuit
+- type: entity
+  parent: ClothingOuterHardsuitSyndieElite
+  id: ClothingOuterHardsuitERTLeaderSploder
+  name: ERT leader's hardsuit
+  description: ERT hardsuit of the "Sploder" class, for the introduction of active combat operations.
+  components:
+  - type: Sprite
+    sprite: Vanilla/Objects/Clothing/OuterClothing/Hardsuits/ERTSuits/sploder.rsi
+    layers:
+    - state: icon
+    - state: icon-leader
+  - type: Clothing
+    sprite: Vanilla/Objects/Clothing/OuterClothing/Hardsuits/ERTSuits/sploder.rsi
+    clothingVisuals:
+      outerClothing:
+      - state: equipped-OUTERCLOTHING
+      - state: leader
+  - type: ToggleableClothing
+    clothingPrototype: ClothingHeadHelmetHardsuitERTSecuritySploder
+  - type: ClothingSpeedModifier
+    walkModifier: 1.0
+    sprintModifier: 0.95
+
+#ERT Security Hardsuit
+- type: entity
+  parent: ClothingOuterHardsuitSyndieElite
+  id: ClothingOuterHardsuitERTSecuritySploder
+  name: ERT security's hardsuit
+  description: hardsuit of the "Sploder" class, for the introduction of active combat operations.
+  components:
+  - type: Sprite
+    sprite: Vanilla/Objects/Clothing/OuterClothing/Hardsuits/ERTSuits/sploder.rsi
+  - type: Clothing
+    sprite: Vanilla/Objects/Clothing/OuterClothing/Hardsuits/ERTSuits/sploder.rsi
+  - type: ToggleableClothing
+    clothingPrototype: ClothingHeadHelmetHardsuitERTSecuritySploder

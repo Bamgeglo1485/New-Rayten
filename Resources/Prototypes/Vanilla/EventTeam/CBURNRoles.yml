@@ -64,8 +64,8 @@
     ChemistryLevel: 3
     EngineeringLevel: 0
     BuildingLevel: 2
-    ResearchLevel: 0
-    Atmosphere: false
+    ResearchLevel: 1
+    Atmosphere: true
     Piloting: true
     MusInstruments: true
     Botany: false
@@ -92,14 +92,14 @@
   - type: Loadout
     prototypes: [MobCBURNRegularLoot]
   - type: Skill
-    RangeWeaponLevel: 3
-    MeleeWeaponLevel: 3
+    RangeWeaponLevel: 2
+    MeleeWeaponLevel: 2
     MedicineLevel: 3
     ChemistryLevel: 3
     EngineeringLevel: 0
-    BuildingLevel: 2
-    ResearchLevel: 0
-    Atmosphere: false
+    BuildingLevel: 1
+    ResearchLevel: 2
+    Atmosphere: true
     Piloting: true
     MusInstruments: true
     Botany: false
@@ -124,12 +124,9 @@
     belt: WeaponAdvancedLaser
   storage:
     back:
-    - BoxMagazineShotgunIncendiary
     - GrenadeIncendiary
     - PillAmbuzolPlus
     - PillAmbuzol
     - PillAmbuzol
     - PillAmbuzol
     - MeleeWeaponPlasmaSword
-  inhand:
-  - WeaponShotgunBulldog

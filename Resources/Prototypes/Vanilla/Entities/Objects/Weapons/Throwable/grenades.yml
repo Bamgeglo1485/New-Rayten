@@ -1,0 +1,15 @@
+- type: entity
+  parent: SmokeGrenade
+  id: ChlorineGasGrenade
+  name: chlorine grenade
+  description: A grenade that smells of 1915 and the violation of the Geneva Conventions on the use of chemical weapons.
+  components:
+  - type: Sprite
+    sprite: Vanilla/Objects/Weapons/Grenades/chemical.rsi
+  - type: SmokeOnTrigger
+    duration: 10
+    spreadAmount: 35
+    solution:
+      reagents:
+      - ReagentId: Chlorine
+        Quantity: 35

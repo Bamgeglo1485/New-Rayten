@@ -1,0 +1,107 @@
+# Роли
+- type: entity
+  parent: MobERTLeader
+  id: MobERTSploderLeader
+  suffix: "ОБР-Л, Подрывник"
+  components:
+  - type: Loadout
+    prototypes: [ERTSploderLeaderLoot]
+  - type: Skill
+    RangeWeaponLevel: 3
+    MeleeWeaponLevel: 2
+    MedicineLevel: 1
+    ChemistryLevel: 2
+    EngineeringLevel: 2
+    BuildingLevel: 2
+    ResearchLevel: 0
+    Atmosphere: true
+    Piloting: true
+    MusInstruments: true
+    Botany: false
+    Bureaucracy: true
+
+- type: entity
+  parent: MobERTRegular
+  id: MobERTPSploderRegular
+  suffix: "ОБР-И, Подрывник"
+  components:
+  - type: Loadout
+    prototypes: [ERTSploderRegularLoot]
+  - type: Skill
+    RangeWeaponLevel: 2
+    MeleeWeaponLevel: 1
+    MedicineLevel: 1
+    ChemistryLevel: 2
+    EngineeringLevel: 3
+    BuildingLevel: 3
+    ResearchLevel: 0
+    Atmosphere: true
+    Piloting: true
+    MusInstruments: true
+    Botany: false
+    Bureaucracy: true
+
+# экипировка
+- type: startingGear
+  id: ERTSploderLeaderLoot
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitERTLeader
+    back: ClothingBackpackERTLeader
+    shoes: ClothingShoesTacticalBoots
+    mask: ClothingMaskGasERT
+    eyes: ClothingEyesGlassesSecurity
+    neck: ClothingNeckMantleERTLeaderPeacekeeper
+    gloves: ClothingHandsGlovesCombat
+    outerClothing: ClothingOuterHardsuitERTLeaderSploder
+    id: ERTLeaderPDA
+    ears: ClothingHeadsetAltCentCom
+    belt: ClothingBeltChiefEngineerFilled
+    pocket1: WeaponPistolN1984
+    pocket2: DoorRemoteCommand
+  storage:
+    back:
+    - WeaponDisabler
+    - MedicatedSuture
+    - RegenerativeMesh
+    - CrowbarRed
+    - MagazineMagnum
+    - CombatMedipen
+    - CombatMedipen
+    - SmokeGrenade
+    - SmokeGrenade
+    - LogProbeCartridge
+    - PhoneInstrument
+    - DoubleEmergencyOxygenTankFilled
+    - DoorRemoteAll
+    - PinpointerNuclear
+    - Sledgehammer
+
+- type: startingGear
+  id: ERTSploderRegularLoot
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitERTEngineer
+    back: ClothingBackpackERTEngineer
+    shoes: ClothingShoesTacticalBoots
+    mask: ClothingMaskGasERT
+    eyes: ClothingEyesGlassesSecurity
+    neck: Whistle
+    gloves: ClothingHandsGlovesCombat
+    outerClothing: ClothingOuterHardsuitERTSecuritySploder
+    id: ERTEngineerPDA
+    ears: ClothingHeadsetAltCentCom
+    belt: ClothingBeltChiefEngineerFilled
+    pocket1: WeaponPulsePistol
+    pocket2: GlowstickPurple
+  storage:
+    back:
+    - WeaponDisabler
+    - MedicatedSuture
+    - RegenerativeMesh
+    - CrowbarRed
+    - SmokeGrenade
+    - CombatMedipen
+    - DoorRemoteResearch
+    - DoorRemoteService
+    - DoubleEmergencyOxygenTankFilled
+    - PinpointerNuclear
+    - Sledgehammer

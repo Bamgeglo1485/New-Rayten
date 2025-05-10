@@ -1,4 +1,4 @@
-#CENTCOMM / ERT HARDSUITS
+# ERT HARDSUITS /// PEACEKEEPER
 #ERT Leader Hardsuit
 - type: entity
   parent: ClothingHeadHelmetHardsuitERTLeader
@@ -48,3 +48,19 @@
     sprite: Vanilla/Objects/Clothing/Head/Hardsuits/ERThelmets/peacekeeper.rsi
   - type: Clothing
     sprite: Vanilla/Objects/Clothing/Head/Hardsuits/ERThelmets/peacekeeper.rsi
+
+# ERT HARDSUITS /// SPLODER
+
+#ERT Security Hardsuit
+- type: entity
+  parent: ClothingHeadHelmetHardsuitSyndieElite
+  id: ClothingHeadHelmetHardsuitERTSecuritySploder
+  name: ERT security hardsuit helmet
+  description: A special hardsuit helmet worn by members of an emergency response team.
+  components:
+  - type: Sprite
+    sprite: Vanilla/Objects/Clothing/Head/Hardsuits/ERThelmets/sploder.rsi
+  - type: Clothing
+    sprite: Vanilla/Objects/Clothing/Head/Hardsuits/ERThelmets/sploder.rsi
+  - type: PointLight
+    color: white

@@ -1,0 +1,26 @@
+# Empty mags
+- type: entity
+  id: BaseFlamethrowerMagazine
+  name: "flamethrower plasma tank"
+  parent: [ BaseItem, BaseSecurityContraband ]
+  components:
+  - type: Tag
+    tags:
+      - MagazineFlamethrower
+  - type: Item
+    size: Small
+  - type: BallisticAmmoProvider
+    proto: CartridgeFlamethrower
+    whitelist:
+      tags:
+        - CartridgeFlamethrower
+    capacity: 30
+  - type: ContainerContainer
+    containers:
+      ballistic-ammo: !type:Container
+  - type: Sprite
+    sprite: Vanilla/Objects/Weapons/Guns/Ammunition/Magazine/flamethrower.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+  - type: Appearance

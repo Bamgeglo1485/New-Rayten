@@ -1,0 +1,81 @@
+- type: entity
+  id: FloorFire
+  name: floor fire
+  parent: BaseKudzu
+  description: It's fire and not a gas, wow!
+  components:
+    - type: Sprite
+      sprite: Effects/fire.rsi
+      state: 1
+    - type: Clickable
+    - type: Fixtures
+      fixtures:
+        fix1:
+          hard: false
+          density: 7
+          shape:
+            !type:PhysShapeAabb
+            bounds: "-0.5,-0.5,0.5,0.5"
+          layer:
+          - MidImpassable
+    - type: Damageable
+      damageModifierSet: Metallic
+    - type: Destructible
+      thresholds:
+      - trigger:
+          !type:DamageTrigger
+          damage: 10
+        behaviors:
+        - !type:DoActsBehavior
+          acts: [ "Destruction" ]
+    - type: Temperature
+      heatDamage: {}
+      coldDamage:
+        types:
+          Blunt: 5
+      coldDamageThreshold: 1
+    - type: Reactive
+      groups:
+        Extinguish: [Touch]
+      reactions:
+      - reagents: [Water, SoapReagent]
+        methods: [Touch]
+        effects:
+        - !type:HealthChange
+          scaleByQuantity: true
+          damage:
+            types:
+              Blunt: 10
+    - type: Kudzu
+      growthTickChance: .15
+      spreadChance: 0.2
+    - type: TimedDespawn
+    - type: DamageContacts
+      damage:
+        types:
+          Heat: 1
+    - type: TileEntityEffect
+      effects:
+      - !type:FlammableReaction
+        multiplier: 1
+        multiplierOnExisting: 0.3
+      - !type:Ignite
+    - type: TileEmission
+      color: "#ffa600"
+    - type: StepTrigger
+      requiredTriggeredSpeed: 0
+      intersectRatio: 0.1
+      blacklist:
+        tags:
+          - Catwalk
+    - type: Barotrauma
+      damage:
+        types:
+          Blunt: 10
+    - type: Respirator
+      damage:
+        types:
+          Blunt: 5
+      damageRecovery:
+        types:
+          Blunt: -5

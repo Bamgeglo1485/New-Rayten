@@ -44,6 +44,7 @@
     revertOnDeath: true
     revertOnCrit: true
     allowRepeatedMorphs: false
+    polymorphSound: /Audio/Vanilla/Effects/R1/Dash.ogg
     exitPolymorphSound: /Audio/Vanilla/Effects/R1/Slam.ogg
     duration: 4
 
@@ -72,21 +73,13 @@
     enabled: false
     groups:
     - AllAccess
-  - type: TriggerOnSpawn
-  - type: SoundOnTrigger
-    sound: /Audio/Vanilla/Effects/R1/Dash.ogg
   - type: Input
     context: "ghost"
   - type: InputMover
   - type: SpawnOnTrigger
     proto: R1DashTrack
-  - type: TimedSpawner
-    prototypes:
-    - R1DashTrack
-    chance: 1
-    intervalSeconds: 1
-    minimumEntitiesSpawned: 1
-    maximumEntitiesSpawned: 1
+  - type: RepeatingTrigger
+    delay: .2
 
 - type: entity
   parent: [BaseMob, Incorporeal]
