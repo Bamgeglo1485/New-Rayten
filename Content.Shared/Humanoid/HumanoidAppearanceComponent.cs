@@ -50,13 +50,13 @@ public sealed partial class HumanoidAppearanceComponent : Component
     [DataField(required: true), AutoNetworkedField]
     public ProtoId<SpeciesPrototype> Species { get; set; }
 
-    // Corvax-TTS-Start
+    // Rayten-TTS-Start
     /// <summary>
     ///     Current voice. Used for correct cloning.
     /// </summary>
     [DataField("voice")]
     public ProtoId<VoiceSpeechPrototype> Voice { get; set; } = SharedHumanoidAppearanceSystem.DefaultVoice;
-    // Corvax-TTS-End
+    // Rayten-TTS-End
 
     /// <summary>
     ///     The initial profile and base layers to apply to this humanoid.
