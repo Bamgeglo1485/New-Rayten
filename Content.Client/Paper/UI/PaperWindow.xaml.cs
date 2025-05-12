@@ -11,7 +11,8 @@ using Robust.Shared.Utility;
 using Robust.Client.UserInterface.RichText;
 using Content.Client.UserInterface.RichText;
 using Robust.Shared.Input;
-
+using Content.Shared.Vanilla.Skill;
+using Robust.Client.Player;
 namespace Content.Client.Paper.UI
 {
     [GenerateTypedNameReferences]
@@ -19,7 +20,8 @@ namespace Content.Client.Paper.UI
     {
         [Dependency] private readonly IInputManager _inputManager = default!;
         [Dependency] private readonly IResourceCache _resCache = default!;
-
+        [Dependency] private readonly IPlayerManager _player = default!;
+        [Dependency] private readonly IEntityManager _entityManager = default!;
         private static Color DefaultTextColor = new(25, 25, 25);
 
         // <summary>
@@ -259,12 +261,29 @@ namespace Content.Client.Paper.UI
             InputContainer.Visible = isEditing;
             EditButtons.Visible = isEditing;
 
+            // Rayten-Start
+            string TEXT;
+            if(state.FakeText == null)
+                TEXT = state.Text;
+            else
+                TEXT = state.FakeText;
+
+            if (_player.LocalSession?.AttachedEntity is { } entity &&
+                _entityManager.TryGetComponent<SkillComponent>(entity, out var skillComp) &&
+                skillComp.Bureaucracy)
+            {
+                TEXT = state.Text;
+            }
+            // Rayten-End
+
+
+
             var msg = new FormattedMessage();
-            msg.AddMarkupPermissive(state.Text);
+            msg.AddMarkupPermissive(TEXT);
 
             // For premade documents, we want to be able to edit them rather than
             // replace them.
-            var shouldCopyText = 0 == Input.TextLength && 0 != state.Text.Length;
+            var shouldCopyText = 0 == Input.TextLength && 0 != TEXT.Length;
             if (!wasEditing || shouldCopyText)
             {
                 // We can get repeated messages with state.Mode == Write if another
@@ -273,7 +292,7 @@ namespace Content.Client.Paper.UI
                 // don't want to lose any text they already input.
                 Input.TextRope = Rope.Leaf.Empty;
                 Input.CursorPosition = new TextEdit.CursorPos();
-                Input.InsertAtCursor(state.Text);
+                Input.InsertAtCursor(TEXT);
             }
 
             for (var i = 0; i <= state.StampedBy.Count * 3 + 1; i++)
@@ -282,8 +301,8 @@ namespace Content.Client.Paper.UI
             }
             WrittenTextLabel.SetMessage(msg, _allowedTags, DefaultTextColor);
 
-            WrittenTextLabel.Visible = !isEditing && state.Text.Length > 0;
-            BlankPaperIndicator.Visible = !isEditing && state.Text.Length == 0;
+            WrittenTextLabel.Visible = !isEditing && TEXT.Length > 0;
+            BlankPaperIndicator.Visible = !isEditing && TEXT.Length == 0;
 
             StampDisplay.RemoveAllChildren();
             StampDisplay.RemoveStamps();

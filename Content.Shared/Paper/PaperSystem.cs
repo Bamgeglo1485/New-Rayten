@@ -282,9 +282,10 @@ public sealed class PaperSystem : EntitySystem
     }
 
 
-    public void SetContent(Entity<PaperComponent> entity, string content)
+    public void SetContent(Entity<PaperComponent> entity, string content, string? fakecontent = null)
     {
         entity.Comp.Content = content;
+        entity.Comp.FakeContent = fakecontent;//Rayten
         Dirty(entity);
         UpdateUserInterface(entity);
 
@@ -300,7 +301,7 @@ public sealed class PaperSystem : EntitySystem
 
     private void UpdateUserInterface(Entity<PaperComponent> entity)
     {
-        _uiSystem.SetUiState(entity.Owner, PaperUiKey.Key, new PaperBoundUserInterfaceState(entity.Comp.Content, entity.Comp.StampedBy, entity.Comp.Mode));
+        _uiSystem.SetUiState(entity.Owner, PaperUiKey.Key, new PaperBoundUserInterfaceState(entity.Comp.Content, entity.Comp.FakeContent, entity.Comp.StampedBy, entity.Comp.Mode));
     }
 }
 

@@ -11,7 +11,8 @@ using Content.Server.Station.Components;
 using Content.Server.Mind;
 using Content.Server.Roles;
 using Content.Server.Roles.Jobs;
-
+using Robust.Shared.Random;
+using System.Linq;
 
 
 
@@ -25,7 +26,7 @@ public sealed class BureaucracyManager : EntitySystem
     [Dependency] private readonly StationSystem _station = default!;
     [Dependency] private readonly JobSystem _jobs = default!;
     [Dependency] private readonly MindSystem _minds = default!;
-
+    [Dependency] private readonly IRobustRandom _random = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -58,10 +59,29 @@ public sealed class BureaucracyManager : EntitySystem
                                     ("job", getjob(Playerent)), 
                                     ("date", getdate())
                                     );
+        string FakeContent = ReplaceRandomRussianLetters(text, 0.7);
 
-        _paperSystem.SetContent(new Entity<PaperComponent>(paperUid, paperComp), text);
+        _paperSystem.SetContent(new Entity<PaperComponent>(paperUid, paperComp), text, FakeContent);
     }
 
+    private string ReplaceRandomRussianLetters(string text, double probability)
+    {
+        var russianLetters = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЬЫЭЮЯабвгдеёжзийклмнопрстуфхцчшщьыэюя".ToCharArray();
+        var charArray = text.ToCharArray();
+
+        for (int i = 0; i < charArray.Length; i++)
+        {
+            if (russianLetters.Contains(charArray[i]))
+            {
+                if (_random.NextDouble() < probability)
+                {
+                    charArray[i] = russianLetters[_random.Next(russianLetters.Length)];
+                }
+            }
+        }
+
+        return new string(charArray);
+    }
     private string getstationname(EntityUid paperUid)
     {
         var stations = _station.GetStations();

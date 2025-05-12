@@ -11,6 +11,9 @@ public sealed partial class PaperComponent : Component
     [DataField("content"), AutoNetworkedField]
     public string Content { get; set; } = "";
 
+    [DataField("fakecontent"), AutoNetworkedField]
+    public string? FakeContent { get; set; } = null;
+
     [DataField("contentSize")]
     public int ContentSize { get; set; } = 6000;
 
@@ -36,12 +39,14 @@ public sealed partial class PaperComponent : Component
     public sealed class PaperBoundUserInterfaceState : BoundUserInterfaceState
     {
         public readonly string Text;
+        public readonly string? FakeText;
         public readonly List<StampDisplayInfo> StampedBy;
         public readonly PaperAction Mode;
 
-        public PaperBoundUserInterfaceState(string text, List<StampDisplayInfo> stampedBy, PaperAction mode = PaperAction.Read)
+        public PaperBoundUserInterfaceState(string text, string? fakeText, List<StampDisplayInfo> stampedBy, PaperAction mode = PaperAction.Read)
         {
             Text = text;
+            FakeText = fakeText;
             StampedBy = stampedBy;
             Mode = mode;
         }

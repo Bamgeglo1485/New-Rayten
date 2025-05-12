@@ -129,8 +129,7 @@ public sealed class SharedSponsorManager
                 current.Add("HumanHairNitori");
                 current.Add("HumanHairLongBow");
                 //голоса
-                    current.Add("Walany");
-                    current.Add("WX");
+                current.Add("Chingchong");
                 //импланты
                 current.Add("CyberlimbRArmBishop");current.Add("CyberlimbLArmBishop");current.Add("CyberlimbRHandBishop");
                 current.Add("CyberlimbLHandBishop");current.Add("CyberlimbRLegBishop");current.Add("CyberlimbLLegBishop");
@@ -170,11 +169,12 @@ public sealed class SharedSponsorManager
                 //голоса
                     current.Add("Willow");
                     current.Add("Warly");
+                    current.Add("Megalovania");
                     break;
 
                     
                 case sponsorRank.SpaceNinja:
-                    current.Add("Megalovania");
+                    current.Add("Meme");
                     break;
             }
             _rankToPrototypes[rank] = current.ToArray();
