@@ -77,6 +77,21 @@ reagent-effect-guidebook-health-change =
                *[both] изменяют здоровье на
             }
     } { $changes }
+reagent-effect-guidebook-even-health-change =
+    { $chance ->
+        [1]
+            { $healsordeals ->
+                [heals] Равномерно лечит
+                [deals] Равномерно наносит урон
+               *[both] Равномерно изменяет здоровье на
+            }
+       *[other]
+            { $healsordeals ->
+                [heals] равномерно излечивать
+                [deals] равномерно наносить
+               *[both] равномерно изменяют здоровье на
+            }
+    } { $changes }
 reagent-effect-guidebook-status-effect =
     { $type ->
         [add]
