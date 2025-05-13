@@ -13,8 +13,6 @@ using Robust.Shared.Utility;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Player;
 using JetBrains.Annotations;
-
-
 namespace Content.Client.Vanilla.UserInterface.GhostBackground;
 
 [UsedImplicitly]
@@ -85,7 +83,7 @@ public sealed class GhostBackgroundUIController : UIController,
             control.OnPressed += () => _backGroundSystem.TakeGhostBackground(bgProto);
             _window.BackgroundsContainer.Children.Add(control);
         }
-
+        _window.MainScroll.HScrollEnabled = false;
         OpenWindow();
     }
 

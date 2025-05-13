@@ -35,6 +35,8 @@ using Robust.Shared.Enums;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 using Direction = Robust.Shared.Maths.Direction;
+using Content.Shared.Vanilla.Background;
+using Content.Client.Vanilla.UserInterface.Lobby.BackgroundUI;
 
 namespace Content.Client.Lobby.UI
 {
@@ -59,7 +61,7 @@ namespace Content.Client.Lobby.UI
 
         // One at a time.
         private LoadoutWindow? _loadoutWindow;
-
+        private BackgroundWindow? _backgroundWindow;
         private bool _exporting;
         private bool _imaging;
 
@@ -958,7 +960,41 @@ namespace Content.Client.Lobby.UI
                         UpdateJobPriorities();
                         SetDirty();
                     };
+                    //Rayten-background-start
+                    var backgroundWindowBtn = new Button()
+                    {
+                        Text = Loc.GetString("background-window"),
+                        HorizontalAlignment = HAlignment.Right,
+                        VerticalAlignment = VAlignment.Center,
+                        Margin = new Thickness(3f, 3f, 0f, 0f),
+                    };
 
+                    var collection = IoCManager.Instance!;
+                    var protoManager = collection.Resolve<IPrototypeManager>();
+
+                    if (!protoManager.TryIndex<RoleBackgroundPrototype>(SharedBackgroundSystem.GetJobPrototype(job.ID), out var roleBackgroundProto))
+                    {
+                        backgroundWindowBtn.Disabled = true;
+                    }
+                    else
+                    {
+                        backgroundWindowBtn.OnPressed += args =>
+                        {
+                            RoleBackground? background = null;
+
+                            Profile?.Backgrounds.TryGetValue(SharedBackgroundSystem.GetJobPrototype(job.ID), out background);
+                            background = background?.Clone();
+
+                            if (background == null)
+                            {
+                                background = new RoleBackground(roleBackgroundProto.ID);
+                                background.SetDefault(Profile, _playerManager.LocalSession, _prototypeManager);
+                            }
+
+                            OpenBackground(job, background, roleBackgroundProto);
+                        };
+                    }
+                    //Rayten-background-end
                     var loadoutWindowBtn = new Button()
                     {
                         Text = Loc.GetString("loadout-window"),
@@ -967,8 +1003,8 @@ namespace Content.Client.Lobby.UI
                         Margin = new Thickness(3f, 3f, 0f, 0f),
                     };
 
-                    var collection = IoCManager.Instance!;
-                    var protoManager = collection.Resolve<IPrototypeManager>();
+                    // var collection = IoCManager.Instance!;
+                    // var protoManager = collection.Resolve<IPrototypeManager>();
 
                     // If no loadout found then disabled button
                     if (!protoManager.TryIndex<RoleLoadoutPrototype>(LoadoutSystem.GetJobPrototype(job.ID), out var roleLoadoutProto))
@@ -999,13 +1035,56 @@ namespace Content.Client.Lobby.UI
                     _jobPriorities.Add((job.ID, selector));
                     jobContainer.AddChild(selector);
                     jobContainer.AddChild(loadoutWindowBtn);
+                    jobContainer.AddChild(backgroundWindowBtn);
                     category.AddChild(jobContainer);
                 }
             }
 
             UpdateJobPriorities();
         }
+        //RAYTEN-START
+        private void OpenBackground(JobPrototype? jobProto, RoleBackground roleBackground, RoleBackgroundPrototype roleBackgroundProto)
+        {
+            _backgroundWindow?.Dispose();
+            _backgroundWindow = null;
+            var collection = IoCManager.Instance;
 
+            if (collection == null || _playerManager.LocalSession == null || Profile == null)
+                return;
+
+            JobOverride = jobProto;
+            var session = _playerManager.LocalSession;
+            _backgroundWindow = new BackgroundWindow(Profile, roleBackground, roleBackgroundProto, _playerManager.LocalSession, collection)
+            {
+                Title = jobProto?.LocalizedName,
+            };
+            _backgroundWindow.RefreshBackgrounds(roleBackground, session, collection);
+            LayoutContainer.SetAnchorPreset(_backgroundWindow, LayoutContainer.LayoutPreset.Wide);
+            _backgroundWindow.Open();
+
+            _backgroundWindow.OnBackgroundPressed += (backgroundProto, backgroundGroup) =>
+            {
+                roleBackground.AddBackground(backgroundProto, backgroundGroup, _prototypeManager);
+                _backgroundWindow.RefreshBackgrounds(roleBackground, session, collection);
+                // Profile = Profile?.WithLoadout(roleLoadout);
+                // ReloadPreview();
+            };
+
+            // JobOverride = jobProto;
+            // ReloadPreview();
+
+            // _loadoutWindow.OnClose += () =>
+            // {
+            //     JobOverride = null;
+            //     ReloadPreview();
+            // };
+
+            // if (Profile is null)
+            //     return;
+
+            // UpdateJobPriorities();
+        }
+        //RAYTEN-END
         private void OpenLoadout(JobPrototype? jobProto, RoleLoadout roleLoadout, RoleLoadoutPrototype roleLoadoutProto)
         {
             _loadoutWindow?.Dispose();

@@ -4,6 +4,7 @@ using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.CustomControls;
 using Robust.Client.UserInterface.XAML;
 using Robust.Client.UserInterface.Controls;
+using System.Numerics;
 
 namespace Content.Client.Vanilla.UserInterface.GhostBackground.window;
 
@@ -24,5 +25,9 @@ public sealed partial class GhostBackgroundWindow : DefaultWindow
     public void ForceClose()
     {
         base.Close(); // Закрытие только через этот метод
+    }
+    protected override DragMode GetDragModeFor(Vector2 relativeMousePos)
+    {
+        return DragMode.None;
     }
 }

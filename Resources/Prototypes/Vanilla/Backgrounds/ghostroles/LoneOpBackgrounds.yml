@@ -1,5 +1,6 @@
 - type: BackgroundGroup
   id: LoneOpBackgroundGroup
+  btype: General
   backgrounds:
   - LoneOpsButcherBackground
   - LoneOpsStandartBackground

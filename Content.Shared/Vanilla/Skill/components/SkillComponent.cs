@@ -321,7 +321,7 @@ public sealed partial class SkillComponent : Component
         };
     }
     //Это лёгкий или обычный навык?
-    public bool IsEasySkill(skillType skill)
+    public static bool IsEasySkill(skillType skill)
     {
         return skill switch
         {

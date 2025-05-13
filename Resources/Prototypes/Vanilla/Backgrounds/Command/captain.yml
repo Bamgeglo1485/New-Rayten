@@ -1,0 +1,89 @@
+- type: roleBackground
+  id: JobCaptain
+  baby: CaptainBaby
+  adult: CaptainAdult
+  # general: CaptainGeneral
+
+- type: BackgroundGroup
+  id: CaptainBaby
+  btype: Baby
+  backgrounds:
+  - CaptainBabyBackground1
+  - CaptainBabyBackground2
+
+- type: BackgroundGroup
+  id: CaptainAdult
+  btype: Adult
+  backgrounds:
+  - CaptainAdultBackground1
+  - CaptainAdultBackground2
+  - CaptainAdultBackground3
+
+# - type: BackgroundGroup
+#   id: CaptainGeneral
+#   btype: General
+#   backgrounds:
+#   - NukeOpYoungBloodBackground
+#   - LoneOpsButcherBackground
+#   - NukeOpAnimalBackground
+
+- type: Background 
+  id: CaptainBabyBackground1
+  name: конченый идиот
+  description: тест
+  specialDesc:
+    - Вы получили пицот миллионов долларов ура!
+  skills:
+    RangeWeapon: 1
+    MeleeWeapon: 2
+  easySkills:
+  - Bureaucracy
+  - Piloting
+
+- type: Background 
+  id: CaptainBabyBackground2
+  name: самый сексуальный мужик в мире
+  description: тест
+  specialDesc:
+    - Вы бессмертны
+  skills:
+    RangeWeapon: 2
+    MeleeWeapon: 2
+  easySkills:
+  - Bureaucracy
+
+- type: Background 
+  id: CaptainAdultBackground1
+  name: горячая чикса
+  description: тест
+  specialDesc:
+    - Вы отень красивый :3
+  skills:
+    RangeWeapon: 2
+    MeleeWeapon: 2
+  easySkills:
+  - Bureaucracy
+
+- type: Background 
+  id: CaptainAdultBackground2
+  name: злодей-британец
+  description: тест
+  specialDesc:
+    - Вы можете ставить хроносферу, останавливающую время в небольшом радиусе
+  skills:
+    Medicine: 1
+    Chemistry: 1
+    Engineering: 1
+  easySkills:
+  - MusInstruments
+  - Bureaucracy
+
+- type: Background 
+  id: CaptainAdultBackground3
+  name: пубертатная язва
+  description: тест
+  specialDesc:
+    - Вы знаете что вы персонаж в игре про космонавтиков
+  skills:
+    Research: 3
+    Crime: 2

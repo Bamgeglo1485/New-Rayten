@@ -5,10 +5,11 @@
     xmlns:controls="clr-namespace:Content.Client.Vanilla.UserInterface.GhostBackground"
     xmlns:style="clr-namespace:Content.Client.Stylesheets"
     Title="Выбор предыстории"
-    SetWidth="950"
-    MinHeight="875"
-    Resizable="False">
+    VerticalExpand="True"
+    HorizontalExpand="True"
+    Resizable="False"
+    Margin="0">
     <ScrollContainer Name="MainScroll" Access="Public">
-        <BoxContainer Orientation="Vertical" Name="BackgroundsContainer" Access="Public"/>
+        <BoxContainer Orientation="Vertical" Name="BackgroundsContainer" Access="Public" />
     </ScrollContainer>
 </windows:GhostBackgroundWindow>
