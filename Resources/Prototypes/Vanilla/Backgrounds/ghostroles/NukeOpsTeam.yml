@@ -1,5 +1,6 @@
 - type: BackgroundGroup
   id: NukeopsBackgroundGroup
+  btype: General
   backgrounds:
   # - NukeOpfreelancerBackground TODO
   - NukeOpYoungBloodBackground

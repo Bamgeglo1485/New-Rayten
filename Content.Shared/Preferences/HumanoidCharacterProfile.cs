@@ -17,6 +17,7 @@ using Robust.Shared.Random;
 using Robust.Shared.Serialization;
 using Robust.Shared.Utility;
 using Content.Shared.Vanilla.VoiceSpeech;
+using Content.Shared.Vanilla.Background;
 
 namespace Content.Shared.Preferences
 {
@@ -64,6 +65,13 @@ namespace Content.Shared.Preferences
 
         [DataField]
         private Dictionary<string, RoleLoadout> _loadouts = new();
+
+        //RAYTEN-START
+        public IReadOnlyDictionary<string, RoleBackground> Backgrounds => _backgrounds;
+
+        [DataField]
+        private Dictionary<string, RoleBackground> _backgrounds = new();
+        //RAYTEN-END
 
         [DataField]
         public string Name { get; set; } = "John Doe";

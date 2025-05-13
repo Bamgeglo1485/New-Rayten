@@ -3,8 +3,7 @@
          xmlns:cc="clr-namespace:Content.Client.UserInterface.Controls"
          VerticalExpand="True"
          HorizontalExpand="True"
-         HorizontalAlignment="Stretch"
-         MaxWidth="920">
+         HorizontalAlignment="Stretch">
     <Button Name="MainButtonContainer"
             Disabled="True"
             HorizontalExpand="True"

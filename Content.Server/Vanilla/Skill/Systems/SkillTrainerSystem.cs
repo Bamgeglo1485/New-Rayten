@@ -59,7 +59,7 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
         }
 
 
-        if (skillComp.IsEasySkill(skillType)) 
+        if (SkillComponent.IsEasySkill(skillType)) 
         {
             bool? lvl = skillComp.GetEasySkill(skillType);
 

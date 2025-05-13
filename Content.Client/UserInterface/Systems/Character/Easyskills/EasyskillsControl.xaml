@@ -3,7 +3,7 @@
     xmlns:customControls="clr-namespace:Content.Client.Administration.UI.CustomControls" 
     HorizontalExpand="True"
     HorizontalAlignment="Stretch"
-    MinWidth="120">
+    MinWidth="180">
 <BoxContainer Name="MainContainer" Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True" MinWidth="120" HorizontalAlignment="Stretch">
         <Button Name="MainButton"
                 Disabled="True"

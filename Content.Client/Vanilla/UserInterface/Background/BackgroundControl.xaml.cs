@@ -21,7 +21,7 @@ public sealed partial class BackgroundControl : Control
         RobustXamlLoader.Load(this);
         var BackgroundNameMessage = new FormattedMessage();
         var BackgroundDescMessage = new FormattedMessage();
-        BackgroundNameMessage.AddMarkupOrThrow(Loc.GetString(name));
+        BackgroundNameMessage.AddMarkupOrThrow($"[head=2][bold][italic]{Loc.GetString(name)}[/italic][/bold][/head]");
         BackgroundDescMessage.AddMarkupOrThrow(Loc.GetString(description));
         NameLabel.SetMessage(BackgroundNameMessage);
         DescriptionLabel.SetMessage(BackgroundDescMessage);
