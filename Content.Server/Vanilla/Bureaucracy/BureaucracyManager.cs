@@ -59,7 +59,7 @@ public sealed class BureaucracyManager : EntitySystem
                                     ("job", getjob(Playerent)), 
                                     ("date", getdate())
                                     );
-        string FakeContent = ReplaceRandomRussianLetters(text, 0.7);
+        string FakeContent = ReplaceRandomRussianLetters(text, 0.4);
 
         _paperSystem.SetContent(new Entity<PaperComponent>(paperUid, paperComp), text, FakeContent);
     }

@@ -285,7 +285,9 @@ public sealed class PaperSystem : EntitySystem
     public void SetContent(Entity<PaperComponent> entity, string content, string? fakecontent = null)
     {
         entity.Comp.Content = content;
-        entity.Comp.FakeContent = fakecontent;//Rayten
+        if (entity.Comp.FakeContent == null)
+            entity.Comp.FakeContent = fakecontent; //Rayten
+
         Dirty(entity);
         UpdateUserInterface(entity);
 
