@@ -17,12 +17,12 @@
                     <BoxContainer Orientation="Vertical" VerticalExpand="True" HorizontalExpand="True" SizeFlagsStretchRatio="10" VerticalAlignment="Bottom" />
                     <Button Name="ButtonSave"
                             Text="Сохранить"
-                            SetHeight="40"
+                            SetHeight="30"
                             StyleClasses="chatSelectorOptionButton"
                             Margin="0" />
                     <Button Name="ButtonReset"
                             Text="Сбросить"
-                            SetHeight="40"
+                            SetHeight="30"
                             StyleClasses="chatSelectorOptionButton"
                             Margin="0" />
                 </BoxContainer>

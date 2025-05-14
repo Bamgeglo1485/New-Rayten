@@ -17,39 +17,23 @@ namespace Content.Client.Vanilla.UserInterface.Lobby.BackgroundUI;
 [GenerateTypedNameReferences]
 public sealed partial class BackgroundGroupContainer : BoxContainer
 {
-    private readonly BackgroundGroupPrototype _groupProto;
     public event Action<ProtoId<BackgroundPrototype>, ProtoId<BackgroundGroupPrototype>>? OnBackgroundSelected;
 
-    [Dependency] private readonly ILogManager _logMan = default!;
-    private ISawmill _sawmill = default!;
-
-    public BackgroundGroupContainer(HumanoidCharacterProfile profile, BackGround? background, BackgroundGroupPrototype groupProto, ICommonSession session, IDependencyCollection collection)
+    public BackgroundGroupContainer(IDependencyCollection collection, BackgroundGroupPrototype groupProto)
     {
         IoCManager.InjectDependencies(this);
         RobustXamlLoader.Load(this);
-        _groupProto = groupProto;
-        _sawmill = _logMan.GetSawmill("ПРЕДЫСТОРИИ.BackgroundGroupContainer");
-        RefreshBackgrounds(profile, background, session, collection);
-    }
 
-    /// <summary>
-    /// Updates button availabilities and buttons.
-    /// </summary>
-    public void RefreshBackgrounds(HumanoidCharacterProfile profile, BackGround? background, ICommonSession session, IDependencyCollection collection)
-    {
         var protoMan = collection.Resolve<IPrototypeManager>();
         var backgroundSystem = collection.Resolve<IEntityManager>().System<SharedBackgroundSystem>();
 
         BackgroundsContainer.DisposeAllChildren();
-        var groupbackgrounds = _groupProto.Backgrounds;
+        var groupbackgrounds = groupProto.Backgrounds;
 
         foreach (var bgId in groupbackgrounds)
         {
             if (!protoMan.TryIndex(bgId, out var bgProto))
-            {
-                _sawmill.Error($"Не найдена предыстория: {bgId}");
                 continue;
-            }
 
             var control = new BackgroundControl(
                 bgProto.Name,
@@ -60,10 +44,9 @@ public sealed partial class BackgroundGroupContainer : BoxContainer
                 bgProto.SkillPoints
             );
 
-            control.OnPressed += () => OnBackgroundSelected?.Invoke(bgId, _groupProto.ID);
+            control.OnPressed += () => OnBackgroundSelected?.Invoke(bgId, groupProto.ID);
             BackgroundsContainer.AddChild(control);
         }
-
-
     }
+
 }

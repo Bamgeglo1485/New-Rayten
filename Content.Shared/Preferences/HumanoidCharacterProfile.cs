@@ -157,12 +157,14 @@ namespace Content.Shared.Preferences
             PreferenceUnavailableMode preferenceUnavailable,
             HashSet<ProtoId<AntagPrototype>> antagPreferences,
             HashSet<ProtoId<TraitPrototype>> traitPreferences,
-            Dictionary<string, RoleLoadout> loadouts)
+            Dictionary<string, RoleLoadout> loadouts,
+            Dictionary<string, RoleBackground> backgrounds)//Rayten-Background
         {
             Name = name;
             FlavorText = flavortext;
             Species = species;
             Voice = voice; // Rayten-TTS
+
             VoicePitch = voicepith;
             Age = age;
             Sex = sex;
@@ -174,7 +176,7 @@ namespace Content.Shared.Preferences
             _antagPreferences = antagPreferences;
             _traitPreferences = traitPreferences;
             _loadouts = loadouts;
-
+            _backgrounds = backgrounds; //Rayten-background
             var hasHighPrority = false;
             foreach (var (key, value) in _jobPriorities)
             {
@@ -206,7 +208,8 @@ namespace Content.Shared.Preferences
                 other.PreferenceUnavailable,
                 new HashSet<ProtoId<AntagPrototype>>(other.AntagPreferences),
                 new HashSet<ProtoId<TraitPrototype>>(other.TraitPreferences),
-                new Dictionary<string, RoleLoadout>(other.Loadouts))
+                new Dictionary<string, RoleLoadout>(other.Loadouts),
+                new Dictionary<string, RoleBackground>(other.Backgrounds))
         {
         }
 
@@ -691,6 +694,26 @@ namespace Content.Shared.Preferences
                 VoicePitch = 1.5f;
             // Rayten-TTS-End
 
+            // Rayten-Backgrounds-start
+            var backgroundstoRemove = new ValueList<string>();
+
+            foreach (var (roleName, backgrounds) in _backgrounds)
+            {
+                if (!prototypeManager.HasIndex<RoleBackgroundPrototype>(roleName))
+                {
+                    backgroundstoRemove.Add(roleName);
+                    continue;
+                }
+
+                backgrounds.EnsureValid(this, session, collection);
+            }
+
+            foreach (var value in backgroundstoRemove)
+            {
+                _backgrounds.Remove(value);
+            }
+            // Rayten-Backgrounds-end
+
             // Checks prototypes exist for all loadouts and dump / set to default if not.
             var toRemove = new ValueList<string>();
 
@@ -820,7 +843,24 @@ namespace Content.Shared.Preferences
             profile._loadouts = copied;
             return profile;
         }
+        public HumanoidCharacterProfile WithBackground(RoleBackground background)
+        {
+            // Deep copies so we don't modify the DB profile.
+            var copied = new Dictionary<string, RoleBackground>();
 
+            foreach (var proto in _backgrounds)
+            {
+                if (proto.Key == background.Role)
+                    continue;
+
+                copied[proto.Key] = proto.Value.Clone();
+            }
+
+            copied[background.Role] = background.Clone();
+            var profile = Clone();
+            profile._backgrounds = copied;
+            return profile;
+        }
         public RoleLoadout GetLoadoutOrDefault(string id, ICommonSession? session, ProtoId<SpeciesPrototype>? species, IEntityManager entManager, IPrototypeManager protoManager)
         {
             if (!_loadouts.TryGetValue(id, out var loadout))

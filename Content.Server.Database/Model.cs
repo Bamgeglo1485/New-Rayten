@@ -371,6 +371,26 @@ namespace Content.Server.Database
                 .OwnsOne(p => p.HWId)
                 .Property(p => p.Type)
                 .HasDefaultValue(HwidType.Legacy);
+            //Rayten-start
+            modelBuilder.Entity<ProfileRoleBackground>()
+                .HasOne(e => e.Profile)
+                .WithMany(e => e.Backgrounds)
+                .HasForeignKey(e => e.ProfileId)
+                .IsRequired();
+
+            modelBuilder.Entity<ProfileBasicSkill>()
+                .HasOne(e => e.ProfileRoleBackground)
+                .WithMany(e => e.AddedBasicSkills)
+                .HasForeignKey(e => e.ProfileRoleBackgroundId)
+                .IsRequired();
+
+            modelBuilder.Entity<ProfileEasySkill>()
+                .HasOne(e => e.ProfileRoleBackground)
+                .WithMany(e => e.AddedEasySkills)
+                .HasForeignKey(e => e.ProfileRoleBackgroundId)
+                .IsRequired();
+            //Rayten-end
+
         }
 
         public virtual IQueryable<AdminLog> SearchLogs(IQueryable<AdminLog> query, string searchText)
@@ -420,7 +440,7 @@ namespace Content.Server.Database
         public List<Trait> Traits { get; } = new();
 
         public List<ProfileRoleLoadout> Loadouts { get; } = new();
-
+        public List<ProfileRoleBackground> Backgrounds { get; } = new(); //Rayten-Background
         [Column("pref_unavailable")] public DbPreferenceUnavailableMode PreferenceUnavailable { get; set; }
 
         public int PreferenceId { get; set; }
@@ -463,6 +483,51 @@ namespace Content.Server.Database
 
         public string TraitName { get; set; } = null!;
     }
+    //RAYTEN-START
+    #region предыстории
+    public class ProfileRoleBackground
+    {
+        public int Id { get; set; }
+
+        public int ProfileId { get; set; }
+
+        public Profile Profile { get; set; } = null!;
+
+        public string RoleName { get; set; } = string.Empty;
+
+        public string? SelectedBabyBackground { get; set; }
+
+        public string? SelectedAdultBackground { get; set; }
+
+        public string? SelectedGeneralBackground { get; set; }
+
+        public int SkillpointCredit { get; set; } = 0;
+
+        public List<ProfileBasicSkill> AddedBasicSkills { get; set; } = new();
+
+        public List<ProfileEasySkill> AddedEasySkills { get; set; } = new();
+    }
+    public class ProfileBasicSkill
+    {
+        public int Id { get; set; }
+
+        public int ProfileRoleBackgroundId { get; set; }
+
+        public ProfileRoleBackground ProfileRoleBackground { get; set; } = null!;
+
+        public string SkillId { get; set; } = string.Empty;
+
+        public int Level { get; set; }
+    }
+    public class ProfileEasySkill
+    {
+        public int Id { get; set; }
+        public int ProfileRoleBackgroundId { get; set; }
+        public ProfileRoleBackground ProfileRoleBackground { get; set; } = null!;
+        public string SkillId { get; set; } = string.Empty;
+    }
+    #endregion
+    //RAYTEN-END
 
     #region Loadouts
 

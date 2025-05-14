@@ -921,6 +921,62 @@ namespace Content.Server.Database.Migrations.Postgres
                     b.ToTable("profile", (string)null);
                 });
 
+            modelBuilder.Entity("Content.Server.Database.ProfileBasicSkill", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("profile_basic_skill_id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Level")
+                        .HasColumnType("integer")
+                        .HasColumnName("level");
+
+                    b.Property<int>("ProfileRoleBackgroundId")
+                        .HasColumnType("integer")
+                        .HasColumnName("profile_role_background_id");
+
+                    b.Property<string>("SkillId")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("skill_id");
+
+                    b.HasKey("Id")
+                        .HasName("PK_profile_basic_skill");
+
+                    b.HasIndex("ProfileRoleBackgroundId");
+
+                    b.ToTable("profile_basic_skill", (string)null);
+                });
+
+            modelBuilder.Entity("Content.Server.Database.ProfileEasySkill", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("profile_easy_skill_id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ProfileRoleBackgroundId")
+                        .HasColumnType("integer")
+                        .HasColumnName("profile_role_background_id");
+
+                    b.Property<string>("SkillId")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("skill_id");
+
+                    b.HasKey("Id")
+                        .HasName("PK_profile_easy_skill");
+
+                    b.HasIndex("ProfileRoleBackgroundId");
+
+                    b.ToTable("profile_easy_skill", (string)null);
+                });
+
             modelBuilder.Entity("Content.Server.Database.ProfileLoadout", b =>
                 {
                     b.Property<int>("Id")
@@ -971,6 +1027,48 @@ namespace Content.Server.Database.Migrations.Postgres
                     b.HasIndex("ProfileRoleLoadoutId");
 
                     b.ToTable("profile_loadout_group", (string)null);
+                });
+
+            modelBuilder.Entity("Content.Server.Database.ProfileRoleBackground", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("profile_role_background_id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ProfileId")
+                        .HasColumnType("integer")
+                        .HasColumnName("profile_id");
+
+                    b.Property<string>("RoleName")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("role_name");
+
+                    b.Property<string>("SelectedAdultBackground")
+                        .HasColumnType("text")
+                        .HasColumnName("selected_adult_background");
+
+                    b.Property<string>("SelectedBabyBackground")
+                        .HasColumnType("text")
+                        .HasColumnName("selected_baby_background");
+
+                    b.Property<string>("SelectedGeneralBackground")
+                        .HasColumnType("text")
+                        .HasColumnName("selected_general_background");
+
+                    b.Property<int>("SkillpointCredit")
+                        .HasColumnType("integer")
+                        .HasColumnName("skillpoint_credit");
+
+                    b.HasKey("Id")
+                        .HasName("PK_profile_role_background");
+
+                    b.HasIndex("ProfileId");
+
+                    b.ToTable("profile_role_background", (string)null);
                 });
 
             modelBuilder.Entity("Content.Server.Database.ProfileRoleLoadout", b =>
@@ -1758,6 +1856,30 @@ namespace Content.Server.Database.Migrations.Postgres
                     b.Navigation("Preference");
                 });
 
+            modelBuilder.Entity("Content.Server.Database.ProfileBasicSkill", b =>
+                {
+                    b.HasOne("Content.Server.Database.ProfileRoleBackground", "ProfileRoleBackground")
+                        .WithMany("AddedBasicSkills")
+                        .HasForeignKey("ProfileRoleBackgroundId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_profile_basic_skill_profile_role_background_profile_role_ba~");
+
+                    b.Navigation("ProfileRoleBackground");
+                });
+
+            modelBuilder.Entity("Content.Server.Database.ProfileEasySkill", b =>
+                {
+                    b.HasOne("Content.Server.Database.ProfileRoleBackground", "ProfileRoleBackground")
+                        .WithMany("AddedEasySkills")
+                        .HasForeignKey("ProfileRoleBackgroundId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_profile_easy_skill_profile_role_background_profile_role_bac~");
+
+                    b.Navigation("ProfileRoleBackground");
+                });
+
             modelBuilder.Entity("Content.Server.Database.ProfileLoadout", b =>
                 {
                     b.HasOne("Content.Server.Database.ProfileLoadoutGroup", "ProfileLoadoutGroup")
@@ -1780,6 +1902,18 @@ namespace Content.Server.Database.Migrations.Postgres
                         .HasConstraintName("FK_profile_loadout_group_profile_role_loadout_profile_role_loa~");
 
                     b.Navigation("ProfileRoleLoadout");
+                });
+
+            modelBuilder.Entity("Content.Server.Database.ProfileRoleBackground", b =>
+                {
+                    b.HasOne("Content.Server.Database.Profile", "Profile")
+                        .WithMany("Backgrounds")
+                        .HasForeignKey("ProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_profile_role_background_profile_profile_id");
+
+                    b.Navigation("Profile");
                 });
 
             modelBuilder.Entity("Content.Server.Database.ProfileRoleLoadout", b =>
@@ -2075,6 +2209,8 @@ namespace Content.Server.Database.Migrations.Postgres
                 {
                     b.Navigation("Antags");
 
+                    b.Navigation("Backgrounds");
+
                     b.Navigation("Jobs");
 
                     b.Navigation("Loadouts");
@@ -2085,6 +2221,13 @@ namespace Content.Server.Database.Migrations.Postgres
             modelBuilder.Entity("Content.Server.Database.ProfileLoadoutGroup", b =>
                 {
                     b.Navigation("Loadouts");
+                });
+
+            modelBuilder.Entity("Content.Server.Database.ProfileRoleBackground", b =>
+                {
+                    b.Navigation("AddedBasicSkills");
+
+                    b.Navigation("AddedEasySkills");
                 });
 
             modelBuilder.Entity("Content.Server.Database.ProfileRoleLoadout", b =>

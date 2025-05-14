@@ -23,22 +23,14 @@ namespace Content.Client.Vanilla.UserInterface.Lobby.BackgroundUI;
 [GenerateTypedNameReferences]
 public sealed partial class BackgroundWindow : FancyWindow
 {
-    public event Action<ProtoId<BackgroundPrototype>, ProtoId<BackgroundGroupPrototype>>? OnBackgroundPressed;
+    public event Action<RoleBackground>? OnSavePressed;
 
     private BackgroundGroupContainer? _babyGroupContainer;
     private BackgroundGroupContainer? _adultGroupContainer;
     private BackgroundGroupContainer? _generalGroupContainer;
-
-
-    private ProtoId<BackgroundPrototype>? _selectedBabyBackground;
-    private ProtoId<BackgroundPrototype>? _selectedGeneralBackground;
-    private ProtoId<BackgroundPrototype>? _selectedAdultBackground;
-    private Dictionary<skillType, SkillLevel> addedbasicskills = new();
-    private HashSet<skillType> addedeasyskills = new();
-
-
+    private RoleBackground CurrentBackground;
     public HumanoidCharacterProfile Profile;
-    private int SkillpointCredit = 0;
+
     public BackgroundWindow(
         HumanoidCharacterProfile profile,
         RoleBackground background,
@@ -49,22 +41,21 @@ public sealed partial class BackgroundWindow : FancyWindow
         RobustXamlLoader.Load(this);
         Profile = profile;
         var protoManager = collection.Resolve<IPrototypeManager>();
-        _selectedBabyBackground = background.SelectedBabyBackground?.Prototype;
-        _selectedGeneralBackground = background.SelectedAdultBackground?.Prototype;
-        _selectedAdultBackground = background.SelectedGeneralBackground?.Prototype;
+        CurrentBackground = background.Clone();
+
         // Baby group
         if (protoManager.TryIndex(proto.Baby, out var babyGroup))
         {
-            _babyGroupContainer = new BackgroundGroupContainer(profile, background.SelectedBabyBackground, babyGroup, session, collection);
+            _babyGroupContainer = new BackgroundGroupContainer(collection, babyGroup);
             LoadoutGroupsContainer.AddTab(_babyGroupContainer, Loc.GetString("детство"));
 
             _babyGroupContainer.OnBackgroundSelected += (protoId, groupId) =>
             {
-                _selectedBabyBackground = protoId;
-                _selectedGeneralBackground = null;
-                addedeasyskills = new();
-                addedbasicskills = new();
-                SkillpointCredit = 0;
+                CurrentBackground.SelectedBabyBackground = protoId;
+                CurrentBackground.SelectedGeneralBackground = null;
+                CurrentBackground.AddedBasicSkills = new();
+                CurrentBackground.AddedEasySkills = new();
+                CurrentBackground.SkillpointCredit = 0;
                 RefreshInformation(collection);
             };
         }
@@ -72,16 +63,16 @@ public sealed partial class BackgroundWindow : FancyWindow
         // Adult group
         if (protoManager.TryIndex(proto.Adult, out var adultGroup))
         {
-            _adultGroupContainer = new BackgroundGroupContainer(profile, background.SelectedAdultBackground, adultGroup, session, collection);
+            _adultGroupContainer = new BackgroundGroupContainer(collection, adultGroup);
             LoadoutGroupsContainer.AddTab(_adultGroupContainer, Loc.GetString("зрелость"));
 
             _adultGroupContainer.OnBackgroundSelected += (protoId, groupId) =>
             {
-                _selectedAdultBackground=protoId;
-                _selectedGeneralBackground=null;
-                addedeasyskills = new();
-                addedbasicskills = new();
-                SkillpointCredit = 0;
+                CurrentBackground.SelectedAdultBackground = protoId;
+                CurrentBackground.SelectedGeneralBackground = null;
+                CurrentBackground.AddedBasicSkills = new();
+                CurrentBackground.AddedEasySkills = new();
+                CurrentBackground.SkillpointCredit = 0;
                 RefreshInformation(collection);
             };
         }
@@ -89,17 +80,17 @@ public sealed partial class BackgroundWindow : FancyWindow
         // General group
         if (protoManager.TryIndex(proto.General, out var generalGroup))
         {
-            _generalGroupContainer = new BackgroundGroupContainer(profile, background.SelectedGeneralBackground, generalGroup, session, collection);
+            _generalGroupContainer = new BackgroundGroupContainer(collection, generalGroup);
             LoadoutGroupsContainer.AddTab(_generalGroupContainer, Loc.GetString("общее"));
 
             _generalGroupContainer.OnBackgroundSelected += (protoId, groupId) =>
             {
-                _selectedGeneralBackground=protoId;
-                _selectedAdultBackground=null;
-                _selectedBabyBackground=null;
-                addedeasyskills = new();
-                addedbasicskills = new();
-                SkillpointCredit = 0;
+                CurrentBackground.SelectedGeneralBackground = protoId;
+                CurrentBackground.SelectedAdultBackground = null;
+                CurrentBackground.SelectedBabyBackground = null;
+                CurrentBackground.AddedBasicSkills = new();
+                CurrentBackground.AddedEasySkills = new();
+                CurrentBackground.SkillpointCredit = 0;
                 RefreshInformation(collection);
             };
         }
@@ -119,32 +110,21 @@ public sealed partial class BackgroundWindow : FancyWindow
     private void OnSave()
     {
         ButtonSave.Disabled = true;
+        OnSavePressed?.Invoke(CurrentBackground);
     }
     private void OnReset(IDependencyCollection collection)
     {
-        _selectedBabyBackground=null;
-        _selectedAdultBackground=null;
-        _selectedGeneralBackground=null;
-        addedeasyskills = new();
-        addedbasicskills = new();
-        SkillpointCredit = 0;
+        CurrentBackground.SelectedBabyBackground = null;
+        CurrentBackground.SelectedAdultBackground = null;
+        CurrentBackground.SelectedGeneralBackground = null;
+        CurrentBackground.AddedBasicSkills = new();
+        CurrentBackground.AddedEasySkills = new();
+        CurrentBackground.SkillpointCredit = 0;
         RefreshInformation(collection);
-    }
-    public void RefreshBackgrounds(RoleBackground background, ICommonSession session, IDependencyCollection collection)
-    {
-        // Refresh each container if it exists
-        if (_babyGroupContainer != null)
-            _babyGroupContainer.RefreshBackgrounds(Profile, background.SelectedBabyBackground, session, collection);
-        if (_adultGroupContainer != null)
-            _adultGroupContainer.RefreshBackgrounds(Profile, background.SelectedAdultBackground, session, collection);
-        if (_generalGroupContainer != null)
-            _generalGroupContainer.RefreshBackgrounds(Profile, background.SelectedGeneralBackground, session, collection);
     }
 
     private void RefreshInformation(IDependencyCollection collection)
     {
-
-        ButtonSave.Disabled = false;
         SelectedSpecials.Visible = false;
         Skillpoints.Visible = false;
         Dictionary<skillType, SkillLevel>? BabyBackgroundBasicSkills = null;
@@ -161,7 +141,7 @@ public sealed partial class BackgroundWindow : FancyWindow
         selectedBackgroundMessage.PushMarkup("");
         List<string> SpecialDesc = new();
 
-        if (_selectedBabyBackground != null && protoManager.TryIndex(_selectedBabyBackground, out var bgProtoBaby))
+        if (CurrentBackground.SelectedBabyBackground != null && protoManager.TryIndex(CurrentBackground.SelectedBabyBackground, out var bgProtoBaby))
         {
             selectedBackgroundMessage.PushMarkup(Loc.GetString("rolebackground-ui-selectedbackgrounds-item", ("name", Loc.GetString(bgProtoBaby.Name))));
             if (bgProtoBaby.SpecialDesc != null)
@@ -170,7 +150,7 @@ public sealed partial class BackgroundWindow : FancyWindow
             BabyBackgroundEasySkills = new(bgProtoBaby.EasySkills);
         }
 
-        if (_selectedAdultBackground != null && protoManager.TryIndex(_selectedAdultBackground, out var bgProtoAdult))
+        if (CurrentBackground.SelectedAdultBackground != null && protoManager.TryIndex(CurrentBackground.SelectedAdultBackground, out var bgProtoAdult))
         {
             selectedBackgroundMessage.PushMarkup(Loc.GetString("rolebackground-ui-selectedbackgrounds-item", ("name", Loc.GetString(bgProtoAdult.Name))));
             if (bgProtoAdult.SpecialDesc != null)
@@ -179,7 +159,7 @@ public sealed partial class BackgroundWindow : FancyWindow
             AdultBackgroundEasySkills = new(bgProtoAdult.EasySkills);
         }
 
-        if (_selectedGeneralBackground != null && protoManager.TryIndex(_selectedGeneralBackground, out var bgProtoGeneral))
+        if (CurrentBackground.SelectedGeneralBackground != null && protoManager.TryIndex(CurrentBackground.SelectedGeneralBackground, out var bgProtoGeneral))
         {
             selectedBackgroundMessage.PushMarkup(Loc.GetString("rolebackground-ui-selectedbackgrounds-item", ("name", Loc.GetString(bgProtoGeneral.Name))));
             if (bgProtoGeneral.SpecialDesc != null)
@@ -225,7 +205,7 @@ public sealed partial class BackgroundWindow : FancyWindow
             (skillType.Bureaucracy, false, 0),
             (skillType.Atmosphere, false, 0)
         };
-        int skillpoints = -SkillpointCredit;
+        int skillpoints = -CurrentBackground.SkillpointCredit;
 
         void ApplyBasicSkills(Dictionary<skillType, SkillLevel>? backgroundSkills)
         {
@@ -278,12 +258,11 @@ public sealed partial class BackgroundWindow : FancyWindow
         ApplyBasicSkills(BabyBackgroundBasicSkills);
         ApplyBasicSkills(AdultBackgroundBasicSkills);
         ApplyBasicSkills(GeneralBackgroundBasicSkills);
-        ApplyBasicSkills(addedbasicskills);
-
+        ApplyBasicSkills(CurrentBackground.AddedBasicSkills); 
         ApplyEasySkills(BabyBackgroundEasySkills);
         ApplyEasySkills(AdultBackgroundEasySkills);
         ApplyEasySkills(GeneralBackgroundEasySkills);
-        ApplyEasySkills(addedeasyskills);
+        ApplyEasySkills(CurrentBackground.AddedEasySkills);
         //Основные навыки
         foreach (var (skillName, level, experience) in generalbasicskills)
         {
@@ -308,32 +287,36 @@ public sealed partial class BackgroundWindow : FancyWindow
             Skillpoints.SetMessage(skillpointMessage);
             Skillpoints.Visible = true;
         }
+        
+        bool hasCompleteSpecific = CurrentBackground.SelectedBabyBackground != null && CurrentBackground.SelectedAdultBackground != null;
+        bool hasGeneral = CurrentBackground.SelectedGeneralBackground != null;
+        ButtonSave.Disabled = !(hasCompleteSpecific || hasGeneral) || skillpoints != 0;
     }
     private void AddSkill(skillType skillName, IDependencyCollection collection)
     {
         if (SkillComponent.IsEasySkill(skillName))
         {
-            if (!addedeasyskills.Contains(skillName))
+            if (!CurrentBackground.AddedEasySkills.Contains(skillName))
             {
-                addedeasyskills.Add(skillName);
-                SkillpointCredit++;
+                CurrentBackground.AddedEasySkills.Add(skillName);
+                CurrentBackground.SkillpointCredit++;
                 RefreshInformation(collection);
             }
             return;
         }
 
         // Если не easy, значит basic
-        if (addedbasicskills.TryGetValue(skillName, out var currentLevel))
+        if (CurrentBackground.AddedBasicSkills.TryGetValue(skillName, out var currentLevel))
         {
             if ((int)currentLevel < (int)SkillLevel.Expert)
-                addedbasicskills[skillName] = currentLevel + 1;
+                CurrentBackground.AddedBasicSkills[skillName] = currentLevel + 1;
         }
         else
         {
-            addedbasicskills[skillName] = SkillLevel.Basic;
+            CurrentBackground.AddedBasicSkills[skillName] = SkillLevel.Basic;
         }
 
-        SkillpointCredit++;
+        CurrentBackground.SkillpointCredit++;
         RefreshInformation(collection);
     }
 

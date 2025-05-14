@@ -16,6 +16,8 @@ using Content.Shared.Preferences;
 using Content.Shared.Preferences.Loadouts;
 using Content.Shared.Roles;
 using Content.Shared.Traits;
+using Content.Shared.Vanilla.Background;
+using Content.Shared.Vanilla.Skill;
 using Microsoft.EntityFrameworkCore;
 using Robust.Shared.Enums;
 using Robust.Shared.Network;
@@ -249,6 +251,33 @@ namespace Content.Server.Database
 
                 loadouts[role.RoleName] = loadout;
             }
+            //Rayten-background-start
+            var backgrounds = new Dictionary<string, RoleBackground>();
+
+            foreach (var role in profile.Backgrounds)
+            {
+                var background = new RoleBackground(role.RoleName)
+                {
+                    SelectedBabyBackground = role.SelectedBabyBackground,
+                    SelectedAdultBackground = role.SelectedAdultBackground,
+                    SelectedGeneralBackground = role.SelectedGeneralBackground,
+                    SkillpointCredit = role.SkillpointCredit,
+                    
+                    // Преобразуем ProfileBasicSkills в словарь
+                    AddedBasicSkills = role.AddedBasicSkills.ToDictionary(
+                        skill => Enum.Parse<skillType>(skill.SkillId),
+                        skill => (SkillLevel)skill.Level
+                    ),
+                    
+                    // Преобразуем ProfileEasySkills в коллекцию skillType
+                    AddedEasySkills = new(role.AddedEasySkills.Select(skill => Enum.Parse<skillType>(skill.SkillId)))
+                };
+
+                backgrounds[role.RoleName] = background;
+            }
+
+
+            //Rayten-background-end
 
             return new HumanoidCharacterProfile(
                 profile.CharacterName,
@@ -274,7 +303,8 @@ namespace Content.Server.Database
                 (PreferenceUnavailableMode) profile.PreferenceUnavailable,
                 antags.ToHashSet(),
                 traits.ToHashSet(),
-                loadouts
+                loadouts,
+                backgrounds //Rayten-Background
             );
         }
 
@@ -357,6 +387,48 @@ namespace Content.Server.Database
 
                 profile.Loadouts.Add(dz);
             }
+            
+            // RAYTEN-START
+            profile.Backgrounds.Clear();
+            foreach (var (roleId, rb) in humanoid.Backgrounds)
+            {
+                // Преобразование базовых навыков
+                var basic = rb.AddedBasicSkills
+                    .ToDictionary(
+                        kv => kv.Key.ToString(),
+                        kv => (int)kv.Value
+                    );
+
+                // Преобразование лёгких навыков
+                var easy = rb.AddedEasySkills
+                    .Select(s => s.ToString())
+                    .ToList();
+
+                var prb = new ProfileRoleBackground
+                {
+                    RoleName = roleId,
+                    SelectedBabyBackground = rb.SelectedBabyBackground,
+                    SelectedAdultBackground = rb.SelectedAdultBackground,
+                    SelectedGeneralBackground = rb.SelectedGeneralBackground,
+                    SkillpointCredit = rb.SkillpointCredit,
+                    AddedBasicSkills = basic
+                        .Select(pair => new ProfileBasicSkill
+                        {
+                            SkillId = pair.Key,
+                            Level = pair.Value
+                        })
+                        .ToList(),
+                    AddedEasySkills = easy
+                        .Select(skill => new ProfileEasySkill
+                        {
+                            SkillId = skill
+                        })
+                        .ToList()
+                };
+
+                profile.Backgrounds.Add(prb);
+            }
+            //RAYTEN-END
 
             return profile;
         }

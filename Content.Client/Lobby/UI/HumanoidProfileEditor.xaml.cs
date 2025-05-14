@@ -713,7 +713,10 @@ namespace Content.Client.Lobby.UI
         {
             _loadoutWindow?.Dispose();
         }
-
+        public void RefreshBackgrounds()
+        {
+            _backgroundWindow?.Dispose();
+        }
         /// <summary>
         /// Reloads the entire dummy entity for preview.
         /// </summary>
@@ -774,6 +777,7 @@ namespace Content.Client.Lobby.UI
             RefreshAntags();
             RefreshJobs();
             RefreshLoadouts();
+            RefreshBackgrounds();
             RefreshSpecies();
             RefreshTraits();
             RefreshFlavorText();
@@ -988,7 +992,6 @@ namespace Content.Client.Lobby.UI
                             if (background == null)
                             {
                                 background = new RoleBackground(roleBackgroundProto.ID);
-                                background.SetDefault(Profile, _playerManager.LocalSession, _prototypeManager);
                             }
 
                             OpenBackground(job, background, roleBackgroundProto);
@@ -1052,37 +1055,19 @@ namespace Content.Client.Lobby.UI
             if (collection == null || _playerManager.LocalSession == null || Profile == null)
                 return;
 
-            JobOverride = jobProto;
             var session = _playerManager.LocalSession;
             _backgroundWindow = new BackgroundWindow(Profile, roleBackground, roleBackgroundProto, _playerManager.LocalSession, collection)
             {
                 Title = jobProto?.LocalizedName,
             };
-            _backgroundWindow.RefreshBackgrounds(roleBackground, session, collection);
             LayoutContainer.SetAnchorPreset(_backgroundWindow, LayoutContainer.LayoutPreset.Wide);
             _backgroundWindow.Open();
 
-            _backgroundWindow.OnBackgroundPressed += (backgroundProto, backgroundGroup) =>
+            _backgroundWindow.OnSavePressed += (savedroleBackground) =>
             {
-                roleBackground.AddBackground(backgroundProto, backgroundGroup, _prototypeManager);
-                _backgroundWindow.RefreshBackgrounds(roleBackground, session, collection);
-                // Profile = Profile?.WithLoadout(roleLoadout);
-                // ReloadPreview();
+                Profile = Profile?.WithBackground(savedroleBackground);
+                UpdateJobPriorities(); // ПОСМОТРЕТЬ ЭТО 
             };
-
-            // JobOverride = jobProto;
-            // ReloadPreview();
-
-            // _loadoutWindow.OnClose += () =>
-            // {
-            //     JobOverride = null;
-            //     ReloadPreview();
-            // };
-
-            // if (Profile is null)
-            //     return;
-
-            // UpdateJobPriorities();
         }
         //RAYTEN-END
         private void OpenLoadout(JobPrototype? jobProto, RoleLoadout roleLoadout, RoleLoadoutPrototype roleLoadoutProto)
@@ -1309,6 +1294,7 @@ namespace Content.Client.Lobby.UI
             RefreshJobs();
             // In case there's species restrictions for loadouts
             RefreshLoadouts();
+            RefreshBackgrounds();
             UpdateSexControls(); // update sex for new species
             UpdateSpeciesGuidebookIcon();
             ReloadPreview();
