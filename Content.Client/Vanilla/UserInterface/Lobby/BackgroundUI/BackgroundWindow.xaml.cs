@@ -30,7 +30,7 @@ public sealed partial class BackgroundWindow : FancyWindow
     private BackgroundGroupContainer? _generalGroupContainer;
     private RoleBackground CurrentBackground;
     public HumanoidCharacterProfile Profile;
-
+    bool firstjoin = true;
     public BackgroundWindow(
         HumanoidCharacterProfile profile,
         RoleBackground background,
@@ -103,14 +103,15 @@ public sealed partial class BackgroundWindow : FancyWindow
         }
 
         RefreshInformation(collection);
-        ButtonSave.OnPressed += _ => OnSave();
+        ButtonSave.OnPressed += _ => OnSave(collection);
         ButtonReset.OnPressed += _ => OnReset(collection);
         
     }
-    private void OnSave()
+    private void OnSave(IDependencyCollection collection)
     {
-        ButtonSave.Disabled = true;
+        firstjoin = true;
         OnSavePressed?.Invoke(CurrentBackground);
+        RefreshInformation(collection);
     }
     private void OnReset(IDependencyCollection collection)
     {
@@ -121,12 +122,17 @@ public sealed partial class BackgroundWindow : FancyWindow
         CurrentBackground.AddedEasySkills = new();
         CurrentBackground.SkillpointCredit = 0;
         RefreshInformation(collection);
+        if(_babyGroupContainer != null) _babyGroupContainer.refreshbtns();
+        if(_adultGroupContainer != null) _adultGroupContainer.refreshbtns();
+        if(_generalGroupContainer != null) _generalGroupContainer.refreshbtns();
     }
 
     private void RefreshInformation(IDependencyCollection collection)
     {
         SelectedSpecials.Visible = false;
         Skillpoints.Visible = false;
+        int skillpoints = 0;
+
         Dictionary<skillType, SkillLevel>? BabyBackgroundBasicSkills = null;
         Dictionary<skillType, SkillLevel>? AdultBackgroundBasicSkills = null;
         Dictionary<skillType, SkillLevel>? GeneralBackgroundBasicSkills = null;
@@ -146,8 +152,10 @@ public sealed partial class BackgroundWindow : FancyWindow
             selectedBackgroundMessage.PushMarkup(Loc.GetString("rolebackground-ui-selectedbackgrounds-item", ("name", Loc.GetString(bgProtoBaby.Name))));
             if (bgProtoBaby.SpecialDesc != null)
                 SpecialDesc.AddRange(bgProtoBaby.SpecialDesc);
+
             BabyBackgroundBasicSkills = new(bgProtoBaby.Skills);
             BabyBackgroundEasySkills = new(bgProtoBaby.EasySkills);
+            skillpoints += bgProtoBaby.SkillPoints;
         }
 
         if (CurrentBackground.SelectedAdultBackground != null && protoManager.TryIndex(CurrentBackground.SelectedAdultBackground, out var bgProtoAdult))
@@ -157,6 +165,7 @@ public sealed partial class BackgroundWindow : FancyWindow
                 SpecialDesc.AddRange(bgProtoAdult.SpecialDesc);
             AdultBackgroundBasicSkills = new(bgProtoAdult.Skills);
             AdultBackgroundEasySkills = new(bgProtoAdult.EasySkills);
+            skillpoints += bgProtoAdult.SkillPoints;
         }
 
         if (CurrentBackground.SelectedGeneralBackground != null && protoManager.TryIndex(CurrentBackground.SelectedGeneralBackground, out var bgProtoGeneral))
@@ -166,6 +175,7 @@ public sealed partial class BackgroundWindow : FancyWindow
                 SpecialDesc.AddRange(bgProtoGeneral.SpecialDesc);
             GeneralBackgroundBasicSkills = new(bgProtoGeneral.Skills);
             GeneralBackgroundEasySkills = new(bgProtoGeneral.EasySkills);
+            skillpoints += bgProtoGeneral.SkillPoints;
         }
 
         SelectedBackgrounds.SetMessage(selectedBackgroundMessage);
@@ -205,7 +215,7 @@ public sealed partial class BackgroundWindow : FancyWindow
             (skillType.Bureaucracy, false, 0),
             (skillType.Atmosphere, false, 0)
         };
-        int skillpoints = -CurrentBackground.SkillpointCredit;
+        skillpoints -= CurrentBackground.SkillpointCredit;
 
         void ApplyBasicSkills(Dictionary<skillType, SkillLevel>? backgroundSkills)
         {
@@ -259,6 +269,7 @@ public sealed partial class BackgroundWindow : FancyWindow
         ApplyBasicSkills(AdultBackgroundBasicSkills);
         ApplyBasicSkills(GeneralBackgroundBasicSkills);
         ApplyBasicSkills(CurrentBackground.AddedBasicSkills); 
+        
         ApplyEasySkills(BabyBackgroundEasySkills);
         ApplyEasySkills(AdultBackgroundEasySkills);
         ApplyEasySkills(GeneralBackgroundEasySkills);
@@ -274,7 +285,7 @@ public sealed partial class BackgroundWindow : FancyWindow
         //Лёгкие навыки
         foreach (var (skillName, have, experience) in generaleasyskills)
         {   
-            var easyskillsControl = new EasyskillsControl(skillName, have, experience, false );
+            var easyskillsControl = new EasyskillsControl(skillName, have, experience, skillpoints > 0 );
             easyskillsControl.OnPressed += () => AddSkill(skillName, collection);
 
             EasySkillContainer.Children.Add(easyskillsControl);
@@ -290,7 +301,8 @@ public sealed partial class BackgroundWindow : FancyWindow
         
         bool hasCompleteSpecific = CurrentBackground.SelectedBabyBackground != null && CurrentBackground.SelectedAdultBackground != null;
         bool hasGeneral = CurrentBackground.SelectedGeneralBackground != null;
-        ButtonSave.Disabled = !(hasCompleteSpecific || hasGeneral) || skillpoints != 0;
+        ButtonSave.Disabled = !(hasCompleteSpecific || hasGeneral) || skillpoints != 0 || firstjoin;
+        firstjoin = false;
     }
     private void AddSkill(skillType skillName, IDependencyCollection collection)
     {

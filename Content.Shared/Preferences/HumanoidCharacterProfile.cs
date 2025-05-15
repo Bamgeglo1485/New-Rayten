@@ -165,7 +165,7 @@ namespace Content.Shared.Preferences
             Species = species;
             Voice = voice; // Rayten-TTS
 
-            VoicePitch = voicepith;
+            VoicePitch = voicepith; // Rayten-TTS
             Age = age;
             Sex = sex;
             Gender = gender;
@@ -197,8 +197,8 @@ namespace Content.Shared.Preferences
             : this(other.Name,
                 other.FlavorText,
                 other.Species,
-                other.Voice,
-                other.VoicePitch,
+                other.Voice, //Rayten-TTS
+                other.VoicePitch, //Rayten-TTS
                 other.Age,
                 other.Sex,
                 other.Gender,
@@ -209,7 +209,7 @@ namespace Content.Shared.Preferences
                 new HashSet<ProtoId<AntagPrototype>>(other.AntagPreferences),
                 new HashSet<ProtoId<TraitPrototype>>(other.TraitPreferences),
                 new Dictionary<string, RoleLoadout>(other.Loadouts),
-                new Dictionary<string, RoleBackground>(other.Backgrounds))
+                new Dictionary<string, RoleBackground>(other.Backgrounds)) //Rayten-Backgrounds
         {
         }
 
@@ -512,6 +512,7 @@ namespace Content.Shared.Preferences
             if (!_antagPreferences.SequenceEqual(other._antagPreferences)) return false;
             if (!_traitPreferences.SequenceEqual(other._traitPreferences)) return false;
             if (!Loadouts.SequenceEqual(other.Loadouts)) return false;
+            if (!Backgrounds.SequenceEqual(other.Backgrounds)) return false;
             if (FlavorText != other.FlavorText) return false;
             return Appearance.MemberwiseEquals(other.Appearance);
         }
@@ -695,24 +696,33 @@ namespace Content.Shared.Preferences
             // Rayten-TTS-End
 
             // Rayten-Backgrounds-start
+            Logger.Info("Начинаем валидацию всех сохранённых предысторий профиля.");
+            Logger.Info($"Всего предысторий у профиля: {_backgrounds.Count}");
             var backgroundstoRemove = new ValueList<string>();
 
             foreach (var (roleName, backgrounds) in _backgrounds)
             {
+                Logger.Info($"Проверяем предысторию для роли: {roleName}");
+
                 if (!prototypeManager.HasIndex<RoleBackgroundPrototype>(roleName))
                 {
+                    Logger.Warning($"Роль '{roleName}' не найдена в прототипах. Помечаем на удаление.");
                     backgroundstoRemove.Add(roleName);
                     continue;
                 }
 
+                Logger.Info($"Роль '{roleName}' найдена. Запускаем валидацию предыстории.");
                 backgrounds.EnsureValid(this, session, collection);
+                Logger.Info($"Валидация предыстории для роли '{roleName}' завершена.");
             }
 
             foreach (var value in backgroundstoRemove)
             {
+                Logger.Warning($"Удаляем предысторию для неизвестной роли: {value}");
                 _backgrounds.Remove(value);
             }
             // Rayten-Backgrounds-end
+
 
             // Checks prototypes exist for all loadouts and dump / set to default if not.
             var toRemove = new ValueList<string>();
@@ -808,6 +818,7 @@ namespace Content.Shared.Preferences
             hashCode.Add(_antagPreferences);
             hashCode.Add(_traitPreferences);
             hashCode.Add(_loadouts);
+            hashCode.Add(_backgrounds);
             hashCode.Add(Name);
             hashCode.Add(FlavorText);
             hashCode.Add(Species);
@@ -845,22 +856,40 @@ namespace Content.Shared.Preferences
         }
         public HumanoidCharacterProfile WithBackground(RoleBackground background)
         {
-            // Deep copies so we don't modify the DB profile.
+            Logger.Info("Начало сохранения предыстории");
+            Logger.Info($"Получена предыстория для роли {background.Role}");
+
             var copied = new Dictionary<string, RoleBackground>();
+            Logger.Info($"Исходное количество предысторий в профиле: {_backgrounds.Count}");
 
             foreach (var proto in _backgrounds)
             {
+                Logger.Info($"Обработка предыстории: Ключ={proto.Key}");
+
                 if (proto.Key == background.Role)
+                {
+                    Logger.Info($"Пропускаем предысторию для роли {proto.Key}, так как она будет заменена");
                     continue;
+                }
 
                 copied[proto.Key] = proto.Value.Clone();
+                Logger.Info($"Скопирована предыстория: Ключ={proto.Key}");
             }
 
             copied[background.Role] = background.Clone();
+            Logger.Info($"Добавлена/заменена предыстория для роли {background.Role}");
+
             var profile = Clone();
+            Logger.Info("Профиль клонирован");
+
             profile._backgrounds = copied;
+            Logger.Info($"В профиле теперь {_backgrounds.Count} предысторий до замены и {copied.Count} после");
+
+            Logger.Info("Предыстория успешно сохранена в новом профиле");
+
             return profile;
         }
+
         public RoleLoadout GetLoadoutOrDefault(string id, ICommonSession? session, ProtoId<SpeciesPrototype>? species, IEntityManager entManager, IPrototypeManager protoManager)
         {
             if (!_loadouts.TryGetValue(id, out var loadout))

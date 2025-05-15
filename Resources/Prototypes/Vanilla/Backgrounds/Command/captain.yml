@@ -39,6 +39,7 @@
   easySkills:
   - Bureaucracy
   - Piloting
+  skillPoints: 2
 
 - type: Background 
   id: CaptainBabyBackground2
@@ -47,8 +48,8 @@
   specialDesc:
     - Вы бессмертны
   skills:
-    RangeWeapon: 2
-    MeleeWeapon: 2
+    RangeWeapon: 1
+    MeleeWeapon: 3
   easySkills:
   - Bureaucracy
 
@@ -59,8 +60,8 @@
   specialDesc:
     - Вы отень красивый :3
   skills:
-    RangeWeapon: 2
-    MeleeWeapon: 2
+    RangeWeapon: 1
+    MeleeWeapon: 3
   easySkills:
   - Bureaucracy
 
@@ -72,8 +73,7 @@
     - Вы можете ставить хроносферу, останавливающую время в небольшом радиусе
   skills:
     Medicine: 1
-    Chemistry: 1
-    Engineering: 1
+    Chemistry: 2
   easySkills:
   - MusInstruments
   - Bureaucracy

@@ -54,6 +54,14 @@ namespace Content.Server.Database
                     .ThenInclude(h => h.Loadouts)
                     .ThenInclude(l => l.Groups)
                     .ThenInclude(group => group.Loadouts)
+                // RAYTEN-START
+                .Include(p => p.Profiles)
+                    .ThenInclude(h => h.Backgrounds)
+                    .ThenInclude(b => b.AddedBasicSkills)
+                .Include(p => p.Profiles)
+                    .ThenInclude(h => h.Backgrounds)
+                    .ThenInclude(b => b.AddedEasySkills)
+                // RAYTEN-END
                 .AsSplitQuery()
                 .SingleOrDefaultAsync(p => p.UserId == userId.UserId, cancel);
 
@@ -253,7 +261,7 @@ namespace Content.Server.Database
             }
             //Rayten-background-start
             var backgrounds = new Dictionary<string, RoleBackground>();
-
+    
             foreach (var role in profile.Backgrounds)
             {
                 var background = new RoleBackground(role.RoleName)

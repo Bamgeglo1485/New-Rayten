@@ -22,7 +22,8 @@ using Robust.Shared.Map;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
-
+using Content.Shared.Vanilla.Background;
+using Content.Server.Vanilla.Background;
 namespace Content.Server.Station.Systems;
 
 /// <summary>
@@ -41,6 +42,7 @@ public sealed class StationSpawningSystem : SharedStationSpawningSystem
     [Dependency] private readonly MetaDataSystem _metaSystem = default!;
     [Dependency] private readonly PdaSystem _pdaSystem = default!;
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+    [Dependency] private readonly BackGroundSystem _bgsys = default!;
 
     /// <summary>
     /// Attempts to spawn a player character onto the given station.
@@ -145,7 +147,11 @@ public sealed class StationSpawningSystem : SharedStationSpawningSystem
         {
             EquipRoleLoadout(entity.Value, loadout, roleProto!);
         }
-
+        //Rayten-start
+        RoleBackground? background = null;
+        profile?.Backgrounds.TryGetValue(SharedBackgroundSystem.GetJobPrototype(prototype?.ID), out background);
+        _bgsys.ApplyBackground(entity.Value, background);
+        //Rayten-end
         if (prototype?.StartingGear != null)
         {
             var startingGear = _prototypeManager.Index<StartingGearPrototype>(prototype.StartingGear);

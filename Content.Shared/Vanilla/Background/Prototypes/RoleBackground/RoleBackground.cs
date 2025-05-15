@@ -42,7 +42,7 @@ public sealed partial class RoleBackground : IEquatable<RoleBackground>
     {
         return new RoleBackground(Role)
         {
-            SkillpointCredit = SkillpointCredit,
+            SkillpointCredit = SkillpointCredit,    
             SelectedBabyBackground = SelectedBabyBackground,
             SelectedAdultBackground = SelectedAdultBackground,
             SelectedGeneralBackground = SelectedGeneralBackground,
@@ -58,55 +58,210 @@ public sealed partial class RoleBackground : IEquatable<RoleBackground>
     public void EnsureValid(HumanoidCharacterProfile profile, ICommonSession session, IDependencyCollection collection)
     {
         var protoManager = collection.Resolve<IPrototypeManager>();
+        List<(skillType Skill, SkillLevel Level, int Experience)> generalbasicskills = new List<(skillType Skill, SkillLevel Level, int Experience)>
+        {
+            (skillType.RangeWeapon, SkillLevel.None, 0),
+            (skillType.MeleeWeapon, SkillLevel.None, 0),
+            (skillType.Medicine, SkillLevel.None, 0),
+            (skillType.Chemistry, SkillLevel.None, 0),
+            (skillType.Engineering, SkillLevel.None, 0),
+            (skillType.Building, SkillLevel.None, 0),
+            (skillType.Research, SkillLevel.None, 0),
+            (skillType.Crime, SkillLevel.None, 0)
+        };
+        List<(skillType Skill, bool have, int Experience)> generaleasyskills = new List<(skillType Skill, bool have, int Experience)>
+        {
+            (skillType.Piloting, false, 0),
+            (skillType.Botany, false, 0),
+            (skillType.MusInstruments, false, 0),
+            (skillType.Bureaucracy, false, 0),
+            (skillType.Atmosphere, false, 0)
+        };
+        int skillpoints = 0;
+
         // 1. Проверка, что роль существует
         if (!protoManager.TryIndex(Role, out RoleBackgroundPrototype? roleProto))
         {
-            SelectedBabyBackground = null;
-            SelectedAdultBackground = null;
-            SelectedGeneralBackground = null;
+            SetDefault(profile);
             return;
         }
+
         // 2. Проверка предысторий по типу
-        void ValidateBackground(ref ProtoId<BackgroundPrototype>? selectedBackgroundId, string? groupId, BackgroundGroupType requiredType)
+        bool ValidateBackground(ref ProtoId<BackgroundPrototype>? selectedBackgroundId, string? groupId, BackgroundGroupType requiredType)
         {
             if (selectedBackgroundId == null || string.IsNullOrEmpty(groupId))
             {
-                selectedBackgroundId = null;
-                return;
+                SetDefault(profile);
+                return false;
             }
 
             // Проверка, что группа существует
             if (!protoManager.TryIndex<BackgroundGroupPrototype>(groupId, out var groupProto))
             {
-                selectedBackgroundId = null;
-                return;
+                SetDefault(profile);
+                return false;
             }
 
             // Проверка, что группа соответствует типу
             if (groupProto.Type != requiredType)
             {
-                selectedBackgroundId = null;
-                return;
+                SetDefault(profile);
+                return false;
             }
 
             // Проверка, что предыстория существует
             if (!protoManager.TryIndex<BackgroundPrototype>(selectedBackgroundId.Value, out var backgroundProto))
             {
-                selectedBackgroundId = null;
-                return;
+                SetDefault(profile);
+                return false;
             }
 
             // Проверка, что предыстория входит в группу
             if (!groupProto.Backgrounds.Contains(selectedBackgroundId.Value))
             {
-                selectedBackgroundId = null;
+                SetDefault(profile);
+                return false;
+            }
+            return true;
+        }
+        // 3. Проверка на навыки
+        //Расчитывает скиллпоинты, если при пересечении навыков из разных предысторий уровень превышает максимальный
+        void CalculateCreditFromBasicSkills(Dictionary<skillType, SkillLevel>? backgroundSkills)
+        {
+            if (backgroundSkills == null)
+                return;
+
+            foreach (var (skill, level) in backgroundSkills)
+            {
+                int index = generalbasicskills.FindIndex(s => s.Skill == skill);
+                if (index == -1)
+                    continue;
+
+                var current = generalbasicskills[index];
+                int total = (int)current.Level + (int)level;
+                SkillLevel newLevel = total > (int)SkillLevel.Expert
+                    ? SkillLevel.Expert
+                    : (SkillLevel)total;
+
+                if (total > (int)SkillLevel.Expert)
+                    skillpoints += total - (int)SkillLevel.Expert;
+
+                generalbasicskills[index] = (skill, newLevel, 0);
             }
         }
-        ValidateBackground(ref SelectedBabyBackground, roleProto.Baby, BackgroundGroupType.Baby);
-        ValidateBackground(ref SelectedAdultBackground, roleProto.Adult, BackgroundGroupType.Adult);
-        ValidateBackground(ref SelectedGeneralBackground, roleProto.General, BackgroundGroupType.General);
-        // 3. Проверка что выбрана либо одна основная предыстория либо детская + взрослая
-        // 4. Проверка на навыки
+        void CalculateCreditFromEasySkills(HashSet<skillType>? backgroundSkills)
+        {
+            if (backgroundSkills == null)
+                return;
+
+            foreach (var skill in backgroundSkills)
+            {
+                int index = generaleasyskills.FindIndex(s => s.Skill == skill);
+                if (index == -1)
+                    continue;
+
+                var current = generaleasyskills[index];
+                if (current.have)
+                {
+                    skillpoints += 1;
+                }
+                else
+                {
+                    generaleasyskills[index] = (skill, true, 0);
+                }
+            }
+        }
+        void CalculateCreditFromAdditiveBasic(Dictionary<skillType, SkillLevel>? backgroundSkills)
+        {
+            if (backgroundSkills == null)
+                return;
+
+            foreach (var (_, level) in backgroundSkills)
+            {
+                skillpoints -= (int)level;
+            }
+        }
+        void CalculateCreditFromAdditiveEasy(HashSet<skillType>? backgroundSkills)
+        {
+            if (backgroundSkills == null)
+                return;
+
+            skillpoints -= backgroundSkills.Count;
+        }
+
+        
+        // 4. Проверка что выбрана либо одна основная предыстория либо детская + взрослая
+        var useSplitBackgrounds = SelectedGeneralBackground == null &&
+                                SelectedAdultBackground != null &&
+                                SelectedBabyBackground != null;
+
+        var useGeneralBackground = SelectedGeneralBackground != null &&
+                                SelectedAdultBackground == null &&
+                                SelectedBabyBackground == null;
+
+        if (useSplitBackgrounds)
+        {
+            //Валидируем предыстории
+            if (!ValidateBackground(ref SelectedBabyBackground, roleProto.Baby, BackgroundGroupType.Baby) || 
+                !ValidateBackground(ref SelectedAdultBackground, roleProto.Adult, BackgroundGroupType.Adult))
+               return;
+
+            //Валидируем навыки
+
+
+            if (protoManager.TryIndex(SelectedBabyBackground, out var bgProtoBaby) &&
+                protoManager.TryIndex(SelectedAdultBackground, out var bgProtoAdult) )
+            {
+                //Добавляем дополнительные скиллпоинты от предысторий
+                skillpoints += bgProtoBaby.SkillPoints;
+                skillpoints += bgProtoAdult.SkillPoints;
+                //считаем кредиты от пересечения лёгких навыков
+                CalculateCreditFromEasySkills(bgProtoBaby.EasySkills);
+                CalculateCreditFromEasySkills(bgProtoAdult.EasySkills);
+
+                //считаем кредиты от пересечения основных навыков
+                CalculateCreditFromBasicSkills(bgProtoBaby.Skills);
+                CalculateCreditFromBasicSkills(bgProtoAdult.Skills);
+                if (skillpoints != SkillpointCredit)
+                {
+                    SetDefault(profile);
+                    return;
+                }
+                //считаем что выбранные навыки соответствуют кредиту
+                CalculateCreditFromAdditiveBasic(AddedBasicSkills);
+                CalculateCreditFromAdditiveEasy(AddedEasySkills);
+                if( skillpoints != 0 )
+                {
+                    SetDefault(profile);
+                    return;
+                }
+                //считаем что выбранные навыки не увеличивают навык сверх максимума
+                CalculateCreditFromBasicSkills(AddedBasicSkills);
+                CalculateCreditFromEasySkills(AddedEasySkills);
+                if( skillpoints != 0 )
+                {
+                    SetDefault(profile);
+                    return;
+                }
+            }
+            else
+            {
+                SetDefault(profile);
+                return;
+            }
+
+
+        } else if (useGeneralBackground)
+        {
+            //Валидируем предысторию
+            if(!ValidateBackground(ref SelectedGeneralBackground, roleProto.General, BackgroundGroupType.General))
+                return;
+        }
+        else
+        {
+            SetDefault(profile);
+            return;
+        }
 
     }
 

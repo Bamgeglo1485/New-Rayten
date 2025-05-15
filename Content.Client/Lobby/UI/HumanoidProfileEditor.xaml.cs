@@ -53,7 +53,7 @@ namespace Content.Client.Lobby.UI
         private readonly MarkingManager _markingManager;
         private readonly JobRequirementsManager _requirements;
         private readonly LobbyUIController _controller;
-
+        private ISawmill _sawmill = default!;
         private readonly SpriteSystem _sprite;
 
         private FlavorText.FlavorText? _flavorText;
@@ -61,7 +61,7 @@ namespace Content.Client.Lobby.UI
 
         // One at a time.
         private LoadoutWindow? _loadoutWindow;
-        private BackgroundWindow? _backgroundWindow;
+        private BackgroundWindow? _backgroundWindow; //RAYTEN
         private bool _exporting;
         private bool _imaging;
 
@@ -106,8 +106,6 @@ namespace Content.Client.Lobby.UI
         private const string DefaultSpeciesGuidebook = "Species";
 
         public event Action<List<ProtoId<GuideEntryPrototype>>>? OnOpenGuidebook;
-
-        private ISawmill _sawmill;
 
         public HumanoidProfileEditor(
             IClientPreferencesManager preferencesManager,
@@ -165,7 +163,6 @@ namespace Content.Client.Lobby.UI
             };
 
             #region Left
-
             #region Name
 
             NameEdit.OnTextChanged += args => { SetName(args.Text); };
@@ -1067,6 +1064,7 @@ namespace Content.Client.Lobby.UI
             {
                 Profile = Profile?.WithBackground(savedroleBackground);
                 UpdateJobPriorities(); // ПОСМОТРЕТЬ ЭТО 
+                IsDirty = true;
             };
         }
         //RAYTEN-END
@@ -1222,6 +1220,10 @@ namespace Content.Client.Lobby.UI
 
             _loadoutWindow?.Dispose();
             _loadoutWindow = null;
+            //Rayten-start
+            _backgroundWindow?.Dispose();
+            _backgroundWindow = null;
+            //Rayten-end
         }
 
         protected override void EnteredTree()

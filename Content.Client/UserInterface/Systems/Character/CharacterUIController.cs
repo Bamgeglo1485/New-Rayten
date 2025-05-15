@@ -313,13 +313,26 @@ public sealed class CharacterUIController : UIController, IOnStateEntered<Gamepl
             return;
         _window.BackgroundContainer.Children.Clear();
 
-        if (EntityManager.TryGetComponent<BackgroundComponent>(user, out var BackgroundComp) 
-            && _prototypeManager.TryIndex(BackgroundComp.Background, out var bgProto))
+        if (EntityManager.TryGetComponent<BackgroundComponent>(user, out var BackgroundComp))
         {
-            var backgroundControl = new BackgroundControl(bgProto.Name, bgProto.Description);
-
-            _window.BackgroundContainer.Children.Add(backgroundControl);
-            _window.TabBackground.Disabled = false;
+            if ( BackgroundComp.BabyBackground != null && _prototypeManager.TryIndex(BackgroundComp.BabyBackground, out var bgProtoBaby))
+            {
+                var backgroundControl = new BackgroundControl(bgProtoBaby.Name, bgProtoBaby.Description);
+                _window.BackgroundContainer.Children.Add(backgroundControl);
+                _window.TabBackground.Disabled = false;
+            }
+            if ( BackgroundComp.AdultBackground != null && _prototypeManager.TryIndex(BackgroundComp.AdultBackground, out var bgProtoAdult))
+            {
+                var backgroundControl = new BackgroundControl(bgProtoAdult.Name, bgProtoAdult.Description);
+                _window.BackgroundContainer.Children.Add(backgroundControl);
+                _window.TabBackground.Disabled = false;
+            }
+            if ( BackgroundComp.GeneralBackground != null && _prototypeManager.TryIndex(BackgroundComp.GeneralBackground, out var bgProtoGeneral))
+            {
+                var backgroundControl = new BackgroundControl(bgProtoGeneral.Name, bgProtoGeneral.Description);
+                _window.BackgroundContainer.Children.Add(backgroundControl);
+                _window.TabBackground.Disabled = false;
+            }
         }
         else
         {

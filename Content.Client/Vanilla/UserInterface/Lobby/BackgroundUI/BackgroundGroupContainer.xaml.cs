@@ -44,9 +44,26 @@ public sealed partial class BackgroundGroupContainer : BoxContainer
                 bgProto.SkillPoints
             );
 
-            control.OnPressed += () => OnBackgroundSelected?.Invoke(bgId, groupProto.ID);
+            control.OnPressed += () =>
+            {
+                refreshbtns(control); // отключаем все, кроме нажатого
+                OnBackgroundSelected?.Invoke(bgId, groupProto.ID);
+            };
+
             BackgroundsContainer.AddChild(control);
         }
     }
+    public void refreshbtns(BackgroundControl? selectedControl = null)
+    {
+        foreach (var child in BackgroundsContainer.Children)
+        {
+            if (child is BackgroundControl control && control != selectedControl)
+            {
+                control.refreshbtn();
+            }
+        }
+    }
+
+
 
 }

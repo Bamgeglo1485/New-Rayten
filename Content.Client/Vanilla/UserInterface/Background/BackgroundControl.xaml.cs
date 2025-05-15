@@ -78,7 +78,17 @@ public sealed partial class BackgroundControl : Control
             SpecialsLabel.SetMessage(specialMsg);
         }
 
-        Button.OnPressed += _ => OnPressed?.Invoke();
+        Button.OnPressed += _ => 
+        {
+            OnPressed?.Invoke();
+            Button.Disabled = true;
+            Button.Text = "Выбрано";
+        };
+    }
+    public void refreshbtn()
+    {
+        Button.Disabled = false;
+        Button.Text = "Выбрать";
     }
     public BackgroundControl(string name, string description)
     {
