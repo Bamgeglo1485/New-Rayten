@@ -1,19 +1,17 @@
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
-using Content.Server.Administration.Logs;
 using Content.Shared.Vanilla.Background;
-using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Vanilla.Skill;
 using Content.Shared.Roles;
 using Content.Server.SkillTrainer;
-using Content.Server.Mind;
-using Content.Shared.Mind;
 using Content.Server.Roles;
 using Content.Server.Ghost.Roles;
 using Content.Server.Administration.Systems;
 using Content.Shared.Administration;
 using Content.Server.Vanilla.Skill;
-using Content.Shared.Vanilla.Jammer;
+using Content.Server.GameTicking.Events;
+using Content.Server.Preferences.Managers;
+using Content.Shared.Preferences;
 
 namespace Content.Server.Vanilla.Background;
 
@@ -22,13 +20,41 @@ public sealed class BackGroundSystem : EntitySystem
     [Dependency] private readonly ServerSkillTrainerSystem _skillTrainer = default!;
     [Dependency] private readonly IPrototypeManager _prototype = default!;
     [Dependency] private readonly AdminFrozenSystem _freeze = default!;
+    
     public override void Initialize()
     {
         base.Initialize();
         SubscribeLocalEvent<AwaitBackgroundComponent, MapInitEvent>(OnMapInit);
         SubscribeLocalEvent<AwaitBackgroundComponent, ComponentShutdown>(OnShutdown);
         SubscribeNetworkEvent<TakeGhostBackgroundEvent>(OnTakeGhostBackgroundEvent);
+        SubscribeLocalEvent<IsJobAllowedEvent>(OnIsJobAllowed);
     }
+    private void OnIsJobAllowed(ref IsJobAllowedEvent ev)
+    {
+        var prefManager = IoCManager.Resolve<IServerPreferencesManager>();
+        var prefs = prefManager.GetPreferences(ev.Player.UserId);
+
+        var profile = prefs.SelectedCharacter as HumanoidCharacterProfile;
+        if (profile == null)
+            return;
+
+        if (!_prototype.TryIndex<JobPrototype>(ev.JobId, out var jobProto))
+            return;
+
+        var jobProtoId = SharedBackgroundSystem.GetJobPrototype(jobProto.ID);
+
+        if (!_prototype.TryIndex<RoleBackgroundPrototype>(jobProtoId, out var roleBackgroundProto))
+        {
+            return;
+        }
+
+        if (!profile.Backgrounds.TryGetValue(jobProtoId, out var selectedBackground))
+        {
+            // Нет предыстории для этой профессии — блокируем
+            ev.Cancelled = true;
+        }
+    }
+
     public void ApplyBackground(EntityUid uid, RoleBackground? rolebackground)
     {   
         if (rolebackground == null)

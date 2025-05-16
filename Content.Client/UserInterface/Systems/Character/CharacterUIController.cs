@@ -315,24 +315,32 @@ public sealed class CharacterUIController : UIController, IOnStateEntered<Gamepl
 
         if (EntityManager.TryGetComponent<BackgroundComponent>(user, out var BackgroundComp))
         {
-            if ( BackgroundComp.BabyBackground != null && _prototypeManager.TryIndex(BackgroundComp.BabyBackground, out var bgProtoBaby))
+            if (BackgroundComp.GeneralBackground == null)
             {
-                var backgroundControl = new BackgroundControl(bgProtoBaby.Name, bgProtoBaby.Description);
-                _window.BackgroundContainer.Children.Add(backgroundControl);
-                _window.TabBackground.Disabled = false;
+                if (_prototypeManager.TryIndex(BackgroundComp.BabyBackground, out var bgProtoBaby))
+                {
+                    var backgroundControl = new BackgroundControl(bgProtoBaby.Name, bgProtoBaby.Description);
+                    _window.BackgroundContainer.Children.Add(backgroundControl);
+                    _window.TabBackground.Disabled = false;
+                }
+                if (_prototypeManager.TryIndex(BackgroundComp.AdultBackground, out var bgProtoAdult))
+                {
+                    var backgroundControl = new BackgroundControl(bgProtoAdult.Name, bgProtoAdult.Description);
+                    _window.BackgroundContainer.Children.Add(backgroundControl);
+                    _window.TabBackground.Disabled = false;
+                }
             }
-            if ( BackgroundComp.AdultBackground != null && _prototypeManager.TryIndex(BackgroundComp.AdultBackground, out var bgProtoAdult))
+            else
             {
-                var backgroundControl = new BackgroundControl(bgProtoAdult.Name, bgProtoAdult.Description);
-                _window.BackgroundContainer.Children.Add(backgroundControl);
-                _window.TabBackground.Disabled = false;
+                if (_prototypeManager.TryIndex(BackgroundComp.GeneralBackground, out var bgProtoGeneral))
+                {
+                    var backgroundControl = new BackgroundControl(bgProtoGeneral.Name, bgProtoGeneral.Description);
+                    _window.BackgroundContainer.Children.Add(backgroundControl);
+                    _window.TabBackground.Disabled = false;
+                }
             }
-            if ( BackgroundComp.GeneralBackground != null && _prototypeManager.TryIndex(BackgroundComp.GeneralBackground, out var bgProtoGeneral))
-            {
-                var backgroundControl = new BackgroundControl(bgProtoGeneral.Name, bgProtoGeneral.Description);
-                _window.BackgroundContainer.Children.Add(backgroundControl);
-                _window.TabBackground.Disabled = false;
-            }
+
+
         }
         else
         {

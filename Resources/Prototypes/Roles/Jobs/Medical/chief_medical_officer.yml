@@ -16,7 +16,7 @@
       department: Medical
       time: 36000 #10 hrs
     - !type:AgeRequirement
-      requiredAge: 26 # Vanilla
+      requiredAge: 30 # Vanilla
   startingGear: CMOGear
   icon: "JobIconChiefMedicalOfficer"
   supervisors: job-supervisors-captain
@@ -29,27 +29,6 @@
   - ChiefMedicalOfficer
   - Brig
   - Cryogenics
-  special:
-  - !type:AddImplantSpecial
-    implants: [ MindShieldImplant ]
-  - !type:AddComponentSpecial
-    components:
-      - type: CommandStaff
-      - type: Skill
-        RangeWeaponLevel: 0
-        MeleeWeaponLevel: 0
-        MedicineLevel: 3
-        ChemistryLevel: 3
-        EngineeringLevel: 2
-        BuildingLevel: 0
-        ResearchLevel: 0
-        Atmosphere: true
-        Piloting: false
-        MusInstruments: true
-        Botany: true
-        Bureaucracy: true
-      - type: AddSkillPoints
-        Points: 1
 
 - type: startingGear
   id: CMOGear
