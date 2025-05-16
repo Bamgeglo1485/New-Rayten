@@ -1,6 +1,6 @@
-ent-MobERTSploderLeader = Лидер ОБР
-    .suffix = ОБР-Л
+ent-MobERTSploderLeader = { ent-MobERTLeader }
+    .suffix = ОБР-Л, Подрывник
     .desc = { ent-MobERTLeader.desc }
-ent-MobERTPSploderRegular = оперативник ОБР
-    .suffix = ОБР-О
+ent-MobERTPSploderRegular = { ent-MobERTRegular }
+    .suffix = ОБР-И, Подрывник
     .desc = { ent-MobERTRegular.desc }
