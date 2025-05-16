@@ -984,15 +984,6 @@ namespace Content.Client.Lobby.UI
                         Profile?.Backgrounds.TryGetValue(SharedBackgroundSystem.GetJobPrototype(job.ID), out background);
                         background = background?.Clone();
 
-                        if (background == null)
-                        {
-                            var msg = new FormattedMessage();
-                            msg.AddMarkupOrThrow("Не выбрана предыстория");
-                            selector.LockRequirements(msg);
-                        }
-                        else
-                            selector.UnlockRequirements();
-
                         backgroundWindowBtn.OnPressed += args =>
                         {
                             if (background == null)

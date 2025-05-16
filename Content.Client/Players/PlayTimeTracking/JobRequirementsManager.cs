@@ -13,6 +13,7 @@ using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
+using Content.Shared.Vanilla.Background;
 
 namespace Content.Client.Players.PlayTimeTracking;
 
@@ -106,7 +107,18 @@ public sealed class JobRequirementsManager : ISharedPlaytimeManager
         var player = _playerManager.LocalSession;
         if (player == null)
             return true;
+        //Rayten-Start
+        if (!_prototypes.TryIndex<RoleBackgroundPrototype>(SharedBackgroundSystem.GetJobPrototype(job.ID), out var roleBackgroundProto))
+        {
+            return CheckRoleRequirements(job, profile, out reason);
+        }
 
+        if (profile == null || !profile.Backgrounds.TryGetValue(SharedBackgroundSystem.GetJobPrototype(job.ID), out var background))
+        {
+            reason = FormattedMessage.FromUnformatted("Не выбрана предыстория");
+            return false;
+        }
+        //Rayten-end
         return CheckRoleRequirements(job, profile, out reason);
     }
 
