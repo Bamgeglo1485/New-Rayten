@@ -5,6 +5,7 @@ using Content.Shared.Players.PlayTimeTracking;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
+using Content.Shared.Antag.Components;
 
 namespace Content.Shared.Roles.Jobs;
 
@@ -174,6 +175,9 @@ public abstract class SharedJobSystem : EntitySystem
 
         if (!MindTryGetJob(mindId, out var prototype))
             return true;
+
+        if (HasComp<AntagImmuneComponent>(player.AttachedEntity))
+            return false;
 
         return prototype.CanBeAntag;
     }
