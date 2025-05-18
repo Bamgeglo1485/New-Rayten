@@ -105,12 +105,13 @@ public sealed partial class RequirementsSelector : BoxContainer
         OptionsContainer.AddChild(_lockStripe);
     }
 
-    public void LockRequirements(FormattedMessage requirements)
+    public void LockRequirements(FormattedMessage requirements, bool showlockstripe = true)
     {
         var tooltip = new Tooltip();
         tooltip.SetMessage(requirements);
         _lockStripe.TooltipSupplier = _ => tooltip;
-        _lockStripe.Visible = true;
+        _lockStripe.Visible = showlockstripe;
+        if (!showlockstripe) _lockStripe.SetSize = Vector2.Zero;
         _options.Visible = false;
     }
 

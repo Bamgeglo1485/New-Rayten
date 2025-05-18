@@ -904,6 +904,9 @@ namespace Content.Client.Lobby.UI
 
                 foreach (var job in jobs)
                 {
+                    var collection = IoCManager.Instance!;
+                    var protoManager = collection.Resolve<IPrototypeManager>();
+
                     var jobContainer = new BoxContainer()
                     {
                         Orientation = LayoutOrientation.Horizontal,
@@ -922,11 +925,24 @@ namespace Content.Client.Lobby.UI
                     };
                     var jobIcon = _prototypeManager.Index(job.Icon);
                     icon.Texture = _sprite.Frame0(jobIcon.Icon);
-                    selector.Setup(items, job.LocalizedName, 200, job.LocalizedDescription, icon, job.Guides);
+                    selector.Setup(items, job.LocalizedName, 220, job.LocalizedDescription, icon, job.Guides);
 
                     if (!_requirements.IsAllowed(job, (HumanoidCharacterProfile?)_preferencesManager.Preferences?.SelectedCharacter, out var reason))
                     {
                         selector.LockRequirements(reason);
+
+                        if (protoManager.TryIndex<RoleBackgroundPrototype>(SharedBackgroundSystem.GetJobPrototype(job.ID), out _))
+                        {
+                            RoleBackground? background = null;
+                            Profile?.Backgrounds.TryGetValue(SharedBackgroundSystem.GetJobPrototype(job.ID), out background);
+                            if (background == null)
+                            {
+                                var LargebackgroundWindowBtn = CreateBackgroundButton(job, protoManager, true);
+                                selector.LockRequirements(reason, false);
+                                selector.OptionsContainer.AddChild(LargebackgroundWindowBtn);
+                            }
+
+                        }
                     }
                     else
                     {
@@ -962,38 +978,7 @@ namespace Content.Client.Lobby.UI
                         SetDirty();
                     };
                     //Rayten-background-start
-                    var backgroundWindowBtn = new Button()
-                    {
-                        Text = Loc.GetString("background-window"),
-                        HorizontalAlignment = HAlignment.Right,
-                        VerticalAlignment = VAlignment.Center,
-                        Margin = new Thickness(3f, 3f, 0f, 0f),
-                    };
-
-                    var collection = IoCManager.Instance!;
-                    var protoManager = collection.Resolve<IPrototypeManager>();
-
-                    if (!protoManager.TryIndex<RoleBackgroundPrototype>(SharedBackgroundSystem.GetJobPrototype(job.ID), out var roleBackgroundProto))
-                    {
-                        backgroundWindowBtn.Disabled = true;
-                    }
-                    else
-                    {
-                        RoleBackground? background = null;
-
-                        Profile?.Backgrounds.TryGetValue(SharedBackgroundSystem.GetJobPrototype(job.ID), out background);
-                        background = background?.Clone();
-
-                        backgroundWindowBtn.OnPressed += args =>
-                        {
-                            if (background == null)
-                            {
-                                background = new RoleBackground(roleBackgroundProto.ID);
-                            }
-
-                            OpenBackground(job, background, roleBackgroundProto);
-                        };
-                    }
+                    var backgroundWindowBtn = CreateBackgroundButton(job, protoManager);
                     //Rayten-background-end
                     var loadoutWindowBtn = new Button()
                     {
@@ -1003,8 +988,7 @@ namespace Content.Client.Lobby.UI
                         Margin = new Thickness(3f, 3f, 0f, 0f),
                     };
 
-                    // var collection = IoCManager.Instance!;
-                    // var protoManager = collection.Resolve<IPrototypeManager>();
+
 
                     // If no loadout found then disabled button
                     if (!protoManager.TryIndex<RoleLoadoutPrototype>(LoadoutSystem.GetJobPrototype(job.ID), out var roleLoadoutProto))
@@ -1043,6 +1027,49 @@ namespace Content.Client.Lobby.UI
             UpdateJobPriorities();
         }
         //RAYTEN-START
+        private Button CreateBackgroundButton(JobPrototype job, IPrototypeManager protoManager, bool expand = false)
+        {
+            var protoId = SharedBackgroundSystem.GetJobPrototype(job.ID);
+
+            // Сначала достаём прототип
+            if (!protoManager.TryIndex<RoleBackgroundPrototype>(protoId, out var roleBackgroundProto))
+            {
+                // Если прототипа нет — создаём отключённую кнопку
+                return new Button
+                {
+                    Text = Loc.GetString("background-window"),
+                    Disabled = true,
+                    StyleClasses = { "chatSelectorOptionButton" },
+                    HorizontalAlignment = HAlignment.Right,
+                    VerticalAlignment = VAlignment.Center,
+                    Margin = new Thickness(3f, 3f, 0f, 0f),
+                };
+            }
+
+            // Получаем background из профиля
+            RoleBackground? background = null;
+            Profile?.Backgrounds.TryGetValue(protoId, out background);
+
+            var backgroundWindowBtn = new Button
+            {
+                Text = Loc.GetString("background-window"),
+                HorizontalExpand = expand,
+                MinWidth = expand ? 400 : 80,
+                HorizontalAlignment = expand ? HAlignment.Center : HAlignment.Right,
+                StyleClasses = { "chatSelectorOptionButton" },
+                VerticalAlignment = VAlignment.Center,
+                Margin = expand ? new Thickness(0f, 0f, 0f, 0f) : new Thickness(3f, 3f, 0f, 0f),
+            };
+
+            backgroundWindowBtn.OnPressed += args =>
+            {
+                var backgroundClone = background?.Clone() ?? new RoleBackground(roleBackgroundProto.ID);
+                OpenBackground(job, backgroundClone, roleBackgroundProto);
+            };
+
+            return backgroundWindowBtn;
+        }
+
         private void OpenBackground(JobPrototype? jobProto, RoleBackground roleBackground, RoleBackgroundPrototype roleBackgroundProto)
         {
             _backgroundWindow?.Dispose();
@@ -1063,7 +1090,7 @@ namespace Content.Client.Lobby.UI
             _backgroundWindow.OnSavePressed += (savedroleBackground) =>
             {
                 Profile = Profile?.WithBackground(savedroleBackground);
-                UpdateJobPriorities(); // ПОСМОТРЕТЬ ЭТО 
+                UpdateJobPriorities(); // ПОСМОТРЕТЬ ЭТО
                 IsDirty = true;
             };
         }

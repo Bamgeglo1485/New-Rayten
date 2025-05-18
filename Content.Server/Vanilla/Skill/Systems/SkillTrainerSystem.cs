@@ -1,10 +1,15 @@
+using Content.Server.Vanilla.Skill;
 using Content.Shared.Vanilla.Skill;
 using Content.Shared.SkillTrainer;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Popups;
+using Content.Shared.Inventory;
+using Content.Shared.FixedPoint;
+using Content.Shared.Damage;
+using Content.Shared.Weapons.Melee.Events;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Network;
-
+using Robust.Shared.Player;
 namespace Content.Server.SkillTrainer;
 
 public sealed class ServerSkillTrainerSystem : EntitySystem
@@ -16,8 +21,47 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
     {
         base.Initialize();
         SubscribeNetworkEvent<UseSkillPointEvent>(UseSkillPoint);
+
+        SubscribeLocalEvent<MeleeTrainerComponent, MeleeHitEvent>(OnMeleeTrainerHit);
+        SubscribeLocalEvent<MeleeTrainerComponent, InventoryRelayedEvent<MeleeHitEvent>>(
+            (e, c, ev) => OnMeleeTrainerHit(e, c, ev.Args));
     }
 
+    private void OnMeleeTrainerHit(EntityUid uid, MeleeTrainerComponent component, MeleeHitEvent args)
+    {
+        // Проверяем, что удар действительно произошел
+        if (!args.IsHit)
+            return;
+
+        // Проверяем, является ли атакующий игроком
+        if (!HasComp<ActorComponent>(args.User))
+            return;
+
+        // Проверяем, есть ли у атакующего компонент SkillComponent
+        if (!TryComp<SkillComponent>(args.User, out var skillCompAttacker))
+            skillCompAttacker = EnsureComp<SkillComponent>(args.User);
+
+        // Перебираем всех сущностей, которые были атакованы
+        foreach (var target in args.HitEntities)
+        {
+            //Проверяем что чел не пиздит сам себя
+            if (target == args.User)
+                continue;
+
+            //Проверяем что цель живой игрок
+            if(!HasComp<ActorComponent>(target))
+                continue;
+
+            // Начисляем опыт за атаку атакующему
+            AddExperience(skillCompAttacker, component.SkillType, component.ExpPerHit);
+
+            // начисляем опыт за атаку атакуемому
+            if (!TryComp<SkillComponent>(target, out var skillCompAttacked))
+                skillCompAttacked = EnsureComp<SkillComponent>(target);
+
+            AddExperience(skillCompAttacked, component.SkillType, component.ExpPerHit);
+        }
+    }
     private void UseSkillPoint(UseSkillPointEvent msg, EntitySessionEventArgs args)
     {
         // Проверяем, что у пользователя есть прикрепленное существо, и что навык задан
@@ -59,7 +103,7 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
         }
 
 
-        if (SkillComponent.IsEasySkill(skillType)) 
+        if (SkillComponent.IsEasySkill(skillType))
         {
             bool? lvl = skillComp.GetEasySkill(skillType);
 
@@ -84,7 +128,7 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
             SkillLevel? level = skillComp.GetSkillLevel(skillType);
             int exp = skillComp.GetSkillExp(skillType);
 
-            if (level == null || level >= SkillLevel.Expert) 
+            if (level == null || level >= SkillLevel.Expert)
                 return false;
 
             exp += experienceAmount;

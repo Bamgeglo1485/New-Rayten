@@ -549,7 +549,7 @@ namespace Content.Shared.Preferences
                 voicePrototype = prototypeManager.Index<VoiceSpeechPrototype>(Voice);
             }
             //Rayten-end
-            
+
             var sex = Sex switch
             {
                 Sex.Male => Sex.Male,
@@ -856,36 +856,22 @@ namespace Content.Shared.Preferences
         }
         public HumanoidCharacterProfile WithBackground(RoleBackground background)
         {
-            Logger.Info("Начало сохранения предыстории");
-            Logger.Info($"Получена предыстория для роли {background.Role}");
-
             var copied = new Dictionary<string, RoleBackground>();
-            Logger.Info($"Исходное количество предысторий в профиле: {_backgrounds.Count}");
 
             foreach (var proto in _backgrounds)
             {
-                Logger.Info($"Обработка предыстории: Ключ={proto.Key}");
 
                 if (proto.Key == background.Role)
-                {
-                    Logger.Info($"Пропускаем предысторию для роли {proto.Key}, так как она будет заменена");
                     continue;
-                }
 
                 copied[proto.Key] = proto.Value.Clone();
-                Logger.Info($"Скопирована предыстория: Ключ={proto.Key}");
             }
 
             copied[background.Role] = background.Clone();
-            Logger.Info($"Добавлена/заменена предыстория для роли {background.Role}");
 
             var profile = Clone();
-            Logger.Info("Профиль клонирован");
 
             profile._backgrounds = copied;
-            Logger.Info($"В профиле теперь {_backgrounds.Count} предысторий до замены и {copied.Count} после");
-
-            Logger.Info("Предыстория успешно сохранена в новом профиле");
 
             return profile;
         }

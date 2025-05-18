@@ -10,5 +10,6 @@
         <TextureButton Name="Help" StyleClasses="HelpButton"/>
     </Control>
     <BoxContainer Name="OptionsContainer"
+                  Access="Public"
                   SetWidth="400"/>
 </BoxContainer>
