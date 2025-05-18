@@ -144,6 +144,10 @@
   specials:
   - !type:AddImplantSpecial
     implants: [ MindShieldImplant ]
+  - !type:AddComponentsSpecial
+    components:
+    - type: AntagImmune
+
 - type: Background
   id: BiomechanicsResearcherBackground
   name: Исследователь биомеханики
