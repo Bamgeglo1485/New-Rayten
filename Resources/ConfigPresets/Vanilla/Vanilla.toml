@@ -1,7 +1,7 @@
 [game]
-desc             = """✨ Мы ищем администраторов проекта, прими участие в создании лучшего сервера по космической станции!
+desc             = """
 🎨 Авторский контент.
-📈 Уникальные системы: навыки, цели отделов, лучшая бюрократия. Продуманные коды угроз и игровые режимы.
+📈 Уникальные системы: Предыстории! Навыки, Цели отделов, лучшая бюрократия. Продуманные коды угроз и игровые режимы.
 📚 Загляни на нашу вики 😏
 🌟 Баланс ролевой игры и веселья – стань частью уникального сообщества!"""
 lobbyenabled     = true
@@ -29,9 +29,14 @@ level = 1
 enabled = true
 
 [net]
-tickrate = 32
+tickrate = 40
 max_connections = 100
+port = 1212
 
+[ic]
+punctuation = true
+flavor_text = true
+ssd_sleep_time = 30
 [infolinks]
 discord = "https://discord.gg/sRSGDyGPw2"
 wiki = "https://vanilla-station.ru/"
@@ -69,6 +74,8 @@ alert.min_players_sharing_connection = 2
 new_player_join_sound = true
 note_stale_days = 90.0
 note_fresh_days = 45.0
+[console]
+login_host_user = "Lemniscate"
 
 [ahelp]
 admin_prefix = 1

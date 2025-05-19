@@ -694,31 +694,21 @@ namespace Content.Shared.Preferences
             // Rayten-TTS-End
 
             // Rayten-Backgrounds-start
-            Logger.Info("Начинаем валидацию всех сохранённых предысторий профиля.");
-            Logger.Info($"Всего предысторий у профиля: {_backgrounds.Count}");
             var backgroundstoRemove = new ValueList<string>();
 
             foreach (var (roleName, backgrounds) in _backgrounds)
             {
-                Logger.Info($"Проверяем предысторию для роли: {roleName}");
 
                 if (!prototypeManager.HasIndex<RoleBackgroundPrototype>(roleName))
                 {
-                    Logger.Warning($"Роль '{roleName}' не найдена в прототипах. Помечаем на удаление.");
                     backgroundstoRemove.Add(roleName);
                     continue;
                 }
-
-                Logger.Info($"Роль '{roleName}' найдена. Запускаем валидацию предыстории.");
                 backgrounds.EnsureValid(this, session, collection);
-                Logger.Info($"Валидация предыстории для роли '{roleName}' завершена.");
             }
 
             foreach (var value in backgroundstoRemove)
-            {
-                Logger.Warning($"Удаляем предысторию для неизвестной роли: {value}");
                 _backgrounds.Remove(value);
-            }
             // Rayten-Backgrounds-end
 
 

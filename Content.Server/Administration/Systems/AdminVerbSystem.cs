@@ -105,6 +105,19 @@ namespace Content.Server.Administration.Systems
 
                 if (TryComp(args.Target, out ActorComponent? targetActor))
                 {
+
+                    //RAYTEN-START
+                    //CHARACTERSHEET
+                    Verb charactersheetverb = new();
+                    charactersheetverb.Text = Loc.GetString("Лист персонажа");
+                    charactersheetverb.Category = VerbCategory.Admin;
+                    charactersheetverb.Icon = new SpriteSpecifier.Texture(new("/Textures/Interface/VerbIcons/examine.svg.192dpi.png"));
+                    charactersheetverb.Act = () =>
+                        _console.RemoteExecuteCommand(player, $"charactersheet {GetNetEntity(args.Target)}");
+                    charactersheetverb.Impact = LogImpact.Low;
+                    args.Verbs.Add(charactersheetverb);
+                    //RAYTEN-END
+
                     // AdminHelp
                     Verb verb = new();
                     verb.Text = Loc.GetString("ahelp-verb-get-data-text");
