@@ -5,9 +5,9 @@ using Content.Shared.Mindshield.Components;
 using Robust.Server.Player;
 using Robust.Shared.Configuration;
 
-namespace Content.Server.Corvax.PeacefulRoundEnd;
+namespace Content.Server.Vanilla.CounerStrike;
 
-public sealed class PeacefulRoundEndSystem : EntitySystem
+public sealed class CounerStrikeSystem : EntitySystem
 {
     [Dependency] private readonly IConfigurationManager _cfg = default!;
     [Dependency] private readonly IPlayerManager _playerManager = default!;
@@ -24,8 +24,18 @@ public sealed class PeacefulRoundEndSystem : EntitySystem
     private void OnRoundEnded(RoundEndTextAppendEvent ev)
     {
         if (!_isEnabled) return;
+        //spawnmap();
+
+        //Манипуляции с игроками
         foreach (var session in _playerManager.Sessions)
         {
+            //freeze();
+            //unequip();
+            //respawn
+            //tptoarena();
+            //equip();
+            //addcomp(CounterStrikeMarker)
+            //unfreeze();
             if (!session.AttachedEntity.HasValue) continue;
 
             var entityId = session.AttachedEntity.Value;

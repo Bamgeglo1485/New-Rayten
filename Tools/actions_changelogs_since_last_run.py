@@ -10,6 +10,7 @@ import itertools
 import os
 import requests
 import yaml
+import json
 from typing import Any, Iterable
 
 GITHUB_API_URL    = os.environ.get("GITHUB_API_URL", "https://api.github.com")
@@ -18,7 +19,7 @@ GITHUB_RUN        = os.environ["GITHUB_RUN_ID"]
 GITHUB_TOKEN      = os.environ["GITHUB_TOKEN"]
 
 # https://discord.com/developers/docs/resources/webhook
-DISCORD_SPLIT_LIMIT = 2000
+DISCORD_SPLIT_LIMIT = 1800
 DISCORD_WEBHOOK_URL = os.environ.get("DISCORD_WEBHOOK_URL")
 
 CHANGELOG_FILES = ["Resources/Changelog/Changelog.yml", "Resources/Changelog/ChangelogSyndie.yml", "Resources/Changelog/ChangelogVanilla.yml"] # Corvax-vanilla-MultiChangelog
@@ -121,13 +122,6 @@ def get_discord_body(content: str):
             "flags": 1 << 2
         }
 
-
-def send_discord(content: str):
-    body = get_discord_body(content)
-    
-    response = requests.post(DISCORD_WEBHOOK_URL, json=body)
-    response.raise_for_status()
-
 # Rayten-Localization-Start
 def translate_to_russian(text: str) -> str:
     if not text.strip():
@@ -147,18 +141,43 @@ def translate_to_russian(text: str) -> str:
         return text
 # Rayten-Localization-End
 
+def send_discord(content: str):
+    try:
+        original_length = len(content)
+        if original_length > 2000:
+            print(f"⚠️ Сообщение слишком длинное ({original_length} символов), обрезаем до 2000.")
+            content = content[:2000]
+
+        print(f"📤 Отправка чанка длиной {len(content)} символов...")
+
+        body = get_discord_body(content)
+
+        response = requests.post(DISCORD_WEBHOOK_URL, json=body)
+        response.raise_for_status()
+        print("✅ Успешно отправлено.")
+
+    except requests.exceptions.HTTPError as http_err:
+        print(f"❌ HTTP ошибка при отправке в Discord: {http_err}")
+        if http_err.response is not None:
+            try:
+                print(f"🧾 Ответ Discord: {http_err.response.json()}")
+            except Exception:
+                print(f"🧾 Ответ Discord (сырой): {http_err.response.text}")
+
+    except requests.exceptions.RequestException as req_err:
+        print(f"❌ Ошибка запроса: {req_err}")
+
+    except Exception as e:
+        print(f"❌ Неизвестная ошибка при отправке в Discord: {e}")
+
 def send_to_discord(entries: Iterable[ChangelogEntry]) -> None:
     if not DISCORD_WEBHOOK_URL:
         print(f"No discord webhook URL found, skipping discord send")
         return
 
     message_content = io.StringIO()
-    # We need to manually split messages to avoid discord's character limit
-    # With that being said this isn't entirely robust
-    # e.g. a sufficiently large CL breaks it, but that's a future problem
 
     for name, group in itertools.groupby(entries, lambda x: x["author"]):
-        # Need to split text to avoid discord character limit
         group_content = io.StringIO()
         group_content.write(f"**{name}** обновил(а):\n")
 
@@ -176,31 +195,28 @@ def send_to_discord(entries: Iterable[ChangelogEntry]) -> None:
                     group_content.write(f"{emoji} - {message} [PR]({url}) \n")
                 else:
                     group_content.write(f"{emoji} - {message}\n")
-        group_content.write(f"\n")  # Corvax: Better formatting
+
+        group_content.write("\n")
 
         group_text = group_content.getvalue()
         message_text = message_content.getvalue()
         message_length = len(message_text)
         group_length = len(group_text)
 
-        # If adding the text would bring it over the group limit then send the message and start a new one
         if message_length + group_length >= DISCORD_SPLIT_LIMIT:
-            print("Split changelog  and sending to discord")
+            print("📦 Превышен лимит, отправляем текущий блок.")
             send_discord(message_text)
-
-            # Reset the message
             message_content = io.StringIO()
 
-        # Flush the group to the message
         message_content.write(group_text)
 
-    # Clean up anything remaining
     message_text = message_content.getvalue()
     if len(message_text) > 0:
-        print("Sending final changelog to discord")
-        message_content.seek(0)  # Corvax
-        for chunk in iter(lambda: message_content.read(2000), ''): # Corvax: Split big changelogs messages
-            send_discord(chunk)
+        print("✅ Финальная отправка")
+        message_content.seek(0)
+        for chunk in iter(lambda: message_content.read(2000), ''):
+            if chunk.strip():  # чтобы не отправлять пустые чанки
+                send_discord(chunk)
 
 
 main()
