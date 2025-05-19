@@ -24,6 +24,7 @@
     - BaseStationMagnet
     - BaseStationExpeditions
     - BaseStationSiliconLawNTDefault # Corvax-NTDefault
+    - BaseStationSalvageJobs
     - BaseStationAllEventsEligible
     - BaseStationNanotrasen
     - BaseStationDeliveries

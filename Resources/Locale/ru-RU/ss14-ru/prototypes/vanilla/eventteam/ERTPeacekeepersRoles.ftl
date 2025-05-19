@@ -1,9 +1,3 @@
-ent-SpawnMobERTPeacekeeperLeader = Спавнер лидера отряда ОБР
-    .desc = { ent-MarkerBase.desc }
-ent-SpawnMobERTPeacekeeperMedic = Спавнер медика отряда ОБР
-    .desc = { ent-MarkerBase.desc }
-ent-SpawnMobERTPeacekeeperRegular = спавнер оперативника ОБР
-    .desc = { ent-MarkerBase.desc }
 ent-MobERTPeacekeeperLeader = Лидер ОБР
     .suffix = ОБР-Л
     .desc = { ent-MobERTLeader.desc }

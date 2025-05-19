@@ -1,0 +1,15 @@
+ent-R1arm = R1 arm module
+    .desc = A bloody hydraulic arm coated in a layer of super-repellent substance from a redspace dimension.
+ent-R1armDebuffed = R1 arm module
+    .desc = A bloody hydraulic arm coated in a layer of super-repellent substance from a redspace dimension.
+    .suffix = Debuffed
+ent-WeaponSlabRevoler = slab revolver
+    .desc = A railgun that fires iron mined from blood.
+ent-WeaponPiercerRevolver = piercer revolver
+    .desc = A railgun that accelerates a projectile to hypersonic speeds.
+ent-WeaponRailcannon = Railcannon
+    .desc = A railcannon that fires iron mined from blood.
+ent-WeaponCoreEjectShotgun = core eject shotgun
+    .desc = A shotgun with a reactor inside that shoots hot pieces of iron.
+ent-WeaponNailgun = nailgun
+    .desc = A railgun that fires iron mined from blood.

@@ -75,6 +75,18 @@
   maxSeverity: 4
 
 - type: alert
+  id: BloodHealToggle
+  icons:
+  - sprite: /Textures/Vanilla/Interface/Alerts/R1_Health.rsi
+    state: bloodToggle0
+  - sprite: /Textures/Vanilla/Interface/Alerts/R1_Health.rsi
+    state: bloodToggle1
+  name: переключение регенерации от крови
+  description: Если крови нет - вы заблокировали регенерацию
+  minSeverity: 0
+  maxSeverity: 1
+
+- type: alert
   id: R1Dead
   category: Health
   icons:

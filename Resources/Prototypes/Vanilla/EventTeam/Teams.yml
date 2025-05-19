@@ -9,7 +9,7 @@
   sound:
     path: /Audio/Vanilla/StationEvents/ERT_Approved_V2.ogg
     params:
-      volume: -3
+      volume: -4
   specialUnits:
     EventTeamERTLeader: SpawnMobERTLeader
     EventTeamERTMedic: SpawnMobERTMedic
@@ -25,7 +25,7 @@
   sound:
     path: /Audio/Vanilla/StationEvents/ERT_Approved_V1.ogg
     params:
-      volume: -3
+      volume: -4
   specialUnits:
     EventTeamERTLeader: SpawnMobERTPeacekeeperLeader
     EventTeamERTMedic: SpawnMobERTPeacekeeperMedic
@@ -41,7 +41,7 @@
   sound:
     path: /Audio/Vanilla/StationEvents/ERT_Approved_V3.ogg
     params:
-      volume: -3
+      volume: -4
   specialUnits:
     EventTeamERTLeader: SpawnMobERTLeader
     EventTeamERTMedic: SpawnMobERTMedic
@@ -58,7 +58,7 @@
   sound:
     path: /Audio/Vanilla/StationEvents/ERT_Approved_V4.ogg
     params:
-      volume: -3
+      volume: -4
   specialUnits:
     EventTeamERTLeader: SpawnMobERTPeacekeeperLeader
     EventTeamERTMedic: SpawnMobERTPeacekeeperMedic
@@ -74,7 +74,7 @@
   sound:
     path: /Audio/Vanilla/StationEvents/ERT_Approved_V7.ogg
     params:
-      volume: -3
+      volume: -4
   specialUnits:
     EventTeamERTLeader: SpawnMobERTSploderLeader
   regularUnit: SpawnMobERTSploderRegular
@@ -89,7 +89,7 @@
   sound:
     path: /Audio/Vanilla/StationEvents/ERT_Approved_V7_Short.ogg
     params:
-      volume: -3
+      volume: -4
   specialUnits:
     EventTeamERTLeader: SpawnMobERTSploderLeader
   regularUnit: SpawnMobERTSploderRegular
@@ -104,7 +104,7 @@
   sound:
     path: /Audio/Vanilla/StationEvents/ERT_Approved_V7.ogg
     params:
-      volume: -3
+      volume: -4
   specialUnits:
     EventTeamERTLeader: SpawnMobERTImplantedLeader
   regularUnit: SpawnMobERTImplantedRegular
@@ -121,7 +121,7 @@
   sound:
     path: /Audio/Vanilla/StationEvents/ERT_Approved_V6.ogg
     params:
-      volume: -3
+      volume: -6
   specialUnits:
     EventTeamCBURNComander: SpawnMobCBURNComander
   regularUnit: SpawnMobCBURNRegular
@@ -136,7 +136,7 @@
   sound:
     path: /Audio/Vanilla/StationEvents/ERT_Approved_V5.ogg
     params:
-      volume: -3
+      volume: -6
   specialUnits:
     EventTeamCBURNComander: SpawnMobCBURNComander
   regularUnit: SpawnMobCBURNRegular

@@ -68,6 +68,9 @@
       collection: FootstepPlating
   - type: FootprintOwner
   - type: ShowHealthBars
+  - type: Reflect
+    reflectProb: 1
+    spread: 0
   - type: ShowHealthIcons
   - type: Access
     enabled: false
@@ -100,14 +103,14 @@
   description: +fistful of dollar
   components:
   - type: RechargeBasicEntityAmmo
-    rechargeCooldown: 10
+    rechargeCooldown: 6
   - type: BasicEntityAmmoProvider
-    proto: CoinProjectile
-    capacity: 3
-    count: 3
+    proto: ReflectCoin
+    capacity: 4
+    count: 4
   - type: Gun
     soundEmpty: null
-    projectileSpeed: 8
+    projectileSpeed: 6
 
 - type: entity
   id: FistfulOfDollarAction
@@ -117,7 +120,7 @@
   - type: WorldTargetAction
     icon: { sprite : Vanilla/Actions/R1.rsi, state: Fistful }
     event: !type:ActionGunShootEvent
-    priority: 1
+    priority: -99
     checkCanAccess: false
     range: 0
     itemIconStyle: BigAction
@@ -126,305 +129,105 @@
       path: /Audio/Vanilla/Effects/R1/Fistful.ogg
 
 - type: entity
+  id: ActionToggleHealing
+  name: Переключить ремонт
+  description: Использовать кровь для ремонта обшивки, или копить её.
+  components:
+  - type: InstantAction
+    itemIconStyle: BigAction
+    priority: -20
+    icon:
+      sprite: Vanilla/Actions/R1.rsi
+      state: Repair
+    iconOn: Vanilla/Actions/R1.rsi/Repair2.png
+    event: !type:ToggleHealingActionEvent
+    useDelay: 1
+
+# R-2
+
+- type: entity
+  id: ActionDashR2
+  name: Dash
+  description: +Tactical Retreat
+  components:
+  - type: InstantAction
+    useDelay: 20
+    event: !type:PolymorphActionEvent
+      protoId: R2Dash
+    itemIconStyle: NoItem
+    icon:
+      sprite: Vanilla/Actions/R1.rsi
+      state: Dash
+
+- type: polymorph
+  id: R2Dash
+  configuration:
+    entity: R2DashEntity
+    transferName: true
+    forced: true
+    revertOnDeath: true
+    revertOnCrit: true
+    allowRepeatedMorphs: false
+    exitPolymorphSound: /Audio/Vanilla/Effects/R1/Slam.ogg
+    duration: 4
+
+- type: entity
+  parent: R1DashEntity
   categories: [ HideSpawnMenu ]
-  parent: ReflectCoinDynamic
-  id: CoinProjectile
-  name: coin
+  id: R2DashEntity
   components:
   - type: Sprite
-    sprite: Vanilla/Actions/R1.rsi
     layers:
-    - state: Coin
-      shader: unshaded
-  - type: Fixtures
-    fixtures:
-      projectile:
-        shape: !type:PhysShapeCircle
-          radius: 0.5
-        mask:
-        - Impassable
-        - BulletImpassable
-        layer:
-        - BulletImpassable
-        - WallLayer
-      fly-by: &flybyfixture
-        shape: !type:PhysShapeCircle
-          radius: 1.5
-        layer:
-        - Impassable
-        - BulletImpassable
-        hard: False
-  - type: FlyBySound
-  - type: TriggerOnCollide
-    fixtureID: projectile
-  - type: EmbeddableProjectile
-    sound: /Audio/Vanilla/Effects/R1/Fistful.ogg
-  - type: Physics
-    bodyType: Dynamic
-    linearDamping: 0
-    angularDamping: 0
-  - type: Projectile
-    deleteOnCollide: false
-    impactEffect: BulletImpactEffect
-    damage:
-      types:
-        Blunt: 10
-  - type: StaminaDamageOnCollide
-    damage: 20
-  - type: TimedDespawn
-    lifetime: 3
+    - state: R2_Dash
+  - type: SpawnOnTrigger
+    proto: R2DashTrack
+  - type: TimedSpawner
+    prototypes:
+    - R2DashTrack
+    chance: 1
+    intervalSeconds: 1
+    minimumEntitiesSpawned: 1
+    maximumEntitiesSpawned: 1
 
 - type: entity
-  id: BulletAPCoinReflected
-  parent: BaseBulletAP
+  parent: R1DashTrack
   categories: [ HideSpawnMenu ]
-  components:
-  - type: Projectile
-    damage:
-      types:
-        Piercing: 27
-    ignoreResistances: true
-
-- type: entity
-  parent: [BaseCartridgeCaselessRifle]
-  categories: [ HideSpawnMenu ]
-  id: CoinCartidge
-  name: серебрянная монета
-  suffix: CoinCartridge, Antimateriel
-  description: Выглядит обожённо.
-  components:
-  - type: CartridgeAmmo
-    proto: BulletAPCoinReflected
-  - type: Appearance
-
-- type: entity
-  parent: [BaseCartridgeCaselessRifle]
-  categories: [ HideSpawnMenu ]
-  id: CoinCartridgeCoin
-  name: серебрянная монета
-  suffix: CoinCartridge, Coin
-  description: Выглядит обожённо.
-  components:
-  - type: CartridgeAmmo
-    proto: CoinProjectile
-  - type: Appearance
-
-- type: entity
-  parent: BaseStructureDynamic
-  categories: [ HideSpawnMenu ]
-  id: ReflectCoinDynamic
-  name: монетка
+  id: R2DashTrack
   components:
   - type: Sprite
-    sprite: Vanilla/Actions/R1.rsi
     layers:
-    - state: Coin
-      shader: unshaded
-  - type: Fixtures
-    fixtures:
-      fix1:
-        shape:
-          !type:PhysShapeAabb
-          bounds: "0.17,0.25,-0.17,-0.30"
-        density: 190
-        mask:
-        - Impassable
-        - BulletImpassable
-        layer:
-        - BulletImpassable
-        - WallLayer
-        - MidImpassable
-        - LowImpassable
-  - type: PointLight
-    color: "#ffd139"
-    radius: 2.0
-    energy: 3.0
-  - type: TimedDespawn
-    lifetime: 1
-  - type: Damageable
-    damageContainer: Inorganic
-    damageModifierSet: Metallic
-  - type: Destructible
-    thresholds:
-    - trigger:
-        !type:DamageTypeTrigger
-        damage: 2
-        damageType: Piercing
-      behaviors:
-      - !type:SpawnEntitiesBehavior
-        spawn:
-          ProjectileReflectedCoin:
-            min: 1
-            max: 1
-      - !type:DoActsBehavior
-        acts: [ "Destruction" ]
-    - trigger:
-        !type:DamageTypeTrigger
-        damage: 2
-        damageType: Blunt
-      behaviors:
-      - !type:SpawnEntitiesBehavior
-        spawn:
-          ProjectileCoinReflectedCoin:
-            min: 1
-            max: 1
-      - !type:DoActsBehavior
-        acts: [ "Destruction" ]
-    - trigger:
-        !type:DamageTypeTrigger
-        damage: 2
-        damageType: Heat
-      behaviors:
-      - !type:SpawnEntitiesBehavior
-        spawn:
-          HitscanReflectedCoin:
-            min: 1
-            max: 1
-      - !type:DoActsBehavior
-        acts: [ "Destruction" ]
+    - state: R2_Dash
 
 - type: entity
-  parent: BaseStructureDynamic
   categories: [ HideSpawnMenu ]
-  id: ReflectedCoinBase
-  abstract: true
-  name: монетка
+  id: FistfulOfDollarR2
+  name: fistful of dollar
+  description: +fistful of dollar
   components:
-  - type: Sprite
-    sprite: Vanilla/Actions/R1.rsi
-    layers:
-    - state: Coin
-      shader: unshaded
-  - type: Transform
-  - type: Fixtures
-    fixtures:
-      fix1:
-        shape:
-          !type:PhysShapeAabb
-          bounds: "0.17,0.25,-0.17,-0.30"
-        density: 190
-        mask:
-        - TabletopMachineMask
-        layer:
-        - TabletopMachineLayer
-        - BulletImpassable
-  - type: PointLight
-    color: "#ffd139"
-    radius: 2.0
-    energy: 3.0
-  - type: TimedDespawn
-    lifetime: 0.6
-  - type: CombatMode
-    toggleMouseRotator: false
-  - type: HTN
-    planCooldown: 0.01
-    rootTask:
-      task: CoinCompound
-    blackboard:
-      RotateSpeed: !type:Single
-        500
-  - type: MouseRotator
-    angleTolerance: 5
-    rotationSpeed: 180
-    simple4DirMode: false
-  - type: NpcFactionMember
-    factions:
-    - Dragon
-
-- type: entity
-  parent: ReflectedCoinBase
-  categories: [ HideSpawnMenu ]
-  id: ProjectileReflectedCoin
-  suffix: Projectile, Reflect
-  components:
-  - type: ContainerContainer
-    containers:
-      ballistic-ammo: !type:Container
+  - type: RechargeBasicEntityAmmo
+    rechargeCooldown: 8
+  - type: BasicEntityAmmoProvider
+    proto: ReflectCoinR2
+    capacity: 4
+    count: 4
   - type: Gun
-    fireRate: 100
-    selectedMode: FullAuto
-    availableModes:
-    - FullAuto
-    soundGunshot:
-      path: /Audio/Vanilla/Effects/R1/Ricochet.ogg
-      params:
-        volume: -3
-  - type: BallisticAmmoProvider
-    proto: CoinCartidge
-    capacity: 1
-  - type: SpawnOnDespawn
-    prototype: ProjectileCoinReflectedCoin
-
-- type: entity
-  parent: ReflectedCoinBase
-  categories: [ HideSpawnMenu ]
-  id: ProjectileCoinReflectedCoin
-  suffix: ProjectileCoin, Reflect
-  components:
-  - type: ContainerContainer
-    containers:
-      ballistic-ammo: !type:Container
-  - type: Gun
-    fireRate: 100
-    selectedMode: FullAuto
-    availableModes:
-    - FullAuto
+    soundEmpty: null
+    projectileSpeed: 6
     soundGunshot:
       path: /Audio/Vanilla/Effects/R1/Coin.ogg
-      params:
-        volume: -1
-  - type: BallisticAmmoProvider
-    proto: CoinCartridgeCoin
-    capacity: 1
-  - type: SpawnOnDespawn
-    prototype: TreasureCoinIron
 
 - type: entity
-  parent: ReflectedCoinBase
-  categories: [ HideSpawnMenu ]
-  id: HitscanReflectedCoin
-  suffix: Laser, Reflect
+  id: FistfulOfDollarActionR2
+  name: Fistful Of Dollar
+  description: +Fistful Of Dollar +Ricoshot
   components:
-  - type: Gun
-    projectileSpeed: 1500
-    fireRate: 6
-    soundGunshot:
-      path: /Audio/Vanilla/Effects/R1/Ricochet.ogg
-      params:
-        volume: -3
-  - type: Battery
-    maxCharge: 200
-    startingCharge: 200
-  - type: HitscanBatteryAmmoProvider
-    proto: Pulse
-    fireCost: 200
-  - type: SpawnOnDespawn
-    prototype: ProjectileCoinReflectedCoin
-
-- type: htnCompound
-  id: CoinCompound
-  branches:
-    - tasks:
-        - !type:HTNPrimitiveTask
-          operator: !type:UtilityOperator
-            proto: NearbyGunTargets
-
-        - !type:HTNPrimitiveTask
-          preconditions:
-            - !type:KeyExistsPrecondition
-              key: Target
-            - !type:TargetInRangePrecondition
-              targetKey: Target
-              rangeKey: RangedRange
-            - !type:TargetInLOSPrecondition
-              targetKey: Target
-              rangeKey: RangedRange
-              opaqueKey: true
-          operator: !type:GunOperator
-            targetKey: Target
-            opaqueKey: true
-          services:
-            - !type:UtilityService
-              id: RangedService
-              proto: NearbyGunTargets
-              key: Target
+  - type: WorldTargetAction
+    icon: { sprite : Vanilla/Actions/R1.rsi, state: Fistful }
+    event: !type:ActionGunShootEvent
+    priority: -99
+    checkCanAccess: false
+    range: 0
+    itemIconStyle: BigAction
+  - type: InstantAction
+    sound: !type:SoundPathSpecifier
+      path: /Audio/Vanilla/Effects/R1/Fistful.ogg

@@ -46,3 +46,4 @@ command-description-xenoartifact-totalResearch = Показывает общее
 command-description-xenoartifact-averageResearch = Вычисляет среднее количество исследовательских очков, генерируемых активированным ксеноартефактом.
 command-description-xenoartifact-unlockAllNodes = Разблокирует все узлы артефакта.
 command-description-stationevent-simulate = Симулирует N раундов с событиями и показывает статистику по каждому событию.
+command-description-jobboard-completeJob = Завершает указанное задание с доски заданий по утилизации для станции.

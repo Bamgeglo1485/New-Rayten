@@ -1,0 +1,154 @@
+﻿- type: entity
+  id: CoinBullet
+  parent: BaseBulletAP
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 0
+    ignoreResistances: true
+  - type: Sprite
+    sprite: Vanilla/Objects/Weapons/Guns/Projectiles/projectiles.rsi
+    layers:
+    - state: coin
+      shader: unshaded
+  - type: PointLight
+    color: "#ffd139"
+    radius: 2.0
+    energy: 1.5
+  - type: SpawnOnTrigger
+    proto: CoinTrack
+  - type: RepeatingTrigger
+    delay: .05
+
+- type: entity
+  parent: BaseCartridgeCaselessRifle
+  categories: [ HideSpawnMenu ]
+  id: CoinCartidge
+  name: серебрянная монета
+  suffix: CoinCartridge, Antimateriel
+  description: Выглядит обожённо.
+  components:
+  - type: CartridgeAmmo
+    proto: CoinBullet
+  - type: Appearance
+
+- type: entity
+  parent: BaseStructureDynamic
+  id: ReflectCoin
+  name: монетка
+  components:
+  - type: Sprite
+    sprite: Vanilla/Actions/R1.rsi
+    layers:
+    - state: Coin
+      shader: unshaded
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "0.17,0.25,-0.17,-0.30"
+        density: 190
+        layer:
+        - SmallMobLayer
+        - Impassable
+  - type: PointLight
+    color: "#ffd139"
+    radius: 2.0
+    energy: 3.0
+  - type: Damageable
+    damageContainer: Inorganic
+    damageModifierSet: Metallic
+  - type: Gun
+    soundEmpty: null
+  - type: ReflectCoin
+  - type: Battery
+    maxCharge: 1
+    startingCharge: 1
+  - type: ProjectileBatteryAmmoProvider
+    proto: CoinCartidge
+    fireCost: 1
+  - type: TimedDespawn
+    lifetime: 3
+  - type: Explosive
+    explosionType: DemolitionCharge
+    totalIntensity: 200
+    intensitySlope: 5
+    maxIntensity: 200
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTypeTrigger
+        damage: 2
+        damageType: Shock
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+      - !type:ExplodeBehavior
+
+- type: entity
+  id: CoinFlash
+  categories: [ HideSpawnMenu ]
+  name: вспышка
+  components:
+  - type: Sprite
+    sprite: Vanilla/Actions/R1.rsi
+    layers:
+    - state: Flash
+      shader: unshaded
+  - type: PointLight
+    color: "#ffd139"
+    radius: 1.0
+    energy: 1.0
+  - type: TimedDespawn
+    lifetime: 0.4
+  - type: Tag
+    tags:
+    - HideContextMenu
+  - type: EmitSoundOnSpawn
+    sound:
+      path: /Audio/Vanilla/Effects/R1/Coin.ogg
+      params:
+        variation: 0.3
+
+- type: entity
+  id: CoinTrack
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Vanilla/Objects/Weapons/Guns/Projectiles/projectiles.rsi
+    layers:
+    - state: coin
+      shader: unshaded
+  - type: TimedDespawn
+    lifetime: 0.1
+
+- type: entity
+  id: CoinShoot
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Vanilla/Actions/R1.rsi
+    layers:
+    - state: CoinBreake
+      shader: unshaded
+  - type: TimedDespawn
+    lifetime: 0.6
+  - type: EmitSoundOnSpawn
+    sound:
+      path: /Audio/Vanilla/Effects/R1/Ricochet.ogg
+      params:
+        variation: 0.3
+# R-2
+
+- type: entity
+  categories: [ HideSpawnMenu ]
+  parent: ReflectCoin
+  id: ReflectCoinR2
+  name: coin
+  components:
+  - type: NpcFactionMember
+    factions:
+    - NanoTrasen

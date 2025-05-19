@@ -71,3 +71,236 @@
       behaviors:
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
+
+# R-1
+
+- type: entity
+  id: ShotCoreEjectProjectile
+  parent: BaseBullet
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Projectiles/projectiles2.rsi
+    layers:
+    - state: buckshot-flare
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 8
+
+- type: entity
+  id: ShotCoreEject
+  categories: [ HideSpawnMenu ]
+  parent: ShotCoreEjectProjectile
+  components:
+  - type: ProjectileSpread
+    proto: ShotCoreEjectProjectile
+    count: 5
+    spread: 30
+
+- type: entity
+  id: ShotCoreEjectProjectileHeat
+  parent: BaseBullet
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Projectiles/projectiles_tg.rsi
+    layers:
+    - state: omnilaser_greyscale
+      shader: unshaded
+      color: orangered
+  - type: Projectile
+    impactEffect: BulletImpactEffectOrangeDisabler
+    damage:
+      types:
+        Heat: 10
+  - type: ChangeTemperatureOnCollide
+    heat: 10000
+
+- type: entity
+  name: shot
+  id: ShotCoreEjectHeat
+  categories: [ HideSpawnMenu ]
+  parent: ShotCoreEjectProjectileHeat
+  components:
+  - type: ProjectileSpread
+    proto: ShotCoreEjectProjectileHeat
+    count: 3
+    spread: 5
+
+- type: entity
+  id: CoreEjectProjectile
+  name: core
+  parent: BaseBulletTrigger
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Projectiles/projectiles2.rsi
+    layers:
+      - state: uranium
+  - type: DeleteOnTrigger
+  - type: ProjectileGrenade
+    fillPrototype: ProjectileFlameCoreEject
+    capacity: 30
+  - type: ContainerContainer
+    containers:
+      cluster-payload: !type:Container
+  - type: Explosive
+    explosionType: FireBomb
+    totalIntensity: 100
+    intensitySlope: 1
+    maxIntensity: 100
+  - type: ExplodeOnTrigger
+  - type: Damageable
+  - type: Projectile
+    damage:
+      types:
+        Heat: 20
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 5
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+      - !type:ExplodeBehavior
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          CoreEjectMiniExplode:
+            min: 1
+            max: 1
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "0.16,0.24,-0.16,-0.29"
+        density: 190
+        layer:
+        - SmallMobLayer
+        - Impassable
+      projectile:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "0.17,0.25,-0.17,-0.30"
+        hard: false
+        mask:
+        - Impassable
+        - BulletImpassable
+
+- type: entity
+  id: CoreEjectMiniExplode
+  parent: BaseItem
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Projectiles/projectiles2.rsi
+    layers:
+      - state: uranium
+  - type: RepeatingTrigger
+    delay: .1
+  - type: ExplodeOnTrigger
+  - type: Explosive
+    explosionType: DemolitionCharge
+    totalIntensity: 100
+    intensitySlope: 5
+    maxIntensity: 100
+
+- type: entity
+  categories: [ HideSpawnMenu ]
+  parent: ProjectileFlame
+  id: ProjectileFlameCoreEject
+  components:
+  - type: Projectile
+    damage:
+      types:
+        Heat: 1
+    deleteOnCollide: true
+  - type: TimedDespawn
+    lifetime: .3
+  - type: RepeatingTrigger
+    delay: .1
+
+- type: entity
+  categories: [ HideSpawnMenu ]
+  parent: BaseBulletTrigger
+  id: ProjectileRailgun
+  components:
+  - type: PointLight
+    color: "#1fcbff"
+    radius: 3.0
+    energy: 5.0
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Projectiles/magic.rsi
+    layers:
+    - state: bluespace
+      shader: unshaded
+  - type: Projectile
+    damage:
+      types:
+        Shock: 60
+        Structural: 226
+    penetrationThreshold: 360
+    penetrationDamageTypeRequirement:
+    - Structural
+    deleteOnCollide: true
+  - type: IgnitionSource
+    temperature: 1000
+    ignited: true
+  - type: RepeatingTrigger
+    delay: .05
+  - type: SpawnOnTrigger
+    proto: RailTrack
+  - type: Electrified
+    requirePower: false
+  - type: LightningArcShooter
+    arcDepth: 2
+    maxLightningArc: 1
+    shootMinInterval: 0.3
+    shootMaxInterval: 0.3
+    shootRange: 3
+    lightningPrototype: Lightning
+
+- type: entity
+  categories: [ HideSpawnMenu ]
+  id: RailTrack
+  components:
+  - type: PointLight
+    color: "#1fcbff"
+    radius: 1.0
+    energy: 3.0
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Projectiles/magic.rsi
+    layers:
+    - state: magicm_cyan
+      shader: unshaded
+  - type: TimedDespawn
+    lifetime: .3
+
+- type: entity
+  id: BulletSlab
+  parent: BaseBullet
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    layers:
+    - state: buckshot-flare
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 15
+
+- type: entity
+  id: BulletNail
+  parent: BaseBullet
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    layers:
+    - state: shard
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 2
+    ignoreResistances: true

@@ -10,3 +10,6 @@ ent-R1Spawner = R-1
     .desc = { ent-BaseAntagSpawner.desc }
 ent-R2 = { ent-R1Base }
     .desc = Mne len tut che to pisat, zabeite her na anglichan.
+ent-R2Spawner = R-2
+    .suffix = Spawner
+    .desc = { ent-BaseAntagSpawner.desc }

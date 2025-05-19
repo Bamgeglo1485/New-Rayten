@@ -3,6 +3,7 @@ using Robust.Shared.GameStates;
 using Content.Shared.Damage;
 using Robust.Shared.Prototypes;
 using Content.Shared.Alert;
+using Content.Shared.Actions;
 
 namespace Content.Shared.Vanilla.BloodSucker;
 
@@ -36,7 +37,7 @@ public sealed partial class BloodSuckerComponent : Component
     /// Сколько юнитов крови будет сгорать просто так из хранилища при фулл хп в интервал
     /// </summary>
     [DataField]
-    public float UnitsDecayPerInterval = 0.35f;
+    public float UnitsDecayPerInterval = 0.45f;
 
     /// <summary>
     /// Сколько юнитов крови из хранилища будет переводиться в отхилл в интервал
@@ -75,6 +76,12 @@ public sealed partial class BloodSuckerComponent : Component
     /// </summary>
     [DataField]
     public float Range = 2f;
+    
+    /// <summary>
+    /// Должен ли переводить кровь в отхилл
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public bool CanHeal = false;
 
     /// <summary>
     /// Звук всасывания крови
@@ -85,4 +92,14 @@ public sealed partial class BloodSuckerComponent : Component
     [DataField]
     public ProtoId<AlertPrototype> BloodAlert = "BloodR1";
 
+    [DataField]
+    public EntityUid? HealingActionEntity;
+
+    [DataField]
+    public EntProtoId HealingAction = "ActionToggleHealing";
+
+}
+
+public sealed partial class ToggleHealingActionEvent : InstantActionEvent
+{
 }

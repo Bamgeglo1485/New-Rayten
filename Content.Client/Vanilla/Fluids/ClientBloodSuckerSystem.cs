@@ -53,5 +53,4 @@ public sealed class ClientBloodSuckerSystem : EntitySystem
         // Показываем алерт
         _alerts.ShowAlert(uid, component.BloodAlert, severity);
     }
-
 }
