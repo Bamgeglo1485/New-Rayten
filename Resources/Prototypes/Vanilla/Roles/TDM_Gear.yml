@@ -1,0 +1,67 @@
+- type: startingGear
+  id: BlueTeamGearDefault
+  equipment:
+    head: ClothingHeadHatBluesoft
+    jumpsuit: ClothingUniformJumpsuitCasualBlue
+    back: ClothingMilitaryBackpack
+    mask: ClothingMaskGasSecurity
+    eyes: ClothingEyesGlassesSunglasses
+    gloves: ClothingHandsMercGlovesCombat
+    outerClothing: ClothingOuterArmorBasicSlim
+    shoes: ClothingShoesBootsCombat
+    belt: ClothingBeltMilitaryWebbing
+    neck: ClothingNeckNanoTrasenPin
+  storage:
+    back:
+    - MagazineRifle
+    - MagazineRifle
+    - MagazineBoxRifle
+    - MagazineBoxRifle
+    - MedkitCombatFilled
+    - MedkitCombatFilled
+    - SmokeGrenade
+    - Brutepack
+    - Brutepack
+    - GrenadeStinger
+    - MagazinePistol
+    - MagazinePistol
+    - MagazineBoxPistol
+    - WeaponPistolMk58
+    - CombatKnife
+  inhand:
+  - WeaponRifleLecter
+
+
+
+- type: startingGear
+  id: RedTeamGearDefault
+  equipment:
+    head: ClothingHeadHatRedsoft
+    jumpsuit: ClothingUniformJumpsuitCasualRed
+    back: ClothingMilitaryBackpack
+    mask: ClothingMaskGasSecurity
+    eyes: ClothingEyesGlassesSunglasses
+    gloves: ClothingHandsMercGlovesCombat
+    outerClothing: ClothingOuterArmorBasicSlim
+    shoes: ClothingShoesBootsCombat
+    belt: ClothingBeltMilitaryWebbing
+    neck: ClothingNeckUSSPPin
+  storage:
+    back:
+    - MagazineRifle
+    - MagazineRifle
+    - MagazineBoxRifle
+    - MagazineBoxRifle
+    - MedkitCombatFilled
+    - MedkitCombatFilled
+    - SmokeGrenade
+    - Brutepack
+    - Brutepack
+    - GrenadeStinger
+    - MagazinePistol
+    - MagazinePistol
+    - MagazineBoxPistol
+    - WeaponPistolMk58
+    - CombatKnife
+  inhand:
+  - WeaponRifleLecter
