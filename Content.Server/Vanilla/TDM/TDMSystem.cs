@@ -53,7 +53,6 @@ public sealed class TDMSystem : EntitySystem
     private int Redguys = 0;
     private bool onlyonecycle = false;
     private bool firstblood = false;
-    private Filter allPlayersInGame = Filter.Empty();
     private MapId? _arenaMapId = null;
     private EntityUid? PreviousGrid = null;
     private EntityUid? TDMUID = null;
@@ -88,6 +87,7 @@ public sealed class TDMSystem : EntitySystem
         if (!rule.CountdownPlayed && rule.TimeOnNewCycle >= TimeSpan.FromSeconds(19.5))
         {
             rule.CountdownPlayed = true;
+            var allPlayersInGame = Filter.Empty().AddWhere(_gameTicker.UserHasJoinedGame);
             _audio.PlayGlobal("/Audio/Vanilla/Effects/TDM/counting.ogg", allPlayersInGame, true);
         }
 
@@ -101,7 +101,7 @@ public sealed class TDMSystem : EntitySystem
         rule.TimeOnNewCycle = TimeSpan.FromSeconds(0);
         rule.CountdownPlayed = false;
         onlyonecycle = rule.OnlyOneCycle;
-        allPlayersInGame = Filter.Empty().AddWhere(_gameTicker.UserHasJoinedGame);
+
         int playerCount = 0;
         bool odd = false;
         bool team = false; //1 - red 0 - blue
@@ -153,7 +153,7 @@ public sealed class TDMSystem : EntitySystem
             if (odd)
             {
                 odd = false;
-                // continue;
+                continue;
             }
             var entityId = tptoarena(session, arena.Value, team, usedspawners);
             AddComp<AdminFrozenComponent>(entityId);
@@ -275,7 +275,7 @@ public sealed class TDMSystem : EntitySystem
                 Loc.GetString("tdm-firstblood", ("player", sourcename), ("victim", victimname)),
                 Loc.GetString("tdm-announcer"),
                 playSound: true,
-                new SoundPathSpecifier("/Audio/Vanilla/Effects/TDM/firstblood.ogg"),
+                new SoundPathSpecifier("/Audio/Vanilla/Effects/TDM/Firstblood.ogg"),
                 color
             );
             if (Blueguys <= 0 || Redguys <= 0)
