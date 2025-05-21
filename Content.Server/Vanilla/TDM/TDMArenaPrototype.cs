@@ -1,6 +1,6 @@
 using Robust.Shared.Prototypes;
 using Content.Shared.Roles;
-namespace Content.Server.Vanilla.TDMRoundEnd;
+namespace Content.Server.Vanilla.TDM;
 
 [Prototype("TDMMap")]
 public sealed partial class TDMMapPrototype : IPrototype

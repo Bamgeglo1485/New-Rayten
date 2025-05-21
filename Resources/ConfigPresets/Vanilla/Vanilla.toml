@@ -5,9 +5,9 @@ desc             = """
 📚 Загляни на нашу вики 😏
 🌟 Баланс ролевой игры и веселья – стань частью уникального сообщества!"""
 lobbyenabled     = true
-lobbyduration = 285
+lobbyduration = 220
 map_pool = "VanillaMapPool"
-round_restart_time = 15
+round_restart_time = 340
 soft_max_players = 100
 panic_bunker.enabled = false
 #panic_bunker.disable_with_admins = true
@@ -16,7 +16,7 @@ panic_bunker.enabled = false
 #panic_bunker.min_overall_minutes = 60
 #panic_bunker.custom_reason = "В настоящий момент нет модераторов, а вы не наиграли достаточного количества минут (60) на нашем сервере."
 contraband_examine = false
-peaceful_end = false
+tdmroundend_enabled = true
 
 [hub]
 tags = "lang:ru,region:eu_e,rp:med"

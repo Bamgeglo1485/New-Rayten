@@ -172,6 +172,20 @@
   rules:
     - DeathMatch31
 
+#RAYTEN-START
+- type: gamePreset
+  id: TeamDeathMatch
+  alias:
+    - TDM
+  name: tdm-preset-title
+  description: tdm-preset-description
+  maxPlayers: 20
+  showInVote: true
+  supportedMaps: TeamDeathMatchMappool
+  rules:
+    - TeamDeathMatch
+#RAYTEN-END
+
 - type: gamePreset
   id: Nukeops
   alias:

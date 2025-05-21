@@ -1,8 +1,8 @@
 - type: startingGear
   id: BlueTeamGearDefault
   equipment:
-    head: ClothingHeadHatBluesoft
-    jumpsuit: ClothingUniformJumpsuitCasualBlue
+    head: ClothingHeadHatBluesoftUnrem
+    jumpsuit: ClothingUniformJumpsuitCasualBlueUnrem
     back: ClothingMilitaryBackpack
     mask: ClothingMaskGasSecurity
     eyes: ClothingEyesGlassesSunglasses
@@ -11,33 +11,29 @@
     shoes: ClothingShoesBootsCombat
     belt: ClothingBeltMilitaryWebbing
     neck: ClothingNeckNanoTrasenPin
+    id: PassengerIDCardUnrem
   storage:
+    belt:
+    - MagazineRifle
+    - MagazineRifle
+    - MagazinePistol
+    - MagazinePistol
+    - CombatKnife
     back:
-    - MagazineRifle
-    - MagazineRifle
     - MagazineBoxRifle
-    - MagazineBoxRifle
-    - MedkitCombatFilled
     - MedkitCombatFilled
     - SmokeGrenade
-    - Brutepack
-    - Brutepack
     - GrenadeStinger
-    - MagazinePistol
-    - MagazinePistol
     - MagazineBoxPistol
     - WeaponPistolMk58
-    - CombatKnife
   inhand:
   - WeaponRifleLecter
-
-
 
 - type: startingGear
   id: RedTeamGearDefault
   equipment:
-    head: ClothingHeadHatRedsoft
-    jumpsuit: ClothingUniformJumpsuitCasualRed
+    head: ClothingHeadHatRedsoftUnrem
+    jumpsuit: ClothingUniformJumpsuitCasualRedUnrem
     back: ClothingMilitaryBackpack
     mask: ClothingMaskGasSecurity
     eyes: ClothingEyesGlassesSunglasses
@@ -46,22 +42,58 @@
     shoes: ClothingShoesBootsCombat
     belt: ClothingBeltMilitaryWebbing
     neck: ClothingNeckUSSPPin
+    id: PassengerIDCardUnrem
   storage:
+    belt:
+    - MagazineRifle
+    - MagazineRifle
+    - MagazinePistol
+    - MagazinePistol
+    - CombatKnife
     back:
-    - MagazineRifle
-    - MagazineRifle
     - MagazineBoxRifle
-    - MagazineBoxRifle
-    - MedkitCombatFilled
     - MedkitCombatFilled
     - SmokeGrenade
-    - Brutepack
-    - Brutepack
     - GrenadeStinger
-    - MagazinePistol
-    - MagazinePistol
     - MagazineBoxPistol
     - WeaponPistolMk58
-    - CombatKnife
   inhand:
   - WeaponRifleLecter
+
+## UNREM ВЕРСИИ
+
+- type: entity
+  parent: PassengerIDCard
+  id: PassengerIDCardUnrem
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Unremoveable
+
+- type: entity
+  parent: ClothingHeadHatRedsoft
+  id: ClothingHeadHatRedsoftUnrem
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Unremoveable
+
+- type: entity
+  parent: ClothingHeadHatBluesoft
+  id: ClothingHeadHatBluesoftUnrem
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Unremoveable
+
+- type: entity
+  parent: ClothingUniformJumpsuitCasualRed
+  id: ClothingUniformJumpsuitCasualRedUnrem
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Unremoveable
+
+- type: entity
+  parent: ClothingUniformJumpsuitCasualBlue
+  id: ClothingUniformJumpsuitCasualBlueUnrem
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Unremoveable
+

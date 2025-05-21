@@ -6,3 +6,8 @@
   - BlueTeamGearDefault
   redteamgear:
   - RedTeamGearDefault
+
+- type: gameMapPool
+  id: TeamDeathMatchMappool
+  maps:
+  - Empty
