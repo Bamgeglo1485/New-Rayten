@@ -18,6 +18,10 @@ public sealed partial class TDMRuleComponent : Component
     public TimeSpan TimeToNewCycle = TimeSpan.FromSeconds(320);
     [DataField]
     public bool CountdownPlayed = false;
+
     [DataField]
     public bool OnlyOneCycle = false;
+
+    [DataField]
+    public bool GameOverPlayed = false;
 }

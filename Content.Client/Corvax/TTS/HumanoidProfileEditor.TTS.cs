@@ -7,7 +7,7 @@ using Content.Shared.Preferences;
 using Content.Shared.Vanilla.VoiceSpeech;
 using Content.Client.Vanilla.VoiceSpeech;
 using Content.Shared.Vanilla.Sponsor;
-using Content.Shared.Audio; 
+using Content.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Random;
 using Timer = Robust.Shared.Timing.Timer;
@@ -52,7 +52,7 @@ public sealed partial class HumanoidProfileEditor
 
             SetVoicePitch(args.Value);
         };
-        
+
         PitchInput.OnValueChanged += args =>
         {
             if (!MathHelper.CloseTo(Pitch.Value, args.Value))
@@ -68,7 +68,7 @@ public sealed partial class HumanoidProfileEditor
         };
 
         VoicePlayButton.OnPressed += _ => PlayPreviewTTS();
-        _sponsorsMgr = IoCManager.Resolve<SharedSponsorManager>(); 
+        _sponsorsMgr = IoCManager.Resolve<SharedSponsorManager>();
     }
 
     private void UpdateTTSVoicesControls()
@@ -115,7 +115,7 @@ public sealed partial class HumanoidProfileEditor
     {
         if (Profile is null)
             return;
-        var rng = IoCManager.Resolve<IRobustRandom>(); 
+        var rng = IoCManager.Resolve<IRobustRandom>();
         var entMan = IoCManager.Resolve<IEntityManager>();
         var _audio = entMan.System<SharedAudioSystem>();
         var _undsys = entMan.System<VoiceSpeechSystem>();
@@ -137,11 +137,11 @@ public sealed partial class HumanoidProfileEditor
 
             var nextChar = previewBeepText[_previewBeepIndex];
 
-            _audio.PlayGlobal(Sound, Filter.Local(), true, AudioParams.Default.WithPitchScale(Profile.VoicePitch).WithVolume(_undsys.AdjustVolume(false)));
+            _audio.PlayGlobal(Sound, Filter.Local(), true, AudioParams.Default.WithPitchScale(Profile.VoicePitch).WithVolume(1f));
             _previewBeepIndex++;
 
             if (_previewBeepIndex < previewBeepText.Length && _previewBeepIndex <= 55)
-            { 
+            {
                 Timer.Spawn(TimeSpan.FromSeconds(rng.NextFloat(0.05f, 0.2f)), BeepStep);
             }
         }

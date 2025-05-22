@@ -1,19 +1,20 @@
-using Robust.Shared.Timing;
-using Content.Shared.Audio; 
+
+using Content.Shared.Audio;
 using Content.Shared.Chat;
+using Content.Shared.Corvax.CCCVars;
+using Content.Shared.Vanilla.VoiceSpeech;
 using Robust.Shared.Random;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
-using System.Linq;
-using Content.Shared.Corvax.CCCVars;
-using Content.Shared.Vanilla.VoiceSpeech;
-using Content.Client.Examine;
-using Robust.Client.Graphics;
 using Robust.Shared.Configuration;
+using Robust.Shared.Map;
+using Robust.Shared.Timing;
 using Robust.Shared.Prototypes;
 using Robust.Client.Player;
 using Robust.Client.GameObjects;
-using Robust.Shared.Map;
+using Content.Client.Examine;
+using Robust.Client.Graphics;
+using System.Linq;
 
 namespace Content.Client.Vanilla.VoiceSpeech;
 
@@ -52,34 +53,9 @@ public sealed class VoiceSpeechSystem : EntitySystem
 
     private void onBeep(EntityUid uid, VoiceEmitterComponent comp, VoiceSpeechBeepEvent args)
     {
-        if (comp.VoicePrototypeId == null)
+        if (comp.VoicePrototypeId == null )
             return;
-
-        var audioParams = AudioParams.Default
-            .WithPitchScale(comp.Pitch)
-            .WithVolume(AdjustVolume(comp.iswhisper))
-            .WithMaxDistance(AdjustDistance(comp.iswhisper));
-
-        _audio.PlayLocal(
-            comp.Voice,
-            uid,
-            soundInitiator: uid,
-            audioParams: audioParams);
-    }
-
-    public float AdjustVolume(bool isWhisper)
-    {
-        var volume = -10f + SharedAudioSystem.GainToVolume(_volume);
-
-        if (isWhisper)
-            volume -= SharedAudioSystem.GainToVolume(5f);
-
-        return volume;
-    }
-
-    private float AdjustDistance(bool isWhisper)
-    {
-        return isWhisper ? SharedChatSystem.WhisperMuffledRange : SharedChatSystem.VoiceRange;
+        _audio.PlayLocal(comp.Voice, uid, null);
     }
 }
 public sealed class VoiceSpeechBeepEvent : EntityEventArgs

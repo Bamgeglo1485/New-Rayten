@@ -92,14 +92,22 @@ public sealed class TDMSystem : EntitySystem
         }
 
         // Пора запустить новый цикл
-        if (rule.TimeOnNewCycle >= rule.TimeToNewCycle)
+        if (!rule.GameOverPlayed && rule.TimeOnNewCycle >= rule.TimeToNewCycle)
+        {
+            rule.GameOverPlayed = true;
             GameOver();
+        }
+
     }
 
     private void NewCycle(EntityUid uid, TDMRuleComponent rule, NewTDMCycleEvent args)
     {
+        TDMUID = uid;
         rule.TimeOnNewCycle = TimeSpan.FromSeconds(0);
+        rule.GameOverPlayed = false;
         rule.CountdownPlayed = false;
+        Blueguys = 0;
+        Redguys = 0;
         onlyonecycle = rule.OnlyOneCycle;
 
         int playerCount = 0;
@@ -118,9 +126,6 @@ public sealed class TDMSystem : EntitySystem
             odd = true;
             playerCount -= 1;
         }
-
-        Blueguys = playerCount / 2;
-        Redguys = Blueguys;
         firstblood = false;
 
         //выбираем рандомный прототип арены и спавним грид арены
@@ -158,6 +163,11 @@ public sealed class TDMSystem : EntitySystem
             var entityId = tptoarena(session, arena.Value, team, usedspawners);
             AddComp<AdminFrozenComponent>(entityId);
 
+            if (team)
+                Redguys++;
+            else
+                Blueguys++;
+
             var marker = EnsureComp<TDMMarkerComponent>(entityId);
             marker.Team = team;
 
@@ -184,7 +194,7 @@ public sealed class TDMSystem : EntitySystem
             Timer.Spawn(TimeSpan.FromSeconds(10), () => RaiseLocalEvent(TDMUID.Value, new NewTDMCycleEvent()));
         }
 
-        bool winner = Blueguys > Redguys ? true : false;
+        bool winner = Blueguys > Redguys ? false : true;
 
         if (Blueguys == Redguys)
             _chatSystem.DispatchGlobalAnnouncement(
@@ -252,7 +262,7 @@ public sealed class TDMSystem : EntitySystem
 
         Color color = Color.DodgerBlue;
 
-        if (component.Team)
+        if (!component.Team)
             color = Color.Red;
 
         if (args.Origin == null)
@@ -294,7 +304,7 @@ public sealed class TDMSystem : EntitySystem
         if (sourcecomp.TotalKills == 4)
             _chatSystem.DispatchGlobalAnnouncement(
                 Loc.GetString("tdm-killstreak", ("streak", sourcecomp.TotalKills), ("player", sourcename), ("victim", victimname)),
-                "Ванилька-комментаторша",
+                Loc.GetString("tdm-announcer"),
                 playSound: true,
                 new SoundPathSpecifier("/Audio/Vanilla/Effects/TDM/UltraKill.ogg"),
                 color
@@ -323,7 +333,7 @@ public sealed class TDMSystem : EntitySystem
                 null,
                 color
             );
-        if (Blueguys == 0 || Redguys == 0)
+        if (Blueguys <= 0 || Redguys <= 0)
             GameOver();
     }
     //респавнит челика на арене

@@ -288,11 +288,10 @@ public sealed class PaperSystem : EntitySystem
         SetContent((entity, paper), content);
     }
 
-    public void SetContent(Entity<PaperComponent> entity, string content, string? fakecontent = null)
+    public void SetContent(Entity<PaperComponent> entity, string content)
     {
         entity.Comp.Content = content;
-        if (entity.Comp.FakeContent == null)
-            entity.Comp.FakeContent = fakecontent; //Rayten
+        entity.Comp.FakeContent = ReplaceRandomRussianLetters(content, 0.25);
 
         Dirty(entity);
         UpdateUserInterface(entity);
@@ -306,7 +305,26 @@ public sealed class PaperSystem : EntitySystem
 
         _appearance.SetData(entity, PaperVisuals.Status, status, appearance);
     }
+    //rayten-start
+    private string ReplaceRandomRussianLetters(string text, double probability)
+    {
+        var russianLetters = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЬЫЭЮЯабвгдеёжзийклмнопрстуфхцчшщьыэюя".ToCharArray();
+        var charArray = text.ToCharArray();
 
+        for (int i = 0; i < charArray.Length; i++)
+        {
+            if (russianLetters.Contains(charArray[i]))
+            {
+                if (_random.NextDouble() < probability)
+                {
+                    charArray[i] = russianLetters[_random.Next(russianLetters.Length)];
+                }
+            }
+        }
+
+        return new string(charArray);
+    }
+    //rayten-end
     private void UpdateUserInterface(Entity<PaperComponent> entity)
     {
         _uiSystem.SetUiState(entity.Owner, PaperUiKey.Key, new PaperBoundUserInterfaceState(entity.Comp.Content, entity.Comp.FakeContent, entity.Comp.StampedBy, entity.Comp.Mode));

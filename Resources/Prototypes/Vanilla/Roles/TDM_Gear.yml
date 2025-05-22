@@ -11,7 +11,7 @@
     shoes: ClothingShoesBootsCombat
     belt: ClothingBeltMilitaryWebbing
     neck: ClothingNeckNanoTrasenPin
-    id: PassengerIDCardUnrem
+    id: PassengerPDAUnrem
   storage:
     belt:
     - MagazineRifle
@@ -42,7 +42,7 @@
     shoes: ClothingShoesBootsCombat
     belt: ClothingBeltMilitaryWebbing
     neck: ClothingNeckUSSPPin
-    id: PassengerIDCardUnrem
+    id: PassengerPDAUnrem
   storage:
     belt:
     - MagazineRifle
@@ -63,9 +63,11 @@
 ## UNREM ВЕРСИИ
 
 - type: entity
-  parent: PassengerIDCard
-  id: PassengerIDCardUnrem
+  parent: PassengerPDA
+  id: PassengerPDAUnrem
   categories: [ HideSpawnMenu ]
+  name: КПК Наёмника
+  description: Почему он серый?
   components:
   - type: Unremoveable
 

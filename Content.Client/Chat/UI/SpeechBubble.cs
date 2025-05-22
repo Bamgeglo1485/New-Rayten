@@ -10,6 +10,9 @@ using Robust.Shared.Configuration;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 using Content.Shared.Vanilla.VoiceSpeech;
+using Content.Shared.Audio;
+using Robust.Shared.Audio.Systems;
+using Robust.Shared.Audio;
 using Content.Client.Vanilla.VoiceSpeech;
 using Robust.Shared.Prototypes;
 
@@ -63,7 +66,7 @@ namespace Content.Client.Chat.UI
         protected RichTextLabel? _textLabel;
         private string _fullText = "";
         private int _revealedLength;
-        private const float LetterDelay = 0.05f;
+        private const float LetterDelay = 0.065f;
         private float _accumulatedTime;
         private Color? _fontColor;
         private bool _wasBold = false;
@@ -100,21 +103,29 @@ namespace Content.Client.Chat.UI
                 SpeechType.Looc => new TextSpeechBubble(message, senderEntity, "emoteBox", Color.FromHex("#48d1cc")),
                 _ => throw new ArgumentOutOfRangeException()
             };
-
+            //rayten-start
             if ( type == SpeechType.Say || type == SpeechType.Whisper )
             {
                 var entMan = IoCManager.Resolve<IEntityManager>();
-                var protoMan = IoCManager.Resolve<IPrototypeManager>();
 
-                if (!entMan.TryGetComponent<VoiceEmitterComponent>(senderEntity, out var undemitcomp)
-                    || undemitcomp.VoicePrototypeId == null
-                    || !protoMan.TryIndex<VoiceSpeechPrototype>(undemitcomp.VoicePrototypeId, out var protoVoice))
+                if (!entMan.TryGetComponent<VoiceEmitterComponent>(senderEntity, out var undemitcomp))
                     return bubble;
 
-                undemitcomp.Voice = protoVoice.Voice;
-                undemitcomp.iswhisper = type == SpeechType.Whisper ? true : false; 
-
+                undemitcomp.Voice.Params = AudioParams.Default
+                    .WithPitchScale(undemitcomp.Pitch)
+                    .WithVolume(AdjustVolume(type == SpeechType.Whisper))
+                    .WithMaxDistance(type == SpeechType.Whisper ? SharedChatSystem.WhisperMuffledRange : SharedChatSystem.VoiceRange);
             }
+            float AdjustVolume(bool isWhisper)
+            {
+                var volume = 3f;
+
+                if (isWhisper)
+                    volume -= SharedAudioSystem.GainToVolume(6f);
+
+                return volume;
+            }
+            //rayten-end
             return bubble;
         }
 
@@ -152,7 +163,6 @@ namespace Content.Client.Chat.UI
                 return;
             }
 
-
             // Lerp to our new vertical offset if it's been modified.
             if (MathHelper.CloseToPercent(_verticalOffsetAchieved - VerticalOffset, 0, 0.1))
             {
@@ -168,7 +178,7 @@ namespace Content.Client.Chat.UI
                 Modulate = Color.White.WithAlpha(0);
                 return;
             }
-                        // RAYTEN-START
+            // RAYTEN-START
             if (_entityManager.TryGetComponent<VoiceEmitterComponent>(_senderEntity, out var comp) && comp.VoicePrototypeId != null)
             {
                 var entMan = IoCManager.Resolve<IEntityManager>();
@@ -182,7 +192,8 @@ namespace Content.Client.Chat.UI
                         _accumulatedTime -= LetterDelay;
 
                         var newChar = _fullText[_revealedLength];
-                        entMan.EventBus.RaiseLocalEvent(_senderEntity, new VoiceSpeechBeepEvent(newChar));
+                        if(newChar != ' ')
+                            entMan.EventBus.RaiseLocalEvent(_senderEntity, new VoiceSpeechBeepEvent(newChar));
 
                         _revealedLength++;
                         _timeLeft += LetterDelay;
@@ -192,7 +203,7 @@ namespace Content.Client.Chat.UI
                             break;
                         }
                     }
-                    
+
                     var visible = _fullText.Substring(0, _revealedLength);
                     var hidden = _fullText.Substring(_revealedLength);
                     if (_wasBold)

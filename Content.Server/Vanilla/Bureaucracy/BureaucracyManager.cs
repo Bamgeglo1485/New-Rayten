@@ -49,39 +49,21 @@ public sealed class BureaucracyManager : EntitySystem
 
         if(paperComp.StampedBy.Count > 0)
             return;
-            
+
         _audio.PlayPvs(paperComp.Sound, paperUid);
 
-        string text = Loc.GetString(prototype.Text, 
-                                    ("station", getstationname(paperUid)), 
-                                    ("label", prototype.label), 
-                                    ("name", getname(Playerent)), 
-                                    ("job", getjob(Playerent)), 
+        string text = Loc.GetString(prototype.Text,
+                                    ("station", getstationname(paperUid)),
+                                    ("label", prototype.label),
+                                    ("name", getname(Playerent)),
+                                    ("job", getjob(Playerent)),
                                     ("date", getdate())
                                     );
-        string FakeContent = ReplaceRandomRussianLetters(text, 0.4);
 
-        _paperSystem.SetContent(new Entity<PaperComponent>(paperUid, paperComp), text, FakeContent);
+        _paperSystem.SetContent(new Entity<PaperComponent>(paperUid, paperComp), text);
     }
 
-    private string ReplaceRandomRussianLetters(string text, double probability)
-    {
-        var russianLetters = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЬЫЭЮЯабвгдеёжзийклмнопрстуфхцчшщьыэюя".ToCharArray();
-        var charArray = text.ToCharArray();
 
-        for (int i = 0; i < charArray.Length; i++)
-        {
-            if (russianLetters.Contains(charArray[i]))
-            {
-                if (_random.NextDouble() < probability)
-                {
-                    charArray[i] = russianLetters[_random.Next(russianLetters.Length)];
-                }
-            }
-        }
-
-        return new string(charArray);
-    }
     private string getstationname(EntityUid paperUid)
     {
         var stations = _station.GetStations();
@@ -101,7 +83,7 @@ public sealed class BureaucracyManager : EntitySystem
         return "Номер станции";
     }
 
-    private string getname(EntityUid? Playerent) 
+    private string getname(EntityUid? Playerent)
     {
         if (Playerent == null || !TryComp<MetaDataComponent>(Playerent.Value, out var metaData))
             return "Составитель документа";
@@ -119,7 +101,7 @@ public sealed class BureaucracyManager : EntitySystem
             return "Без должности";
 
         if (_jobs.MindTryGetJobName(mindId, out var jobName))
-            return jobName; 
+            return jobName;
 
         return "Без должности";
     }
