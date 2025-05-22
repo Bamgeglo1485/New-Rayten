@@ -4,7 +4,6 @@
     head: ClothingHeadHatBluesoftUnrem
     jumpsuit: ClothingUniformJumpsuitCasualBlueUnrem
     back: ClothingMilitaryBackpack
-    mask: ClothingMaskGasSecurity
     eyes: ClothingEyesGlassesSunglasses
     gloves: ClothingHandsMercGlovesCombat
     outerClothing: ClothingOuterArmorBasicSlim
@@ -35,7 +34,6 @@
     head: ClothingHeadHatRedsoftUnrem
     jumpsuit: ClothingUniformJumpsuitCasualRedUnrem
     back: ClothingMilitaryBackpack
-    mask: ClothingMaskGasSecurity
     eyes: ClothingEyesGlassesSunglasses
     gloves: ClothingHandsMercGlovesCombat
     outerClothing: ClothingOuterArmorBasicSlim

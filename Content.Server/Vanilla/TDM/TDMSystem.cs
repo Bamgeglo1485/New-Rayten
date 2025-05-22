@@ -60,6 +60,7 @@ public sealed class TDMSystem : EntitySystem
     {
         base.Initialize();
         SubscribeLocalEvent<TDMMarkerComponent, DamageChangedEvent>(OnDamageChanged, before: [typeof(MobThresholdSystem)]);
+        SubscribeLocalEvent<TDMMarkerComponent, DamageModifyEvent>(OnDamageModify);
         SubscribeLocalEvent<TDMMarkerComponent, MobStateChangedEvent>(OnMobStateChanged);
         SubscribeLocalEvent<RoundStartedEvent>(OnRoundStarted);
         SubscribeLocalEvent<TDMRuleComponent, NewTDMCycleEvent>(NewCycle);
@@ -87,6 +88,11 @@ public sealed class TDMSystem : EntitySystem
         if (!rule.CountdownPlayed && rule.TimeOnNewCycle >= TimeSpan.FromSeconds(19.5))
         {
             rule.CountdownPlayed = true;
+            if (Redguys <= 0 || Blueguys <= 0)
+            {
+                GameOver();
+                return;
+            }
             var allPlayersInGame = Filter.Empty().AddWhere(_gameTicker.UserHasJoinedGame);
             _audio.PlayGlobal("/Audio/Vanilla/Effects/TDM/counting.ogg", allPlayersInGame, true);
         }
@@ -177,17 +183,17 @@ public sealed class TDMSystem : EntitySystem
             //меняем команду для следующего игрока
             team = !team;
         }
-        QueueDel(PreviousGrid);
         PreviousGrid = arena;
     }
     private void GameOver()
     {
+        QueueDel(PreviousGrid);
         if (TDMUID == null)
             return;
 
         if (onlyonecycle)
         {
-            _gameTicker.RestartRound();
+            Timer.Spawn(TimeSpan.FromSeconds(5), () => _gameTicker.RestartRound());
         }
         else
         {
@@ -230,17 +236,26 @@ public sealed class TDMSystem : EntitySystem
         }
     }
 
-    private void OnMapInit(EntityUid uid, TDMRuleComponent component, MapInitEvent args)
+    private void OnDamageModify(EntityUid uid, TDMMarkerComponent component, DamageModifyEvent args)
     {
-        RaiseLocalEvent(uid, new NewTDMCycleEvent());
+        if (!TryComp<TDMMarkerComponent>(args.Origin, out var sourcecomp))
+            return;
+
+        if (component.Team != sourcecomp.Team)
+            return;
+
+        // Полностью обнуляем урон
+        args.Damage = new DamageSpecifier();
     }
+
     private void OnDamageChanged(EntityUid uid, TDMMarkerComponent component, DamageChangedEvent args)
     {
-        // if (!args.DamageIncreased || args.DamageDelta == null)  //TODO
-        //     return;
+        if (!args.DamageIncreased || args.DamageDelta == null)
+            return;
 
-        // if (args.Origin != null && args.Origin.Value != uid && TryComp<TDMMarkerComponent>(args.Origin, out var sourcecomp))
-        //     sourcecomp.TotalDamage += args.DamageDelta.GetTotal();
+        TryComp<TDMMarkerComponent>(args.Origin, out var sourcecomp);
+        if (args.Origin != null && args.Origin.Value != uid && sourcecomp != null)
+            sourcecomp.TotalDamage += args.DamageDelta.GetTotal();
     }
 
     private void OnMobStateChanged(EntityUid uid, TDMMarkerComponent component, MobStateChangedEvent args)
@@ -260,10 +275,10 @@ public sealed class TDMSystem : EntitySystem
         else
             Blueguys -= 1;
 
-        Color color = Color.DodgerBlue;
+        if (Blueguys <= 0 || Redguys <= 0)
+            GameOver();
 
-        if (!component.Team)
-            color = Color.Red;
+        Color color = component.Team ? Color.Red : Color.DodgerBlue;
 
         if (args.Origin == null)
             return;
@@ -276,8 +291,11 @@ public sealed class TDMSystem : EntitySystem
         if (origin != uid)
             sourcecomp.TotalKills++;
 
-        string sourcename = Identity.Name(origin, EntityManager);
-        string victimname = Identity.Name(uid, EntityManager);
+        if (!TryComp<MetaDataComponent>(origin, out var originmeta) || !TryComp<MetaDataComponent>(uid, out var entmeta))
+            return;
+
+        string sourcename = originmeta.EntityName;
+        string victimname = entmeta.EntityName;
         if (!firstblood)
         {
             firstblood = true;
@@ -288,53 +306,27 @@ public sealed class TDMSystem : EntitySystem
                 new SoundPathSpecifier("/Audio/Vanilla/Effects/TDM/Firstblood.ogg"),
                 color
             );
-            if (Blueguys <= 0 || Redguys <= 0)
-                GameOver();
             return;
         }
 
-        if (sourcecomp.TotalKills == 5)
-            _chatSystem.DispatchGlobalAnnouncement(
-                Loc.GetString("tdm-killstreak", ("streak", sourcecomp.TotalKills), ("player", sourcename), ("victim", victimname)),
-                Loc.GetString("tdm-announcer"),
-                playSound: true,
-                new SoundPathSpecifier("/Audio/Vanilla/Effects/TDM/Rampage.ogg"),
-                color
-            );
-        if (sourcecomp.TotalKills == 4)
-            _chatSystem.DispatchGlobalAnnouncement(
-                Loc.GetString("tdm-killstreak", ("streak", sourcecomp.TotalKills), ("player", sourcename), ("victim", victimname)),
-                Loc.GetString("tdm-announcer"),
-                playSound: true,
-                new SoundPathSpecifier("/Audio/Vanilla/Effects/TDM/UltraKill.ogg"),
-                color
-            );
-        if (sourcecomp.TotalKills == 3)
-            _chatSystem.DispatchGlobalAnnouncement(
-                Loc.GetString("tdm-killstreak", ("streak", sourcecomp.TotalKills), ("player", sourcename), ("victim", victimname)),
-                Loc.GetString("tdm-announcer"),
-                playSound: true,
-                new SoundPathSpecifier("/Audio/Vanilla/Effects/TDM/TripleKill.ogg"),
-                color
-            );
-        if (sourcecomp.TotalKills == 2)
-            _chatSystem.DispatchGlobalAnnouncement(
-                Loc.GetString("tdm-killstreak", ("streak", sourcecomp.TotalKills), ("player", sourcename), ("victim", victimname)),
-                Loc.GetString("tdm-announcer"),
-                playSound: true,
-                new SoundPathSpecifier("/Audio/Vanilla/Effects/TDM/Doublekill.ogg"),
-                color
-            );
-        if (sourcecomp.TotalKills == 1)
-            _chatSystem.DispatchGlobalAnnouncement(
-                Loc.GetString("tdm-killstreak", ("streak", sourcecomp.TotalKills), ("player", sourcename), ("victim", victimname)),
-                Loc.GetString("tdm-announcer"),
-                playSound: false,
-                null,
-                color
-            );
-        if (Blueguys <= 0 || Redguys <= 0)
-            GameOver();
+        var kills = sourcecomp.TotalKills;
+        var killSounds = new Dictionary<int, string>
+        {
+            { 2, "/Audio/Vanilla/Effects/TDM/Doublekill.ogg" },
+            { 3, "/Audio/Vanilla/Effects/TDM/TripleKill.ogg" },
+            { 4, "/Audio/Vanilla/Effects/TDM/UltraKill.ogg" },
+            { 5, "/Audio/Vanilla/Effects/TDM/Rampage.ogg" },
+        };
+        var playSound = killSounds.ContainsKey(kills);
+        var sound = playSound ? new SoundPathSpecifier(killSounds[kills]) : null;
+
+        _chatSystem.DispatchGlobalAnnouncement(
+            Loc.GetString("tdm-killstreak", ("streak", kills), ("player", sourcename), ("victim", victimname)),
+            Loc.GetString("tdm-announcer"),
+            playSound: playSound,
+            sound,
+            color
+        );
     }
     //респавнит челика на арене
     private EntityUid tptoarena(ICommonSession session, EntityUid arena, bool team, HashSet<EntityUid> usedspawners)
