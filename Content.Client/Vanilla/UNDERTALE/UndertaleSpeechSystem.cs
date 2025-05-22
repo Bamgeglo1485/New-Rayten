@@ -29,7 +29,6 @@ public sealed class VoiceSpeechSystem : EntitySystem
     {
         base.Initialize();
         SubscribeLocalEvent<VoiceEmitterComponent, VoiceSpeechBeepEvent>(onBeep);
-        SubscribeLocalEvent<VoiceEmitterComponent, MapInitEvent>(onMapInit);
         _cfg.OnValueChanged(CCCVars.TTSVolume, OnTtsVolumeChanged, true);
     }
 
@@ -42,13 +41,6 @@ public sealed class VoiceSpeechSystem : EntitySystem
     private void OnTtsVolumeChanged(float volume)
     {
         _volume = volume;
-    }
-    private void onMapInit(EntityUid uid, VoiceEmitterComponent comp, MapInitEvent args)
-    {
-        if (comp.VoicePrototypeId == null || !_prototypeManager.TryIndex<VoiceSpeechPrototype>(comp.VoicePrototypeId, out var proto))
-            return;
-
-        comp.Voice = proto.Voice;
     }
 
     private void onBeep(EntityUid uid, VoiceEmitterComponent comp, VoiceSpeechBeepEvent args)

@@ -107,23 +107,17 @@ namespace Content.Client.Chat.UI
             if ( type == SpeechType.Say || type == SpeechType.Whisper )
             {
                 var entMan = IoCManager.Resolve<IEntityManager>();
-
-                if (!entMan.TryGetComponent<VoiceEmitterComponent>(senderEntity, out var undemitcomp))
+                var protoMan = IoCManager.Resolve<IPrototypeManager>();
+                if (!entMan.TryGetComponent<VoiceEmitterComponent>(senderEntity, out var undemitcomp)
+                    || undemitcomp.VoicePrototypeId == null
+                    || !protoMan.TryIndex<VoiceSpeechPrototype>(undemitcomp.VoicePrototypeId, out var protoVoice))
                     return bubble;
 
+                undemitcomp.Voice = protoVoice.Voice;
                 undemitcomp.Voice.Params = AudioParams.Default
                     .WithPitchScale(undemitcomp.Pitch)
-                    .WithVolume(AdjustVolume(type == SpeechType.Whisper))
+                    .WithVolume(type == SpeechType.Whisper ? -3f : 3f )
                     .WithMaxDistance(type == SpeechType.Whisper ? SharedChatSystem.WhisperMuffledRange : SharedChatSystem.VoiceRange);
-            }
-            float AdjustVolume(bool isWhisper)
-            {
-                var volume = 3f;
-
-                if (isWhisper)
-                    volume -= SharedAudioSystem.GainToVolume(6f);
-
-                return volume;
             }
             //rayten-end
             return bubble;
