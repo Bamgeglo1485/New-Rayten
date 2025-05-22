@@ -27,9 +27,6 @@ public sealed partial class ReflectCoinComponent : Component
     [ViewVariables]
     public bool Flashing = false;
 
-    [DataField("shootEffect")]
-    public string ShootEffectPrototype = "CoinShoot";
-
     [DataField("flashEffect")]
     public string FlashEffectPrototype = "CoinFlash";
 }

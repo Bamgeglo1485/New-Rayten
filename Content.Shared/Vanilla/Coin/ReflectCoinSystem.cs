@@ -52,21 +52,23 @@ public sealed class ReflectCoinSystem : EntitySystem
             !HasComp<ProjectileBatteryAmmoProviderComponent>(uid))
             return;
 
-        if (args.Origin is { } attacker && TryComp<NpcFactionMemberComponent>(attacker, out var attackerFactions))
+        if (args.Origin is { } origin)
         {
-            CopyComp(attacker, uid, attackerFactions);
+            component.Shooter = TryComp<ProjectileComponent>(origin, out var projectile)
+                ? projectile.Shooter
+                : origin;
         }
 
+        EntityUid shooter = component.Shooter!.Value;
 
         component.StoredDamage = args.DamageDelta;
-        var target = FindCoinTarget(uid) ?? FindNpcTarget(uid);
+
+        var target = FindCoinTarget(uid) ?? FindNpcTarget(shooter);
 
         if (target == null)
             return;
 
         _gunSystem.AttemptShoot(uid, uid, gun, new EntityCoordinates(target.Value, Vector2.Zero));
-        var coords = Transform(uid).Coordinates;
-        Spawn(component.ShootEffectPrototype, coords);
     }
 
     private void ModifyDamage(EntityUid uid, ReflectCoinComponent component, AmmoShotEvent args)
@@ -84,10 +86,7 @@ public sealed class ReflectCoinSystem : EntitySystem
                 projectileComp.Shooter = component.Shooter;
             }
         }
-        // крч если монетка удаляется сразу, то появляются ошибки в консоли,
-        // ошибка связана с анимацией выстрела, варианты фикса либо как-то убрать их, либо отсрочить удаление монетки до момента пока анимация выстрела не закончится
-        // либо еще какие-нибудь костыли, спавн еще одной невидимой монетки которая будет стрелять яхз
-        uid.SpawnTimer(TimeSpan.FromSeconds(0.4), () => QueueDel(uid));
+        QueueDel(uid);
     }
 
     private EntityUid? FindCoinTarget(EntityUid sourceUid)

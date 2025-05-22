@@ -87,6 +87,11 @@
       - !type:DoActsBehavior
         acts: ["Destruction"]
       - !type:ExplodeBehavior
+  - type: SpawnOnDespawn
+    prototype: CoinShoot
+  - type: NpcFactionMember
+    factions:
+    - Dragon
 
 - type: entity
   id: CoinFlash

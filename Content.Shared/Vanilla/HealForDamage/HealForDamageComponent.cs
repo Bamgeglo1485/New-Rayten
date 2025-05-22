@@ -10,6 +10,6 @@ public sealed partial class HealForDamageComponent : Component
     public float Radius = 4f; 
 
     [DataField("healMultiplier")]
-    public float HealMultiplier = 2f;
+    public float HealMultiplier = 1.5f;
 
 }

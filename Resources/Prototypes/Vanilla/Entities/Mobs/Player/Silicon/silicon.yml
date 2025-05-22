@@ -72,7 +72,7 @@
     thresholds:
     - trigger:
         !type:DamageTrigger
-        damage: 200
+        damage: 150
       behaviors:
       - !type:SpawnEntitiesBehavior
         spawnInContainer: true
@@ -112,8 +112,8 @@
   - type: MobThresholds
     thresholds:
       0: Alive
-      170: Critical
-      300: Dead
+      130: Critical
+      150: Dead
     stateAlertDict:
       Alive: R1Health
       Critical: R1Dead
@@ -146,12 +146,12 @@
     modifiers:
       coefficients:
         Blunt: 1.5
-        Heat: 1.5
+        Heat: 2
   - type: BloodSucker
     heal:
       groups:
-        Brute: -1
-        Burn: -1
+        Brute: -0.7
+        Burn: -0.7
     bloodlessPenalty:
       types:
         Heat: 20
