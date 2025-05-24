@@ -30,7 +30,7 @@ public sealed partial class ChangeMindSpecial : BackgroundSpecial
         if (!_mind.TryGetMind(mob, out var mindId, out var mindcomp))
             return;
 
-        _role.MindRemoveRole<MindRoleComponent>(mindId);
+        // _role.MindRemoveRole<MindRoleComponent>(mindId);
         _role.MindRemoveRole<GhostRoleMarkerRoleComponent>(mindId);
         _role.MindRemoveRole<NukeopsRoleComponent>(mindId);
 

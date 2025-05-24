@@ -23,6 +23,7 @@ namespace Content.Client.Chat.UI
         [Dependency] private readonly IEyeManager _eyeManager = default!;
         [Dependency] private readonly IEntityManager _entityManager = default!;
         [Dependency] protected readonly IConfigurationManager ConfigManager = default!;
+        [Dependency] protected readonly VoiceSpeechSystem _speech = default!;
         private readonly SharedTransformSystem _transformSystem;
 
         public enum SpeechType : byte
@@ -106,18 +107,17 @@ namespace Content.Client.Chat.UI
             //rayten-start
             if ( type == SpeechType.Say || type == SpeechType.Whisper )
             {
-                var entMan = IoCManager.Resolve<IEntityManager>();
                 var protoMan = IoCManager.Resolve<IPrototypeManager>();
+                var entMan = IoCManager.Resolve<IEntityManager>();
+                var speechsys = entMan.System<VoiceSpeechSystem>();
+
                 if (!entMan.TryGetComponent<VoiceEmitterComponent>(senderEntity, out var undemitcomp)
                     || undemitcomp.VoicePrototypeId == null
                     || !protoMan.TryIndex<VoiceSpeechPrototype>(undemitcomp.VoicePrototypeId, out var protoVoice))
                     return bubble;
 
                 undemitcomp.Voice = protoVoice.Voice;
-                undemitcomp.Voice.Params = AudioParams.Default
-                    .WithPitchScale(undemitcomp.Pitch)
-                    .WithVolume(type == SpeechType.Whisper ? -3f : 3f )
-                    .WithMaxDistance(type == SpeechType.Whisper ? SharedChatSystem.WhisperMuffledRange : SharedChatSystem.VoiceRange);
+                undemitcomp.Voice.Params = speechsys.SetVolume(type == SpeechType.Whisper, undemitcomp);
             }
             //rayten-end
             return bubble;
@@ -186,8 +186,8 @@ namespace Content.Client.Chat.UI
                         _accumulatedTime -= LetterDelay;
 
                         var newChar = _fullText[_revealedLength];
-                        if(newChar != ' ')
-                            entMan.EventBus.RaiseLocalEvent(_senderEntity, new VoiceSpeechBeepEvent(newChar));
+                        if (newChar != ' ' && newChar != ',' && newChar != '.')
+                            _speech.Beep(_senderEntity, comp);
 
                         _revealedLength++;
                         _timeLeft += LetterDelay;

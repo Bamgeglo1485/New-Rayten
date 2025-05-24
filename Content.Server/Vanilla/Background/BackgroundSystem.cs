@@ -20,7 +20,7 @@ public sealed class BackGroundSystem : EntitySystem
     [Dependency] private readonly ServerSkillTrainerSystem _skillTrainer = default!;
     [Dependency] private readonly IPrototypeManager _prototype = default!;
     [Dependency] private readonly AdminFrozenSystem _freeze = default!;
-    
+
     public override void Initialize()
     {
         base.Initialize();
@@ -56,7 +56,7 @@ public sealed class BackGroundSystem : EntitySystem
     }
 
     public void ApplyBackground(EntityUid uid, RoleBackground? rolebackground)
-    {   
+    {
         if (rolebackground == null)
             return;
         //итоговые навыки
@@ -76,7 +76,7 @@ public sealed class BackGroundSystem : EntitySystem
         List<BackgroundSpecial> generalSpecials = new();
 
         //обнуляем навык и предысторию
-        RemComp<SkillComponent>(uid);      
+        RemComp<SkillComponent>(uid);
         var skillComp = EnsureComp<SkillComponent>(uid);
         var backgroundcomp = EnsureComp<BackgroundComponent>(uid);
 
@@ -165,7 +165,7 @@ public sealed class BackGroundSystem : EntitySystem
 
         if (_prototype.TryIndex(msg.Background, out var bgProto))
         {
-            RemComp<SkillComponent>(uid);      
+            RemComp<SkillComponent>(uid);
             var skillComp = EnsureComp<SkillComponent>(uid);
 
             ApplySkills(uid, skillComp, bgProto.Skills);
@@ -179,14 +179,14 @@ public sealed class BackGroundSystem : EntitySystem
         }
         else
         {
-            Log.Error($"Не удалось найти предысторию с ID {msg.Background}");            
+            Log.Error($"Не удалось найти предысторию с ID {msg.Background}");
         }
     }
     private void ApplySkillPoints(EntityUid uid, SkillComponent skillComp, int SkillPoints)
     {
         skillComp.SkillPoints += SkillPoints;
     }
-    
+
     private void ApplySkills(EntityUid uid, SkillComponent skillComp, Dictionary<skillType, SkillLevel> Skills)
     {
         foreach (var (skillType, level) in Skills)

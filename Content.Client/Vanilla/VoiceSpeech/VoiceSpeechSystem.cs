@@ -28,8 +28,33 @@ public sealed class VoiceSpeechSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<VoiceEmitterComponent, VoiceSpeechBeepEvent>(onBeep);
         _cfg.OnValueChanged(CCCVars.TTSVolume, OnTtsVolumeChanged, true);
+    }
+
+    public void Beep(EntityUid uid, VoiceEmitterComponent comp)
+    {
+        if (comp.VoicePrototypeId == null)
+            return;
+
+        _audio.PlayLocal(comp.Voice, uid, null);
+    }
+
+    public AudioParams SetVolume(bool whisper, VoiceEmitterComponent comp)
+    {
+        return AudioParams.Default
+                .WithPitchScale(comp.Pitch)
+                .WithVolume(AdjustVolume(whisper))
+                .WithMaxDistance(whisper ? SharedChatSystem.WhisperMuffledRange : SharedChatSystem.VoiceRange);
+    }
+
+    private float AdjustVolume(bool isWhisper)
+    {
+        float volume = -10f + SharedAudioSystem.GainToVolume(_volume);
+
+        if (isWhisper)
+            volume -= SharedAudioSystem.GainToVolume(5f);
+
+        return volume;
     }
 
     public override void Shutdown()
@@ -41,21 +66,5 @@ public sealed class VoiceSpeechSystem : EntitySystem
     private void OnTtsVolumeChanged(float volume)
     {
         _volume = volume;
-    }
-
-    private void onBeep(EntityUid uid, VoiceEmitterComponent comp, VoiceSpeechBeepEvent args)
-    {
-        if (comp.VoicePrototypeId == null )
-            return;
-        _audio.PlayLocal(comp.Voice, uid, null);
-    }
-}
-public sealed class VoiceSpeechBeepEvent : EntityEventArgs
-{
-    public char Character { get; }
-
-    public VoiceSpeechBeepEvent(char character)
-    {
-        Character = character;
     }
 }
