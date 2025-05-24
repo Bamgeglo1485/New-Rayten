@@ -48,4 +48,3 @@ signal-port-name-power-discharging = Разрядка
 signal-port-description-power-discharging = Этот порт задействуется с высоким уровнем сигнала когда батарея разряжается, и с низким когда нет.
 signal-port-name-item-detected = Обнаружено
 signal-port-description-item-detected = Этот порт активируется, когда передатчик обнаруживает предмет.
-

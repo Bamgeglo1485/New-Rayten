@@ -16,7 +16,8 @@
       department: Medical
       time: 36000 #10 hrs
     - !type:AgeRequirement
-      requiredAge: 30 # Vanilla
+      requiredAge: 32 # Vanilla
+  weight: 10
   startingGear: CMOGear
   icon: "JobIconChiefMedicalOfficer"
   supervisors: job-supervisors-captain
