@@ -23,7 +23,6 @@ namespace Content.Client.Chat.UI
         [Dependency] private readonly IEyeManager _eyeManager = default!;
         [Dependency] private readonly IEntityManager _entityManager = default!;
         [Dependency] protected readonly IConfigurationManager ConfigManager = default!;
-        [Dependency] protected readonly VoiceSpeechSystem _speech = default!;
         private readonly SharedTransformSystem _transformSystem;
 
         public enum SpeechType : byte
@@ -176,7 +175,7 @@ namespace Content.Client.Chat.UI
             if (_entityManager.TryGetComponent<VoiceEmitterComponent>(_senderEntity, out var comp) && comp.VoicePrototypeId != null)
             {
                 var entMan = IoCManager.Resolve<IEntityManager>();
-
+                var speechsys = entMan.System<VoiceSpeechSystem>();
                 if (_textLabel != null && _revealedLength < _fullText.Length)
                 {
                     _accumulatedTime += args.DeltaSeconds;
@@ -187,7 +186,7 @@ namespace Content.Client.Chat.UI
 
                         var newChar = _fullText[_revealedLength];
                         if (newChar != ' ' && newChar != ',' && newChar != '.')
-                            _speech.Beep(_senderEntity, comp);
+                            speechsys.Beep(_senderEntity, comp);
 
                         _revealedLength++;
                         _timeLeft += LetterDelay;
