@@ -39,9 +39,9 @@ flavor_text = true
 ssd_sleep_time = 30
 [infolinks]
 discord = "https://discord.gg/sRSGDyGPw2"
-wiki = "https://vanilla-station.ru/"
+wiki = "https://rayten.ru/"
 appeal = "https://discord.com/channels/1236324156165980311/1236381848909910126"
-github = "https://github.com/VanillaStation14/VanillaStation"
+github = "https://github.com/RaytenCorp/Rayten"
 bug_report = "https://discord.com/channels/1236324156165980311/1271239142944280671"
 
 [vote]
