@@ -278,7 +278,7 @@ public sealed class TDMSystem : EntitySystem
         if (Blueguys <= 0 || Redguys <= 0)
             GameOver();
 
-        Color color = component.Team ? Color.Red : Color.DodgerBlue;
+        Color color = component.Team ? Color.DodgerBlue : Color.Red;
 
         if (args.Origin == null)
             return;
