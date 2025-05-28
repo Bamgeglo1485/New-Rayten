@@ -130,7 +130,7 @@
 - type: Background
   id: CadetWizardBackground
   name: Служу науке и магии
-  # sponsorOnly: true
+  sponsorOnly: true
   specialDesc:
     - Заклинание "Щит разума" вместо импланта
     - Набор заклинаний
