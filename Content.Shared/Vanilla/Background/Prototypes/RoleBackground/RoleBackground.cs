@@ -3,6 +3,7 @@ using System.Linq;
 using Content.Shared.Humanoid.Prototypes;
 using Content.Corvax.Interfaces.Shared;
 using Content.Shared.Random;
+using Content.Shared.Vanilla.Sponsor;
 using Robust.Shared.Collections;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
@@ -18,6 +19,7 @@ namespace Content.Shared.Vanilla.Background;
 [Serializable, NetSerializable, DataDefinition]
 public sealed partial class RoleBackground : IEquatable<RoleBackground>
 {
+
     [DataField]
     public ProtoId<RoleBackgroundPrototype> Role;
 
@@ -27,7 +29,9 @@ public sealed partial class RoleBackground : IEquatable<RoleBackground>
     public ProtoId<BackgroundPrototype>? SelectedAdultBackground;
     [DataField]
     public ProtoId<BackgroundPrototype>? SelectedGeneralBackground;
+
     public int SkillpointCredit = 0;
+
     [DataField]
     public Dictionary<skillType, SkillLevel> AddedBasicSkills = new();
     [DataField]
@@ -42,7 +46,7 @@ public sealed partial class RoleBackground : IEquatable<RoleBackground>
     {
         return new RoleBackground(Role)
         {
-            SkillpointCredit = SkillpointCredit,    
+            SkillpointCredit = SkillpointCredit,
             SelectedBabyBackground = SelectedBabyBackground,
             SelectedAdultBackground = SelectedAdultBackground,
             SelectedGeneralBackground = SelectedGeneralBackground,
@@ -52,12 +56,17 @@ public sealed partial class RoleBackground : IEquatable<RoleBackground>
     }
 
 
-    /// <summary>
-    /// Ensures all prototypes exist and effects can be applied.
-    /// </summary>
     public void EnsureValid(HumanoidCharacterProfile profile, ICommonSession session, IDependencyCollection collection)
     {
         var protoManager = collection.Resolve<IPrototypeManager>();
+        var sponsors = collection.Resolve<SharedSponsorManager>();
+        if (!sponsors.TryGetServerPrototypes(session.UserId, out var prototypes))
+            prototypes = [];
+
+        Logger.Info($"детская предыстория: {SelectedBabyBackground != null}");
+        Logger.Info($"взрослая предыстория: {SelectedAdultBackground != null}");
+        Logger.Info($"общая предыстория: {SelectedGeneralBackground != null}");
+
         List<(skillType Skill, SkillLevel Level, int Experience)> generalbasicskills = new List<(skillType Skill, SkillLevel Level, int Experience)>
         {
             (skillType.RangeWeapon, SkillLevel.None, 0),
@@ -91,37 +100,45 @@ public sealed partial class RoleBackground : IEquatable<RoleBackground>
         {
             if (selectedBackgroundId == null || string.IsNullOrEmpty(groupId))
             {
-                SetDefault(profile);
+                Logger.Error("пустая предыстория");
                 return false;
             }
 
             // Проверка, что группа существует
             if (!protoManager.TryIndex<BackgroundGroupPrototype>(groupId, out var groupProto))
             {
-                SetDefault(profile);
+                Logger.Error("группы не существует");
                 return false;
             }
 
             // Проверка, что группа соответствует типу
             if (groupProto.Type != requiredType)
             {
-                SetDefault(profile);
+                Logger.Error("группа не соответствует типу");
                 return false;
             }
 
             // Проверка, что предыстория существует
             if (!protoManager.TryIndex<BackgroundPrototype>(selectedBackgroundId.Value, out var backgroundProto))
             {
-                SetDefault(profile);
+                Logger.Error("предыстории не существует");
                 return false;
             }
 
             // Проверка, что предыстория входит в группу
             if (!groupProto.Backgrounds.Contains(selectedBackgroundId.Value))
             {
-                SetDefault(profile);
+                Logger.Error("предыстория не подходит группе");
                 return false;
             }
+
+            // Проверка на донат
+            if (backgroundProto.SponsorOnly && !prototypes.Contains(backgroundProto.ID))
+            {
+                Logger.Error("ЭЭЭ ТЫ НЕ ДОНАТЕР");
+                return false;
+            }
+
             return true;
         }
         // 3. Проверка на навыки
@@ -189,28 +206,32 @@ public sealed partial class RoleBackground : IEquatable<RoleBackground>
             skillpoints -= backgroundSkills.Count;
         }
 
-        
+
         // 4. Проверка что выбрана либо одна основная предыстория либо детская + взрослая
         var useSplitBackgrounds = SelectedGeneralBackground == null &&
-                                SelectedAdultBackground != null &&
-                                SelectedBabyBackground != null;
+                                  SelectedAdultBackground != null &&
+                                  SelectedBabyBackground != null;
 
         var useGeneralBackground = SelectedGeneralBackground != null &&
-                                SelectedAdultBackground == null &&
-                                SelectedBabyBackground == null;
+                                   SelectedAdultBackground == null &&
+                                   SelectedBabyBackground == null;
 
         if (useSplitBackgrounds)
         {
             //Валидируем предыстории
-            if (!ValidateBackground(ref SelectedBabyBackground, roleProto.Baby, BackgroundGroupType.Baby) || 
+            if (!ValidateBackground(ref SelectedBabyBackground, roleProto.Baby, BackgroundGroupType.Baby) ||
                 !ValidateBackground(ref SelectedAdultBackground, roleProto.Adult, BackgroundGroupType.Adult))
-               return;
+            {
+                SetDefault(profile);
+                return;
+            }
+
 
             //Валидируем навыки
 
 
             if (protoManager.TryIndex(SelectedBabyBackground, out var bgProtoBaby) &&
-                protoManager.TryIndex(SelectedAdultBackground, out var bgProtoAdult) )
+                protoManager.TryIndex(SelectedAdultBackground, out var bgProtoAdult))
             {
                 //Добавляем дополнительные скиллпоинты от предысторий
                 skillpoints += bgProtoBaby.SkillPoints;
@@ -230,7 +251,7 @@ public sealed partial class RoleBackground : IEquatable<RoleBackground>
                 //считаем что выбранные навыки соответствуют кредиту
                 CalculateCreditFromAdditiveBasic(AddedBasicSkills);
                 CalculateCreditFromAdditiveEasy(AddedEasySkills);
-                if( skillpoints != 0 )
+                if (skillpoints != 0)
                 {
                     SetDefault(profile);
                     return;
@@ -238,7 +259,7 @@ public sealed partial class RoleBackground : IEquatable<RoleBackground>
                 //считаем что выбранные навыки не увеличивают навык сверх максимума
                 CalculateCreditFromBasicSkills(AddedBasicSkills);
                 CalculateCreditFromEasySkills(AddedEasySkills);
-                if( skillpoints != 0 )
+                if (skillpoints != 0)
                 {
                     SetDefault(profile);
                     return;
@@ -249,20 +270,71 @@ public sealed partial class RoleBackground : IEquatable<RoleBackground>
                 SetDefault(profile);
                 return;
             }
-
-
-        } else if (useGeneralBackground)
+        }
+        else if (useGeneralBackground)
         {
             //Валидируем предысторию
-            if(!ValidateBackground(ref SelectedGeneralBackground, roleProto.General, BackgroundGroupType.General))
+            if (!ValidateBackground(ref SelectedGeneralBackground, roleProto.General, BackgroundGroupType.General))
+            {
+                SetDefault(profile);
                 return;
+            }
+
+            //Валидируем навыки
+
+            if (protoManager.TryIndex(SelectedGeneralBackground, out var bgProtoGenerl))
+            {
+                //Добавляем дополнительные скиллпоинты от предысторий
+                skillpoints += bgProtoGenerl.SkillPoints;
+                //считаем кредиты от пересечения лёгких навыков
+                CalculateCreditFromEasySkills(bgProtoGenerl.EasySkills);
+
+                //считаем кредиты от пересечения основных навыков
+                CalculateCreditFromBasicSkills(bgProtoGenerl.Skills);
+                if (skillpoints != SkillpointCredit)
+                {
+                    Logger.Error("скиллпоинты не соответствуют кредиту");
+                    SetDefault(profile);
+                    return;
+                }
+                //считаем что выбранные навыки соответствуют кредиту
+                CalculateCreditFromAdditiveBasic(AddedBasicSkills);
+                CalculateCreditFromAdditiveEasy(AddedEasySkills);
+
+                if (skillpoints != 0)
+                {
+                    Logger.Error("навыки не соответствуют кредиту");
+                    SetDefault(profile);
+                    return;
+                }
+                //считаем что выбранные навыки не увеличивают навык сверх максимума
+                CalculateCreditFromBasicSkills(AddedBasicSkills);
+                CalculateCreditFromEasySkills(AddedEasySkills);
+
+                if (skillpoints != 0)
+                {
+                    Logger.Error("навыки добавлены сверх максимума");
+                    SetDefault(profile);
+                    return;
+                }
+            }
+            else
+            {
+                Logger.Error("не удалось индексировать предысторию");
+                SetDefault(profile);
+                return;
+            }
         }
         else
         {
+            Logger.Error("не выбрана одна общая либо детская + взрослая предытория");
             SetDefault(profile);
             return;
         }
-
+        Logger.Info("итог");
+        Logger.Info($"детская предыстория: {SelectedBabyBackground != null}");
+        Logger.Info($"взрослая предыстория: {SelectedAdultBackground != null}");
+        Logger.Info($"общая предыстория: {SelectedGeneralBackground != null}");
     }
 
     public void SetDefault(HumanoidCharacterProfile? profile)

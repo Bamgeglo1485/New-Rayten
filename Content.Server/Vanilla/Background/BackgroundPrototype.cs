@@ -1,18 +1,23 @@
-using Robust.Shared.Prototypes;
-using Robust.Shared.Serialization;
-using Content.Shared.Vanilla.Background;
+
 using Content.Server.Mind;
-using Content.Shared.Mind;
 using Content.Server.Roles;
 using Content.Server.Ghost.Roles;
+using Content.Server.Actions;
 using Content.Shared.Hands.EntitySystems;
+using Content.Shared.Mind;
 using Content.Shared.Roles;
+using Content.Shared.Actions;
 using Content.Shared.Vanilla.Jammer;
+using Content.Shared.Vanilla.Background;
+using Content.Shared.Implants;
+using Content.Shared.Inventory;
+using Content.Shared.Clothing;
+using Robust.Shared.Prototypes;
+using Robust.Shared.Serialization;
 using Robust.Shared.GameObjects;
-using JetBrains.Annotations;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.Set;
 using Robust.Shared.Utility;
-using Content.Shared.Implants;
+using JetBrains.Annotations;
 
 namespace Content.Server.Vanilla.Background;
 
@@ -71,6 +76,28 @@ public sealed partial class AddComponentsSpecial : BackgroundSpecial
         entMan.AddComponents(mob, Components, removeExisting: true);
     }
 }
+public sealed partial class AddActionSpecial : BackgroundSpecial
+{
+    [DataField(required: true)]
+    public EntProtoId Action { get; private set; }
+
+    public override void apply(EntityUid mob)
+    {
+        var entMan = IoCManager.Resolve<IEntityManager>();
+        var _mind = entMan.System<MindSystem>();
+        var _actions = entMan.System<ActionsSystem>();
+        var _actionContainer = entMan.System<ActionContainerSystem>();
+        //give action
+        if (!string.IsNullOrWhiteSpace(Action))
+        {
+            if (!_mind.TryGetMind(mob, out var mind, out _))
+                _actions.AddAction(mob, Action);
+            else
+                _actionContainer.AddAction(mind, Action);
+        }
+
+    }
+}
 public sealed partial class AddImplantSpecial : BackgroundSpecial
 {
     [DataField("implants", customTypeSerializer: typeof(PrototypeIdHashSetSerializer<EntityPrototype>))]
@@ -82,6 +109,7 @@ public sealed partial class AddImplantSpecial : BackgroundSpecial
         implantSystem.AddImplants(mob, Implants);
     }
 }
+
 public sealed partial class RaiseEventSpecial : BackgroundSpecial
 {
     [DataField(required: true)]
@@ -94,5 +122,34 @@ public sealed partial class RaiseEventSpecial : BackgroundSpecial
         {
             entityManager.EventBus.RaiseEvent(EventSource.Local, (object)specialevent);
         }
+    }
+}
+public sealed partial class EquipSpecial : BackgroundSpecial
+{
+    [DataField(required: true)]
+    public List<string> RemoveSlotID { get; private set; }
+
+    [DataField("loadout")]
+    public List<ProtoId<StartingGearPrototype>> Loadout = new();
+    public override void apply(EntityUid mob)
+    {
+        var entMan = IoCManager.Resolve<IEntityManager>();
+        var _loadout = entMan.System<LoadoutSystem>();
+        var _inventory = entMan.System<InventorySystem>();
+
+        if (!entMan.TryGetComponent<InventoryComponent>(mob, out var inventory))
+            return;
+
+        foreach (var slotId in RemoveSlotID)
+        {
+            Logger.Info($"обрабатываем {slotId}");
+            // Пытаемся снять предмет
+            if (!_inventory.TryUnequip(mob, slotId, out var removedUid, silent: true))
+                continue;
+
+            if (entMan.EntityExists(removedUid))
+                entMan.DeleteEntity(removedUid.Value);
+        }
+        _loadout.Equip(mob, Loadout, null);
     }
 }

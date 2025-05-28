@@ -49,7 +49,7 @@ public sealed partial class BackgroundWindow : FancyWindow
             _babyGroupContainer = new BackgroundGroupContainer(collection, babyGroup);
             LoadoutGroupsContainer.AddTab(_babyGroupContainer, Loc.GetString("детство"));
 
-            _babyGroupContainer.OnBackgroundSelected += (protoId, groupId) =>
+            _babyGroupContainer.OnBackgroundSelected += (protoId) =>
             {
                 CurrentBackground.SelectedBabyBackground = protoId;
                 CurrentBackground.SelectedGeneralBackground = null;
@@ -66,7 +66,7 @@ public sealed partial class BackgroundWindow : FancyWindow
             _adultGroupContainer = new BackgroundGroupContainer(collection, adultGroup);
             LoadoutGroupsContainer.AddTab(_adultGroupContainer, Loc.GetString("зрелость"));
 
-            _adultGroupContainer.OnBackgroundSelected += (protoId, groupId) =>
+            _adultGroupContainer.OnBackgroundSelected += (protoId) =>
             {
                 CurrentBackground.SelectedAdultBackground = protoId;
                 CurrentBackground.SelectedGeneralBackground = null;
@@ -83,7 +83,7 @@ public sealed partial class BackgroundWindow : FancyWindow
             _generalGroupContainer = new BackgroundGroupContainer(collection, generalGroup);
             LoadoutGroupsContainer.AddTab(_generalGroupContainer, Loc.GetString("общее"));
 
-            _generalGroupContainer.OnBackgroundSelected += (protoId, groupId) =>
+            _generalGroupContainer.OnBackgroundSelected += (protoId) =>
             {
                 CurrentBackground.SelectedGeneralBackground = protoId;
                 CurrentBackground.SelectedAdultBackground = null;
@@ -105,7 +105,7 @@ public sealed partial class BackgroundWindow : FancyWindow
         RefreshInformation(collection);
         ButtonSave.OnPressed += _ => OnSave(collection);
         ButtonReset.OnPressed += _ => OnReset(collection);
-        
+
     }
     private void OnSave(IDependencyCollection collection)
     {
@@ -173,6 +173,7 @@ public sealed partial class BackgroundWindow : FancyWindow
             selectedBackgroundMessage.PushMarkup(Loc.GetString("rolebackground-ui-selectedbackgrounds-item", ("name", Loc.GetString(bgProtoGeneral.Name))));
             if (bgProtoGeneral.SpecialDesc != null)
                 SpecialDesc.AddRange(bgProtoGeneral.SpecialDesc);
+
             GeneralBackgroundBasicSkills = new(bgProtoGeneral.Skills);
             GeneralBackgroundEasySkills = new(bgProtoGeneral.EasySkills);
             skillpoints += bgProtoGeneral.SkillPoints;
@@ -268,8 +269,8 @@ public sealed partial class BackgroundWindow : FancyWindow
         ApplyBasicSkills(BabyBackgroundBasicSkills);
         ApplyBasicSkills(AdultBackgroundBasicSkills);
         ApplyBasicSkills(GeneralBackgroundBasicSkills);
-        ApplyBasicSkills(CurrentBackground.AddedBasicSkills); 
-        
+        ApplyBasicSkills(CurrentBackground.AddedBasicSkills);
+
         ApplyEasySkills(BabyBackgroundEasySkills);
         ApplyEasySkills(AdultBackgroundEasySkills);
         ApplyEasySkills(GeneralBackgroundEasySkills);
@@ -284,7 +285,7 @@ public sealed partial class BackgroundWindow : FancyWindow
         }
         //Лёгкие навыки
         foreach (var (skillName, have, experience) in generaleasyskills)
-        {   
+        {
             var easyskillsControl = new EasyskillsControl(skillName, have, experience, skillpoints > 0 );
             easyskillsControl.OnPressed += () => AddSkill(skillName, collection);
 
@@ -298,7 +299,7 @@ public sealed partial class BackgroundWindow : FancyWindow
             Skillpoints.SetMessage(skillpointMessage);
             Skillpoints.Visible = true;
         }
-        
+
         bool hasCompleteSpecific = CurrentBackground.SelectedBabyBackground != null && CurrentBackground.SelectedAdultBackground != null;
         bool hasGeneral = CurrentBackground.SelectedGeneralBackground != null;
         ButtonSave.Disabled = !(hasCompleteSpecific || hasGeneral) || skillpoints != 0 || firstjoin;

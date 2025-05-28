@@ -10,6 +10,7 @@ using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Content.Client.Vanilla.Background;
 using Content.Shared.Vanilla.Background;
+using Content.Shared.Vanilla.Sponsor;
 using Content.Client.Vanilla.UserInterface.Background;
 
 namespace Content.Client.Vanilla.UserInterface.Lobby.BackgroundUI;
@@ -17,13 +18,14 @@ namespace Content.Client.Vanilla.UserInterface.Lobby.BackgroundUI;
 [GenerateTypedNameReferences]
 public sealed partial class BackgroundGroupContainer : BoxContainer
 {
-    public event Action<ProtoId<BackgroundPrototype>, ProtoId<BackgroundGroupPrototype>>? OnBackgroundSelected;
+    public event Action<ProtoId<BackgroundPrototype>>? OnBackgroundSelected;
 
     public BackgroundGroupContainer(IDependencyCollection collection, BackgroundGroupPrototype groupProto)
     {
         IoCManager.InjectDependencies(this);
         RobustXamlLoader.Load(this);
 
+        var sponsorman  = collection.Resolve<SharedSponsorManager>();
         var protoMan = collection.Resolve<IPrototypeManager>();
         var backgroundSystem = collection.Resolve<IEntityManager>().System<SharedBackgroundSystem>();
 
@@ -41,13 +43,14 @@ public sealed partial class BackgroundGroupContainer : BoxContainer
                 bgProto.SpecialDesc,
                 bgProto.Skills,
                 bgProto.EasySkills,
-                bgProto.SkillPoints
+                bgProto.SkillPoints,
+                (bgProto.SponsorOnly && !sponsorman.GetClientPrototypes().Contains(bgProto.ID))
             );
 
             control.OnPressed += () =>
             {
                 refreshbtns(control); // отключаем все, кроме нажатого
-                OnBackgroundSelected?.Invoke(bgId, groupProto.ID);
+                OnBackgroundSelected?.Invoke(bgId);
             };
 
             BackgroundsContainer.AddChild(control);
@@ -63,7 +66,4 @@ public sealed partial class BackgroundGroupContainer : BoxContainer
             }
         }
     }
-
-
-
 }

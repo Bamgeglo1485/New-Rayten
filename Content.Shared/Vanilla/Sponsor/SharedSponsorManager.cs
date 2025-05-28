@@ -30,7 +30,7 @@ public sealed class SharedSponsorManager
     {
         if (!_ranks.TryGetValue(userId, out var rank))
         {
-            prototypes = Array.Empty<string>(); 
+            prototypes = Array.Empty<string>();
             return false;
         }
 
@@ -170,9 +170,11 @@ public sealed class SharedSponsorManager
                     current.Add("Willow");
                     current.Add("Warly");
                     current.Add("Megalovania");
+                //предыстории
+                    current.Add("CadetWizardBackground");
                     break;
 
-                    
+
                 case sponsorRank.SpaceNinja:
                     current.Add("Meme");
                     break;

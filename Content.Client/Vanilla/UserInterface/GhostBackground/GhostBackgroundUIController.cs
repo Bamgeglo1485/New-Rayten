@@ -5,6 +5,7 @@ using Content.Client.Vanilla.UserInterface.Background;
 using Content.Client.Vanilla.Background;
 using Content.Client.Gameplay;
 using Content.Shared.Vanilla.Background;
+using Content.Shared.Vanilla.Sponsor;
 using Robust.Client.UserInterface.Controllers;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface;
@@ -13,30 +14,29 @@ using Robust.Shared.Utility;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Player;
 using JetBrains.Annotations;
+using System.Linq;
 namespace Content.Client.Vanilla.UserInterface.GhostBackground;
 
 [UsedImplicitly]
-public sealed class GhostBackgroundUIController : UIController, 
-    IOnStateEntered<GameplayState>, 
-    IOnStateExited<GameplayState>, 
+public sealed class GhostBackgroundUIController : UIController,
+    IOnStateEntered<GameplayState>,
+    IOnStateExited<GameplayState>,
     IOnSystemChanged<BackgroundSystem>
 {
     private GhostBackgroundWindow? _window;
     private ProtoId<BackgroundGroupPrototype>? _pendingBackground;
-    
     [Dependency] private readonly IPrototypeManager _prototype = default!;
     [Dependency] private readonly ILogManager _logMan = default!;
     [Dependency] private readonly IPlayerManager _player = default!;
     [Dependency] private readonly GameplayStateLoadController _gameplayStateLoad = default!;
     [UISystemDependency] private readonly BackgroundSystem _backGroundSystem = default!;
-    
     private ISawmill _sawmill = default!;
 
     public override void Initialize()
     {
         base.Initialize();
         _sawmill = _logMan.GetSawmill("ui.ghostbg");
-        
+
         _gameplayStateLoad.OnScreenLoad += LoadGui;
         _gameplayStateLoad.OnScreenUnload += UnloadGui;
     }
@@ -55,7 +55,7 @@ public sealed class GhostBackgroundUIController : UIController,
     private void ApplyBackground(ProtoId<BackgroundGroupPrototype> backgroundGroupId)
     {
         _window!.BackgroundsContainer.Children.Clear();
-
+        var sponsorman = IoCManager.Resolve<SharedSponsorManager>();
         if (!_prototype.TryIndex(backgroundGroupId, out var backgroundGroup))
         {
             _sawmill.Error($"Не найдена группа предысторий: {backgroundGroupId}");
@@ -77,9 +77,10 @@ public sealed class GhostBackgroundUIController : UIController,
                 bgProto.SpecialDesc,
                 bgProto.Skills,
                 bgProto.EasySkills,
-                bgProto.SkillPoints
+                bgProto.SkillPoints,
+                (bgProto.SponsorOnly && !sponsorman.GetClientPrototypes().Contains(bgProto.ID))
             );
-            
+
             control.OnPressed += () => _backGroundSystem.TakeGhostBackground(bgProto);
             _window.BackgroundsContainer.Children.Add(control);
         }

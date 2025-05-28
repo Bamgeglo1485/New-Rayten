@@ -1098,8 +1098,8 @@ namespace Content.Client.Lobby.UI
 
             _backgroundWindow.OnSavePressed += (savedroleBackground) =>
             {
+                Logger.Info($"сохранено: {savedroleBackground.SelectedGeneralBackground}");
                 Profile = Profile?.WithBackground(savedroleBackground);
-                UpdateJobPriorities(); // ПОСМОТРЕТЬ ЭТО
                 IsDirty = true;
             };
         }

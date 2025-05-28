@@ -147,11 +147,7 @@ public sealed class StationSpawningSystem : SharedStationSpawningSystem
         {
             EquipRoleLoadout(entity.Value, loadout, roleProto!);
         }
-        //Rayten-start
-        RoleBackground? background = null;
-        profile?.Backgrounds.TryGetValue(SharedBackgroundSystem.GetJobPrototype(prototype?.ID), out background);
-        _bgsys.ApplyBackground(entity.Value, background);
-        //Rayten-end
+
         if (prototype?.StartingGear != null)
         {
             var startingGear = _prototypeManager.Index<StartingGearPrototype>(prototype.StartingGear);
@@ -168,6 +164,11 @@ public sealed class StationSpawningSystem : SharedStationSpawningSystem
 
         DoJobSpecials(job, entity.Value);
         _identity.QueueIdentityUpdate(entity.Value);
+        //Rayten-start
+        RoleBackground? background = null;
+        profile?.Backgrounds.TryGetValue(SharedBackgroundSystem.GetJobPrototype(prototype?.ID), out background);
+        _bgsys.ApplyBackground(entity.Value, background);
+        //Rayten-end
         return entity.Value;
     }
 

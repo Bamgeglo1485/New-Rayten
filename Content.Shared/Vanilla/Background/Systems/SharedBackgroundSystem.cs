@@ -32,7 +32,7 @@ public sealed class SharedBackgroundSystem : EntitySystem
 [Serializable, NetSerializable]
 public sealed class TakeGhostBackgroundEvent : EntityEventArgs
 {
-    public readonly ProtoId<BackgroundPrototype> Background; 
+    public readonly ProtoId<BackgroundPrototype> Background;
     public TakeGhostBackgroundEvent(ProtoId<BackgroundPrototype> background)
     {
         Background = background;
