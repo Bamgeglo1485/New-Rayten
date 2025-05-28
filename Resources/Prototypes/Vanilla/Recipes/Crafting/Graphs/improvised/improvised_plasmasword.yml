@@ -45,11 +45,8 @@
     edges:
     - to: sword
       steps:
-      - material: Capacitor
-        amount: 1
-        doAfter: 2
-      - material: MatterBin
-        amount: 2
+      - material: Manipulator
+        amount: 3
         doAfter: 2
       - tool: Welding
         doAfter: 2

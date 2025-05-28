@@ -25,8 +25,9 @@ construction-graph-tag-medical-hud = медицинский HUD
 # Безопасность
 construction-graph-tag-sun-glasses = солнцезащитные очки
 construction-graph-tag-security-helmet = шлем охраны
+# materials
+construction-graph-tag-manipulator = модуль машины
 # Материалы
-construction-graph-tag-capacitor = конденсатор
 construction-graph-tag-voice-trigger = голосовой триггер
 construction-graph-tag-signal-trigger = сигнальный триггер
 construction-graph-tag-proximity-sensor = датчик движения

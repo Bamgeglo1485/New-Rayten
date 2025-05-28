@@ -49,7 +49,7 @@
           doAfter: 0.5
         - tool: Welding
           doAfter: 4
-        - material: Capacitor
+        - material: Manipulator
           amount: 1
           doAfter: 0.5
         - tag: EmitterCircuitboard
