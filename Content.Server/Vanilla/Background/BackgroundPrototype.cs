@@ -133,7 +133,6 @@ public sealed partial class EquipSpecial : BackgroundSpecial
     public List<ProtoId<StartingGearPrototype>> Loadout = new();
     public override void apply(EntityUid mob)
     {
-<<<<<<< HEAD
         var entMan = IoCManager.Resolve<IEntityManager>();
         var _loadout = entMan.System<LoadoutSystem>();
         var _inventory = entMan.System<InventorySystem>();
@@ -152,7 +151,5 @@ public sealed partial class EquipSpecial : BackgroundSpecial
                 entMan.DeleteEntity(removedUid.Value);
         }
         _loadout.Equip(mob, Loadout, null);
-=======
->>>>>>> e2b89452f1c6eec287e1abf97724ba5b56ceed26
     }
 }
