@@ -9,7 +9,7 @@
   parent: ClothingOuterHardsuitWizard
   id: ClothingOuterHardsuitWizardCadet
   categories: [ HideSpawnMenu ]
-  name: скафандр волшебника
+  name: скафандр волшебника СБ
   description: Причудливый скафандр, инкрустированный драгоценными камнями, излучающий магическую энергию. Данная модель зачарована на скорость и несъемность.
   components:
   - type: Unremoveable
