@@ -21,7 +21,7 @@ public sealed class SharedSponsorManager
     }
 
     #region АПИШКИ
-    public IReadOnlyList<string> GetClientPrototypes()
+    public string[] GetClientPrototypes()
     {
         return GetPrototypesForRank(_Clientrank);
     }

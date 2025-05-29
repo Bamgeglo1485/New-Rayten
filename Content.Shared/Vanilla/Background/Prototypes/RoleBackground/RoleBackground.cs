@@ -60,12 +60,13 @@ public sealed partial class RoleBackground : IEquatable<RoleBackground>
     {
         var protoManager = collection.Resolve<IPrototypeManager>();
         var sponsors = collection.Resolve<SharedSponsorManager>();
-        if (!sponsors.TryGetServerPrototypes(session.UserId, out var prototypes))
-            prototypes = [];
+        var netManager = collection.Resolve<INetManager>(); // Corvax-Loadouts
+        string[] sponsorPrototypes;
 
-        Logger.Info($"детская предыстория: {SelectedBabyBackground != null}");
-        Logger.Info($"взрослая предыстория: {SelectedAdultBackground != null}");
-        Logger.Info($"общая предыстория: {SelectedGeneralBackground != null}");
+        if (netManager.IsServer)
+            sponsorPrototypes = sponsors.TryGetServerPrototypes(session.UserId, out var prototypes) ? prototypes.ToArray() : [];
+        else
+            sponsorPrototypes = sponsors.GetClientPrototypes().ToArray();
 
         List<(skillType Skill, SkillLevel Level, int Experience)> generalbasicskills = new List<(skillType Skill, SkillLevel Level, int Experience)>
         {
@@ -133,9 +134,9 @@ public sealed partial class RoleBackground : IEquatable<RoleBackground>
             }
 
             // Проверка на донат
-            if (backgroundProto.SponsorOnly && !prototypes.Contains(backgroundProto.ID))
+            if (backgroundProto.SponsorOnly && !sponsorPrototypes.Contains(backgroundProto.ID))
             {
-                Logger.Error("ЭЭЭ ТЫ НЕ ДОНАТЕР");
+                Logger.Error($"ЭЭЭ ТЫ НЕ ДОНАТЕР, тебе нельзя использовать {backgroundProto.ID}");
                 return false;
             }
 
