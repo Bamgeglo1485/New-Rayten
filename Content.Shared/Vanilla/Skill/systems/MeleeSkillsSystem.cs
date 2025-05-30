@@ -26,10 +26,10 @@ public sealed class SharedMeleeSkillSystem : EntitySystem
         // Определяем множитель в зависимости от уровня
         FixedPoint2 damageMultiplier = userskill.MeleeWeaponLevel switch
         {
-            SkillLevel.None => 0.5f,         // 50%
-            SkillLevel.Basic => 0.7f,        // 70%
-            SkillLevel.Advanced => 0.9f,     // 90%
-            SkillLevel.Expert => 1.1f,       // 110%
+            SkillLevel.None => 0.5f,
+            SkillLevel.Basic => 0.75f,
+            SkillLevel.Advanced => 1.0f,
+            SkillLevel.Expert => 1.0f,
             _ => 1f
         };
 
