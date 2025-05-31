@@ -1,10 +1,10 @@
-action-speech-spell-forcewall = ТАРКОЛ МИНТИ ЖЕРИ
-action-speech-spell-knock = АУЛИЕ ОКСИН ФЬЕРА
+action-speech-spell-forcewall = ТАРКОЛ ФЬЕРА
+action-speech-spell-knock = АУЛЬЕ ОКСИН ФЬЕРА
 action-speech-spell-smite = ЭЙ НАТХ!
-action-speech-spell-summon-magicarp = АЙЕ КХУЗЕ ЕУ
+action-speech-spell-summon-magicarp = АЙЕ КХУЗЕ
 action-speech-spell-fireball = ОНИ'СОМА!
 action-speech-spell-summon-guns = ЙОР'НИ ВЕС-КОРФА
-action-speech-spell-summon-magic = РЫГОИН ФЕМА-ВЕРЕКО
+action-speech-spell-summon-magic = ФЕМА-ВЕРЕКО
 action-speech-spell-mind-swap = ГИН'Ю КАПАН!
 action-speech-spell-cluwne = !КНОХ
 action-speech-spell-slip = СКУОЛЬ ЗКО!

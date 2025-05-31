@@ -22,7 +22,7 @@
 
 - type: entity
   parent: MobERTRegular
-  id: MobERTPSploderRegular
+  id: MobERTSploderRegular
   suffix: "ОБР-И, Подрывник"
   components:
   - type: Loadout
@@ -105,3 +105,23 @@
     - DoubleEmergencyOxygenTankFilled
     - PinpointerNuclear
     - Sledgehammer
+
+# Спавны
+
+- type: entity
+  id: SpawnMobERTSploderLeader
+  categories: [ HideSpawnMenu ]
+  name: Спавнер лидера отряда ОБР
+  parent: MarkerBase
+  components:
+    - type: GhostRoleMobSpawner
+      prototype: MobERTSploderLeader
+
+- type: entity
+  id: SpawnMobERTSploderRegular
+  categories: [ HideSpawnMenu ]
+  name: спавнер оперативника ОБР
+  parent: MarkerBase
+  components:
+    - type: GhostRoleMobSpawner
+      prototype: MobERTSploderRegular

@@ -10,7 +10,6 @@
   id: StandardNanotrasenStation
   parent:
     - BaseStation
-    - BaseStationGoal # Corvax
     - BaseStationNews
     - BaseStationCargo
     - BaseStationJobsSpawning
@@ -23,8 +22,8 @@
     - BaseStationAlertLevels
     - BaseStationMagnet
     - BaseStationExpeditions
-    - BaseStationSiliconLawNTDefault # Corvax-NTDefault
     - BaseStationSalvageJobs
+    - BaseStationSiliconLawCrewsimov
     - BaseStationAllEventsEligible
     - BaseStationNanotrasen
     - BaseStationDeliveries
