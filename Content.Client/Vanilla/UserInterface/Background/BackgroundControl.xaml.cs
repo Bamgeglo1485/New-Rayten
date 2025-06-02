@@ -91,14 +91,23 @@ public sealed partial class BackgroundControl : Control
         if (notallowed)
         {
             Button.Text = "Недоступно";
+            Line.Color = Color.Gold;
             Button.Disabled = true;
         }
     }
 
     public void refreshbtn()
     {
-        Button.Disabled = false;
-        Button.Text = "Выбрать";
+        if (_notallowed)
+        {
+            Button.Disabled = false;
+            Button.Text = "Недоступно";
+        }
+        else
+        {
+            Button.Disabled = false;
+            Button.Text = "Выбрать";
+        }
     }
 
     public BackgroundControl(string name, string description)

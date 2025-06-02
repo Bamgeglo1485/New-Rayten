@@ -53,7 +53,7 @@ public sealed class CallEventTeamCommand : IConsoleCommand
                 return;
             }
         }
-        
+
         if(!ignoreJammer)
         {
             TimeSpan timetoremjammer = jammerSystem.CheckJammer();
@@ -83,7 +83,7 @@ public sealed class CallEventTeamCommand : IConsoleCommand
             LogType.AdminMessage,
             LogImpact.Extreme,
             $"Admin {(shell.Player != null ? shell.Player.Name : "An administrator")} called an Event Team !");
-        
+
         shell.WriteLine($"{EventTeamId} был вызван!");
     }
 

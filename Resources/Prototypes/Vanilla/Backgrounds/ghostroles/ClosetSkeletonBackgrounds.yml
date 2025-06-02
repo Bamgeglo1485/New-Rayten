@@ -3,13 +3,11 @@
   btype: General
   backgrounds:
   - ClosetSkeletonBrainlessBackground
-  # - ClosetSkeletonWizardBackground
+  - ClosetSkeletonWizardBackground
   - ClosetSkeletonSillyBackground
   - ClosetSkeletonEvilBackground
+  - ClosetSkeletonCurseBackground
   - ClosetSkeletonSaboteurBackground
-
-
-
 
 - type: Background
   id: ClosetSkeletonBrainlessBackground
@@ -26,24 +24,35 @@
   - Atmosphere
   specials:
   - !type:ChangeMindSpecial
-    mindRoles: 
+    mindRoles:
     - MindRoleGhostRoleNeutral
 
 - type: Background
   id: ClosetSkeletonWizardBackground
   name: background-closetskeleton-name-Wizard
   description: background-closetskeleton-desc-Wizard
+  sponsorOnly: true
   specialDesc:
-    - Вы свободный агент
-    - Вы получаете одно случайное заклинание
+    - Вы антагонист
+    - У вас есть заклинания полиморф тарантула и отталкивание
+    - Волшебная роба
   skills:
-    RangeWeapon: 2
     MeleeWeapon: 2
+    Building: 2
+    Medicine: 2
+    Crime: 1
+  easySkills:
+  - MusInstruments
   specials:
-  - !type:ChangeMindSpecial
-    mindRoles: 
-    - MindRoleGhostRoleFreeAgent
-  # - RandomMagic
+  - !type:AddActionSpecial
+    action: ActionPolymorphWizardSpider
+  - !type:AddActionSpecial
+    action: ActionRepulse
+  - !type:EquipSpecial
+    removeSlotID:
+    - shoes
+    loadout:
+    - SkeletonWizard
 
 - type: Background
   id: ClosetSkeletonSillyBackground
@@ -61,9 +70,9 @@
   - Atmosphere
   specials:
   - !type:ChangeMindSpecial
-    mindRoles: 
+    mindRoles:
     - MindRoleGhostRoleNeutral
-    
+
 - type: Background
   id: ClosetSkeletonEvilBackground
   name: background-closetskeleton-name-Evil
@@ -77,10 +86,35 @@
     Crime: 1
   specials:
   - !type:ChangeMindSpecial
-    mindRoles: 
+    mindRoles:
     - MindRoleGhostRoleSoloAntagonist
   - !type:AddComponentsSpecial
     components:
+    - type: ReplacementAccent
+      accent: genericAggressive
+
+
+- type: Background
+  id: ClosetSkeletonCurseBackground
+  name: Проклятие
+  description: background-closetskeleton-desc-SkeletonCurse
+  specialDesc:
+    - Вы носитель проклятия, которое делает вас скелетом, если вас кто-то убьет - проклятие перенесётся на него, а ваша душа упокоится
+    - Вы антагонист
+    - Вы не обладаете интеллектом
+    - Вы Пацифист
+  skills:
+    MeleeWeapon: 3
+    Medicine: 2
+    Crime: 1
+  specials:
+  - !type:ChangeMindSpecial
+    mindRoles:
+    - MindRoleGhostRoleSoloAntagonist
+  - !type:AddComponentsSpecial
+    components:
+    - type: SkeletonCurse
+    - type: Pacified
     - type: ReplacementAccent
       accent: genericAggressive
 
@@ -98,5 +132,5 @@
   - Piloting
   specials:
   - !type:ChangeMindSpecial
-    mindRoles: 
+    mindRoles:
     - MindRoleGhostRoleSoloAntagonist

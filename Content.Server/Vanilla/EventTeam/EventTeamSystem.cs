@@ -41,17 +41,28 @@ public sealed class EventTeamSystem : EntitySystem
     public bool call(ProtoId<EventTeamPrototype> protoId, bool igonrejammer = false)
     {
         if (!_prototypes.TryIndex(protoId, out var prototype))
+        {
+            Logger.Error($"Ошибка в протипе");
             return false;
-
+        }
         if (_gameTicker.RunLevel != GameRunLevel.InRound)
+        {
+            Logger.Warning($"Мы в лобби?");
             return false;
+        }
+
+        if (!igonrejammer && _jammer.CheckJammer() != TimeSpan.Zero)
+        {
+            Logger.Info($"Установлена глушилка, блокирующая спавн ");
+            return false;
+        }
 
         var shuttle = SpawnShuttle(prototype.ShuttlePath);
         if (shuttle == null)
+        {
+            Logger.Error($"Не удалось заспавнить шаттл.");
             return false;
-
-        if(!igonrejammer && _jammer.CheckJammer() != TimeSpan.Zero)
-            return false;
+        }
 
         SpawnEventRoles(prototype, shuttle.Value);
         DispatchAnnouncement(prototype);
@@ -130,7 +141,7 @@ public sealed class EventTeamSystem : EntitySystem
         if (string.IsNullOrEmpty(proto.RegularUnit))
             return;
 
-        int playerCount = _playerManager.PlayerCount; 
+        int playerCount = _playerManager.PlayerCount;
 
         //сколько юнитов должно быть заспавнено исходя из формулы? Минимум 1 челик.
         int RegularUnitsCount = 1;

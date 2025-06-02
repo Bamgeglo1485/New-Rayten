@@ -27,7 +27,6 @@ public sealed class JammerSystem : EntitySystem
     private void OnMapInit(EntityUid uid, SetJammerOnSpawnComponent component, MapInitEvent args)
     {
         SetJammer(component.Duration);
-        //RemComp<SetJammerOnSpawnComponent>(uid);
     }
 
     public void TrySetJammer()
@@ -36,7 +35,7 @@ public sealed class JammerSystem : EntitySystem
             return;
         SetJammer(defaultjammertime);
     }
-    
+
     public void SetJammer(TimeSpan duration)
     {
         _isJammerActive = true;

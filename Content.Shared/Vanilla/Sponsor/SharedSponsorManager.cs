@@ -111,6 +111,8 @@ public sealed class SharedSponsorManager
             switch (rank)
             {
                 case sponsorRank.GrayTide:
+                current.Add("ClosetSkeletonWizardBackground");
+                current.Add("NukeOpfreelancerBackground");
                     break;
 
 

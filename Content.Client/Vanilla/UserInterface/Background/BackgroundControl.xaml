@@ -17,7 +17,7 @@
                     <Button Name="Button" Text="Выбрать" HorizontalAlignment="Right" StyleClasses="chatSelectorOptionButton" MinWidth="153"/>
                 </BoxContainer>
             <cc:HSpacer Spacing="2" />
-            <cc:HLine Color="#0ec7ec" Thickness="2" />
+            <cc:HLine Name="Line" Color="#0ec7ec" Thickness="2" />
             <cc:HSpacer Spacing="2" />
             <!-- Описание предыстории -->
             <RichTextLabel Name="DescriptionLabel" HorizontalExpand="True" VerticalExpand="True" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="4 12" />
