@@ -55,7 +55,7 @@ public sealed class SharedSponsorManager
         {
             sponsorRank.GrayTide => "#546E7A",
             sponsorRank.Revolutionary => "#33CCEA",
-            sponsorRank.Syndicate => "#990000",
+            sponsorRank.Syndicate => "#880808",
             sponsorRank.SpaceNinja => "#1ABC9C",
             _ => "white"
         };
