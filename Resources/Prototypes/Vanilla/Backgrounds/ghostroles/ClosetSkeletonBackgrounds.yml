@@ -3,8 +3,8 @@
   btype: General
   backgrounds:
   - ClosetSkeletonBrainlessBackground
-  - ClosetSkeletonWizardBackground
   - ClosetSkeletonSillyBackground
+  - ClosetSkeletonWizardBackground
   - ClosetSkeletonEvilBackground
   - ClosetSkeletonCurseBackground
   - ClosetSkeletonSaboteurBackground
