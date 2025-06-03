@@ -9,13 +9,13 @@ public sealed partial class SkeletonCurseComponent : Component
 {
     [DataField("lifetimeDamage")]
     public Dictionary<EntityUid, FixedPoint2> LifetimeDamage = new();
+
     [DataField("damage")]
     public DamageSpecifier Damage = new()
     {
         DamageDict = new()
         {
-            { "Blunt", 105 }
+            { "Blunt", 150 }
         }
     };
-
 }

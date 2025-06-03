@@ -1,9 +1,8 @@
-
-using Content.Server.Mind;
-using Content.Server.Roles;
 using Content.Server.Polymorph.Systems;
 using Content.Server.Speech.Components;
 using Content.Server.Chat.Managers;
+using Content.Server.Destructible;
+using Content.Server.Destructible.Thresholds.Triggers;
 using Content.Shared.CombatMode.Pacification;
 using Content.Shared.Damage;
 using Content.Shared.Mobs.Systems;
@@ -20,36 +19,12 @@ public sealed class SkeletonCurseSystem : EntitySystem
 {
     [Dependency] private readonly DamageableSystem _damageable = default!;
     [Dependency] private readonly PolymorphSystem _polymorphSystem = default!;
-    [Dependency] private readonly MindSystem _mind = default!;
-    [Dependency] private readonly RoleSystem _role = default!;
     [Dependency] private readonly IChatManager _chat = default!;
     [Dependency] private readonly ActorSystem _actor = default!;
     public override void Initialize()
     {
         SubscribeLocalEvent<SkeletonCurseComponent, MapInitEvent>(OnMapInit);
-        SubscribeLocalEvent<SkeletonCurseComponent, MobStateChangedEvent>(OnMobStateChanged);
         SubscribeLocalEvent<SkeletonCurseComponent, DamageChangedEvent>(OnDamageChanged, before: [typeof(MobThresholdSystem)]);
-    }
-    /// <summary>
-    /// При смерти проклинаем того, кто нанёс больше всего урона
-    /// </summary>
-    private void OnMobStateChanged(EntityUid uid, SkeletonCurseComponent component, MobStateChangedEvent args)
-    {
-        if (args.NewMobState == MobState.Critical && args.OldMobState < args.NewMobState)
-        {
-            if (TryComp<DamageableComponent>(uid, out var damage))
-            {
-                _damageable.TryChangeDamage(uid, component.Damage, true, false, damage);
-            }
-            else return;
-        }
-        else return;
-
-        var topDamager = component.LifetimeDamage
-            .OrderByDescending(pair => pair.Value)
-            .FirstOrDefault().Key;
-
-        Curse(topDamager);
     }
     /// <summary>
     /// Получили проклятие - даём небольшой брифинг в чат
@@ -79,22 +54,28 @@ public sealed class SkeletonCurseSystem : EntitySystem
         if (cursedent == null)
             return;
 
-        AddComp<SkeletonCurseComponent>(cursedent.Value);
+        var cursecomp = EnsureComp<SkeletonCurseComponent>(cursedent.Value);
+
         var accent = EnsureComp<ReplacementAccentComponent>(cursedent.Value);
         accent.Accent = "genericAggressive";
         Dirty(cursedent.Value, accent);
 
         AddComp<PacifiedComponent>(cursedent.Value);
-
-        //соло-антажность
-        if (_mind.TryGetMind(cursedent.Value, out var mindId, out var mindcomp))
+        if (TryComp<DestructibleComponent>(cursedent.Value, out var destructible))
         {
-            List<EntProtoId> MindRoles = new() { "MindRoleGhostRoleSoloAntagonist" };
-            _role.MindAddRoles(mindId, MindRoles, mindcomp);
+            foreach (var threshold in destructible.Thresholds)
+            {
+                if (threshold.Trigger is DamageTrigger damageTrigger)
+                {
+                    damageTrigger.Damage = 500;
+                }
+            }
+
+            Dirty(cursedent.Value, destructible);
         }
     }
     /// <summary>
-    /// Запоминаем всех наших обидчиков, если урон превышает 100 - переносим проклятие
+    /// Запоминаем всех наших обидчиков, если урон превышает 30 - переносим проклятие
     /// </summary>
     private void OnDamageChanged(EntityUid uid, SkeletonCurseComponent component, DamageChangedEvent args)
     {
@@ -108,7 +89,7 @@ public sealed class SkeletonCurseSystem : EntitySystem
 
         var damage = args.DamageDelta.GetTotal();
         component.LifetimeDamage[origin] = component.LifetimeDamage.GetValueOrDefault(origin) + damage;
-        if (component.LifetimeDamage[origin] > FixedPoint2.New(100))
+        if (component.LifetimeDamage[origin] > FixedPoint2.New(30))
         {
             if (TryComp<DamageableComponent>(uid, out var damagecomp))
             {
