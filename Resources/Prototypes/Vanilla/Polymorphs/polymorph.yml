@@ -3,7 +3,7 @@
   configuration:
     entity: MobSkeletonPerson
     forced: true
-    inventory: Drop
+    inventory: Transfer
     transferName: true
     transferDamage: true
     revertOnCrit: false
