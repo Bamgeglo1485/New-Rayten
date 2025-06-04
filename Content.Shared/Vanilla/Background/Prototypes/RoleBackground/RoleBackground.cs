@@ -332,10 +332,6 @@ public sealed partial class RoleBackground : IEquatable<RoleBackground>
             SetDefault(profile);
             return;
         }
-        Logger.Info("итог");
-        Logger.Info($"детская предыстория: {SelectedBabyBackground != null}");
-        Logger.Info($"взрослая предыстория: {SelectedAdultBackground != null}");
-        Logger.Info($"общая предыстория: {SelectedGeneralBackground != null}");
     }
 
     public void SetDefault(HumanoidCharacterProfile? profile)
