@@ -103,7 +103,6 @@ public sealed class TDMSystem : EntitySystem
             rule.GameOverPlayed = true;
             GameOver();
         }
-
     }
 
     private void NewCycle(EntityUid uid, TDMRuleComponent rule, NewTDMCycleEvent args)
