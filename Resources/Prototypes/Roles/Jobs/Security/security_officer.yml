@@ -23,32 +23,6 @@
   special:
   - !type:AddImplantSpecial
     implants: [ MindShieldImplant ]
-  - !type:AddComponentSpecial
-    components:
-      - type: TriggerOnMobstateChange
-        mobState:
-        - Critical
-      - type: EmitSoundOnTrigger
-        sound:
-          collection: SoldierDeath
-          params:
-            volume: -4
-      - type: Skill
-        RangeWeaponLevel: 3
-        MeleeWeaponLevel: 3
-        MedicineLevel: 1
-        ChemistryLevel: 0
-        EngineeringLevel: 0
-        BuildingLevel: 0
-        ResearchLevel: 0
-        Atmosphere: false
-        Piloting: false
-        MusInstruments: true
-        Botany: false
-        Bureaucracy: true
-      - type: AddSkillPoints
-        Points: 1
-
 
 - type: startingGear
   id: SecurityOfficerGear

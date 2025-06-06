@@ -14,18 +14,19 @@
     - state: enabled
       visible: false
       shader: unshaded
-      map: ["enum.ToggleVisuals.Layer"]
+      map: ["enum.ToggleableVisuals.Layer"]
   - type: GenericVisualizer
     visuals:
-      enum.ToggleVisuals.Toggled:
-        enum.ToggleVisuals.Layer:
+      enum.ToggleableVisuals.Enabled:
+        enum.ToggleableVisuals.Layer:
           True: { visible: true }
           False: { visible: false }
+  - type: ItemTogglePointLight
+    toggleableVisualsColorModulatesLights: true
   - type: Item
     size: Small
     sprite: Vanilla/Objects/Weapons/Makeshift/makeshift_plasmasword_inhands.rsi
   - type: ItemToggle
-    predictable: false
     soundActivate:
       path: /Audio/Vanilla/Weapons/PlasmaSword/plasmasword_activate.ogg
       params:
@@ -84,7 +85,7 @@
       params:
         volume: -8
         maxDistance: 12
-  - type: ToggleableLightVisuals
+  - type: ToggleableVisuals
     spriteLayer: blade
     inhandVisuals:
       left:
@@ -112,7 +113,6 @@
     radius: 2.5
     color: blue
     netsync: false
-  - type: ItemTogglePointLight
   - type: Appearance
   - type: StaticPrice
     price: 1000

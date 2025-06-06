@@ -62,6 +62,8 @@ construction-graph-tag-match-stick = спичка
 construction-graph-tag-potato = картофелина
 construction-graph-tag-wheat-bushel = сноп пшеницы
 construction-graph-tag-corgi-hide = шкура корги
+construction-graph-tag-apron = фартук
+construction-graph-tag-utility-belt = пояс с инструментами
 soil-construction-graph-any-mushroom = любые грибы
 # Игрушки
 construction-graph-tag-rubber-ducky = резиновая уточка

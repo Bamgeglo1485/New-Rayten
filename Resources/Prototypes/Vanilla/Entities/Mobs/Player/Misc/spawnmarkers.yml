@@ -1,0 +1,28 @@
+## TDM
+- type: entity
+  id: SpawnPointTeamRed
+  name: Метка красной команды
+  parent: MarkerBase
+  suffix: TDM
+  components:
+    - type: SpawnPoint
+    - type: Sprite
+      sprite: Markers/jobs.rsi
+      layers:
+        - state: green
+        - sprite: Mobs/Ghosts/ghost_human.rsi
+          state: icon
+
+- type: entity
+  id: SpawnPointTeamBlue
+  name: Спавнер Синей команды
+  parent: MarkerBase
+  suffix: TDM
+  components:
+    - type: SpawnPoint
+    - type: Sprite
+      sprite: Markers/jobs.rsi
+      layers:
+        - state: green
+        - sprite: Mobs/Ghosts/ghost_human.rsi
+          state: icon

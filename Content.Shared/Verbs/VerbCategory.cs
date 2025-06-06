@@ -41,8 +41,8 @@ namespace Content.Shared.Verbs
 
         //Vanilla-Station-start
         // Подкатегории
-        public List<VerbCategory> SubCategories { get; set; } = new List<VerbCategory>(); 
-        public bool ShowInHead { get; set; } = true; 
+        public List<VerbCategory> SubCategories { get; set; } = new List<VerbCategory>();
+        public bool ShowInHead { get; set; } = true;
         // Метод для добавления подкатегории
         public void AddSubCategory(VerbCategory subCategory)
         {
@@ -111,6 +111,7 @@ namespace Content.Shared.Verbs
 
         public static readonly VerbCategory PowerLevel = new("verb-categories-power-level", null);
 
-
+        public static readonly VerbCategory Adjust =
+            new("verb-categories-adjust", "/Textures/Interface/VerbIcons/screwdriver.png");
     }
 }

@@ -13,12 +13,6 @@ using Robust.Shared.Player;
 using Robust.Shared.Utility;
 using static Robust.Client.UserInterface.Controls.LineEdit;
 
-// Corvax-Highlights-Start
-using Content.Shared.CCVar;
-using Robust.Shared.Configuration;
-using Content.Shared.Corvax.CCCVars;
-// Corvax-Highlights-End
-
 namespace Content.Client.UserInterface.Systems.Chat.Widgets;
 
 [GenerateTypedNameReferences]
@@ -27,11 +21,6 @@ public partial class ChatBox : UIWidget
 {
     private readonly ChatUIController _controller;
     private readonly IEntityManager _entManager;
-
-    // Corvax-Highlights-Start
-    private static readonly Color HighlightColor = Color.FromHex("#e5ffcc");
-    private List<string> _highlights = [];
-    // Corvax-Highlights-End
 
     public bool Main { get; set; }
 
@@ -49,14 +38,10 @@ public partial class ChatBox : UIWidget
         ChatInput.Input.OnFocusExit += OnFocusExit;
         ChatInput.ChannelSelector.OnChannelSelect += OnChannelSelect;
         ChatInput.FilterButton.Popup.OnChannelFilter += OnChannelFilter;
-        // Corvax-Highlights-Start
         ChatInput.FilterButton.Popup.OnNewHighlights += OnNewHighlights;
-        // Corvax-Highlights-End
         _controller = UserInterfaceManager.GetUIController<ChatUIController>();
         _controller.MessageAdded += OnMessageAdded;
-        // Corvax-Highlights-Start
-        _controller.HighlightsUpdated += OnHighlightsReceived;
-        // Corvax-Highlights-End
+        _controller.HighlightsUpdated += OnHighlightsUpdated;
         _controller.RegisterChat(this);
     }
 
@@ -80,15 +65,12 @@ public partial class ChatBox : UIWidget
 
         var color = msg.MessageColorOverride ?? msg.Channel.TextColor();
 
-        // Corvax-Highlights-Start
-        // Highlight any words choosen by the client.
-        foreach (var highlight in _highlights)
-        {
-            msg.WrappedMessage = SharedChatSystem.InjectTagAroundString(msg, highlight, "color", HighlightColor.ToHex());
-        }
-        // Corvax-Highlights-End
-
         AddLine(msg.WrappedMessage, color);
+    }
+
+    private void OnHighlightsUpdated(string highlights)
+    {
+        ChatInput.FilterButton.Popup.UpdateHighlights(highlights);
     }
 
     private void OnChannelSelect(ChatSelectChannel channel)
@@ -121,31 +103,10 @@ public partial class ChatBox : UIWidget
         }
     }
 
-    // Corvax-Highlights-Start
     private void OnNewHighlights(string highlighs)
     {
         _controller.UpdateHighlights(highlighs);
     }
-
-    private void OnHighlightsReceived(string highlights)
-    {
-        // Save the newly provided list of highlighs if different.
-        var cfg = IoCManager.Resolve<IConfigurationManager>();
-        if (!cfg.GetCVar(CCCVars.ChatHighlights).Equals(highlights, StringComparison.CurrentCultureIgnoreCase))
-        {
-            cfg.SetCVar(CCCVars.ChatHighlights, highlights);
-            cfg.SaveToFile();
-        }
-
-        // Fill the array with the highlights separated by commas, disregarding empty entries.
-        string[] arr_highlights = highlights.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-        _highlights.Clear();
-        foreach (var keyword in arr_highlights)
-        {
-            _highlights.Add(keyword);
-        }
-    }
-    // Corvax-Highlights-Start
 
     public void AddLine(string message, Color color)
     {

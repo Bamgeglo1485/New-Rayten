@@ -1,6 +1,3 @@
-- type: Tag
-  id: PowerSabre
-
 - type: entity
   name: captain's force sabre
   parent: [BaseItem, BaseCommandContraband]
@@ -17,17 +14,15 @@
     - state: base
       map: ["base"]
     - state: activated
-      map: ["enum.ToggleVisuals.Layer"]
+      map: ["enum.ToggleableVisuals.Layer"]
     - state: on-equipped-BELT
       shader: unshaded
       visible: false
   - type: Stunbaton
     energyPerUse: 250
-  - type: ItemTogglePointLight
   - type: ItemToggleSize
     activatedSize: Ginormous
   - type: ItemToggle
-    predictable: false
     soundActivate:
       path: /Audio/Vanilla/Weapons/PowerSabre/powersabreon.ogg
       params:
@@ -106,16 +101,18 @@
     sprite: Vanilla/Objects/Weapons/Melee/powersabre_inhands.rsi
     size: Small
   - type: Appearance
+  - type: ItemTogglePointLight
+    toggleableVisualsColorModulatesLights: true
   - type: GenericVisualizer
     visuals:
-      enum.ToggleVisuals.Toggled:
-        enum.ToggleVisuals.Layer:
+      enum.ToggleableVisuals.Enabled:
+        enum.ToggleableVisuals.Layer:
           True: { visible: true }
           False: { visible: false }
         base:
           True: {visible: false}
           False: { visible: true }
-  - type: ToggleableLightVisuals
+  - type: ToggleableVisuals
     spriteLayer: "blade"
     inhandVisuals:
       left:
@@ -126,9 +123,9 @@
       - state: right_enabled
         shader: unshaded
       - state: off-inhand-right
-    clothingVisuals:
-      belt:
-      - state: on-equipped-BELT
+        clothingVisuals:
+          belt:
+          - state: on-equipped-BELT
   - type: StaticPrice
     price: 80
   - type: Riggable

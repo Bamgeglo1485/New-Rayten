@@ -30,12 +30,12 @@ hud-chatbox-channel-Visual = Визуальный
 hud-chatbox-channel-Damage = Повреждения
 hud-chatbox-channel-Unspecified = Неопределённый
 hud-chatbox-highlights = Подсветка:
-hud-chatbox-highlights-button = Отправить
+hud-chatbox-highlights-button = Применить
 hud-chatbox-highlights-tooltip =
-    Слова должны быть разделены новой строкой,
-    если обернуты в " ", они будут подсвечены
-    только если отделены пробелами.
+    Слова должны быть разделены переводом строки.
+    Если они заключены в кавычки ", они будут подсвечиваться
+    только при разделении пробелами или знаками препинания.
 hud-chatbox-highlights-placeholder =
-    Урист
-    "Пара"
-    Мост
+    Джордж Хайтауэр
+    "Хоп"
+    Медицинский

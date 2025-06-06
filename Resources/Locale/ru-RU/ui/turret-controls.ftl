@@ -13,6 +13,7 @@ turret-controls-window-turret-deployed = ПОИСК ЦЕЛИ...
 turret-controls-window-turret-deploying = АКТИВАЦИЯ
 turret-controls-window-turret-firing = АТАКА ПО ЦЕЛИ
 turret-controls-window-turret-error = ОШИБКА
+turret-controls-window-turret-broken = ***НЕИСПРАВНА***
 # Buttons
 turret-controls-window-safe = Неактивно
 turret-controls-window-stun = Оглушение
