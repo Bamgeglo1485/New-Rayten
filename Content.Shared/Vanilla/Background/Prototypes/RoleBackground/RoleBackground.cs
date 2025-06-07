@@ -60,7 +60,7 @@ public sealed partial class RoleBackground : IEquatable<RoleBackground>
     {
         var protoManager = collection.Resolve<IPrototypeManager>();
         var sponsors = collection.Resolve<SharedSponsorManager>();
-        var netManager = collection.Resolve<INetManager>(); // Corvax-Loadouts
+        var netManager = collection.Resolve<INetManager>();
         string[] sponsorPrototypes;
 
         if (netManager.IsServer)
@@ -227,10 +227,6 @@ public sealed partial class RoleBackground : IEquatable<RoleBackground>
                 return;
             }
 
-
-            //Валидируем навыки
-
-
             if (protoManager.TryIndex(SelectedBabyBackground, out var bgProtoBaby) &&
                 protoManager.TryIndex(SelectedAdultBackground, out var bgProtoAdult))
             {
@@ -328,7 +324,6 @@ public sealed partial class RoleBackground : IEquatable<RoleBackground>
         }
         else
         {
-            Logger.Error("не выбрана одна общая либо детская + взрослая предытория");
             SetDefault(profile);
             return;
         }

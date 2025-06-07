@@ -49,6 +49,7 @@ public sealed class TDMSystem : EntitySystem
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly ChatSystem _chatSystem = default!;
     [Dependency] private readonly DamageableSystem _damageable = default!;
+
     private int Blueguys = 0;
     private int Redguys = 0;
     private bool onlyonecycle = false;

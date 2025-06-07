@@ -1,16 +1,16 @@
 meta:
   format: 7
-  category: Map
-  engineVersion: 261.1.0
+  category: Grid
+  engineVersion: 261.2.0
   forkId: ""
   forkVersion: ""
-  time: 06/04/2025 13:53:59
-  entityCount: 568
-maps:
-- 93
+  time: 06/07/2025 17:12:28
+  entityCount: 567
+maps: []
 grids:
 - 1
-orphans: []
+orphans:
+- 1
 nullspace: []
 tilemap:
   0: Space
@@ -29,7 +29,7 @@ entities:
       name: grid
     - type: Transform
       pos: 0.78125,1.703125
-      parent: 93
+      parent: invalid
     - type: MapGrid
       chunks:
         -1,-1:
@@ -474,16 +474,6 @@ entities:
         chunkSize: 4
     - type: GasTileOverlay
     - type: RadiationGridResistance
-  - uid: 93
-    components:
-    - type: MetaData
-      name: Map Entity
-    - type: Transform
-    - type: Map
-      mapPaused: True
-    - type: GridTree
-    - type: Broadphase
-    - type: OccluderTree
 - proto: AlwaysPoweredWallLight
   entities:
   - uid: 195
@@ -1054,7 +1044,7 @@ entities:
       pos: -4.5,4.5
       parent: 1
     - type: Door
-      secondsUntilStateChange: -4501.524
+      secondsUntilStateChange: -4524.3013
       state: Opening
     - type: Forensics
       residues: []
@@ -3845,7 +3835,7 @@ entities:
       pos: 3.5,1.5
       parent: 1
     - type: Door
-      secondsUntilStateChange: -675.62555
+      secondsUntilStateChange: -698.403
       state: Opening
     - type: Forensics
       residues: []
