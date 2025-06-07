@@ -76,7 +76,7 @@ Bureaucracy-request-dismissal =
     
     { Bureaucracy-base-end }
 Bureaucracy-request-constructionwork =
-    { Bureaucracy-base-end }
+    { Bureaucracy-base-start }
     
     Прошу провести строительные работы в (название отдела или объекта) по причине (причина запроса).
     
