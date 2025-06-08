@@ -233,7 +233,7 @@
     shoes: ClothingShoesTacticalBoots
     mask: ClothingMaskGasERT
     eyes: ClothingEyesGlassesSecurity
-    neck: ClothingNeckMantleERTLeader # Corvax-Clothing
+    neck: ClothingNeckMantleERTLeader
     gloves: ClothingHandsGlovesCombat
     outerClothing: ClothingOuterHardsuitERTLeader
     id: ERTLeaderPDA

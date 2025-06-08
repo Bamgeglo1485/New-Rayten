@@ -10,73 +10,80 @@ namespace Content.Server.Vanilla.Jammer;
 
 public sealed class JammerSystem : EntitySystem
 {
-    private bool _isJammerActive = false;
-    private TimeSpan? _jammerEndTime = null;
-    private TimeSpan defaultjammertime = TimeSpan.FromMinutes(35);
-    private TimeSpan AddictiveTime = TimeSpan.FromMinutes(0);
     [Dependency] private readonly IGameTiming _timing = default!;
 
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<RoundEndMessageEvent>(OnRoundEnd);
         SubscribeLocalEvent<OverrideJammerTimeEvent>(Onoverride);
         SubscribeLocalEvent<SetJammerOnSpawnComponent, MapInitEvent>(OnMapInit);
         SubscribeLocalEvent<CommunicationConsoleCallShuttleAttemptEvent>(OnShuttleCallAttempt);
     }
+
     private void OnMapInit(EntityUid uid, SetJammerOnSpawnComponent component, MapInitEvent args)
     {
         SetJammer(component.Duration);
     }
 
-    public void TrySetJammer()
+    public void SetJammer(TimeSpan duration, EntityUid? station = null)
     {
-        if(_isJammerActive)
-            return;
-        SetJammer(defaultjammertime);
-    }
-
-    public void SetJammer(TimeSpan duration)
-    {
-        _isJammerActive = true;
-        _jammerEndTime = _timing.CurTime + duration + AddictiveTime;
-    }
-
-    public void RemoveJammer()
-    {
-        _isJammerActive = false;
-        _jammerEndTime = null;
-    }
-
-    public TimeSpan CheckJammer()
-    {
-        if (!_isJammerActive || _jammerEndTime == null)
-            return TimeSpan.Zero;
-
-        var remainingTime = _jammerEndTime - _timing.CurTime;
-        if (remainingTime <= TimeSpan.Zero)
+        var newendtime = _timing.CurTime + duration;
+        var query = EntityQueryEnumerator<StationJammerComponent>();
+        while (query.MoveNext(out var stationUid, out var jammer))
         {
-            RemoveJammer();
-            return TimeSpan.Zero;
-        }
+            if (station != null && station != stationUid)
+                continue;
 
-        return remainingTime.Value;
+            if (jammer.JammerEndTime == null || newendtime > jammer.JammerEndTime)
+                jammer.JammerEndTime = newendtime;
+        }
+    }
+
+    public void RemoveJammer(EntityUid? station = null)
+    {
+        var query = EntityQueryEnumerator<StationJammerComponent>();
+        while (query.MoveNext(out var stationUid, out var jammer))
+        {
+            if (station != null && station != stationUid)
+                continue;
+
+            jammer.JammerEndTime = null;
+        }
+    }
+
+    public (bool isActive, TimeSpan timetobreak) CheckJammer(EntityUid? station = null)
+    {
+        var curtime = _timing.CurTime;
+        var query = EntityQueryEnumerator<StationJammerComponent>();
+        while (query.MoveNext(out var stationUid, out var jammer))
+        {
+            if (station != null && station != stationUid)
+                continue;
+
+            if (jammer.JammerEndTime != null)
+            {
+                if (curtime > jammer.JammerEndTime)
+                    RemoveJammer(stationUid);
+                else
+                    return (true, jammer.JammerEndTime.Value - curtime);
+            }
+
+        }
+        return (false, TimeSpan.Zero);
     }
 
     private void Onoverride(OverrideJammerTimeEvent ev)
     {
-        AddictiveTime = TimeSpan.FromMinutes(ev.Minutes);
+        SetJammer(TimeSpan.FromMinutes(ev.Minutes));
     }
 
-    private void OnRoundEnd(RoundEndMessageEvent ev)
-    {
-        RemoveJammer();
-        AddictiveTime = TimeSpan.FromMinutes(0);
-    }
     private void OnShuttleCallAttempt(ref CommunicationConsoleCallShuttleAttemptEvent ev)
     {
-        if (CheckJammer() == TimeSpan.Zero)
+        var (isjammeractive, timetobreak) = CheckJammer();
+
+        if (isjammeractive)
             return;
+
         ev.Cancelled = true;
         ev.Reason = Loc.GetString("jammer-shuttle-call-unavailable");
     }

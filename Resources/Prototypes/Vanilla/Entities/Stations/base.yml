@@ -1,0 +1,5 @@
+- type: entity
+  id: BaseStationJammer
+  abstract: true
+  components:
+    - type: StationJammer

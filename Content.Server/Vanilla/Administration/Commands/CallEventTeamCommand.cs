@@ -54,12 +54,13 @@ public sealed class CallEventTeamCommand : IConsoleCommand
             }
         }
 
-        if(!ignoreJammer)
+        if (!ignoreJammer)
         {
-            TimeSpan timetoremjammer = jammerSystem.CheckJammer();
-            if(timetoremjammer != TimeSpan.Zero)
+            var (isjammeractive, timetobreak) = jammerSystem.CheckJammer();
+
+            if (isjammeractive)
             {
-                shell.WriteLine($"Установлена глушилка! Будет снята через: {(int)timetoremjammer.TotalMinutes} минут(ы) и {timetoremjammer.Seconds} секунд(ы)");
+                shell.WriteLine($"Установлена глушилка! Будет снята через: {(int)timetobreak.TotalMinutes}:{timetobreak.Seconds}");
                 return;
             }
         }
@@ -75,7 +76,7 @@ public sealed class CallEventTeamCommand : IConsoleCommand
 
         if(!eventTeamSystem.call(EventTeamId, ignoreJammer))
         {
-            shell.WriteLine($"ошибка.");
+            shell.WriteLine($"какая-та ошибка в прототипе :c");
             return;
         }
 

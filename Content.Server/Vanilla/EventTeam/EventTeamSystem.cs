@@ -45,13 +45,16 @@ public sealed class EventTeamSystem : EntitySystem
             Logger.Error($"Ошибка в протипе");
             return false;
         }
+
         if (_gameTicker.RunLevel != GameRunLevel.InRound)
         {
             Logger.Warning($"Мы в лобби?");
             return false;
         }
 
-        if (!igonrejammer && _jammer.CheckJammer() != TimeSpan.Zero)
+        var (isjammeractive, timetobreak) = _jammer.CheckJammer();
+
+        if (!igonrejammer && isjammeractive)
         {
             Logger.Info($"Установлена глушилка, блокирующая спавн ");
             return false;
