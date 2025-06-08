@@ -7,8 +7,6 @@
       min:  600
       max:  600
   - type: WhiteoutRule
-  - type: SetJammerOnSpawn
-    duration: 120
   - type: SurvivorRule
 
 - type: entity
@@ -18,8 +16,6 @@
   - type: SurvivorRule
   - type: WhiteoutRule
     whiteoutPrepareTime: 60
-  - type: SetJammerOnSpawn
-    duration: 21
 
 - type: entity
   parent: Whiteout

@@ -97,6 +97,8 @@ public sealed class WhiteoutRuleSystem : GameRuleSystem<WhiteoutRuleComponent>
             RemComp<TradeStationComponent>(tradepost);
         }
 
+        // _jammer.SetJammer(TimeSpan.FromSeconds(comp.WhiteoutLength+comp.WhiteoutFinalLength+comp.WhiteoutPrepareTime));
+
         _chat.DispatchGlobalAnnouncement(Loc.GetString(comp.WhiteoutPrepareAnnouncement), playSound: true, announcementSound: comp.WhiteoutSoundAnnouncement, colorOverride: Color.Red);
     }
 
@@ -246,7 +248,7 @@ public sealed class WhiteoutRuleSystem : GameRuleSystem<WhiteoutRuleComponent>
 
         _weather.SetWeather(mapId, weatherProto, TimeSpan.FromMinutes(30));
 
-        RemoveHardsuitProtection();
+        ChangeHardsuitProtection(true);
 
         _chat.DispatchGlobalAnnouncement(Loc.GetString(comp.WhiteoutAnnouncement), colorOverride: Color.Red);
         _audio.PlayGlobal(comp.WhiteoutAlarmSound, Filter.Broadcast(), true);
@@ -260,7 +262,7 @@ public sealed class WhiteoutRuleSystem : GameRuleSystem<WhiteoutRuleComponent>
 
         RemComp<MapAtmosphereComponent>(comp.ActiveMapUid);
 
-        AddHardsuitProtection();
+        ChangeHardsuitProtection(false);
         _chat.DispatchGlobalAnnouncement(Loc.GetString(comp.WhiteoutEndAnnouncement), playSound: true, announcementSound: comp.WhiteoutSoundAnnouncement, colorOverride: Color.Red);
     }
 
@@ -293,30 +295,27 @@ public sealed class WhiteoutRuleSystem : GameRuleSystem<WhiteoutRuleComponent>
     }
 
     // Убирание или добавление резистов скафов
-    private void AddHardsuitProtection()
+    private void ChangeHardsuitProtection(bool remove)
     {
         var query = EntityQueryEnumerator<TagComponent>();
         while (query.MoveNext(out var uid, out _))
         {
             if (_tagSystem.HasTag(uid, "Hardsuit"))
             {
-                AddComp<TemperatureProtectionComponent>(uid);
-                AddComp<PressureProtectionComponent>(uid);
+                if (remove)
+                {
+                    RemComp<TemperatureProtectionComponent>(uid);
+                    RemComp<PressureProtectionComponent>(uid);
+                }
+                else
+                {
+                    AddComp<TemperatureProtectionComponent>(uid);
+                    AddComp<PressureProtectionComponent>(uid);
+                }
             }
         }
     }
-    private void RemoveHardsuitProtection()
-    {
-        var query = EntityQueryEnumerator<TemperatureProtectionComponent, PressureProtectionComponent, TransformComponent>();
-        while (query.MoveNext(out var uid, out _, out _, out _))
-        {
-            if (_tagSystem.HasTag(uid, "Hardsuit"))
-            {
-                RemComp<TemperatureProtectionComponent>(uid);
-                RemComp<PressureProtectionComponent>(uid);
-            }
-        }
-    }
+
 
     // Взрыв смэсов
     private void ExplodeSmes(EntityUid ActiveMapUid, MapId ActiveMapId)
