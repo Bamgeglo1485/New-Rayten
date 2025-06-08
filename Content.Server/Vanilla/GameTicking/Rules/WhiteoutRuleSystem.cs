@@ -17,6 +17,7 @@ using Content.Server.Weather;
 using Content.Server.Damage;
 using Content.Server.Resist;
 using Content.Server.Audio;
+using Content.Server.Vanilla.Jammer;
 
 using Content.Shared.GameTicking.Components;
 using Content.Shared.FixedPoint;
@@ -57,6 +58,7 @@ public sealed class WhiteoutRuleSystem : GameRuleSystem<WhiteoutRuleComponent>
     [Dependency] private readonly ExplosionSystem _boom = default!;
     [Dependency] private readonly TagSystem _tagSystem = default!;
     [Dependency] private readonly ChatSystem _chat = default!;
+    [Dependency] private readonly JammerSystem _jammer = default!;
 
     public override void Initialize()
     {
@@ -97,7 +99,7 @@ public sealed class WhiteoutRuleSystem : GameRuleSystem<WhiteoutRuleComponent>
             RemComp<TradeStationComponent>(tradepost);
         }
 
-        // _jammer.SetJammer(TimeSpan.FromSeconds(comp.WhiteoutLength+comp.WhiteoutFinalLength+comp.WhiteoutPrepareTime));
+        _jammer.SetJammer(TimeSpan.FromSeconds(comp.WhiteoutLength+comp.WhiteoutFinalLength+comp.WhiteoutPrepareTime));
 
         _chat.DispatchGlobalAnnouncement(Loc.GetString(comp.WhiteoutPrepareAnnouncement), playSound: true, announcementSound: comp.WhiteoutSoundAnnouncement, colorOverride: Color.Red);
     }

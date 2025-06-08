@@ -16,6 +16,7 @@ using Content.Shared.CCVar;
 using Content.Shared.GameTicking;
 using Content.Shared.Mind;
 using Content.Shared.Players.RateLimiting;
+using Content.Shared.Vanilla.Sponsor;
 using JetBrains.Annotations;
 using Robust.Server.Player;
 using Robust.Shared;
@@ -32,6 +33,8 @@ namespace Content.Server.Administration.Systems
     public sealed partial class BwoinkSystem : SharedBwoinkSystem
     {
         private const string RateLimitKey = "AdminHelp";
+
+        [Dependency] private readonly SharedSponsorManager _sponsorsManager = default!;
         private static readonly Dictionary<string, string> AdminOOCColors = new()
         {
             { "Хост", "#2ECC71" },
@@ -680,19 +683,24 @@ namespace Content.Server.Administration.Systems
             }
             else if (senderAdmin is not null && senderAdmin.HasFlag(AdminFlags.Adminhelp))
             {
-                //vanilla-station-start
+                //rayten-start
                 string adminOOCColor = "red";
                 if (senderAdmin?.Title != null && AdminOOCColors.ContainsKey(senderAdmin.Title))
                     adminOOCColor = AdminOOCColors[senderAdmin.Title];
 
                 bwoinkText = $"[color={adminOOCColor}]{adminPrefix}{senderSession.Name}[/color]";
-                //vanilla-station-end
+                //rayten-end
             }
             else
             {
-                bwoinkText = $"{senderSession.Name}";
+                //rayten-start
+                if (_sponsorsManager.TryGetOOCColor(senderSession.UserId, out var oocColor))
+                    bwoinkText = $"[color={oocColor}]{senderSession.Name}[/color]";
+                else
+                    bwoinkText = $"{senderSession.Name}";
+                //rayten-end
             }
-            
+
 
             bwoinkText = $"{(message.AdminOnly ? Loc.GetString("bwoink-message-admin-only") : !message.PlaySound ? Loc.GetString("bwoink-message-silent") : "")} {bwoinkText}: {escapedText}";
 
