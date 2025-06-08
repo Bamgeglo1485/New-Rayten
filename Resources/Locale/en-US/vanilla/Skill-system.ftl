@@ -12,12 +12,12 @@ Skill-issue-easyskill-message-bureaucracy-unskilled = Требуется нав�
 Skill-issue-easyskill-message-atmosphere-unskilled = Требуется навык атмосферы.
 Skill-issue-easyskill-message-crime-unskilled = Требуется навык преступности.
 shared-solution-container-component-on-examine-main-text-skill-issue = { "" }
-construction-menu-skill-building =  [color=#FFBF00]Требуется { $lvl } ур. строительства[/color]
-construction-menu-skill-engineering =  [color=#ff6600]Требуется { $lvl } ур. инженерии[/color]
-construction-menu-skill-atmosphere =  [color=#4ebed7]Требуется знание атмосферы[/color]
+construction-menu-skill-building = [color=#FFBF00]Требуется { $lvl } ур. строительства[/color]
+construction-menu-skill-engineering = [color=#ff6600]Требуется { $lvl } ур. инженерии[/color]
+construction-menu-skill-atmosphere = [color=#4ebed7]Требуется знание атмосферы[/color]
 skill-system-bonusskillpoints-message = Вы получили { $skillpoints } очков навыков, т.к. было менее 10 готовых игроков.
 examine-skilltrainer-part-2 = доступно { $SkillExpToLearn } опыта.
-skill-system-UI-SkillNameLabel =  [color=#EFBF04]{ $skillname ->
+skill-system-UI-SkillNameLabel = [color=#EFBF04]{ $skillname ->
         [Piloting] Пилотирование
         [RangeWeapon] Стрельба
         [MeleeWeapon] Ближний бой
@@ -39,7 +39,7 @@ skill-system-UI-ExpLabel = { $exp }/600[color=red]{ $amnesia }[/color]
 skill-system-UI-ExpLabel-maxlvl = Макс.
 skill-system-UI-Easy-SkillInfoLabel = Опыт: { $exp }/600
 skill-system-UI-Easy-SkillInfoLabel-Have = Изучен.
-skill-system-UI-Easy-AmnesiaLabel =  [color=red]Амнезия: { $exptorestore }[/color]
+skill-system-UI-Easy-AmnesiaLabel = [color=red]Амнезия: { $exptorestore }[/color]
 skill-system-UI-Tooltip-RangeWeapon = Данный навык отвечает за разброс огнестрельного оружия.
 skill-system-UI-Tooltip-MeleeWeapon =
     Данный навык отвечает за урон от ближнего боя, толкание,
