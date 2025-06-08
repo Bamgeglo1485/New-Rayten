@@ -96,7 +96,7 @@
     gloves: ClothingHandsGlovesCaptainWhite
   effects:
   - !type:GroupLoadoutEffect
-    proto: MasterCap
+    proto: SuperMasterCap
 
 #sabres
 - type: loadout
@@ -113,7 +113,9 @@
   id: CaptainWhiteSabreLoadout
   equipment:
     belt: ClothingBeltWhiteSheathFilled
-
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: SuperMasterCap
 #Neck
 
 - type: loadout

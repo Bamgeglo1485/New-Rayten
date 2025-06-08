@@ -1,0 +1,19 @@
+- type: microwaveMealRecipe
+  id: RecipeBlueSkyPlate
+  name: blue sky plate recipe
+  result: BlueSkyPlate
+  time: 15
+  reagents:
+    Ephedronex: 60
+
+- type: microwaveMealRecipe
+  id: RecipeSawdustMeal
+  name: рецепт каши из опилок
+  result: FoodSawdustMeal
+  time: 20
+  group: Savory
+  reagents:
+    Water: 10
+    Cellulose: 40
+  solids:
+    FoodBowlBig: 1

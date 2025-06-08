@@ -1,0 +1,31 @@
+- type: tile
+  id: FloorSnowPlating
+  name: tiles-snow
+  sprite: /Textures/Tiles/Planet/Snow/snow.png
+  variants: 13
+  placementVariants:
+  - 0.8
+  - 0.0166
+  - 0.0166
+  - 0.0166
+  - 0.0166
+  - 0.0166
+  - 0.0166
+  - 0.0166
+  - 0.0166
+  - 0.0166
+  - 0.0166
+  - 0.0116
+  - 0.0116
+  edgeSpritePriority: 2
+  edgeSprites:
+    South: /Textures/Tiles/Planet/Snow/snow_double_edge_south.png
+    East: /Textures/Tiles/Planet/Snow/snow_double_edge_east.png
+    North: /Textures/Tiles/Planet/Snow/snow_double_edge_north.png
+    West: /Textures/Tiles/Planet/Snow/snow_double_edge_west.png
+  isSubfloor: false
+  footstepSounds:
+    collection: FootstepSnow
+  heatCapacity: 10000
+  weather: true
+  indestructible: false

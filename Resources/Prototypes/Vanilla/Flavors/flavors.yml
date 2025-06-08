@@ -1,0 +1,4 @@
+- type: flavor
+  id: SawdustFlavor
+  flavorType: Base
+  description: flavor-sawdust

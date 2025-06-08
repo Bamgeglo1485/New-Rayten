@@ -1,3 +1,5 @@
+# Blue Sky
+
 - type: entity
   parent: FoodInjectableBase
   name: blue sky plate
@@ -58,3 +60,31 @@
     size: Tiny
     shape:
     - 0,0,0,0
+
+# Sawdust Oatmeal
+
+- type: entity
+  name: каша из опилок
+  parent: FoodBowlBase
+  id: FoodSawdustMeal
+  description: Ходят слухи, что это было единственной едой в Лондоне в 1886 году.
+  components:
+  - type: FlavorProfile
+    flavors:
+      - SawdustFlavor
+  - type: Sprite
+    sprite: Vanilla/Objects/Consumable/Food/SawdustMeal.rsi
+    layers:
+    - state: bowl
+    - state: oatmeal
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 20
+        reagents:
+        - ReagentId: Nutriment
+          Quantity: 7
+        - ReagentId: Vitamin
+          Quantity: 2
+        - ReagentId: Cellulose
+          Quantity: 10
