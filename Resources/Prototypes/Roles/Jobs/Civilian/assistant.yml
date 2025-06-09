@@ -7,24 +7,6 @@
   startingGear: PassengerGear
   icon: "JobIconPassenger"
   supervisors: job-supervisors-everyone
-  special:
-  - !type:AddComponentSpecial
-    components:
-      - type: Skill
-        RangeWeaponLevel: 1
-        MeleeWeaponLevel: 1
-        MedicineLevel: 1
-        ChemistryLevel: 0
-        EngineeringLevel: 0
-        BuildingLevel: 0
-        ResearchLevel: 0
-        Atmosphere: false
-        Piloting: false
-        MusInstruments: true
-        Botany: false
-        Bureaucracy: false
-      - type: AddSkillPoints
-        Points: 1
 #  access: # Corvax-MRP
 #  - Maintenance
 
