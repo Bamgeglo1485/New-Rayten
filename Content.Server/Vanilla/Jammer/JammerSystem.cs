@@ -81,7 +81,7 @@ public sealed class JammerSystem : EntitySystem
     {
         var (isjammeractive, timetobreak) = CheckJammer();
 
-        if (isjammeractive)
+        if (!isjammeractive)
             return;
 
         ev.Cancelled = true;
