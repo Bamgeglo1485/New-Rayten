@@ -87,14 +87,7 @@ public abstract class SharedCombatModeSystem : EntitySystem
     {
         if (value)
         {
-            var rot = EnsureComp<MouseRotatorComponent>(uid); // Corvax-Next-NoScope
-            // Corvax-Next-NoScope-Start
-            if (TryComp<CombatModeComponent>(uid, out var comp) && comp.SmoothRotation) // no idea under which (intended) circumstances this can fail (if any), so i'll avoid Comp<>().
-            {
-                rot.AngleTolerance = Angle.FromDegrees(1); // arbitrary
-                rot.Simple4DirMode = false;
-            }
-            // Corvax-Next-NoScope-End
+            EnsureComp<MouseRotatorComponent>(uid);
             EnsureComp<NoRotateOnMoveComponent>(uid);
         }
         else
