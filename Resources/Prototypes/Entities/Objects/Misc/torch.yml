@@ -79,3 +79,7 @@
     - type: Tag
       tags:
       - Torch
+
+      # VANILLA-WHITEOUT STARTS
+    - type: Warmer
+      # VANILLA-WHITEOUT ENDS

@@ -1,0 +1,89 @@
+- type: entity
+  parent: BaseItem
+  id: HeatLamp
+  name: тепловая лампа
+  description: Урановая лампа со свинцовым покрытием. Свинец не сильно полезнее урана.
+  components:
+  - type: Sprite
+    sprite: Vanilla/Objects/Devices/heatlamp.rsi
+    layers:
+      - state: base
+      - state: light
+        shader: unshaded
+        visible: false
+        map: [ "light" ]
+  - type: Item
+    size: Normal
+  - type: Clothing
+    sprite: Vanilla/Objects/Devices/heatlamp.rsi
+    equippedPrefix: off
+    quickEquip: false
+    equipSound:
+      path: /Audio/Items/belt_equip.ogg
+    slots:
+      - Neck
+  - type: PointLight
+    enabled: false
+    radius: 9
+    energy: 1
+    color: "#5885ff"
+    netsync: false
+  - type: Appearance
+  - type: ItemTogglePointLight
+  - type: ItemToggle
+    soundActivate:
+      path: /Audio/Vanilla/Effects/heatlamp_enable.ogg
+      params:
+        volume: -5
+        variation: 0.1
+    soundDeactivate:
+      path: /Audio/Vanilla/Effects/heatlamp_disable.ogg
+      params:
+        volume: -5
+        variation: 0.1
+  - type: UseDelay
+    delay: 2.0
+  - type: GenericVisualizer
+    visuals:
+      enum.ToggleableVisuals.Enabled:
+        enum.ToggleableVisuals.Layer:
+          True: {state: light}
+          False: {state: base}
+  - type: ToggleableVisuals
+    spriteLayer: enum.ToggleableVisuals.Layer
+    clothingVisuals:
+      neck:
+      - state: on-equipped-NECK
+  - type: StaticPrice
+    price: 1200
+  - type: Warmer
+    moleRatio: 0
+    tileHeatStrength: 0
+    heatMaxTemp: 313.15
+    bodyHeatStrength: 3000
+    onlyWeared: true
+
+- type: entity
+  parent: HeatLamp
+  id: OldHeatLamp
+  name: древняя тепловая лампа
+  description: Тепловая лампа, которая когда то служила при строительстве станций, но её конструкция довольно устарела, так как выбрасывала пар в атмосферу.
+  components:
+  - type: Sprite
+    sprite: Vanilla/Objects/Devices/old_heatlamp.rsi
+  - type: Clothing
+    sprite: Vanilla/Objects/Devices/old_heatlamp.rsi
+  - type: PointLight
+    enabled: false
+    radius: 12
+    energy: 2
+    color: "#FFC458"
+    netsync: false
+  - type: StaticPrice
+    price: 3200
+  - type: Warmer
+    gasType: WaterVapor
+    moleRatio: 0.025
+    tileHeatStrength: 1.5
+    heatMaxTemp: 313.15
+    bodyHeatStrength: 2500

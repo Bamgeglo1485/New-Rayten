@@ -11,33 +11,21 @@
 
 - type: entity
   parent: BaseGameRule
-  id: WhiteoutMomental
+  id: WhiteoutDebug
   components:
   - type: SurvivorRule
   - type: WhiteoutRule
     whiteoutPrepareTime: 60
-
-- type: entity
-  parent: Whiteout
-  id: WhiteoutPlanetMap
-  components:
-  - type: SurvivorRule
-  - type: WhiteoutRule
-    planetMap: true
-    whiteoutPrepareAnnouncement: whiteout-planet-prepare-announcement
-    whiteoutAnnouncement: whiteout-planet-announcement
-    whiteoutFinalAnnouncement: whiteout-announcement-final
-    whiteoutEndAnnouncement: whiteout-announcement-end
 
 - type: gamePreset
   id: Whiteout
   name: whiteout-title
   showInVote: false
   description: whiteout-description
+  minPlayers: 10
   alias:
     - whiteout
   rules:
-  - BasicStationEventScheduler
   - SpaceTrafficControlEventScheduler
   - BasicRoundstartVariation
   - Whiteout
@@ -47,38 +35,12 @@
   name: whiteout-londoners-title
   showInVote: false
   description: whiteout-londoners-description
+  minPlayers: 15
   alias:
     - Londoners
     - WhiteoutRevolutionary
   rules:
-  - BasicStationEventScheduler
   - SpaceTrafficControlEventScheduler
   - BasicRoundstartVariation
   - Whiteout
-  - Revolutionary
-
-- type: gamePreset
-  id: WhiteoutPlanetMap
-  name: whiteout-title
-  showInVote: false
-  description: whiteout-planet-description
-  rules:
-  - BasicStationEventScheduler
-  - SpaceTrafficControlEventScheduler
-  - BasicRoundstartVariation
-  - WhiteoutPlanetMap
-
-- type: gamePreset
-  id: WhiteoutLondonersPlanetMap
-  name: whiteout-londoners-title
-  showInVote: false
-  description: whiteout-londoners-description
-  alias:
-    - PlanetMapLondoners
-    - PlanetMapWhiteoutRevolutionary
-  rules:
-  - BasicStationEventScheduler
-  - SpaceTrafficControlEventScheduler
-  - BasicRoundstartVariation
-  - WhiteoutPlanetMap
   - Revolutionary

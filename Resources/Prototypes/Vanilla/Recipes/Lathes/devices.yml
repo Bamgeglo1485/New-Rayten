@@ -33,3 +33,12 @@
     Plastic: 100
     Plasma: 50
     Silver: 50
+
+- type: latheRecipe
+  id: HeatLamp
+  result: HeatLamp
+  completetime: 10
+  materials:
+    Steel: 1200
+    Glass: 600
+    Uranium: 300

@@ -170,7 +170,7 @@
     - Fulton
     - FultonBeacon
     - HandheldPowerMonitorEmpty # Rayten
-  
+
 - type: technology
   id: MassExcavation
   name: research-technology-excavation
@@ -214,5 +214,6 @@
   recipeUnlocks:
   - PowerCellMicroreactor
   - PowerCellHyper
+  - HeatLamp # VANILLA-WHITEOUT
   technologyPrerequisites:
   - AdvancedPowercells

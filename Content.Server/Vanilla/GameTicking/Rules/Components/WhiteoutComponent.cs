@@ -21,19 +21,22 @@ public sealed partial class WhiteoutRuleComponent : Component
     public float WhiteoutPrepareTime = 3000f;
 
     [DataField, ViewVariables(VVAccess.ReadWrite)]
-    public float WhiteoutPrepareTemp = 253.15f;
+    public float WhiteoutPrepareTemp = 213.15f;
     [DataField, ViewVariables(VVAccess.ReadWrite)]
     public float WhiteoutTemp = 123.15f;
     [DataField, ViewVariables(VVAccess.ReadWrite)]
     public float WhiteoutFinalTemp = 23.15f;
 
     [DataField, ViewVariables(VVAccess.ReadWrite)]
-    public float WhiteoutPrepareStrength = 0.005f;
+    public float WhiteoutPrepareStrength = 0.008f;
     [DataField, ViewVariables(VVAccess.ReadWrite)]
-    public float WhiteoutStrength = 0.05f;
+    public float WhiteoutStrength = 0.045f;
     [DataField, ViewVariables(VVAccess.ReadWrite)]
-    public float WhiteoutFinalModifier = 1.5f;
+    public float WhiteoutFinalModifier = 1.3f;
 
+
+    [DataField]
+    public string PrestartWeather = "SnowfallMedium";
     [DataField]
     public string Weather = "SnowfallHeavy";
 

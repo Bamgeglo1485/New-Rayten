@@ -47,6 +47,7 @@
   - PowerCellMicroreactor
   - PowerCellHigh
   - PowerCellHyper
+  - HeatLamp
 
 - type: latheRecipePack
   id: ScienceWeapons
