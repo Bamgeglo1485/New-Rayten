@@ -83,9 +83,24 @@ public sealed class FaxSystem : EntitySystem
     {
         base.Update(frameTime);
 
+        //RAYTEN-FAX-INBLUESPACE
         var query = EntityQueryEnumerator<FaxMachineComponent, ApcPowerReceiverComponent>();
         while (query.MoveNext(out var uid, out var fax, out var receiver))
         {
+            // Сначала обновляем таймеры задержки у всех отложенных факсов, вне зависимости от питания
+            for (var i = fax.FaxesInBlueSpace.Count - 1; i >= 0; i--)
+            {
+                var pending = fax.FaxesInBlueSpace[i];
+                pending.TimeRemaining -= TimeSpan.FromSeconds(frameTime);
+
+                // Если время пришло, а питание есть — доставляем факс
+                if (pending.TimeRemaining <= TimeSpan.Zero && receiver.Powered)
+                {
+                    Receive(uid, pending.Printout, pending.FromAddress, fax);
+                    fax.FaxesInBlueSpace.RemoveAt(i);
+                }
+            }
+
             if (!receiver.Powered)
                 continue;
 
@@ -93,6 +108,7 @@ public sealed class FaxSystem : EntitySystem
             ProcessInsertingAnimation(uid, frameTime, fax);
             ProcessSendingTimeout(uid, frameTime, fax);
         }
+
     }
 
     private void ProcessPrintingAnimation(EntityUid uid, float frameTime, FaxMachineComponent comp)
@@ -297,14 +313,38 @@ public sealed class FaxSystem : EntitySystem
                     args.Data.TryGetValue(FaxConstants.FaxPaperPrototypeData, out string? prototypeId);
                     args.Data.TryGetValue(FaxConstants.FaxPaperLockedData, out bool? locked);
 
+
                     var printout = new FaxPrintout(content, name, label, prototypeId, stampState, stampedBy, locked ?? false);
-                    Receive(uid, printout, args.SenderAddress);
+                    //RAYTEN-START
+
+                    //Если документ без печати не отправляем его, это спам
+                    if (stampState == null && component.SpamFilter)
+                        return;
+
+                    args.Data.TryGetValue(FaxConstants.FaxSenderUidData, out EntityUid senderUid);
+                    bool isFarFax = false;
+                    var recieverMap = Transform(uid).MapID;
+                    var senderMap = Transform(senderUid).MapID;
+
+                    if (recieverMap != senderMap)
+                    {
+                        component.FaxesInBlueSpace.Add(new FaxInBlueSpace(
+                            uid,
+                            printout,
+                            args.SenderAddress,
+                            TimeSpan.FromMinutes(0.5)
+                        ));
+                    }
+                    else
+                    {
+                        Receive(uid, printout, args.SenderAddress);
+                    }
+                    //RAYTEN-END
 
                     break;
             }
         }
     }
-
     private void OnToggleInterface(EntityUid uid, FaxMachineComponent component, AfterActivatableUIOpenEvent args)
     {
         UpdateUserInterface(uid, component);
@@ -540,6 +580,8 @@ public sealed class FaxSystem : EntitySystem
             payload[FaxConstants.FaxPaperStampStateData] = paper.StampState;
             payload[FaxConstants.FaxPaperStampedByData] = paper.StampedBy;
         }
+
+        payload[FaxConstants.FaxSenderUidData] = uid;
 
         _deviceNetworkSystem.QueuePacket(uid, component.DestinationFaxAddress, payload);
 

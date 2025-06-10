@@ -44,13 +44,13 @@ public sealed class RequiresSkillSystem : EntitySystem
     {
         if (args.Handled)
             return;
-            
+
         if(!EntityManager.TryGetComponent<RequiresSkillComponent>(uid, out var Reqcomponent))
             return;
 
-        if(HasRequiredSkills(args.User, Reqcomponent, popup: _timing.IsFirstTimePredicted ))
+        if (HasRequiredSkills(args.User, Reqcomponent, popup: _timing.IsFirstTimePredicted ))
             return;
-            
+
         args.Handled = true;
     }
 
@@ -72,14 +72,14 @@ public sealed class RequiresSkillSystem : EntitySystem
     {
         if (uid != args.SlotEntity || args.Cancelled || args.User == null)
             return;
-            
+
         var hasSkills = HasRequiredSkills(args.User.Value, component, popup: _timing.IsFirstTimePredicted );
 
         var hasCraftSkills = !component.NeedCraftableSkills || HasRequiredSkillsForCraft(args.User.Value, component);
 
         if (hasSkills && hasCraftSkills)
             return;
-            
+
         args.Cancelled = true;
     }
     public bool HasRequiredSkills(EntityUid user, RequiresSkillComponent component, bool popup = true)
@@ -197,22 +197,22 @@ public sealed class RequiresSkillSystem : EntitySystem
                 if (_net.IsClient) _audio.PlayGlobal("/Audio/Vanilla/SkillSystem/meep-merp.ogg", Filter.Local(), false);
             }
             return false;
-        }  
+        }
         return true;
     }
-    
+
     public bool HasSkillLevel(EntityUid user, SkillLevel requiredLevel, Func<SkillComponent, SkillLevel> skillSelector)
     {
         return TryComp<SkillComponent>(user, out var skillComponent) && skillSelector(skillComponent) >= requiredLevel;
     }
 
     public bool HasEasySkill(EntityUid user, bool requiredEasySkill, Func<SkillComponent, bool> skillSelector)
-    {   
+    {
         if(!requiredEasySkill)
             return true;
 
         return TryComp<SkillComponent>(user, out var skillComponent) && skillSelector(skillComponent) == requiredEasySkill;
     }
 
-    
+
 }
