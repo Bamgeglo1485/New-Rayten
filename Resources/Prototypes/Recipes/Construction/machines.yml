@@ -76,6 +76,7 @@
 
 - type: construction
   id: LightSwitchDirectionalRecipe
+  name: construction-recipe-light-switch-directional
   graph: LightSwitchDirectionalGraph
   RequiresEngineeringLevel: 1
   startNode: start
@@ -91,6 +92,7 @@
 
 - type: construction
   id: SignalSwitchDirectionalRecipe
+  name: construction-recipe-signal-switch-directional
   graph: SignalSwitchDirectionalGraph
   RequiresEngineeringLevel: 1
   startNode: start
@@ -105,6 +107,7 @@
 
 - type: construction
   id: SignalButtonDirectionalRecipe
+  name: construction-recipe-signal-button-directional
   graph: SignalButtonDirectionalGraph
   RequiresEngineeringLevel: 1
   startNode: start
