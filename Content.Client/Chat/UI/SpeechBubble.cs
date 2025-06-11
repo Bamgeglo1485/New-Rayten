@@ -15,7 +15,7 @@ using Robust.Shared.Audio.Systems;
 using Robust.Shared.Audio;
 using Content.Client.Vanilla.VoiceSpeech;
 using Robust.Shared.Prototypes;
-
+using System.Text.RegularExpressions;
 namespace Content.Client.Chat.UI
 {
     public abstract class SpeechBubble : Control
@@ -66,7 +66,7 @@ namespace Content.Client.Chat.UI
         protected RichTextLabel? _textLabel;
         private string _fullText = "";
         private int _revealedLength;
-        private const float LetterDelay = 0.065f;
+        private const float LetterDelay = 0.05f;
         private float _accumulatedTime;
         private Color? _fontColor;
         private bool _wasBold = false;
@@ -76,9 +76,10 @@ namespace Content.Client.Chat.UI
             if (_fullText.Contains("[bold]") && _fullText.Contains("[/bold]"))
             {
                 _wasBold = true;
-                _fullText = _fullText.Replace("[bold]","").Replace("[/bold]","");
             }
-            _fullText = _fullText.Replace("[", "");
+            _fullText = _fullText.Replace("[bold]", "").Replace("[/bold]", "");
+            _fullText = Regex.Replace(_fullText, @"\[color=#(?:[0-9a-fA-F]{6}|[0-9a-fA-F]{8})\]", "");
+            _fullText = _fullText.Replace("[/color]", "");
 
             _fontColor = fontColor;
             _revealedLength = 0;
@@ -168,7 +169,9 @@ namespace Content.Client.Chat.UI
 
             if (!_entityManager.TryGetComponent<TransformComponent>(_senderEntity, out var xform) || xform.MapID != _eyeManager.CurrentEye.Position.MapId)
             {
-                Modulate = Color.White.WithAlpha(0);
+                // Modulate = Color.White.WithAlpha(0);
+                // return;
+                Timer.Spawn(0, Die);
                 return;
             }
             // RAYTEN-START
@@ -176,11 +179,17 @@ namespace Content.Client.Chat.UI
             {
                 var entMan = IoCManager.Resolve<IEntityManager>();
                 var speechsys = entMan.System<VoiceSpeechSystem>();
+
                 if (_textLabel != null && _revealedLength < _fullText.Length)
                 {
                     _accumulatedTime += args.DeltaSeconds;
 
-                    while (_accumulatedTime >= LetterDelay && _revealedLength < _fullText.Length)
+                    if (_accumulatedTime >= LetterDelay * (_fullText.Length - _revealedLength))
+                    {
+                        _revealedLength = _fullText.Length;
+                        speechsys.Beep(_senderEntity, comp);
+                    }
+                    else if (_accumulatedTime >= LetterDelay)
                     {
                         _accumulatedTime -= LetterDelay;
 
@@ -190,10 +199,10 @@ namespace Content.Client.Chat.UI
 
                         _revealedLength++;
                         _timeLeft += LetterDelay;
+
                         if (_revealedLength >= 55)
                         {
                             _revealedLength = _fullText.Length;
-                            break;
                         }
                     }
 
@@ -205,9 +214,7 @@ namespace Content.Client.Chat.UI
                     }
 
                     var formatted = FormatSpeech(visible, _fontColor);
-
                     formatted.AddMarkupOrThrow($"[color=#00000000]{hidden}[/color]");
-
                     _textLabel.SetMessage(formatted);
                 }
             }

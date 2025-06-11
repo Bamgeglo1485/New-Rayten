@@ -2,11 +2,18 @@ using Content.Server.GameTicking;
 using Content.Server.Station.Systems;
 using Content.Server.Spawners.Components;
 using Content.Server.Ghost.Roles.Components;
+using Content.Server.Administration.Logs;
 using Content.Server.Chat.Systems;
 using Content.Server.Vanilla.Jammer;
+using Content.Server.Communications;
+using Content.Server.Popups;
+using Content.Shared.Access.Systems;
+using Content.Shared.Access.Components;
+using Content.Shared.Communications;
 using Content.Shared.GameTicking;
 using Content.Shared.Ghost.Roles.Components;
 using Content.Shared.Storage;
+using Content.Shared.Database;
 using Robust.Server.Player;
 using Robust.Server.GameObjects;
 using Robust.Shared.Map;
@@ -25,6 +32,8 @@ public sealed class EventTeamSystem : EntitySystem
 {
     [Dependency] private readonly IPrototypeManager _prototypes = default!;
     [Dependency] private readonly IPlayerManager _playerManager = default!;
+    [Dependency] private readonly PopupSystem _popupSystem = default!;
+    [Dependency] private readonly AccessReaderSystem _accessReaderSystem = default!;
     [Dependency] private readonly MapSystem _mapsystem = default!;
     [Dependency] private readonly GameTicker _gameTicker = default!;
     [Dependency] private readonly MapLoaderSystem _map = default!;
@@ -33,12 +42,151 @@ public sealed class EventTeamSystem : EntitySystem
     [Dependency] private readonly ISerializationManager _serialization = default!;
     [Dependency] private readonly ChatSystem _chatSystem = default!;
     [Dependency] private readonly JammerSystem _jammer = default!;
+    [Dependency] private readonly IAdminLogManager _adminLogger = default!;
+    [Dependency] private readonly MetaDataSystem _metaData = default!;
+    [Dependency] private readonly StationSystem _stationSystem = default!;
     public override void Initialize()
     {
         base.Initialize();
+        SubscribeLocalEvent<CommunicationsConsoleComponent, CommunicationsConsoleCallERTMessage>(OnCallERTMessage);
+        SubscribeLocalEvent<StationERTComponent, MapInitEvent>(OnStationInit);
+        SubscribeLocalEvent<StationERTComponent, ComponentShutdown>(OnshipyardShutdown);
     }
 
-    public bool call(ProtoId<EventTeamPrototype> protoId, bool igonrejammer = false)
+    // Спавним верфь дсо
+    private void OnStationInit(EntityUid uid, StationERTComponent component, MapInitEvent args)
+    {
+
+        // Post mapinit? fancy
+        if (TryComp(component.Entity, out TransformComponent? xform))
+        {
+            component.MapEntity = xform.MapUid;
+            return;
+        }
+
+        AddShipyard(uid, component);
+    }
+    private void OnshipyardShutdown(EntityUid uid, StationERTComponent component, ComponentShutdown args)
+    {
+        ClearShipyard(component);
+    }
+    private void AddShipyard(EntityUid station, StationERTComponent component)
+    {
+        DebugTools.Assert(LifeStage(station) >= EntityLifeStage.MapInitialized);
+        if (component.MapEntity != null || component.Entity != null)
+        {
+            Log.Warning("Attempted to re-add an existing shipyard map.");
+            return;
+        }
+
+        // Check for existing shipyards and just point to that
+        var query = AllEntityQuery<StationERTComponent>();
+        while (query.MoveNext(out var otherComp))
+        {
+            if (otherComp == component)
+                continue;
+
+            if (!Exists(otherComp.MapEntity) || !Exists(otherComp.Entity))
+            {
+                Log.Error($"Discovered invalid Shipyard component?");
+                ClearShipyard(otherComp);
+                continue;
+            }
+
+            component.MapEntity = otherComp.MapEntity;
+            component.Entity = otherComp.Entity;
+            return;
+        }
+
+        if (string.IsNullOrEmpty(component.Map.ToString()))
+        {
+            Log.Warning("No Shipyard map found, skipping setup.");
+            return;
+        }
+
+        var map = _mapsystem.CreateMap(out var mapId);
+        if (!_map.TryLoadGrid(mapId, component.Map, out var grid))
+        {
+            Log.Error($"Failed to set up Shipyard grid!");
+            return;
+        }
+
+        if (!Exists(map))
+        {
+            Log.Error($"Failed to set up Shipyard map!");
+            QueueDel(grid);
+            return;
+        }
+
+        if (!Exists(grid))
+        {
+            Log.Error($"Failed to set up Shipyard grid!");
+            QueueDel(map);
+            return;
+        }
+
+        var xform = Transform(grid.Value);
+        if (xform.ParentUid != map || xform.MapUid != map)
+        {
+            Log.Error($"Shipyard grid is not parented to its own map?");
+            QueueDel(map);
+            QueueDel(grid);
+            return;
+        }
+
+        component.MapEntity = map;
+        _metaData.SetEntityName(map, Loc.GetString("map-name-Shipyard"));
+        component.Entity = grid;
+        Log.Info($"Created Shipyard grid {ToPrettyString(grid)} on map {ToPrettyString(map)} for station {ToPrettyString(station)}");
+    }
+
+    private void ClearShipyard(StationERTComponent component)
+    {
+        QueueDel(component.Entity);
+        QueueDel(component.MapEntity);
+        component.Entity = null;
+        component.MapEntity = null;
+        component.ERTCalled = false;
+    }
+
+    private void OnCallERTMessage(EntityUid uid, CommunicationsConsoleComponent comp, CommunicationsConsoleCallERTMessage message)
+    {
+        var user = message.Actor;
+        if (TryComp<AccessReaderComponent>(uid, out var accessReaderComponent))
+        {
+            if (!_accessReaderSystem.IsAllowed(user, uid, accessReaderComponent))
+            {
+                _popupSystem.PopupEntity(Loc.GetString("comms-console-permission-denied"), uid, message.Actor);
+                return;
+            }
+        }
+        var ev = new CommunicationConsoleCallShuttleAttemptEvent(uid, comp, user);
+        RaiseLocalEvent(ref ev);
+        if (ev.Cancelled)
+        {
+            _popupSystem.PopupEntity(ev.Reason ?? Loc.GetString("comms-console-shuttle-unavailable"), uid, message.Actor);
+            return;
+        }
+        var station = _stationSystem.GetOwningStation(uid);
+        if (!TryComp<StationERTComponent>(station, out var ertcomp))
+        {
+            _popupSystem.PopupEntity(Loc.GetString("comms-console-ert-protoerror"), uid, message.Actor);
+            return;
+        }
+
+        if (ertcomp.ERTCalled)
+        {
+            _popupSystem.PopupEntity(Loc.GetString("comms-console-ert-alreadycalled"), uid, message.Actor);
+            return;
+        }
+
+        call("ERT", ertcomp.Entity);
+        ertcomp.ERTCalled = true;
+
+        _adminLogger.Add(LogType.Action, LogImpact.Extreme, $"{ToPrettyString(user):player} has called ERT");
+    }
+
+    public bool call(ProtoId<EventTeamPrototype> protoId, EntityUid? shipyard, bool igonrejammer = false)
     {
         if (!_prototypes.TryIndex(protoId, out var prototype))
         {
@@ -60,38 +208,25 @@ public sealed class EventTeamSystem : EntitySystem
             return false;
         }
 
-        var shuttle = SpawnShuttle(prototype.ShuttlePath);
-        if (shuttle == null)
+        if (shipyard == null)
         {
-            Logger.Error($"Не удалось заспавнить шаттл.");
+            Logger.Error($"Верфи ДСО не существует");
             return false;
         }
 
-        SpawnEventRoles(prototype, shuttle.Value);
+        SpawnEventRoles(prototype, shipyard.Value);
         DispatchAnnouncement(prototype);
 
         return true;
     }
 
-    private EntityUid? SpawnShuttle(string shuttlePath)
-    {
-        _mapsystem.CreateMap(out var mapId);
-        var opts = DeserializationOptions.Default with {InitializeMaps = true};
-        if (!_map.TryLoadGrid(mapId, new ResPath(shuttlePath), out var grid, opts))
-        {
-            return null;
-        }
-
-        return grid;
-    }
-
-    private void SpawnEventRoles(EventTeamPrototype proto, EntityUid shuttle)
+    private void SpawnEventRoles(EventTeamPrototype proto, EntityUid shipyard)
     {
         var query = EntityQueryEnumerator<SpawnPointComponent, MetaDataComponent, TransformComponent>();
         var Regularmarkers = new List<EntityCoordinates>();
         while (query.MoveNext(out _, out var meta, out var trans))
         {
-            if (trans.GridUid != shuttle)
+            if (trans.GridUid != shipyard)
                 continue;
 
             if (meta.EntityPrototype!.ID == "MarkerEventRegularRole")
@@ -101,9 +236,9 @@ public sealed class EventTeamSystem : EntitySystem
 
         }
         if (Regularmarkers.Count == 0)
-            Regularmarkers.Add(Transform(shuttle).Coordinates);
+            Regularmarkers.Add(Transform(shipyard).Coordinates);
 
-        SpawnSpecialUnits(proto, shuttle);
+        SpawnSpecialUnits(proto, shipyard);
         SpawnRegularUnits(proto, Regularmarkers);
     }
 

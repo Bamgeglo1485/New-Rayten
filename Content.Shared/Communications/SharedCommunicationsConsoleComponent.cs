@@ -72,6 +72,13 @@ namespace Content.Shared.Communications
     public sealed class CommunicationsConsoleRecallEmergencyShuttleMessage : BoundUserInterfaceMessage
     {
     }
+    //rayten-start
+    [Serializable, NetSerializable]
+    public sealed class CommunicationsConsoleCallERTMessage : BoundUserInterfaceMessage
+    {
+    }
+
+    //rayten-end
 
     [Serializable, NetSerializable]
     public enum CommunicationsConsoleUiKey
