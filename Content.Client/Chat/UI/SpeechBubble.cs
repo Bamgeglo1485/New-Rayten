@@ -203,7 +203,7 @@ namespace Content.Client.Chat.UI
                             speechsys.Beep(_senderEntity, comp);
 
                         _revealedLength++;
-                        _timeLeft += LetterDelay;
+                        timeLeft += LetterDelay;
 
                         if (_revealedLength >= 55)
                         {
