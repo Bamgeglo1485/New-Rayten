@@ -137,7 +137,7 @@ public sealed class EventTeamSystem : EntitySystem
         component.MapEntity = map;
         _metaData.SetEntityName(map, Loc.GetString("map-name-Shipyard"));
         component.Entity = grid;
-        Log.Info($"Created Shipyard grid {ToPrettyString(grid)} on map {ToPrettyString(map)} for station {ToPrettyString(station)}");
+        Log.Info($"Создана вервь ДСО, грид {ToPrettyString(grid)} на карте {ToPrettyString(map)} для станции {ToPrettyString(station)}");
     }
 
     private void ClearShipyard(StationERTComponent component)
@@ -180,9 +180,15 @@ public sealed class EventTeamSystem : EntitySystem
             return;
         }
 
-        call("ERT", ertcomp.Entity);
+        station.Value.SpawnTimer(TimeSpan.FromMinutes(10f), () => call("ERT", ertcomp.Entity));
+
         ertcomp.ERTCalled = true;
 
+        var sender = Loc.GetString("chat-manager-sender-announcement");
+        _chatSystem.DispatchGlobalAnnouncement(
+            Loc.GetString("comms-console-ert-call"),
+            sender
+        );
         _adminLogger.Add(LogType.Action, LogImpact.Extreme, $"{ToPrettyString(user):player} has called ERT");
     }
 
@@ -215,8 +221,18 @@ public sealed class EventTeamSystem : EntitySystem
         }
 
         SpawnEventRoles(prototype, shipyard.Value);
-        DispatchAnnouncement(prototype);
 
+        if (prototype.AnnouncementText == null)
+            return true;
+
+        var sender = prototype.Sender != null ? Loc.GetString(prototype.Sender) : Loc.GetString("chat-manager-sender-announcement");
+        _chatSystem.DispatchGlobalAnnouncement(
+            Loc.GetString(prototype.AnnouncementText),
+            sender,
+            playSound: true,
+            prototype.Sound,
+            prototype.AnnouncementColor
+        );
         return true;
     }
 
@@ -310,19 +326,4 @@ public sealed class EventTeamSystem : EntitySystem
 
         return uid;
     }
-    private void DispatchAnnouncement(EventTeamPrototype proto)
-    {
-        if(proto.AnnouncementText == null)
-            return;
-        var sender = proto.Sender != null ? Loc.GetString(proto.Sender) : Loc.GetString("chat-manager-sender-announcement");
-        _chatSystem.DispatchGlobalAnnouncement(
-            Loc.GetString(proto.AnnouncementText),
-            sender,
-            playSound: true,
-            proto.Sound,
-            proto.AnnouncementColor
-        );
-    }
-
-
 }
