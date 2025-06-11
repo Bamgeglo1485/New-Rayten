@@ -144,10 +144,9 @@ public sealed class WhiteoutRuleSystem : GameRuleSystem<WhiteoutRuleComponent>
                 }
                 else
                 {
-                    var prepareTemp = comp.WhiteoutPrepareTemp * (comp.TimeActive / comp.WhiteoutPrepareTime);
-                    var prepareStrength = comp.WhiteoutPrepareStrength * (comp.TimeActive / comp.WhiteoutPrepareTime);
+                    float prepareStrength = comp.WhiteoutPrepareStrength * (comp.TimeActive / comp.WhiteoutPrepareTime);
 
-                    Freeze(prepareTemp, prepareStrength, comp.ActiveMapId);
+                    Freeze(comp.WhiteoutPrepareTemp, prepareStrength, comp.ActiveMapId);
 
                     if (comp.TimeActive >= comp.WhiteoutPrepareTime - 240f & !comp.PrestartPlayed)
                     {
@@ -174,6 +173,7 @@ public sealed class WhiteoutRuleSystem : GameRuleSystem<WhiteoutRuleComponent>
                 {
                     var damage = new DamageSpecifier();
                     damage.DamageDict.Add("Blunt", FixedPoint2.New(130));
+
                     //лампы
                     var lampQuery = EntityQueryEnumerator<PoweredLightComponent, TransformComponent>();
                     while (lampQuery.MoveNext(out var lampEnt, out var light, out var xform))
@@ -282,7 +282,7 @@ public sealed class WhiteoutRuleSystem : GameRuleSystem<WhiteoutRuleComponent>
         _audio.PlayGlobal(comp.WhiteoutAlarmSound, Filter.Broadcast(), true);
     }
 
-        // Действия при конце
+    // Действия при конце
     private void EndWhiteout(EntityUid uid, WhiteoutRuleComponent comp, GameRuleComponent rule)
     {
         SetWeather(comp, "null");
@@ -344,27 +344,26 @@ public sealed class WhiteoutRuleSystem : GameRuleSystem<WhiteoutRuleComponent>
     // Убирание или добавление резистов скафов
     private void ChangeHardsuitProtection(bool remove)
     {
-        var query = EntityQueryEnumerator<TagComponent>();
-        while (query.MoveNext(out var uid, out _))
+        var query = EntityQueryEnumerator<PressureProtectionComponent, TemperatureProtectionComponent>();
+        while (query.MoveNext(out var uid, out _, out var huy))
         {
-            if (_tagSystem.HasTag(uid, "Hardsuit"))
+            if (!_tagSystem.HasTag(uid, "Hardsuit"))
+                return;
+
+            if (remove)
             {
-                if (remove)
-                {
-                    RemComp<TemperatureProtectionComponent>(uid);
-                    RemComp<PressureProtectionComponent>(uid);
-                }
-                else
-                {
-                    AddComp<TemperatureProtectionComponent>(uid);
-                    var pressureProtection = AddComp<PressureProtectionComponent>(uid);
-                    pressureProtection.LowPressureMultiplier = 1000f;
-                    pressureProtection.HighPressureMultiplier = 0.3f;
-                }
+                RemComp<TemperatureProtectionComponent>(uid);
+                RemComp<PressureProtectionComponent>(uid);
+            }
+            else
+            {
+                AddComp<TemperatureProtectionComponent>(uid);
+                var pressureProtection = AddComp<PressureProtectionComponent>(uid);
+                pressureProtection.LowPressureMultiplier = 1000f;
+                pressureProtection.HighPressureMultiplier = 0.3f;
             }
         }
     }
-
 
     // Взрыв смэсов
     private void ExplodeSmes(EntityUid ActiveMapUid, MapId ActiveMapId)
@@ -376,7 +375,7 @@ public sealed class WhiteoutRuleSystem : GameRuleSystem<WhiteoutRuleComponent>
         while (query.MoveNext(out var uid, out _, out var xform))
         {
             if (xform.MapID == ActiveMapId && CheckTileTemperature(uid, 133.15f))
-                _boom.QueueExplosion( uid, "Cryo", 200, 10, 200 );
+                _boom.QueueExplosion(uid, "Cryo", 200, 10, 200);
         }
     }
 

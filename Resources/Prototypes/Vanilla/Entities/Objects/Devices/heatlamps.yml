@@ -60,7 +60,7 @@
     moleRatio: 0
     tileHeatStrength: 0
     heatMaxTemp: 313.15
-    bodyHeatStrength: 3000
+    bodyHeatStrength: 3500
     onlyWeared: true
 
 - type: entity
@@ -86,4 +86,4 @@
     moleRatio: 0.025
     tileHeatStrength: 1.5
     heatMaxTemp: 313.15
-    bodyHeatStrength: 2500
+    bodyHeatStrength: 3000
