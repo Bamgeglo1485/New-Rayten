@@ -6,14 +6,21 @@ namespace Content.Shared.Vanilla.TDMRoundEnd;
 [RegisterComponent]
 public sealed partial class TDMMarkerComponent : Component
 {
-    [DataField("team")]
-    public bool Team = true; //1-red 0-blue
+    [DataField]
+    public EntityUid? RuleLink = null;
 
+    [DataField]
+    public bool Team = true;
+
+    [DataField]
     public int TotalKills = 0;
+    
+    [DataField]
     public FixedPoint2 TotalDamage = new();
-    [DataField("damage")] public DamageSpecifier Damage = new()
+
+    public DamageSpecifier Damage = new()
     {
-        DamageDict = new ()
+        DamageDict = new()
         {
             { "Poison", 1200 }
         }

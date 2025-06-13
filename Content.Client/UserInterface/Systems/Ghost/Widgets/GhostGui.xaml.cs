@@ -14,6 +14,7 @@ public sealed partial class GhostGui : UIWidget
     public event Action? RequestWarpsPressed;
     public event Action? ReturnToBodyPressed;
     public event Action? GhostRolesPressed;
+    public event Action? TDMArenaButtonPressed;
     private int _prevNumberRoles;
 
     public GhostGui()
@@ -23,6 +24,8 @@ public sealed partial class GhostGui : UIWidget
         TargetWindow = new GhostTargetWindow();
 
         MouseFilter = MouseFilterMode.Ignore;
+
+        TDMArenaButton.OnPressed += _ => TDMArenaButtonPressed?.Invoke();//RAYTEN
 
         GhostWarpButton.OnPressed += _ => RequestWarpsPressed?.Invoke();
         ReturnToBodyButton.OnPressed += _ => ReturnToBodyPressed?.Invoke();
@@ -54,7 +57,23 @@ public sealed partial class GhostGui : UIWidget
 
         TargetWindow.Populate();
     }
-
+    public void TDMUpdate(TimeSpan TimeToNewCycle, int tdmwannajoin)
+    {
+        //Rayten-start
+        if (TimeToNewCycle <= TimeSpan.FromSeconds(-1))
+        {
+            TDMArenaButton.Text = Loc.GetString("TDM-NotAvailable");
+            TDMArenaButton.Disabled = true;
+        }
+        else
+        {
+            int blueguys = (tdmwannajoin % 2 == 1) ? tdmwannajoin / 2 + 1 : tdmwannajoin / 2;
+            int redguys = tdmwannajoin / 2;
+            TDMArenaButton.Text = Loc.GetString("TDM-Available", ("blueguys", blueguys), ("redguys", redguys), ("timer", TimeToNewCycle));
+            TDMArenaButton.Disabled = false;
+        }
+        //Rayten-end
+    }
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);

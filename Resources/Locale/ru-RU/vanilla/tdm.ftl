@@ -17,3 +17,10 @@ tdm-gameover =
         [true] Победа красной команды!
        *[other] Ничья :c
     }
+    Лучшие игроки:
+    { $result }
+    { $result1 }
+    { $result2 }
+    { $result3 }
+TDM-NotAvailable = TDM
+TDM-Available = TDM { $blueguys } VS { $redguys } ({ $timer})

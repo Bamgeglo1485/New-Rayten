@@ -1,4 +1,4 @@
-﻿using Content.Server.GameTicking;
+using Content.Server.GameTicking;
 using Content.Server.Mind;
 using Content.Server.Station.Systems;
 using Content.Server.Spawners.Components;
@@ -14,6 +14,8 @@ using Content.Shared.Damage;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.IdentityManagement;
+using Content.Shared.Vanilla.TDM;
+using Content.Shared.Ghost;
 using Robust.Server.GameObjects;
 using Robust.Shared.Utility;
 using Robust.Server.Player;
@@ -29,16 +31,15 @@ using Robust.Shared.Configuration;
 using Timer = Robust.Shared.Timing.Timer;
 using Robust.Shared.Player;
 using Robust.Shared.Random;
+using System.Linq;
 
 namespace Content.Server.Vanilla.TDM;
 
 public sealed class TDMSystem : EntitySystem
 {
-
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
+    record PlayerStats(string Name, int Kills, float Damage);
     [Dependency] private readonly MapSystem _mapSystem = default!;
     [Dependency] private readonly MapLoaderSystem _mapLoader = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
     [Dependency] private readonly GameTicker _gameTicker = default!;
     [Dependency] private readonly IGameTiming _gameTiming = default!;
     [Dependency] private readonly MindSystem _mindSystem = default!;
@@ -49,205 +50,334 @@ public sealed class TDMSystem : EntitySystem
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly ChatSystem _chatSystem = default!;
     [Dependency] private readonly DamageableSystem _damageable = default!;
+    [Dependency] private readonly SharedGhostSystem _ghosts = default!;
 
-    private int Blueguys = 0;
-    private int Redguys = 0;
-    private bool onlyonecycle = false;
-    private bool firstblood = false;
-    private MapId? _arenaMapId = null;
-    private EntityUid? PreviousGrid = null;
-    private EntityUid? TDMUID = null;
+    EntityUid? Currentrule = null;
+    
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<TDMMarkerComponent, DamageChangedEvent>(OnDamageChanged, before: [typeof(MobThresholdSystem)]);
-        SubscribeLocalEvent<TDMMarkerComponent, DamageModifyEvent>(OnDamageModify);
-        SubscribeLocalEvent<TDMMarkerComponent, MobStateChangedEvent>(OnMobStateChanged);
-        SubscribeLocalEvent<RoundStartedEvent>(OnRoundStarted);
-        SubscribeLocalEvent<TDMRuleComponent, NewTDMCycleEvent>(NewCycle);
+        SubscribeLocalEvent<TDMMarkerComponent, DamageChangedEvent>(OnDamageChanged, before: [typeof(MobThresholdSystem)]); //записываем урон который нанесли
+        SubscribeLocalEvent<TDMMarkerComponent, DamageModifyEvent>(OnDamageModify);    //НО-френдлифаер
+        SubscribeLocalEvent<TDMMarkerComponent, MobStateChangedEvent>(OnMobStateChanged); //Вычёркиваем
+
+        SubscribeLocalEvent<TDMRuleComponent, MapInitEvent>(OnRuleInit);//новый геймрул кайф
+        SubscribeLocalEvent<TDMRuleComponent, ComponentShutdown>(OnRuleShutDown); // это конец
+
+        SubscribeNetworkEvent<TDMInfoRequest>(OnInfoRequest); //Пользователь запросил инфы
+        SubscribeNetworkEvent<TPMeToTDMEvent>(OnArenaJoinRequest); //Пользователь захотел зайти на арену
     }
+    private void OnArenaJoinRequest(TPMeToTDMEvent msg, EntitySessionEventArgs args)
+    {
+        var session = args.SenderSession;
+
+        if (session == null || Currentrule == null)
+            return;
+
+        if (!TryComp<TDMRuleComponent>(Currentrule, out var rule))
+            return;
+
+        if (rule.CurrentStatus != TDMStatus.awaitstart)
+            return;
+
+        if (rule.Players.Contains(session))
+            return;
+
+        rule.Playercount++;
+        rule.Players.Add(session);
+        //Сообщаем о том что добавился новый игрок
+        var info = new TDMInformation(rule.Playercount, rule.TimeForPlayersJoin, rule.CurrentStatus == TDMStatus.awaitstart);
+        RaiseNetworkEvent(info, Filter.Broadcast());
+
+        if (session.AttachedEntity != null)
+            _ghosts.SetCanReturnToBody(session.AttachedEntity.Value, false);
+
+    }
+    private void OnInfoRequest(TDMInfoRequest msg, EntitySessionEventArgs args)
+    {
+        if (Currentrule != null)
+        {
+            if (!TryComp<TDMRuleComponent>(Currentrule, out var rule))
+                return;
+
+            var response = new TDMInformation(rule.Playercount, rule.TimeForPlayersJoin, rule.CurrentStatus == TDMStatus.awaitstart);
+            RaiseNetworkEvent(response, Filter.SinglePlayer(args.SenderSession));
+        }
+    }
+
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
         var currentTime = _gameTiming.CurTime;
 
-        if (TDMUID == null)
-            return;
-
-        if (!TryComp<TDMRuleComponent>(TDMUID.Value, out var rule))
-            return;
-
-        if (currentTime < rule.NextUpdate)
-            return;
-
-        // Обновляем таймер на следующий апдейт
-        rule.NextUpdate = currentTime + TimeSpan.FromSeconds(1);
-
-        rule.TimeOnNewCycle += TimeSpan.FromSeconds(1);
-
-        // Обратный отсчёт
-        if (!rule.CountdownPlayed && rule.TimeOnNewCycle >= TimeSpan.FromSeconds(19.5))
-        {
-            rule.CountdownPlayed = true;
-            if (Redguys <= 0 || Blueguys <= 0)
-            {
-                GameOver();
-                return;
-            }
-            var allPlayersInGame = Filter.Empty().AddWhere(_gameTicker.UserHasJoinedGame);
-            _audio.PlayGlobal("/Audio/Vanilla/Effects/TDM/counting.ogg", allPlayersInGame, true);
-        }
-
-        // Пора запустить новый цикл
-        if (!rule.GameOverPlayed && rule.TimeOnNewCycle >= rule.TimeToNewCycle)
-        {
-            rule.GameOverPlayed = true;
-            GameOver();
-        }
-    }
-
-    private void NewCycle(EntityUid uid, TDMRuleComponent rule, NewTDMCycleEvent args)
-    {
-        TDMUID = uid;
-        rule.TimeOnNewCycle = TimeSpan.FromSeconds(0);
-        rule.GameOverPlayed = false;
-        rule.CountdownPlayed = false;
-        Blueguys = 0;
-        Redguys = 0;
-        onlyonecycle = rule.OnlyOneCycle;
-
-        int playerCount = 0;
-        bool odd = false;
-        bool team = false; //1 - red 0 - blue
-
-        //считаем количество игроков
-        foreach (var session in _playerManager.Sessions)
-        {
-            if (!session.AttachedEntity.HasValue)
-                continue;
-            playerCount++;
-        }
-        if (playerCount % 2 == 1)
-        {
-            odd = true;
-            playerCount -= 1;
-        }
-        firstblood = false;
-
-        //выбираем рандомный прототип арены и спавним грид арены
-        var proto = PickRandomArena(playerCount);
-        if (proto == null)
-        {
-            Log.Error($"Не удалось найти никакой подходящей карты");
-            _gameTicker.RestartRound();
-            return;
-        }
-
-        var arena = SpawnArena(proto.ArenaPath);
-
-        if (arena == null)
-        {
-            Log.Error($"Арена не заспавнилась.");
-            _gameTicker.RestartRound();
-            return;
-        }
-
-        HashSet<EntityUid> usedspawners = new();
-        //Манипуляции с игроками
-        var sessions = _playerManager.Sessions;
-        _random.Shuffle(sessions);
-        foreach (var session in sessions)
-        {
-            if (!session.AttachedEntity.HasValue)
-                continue;
-
-            if (odd)
-            {
-                odd = false;
-                continue;
-            }
-            var entityId = tptoarena(session, arena.Value, team, usedspawners);
-            AddComp<AdminFrozenComponent>(entityId);
-
-            if (team)
-                Redguys++;
-            else
-                Blueguys++;
-
-            var marker = EnsureComp<TDMMarkerComponent>(entityId);
-            marker.Team = team;
-
-            entityId.SpawnTimer(TimeSpan.FromSeconds(30), () => RemComp<AdminFrozenComponent>(entityId));
-            fuckskills(entityId);
-            _loadout.Equip(entityId, team ? proto.RedTeamGear : proto.BlueTeamGear, null);
-            //меняем команду для следующего игрока
-            team = !team;
-        }
-        PreviousGrid = arena;
-    }
-    private void GameOver()
-    {
-        QueueDel(PreviousGrid);
-        if (TDMUID == null)
-            return;
-
-        if (onlyonecycle)
-        {
-            Timer.Spawn(TimeSpan.FromSeconds(5), () => _gameTicker.RestartRound());
-        }
-        else
-        {
-            Timer.Spawn(TimeSpan.FromSeconds(10), () => RaiseLocalEvent(TDMUID.Value, new NewTDMCycleEvent()));
-        }
-
-        bool winner = Blueguys > Redguys ? false : true;
-
-        if (Blueguys == Redguys)
-            _chatSystem.DispatchGlobalAnnouncement(
-                Loc.GetString("tdm-gameover", ("winner", "other")),
-                Loc.GetString("tdm-announcer"),
-                playSound: false,
-                null,
-                Color.Green
-            );
-        else
-            _chatSystem.DispatchGlobalAnnouncement(
-                Loc.GetString("tdm-gameover", ("winner", winner)),
-                Loc.GetString("tdm-announcer"),
-                playSound: false,
-                null,
-                winner ? Color.Red : Color.DodgerBlue
-            );
-    }
-    private void OnRoundStarted(RoundStartedEvent ev)
-    {
-        EntityUid? lastid = null;
         var query = EntityQueryEnumerator<TDMRuleComponent>();
         while (query.MoveNext(out var uid, out var rule))
         {
-            lastid = uid;
-        }
+            if (currentTime < rule.NextUpdate)
+                continue;
 
-        if (lastid != null)
-        {
-            _arenaMapId = null;
-            TDMUID = lastid;
-            RaiseLocalEvent(lastid.Value, new NewTDMCycleEvent());
+            rule.NextUpdate = currentTime + TimeSpan.FromSeconds(1);
+
+            // ожидаем начала, собираем заявки
+            if (rule.CurrentStatus == TDMStatus.awaitstart)
+            {
+                //Количество игроков меньше 2 не трогаем ваще
+                if (rule.Playercount < 2)
+                {
+                    rule.TimeForPlayersJoin = TimeSpan.FromSeconds(60f);
+                    return;
+                }
+
+                if (rule.TimeForPlayersJoin > TimeSpan.FromSeconds(0))
+                {
+                    rule.TimeForPlayersJoin -= TimeSpan.FromSeconds(1); //обратный отсчёт
+
+                    return;
+                }
+                else
+                {
+                    rule.CurrentStatus = TDMStatus.startup; //время на сбор заявок вышло, спавним игроков
+
+                }
+            }
+
+            //Начали раунд, спавним всех кто пожелал поучаствовать
+            if (rule.CurrentStatus == TDMStatus.startup)
+            {
+                //Сообщаем о том что всё конец сбора заявок парни
+                var msg = new TDMInformation(rule.Playercount, rule.TimeForPlayersJoin, rule.CurrentStatus == TDMStatus.awaitstart);
+                RaiseNetworkEvent(msg, Filter.Broadcast());
+
+                HashSet<EntityUid> usedspawners = new();
+
+                //Желающих оказалось меньше чем два игрока, поэтому досрочно завершаем цикл
+                if (rule.Playercount < 2)
+                {
+                    GameOver(uid, rule);
+                    return;
+                }
+
+                var arena = SpawnArena(rule.Playercount, rule);
+
+                if (arena == null)
+                {
+                    Log.Error("не удалось заспавнить арену для тдма");
+                    return;
+                }
+
+                rule.Arena = arena.Value;
+
+                bool odd = (rule.Playercount % 2 == 1) ? true : false;
+
+                //проходим по всем игрокам и закидываем их на арену
+                foreach (var player in rule.Players)
+                {
+                    if (!player.AttachedEntity.HasValue)
+                        continue;
+
+                    if (odd)
+                    {
+                        odd = false;
+                        continue;
+                    }
+
+                    var spawner = AddPlayerToArena(player, uid, usedspawners);
+
+                    if (spawner != null)
+                        usedspawners.Add(spawner.Value);
+
+                    //меняем команду для следующего игрока
+                    rule.NextTeam = !rule.NextTeam;
+                }
+                rule.CurrentStatus = TDMStatus.countdown; //Вот теперь матч реально начался
+            }
+
+            rule.TimeOnNewCycle += TimeSpan.FromSeconds(1);
+
+            //обратный отсчёт
+            if (rule.CurrentStatus == TDMStatus.countdown)
+            {
+                if (rule.TimeOnNewCycle <= TimeSpan.FromSeconds(19.5))
+                {
+                    return;
+                }
+                else
+                {
+                    //запускаем обратный отсчёт
+                    var filter = Filter.Empty().AddPlayers(rule.Players);
+                    _audio.PlayGlobal("/Audio/Vanilla/Effects/TDM/counting.ogg", filter, true);
+                    rule.CurrentStatus = TDMStatus.unfreeze;
+                }
+            }
+
+            //Размораживаем игроков и начинаем пвпшиться
+            if (rule.CurrentStatus == TDMStatus.unfreeze && rule.TimeOnNewCycle >= TimeSpan.FromSeconds(30))
+            {
+                rule.Firstblooded = false;
+
+                foreach (var player in rule.Players)
+                {
+                    if (!player.AttachedEntity.HasValue)
+                        continue;
+
+                    RemComp<AdminFrozenComponent>(player.AttachedEntity.Value);
+                }
+                rule.CurrentStatus = TDMStatus.started;
+            }
+
+            // Пора запустить новый цикл
+            if (rule.CurrentStatus == TDMStatus.started && rule.TimeOnNewCycle >= rule.TimeToNewCycle)
+            {
+                rule.CurrentStatus = TDMStatus.ended;
+                GameOver(uid, rule);
+            }
         }
     }
 
-    private void OnDamageModify(EntityUid uid, TDMMarkerComponent component, DamageModifyEvent args)
+    //обновляем все значения
+    public void NewCycle(EntityUid uid, TDMRuleComponent rule)
     {
-        if (!TryComp<TDMMarkerComponent>(args.Origin, out var sourcecomp))
-            return;
-
-        if (component.Team != sourcecomp.Team)
-            return;
-
-        // Полностью обнуляем урон
-        args.Damage = new DamageSpecifier();
+        rule.Players = new(); //Сбрасываем предыдущих пользователей
+        rule.Playercount = 0;
+        rule.CurrentStatus = TDMStatus.awaitstart; //начинаем собирать игроков в раунд
+        rule.TimeForPlayersJoin = TimeSpan.FromMinutes(1f); //1 минута на участие
+        rule.TimeOnNewCycle = TimeSpan.FromSeconds(0);
+        //Сообщаем о том что начался новый цикл
+        var msg = new TDMInformation(rule.Playercount, rule.TimeForPlayersJoin, rule.CurrentStatus == TDMStatus.awaitstart);
+        RaiseNetworkEvent(msg, Filter.Broadcast());
     }
 
+    /// <summary>
+    /// Завершает пизделку, сообщает кто победил, запускает новый цикл, если это не ласт раунд
+    /// </summary>
+    private void GameOver(EntityUid uid, TDMRuleComponent rule, bool notstartnewcycle = false)
+    {
+        var redguys = rule.PlayerCharacters.Count(p => p.Value == true);
+        var blueguys = rule.PlayerCharacters.Count(p => p.Value == false);
+
+        bool winner = blueguys > redguys ? false : true;
+        List<PlayerStats> statsList = new();
+
+        foreach (var (player, _) in rule.PlayerCharacters)
+        {
+            if (!TryComp<TDMMarkerComponent>(uid, out var marker))
+                continue;
+
+            var name = MetaData(uid).EntityName;
+            int kills = marker.TotalKills;
+            float damage = marker.TotalDamage.Float();
+
+            statsList.Add(new PlayerStats(name, kills, damage));
+        }
+
+        var sorted = statsList.OrderByDescending(s => s.Kills).ToList();
+
+        var result = "Имя | Убийства | Урон";
+        var resultList = sorted.Take(3)
+            .Select(s => $"{s.Name} | {s.Kills} | {s.Damage:F1}")
+            .ToList();
+
+
+        if (blueguys == redguys)
+            _chatSystem.DispatchFilteredAnnouncement(
+                Filter.Empty().AddPlayers(rule.Players),
+                Loc.GetString("tdm-gameover",
+                    ("winner", "other"),
+                    ("result", result),
+                    ("result1", resultList.ElementAtOrDefault(0) ?? ""),
+                    ("result2", resultList.ElementAtOrDefault(1) ?? ""),
+                    ("result3", resultList.ElementAtOrDefault(2) ?? "")),
+                source: null,
+                Loc.GetString("tdm-announcer"),
+                playSound: false,
+                announcementSound: null,
+                Color.Green
+            );
+        else
+            _chatSystem.DispatchFilteredAnnouncement(
+                Filter.Empty().AddPlayers(rule.Players),
+                Loc.GetString("tdm-gameover",
+                    ("winner", winner),
+                    ("result", result),
+                    ("result1", resultList.ElementAtOrDefault(0) ?? ""),
+                    ("result2", resultList.ElementAtOrDefault(1) ?? ""),
+                    ("result3", resultList.ElementAtOrDefault(2) ?? "")),
+                source: null,
+                Loc.GetString("tdm-announcer"),
+                playSound: false,
+                announcementSound: null,
+                winner ? Color.Red : Color.DodgerBlue
+            );
+
+
+        QueueDel(rule.Arena); //Удаляем прошлую арену
+
+        if (rule.LastRound)
+        {
+            Timer.Spawn(TimeSpan.FromSeconds(3), () => _gameTicker.RestartRound());
+            return;
+        }
+
+        if (!notstartnewcycle)
+            NewCycle(uid, rule);
+    }
+
+    //Метод добавляет игрока на арену, возвращает спавн, на котором игрок был заспавнен
+    public EntityUid? AddPlayerToArena(ICommonSession session, EntityUid ruleEnt, HashSet<EntityUid> usedspawners)
+    {
+        if (!TryComp<TDMRuleComponent>(ruleEnt, out var rule))
+            return null;
+
+        //Спавним игрока на арене
+        var targetSpawnId = rule.NextTeam ? "SpawnPointTeamRed" : "SpawnPointTeamBlue";
+
+        EntityUid? usedspawner = null;
+        EntityCoordinates? lastvalidSpawnerCoords = null;
+
+        var query = EntityQueryEnumerator<SpawnPointComponent, MetaDataComponent, TransformComponent>();
+        while (query.MoveNext(out var spawnpoint, out _, out var meta, out var trans))
+        {
+            if (meta.EntityPrototype?.ID != targetSpawnId)
+                continue;
+
+            if (trans.GridUid != rule.Arena)
+                continue;
+
+            if (usedspawners.Contains(spawnpoint))
+                continue;
+
+            usedspawner = spawnpoint;
+            lastvalidSpawnerCoords = trans.Coordinates;
+            break;
+        }
+
+        if (lastvalidSpawnerCoords == null)
+            lastvalidSpawnerCoords = Transform(rule.Arena).Coordinates;
+
+        var profile = _gameTicker.GetPlayerProfile(session);
+        var mobUid = _spawning.SpawnPlayerMob(lastvalidSpawnerCoords.Value, null, profile, null);
+
+        if (_mindSystem.TryGetMind(session.AttachedEntity!.Value, out var mindId, out var mindComp))
+            _mindSystem.TransferTo(mindId, mobUid, true, mind: mindComp);
+
+        //даём все навыки
+        fuckskills(mobUid);
+
+        //Замораживаем
+        AddComp<AdminFrozenComponent>(mobUid);
+
+        //Добавляем метку
+        var marker = EnsureComp<TDMMarkerComponent>(mobUid);
+        marker.Team = rule.NextTeam;
+        marker.RuleLink = ruleEnt;
+
+        //Одеваем
+        if (rule.TDMProto != null)
+            _loadout.Equip(mobUid, marker.Team ? rule.TDMProto.RedTeamGear : rule.TDMProto.BlueTeamGear, null);
+
+        rule.PlayerCharacters[mobUid] = marker.Team; //Добавляем в список игроков
+        return usedspawner;
+    }
     private void OnDamageChanged(EntityUid uid, TDMMarkerComponent component, DamageChangedEvent args)
     {
         if (!args.DamageIncreased || args.DamageDelta == null)
@@ -260,7 +390,7 @@ public sealed class TDMSystem : EntitySystem
 
     private void OnMobStateChanged(EntityUid uid, TDMMarkerComponent component, MobStateChangedEvent args)
     {
-        if (args.NewMobState == MobState.Critical && args.OldMobState < args.NewMobState)
+        if ( (args.NewMobState == MobState.Critical && args.OldMobState < args.NewMobState) || (args.NewMobState == MobState.Dead && args.OldMobState <  MobState.Critical) )
         {
             if (TryComp<DamageableComponent>(uid, out var damage))
             {
@@ -270,13 +400,19 @@ public sealed class TDMSystem : EntitySystem
         }
         else return;
 
-        if (component.Team)
-            Redguys -= 1;
-        else
-            Blueguys -= 1;
+        if (component.RuleLink == null)
+            return;
 
-        if (Blueguys <= 0 || Redguys <= 0)
-            GameOver();
+        if (!TryComp<TDMRuleComponent>(component.RuleLink, out var rulecomp))
+            return;
+
+        rulecomp.PlayerCharacters.Remove(uid);
+
+        var redguys = rulecomp.PlayerCharacters.Count(p => p.Value == true);
+        var blueguys = rulecomp.PlayerCharacters.Count(p => p.Value == false);
+
+        if (blueguys <= 0 || redguys <= 0)
+            GameOver(component.RuleLink.Value, rulecomp);
 
         Color color = component.Team ? Color.DodgerBlue : Color.Red;
 
@@ -284,8 +420,8 @@ public sealed class TDMSystem : EntitySystem
             return;
 
         var origin = args.Origin.Value;
-        TryComp<TDMMarkerComponent>(origin, out var sourcecomp);
-        if (sourcecomp == null)
+
+        if (!TryComp<TDMMarkerComponent>(origin, out var sourcecomp))
             return;
 
         if (origin != uid)
@@ -296,11 +432,13 @@ public sealed class TDMSystem : EntitySystem
 
         string sourcename = originmeta.EntityName;
         string victimname = entmeta.EntityName;
-        if (!firstblood)
+        if (!rulecomp.Firstblooded)
         {
-            firstblood = true;
-            _chatSystem.DispatchGlobalAnnouncement(
+            rulecomp.Firstblooded = true;
+            _chatSystem.DispatchFilteredAnnouncement(
+                Filter.Empty().AddPlayers(rulecomp.Players),
                 Loc.GetString("tdm-firstblood", ("player", sourcename), ("victim", victimname)),
+                source: null,
                 Loc.GetString("tdm-announcer"),
                 playSound: true,
                 new SoundPathSpecifier("/Audio/Vanilla/Effects/TDM/Firstblood.ogg"),
@@ -320,47 +458,43 @@ public sealed class TDMSystem : EntitySystem
         var playSound = killSounds.ContainsKey(kills);
         var sound = playSound ? new SoundPathSpecifier(killSounds[kills]) : null;
 
-        _chatSystem.DispatchGlobalAnnouncement(
+        _chatSystem.DispatchFilteredAnnouncement(
+            Filter.Empty().AddPlayers(rulecomp.Players),
             Loc.GetString("tdm-killstreak", ("streak", kills), ("player", sourcename), ("victim", victimname)),
+            source: null,
             Loc.GetString("tdm-announcer"),
             playSound: playSound,
             sound,
             color
         );
     }
-    //респавнит челика на арене
-    private EntityUid tptoarena(ICommonSession session, EntityUid arena, bool team, HashSet<EntityUid> usedspawners)
+    private EntityUid? SpawnArena(int playerCount, TDMRuleComponent rule)
     {
-        var coords = FindSpawnCoordinates(arena, team, usedspawners);
-        var profile = _gameTicker.GetPlayerProfile(session);
-        var mobUid = _spawning.SpawnPlayerMob(coords, null, profile, null);
+        rule.TDMProto = PickRandomArena(playerCount);
 
-        if (_mindSystem.TryGetMind(session.AttachedEntity!.Value, out var mindId, out var mindComp))
-            _mindSystem.TransferTo(mindId, mobUid, true, mind: mindComp);
-        return mobUid;
-    }
-    private EntityCoordinates FindSpawnCoordinates(EntityUid arena, bool team, HashSet<EntityUid> usedspawners)
-    {
-        var targetSpawnId = team ? "SpawnPointTeamRed" : "SpawnPointTeamBlue";
-        EntityCoordinates? lastvalidspawner = null;
-
-        var query = EntityQueryEnumerator<SpawnPointComponent, MetaDataComponent, TransformComponent>();
-        while (query.MoveNext(out var entity, out _, out var meta, out var trans))
+        if (rule.TDMProto == null)
         {
-            if (meta.EntityPrototype?.ID != targetSpawnId)
-                continue;
-
-            if (trans.GridUid != arena)
-                continue;
-
-            if (usedspawners.Contains(entity))
-                continue;
-
-            usedspawners.Add(entity);
-            lastvalidspawner = trans.Coordinates;
-            return trans.Coordinates;
+            Log.Error($"Не удалось найти никакой подходящей карты");
+            return null;
         }
-        return lastvalidspawner ?? Transform(arena).Coordinates;
+
+        // Проверка: если карта не существует, создаём новую
+        if (rule.ArenaMapId == null || !_mapSystem.MapExists(rule.ArenaMapId))
+        {
+            _mapSystem.CreateMap(out var newMapId);
+            rule.ArenaMapId = newMapId;
+        }
+
+        var opts = DeserializationOptions.Default;
+
+        // Пытаемся загрузить грид на карту
+        if (!_mapLoader.TryLoadGrid(rule.ArenaMapId.Value, new ResPath(rule.TDMProto.ArenaPath), out var grid, opts))
+        {
+            Logger.Warning($"Не удалось загрузить арену по пути {rule.TDMProto.ArenaPath} на карту {rule.ArenaMapId.Value}");
+            return null;
+        }
+
+        return grid;
     }
     private TDMMapPrototype? PickRandomArena(int playerCount)
     {
@@ -377,28 +511,6 @@ public sealed class TDMSystem : EntitySystem
 
         return _random.Pick(validPrototypes);
     }
-
-    private EntityUid? SpawnArena(string arenaPath)
-    {
-        // Проверка: если карта не существует, создаём новую
-        if (_arenaMapId == null || !_mapSystem.MapExists(_arenaMapId.Value))
-        {
-            _mapSystem.CreateMap(out var newMapId);
-            _arenaMapId = newMapId;
-        }
-
-        var opts = DeserializationOptions.Default;
-
-        // Пытаемся загрузить грид на карту
-        if (!_mapLoader.TryLoadGrid(_arenaMapId.Value, new ResPath(arenaPath), out var grid, opts))
-        {
-            Logger.Warning($"Не удалось загрузить арену по пути {arenaPath} на карту {_arenaMapId.Value}");
-            return null;
-        }
-
-        return grid;
-    }
-
     private void fuckskills(EntityUid user)
     {
         if (!TryComp<SkillComponent>(user, out var skillComp))
@@ -420,8 +532,28 @@ public sealed class TDMSystem : EntitySystem
 
         Dirty(user, skillComp);
     }
-}
+    //НО-френдлифаер
+    private void OnDamageModify(EntityUid uid, TDMMarkerComponent component, DamageModifyEvent args)
+    {
+        if (!TryComp<TDMMarkerComponent>(args.Origin, out var sourcecomp))
+            return;
 
-public sealed class NewTDMCycleEvent : EntityEventArgs
-{
+        if (component.Team != sourcecomp.Team)
+            return;
+
+        // Полностью обнуляем урон
+        args.Damage = new DamageSpecifier();
+    }
+    private void OnRuleInit(EntityUid uid, TDMRuleComponent rule, MapInitEvent args)
+    {
+        Currentrule = uid;
+        var msg = new TDMInformation(rule.Playercount, rule.TimeForPlayersJoin, rule.CurrentStatus == TDMStatus.awaitstart);
+        RaiseNetworkEvent(msg, Filter.Broadcast());
+    }
+    private void OnRuleShutDown(EntityUid uid, TDMRuleComponent component, ComponentShutdown args)
+    {
+        GameOver(uid, component, true);
+        if (Currentrule == uid)
+            Currentrule = null;
+    }
 }

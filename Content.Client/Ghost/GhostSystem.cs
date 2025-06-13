@@ -5,7 +5,7 @@ using Robust.Client.Console;
 using Robust.Client.GameObjects;
 using Robust.Client.Player;
 using Robust.Shared.Player;
-
+using Content.Shared.Vanilla.TDM;
 namespace Content.Client.Ghost
 {
     public sealed class GhostSystem : SharedGhostSystem
@@ -146,6 +146,7 @@ namespace Content.Client.Ghost
         {
             GhostVisibility = true;
             PlayerAttached?.Invoke(component);
+            RaiseNetworkEvent(new TDMInfoRequest());//Rayten
         }
 
         private void OnGhostState(EntityUid uid, GhostComponent component, ref AfterAutoHandleStateEvent args)

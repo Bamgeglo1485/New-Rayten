@@ -1,26 +1,27 @@
 ﻿using Content.Client.Gameplay;
 using Content.Client.Ghost;
+using Content.Client.Vanilla.TDM;
 using Content.Client.UserInterface.Systems.Gameplay;
 using Content.Client.UserInterface.Systems.Ghost.Widgets;
 using Content.Shared.Ghost;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controllers;
 
+
 namespace Content.Client.UserInterface.Systems.Ghost;
 
 // TODO hud refactor BEFORE MERGE fix ghost gui being too far up
-public sealed class GhostUIController : UIController, IOnSystemChanged<GhostSystem>
+public sealed class GhostUIController : UIController, IOnSystemChanged<GhostSystem>, IOnSystemChanged<TDMSystem>
 {
     [Dependency] private readonly IEntityNetworkManager _net = default!;
 
     [UISystemDependency] private readonly GhostSystem? _system = default;
-
+    [UISystemDependency] private readonly TDMSystem? _TDM = default;
     private GhostGui? Gui => UIManager.GetActiveUIWidgetOrNull<GhostGui>();
 
     public override void Initialize()
     {
         base.Initialize();
-
         var gameplayStateLoad = UIManager.GetUIController<GameplayStateLoadController>();
         gameplayStateLoad.OnScreenLoad += OnScreenLoad;
         gameplayStateLoad.OnScreenUnload += OnScreenUnload;
@@ -55,7 +56,24 @@ public sealed class GhostUIController : UIController, IOnSystemChanged<GhostSyst
         system.GhostWarpsResponse -= OnWarpsResponse;
         system.GhostRoleCountUpdated -= OnRoleCountUpdated;
     }
+    public void OnSystemLoaded(TDMSystem system)
+    {
+        system.TDMInfoUpdated += OnTdmInfoUpdated;
+    }
 
+    public void OnSystemUnloaded(TDMSystem system)
+    {
+        system.TDMInfoUpdated -= OnTdmInfoUpdated;
+    }
+
+    private void OnTdmInfoUpdated(TimeSpan TimeForPlayersJoin, int Playercount)
+    {
+        if (Gui == null)
+        {
+            return;
+        }
+        Gui.TDMUpdate(TimeForPlayersJoin, Playercount);
+    }
     public void UpdateGui()
     {
         if (Gui == null)
@@ -122,6 +140,8 @@ public sealed class GhostUIController : UIController, IOnSystemChanged<GhostSyst
         if (Gui == null)
             return;
 
+        Gui.TDMArenaButtonPressed += TDMArena;
+
         Gui.RequestWarpsPressed += RequestWarps;
         Gui.ReturnToBodyPressed += ReturnToBody;
         Gui.GhostRolesPressed += GhostRolesPressed;
@@ -135,6 +155,7 @@ public sealed class GhostUIController : UIController, IOnSystemChanged<GhostSyst
     {
         if (Gui == null)
             return;
+        Gui.TDMArenaButtonPressed -= TDMArena;
 
         Gui.RequestWarpsPressed -= RequestWarps;
         Gui.ReturnToBodyPressed -= ReturnToBody;
@@ -142,6 +163,11 @@ public sealed class GhostUIController : UIController, IOnSystemChanged<GhostSyst
         Gui.TargetWindow.WarpClicked -= OnWarpClicked;
 
         Gui.Hide();
+    }
+
+    private void TDMArena()
+    {
+        _TDM?.TPMeToArena();
     }
 
     private void ReturnToBody()
