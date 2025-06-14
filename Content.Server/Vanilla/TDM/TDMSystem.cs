@@ -1,4 +1,4 @@
-﻿using Content.Server.GameTicking;
+using Content.Server.GameTicking;
 using Content.Server.Mind;
 using Content.Server.Station.Systems;
 using Content.Server.Spawners.Components;
@@ -99,7 +99,7 @@ public sealed class TDMSystem : EntitySystem
             return;
         }
 
-        GameOver(Currentrule.Value, rule, true);
+        GameOver(Currentrule.Value, rule);
         rule.LastRound = true;
     }
 
