@@ -11,7 +11,7 @@ namespace Content.Client.Vanilla.TDM.UI
     {
         public readonly Button DenyButton;
         public readonly Button AcceptButton;
-        public override close()
+        public override void Close()
         {
             return;
         }

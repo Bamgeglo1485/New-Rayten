@@ -111,52 +111,55 @@ public sealed class SharedSponsorManager
             switch (rank)
             {
                 case sponsorRank.GrayTide:
-                current.Add("ClosetSkeletonWizardBackground");
-                current.Add("NukeOpfreelancerBackground");
+                    current.Add("ClosetSkeletonWizardBackground");
+                    current.Add("NukeOpfreelancerBackground");
                     break;
 
 
                 case sponsorRank.Revolutionary:
-                //прически
-                current.Add("HumanHairCotton");
-                current.Add("HumanHairFingerwave");
-                current.Add("HumanHairFortuneteller");
-                current.Add("HumanHairFortunetellerAlt");
-                current.Add("HumanHairLongdtails");
-                current.Add("HumanHairLooseSlicked");
-                current.Add("HumanHairQuadcurls");
-                current.Add("HumanHairShy");
-                current.Add("HumanHairSpicy");
-                current.Add("HumanHairWife");
-                current.Add("HumanHairNitori");
-                current.Add("HumanHairLongBow");
-                //голоса
-                current.Add("Chingchong");
-                //импланты
-                current.Add("CyberlimbRArmBishop");current.Add("CyberlimbLArmBishop");current.Add("CyberlimbRHandBishop");
-                current.Add("CyberlimbLHandBishop");current.Add("CyberlimbRLegBishop");current.Add("CyberlimbLLegBishop");
-                current.Add("CyberlimbLFootBishop");current.Add("CyberlimbRFootBishop");current.Add("CyberlimbTorsoBishop");
-                current.Add("CyberlimbRArmHephaestus");current.Add("CyberlimbRHandHephaestus");current.Add("CyberlimbLHandHephaestus");
-                current.Add("CyberlimbRLegHephaestus");current.Add("CyberlimbLLegHephaestus");
-                current.Add("CyberlimbLFootHephaestus");current.Add("CyberlimbRFootHephaestus");current.Add("CyberlimbTorsoHephaestus");
-                current.Add("CyberlimbRArmHephaestusTitan");current.Add("CyberlimbLArmHephaestusTitan");current.Add("CyberlimbRHandHephaestusTitan");
-                current.Add("CyberlimbLHandHephaestusTitan");current.Add("CyberlimbRLegHephaestusTitan");current.Add("CyberlimbLLegHephaestusTitan");
-                current.Add("CyberlimbLFootHephaestusTitan");current.Add("CyberlimbRFootHephaestusTitan");current.Add("CyberlimbTorsoHephaestusTitan");
-                current.Add("CyberlimbRArmMorpheus");current.Add("CyberlimbLArmMorpheus");current.Add("CyberlimbRHandMorpheus");current.Add("CyberlimbLHandMorpheus");
-                current.Add("CyberlimbRLegMorpheus");current.Add("CyberlimbLLegMorpheus");current.Add("CyberlimbLFootMorpheus");
-                current.Add("CyberlimbRFootMorpheus");current.Add("CyberlimbTorsoMorpheus");current.Add("CyberlimbRArmWardtakahashi");
-                current.Add("CyberlimbLArmWardtakahashi");current.Add("CyberlimbRHandWardtakahashi");current.Add("CyberlimbLHandWardtakahashi");
-                current.Add("CyberlimbRLegWardtakahashi");current.Add("CyberlimbLLegWardtakahashi");current.Add("CyberlimbLFootWardtakahashi");
-                current.Add("CyberlimbRFootWardtakahashi");current.Add("CyberlimbTorsoWardtakahashiMale");current.Add("CyberlimbTorsoWardtakahashiFemale");
-                current.Add("CyberlimbRArmZenghu");current.Add("CyberlimbLArmZenghu");current.Add("CyberlimbRHandZenghu");
-                current.Add("CyberlimbLHandZenghu");current.Add("CyberlimbRLegZenghu");current.Add("CyberlimbLLegZenghu");
-                current.Add("CyberlimbLFootZenghu");current.Add("CyberlimbRFootZenghu");current.Add("CyberlimbTorsoZenghu");
-                current.Add("CyberlimbRArmNanotrasen");current.Add("CyberlimbLArmNanotrasen");current.Add("CyberlimbRHandNanotrasen");
-                current.Add("CyberlimbLHandNanotrasen");current.Add("CyberlimbRLegNanotrasen");current.Add("CyberlimbLLegNanotrasen");
-                current.Add("CyberlimbLFootNanotrasen");current.Add("CyberlimbRFootNanotrasen");current.Add("CyberlimbTorsoNanotrasen");
-                current.Add("CyberlimbRArmXion");current.Add("CyberlimbLArmXion");current.Add("CyberlimbRHandXion");
-                current.Add("CyberlimbLHandXion");current.Add("CyberlimbRLegXion");current.Add("CyberlimbTorsoXion");
-                current.Add("CyberlimbLLegXion"); current.Add("CyberlimbLFootXion");current.Add("CyberlimbRFootXion");
+                    //Предыстории
+                    current.Add("BlueGuySpyBackground");
+                    current.Add("RedGuySpyBackground");
+                    //прически
+                    current.Add("HumanHairCotton");
+                    current.Add("HumanHairFingerwave");
+                    current.Add("HumanHairFortuneteller");
+                    current.Add("HumanHairFortunetellerAlt");
+                    current.Add("HumanHairLongdtails");
+                    current.Add("HumanHairLooseSlicked");
+                    current.Add("HumanHairQuadcurls");
+                    current.Add("HumanHairShy");
+                    current.Add("HumanHairSpicy");
+                    current.Add("HumanHairWife");
+                    current.Add("HumanHairNitori");
+                    current.Add("HumanHairLongBow");
+                    //голоса
+                    current.Add("Chingchong");
+                    //импланты
+                    current.Add("CyberlimbRArmBishop");current.Add("CyberlimbLArmBishop");current.Add("CyberlimbRHandBishop");
+                    current.Add("CyberlimbLHandBishop");current.Add("CyberlimbRLegBishop");current.Add("CyberlimbLLegBishop");
+                    current.Add("CyberlimbLFootBishop");current.Add("CyberlimbRFootBishop");current.Add("CyberlimbTorsoBishop");
+                    current.Add("CyberlimbRArmHephaestus");current.Add("CyberlimbRHandHephaestus");current.Add("CyberlimbLHandHephaestus");
+                    current.Add("CyberlimbRLegHephaestus");current.Add("CyberlimbLLegHephaestus");
+                    current.Add("CyberlimbLFootHephaestus");current.Add("CyberlimbRFootHephaestus");current.Add("CyberlimbTorsoHephaestus");
+                    current.Add("CyberlimbRArmHephaestusTitan");current.Add("CyberlimbLArmHephaestusTitan");current.Add("CyberlimbRHandHephaestusTitan");
+                    current.Add("CyberlimbLHandHephaestusTitan");current.Add("CyberlimbRLegHephaestusTitan");current.Add("CyberlimbLLegHephaestusTitan");
+                    current.Add("CyberlimbLFootHephaestusTitan");current.Add("CyberlimbRFootHephaestusTitan");current.Add("CyberlimbTorsoHephaestusTitan");
+                    current.Add("CyberlimbRArmMorpheus");current.Add("CyberlimbLArmMorpheus");current.Add("CyberlimbRHandMorpheus");current.Add("CyberlimbLHandMorpheus");
+                    current.Add("CyberlimbRLegMorpheus");current.Add("CyberlimbLLegMorpheus");current.Add("CyberlimbLFootMorpheus");
+                    current.Add("CyberlimbRFootMorpheus");current.Add("CyberlimbTorsoMorpheus");current.Add("CyberlimbRArmWardtakahashi");
+                    current.Add("CyberlimbLArmWardtakahashi");current.Add("CyberlimbRHandWardtakahashi");current.Add("CyberlimbLHandWardtakahashi");
+                    current.Add("CyberlimbRLegWardtakahashi");current.Add("CyberlimbLLegWardtakahashi");current.Add("CyberlimbLFootWardtakahashi");
+                    current.Add("CyberlimbRFootWardtakahashi");current.Add("CyberlimbTorsoWardtakahashiMale");current.Add("CyberlimbTorsoWardtakahashiFemale");
+                    current.Add("CyberlimbRArmZenghu");current.Add("CyberlimbLArmZenghu");current.Add("CyberlimbRHandZenghu");
+                    current.Add("CyberlimbLHandZenghu");current.Add("CyberlimbRLegZenghu");current.Add("CyberlimbLLegZenghu");
+                    current.Add("CyberlimbLFootZenghu");current.Add("CyberlimbRFootZenghu");current.Add("CyberlimbTorsoZenghu");
+                    current.Add("CyberlimbRArmNanotrasen");current.Add("CyberlimbLArmNanotrasen");current.Add("CyberlimbRHandNanotrasen");
+                    current.Add("CyberlimbLHandNanotrasen");current.Add("CyberlimbRLegNanotrasen");current.Add("CyberlimbLLegNanotrasen");
+                    current.Add("CyberlimbLFootNanotrasen");current.Add("CyberlimbRFootNanotrasen");current.Add("CyberlimbTorsoNanotrasen");
+                    current.Add("CyberlimbRArmXion");current.Add("CyberlimbLArmXion");current.Add("CyberlimbRHandXion");
+                    current.Add("CyberlimbLHandXion");current.Add("CyberlimbRLegXion");current.Add("CyberlimbTorsoXion");
+                    current.Add("CyberlimbLLegXion"); current.Add("CyberlimbLFootXion");current.Add("CyberlimbRFootXion");
                     break;
 
 

@@ -72,15 +72,6 @@
   - type: RespawnTracker
     respawnDelay: 5
 
-# RAYTEN-START
-- type: entity
-  id: TeamDeathMatch
-  parent: BaseGameRule
-  components:
-  - type: TDMRule
-  # - type: PointManager todo
-# RAYTEN-END
-
 - type: entity
   id: InactivityTimeRestart
   parent: BaseGameRule
