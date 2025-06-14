@@ -3,7 +3,7 @@
   id: BlueGuyScout
   parent: BlueTeamGearDefault
   equipment:
-    shoes: ClothingShoesBootsSpeed
+    shoes: ClothingShoesBootsSpeedUnrem
     belt: ClothingBeltBandolier
     outerClothing: ClothingOuterFlannelBlue
     pocket1: PowerCellMicroreactor
@@ -19,7 +19,7 @@
   id: RedGuyScout
   parent: RedTeamGearDefault
   equipment:
-    shoes: ClothingShoesBootsSpeed
+    shoes: ClothingShoesBootsSpeedUnrem
     belt: ClothingBeltBandolier
     outerClothing: ClothingOuterFlannelRed
     pocket1: PowerCellMicroreactor
@@ -97,6 +97,7 @@
   parent: RedTeamGearDefault
   equipment:
     outerClothing: ClothingOuterCoatAMG
+    eyes: ClothingEyesHudMedical
   storage:
     back:
     - MedicatedSuture
@@ -115,6 +116,7 @@
   parent: BlueTeamGearDefault
   equipment:
     outerClothing: ClothingOuterCoatAMG
+    eyes: ClothingEyesHudMedical
   storage:
     back:
     - MedicatedSuture
@@ -135,7 +137,7 @@
   storage:
     back:
     - MedicatedSuture
-    - MagazineBoxAntiMateriel
+    - BruteAutoInjector
   inhand:
     - WeaponSniperHristov
 
@@ -145,7 +147,7 @@
   storage:
     back:
     - MedicatedSuture
-    - MagazineBoxAntiMateriel
+    - BruteAutoInjector
   inhand:
     - WeaponSniperHristov
 
@@ -155,9 +157,11 @@
   parent: RedTeamGearDefault
   storage:
     belt:
+    - MedicatedSuture
     - MagazineBoxCaselessRifle
     - MagazinePistolCaselessRifle
     - MagazinePistolCaselessRifle
+    - BruteAutoInjector
     - SmokeGrenade
     back:
     - MedicatedSuture
@@ -170,9 +174,11 @@
   parent: BlueTeamGearDefault
   storage:
     belt:
+    - MedicatedSuture
     - MagazineBoxCaselessRifle
     - MagazinePistolCaselessRifle
     - MagazinePistolCaselessRifle
+    - BruteAutoInjector
     - SmokeGrenade
     back:
     - MedicatedSuture
@@ -277,14 +283,26 @@
   - type: Unremoveable
 
 - type: entity
+  parent: ClothingShoesBootsSpeed
+  id: ClothingShoesBootsSpeedUnrem
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Unremoveable
+  - type: ItemSlots
+    slots:
+      cell_slot:
+        name: power-cell-slot-component-slot-name-default
+        startingItem: PowerCellMicroreactor
+
+- type: entity
   parent: ClothingOuterArmorHeavy
   id: ClothingOuterArmorHeavyUnrem
   categories: [ HideSpawnMenu ]
   components:
   - type: Unremoveable
   - type: ClothingSpeedModifier
-    walkModifier: 0.6
-    sprintModifier: 0.6
+    walkModifier: 0.55
+    sprintModifier: 0.55
 
 
 - type: entity

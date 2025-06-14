@@ -6,6 +6,7 @@
     delay:
       min:  600
       max:  600
+    minPlayers: 15
   - type: WhiteoutRule
   - type: SurvivorRule
 
@@ -22,7 +23,6 @@
   name: whiteout-title
   showInVote: false
   description: whiteout-description
-  minPlayers: 10
   alias:
     - whiteout
   rules:
@@ -35,7 +35,6 @@
   name: whiteout-londoners-title
   showInVote: false
   description: whiteout-londoners-description
-  minPlayers: 15
   alias:
     - Londoners
     - WhiteoutRevolutionary
