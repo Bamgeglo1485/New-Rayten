@@ -1,10 +1,14 @@
 ﻿using Content.Shared.Vanilla.TDM;
 using Robust.Shared.Timing;
+using Content.Shared.GameTicking;
+using Content.Client.Vanilla.TDM.UI;
 
 namespace Content.Client.Vanilla.TDM;
 
 public sealed class TDMSystem : EntitySystem
 {
+    private AcceptTDMWindow? _tdmWindow;
+
     [Dependency] private readonly IGameTiming _gameTiming = default!;
     public event Action<TimeSpan, int>? TDMInfoUpdated;
 
@@ -18,6 +22,30 @@ public sealed class TDMSystem : EntitySystem
     {
         base.Initialize();
         SubscribeNetworkEvent<TDMInformation>(RefreshInformation);
+        SubscribeNetworkEvent<RoundEndMessageEvent>(OnRoundEndMessage);
+    }
+
+    private void OnRoundEndMessage(RoundEndMessageEvent ev)
+    {
+        if (_tdmWindow != null && _tdmWindow.IsOpen)
+            return;
+
+        _tdmWindow = new AcceptTDMWindow();
+
+        _tdmWindow.AcceptButton.OnPressed += _ =>
+        {
+            _tdmWindow.Dispose();
+            _tdmWindow = null;
+            TPMeToArena();
+        };
+
+        _tdmWindow.DenyButton.OnPressed += _ =>
+        {
+            _tdmWindow.Dispose();
+            _tdmWindow = null;
+        };
+
+        _tdmWindow.OpenCentered();
     }
 
     private void RefreshInformation(TDMInformation msg, EntitySessionEventArgs args)

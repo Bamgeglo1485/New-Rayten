@@ -1,8 +1,3 @@
-using Robust.Shared.Prototypes;
-using Robust.Shared.Serialization;
-using Content.Shared.Vanilla.Background;
-using Content.Shared.Vanilla.Skill;
-using Content.Shared.Roles;
 using Content.Server.SkillTrainer;
 using Content.Server.Roles;
 using Content.Server.Ghost.Roles;
@@ -11,7 +6,13 @@ using Content.Shared.Administration;
 using Content.Server.Vanilla.Skill;
 using Content.Server.GameTicking.Events;
 using Content.Server.Preferences.Managers;
+using Content.Shared.Vanilla.Background;
+using Content.Shared.Vanilla.TDM;
+using Content.Shared.Vanilla.Skill;
+using Content.Shared.Roles;
 using Content.Shared.Preferences;
+using Robust.Shared.Prototypes;
+using Robust.Shared.Serialization;
 
 namespace Content.Server.Vanilla.Background;
 
@@ -148,7 +149,9 @@ public sealed class BackGroundSystem : EntitySystem
 
     private void OnShutdown(EntityUid uid, AwaitBackgroundComponent component, ComponentShutdown args)
     {
-        RemComp<AdminFrozenComponent>(uid);
+        if (!HasComp<TDMMarkerComponent>(uid))
+            RemComp<AdminFrozenComponent>(uid);
+
     }
 
     private void OnTakeGhostBackgroundEvent(TakeGhostBackgroundEvent msg, EntitySessionEventArgs args)

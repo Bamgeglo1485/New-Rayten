@@ -17,10 +17,10 @@ tdm-gameover =
         [true] Победа красной команды!
        *[other] Ничья :c
     }
-    Лучшие игроки:
     { $result }
-    { $result1 }
-    { $result2 }
-    { $result3 }
 TDM-NotAvailable = TDM
 TDM-Available = TDM { $blueguys } VS { $redguys } ({ $timer})
+accept-TDM-window-title = Приглашение в TDM
+accept-TDM-window-prompt-text-part = TDM будет начат через 30 секунд, хотите принять участие?
+accept-TDM-window-accept-button = Да!
+accept-TDM-window-deny-button = Нет

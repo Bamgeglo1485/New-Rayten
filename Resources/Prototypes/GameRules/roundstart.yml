@@ -140,8 +140,6 @@
         duration: 1200 # 20 минут
       - type: AwaitBackground
         backgroundGroup: NukeopsCommanderBackgroundGroup
-      - type: SetJammerOnSpawn
-        duration: 2100 # 35 минут
       #rayten-end
       - type: NukeOperative
       - type: RandomMetadata

@@ -1,7 +1,7 @@
 using Content.Shared.FixedPoint;
 using Content.Shared.Damage;
 
-namespace Content.Shared.Vanilla.TDMRoundEnd;
+namespace Content.Shared.Vanilla.TDM;
 
 [RegisterComponent]
 public sealed partial class TDMMarkerComponent : Component
@@ -14,7 +14,7 @@ public sealed partial class TDMMarkerComponent : Component
 
     [DataField]
     public int TotalKills = 0;
-    
+
     [DataField]
     public FixedPoint2 TotalDamage = new();
 

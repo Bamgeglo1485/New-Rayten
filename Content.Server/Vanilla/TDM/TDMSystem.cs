@@ -1,13 +1,14 @@
-using Content.Server.GameTicking;
+﻿using Content.Server.GameTicking;
 using Content.Server.Mind;
 using Content.Server.Station.Systems;
 using Content.Server.Spawners.Components;
 using Content.Server.Chat.Systems;
 using Content.Shared.Administration;
 using Content.Shared.GameTicking;
-using Content.Shared.Vanilla.TDMRoundEnd;
+using Content.Shared.CombatMode.Pacification;
 using Content.Shared.Vanilla.CCVars;
 using Content.Shared.Vanilla.Skill;
+using Content.Shared.Vanilla.Background;
 using Content.Shared.Mindshield.Components;
 using Content.Shared.Clothing;
 using Content.Shared.Damage;
@@ -19,6 +20,7 @@ using Content.Shared.Ghost;
 using Robust.Server.GameObjects;
 using Robust.Shared.Utility;
 using Robust.Server.Player;
+using Robust.Shared.Enums;
 using Robust.Shared.EntitySerialization.Systems;
 using Robust.Shared.EntitySerialization;
 using Robust.Shared.Map.Components;
@@ -51,9 +53,9 @@ public sealed class TDMSystem : EntitySystem
     [Dependency] private readonly ChatSystem _chatSystem = default!;
     [Dependency] private readonly DamageableSystem _damageable = default!;
     [Dependency] private readonly SharedGhostSystem _ghosts = default!;
-
+    [Dependency] private readonly IPlayerManager _playerManager = default!;
     EntityUid? Currentrule = null;
-    
+
     public override void Initialize()
     {
         base.Initialize();
@@ -66,7 +68,42 @@ public sealed class TDMSystem : EntitySystem
 
         SubscribeNetworkEvent<TDMInfoRequest>(OnInfoRequest); //Пользователь запросил инфы
         SubscribeNetworkEvent<TPMeToTDMEvent>(OnArenaJoinRequest); //Пользователь захотел зайти на арену
+        SubscribeLocalEvent<RoundEndTextAppendEvent>(OnRoundEnded);
+        _playerManager.PlayerStatusChanged += OnPlayerStatusChanged;
     }
+    public override void Shutdown()
+    {
+        base.Shutdown();
+
+        _playerManager.PlayerStatusChanged -= OnPlayerStatusChanged;
+    }
+    private void OnRoundEnded(RoundEndTextAppendEvent ev)
+    {
+        foreach (var session in _playerManager.Sessions)
+        {
+            if (!session.AttachedEntity.HasValue) continue;
+
+            var entityId = session.AttachedEntity.Value;
+            EnsureComp<PacifiedComponent>(entityId);
+        }
+
+        if (Currentrule == null)
+        {
+            _gameTicker.RestartRound();
+            return;
+        }
+
+        if (!TryComp<TDMRuleComponent>(Currentrule, out var rule))
+        {
+            _gameTicker.RestartRound();
+            return;
+        }
+
+        GameOver(Currentrule.Value, rule);
+        rule.LastRound = true;
+        rule.TimeForPlayersJoin = TimeSpan.FromSeconds(30f);
+    }
+
     private void OnArenaJoinRequest(TPMeToTDMEvent msg, EntitySessionEventArgs args)
     {
         var session = args.SenderSession;
@@ -91,8 +128,22 @@ public sealed class TDMSystem : EntitySystem
 
         if (session.AttachedEntity != null)
             _ghosts.SetCanReturnToBody(session.AttachedEntity.Value, false);
-
     }
+    private void OnPlayerStatusChanged(object? sender, SessionStatusEventArgs e)
+    {
+        if (e.NewStatus != SessionStatus.Disconnected || Currentrule == null || !TryComp<TDMRuleComponent>(Currentrule, out var rule))
+        {
+            return;
+        }
+
+        rule.Players.Remove(e.Session);
+        rule.Playercount--;
+
+        //Сообщаем о том что игрок сдох
+        var info = new TDMInformation(rule.Playercount, rule.TimeForPlayersJoin, rule.CurrentStatus == TDMStatus.awaitstart);
+        RaiseNetworkEvent(info, Filter.Broadcast());
+    }
+
     private void OnInfoRequest(TDMInfoRequest msg, EntitySessionEventArgs args)
     {
         if (Currentrule != null)
@@ -238,6 +289,7 @@ public sealed class TDMSystem : EntitySystem
     public void NewCycle(EntityUid uid, TDMRuleComponent rule)
     {
         rule.Players = new(); //Сбрасываем предыдущих пользователей
+        rule.PlayerCharacters = new(); //Сбрасываем предыдущих персонажей
         rule.Playercount = 0;
         rule.CurrentStatus = TDMStatus.awaitstart; //начинаем собирать игроков в раунд
         rule.TimeForPlayersJoin = TimeSpan.FromMinutes(1f); //1 минута на участие
@@ -256,14 +308,15 @@ public sealed class TDMSystem : EntitySystem
         var blueguys = rule.PlayerCharacters.Count(p => p.Value == false);
 
         bool winner = blueguys > redguys ? false : true;
+
         List<PlayerStats> statsList = new();
 
         foreach (var (player, _) in rule.PlayerCharacters)
         {
-            if (!TryComp<TDMMarkerComponent>(uid, out var marker))
+            if (!TryComp<TDMMarkerComponent>(player, out var marker))
                 continue;
 
-            var name = MetaData(uid).EntityName;
+            var name = MetaData(player).EntityName;
             int kills = marker.TotalKills;
             float damage = marker.TotalDamage.Float();
 
@@ -272,10 +325,15 @@ public sealed class TDMSystem : EntitySystem
 
         var sorted = statsList.OrderByDescending(s => s.Kills).ToList();
 
-        var result = "Имя | Убийства | Урон";
-        var resultList = sorted.Take(3)
-            .Select(s => $"{s.Name} | {s.Kills} | {s.Damage:F1}")
-            .ToList();
+        var result = "Игрок".PadRight(32) + "| " + "Убийства".PadRight(10) + "| " + "Урон".PadRight(10) + "\n";
+
+        foreach (var stat in sorted)
+        {
+            string name = stat.Name.Length > 32 ? stat.Name.Substring(0, 32) : stat.Name;
+            result += name.PadRight(32) + "| " +
+                    stat.Kills.ToString().PadRight(10) + "| " +
+                    ((int)stat.Damage).ToString().PadRight(10) + "\n";
+        }
 
 
         if (blueguys == redguys)
@@ -283,10 +341,7 @@ public sealed class TDMSystem : EntitySystem
                 Filter.Empty().AddPlayers(rule.Players),
                 Loc.GetString("tdm-gameover",
                     ("winner", "other"),
-                    ("result", result),
-                    ("result1", resultList.ElementAtOrDefault(0) ?? ""),
-                    ("result2", resultList.ElementAtOrDefault(1) ?? ""),
-                    ("result3", resultList.ElementAtOrDefault(2) ?? "")),
+                    ("result", result)),
                 source: null,
                 Loc.GetString("tdm-announcer"),
                 playSound: false,
@@ -297,11 +352,8 @@ public sealed class TDMSystem : EntitySystem
             _chatSystem.DispatchFilteredAnnouncement(
                 Filter.Empty().AddPlayers(rule.Players),
                 Loc.GetString("tdm-gameover",
-                    ("winner", winner),
-                    ("result", result),
-                    ("result1", resultList.ElementAtOrDefault(0) ?? ""),
-                    ("result2", resultList.ElementAtOrDefault(1) ?? ""),
-                    ("result3", resultList.ElementAtOrDefault(2) ?? "")),
+                    ("winner", "other"),
+                    ("result", result)),
                 source: null,
                 Loc.GetString("tdm-announcer"),
                 playSound: false,
@@ -310,16 +362,19 @@ public sealed class TDMSystem : EntitySystem
             );
 
 
-        QueueDel(rule.Arena); //Удаляем прошлую арену
+
+        Timer.Spawn(TimeSpan.FromSeconds(1), () => QueueDel(rule.Arena));//Удаляем прошлую арену
 
         if (rule.LastRound)
         {
-            Timer.Spawn(TimeSpan.FromSeconds(3), () => _gameTicker.RestartRound());
+            Timer.Spawn(TimeSpan.FromSeconds(1), () => _gameTicker.RestartRound());
             return;
         }
-
-        if (!notstartnewcycle)
-            NewCycle(uid, rule);
+        else
+        {
+            if (!notstartnewcycle)
+                NewCycle(uid, rule);
+        }
     }
 
     //Метод добавляет игрока на арену, возвращает спавн, на котором игрок был заспавнен
@@ -370,6 +425,9 @@ public sealed class TDMSystem : EntitySystem
         var marker = EnsureComp<TDMMarkerComponent>(mobUid);
         marker.Team = rule.NextTeam;
         marker.RuleLink = ruleEnt;
+        //Добавляем предыстории
+        var background = EnsureComp<AwaitBackgroundComponent>(mobUid);
+        background.BackgroundGroup = (marker.Team) ? "RedGuyBackgroundGroup" : "BlueGuyBackgroundGroup";
 
         //Одеваем
         if (rule.TDMProto != null)
@@ -390,7 +448,7 @@ public sealed class TDMSystem : EntitySystem
 
     private void OnMobStateChanged(EntityUid uid, TDMMarkerComponent component, MobStateChangedEvent args)
     {
-        if ( (args.NewMobState == MobState.Critical && args.OldMobState < args.NewMobState) || (args.NewMobState == MobState.Dead && args.OldMobState <  MobState.Critical) )
+        if ((args.NewMobState == MobState.Critical && args.OldMobState < args.NewMobState) || (args.NewMobState == MobState.Dead && args.OldMobState < MobState.Critical))
         {
             if (TryComp<DamageableComponent>(uid, out var damage))
             {
@@ -408,65 +466,71 @@ public sealed class TDMSystem : EntitySystem
 
         rulecomp.PlayerCharacters.Remove(uid);
 
+        Color color = component.Team ? Color.DodgerBlue : Color.Red;
+
+        if (args.Origin != null && TryComp<TDMMarkerComponent>(args.Origin, out var sourcecomp))
+        {
+            var origin = args.Origin.Value;
+
+            if (origin != uid)
+                sourcecomp.TotalKills++;
+
+            if (TryComp<MetaDataComponent>(origin, out var originmeta) && TryComp<MetaDataComponent>(uid, out var entmeta))
+            {
+                string sourcename = originmeta.EntityName;
+                string victimname = entmeta.EntityName;
+
+                if (!rulecomp.Firstblooded)
+                {
+                    rulecomp.Firstblooded = true;
+
+                    var filter = Filter.Empty().AddPlayers(rulecomp.Players);
+                    _audio.PlayGlobal("/Audio/Vanilla/Effects/TDM/Firstblood.ogg", filter, true);
+
+                    _chatSystem.DispatchFilteredAnnouncement(
+                        filter,
+                        Loc.GetString("tdm-firstblood", ("player", sourcename), ("victim", victimname)),
+                        source: origin,
+                        Loc.GetString("tdm-announcer"),
+                        playSound: false,
+                        null,
+                        color
+                    );
+                }
+                else
+                {
+                    var kills = sourcecomp.TotalKills;
+                    var killSounds = new Dictionary<int, string>
+                    {
+                        { 2, "/Audio/Vanilla/Effects/TDM/Doublekill.ogg" },
+                        { 3, "/Audio/Vanilla/Effects/TDM/TripleKill.ogg" },
+                        { 4, "/Audio/Vanilla/Effects/TDM/UltraKill.ogg" },
+                        { 5, "/Audio/Vanilla/Effects/TDM/Rampage.ogg" },
+                    };
+
+                    var filter = Filter.Empty().AddPlayers(rulecomp.Players);
+
+                    if (killSounds.ContainsKey(kills))
+                        _audio.PlayGlobal(killSounds[kills], filter, true);
+
+                    _chatSystem.DispatchFilteredAnnouncement(
+                        Filter.Empty().AddPlayers(rulecomp.Players),
+                        Loc.GetString("tdm-killstreak", ("streak", kills), ("player", sourcename), ("victim", victimname)),
+                        source: origin,
+                        Loc.GetString("tdm-announcer"),
+                        playSound: false,
+                        null,
+                        color
+                    );
+                }
+            }
+        }
+
         var redguys = rulecomp.PlayerCharacters.Count(p => p.Value == true);
         var blueguys = rulecomp.PlayerCharacters.Count(p => p.Value == false);
 
         if (blueguys <= 0 || redguys <= 0)
             GameOver(component.RuleLink.Value, rulecomp);
-
-        Color color = component.Team ? Color.DodgerBlue : Color.Red;
-
-        if (args.Origin == null)
-            return;
-
-        var origin = args.Origin.Value;
-
-        if (!TryComp<TDMMarkerComponent>(origin, out var sourcecomp))
-            return;
-
-        if (origin != uid)
-            sourcecomp.TotalKills++;
-
-        if (!TryComp<MetaDataComponent>(origin, out var originmeta) || !TryComp<MetaDataComponent>(uid, out var entmeta))
-            return;
-
-        string sourcename = originmeta.EntityName;
-        string victimname = entmeta.EntityName;
-        if (!rulecomp.Firstblooded)
-        {
-            rulecomp.Firstblooded = true;
-            _chatSystem.DispatchFilteredAnnouncement(
-                Filter.Empty().AddPlayers(rulecomp.Players),
-                Loc.GetString("tdm-firstblood", ("player", sourcename), ("victim", victimname)),
-                source: null,
-                Loc.GetString("tdm-announcer"),
-                playSound: true,
-                new SoundPathSpecifier("/Audio/Vanilla/Effects/TDM/Firstblood.ogg"),
-                color
-            );
-            return;
-        }
-
-        var kills = sourcecomp.TotalKills;
-        var killSounds = new Dictionary<int, string>
-        {
-            { 2, "/Audio/Vanilla/Effects/TDM/Doublekill.ogg" },
-            { 3, "/Audio/Vanilla/Effects/TDM/TripleKill.ogg" },
-            { 4, "/Audio/Vanilla/Effects/TDM/UltraKill.ogg" },
-            { 5, "/Audio/Vanilla/Effects/TDM/Rampage.ogg" },
-        };
-        var playSound = killSounds.ContainsKey(kills);
-        var sound = playSound ? new SoundPathSpecifier(killSounds[kills]) : null;
-
-        _chatSystem.DispatchFilteredAnnouncement(
-            Filter.Empty().AddPlayers(rulecomp.Players),
-            Loc.GetString("tdm-killstreak", ("streak", kills), ("player", sourcename), ("victim", victimname)),
-            source: null,
-            Loc.GetString("tdm-announcer"),
-            playSound: playSound,
-            sound,
-            color
-        );
     }
     private EntityUid? SpawnArena(int playerCount, TDMRuleComponent rule)
     {
