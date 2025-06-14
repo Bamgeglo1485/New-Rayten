@@ -1,4 +1,4 @@
-﻿using Content.Server.GameTicking;
+using Content.Server.GameTicking;
 using Content.Server.Mind;
 using Content.Server.Station.Systems;
 using Content.Server.Spawners.Components;
