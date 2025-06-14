@@ -99,7 +99,7 @@ public sealed class TDMSystem : EntitySystem
             return;
         }
 
-        GameOver(Currentrule.Value, rule, true);
+        GameOver(Currentrule.Value, rule);
         rule.LastRound = true;
     }
 
@@ -281,7 +281,6 @@ public sealed class TDMSystem : EntitySystem
             // Пора запустить новый цикл
             if (rule.CurrentStatus == TDMStatus.started && rule.TimeOnNewCycle >= rule.TimeToNewCycle)
             {
-                rule.CurrentStatus = TDMStatus.ended;
                 GameOver(uid, rule);
             }
         }
@@ -306,6 +305,14 @@ public sealed class TDMSystem : EntitySystem
     /// </summary>
     private void GameOver(EntityUid uid, TDMRuleComponent rule, bool notstartnewcycle = false)
     {
+        rule.CurrentStatus = TDMStatus.ended;
+
+        if (notstartnewcycle)
+        {
+            QueueDel(rule.Arena);
+            return;
+        }
+
         var redguys = rule.PlayerCharacters.Count(p => p.Value == true);
         var blueguys = rule.PlayerCharacters.Count(p => p.Value == false);
 
@@ -313,9 +320,14 @@ public sealed class TDMSystem : EntitySystem
 
         List<PlayerStats> statsList = new();
 
-        foreach (var (player, _) in rule.PlayerCharacters)
+        var query = EntityQueryEnumerator<TDMMarkerComponent>();
+
+        while (query.MoveNext(out var player, out var marker))
         {
-            if (!TryComp<TDMMarkerComponent>(player, out var marker))
+            if (!TryComp<TDMRuleComponent>(marker.RuleLink, out var rulelink))
+                continue;
+
+            if (rulelink != rule)
                 continue;
 
             var name = MetaData(player).EntityName;
@@ -353,12 +365,10 @@ public sealed class TDMSystem : EntitySystem
         if (rule.LastRound)
         {
             _gameTicker.RestartRound();
-            return;
         }
         else
         {
-            if (!notstartnewcycle)
-                NewCycle(uid, rule);
+            NewCycle(uid, rule);
         }
     }
 
@@ -400,8 +410,6 @@ public sealed class TDMSystem : EntitySystem
         if (_mindSystem.TryGetMind(session.AttachedEntity!.Value, out var mindId, out var mindComp))
             _mindSystem.TransferTo(mindId, mobUid, true, mind: mindComp);
 
-        //Замораживаем
-        AddComp<AdminFrozenComponent>(mobUid);
 
         //Добавляем метку
         var marker = EnsureComp<TDMMarkerComponent>(mobUid);
@@ -410,6 +418,10 @@ public sealed class TDMSystem : EntitySystem
         //Добавляем предыстории
         var background = EnsureComp<AwaitBackgroundComponent>(mobUid);
         background.BackgroundGroup = (marker.Team) ? "RedGuyBackgroundGroup" : "BlueGuyBackgroundGroup";
+
+        //Замораживаем
+        RemComp<AdminFrozenComponent>(mobUid);
+        AddComp<AdminFrozenComponent>(mobUid);
 
         rule.PlayerCharacters[mobUid] = marker.Team; //Добавляем в список игроков
         return usedspawner;
