@@ -121,18 +121,6 @@
   - Wizard
   - Xenoborg
 
-# vanilla-station-start
-- type: npcFaction
-  id: CentComm
-  hostile:
-    - Dragon
-    - NanoTrasen
-    - SimpleHostile
-    - Syndicate
-    - Xeno
-    - Zombie
-    - Revolutionary
-    - AllHostile
 
 - type: npcFaction
   id: AllHostile
@@ -183,5 +171,5 @@
   - Xeno # rivalry
 
   # cause they are hostile to them
-  - SimpleHostile 
+  - SimpleHostile
   - AllHostile

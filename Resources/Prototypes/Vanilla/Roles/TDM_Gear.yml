@@ -6,7 +6,6 @@
     shoes: ClothingShoesBootsSpeedUnrem
     belt: ClothingBeltBandolier
     outerClothing: ClothingOuterFlannelBlue
-    pocket1: PowerCellMicroreactor
   storage:
     back:
     - BoxLethalshot
@@ -22,7 +21,6 @@
     shoes: ClothingShoesBootsSpeedUnrem
     belt: ClothingBeltBandolier
     outerClothing: ClothingOuterFlannelRed
-    pocket1: PowerCellMicroreactor
   storage:
     back:
     - BoxLethalshot
@@ -188,6 +186,59 @@
   inhand:
     - WeaponPistolCobra
 
+# инженер
+- type: startingGear
+  id: RedGuyEngineer
+  parent: RedTeamGearDefault
+  equipment:
+    belt: ClothingBeltChiefEngineer
+    shoes: ClothingShoesBootsMagAdv
+    pocket1: HandTeleporter
+  storage:
+    belt:
+    - Wrench
+    - Screwdriver
+    - TDMRCD
+    - RCDAmmo
+    - SmokeGrenade
+    back:
+    - MedicatedSuture
+    - BruteAutoInjector
+  inhand:
+    - ToolboxTurretTDMRed
+
+- type: startingGear
+  id: BlueGuyEngineer
+  parent: BlueTeamGearDefault
+  equipment:
+    belt: ClothingBeltChiefEngineer
+    shoes: ClothingShoesBootsMagAdv
+    pocket1: HandTeleporter
+  storage:
+    belt:
+    - Wrench
+    - Screwdriver
+    - TDMRCD
+    - RCDAmmo
+    - SmokeGrenade
+    back:
+    - MedicatedSuture
+    - BruteAutoInjector
+  inhand:
+    - ToolboxTurretTDMBlue
+
+
+
+
+
+
+
+
+
+
+
+
+
 # базовые гиры
 - type: startingGear
   id: BlueTeamGearDefault
@@ -321,3 +372,120 @@
         reagents:
         - ReagentId: Puncturase
           Quantity: 50
+
+- type: entity
+  name: Свёрнутая турель
+  parent: ToolboxMechanical
+  id: ToolboxTurretTDMBlue
+  categories: [ HideSpawnMenu ]
+  description: Гаечным ключём разворачивается, отвёрткой сворачивается.
+  components:
+  - type: Damageable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+      - trigger:
+          !type:DamageTrigger
+          damage: 100
+        behaviors:
+          - !type:DoActsBehavior
+            acts: [ "Destruction" ]
+      - trigger:
+          !type:DamageTrigger
+          damage: 1
+        behaviors:
+          - !type:DoActsBehavior
+            acts: [ "Destruction" ]
+          - !type:SpawnEntitiesBehavior
+            spawn:
+              WeaponTurretBlueTeam:
+                min: 1
+                max: 1
+
+- type: entity
+  name: Свёрнутая турель
+  parent: ToolboxEmergency
+  id: ToolboxTurretTDMRed
+  categories: [ HideSpawnMenu ]
+  description: Гаечным ключём разворачивается, отвёрткой сворачивается.
+  components:
+  - type: Damageable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+      - trigger:
+          !type:DamageTrigger
+          damage: 100
+        behaviors:
+          - !type:DoActsBehavior
+            acts: [ "Destruction" ]
+      - trigger:
+          !type:DamageTrigger
+          damage: 1
+        behaviors:
+          - !type:DoActsBehavior
+            acts: [ "Destruction" ]
+          - !type:SpawnEntitiesBehavior
+            spawn:
+              WeaponTurretRedTeam:
+                min: 1
+                max: 1
+
+- type: entity
+  parent: WeaponTurretSyndicateDisposable
+  id: WeaponTurretRedTeam
+  name: турель красной команды
+  description: Красотка.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TDMMarker
+    team: true
+    summon: true
+  - type: NpcFactionMember
+    factions:
+    - RedTeamTDM
+
+
+- type: entity
+  parent: WeaponTurretSyndicateDisposable
+  id: WeaponTurretBlueTeam
+  name: турель синей команды
+  description: Красотка.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TDMMarker
+    team: false
+    summon: true
+  - type: NpcFactionMember
+    factions:
+    - BlueTeamTDM
+  # - type: Destructible
+  #   thresholds:
+  #   - trigger:
+  #       !type:DamageTrigger
+  #       damage: 600
+  #     behaviors:
+  #     - !type:DoActsBehavior
+  #       acts: [ "Destruction" ]
+  #   - trigger:
+  #       !type:DamageTrigger
+  #       damage: 100
+  #     behaviors:
+  #     - !type:DoActsBehavior
+  #       acts: [ "Destruction" ]
+  #     - !type:TriggerBehavior
+
+- type: entity
+  parent: RCD
+  id: TDMRCD
+  name: РСУ
+  description: Ставь стеночки инженер!
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RCD
+    availablePrototypes:
+    - WallSolid
+    - Plating
+    - Window
+    - ReinforcedWindow
+

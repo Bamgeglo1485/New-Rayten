@@ -1,0 +1,23 @@
+- type: npcFaction
+  id: CentComm
+  hostile:
+    - Dragon
+    - NanoTrasen
+    - SimpleHostile
+    - Syndicate
+    - Xeno
+    - Zombie
+    - Revolutionary
+    - AllHostile
+
+- type: npcFaction
+  id: BlueTeamTDM
+  hostile:
+    - RedTeamTDM
+    - AllHostile
+
+- type: npcFaction
+  id: RedTeamTDM
+  hostile:
+    - BlueTeamTDM
+    - AllHostile
