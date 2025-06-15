@@ -11,7 +11,7 @@ public sealed partial class StationERTComponent : Component
 {
 
     [DataField]
-    public ResPath Map = new("Maps/Vanilla/Shuttles/Knocker_ERT_Base.yml");
+    public ResPath Map = new("/Maps/Vanilla/Shuttles/Knocker_ERT_Base.yml");
     /// <summary>
     /// Сущность верфи которая была заспавнена
     /// </summary>
