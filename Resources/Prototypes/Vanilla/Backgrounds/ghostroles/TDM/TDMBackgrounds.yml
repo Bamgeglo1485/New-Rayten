@@ -7,8 +7,8 @@
   - BlueGuyHeavyBackground
   - BlueGuyMedicBackground
   - BlueGuySniperBackground
-  # - BlueGuyEngineerBackground todo
   - BlueGuySpyBackground
+  - BlueGuyEngineerBackground
 
 - type: Background
   id: BlueGuyScoutBackground
@@ -28,6 +28,11 @@
     - shoes
     loadout:
     - BlueGuyScout
+  - !type:AddComponentsSpecial
+    components:
+    - type: NpcFactionMember
+      factions:
+      - BlueTeamTDM
 
 - type: Background
   id: BlueGuySoldierBackground
@@ -46,6 +51,11 @@
     - shoes
     loadout:
     - BlueGuySoldier
+  - !type:AddComponentsSpecial
+    components:
+    - type: NpcFactionMember
+      factions:
+      - BlueTeamTDM
 
 - type: Background
   id: BlueGuyHeavyBackground
@@ -64,6 +74,11 @@
     - shoes
     loadout:
     - BlueGuyHeavy
+  - !type:AddComponentsSpecial
+    components:
+    - type: NpcFactionMember
+      factions:
+      - BlueTeamTDM
 
 - type: Background
   id: BlueGuyMedicBackground
@@ -72,7 +87,6 @@
   sponsorOnly: false
   skills:
     RangeWeapon: 1
-    MeleeWeapon: 2
     Medicine: 3
     Chemistry: 3
   specialDesc:
@@ -83,6 +97,11 @@
     - shoes
     loadout:
     - BlueGuyMedic
+  - !type:AddComponentsSpecial
+    components:
+    - type: NpcFactionMember
+      factions:
+      - BlueTeamTDM
 
 - type: Background
   id: BlueGuySniperBackground
@@ -101,6 +120,11 @@
     - shoes
     loadout:
     - BlueGuySniper
+  - !type:AddComponentsSpecial
+    components:
+    - type: NpcFactionMember
+      factions:
+      - BlueTeamTDM
 
 - type: Background
   id: BlueGuySpyBackground
@@ -120,6 +144,36 @@
     - shoes
     loadout:
     - BlueGuySpy
+  - !type:AddComponentsSpecial
+    components:
+    - type: NpcFactionMember
+      factions:
+      - RedTeamTDM
+      - BlueTeamTDM
+
+- type: Background
+  id: BlueGuyEngineerBackground
+  name: Инженер
+  description: Слушай, парень, я ведь инженер, и умею решать проблемы. Не проблемы типа «что есть добро?», потому что с такими вопросами должны разбираться долбанные философы. Я решаю практические проблемы.
+  sponsorOnly: true
+  skills:
+    RangeWeapon: 2
+    MeleeWeapon: 2
+    Engineering: 3
+    Building: 3
+  specialDesc:
+    - Вы можете строить, у вас есть турель, а также телепорт!
+  specials:
+  - !type:EquipSpecial
+    removeSlotID:
+    - shoes
+    loadout:
+    - BlueGuyEngineer
+  - !type:AddComponentsSpecial
+    components:
+    - type: NpcFactionMember
+      factions:
+      - BlueTeamTDM
 
 # красная команда
 
@@ -132,8 +186,8 @@
   - RedGuyHeavyBackground
   - RedGuyMedicBackground
   - RedGuySniperBackground
-  # - RedGuyEngineerBackground todo
   - RedGuySpyBackground
+  - RedGuyEngineerBackground
 
 - type: Background
   id: RedGuyScoutBackground
@@ -153,6 +207,11 @@
     - shoes
     loadout:
     - RedGuyScout
+  - !type:AddComponentsSpecial
+    components:
+    - type: NpcFactionMember
+      factions:
+      - RedTeamTDM
 
 - type: Background
   id: RedGuySoldierBackground
@@ -171,6 +230,11 @@
     - shoes
     loadout:
     - RedGuySoldier
+  - !type:AddComponentsSpecial
+    components:
+    - type: NpcFactionMember
+      factions:
+      - RedTeamTDM
 
 - type: Background
   id: RedGuyHeavyBackground
@@ -189,12 +253,21 @@
     - shoes
     loadout:
     - RedGuyHeavy
+  - !type:AddComponentsSpecial
+    components:
+    - type: NpcFactionMember
+      factions:
+      - RedTeamTDM
 
 - type: Background
   id: RedGuyMedicBackground
   name: Медик
   description: А теперь попрактикуемся в медицине!
   sponsorOnly: false
+  skills:
+    RangeWeapon: 1
+    Medicine: 3
+    Chemistry: 3
   specialDesc:
     - У вас буквально нет оружия. Но зато у вас есть куча медицины и гипоспрей!
   skills:
@@ -208,6 +281,11 @@
     - shoes
     loadout:
     - RedGuyMedic
+  - !type:AddComponentsSpecial
+    components:
+    - type: NpcFactionMember
+      factions:
+      - RedTeamTDM
 
 - type: Background
   id: RedGuySniperBackground
@@ -226,6 +304,12 @@
     - shoes
     loadout:
     - RedGuySniper
+  - !type:AddComponentsSpecial
+    components:
+    - type: NpcFactionMember
+      factions:
+      - RedTeamTDM
+
 
 - type: Background
   id: RedGuySpyBackground
@@ -245,3 +329,33 @@
     - shoes
     loadout:
     - RedGuySpy
+  - !type:AddComponentsSpecial
+    components:
+    - type: NpcFactionMember
+      factions:
+      - RedTeamTDM
+      - BlueTeamTDM
+
+- type: Background
+  id: RedGuyEngineerBackground
+  name: Инженер
+  description: Слушай, парень, я ведь инженер, и умею решать проблемы. Не проблемы типа «что есть добро?», потому что с такими вопросами должны разбираться долбанные философы. Я решаю практические проблемы.
+  sponsorOnly: true
+  skills:
+    RangeWeapon: 2
+    MeleeWeapon: 2
+    Engineering: 3
+    Building: 3
+  specialDesc:
+    - Вы можете строить, у вас есть турель, а также телепорт!
+  specials:
+  - !type:EquipSpecial
+    removeSlotID:
+    - shoes
+    loadout:
+    - RedGuyEngineer
+  - !type:AddComponentsSpecial
+    components:
+    - type: NpcFactionMember
+      factions:
+      - RedTeamTDM

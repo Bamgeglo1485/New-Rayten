@@ -22,8 +22,9 @@
     - suitStorage
   - type: AmmoCounter
   - type: Gun
-    fireRate: 0.75
+    fireRate: 1
     selectedMode: SemiAuto
+    projectileSpeed: 75
     availableModes:
     - SemiAuto
     soundGunshot:
@@ -78,11 +79,11 @@
     capacity: 5
     proto: CartridgeAntiMateriel
   - type: SpeedModifiedOnWield
-    walkModifier: 0.25
-    sprintModifier: 0.25
+    walkModifier: 0.35
+    sprintModifier: 0.35
   - type: CursorOffsetRequiresWield
   - type: EyeCursorOffset
-    maxOffset: 3
+    maxOffset: 10
     pvsIncrease: 0.3
   - type: StaticPrice
     price: 3500
