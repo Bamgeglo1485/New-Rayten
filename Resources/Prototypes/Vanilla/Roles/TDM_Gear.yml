@@ -444,7 +444,21 @@
   - type: NpcFactionMember
     factions:
     - RedTeamTDM
-
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 600
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+    - trigger:
+        !type:DamageTrigger
+        damage: 595
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+      - !type:TriggerBehavior
 
 - type: entity
   parent: WeaponTurretSyndicateDisposable
@@ -459,21 +473,21 @@
   - type: NpcFactionMember
     factions:
     - BlueTeamTDM
-  # - type: Destructible
-  #   thresholds:
-  #   - trigger:
-  #       !type:DamageTrigger
-  #       damage: 600
-  #     behaviors:
-  #     - !type:DoActsBehavior
-  #       acts: [ "Destruction" ]
-  #   - trigger:
-  #       !type:DamageTrigger
-  #       damage: 100
-  #     behaviors:
-  #     - !type:DoActsBehavior
-  #       acts: [ "Destruction" ]
-  #     - !type:TriggerBehavior
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 600
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+    - trigger:
+        !type:DamageTrigger
+        damage: 595
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+      - !type:TriggerBehavior
 
 - type: entity
   parent: RCD
