@@ -18,6 +18,12 @@ public sealed partial class TDMMarkerComponent : Component
     [DataField]
     public FixedPoint2 TotalDamage = new();
 
+    [DataField]
+    public EntityUid? Summoner = null;
+
+    [DataField]
+    public bool Summon = false;
+
     public DamageSpecifier Damage = new()
     {
         DamageDict = new()

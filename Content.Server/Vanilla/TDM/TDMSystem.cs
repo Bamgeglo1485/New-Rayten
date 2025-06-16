@@ -40,7 +40,20 @@ namespace Content.Server.Vanilla.TDM;
 
 public sealed class TDMSystem : EntitySystem
 {
-    record PlayerStats(string Name, int Kills, float Damage);
+    public sealed class PlayerStats
+    {
+        public string Name { get; set; }
+        public int Kills { get; set; }
+        public float Damage { get; set; }
+
+        public PlayerStats(string name, int kills, float damage)
+        {
+            Name = name;
+            Kills = kills;
+            Damage = damage;
+        }
+    }
+
     [Dependency] private readonly MapSystem _mapSystem = default!;
     [Dependency] private readonly MapLoaderSystem _mapLoader = default!;
     [Dependency] private readonly GameTicker _gameTicker = default!;
@@ -54,6 +67,7 @@ public sealed class TDMSystem : EntitySystem
     [Dependency] private readonly DamageableSystem _damageable = default!;
     [Dependency] private readonly SharedGhostSystem _ghosts = default!;
     [Dependency] private readonly IPlayerManager _playerManager = default!;
+    [Dependency] private readonly EntityLookupSystem _lookup = default!;
     EntityUid? Currentrule = null;
 
     public override void Initialize()
@@ -62,6 +76,7 @@ public sealed class TDMSystem : EntitySystem
         SubscribeLocalEvent<TDMMarkerComponent, DamageChangedEvent>(OnDamageChanged, before: [typeof(MobThresholdSystem)]); //записываем урон который нанесли
         SubscribeLocalEvent<TDMMarkerComponent, DamageModifyEvent>(OnDamageModify);    //НО-френдлифаер
         SubscribeLocalEvent<TDMMarkerComponent, MobStateChangedEvent>(OnMobStateChanged); //Вычёркиваем
+        SubscribeLocalEvent<TDMMarkerComponent, MapInitEvent>(OnMarkerInit); //Вычёркиваем
 
         SubscribeLocalEvent<TDMRuleComponent, MapInitEvent>(OnRuleInit);//новый геймрул кайф
         SubscribeLocalEvent<TDMRuleComponent, ComponentShutdown>(OnRuleShutDown); // это конец
@@ -250,7 +265,7 @@ public sealed class TDMSystem : EntitySystem
             //обратный отсчёт
             if (rule.CurrentStatus == TDMStatus.countdown)
             {
-                if (rule.TimeOnNewCycle <= TimeSpan.FromSeconds(19.5))
+                if (rule.TimeOnNewCycle <= TimeSpan.FromSeconds(4.5))
                 {
                     return;
                 }
@@ -264,7 +279,7 @@ public sealed class TDMSystem : EntitySystem
             }
 
             //Размораживаем игроков и начинаем пвпшиться
-            if (rule.CurrentStatus == TDMStatus.unfreeze && rule.TimeOnNewCycle >= TimeSpan.FromSeconds(30))
+            if (rule.CurrentStatus == TDMStatus.unfreeze && rule.TimeOnNewCycle >= TimeSpan.FromSeconds(15))
             {
                 rule.Firstblooded = false;
 
@@ -317,8 +332,8 @@ public sealed class TDMSystem : EntitySystem
         var blueguys = rule.PlayerCharacters.Count(p => p.Value == false);
 
         bool winner = blueguys > redguys ? false : true;
-
         List<PlayerStats> statsList = new();
+        var statsByEntity = new Dictionary<EntityUid, PlayerStats>();
 
         var query = EntityQueryEnumerator<TDMMarkerComponent>();
 
@@ -330,24 +345,36 @@ public sealed class TDMSystem : EntitySystem
             if (rulelink != rule)
                 continue;
 
-            var name = MetaData(player).EntityName;
-            int kills = marker.TotalKills;
-            float damage = marker.TotalDamage.Float();
+            var target = marker.Summoner ?? player;
 
-            statsList.Add(new PlayerStats(name, kills, damage));
+            if (!statsByEntity.TryGetValue(target, out var stats))
+            {
+                var name = MetaData(target).EntityName;
+                stats = new PlayerStats(name, 0, 0f);
+                statsByEntity[target] = stats;
+            }
+
+            stats.Kills += marker.TotalKills;
+            stats.Damage += marker.TotalDamage.Float();
         }
 
-        var sorted = statsList.OrderByDescending(s => s.Kills).ToList();
+        statsList.AddRange(statsByEntity.Values);
 
-        var result = "Игрок".PadRight(32) + "| " + "Убийств".PadRight(10) + "| " + "Урон".PadRight(10) + "\n";
+        var sorted = statsList
+            .OrderByDescending(s => s.Kills)
+            .ThenByDescending(s => s.Damage)
+            .ToList();
+
+        var result = $"{"Игрок".PadRight(32)}| {"Убийств".PadRight(10)}| {"Урон".PadRight(10)}\n";
 
         foreach (var stat in sorted)
         {
-            string name = stat.Name.Length > 32 ? stat.Name.Substring(0, 32) : stat.Name;
+            string name = stat.Name.Length > 32 ? stat.Name[..32] : stat.Name;
             result += name.PadRight(32) + "| " +
                     stat.Kills.ToString().PadRight(10) + "| " +
                     ((int)stat.Damage).ToString().PadRight(10) + "\n";
         }
+
         Color draw = Color.Green;
         Color wincolor = winner ? Color.Red : Color.DodgerBlue;
 
@@ -465,36 +492,38 @@ public sealed class TDMSystem : EntitySystem
             if (origin != uid)
                 sourcecomp.TotalKills++;
 
-            if (TryComp<MetaDataComponent>(origin, out var originmeta) && TryComp<MetaDataComponent>(uid, out var entmeta))
+            TryComp<MetaDataComponent>(origin, out var originmeta);
+            TryComp<MetaDataComponent>(sourcecomp.Summoner, out var summonmeta);
+            TryComp<MetaDataComponent>(uid, out var entmeta);
+
+            string sourcename = summonmeta?.EntityName ?? originmeta?.EntityName ?? "неизвестно";
+            string victimname = entmeta?.EntityName ?? "неизвестно";
+
+
+            if (!rulecomp.Firstblooded)
             {
-                string sourcename = originmeta.EntityName;
-                string victimname = entmeta.EntityName;
+                rulecomp.Firstblooded = true;
 
-                if (!rulecomp.Firstblooded)
+                var filter = Filter.Empty().AddPlayers(rulecomp.Players);
+                _audio.PlayGlobal("/Audio/Vanilla/Effects/TDM/Firstblood.ogg", filter, true);
+                DispatchMonospaceAnnouncement(filter, Loc.GetString("tdm-firstblood", ("player", sourcename), ("victim", victimname)), color);
+            }
+            else
+            {
+                var kills = sourcecomp.TotalKills;
+                var killSounds = new Dictionary<int, string>
                 {
-                    rulecomp.Firstblooded = true;
+                    { 2, "/Audio/Vanilla/Effects/TDM/Doublekill.ogg" },
+                    { 3, "/Audio/Vanilla/Effects/TDM/TripleKill.ogg" },
+                    { 4, "/Audio/Vanilla/Effects/TDM/UltraKill.ogg" },
+                    { 5, "/Audio/Vanilla/Effects/TDM/Rampage.ogg" },
+                };
 
-                    var filter = Filter.Empty().AddPlayers(rulecomp.Players);
-                    _audio.PlayGlobal("/Audio/Vanilla/Effects/TDM/Firstblood.ogg", filter, true);
-                    DispatchMonospaceAnnouncement(filter, Loc.GetString("tdm-firstblood", ("player", sourcename), ("victim", victimname)), color);
-                }
-                else
-                {
-                    var kills = sourcecomp.TotalKills;
-                    var killSounds = new Dictionary<int, string>
-                    {
-                        { 2, "/Audio/Vanilla/Effects/TDM/Doublekill.ogg" },
-                        { 3, "/Audio/Vanilla/Effects/TDM/TripleKill.ogg" },
-                        { 4, "/Audio/Vanilla/Effects/TDM/UltraKill.ogg" },
-                        { 5, "/Audio/Vanilla/Effects/TDM/Rampage.ogg" },
-                    };
+                var filter = Filter.Empty().AddPlayers(rulecomp.Players);
 
-                    var filter = Filter.Empty().AddPlayers(rulecomp.Players);
-
-                    if (killSounds.ContainsKey(kills))
-                        _audio.PlayGlobal(killSounds[kills], filter, true);
-                    DispatchMonospaceAnnouncement(Filter.Empty().AddPlayers(rulecomp.Players), Loc.GetString("tdm-killstreak", ("streak", kills), ("player", sourcename), ("victim", victimname)), color);
-                }
+                if (killSounds.ContainsKey(kills))
+                    _audio.PlayGlobal(killSounds[kills], filter, true);
+                DispatchMonospaceAnnouncement(Filter.Empty().AddPlayers(rulecomp.Players), Loc.GetString("tdm-killstreak", ("streak", kills), ("player", sourcename), ("victim", victimname)), color);
             }
         }
 
@@ -504,6 +533,7 @@ public sealed class TDMSystem : EntitySystem
         if (blueguys <= 0 || redguys <= 0)
             GameOver(component.RuleLink.Value, rulecomp);
     }
+
     private EntityUid? SpawnArena(int playerCount, TDMRuleComponent rule)
     {
         rule.TDMProto = PickRandomArena(playerCount);
@@ -558,6 +588,20 @@ public sealed class TDMSystem : EntitySystem
 
         // Полностью обнуляем урон
         args.Damage = new DamageSpecifier();
+    }
+    private void OnMarkerInit(EntityUid uid, TDMMarkerComponent marker, MapInitEvent args)
+    {
+        marker.RuleLink = Currentrule;
+        var transform = Transform(uid);
+        var entitiesInRange = _lookup.GetEntitiesInRange(transform.Coordinates, 2f);
+        foreach (var entity in entitiesInRange)
+        {
+            if (HasComp<TDMSummonerComponent>(entity))
+            {
+                marker.Summoner = entity;
+                return;
+            }
+        }
     }
     private void OnRuleInit(EntityUid uid, TDMRuleComponent rule, MapInitEvent args)
     {

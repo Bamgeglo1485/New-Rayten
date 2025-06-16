@@ -6,7 +6,6 @@
     shoes: ClothingShoesBootsSpeedUnrem
     belt: ClothingBeltBandolier
     outerClothing: ClothingOuterFlannelBlue
-    pocket1: PowerCellMicroreactor
   storage:
     back:
     - BoxLethalshot
@@ -22,7 +21,6 @@
     shoes: ClothingShoesBootsSpeedUnrem
     belt: ClothingBeltBandolier
     outerClothing: ClothingOuterFlannelRed
-    pocket1: PowerCellMicroreactor
   storage:
     back:
     - BoxLethalshot
@@ -191,10 +189,11 @@
 # инженер
 - type: startingGear
   id: RedGuyEngineer
-  parent: BlueTeamGearDefault
+  parent: RedTeamGearDefault
   equipment:
     belt: ClothingBeltChiefEngineer
     shoes: ClothingShoesBootsMagAdv
+    pocket1: HandTeleporter
   storage:
     belt:
     - Wrench
@@ -214,6 +213,7 @@
   equipment:
     belt: ClothingBeltChiefEngineer
     shoes: ClothingShoesBootsMagAdv
+    pocket1: HandTeleporter
   storage:
     belt:
     - Wrench
@@ -437,6 +437,8 @@
   name: disposable ballistic turret
   categories: [ HideSpawnMenu ]
   components:
+  - type: TDMMarker
+    team: true
   - type: NpcFactionMember
     factions:
     - RedTeamTDM
@@ -448,6 +450,8 @@
   name: disposable ballistic turret
   categories: [ HideSpawnMenu ]
   components:
+  - type: TDMMarker
+    team: false
   - type: NpcFactionMember
     factions:
     - BlueTeamTDM

@@ -19,7 +19,7 @@ public sealed partial class TDMRuleComponent : Component
     public TimeSpan TimeOnNewCycle = TimeSpan.FromSeconds(0);
 
     [DataField]
-    public TimeSpan TimeToNewCycle = TimeSpan.FromSeconds(320);
+    public TimeSpan TimeToNewCycle = TimeSpan.FromSeconds(200);
 
     [DataField]
     public TimeSpan TimeForPlayersJoin = TimeSpan.FromMinutes(1f);

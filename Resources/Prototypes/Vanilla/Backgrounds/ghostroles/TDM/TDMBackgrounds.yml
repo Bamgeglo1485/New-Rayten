@@ -155,7 +155,7 @@
   id: BlueGuyEngineerBackground
   name: Инженер
   description: Слушай, парень, я ведь инженер, и умею решать проблемы. Не проблемы типа «что есть добро?», потому что с такими вопросами должны разбираться долбанные философы. Я решаю практические проблемы.
-  sponsorOnly: true
+  # sponsorOnly: true
   skills:
     RangeWeapon: 2
     MeleeWeapon: 2
@@ -171,6 +171,7 @@
     - BlueGuyEngineer
   - !type:AddComponentsSpecial
     components:
+    - type: TDMSummoner
     - type: NpcFactionMember
       factions:
       - BlueTeamTDM
@@ -270,11 +271,6 @@
     Chemistry: 3
   specialDesc:
     - У вас буквально нет оружия. Но зато у вас есть куча медицины и гипоспрей!
-  skills:
-    RangeWeapon: 1
-    MeleeWeapon: 2
-    Medicine: 3
-    Chemistry: 3
   specials:
   - !type:EquipSpecial
     removeSlotID:
@@ -340,7 +336,7 @@
   id: RedGuyEngineerBackground
   name: Инженер
   description: Слушай, парень, я ведь инженер, и умею решать проблемы. Не проблемы типа «что есть добро?», потому что с такими вопросами должны разбираться долбанные философы. Я решаю практические проблемы.
-  sponsorOnly: true
+  # sponsorOnly: true
   skills:
     RangeWeapon: 2
     MeleeWeapon: 2
@@ -356,6 +352,7 @@
     - RedGuyEngineer
   - !type:AddComponentsSpecial
     components:
+    - type: TDMSummoner
     - type: NpcFactionMember
       factions:
       - RedTeamTDM
