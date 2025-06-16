@@ -198,7 +198,7 @@
     belt:
     - Wrench
     - Screwdriver
-    - RCD
+    - TDMRCD
     - RCDAmmo
     - SmokeGrenade
     back:
@@ -218,7 +218,7 @@
     belt:
     - Wrench
     - Screwdriver
-    - RCD
+    - TDMRCD
     - RCDAmmo
     - SmokeGrenade
     back:
@@ -434,11 +434,13 @@
 - type: entity
   parent: WeaponTurretSyndicateDisposable
   id: WeaponTurretRedTeam
-  name: disposable ballistic turret
+  name: турель красной команды
+  description: Красотка.
   categories: [ HideSpawnMenu ]
   components:
   - type: TDMMarker
     team: true
+    summon: true
   - type: NpcFactionMember
     factions:
     - RedTeamTDM
@@ -447,11 +449,13 @@
 - type: entity
   parent: WeaponTurretSyndicateDisposable
   id: WeaponTurretBlueTeam
-  name: disposable ballistic turret
+  name: турель синей команды
+  description: Красотка.
   categories: [ HideSpawnMenu ]
   components:
   - type: TDMMarker
     team: false
+    summon: true
   - type: NpcFactionMember
     factions:
     - BlueTeamTDM
@@ -470,3 +474,17 @@
   #     - !type:DoActsBehavior
   #       acts: [ "Destruction" ]
   #     - !type:TriggerBehavior
+
+- type: entity
+  parent: RCD
+  id: TDMRCD
+  name: РСУ
+  description: Ставь стеночки инженер!
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RCD
+    availablePrototypes:
+    - WallSolid
+    - Window
+    - ReinforcedWindow
+
