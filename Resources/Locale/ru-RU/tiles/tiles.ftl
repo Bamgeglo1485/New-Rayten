@@ -36,6 +36,7 @@ tiles-dark-floor-herringbone = тёмные стальные плиты ёлоч
 tiles-dark-floor-diagonal-mini = тёмные стальные диагональные плиты
 tiles-plastic-dark-floor = тёмные пластиковые плиты
 tiles-techmaint-floor = технический пол
+tiles-techmaint-floor-dark = тёмный технический пол
 tiles-reinforced-floor = армированный пол
 tiles-super-reinforced-floor = укреплённый армированный пол
 tiles-mono-floor = моно пол
@@ -133,3 +134,9 @@ tiles-astro-snow = астро-снег
 tiles-astro-asteroid-sand = астро-песок астероида
 tiles-astro-asteroid-sand-borderless = бескрайний астро-песок астероида
 tiles-wood-large = большой деревянный пол
+tiles-xeno-floor = ксенопол
+tiles-xeno-steel = ксеностальная плитка
+tiles-xeno-steel-corner = угловая ксеностальная плитка
+tiles-xeno-maint = ксенотехническая плитка
+tiles-dark-squiggly = тёмная извилистая стальная плитка
+

@@ -1,16 +1,16 @@
 meta:
   format: 7
-  category: Map
+  category: Grid
   engineVersion: 262.0.0
-  forkId: ""
-  forkVersion: ""
-  time: 06/16/2025 22:38:26
-  entityCount: 2090
-maps:
-- 15
+  forkId: Vanilla
+  forkVersion: 0681692c7b903732ccfaa27b07c33702666e96bd
+  time: 06/17/2025 14:05:09
+  entityCount: 2089
+maps: []
 grids:
 - 13
-orphans: []
+orphans:
+- 13
 nullspace: []
 tilemap:
   0: Space
@@ -33,7 +33,7 @@ entities:
       name: grid
     - type: Transform
       pos: -3.125,-3.875
-      parent: 15
+      parent: invalid
     - type: MapGrid
       chunks:
         0,0:
@@ -307,16 +307,6 @@ entities:
         chunkSize: 4
     - type: GasTileOverlay
     - type: RadiationGridResistance
-  - uid: 15
-    components:
-    - type: MetaData
-      name: Map Entity
-    - type: Transform
-    - type: Map
-      mapPaused: True
-    - type: GridTree
-    - type: Broadphase
-    - type: OccluderTree
 - proto: AlwaysPoweredWallLight
   entities:
   - uid: 19
@@ -8083,7 +8073,7 @@ entities:
       pos: 0.5,28.5
       parent: 13
     - type: Door
-      secondsUntilStateChange: -369.0335
+      secondsUntilStateChange: -391.3519
       state: Opening
     - type: DeviceLinkSource
       lastSignals:
@@ -8099,7 +8089,7 @@ entities:
       pos: 1.5,28.5
       parent: 13
     - type: Door
-      secondsUntilStateChange: -369.36685
+      secondsUntilStateChange: -391.68524
       state: Opening
     - type: DeviceLinkSource
       lastSignals:
@@ -8115,7 +8105,7 @@ entities:
       pos: 2.5,28.5
       parent: 13
     - type: Door
-      secondsUntilStateChange: -371.2002
+      secondsUntilStateChange: -393.5186
       state: Opening
     - type: DeviceLinkSource
       lastSignals:
