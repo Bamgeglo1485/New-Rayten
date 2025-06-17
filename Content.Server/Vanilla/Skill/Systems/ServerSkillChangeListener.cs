@@ -1,4 +1,5 @@
 using Content.Shared.Vanilla.Skill;
+using Content.Shared.Strip.Components;
 namespace Content.Server.Vanilla.Skill;
 
 public sealed class ServerSkillChangeListener : EntitySystem
