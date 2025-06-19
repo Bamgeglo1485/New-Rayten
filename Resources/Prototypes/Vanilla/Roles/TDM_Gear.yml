@@ -132,6 +132,8 @@
 - type: startingGear
   id: BlueGuySniper
   parent: BlueTeamGearDefault
+  equipment:
+    outerClothing: ClothingOuterFlannelBlue
   storage:
     back:
     - MagazineBoxAntiMateriel
@@ -143,6 +145,8 @@
 - type: startingGear
   id: RedGuySniper
   parent: RedTeamGearDefault
+  equipment:
+    outerClothing: ClothingOuterFlannelRed
   storage:
     back:
     - MagazineBoxAntiMateriel

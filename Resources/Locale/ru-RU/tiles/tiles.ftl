@@ -139,4 +139,3 @@ tiles-xeno-steel = ксеностальная плитка
 tiles-xeno-steel-corner = угловая ксеностальная плитка
 tiles-xeno-maint = ксенотехническая плитка
 tiles-dark-squiggly = тёмная извилистая стальная плитка
-

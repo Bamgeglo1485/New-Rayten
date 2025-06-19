@@ -21,6 +21,9 @@ cmd-roleban-hint-duration-6 = 1 месяц
 
 cmd-roleunban-desc = Возвращает пользователю возможность играть на роли
 cmd-roleunban-help = Использование: roleunban <role ban id>
+cmd-roleunban-unable-to-parse-id =
+    Не удалось обработать { $id } как целое число идентификатора бана.
+    { $help }
 
 ## Completion result hints
 
