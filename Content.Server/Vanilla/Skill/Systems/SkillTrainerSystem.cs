@@ -2,10 +2,12 @@ using Content.Server.Vanilla.Skill;
 using Content.Shared.Vanilla.Skill;
 using Content.Shared.SkillTrainer;
 using Content.Shared.Mobs.Components;
-using Content.Shared.Popups;
 using Content.Shared.Inventory;
+using Content.Shared.Weapons.Melee;
 using Content.Shared.FixedPoint;
 using Content.Shared.Damage;
+using Content.Shared.Mobs;
+using Content.Shared.Mobs.Components;
 using Content.Shared.Weapons.Melee.Events;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Network;
@@ -21,13 +23,40 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
     {
         base.Initialize();
         SubscribeNetworkEvent<UseSkillPointEvent>(UseSkillPoint);
-
-        SubscribeLocalEvent<MeleeTrainerComponent, MeleeHitEvent>(OnMeleeTrainerHit);
+        SubscribeLocalEvent<MeleeWeaponComponent, MeleeHitEvent>(OnMeleeHitTraining);
+        SubscribeLocalEvent<MeleeTrainerComponent, MeleeHitEvent>(OnBoxTrainHit);
         SubscribeLocalEvent<MeleeTrainerComponent, InventoryRelayedEvent<MeleeHitEvent>>(
-            (e, c, ev) => OnMeleeTrainerHit(e, c, ev.Args));
+            (e, c, ev) => OnBoxTrainHit(e, c, ev.Args));
+    }
+    private void OnMeleeHitTraining(EntityUid uid, MeleeWeaponComponent component, MeleeHitEvent args)
+    {
+        if (!args.IsHit)
+            return;
+
+        if (!TryComp<SkillComponent>(args.User, out var skillcomp))
+            return;
+        // Считаем урон с учётом штрафа
+        var totalDamage = args.BaseDamage + args.BonusDamage;
+        int experience = (int) totalDamage.GetTotal().Float();
+
+        // Перебираем всех, кого ударили
+        foreach (var target in args.HitEntities)
+        {
+            if (target == args.User)
+                continue;
+
+            if (!TryComp<MobStateComponent>(target, out var targetmobstate))
+                continue;
+
+            if (targetmobstate.CurrentState != MobState.Alive)
+                continue;
+
+            AddExperience(skillcomp, skillType.MeleeWeapon, experience);
+            return;
+        }
     }
 
-    private void OnMeleeTrainerHit(EntityUid uid, MeleeTrainerComponent component, MeleeHitEvent args)
+    private void OnBoxTrainHit(EntityUid uid, MeleeTrainerComponent component, MeleeHitEvent args)
     {
         // Проверяем, что удар действительно произошел
         if (!args.IsHit)
@@ -49,19 +78,14 @@ public sealed class ServerSkillTrainerSystem : EntitySystem
                 continue;
 
             //Проверяем что цель живой игрок
-            if(!HasComp<ActorComponent>(target))
+            if (!HasComp<ActorComponent>(target))
                 continue;
 
             // Начисляем опыт за атаку атакующему
             AddExperience(skillCompAttacker, component.SkillType, component.ExpPerHit);
-
-            // начисляем опыт за атаку атакуемому
-            if (!TryComp<SkillComponent>(target, out var skillCompAttacked))
-                skillCompAttacked = EnsureComp<SkillComponent>(target);
-
-            AddExperience(skillCompAttacked, component.SkillType, component.ExpPerHit);
         }
     }
+
     private void UseSkillPoint(UseSkillPointEvent msg, EntitySessionEventArgs args)
     {
         // Проверяем, что у пользователя есть прикрепленное существо, и что навык задан

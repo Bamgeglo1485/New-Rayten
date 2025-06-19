@@ -4,6 +4,9 @@ using Content.Shared.Interaction;
 using Content.Shared.Interaction.Components;
 using Content.Shared.Item;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
+using Content.Shared.Damage.Components;
+using Content.Shared.Popups;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Events;
 using Content.Shared.Weapons.Ranged.Systems;
@@ -26,6 +29,8 @@ public sealed class GunSkillsSystem : EntitySystem
     [Dependency] private readonly HandsSystem _handsSystem = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly ServerSkillTrainerSystem _skillTrainerSystem = default!;
+    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private readonly SharedStaminaSystem _stamina = default!;
 
     public override void Initialize()
     {
@@ -33,57 +38,62 @@ public sealed class GunSkillsSystem : EntitySystem
         SubscribeLocalEvent<GunComponent, GotEquippedHandEvent>(OnHandPickUp);//обновляет модификаторы при взятии оружия в руки
         SubscribeLocalEvent<GunComponent, GunRefreshModifiersEvent>(OnGunRefreshModifiers);//перегрузка обновления модификаторов
         SubscribeLocalEvent<GunCanBeFallComponent, GunShotEvent>(RangeWeaponFalldownOnShoot);//выпадение оружия при стрельбе
-        SubscribeLocalEvent<ProjectileComponent, ProjectileHitEvent>(TrainOnShoot);
+        SubscribeLocalEvent<ProjectileComponent, ProjectileHitEvent>(OnTrain);
+        SubscribeLocalEvent<StaminaComponent, DamageChangedEvent>(OnHeadShot);
         SubscribeLocalEvent<SkillComponent, HitscanHitEvent>(TrainOnHitscanShoot);
     }
-
     private void TrainOnHitscanShoot(EntityUid uid, SkillComponent skillComp, ref HitscanHitEvent args)
     {
-        if(args.Target == null || uid == args.Target)
+        if (args.Target == null || uid == args.Target)
             return;
 
-        if(HasComp<ActorComponent>(args.Target) || HasComp<GunTrainerComponent>(args.Target))
+        if (HasComp<ActorComponent>(args.Target) || HasComp<GunTrainerComponent>(args.Target))
         {
-            if(_skillTrainerSystem.AddExperience(skillComp, skillType.RangeWeapon, (int)args.dmg.GetTotal()))
-            {
-                if(TryComp<UnskilledWeaponComponent>(args.SourceItem, out var unskilledComp))
-                {
-                    UnskilledWeaponRefreshModifiers(skillComp, unskilledComp);
-                    _gun.RefreshModifiers(args.SourceItem);
-                }
-            }
-
+            _skillTrainerSystem.AddExperience(skillComp, skillType.RangeWeapon, (int)args.dmg.GetTotal());
         }
     }
-    private void TrainOnShoot(EntityUid uid, ProjectileComponent component, ref ProjectileHitEvent args)
+
+    private void OnHeadShot(EntityUid uid, StaminaComponent component, DamageChangedEvent args)
     {
-        if(args.Shooter == null || args.Shooter == args.Target)
+        if (!TryComp<SkillComponent>(args.Origin, out var skillcomp) || args.Origin == null || args.DamageDelta == null)
             return;
 
-        if(HasComp<ActorComponent>(args.Target) || HasComp<GunTrainerComponent>(args.Target))
+        float chance = skillcomp.RangeWeaponLevel switch
         {
+            SkillLevel.None => 0.01f,
+            SkillLevel.Basic => 0.1f,
+            SkillLevel.Advanced => 0.2f,
+            SkillLevel.Expert => 0.3f,
+            _ => 0f
+        };
 
-            if (!EntityManager.TryGetComponent<SkillComponent>(args.Shooter.Value, out var skillComp))
+        if (!_random.Prob(chance))
+            return;
+
+        var headshoter = args.Origin.Value;
+        float staminadamage = args.DamageDelta.GetTotal().Float() * 3;
+
+        _skillTrainerSystem.AddExperience(skillcomp, skillType.RangeWeapon, (int)staminadamage / 3);
+        _audio.PlayPvs("/Audio/Vanilla/SkillSystem/headshot.ogg", uid, AudioParams.Default.WithVolume(-3f).WithMaxDistance(5f));
+
+        _stamina.TakeStaminaDamage(uid, staminadamage, source: headshoter, ignoreResist: true);
+    }
+    private void OnTrain(EntityUid uid, ProjectileComponent component, ref ProjectileHitEvent args)
+    {
+        if (args.Shooter == null || args.Shooter == args.Target)
+            return;
+
+        if (HasComp<ActorComponent>(args.Target) || HasComp<GunTrainerComponent>(args.Target))
+        {
+            if (!TryComp<SkillComponent>(args.Shooter.Value, out var skillComp))
                 skillComp = EnsureComp<SkillComponent>(args.Shooter.Value);
 
-            if(_skillTrainerSystem.AddExperience(skillComp, skillType.RangeWeapon, (int)component.Damage.GetTotal()))
-            {
-                if(component.Weapon == null)
-                    return;
-
-                if(TryComp<UnskilledWeaponComponent>(component.Weapon.Value, out var unskilledComp))
-                {
-                    UnskilledWeaponRefreshModifiers(skillComp, unskilledComp);
-                    _gun.RefreshModifiers(component.Weapon.Value);
-                }
-            }
-
+            _skillTrainerSystem.AddExperience(skillComp, skillType.RangeWeapon, (int)component.Damage.GetTotal());
         }
     }
-
     private void OnHandPickUp(EntityUid uid, GunComponent gunComp, GotEquippedHandEvent args)
     {
-        if(HasComp<GunIgnoreSkillComponent>(uid))
+        if (HasComp<GunIgnoreSkillComponent>(uid))
             return;
 
         if (!EntityManager.TryGetComponent<UnskilledWeaponComponent>(uid, out var unskilledComp))
@@ -93,36 +103,28 @@ public sealed class GunSkillsSystem : EntitySystem
             UnskilledWeaponRefreshModifiers(skillComp, unskilledComp);
         else
         {
-            unskilledComp.MinAnglePenalty = Angle.FromDegrees(60);
-            unskilledComp.MaxAnglePenalty = Angle.FromDegrees(150);
-            unskilledComp.AngleIncreasePenalty = Angle.FromDegrees(18);
+            unskilledComp.MinAnglePenalty = Angle.FromDegrees(50);
+            unskilledComp.MaxAnglePenalty = Angle.FromDegrees(50);
         }
         _gun.RefreshModifiers(uid);
     }
 
-    private void UnskilledWeaponRefreshModifiers(SkillComponent skillComp, UnskilledWeaponComponent unskilledComp)
+    public void UnskilledWeaponRefreshModifiers(SkillComponent skillComp, UnskilledWeaponComponent unskilledComp)
     {
         switch (skillComp.RangeWeaponLevel)
         {
             case SkillLevel.None:
-                unskilledComp.MinAnglePenalty = Angle.FromDegrees(60);
-                unskilledComp.MaxAnglePenalty = Angle.FromDegrees(150);
-                unskilledComp.AngleIncreasePenalty = Angle.FromDegrees(15);
+                unskilledComp.MinAnglePenalty = Angle.FromDegrees(50);
+                unskilledComp.MaxAnglePenalty = Angle.FromDegrees(50);
                 break;
             case SkillLevel.Basic:
-                unskilledComp.MinAnglePenalty = Angle.FromDegrees(0);
-                unskilledComp.MaxAnglePenalty = Angle.FromDegrees(100);
-                unskilledComp.AngleIncreasePenalty = Angle.FromDegrees(10);
+                unskilledComp.MinAnglePenalty = Angle.FromDegrees(10);
+                unskilledComp.MaxAnglePenalty = Angle.FromDegrees(10);
                 break;
             case SkillLevel.Advanced:
-                unskilledComp.MinAnglePenalty = Angle.FromDegrees(0);
-                unskilledComp.MaxAnglePenalty = Angle.FromDegrees(50);
-                unskilledComp.AngleIncreasePenalty = Angle.FromDegrees(5);
-                break;
             case SkillLevel.Expert:
                 unskilledComp.MinAnglePenalty = Angle.FromDegrees(0);
                 unskilledComp.MaxAnglePenalty = Angle.FromDegrees(0);
-                unskilledComp.AngleIncreasePenalty = Angle.FromDegrees(0);
                 break;
         }
     }
@@ -149,7 +151,7 @@ public sealed class GunSkillsSystem : EntitySystem
         if (skillComp.RangeWeaponLevel < component.RequiresRangeWeaponLevel)
         {
             float FallChance = component.RequiresRangeWeaponLevel - skillComp.RangeWeaponLevel;
-            
+
             FallChance = (FallChance > 0) ? FallChance * component.ChanceToFallPerLevel : 0;
 
             if (!_random.Prob(FallChance))

@@ -38,7 +38,7 @@ namespace Content.Server.Repairable
             if (!EntityManager.TryGetComponent<SkillComponent>(args.User, out var skillComp))
                 skillComp = EnsureComp<SkillComponent>(args.User);
 
-            _skillTrainerSystem.AddExperience(skillComp, skillType.Building, (int)damageable.TotalDamage / 5);
+            _skillTrainerSystem.AddExperience(skillComp, skillType.Building, (int)damageable.TotalDamage);
             //vanilla-station-end
             if (component.Damage != null)
             {
