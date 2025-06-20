@@ -28,13 +28,11 @@ public sealed class AlertKeyInterfaceState : BoundUserInterfaceState
 public sealed class AlertKeyApplyMessage : BoundUserInterfaceMessage
 {
     public readonly string Level;
-    public HashSet<string> Subcodestoadd;
-    public HashSet<string> Subcodestorem;
-    public AlertKeyApplyMessage(string level, HashSet<string> subcodestoadd, HashSet<string> subcodestorem)
+    public readonly string Reason;
+    public AlertKeyApplyMessage(string level, string reason)
     {
         Level = level;
-        Subcodestoadd = subcodestoadd;
-        Subcodestorem = subcodestorem;
+        Reason = reason;
     }
 }
 

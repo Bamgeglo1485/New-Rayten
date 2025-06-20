@@ -23,9 +23,23 @@ namespace Content.Client.Vanilla.UserInterface.AlertKey
 
             _menu.OnApply += ApplyAlertLevels;
         }
-        private void ApplyAlertLevels(string mainCode, HashSet<string> subcodestoadd, HashSet<string> subcodestorem)
+        private void ApplyAlertLevels(string? mainCode, string? subcodestoadd, string? reason)
         {
-            SendMessage(new AlertKeyApplyMessage(mainCode, subcodestoadd, subcodestorem));
+            if (reason == null)
+                return;
+
+            if (mainCode != null)
+            {
+                SendMessage(new AlertKeyApplyMessage(mainCode, reason));
+                return;
+            }
+
+            if (subcodestoadd != null)
+            {
+                SendMessage(new AlertKeyApplyMessage(subcodestoadd, reason));
+                return;
+            }
+
         }
 
         protected override void UpdateState(BoundUserInterfaceState state)

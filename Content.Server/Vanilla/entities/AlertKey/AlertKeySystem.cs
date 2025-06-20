@@ -1,12 +1,14 @@
-using Content.Shared.Popups;
+
 using Content.Server.Popups;
 using Content.Server.AlertLevel;
-using Content.Shared.Vanilla.AlertKey;
 using Content.Server.Station.Systems;
-using Robust.Server.GameObjects;
 using Content.Shared.Access.Components;
 using Content.Shared.Access.Systems;
+using Content.Shared.Popups;
 using Content.Shared.Emag.Components;
+using Content.Shared.Vanilla.AlertKey;
+using Robust.Server.GameObjects;
+using Robust.Shared.Prototypes;
 using System.Linq;
 
 namespace Content.Server.Vanilla.AlertKey;
@@ -15,6 +17,7 @@ public sealed class AlertKeySystem : EntitySystem
 {
     [Dependency] private readonly AlertLevelSystem _alertLevelSystem = default!;
     [Dependency] private readonly AccessReaderSystem _accessReaderSystem = default!;
+    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
     [Dependency] private readonly PopupSystem _popupSystem = default!;
     [Dependency] private readonly StationSystem _stationSystem = default!;
     [Dependency] private readonly UserInterfaceSystem _uiSystem = default!;
@@ -45,10 +48,7 @@ public sealed class AlertKeySystem : EntitySystem
         if (stationUid == null)
             return;
 
-        // Если основной код не равен текущему и его нет в списке доступа, или если есть хотя бы один недоступный дополнительный код
-        if ((message.Level != _alertLevelSystem.GetLevel(stationUid.Value) && !comp.CodeAccess.Contains(message.Level)) || 
-            !message.Subcodestoadd.All(comp.CodeAccess.Contains) || 
-            !message.Subcodestorem.All(comp.CodeAccess.Contains))
+        if (!comp.CodeAccess.Contains(message.Level))
         {
             _popupSystem.PopupCursor(Loc.GetString("alert-key-no-access-pool"), message.Actor, PopupType.Medium);
             return;
@@ -58,19 +58,38 @@ public sealed class AlertKeySystem : EntitySystem
         if (!TryComp<AlertLevelComponent>(stationUid.Value, out var alertComp))
             return;
 
-        // Устанавливаем основной уровень
-        _alertLevelSystem.SetLevel(stationUid.Value, message.Level, true, true);
+        string reason = "Неизвестна";
 
-        // Удаляем подуровни из списка на удаление
-        foreach (var subLevel in message.Subcodestorem)
+        if (_prototypeManager.TryIndex<AlertLevelReasonPrototype>(message.Reason, out var reasonproto))
         {
-            _alertLevelSystem.RemSubLevel(stationUid.Value, subLevel, null, alertComp);
+            reason = reasonproto.Text;
         }
 
-        // Добавляем подуровни из списка на добавление
-        foreach (var subLevel in message.Subcodestoadd)
+        if (_prototypeManager.TryIndex<AlertLevelPrototype>("stationAlerts", out var proto))
         {
-            _alertLevelSystem.SetSubLevel(stationUid.Value, subLevel, true, true);
+            if (proto.Levels.TryGetValue(message.Level, out var detail))
+            {
+                if (detail.Subcode)
+                {
+                    // Это сабкод
+                    if (alertComp.ActiveSubLevels.ContainsKey(message.Level))
+                    {
+                        _alertLevelSystem.RemSubLevel(stationUid.Value, message.Level, null, alertComp);
+                    }
+                    else
+                    {
+                        _alertLevelSystem.SetSubLevel(stationUid.Value, message.Level, true, true, reason: reason);
+                    }
+                }
+                else
+                {
+                    // Это основной код
+                    if (message.Level == alertComp.CurrentLevel)
+                        return;
+
+                    _alertLevelSystem.SetLevel(stationUid.Value, message.Level, true, true, reason: reason);
+                }
+            }
         }
     }
 

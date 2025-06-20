@@ -1,0 +1,84 @@
+- type: AlertLevelReason
+  id: green1
+  code: green
+  text: Угрзы отсутствуют.
+
+- type: AlertLevelReason
+  id: blue1
+  code: blue
+  text: Взлом защищённой точки.
+
+- type: AlertLevelReason
+  id: blue2
+  code: blue
+  text: Кража особо-ценного предмета.
+
+- type: AlertLevelReason
+  id: blue3
+  code: blue
+  text: Найдено вражеское снаряжение.
+
+- type: AlertLevelReason
+  id: red1
+  code: red
+  text: Подрыв отсека станции/установлена бомба.
+
+- type: AlertLevelReason
+  id: red2
+  code: red
+  text: Убийство сотрудника станции.
+
+- type: AlertLevelReason
+  id: red3
+  code: red
+  text: На станции присутствует тяжело-вооружённый преступник!
+
+- type: AlertLevelReason
+  id: red4
+  code: red
+  text: Вспышка зомби вируса.
+
+- type: AlertLevelReason
+  id: red5
+  code: red
+  text: Взлом станционного ИИ.
+
+- type: AlertLevelReason
+  id: red6
+  code: red
+  text: Крупномасштабные бунты.
+
+- type: AlertLevelReason
+  id: yellow1
+  code: yellow
+  text: На станции присутствуют серьезные структурные или атмосферные повреждения.
+
+- type: AlertLevelReason
+  id: yellow2
+  code: yellow
+  text: Выход сингулярности/шаровой молнии.
+
+- type: AlertLevelReason
+  id: yellow3
+  code: yellow
+  text: Утечка газа.
+
+- type: AlertLevelReason
+  id: violet1
+  code: violet
+  text: На станции существует подтвержденная опасная вспышка вируса, которая требует введения карантинных мер.
+
+- type: AlertLevelReason
+  id: gray1
+  code: gray
+  text: На станции присутствует агрессивная неразумная фауна.
+
+- type: AlertLevelReason
+  id: gray2
+  code: gray
+  text: Нападение космического дракона.
+
+- type: AlertLevelReason
+  id: gray3
+  code: gray
+  text: Появление ревенанта.

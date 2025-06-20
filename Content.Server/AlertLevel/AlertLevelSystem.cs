@@ -60,7 +60,7 @@ public sealed class AlertLevelSystem : EntitySystem
     }
 
 
-    //метод уменьшает код угрозы на 1 уровень 
+    //метод уменьшает код угрозы на 1 уровень
     private void Downcode(EntityUid station, AlertLevelComponent alert)
     {
         if (alert.AlertLevels == null)
@@ -180,7 +180,7 @@ public sealed class AlertLevelSystem : EntitySystem
     /// <param name="force">Force the alert change. This applies if the alert level is not selectable or not.</param>
     /// <param name="locked">Will it be possible to change level by crew.</param>
     public void SetLevel(EntityUid station, string level, bool playSound, bool announce, bool force = false,
-        bool locked = false, MetaDataComponent? dataComponent = null, AlertLevelComponent? component = null)
+        bool locked = false, MetaDataComponent? dataComponent = null, AlertLevelComponent? component = null, string? reason = null)
     {
         if (!Resolve(station, ref component, ref dataComponent)
             || component.AlertLevels == null
@@ -205,14 +205,14 @@ public sealed class AlertLevelSystem : EntitySystem
             component.CurrentTimeToNewCode = _cfg.GetCVar(CCVVars.GameAlertLevelDownDelay);
         else
             component.CurrentTimeToNewCode = 0;
-            
+
         component.CurrentLevel = level;
         component.IsLevelLocked = locked;
 
-        var stationName = dataComponent.EntityName;
+        var stationName = (reason == null) ? dataComponent.EntityName : reason;
         var name = Loc.TryGetString($"alert-level-{level}", out var locName) ? locName.ToLower() : level.ToLower();
         var announcement = Loc.TryGetString(detail.Announcement, out var locAnnouncement) ? locAnnouncement : detail.Announcement;
-        var announcementFull = Loc.GetString("alert-level-announcement", ("name", name), ("announcement", announcement));
+        string announcementFull = Loc.GetString("alert-level-announcement", ("name", name), ("announcement", announcement));
 
         var playDefault = false;
         if (playSound)
@@ -241,7 +241,7 @@ public sealed class AlertLevelSystem : EntitySystem
     /// Устанавливает дополнительный код угрозы для станции.
     /// </summary>
     public void SetSubLevel(EntityUid station, string subLevel, bool playSound, bool announce, bool force = false,
-        bool locked = false, MetaDataComponent? dataComponent = null, AlertLevelComponent? component = null)
+        bool locked = false, MetaDataComponent? dataComponent = null, AlertLevelComponent? component = null, string? reason = null)
     {
         if (!Resolve(station, ref component, ref dataComponent)
             || component.AlertLevels == null
@@ -263,10 +263,11 @@ public sealed class AlertLevelSystem : EntitySystem
 
         component.ActiveSubLevels[subLevel] = _cfg.GetCVar(CCVVars.GameAlertLevelDownDelay);
 
-        var stationName = dataComponent.EntityName;
+        var stationName = (reason == null) ? dataComponent.EntityName : reason;
         var name = Loc.TryGetString($"alert-level-{subLevel}", out var locName) ? locName.ToLower() : subLevel.ToLower();
         var announcement = Loc.TryGetString(detail.Announcement, out var locAnnouncement) ? locAnnouncement : detail.Announcement;
-        var announcementFull = Loc.GetString("alert-level-announcement", ("name", name), ("announcement", announcement));
+        string announcementFull = Loc.GetString("alert-level-announcement", ("name", name), ("announcement", announcement));
+
 
         var playDefault = false;
         if (playSound)
