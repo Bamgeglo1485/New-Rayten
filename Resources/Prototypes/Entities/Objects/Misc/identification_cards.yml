@@ -87,6 +87,7 @@
     layers:
     - state: default
     - state: idintern-cadet
+  - type: AlertLevelAccess #Rayten
 
 - type: entity
   parent: PassengerIDCard
@@ -133,6 +134,7 @@
     - state: idsecurityofficer
   - type: PresetIdCard
     job: SecurityOfficer
+  - type: AlertLevelAccess #Rayten
 
 - type: entity
   parent: IDCardStandard
@@ -145,6 +147,7 @@
         - state: idwarden
     - type: PresetIdCard
       job: Warden
+    - type: AlertLevelAccess #Rayten
 
 - type: entity
   parent: IDCardStandard
@@ -437,6 +440,7 @@
     heldPrefix: silver
   - type: PresetIdCard
     job: HeadOfSecurity
+  - type: AlertLevelAccess #Rayten
 
 - type: entity
   parent: IDCardStandard

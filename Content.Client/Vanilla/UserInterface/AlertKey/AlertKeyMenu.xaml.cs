@@ -23,6 +23,15 @@ namespace Content.Client.Vanilla.UserInterface.AlertKey
         private string? subcodestoadd = null;
         private string? SelectedReason = null;
         private string? _selectedMainLevel = null;
+        private readonly Dictionary<string, Color> ColorMap = new()
+        {
+            { "green", Color.Green },
+            { "blue", Color.DodgerBlue },
+            { "violet", Color.Violet },
+            { "yellow", Color.Yellow },
+            { "gray", Color.Gray },
+            { "red", Color.Red },
+        };
 
         public AlertKeyMenu()
         {
@@ -36,6 +45,7 @@ namespace Content.Client.Vanilla.UserInterface.AlertKey
             MainSelection.OnItemSelected += args =>
             {
                 SelectedReason = null;
+                subcodestoadd = null;
                 ApplyButton.Disabled = !AlertLevelSelectable || SelectedReason == null;
 
                 ReasonContainer.Children.Clear();
@@ -64,7 +74,10 @@ namespace Content.Client.Vanilla.UserInterface.AlertKey
                             ApplyButton.Disabled = !AlertLevelSelectable || SelectedReason == null;
 
                             foreach (var btn in buttonList)
+                            {
+                                btn.Modulate = Color.White;
                                 btn.Disabled = false;
+                            }
                         }
                         else
                         {
@@ -72,7 +85,14 @@ namespace Content.Client.Vanilla.UserInterface.AlertKey
                             ApplyButton.Disabled = !AlertLevelSelectable || SelectedReason == null;
 
                             foreach (var btn in buttonList)
+                            {
+                                btn.Modulate = Color.White;
                                 btn.Disabled = true;
+                            }
+
+
+                            if (ColorMap.TryGetValue(_selectedMainLevel, out var color))
+                                reasonButton.Modulate = color;
 
                             reasonButton.Disabled = false;
                         }
@@ -94,6 +114,7 @@ namespace Content.Client.Vanilla.UserInterface.AlertKey
         private void OnSubLevelToggled(string level, bool isPressed)
         {
             SelectedReason = null;
+            _selectedMainLevel = null;
             ApplyButton.Disabled = !AlertLevelSelectable || SelectedReason == null;
             ReasonContainer.Children.Clear();
 
@@ -106,7 +127,7 @@ namespace Content.Client.Vanilla.UserInterface.AlertKey
 
                 foreach (var reason in allreasons)
                 {
-                    if (_selectedMainLevel != reason.Code)
+                    if (level != reason.Code)
                         continue;
 
                     var reasonButton = new Button()
@@ -114,7 +135,6 @@ namespace Content.Client.Vanilla.UserInterface.AlertKey
                         Text = reason.Text,
                         StyleClasses = { "chatSelectorOptionButton" },
                     };
-
                     reasonButton.OnPressed += _ =>
                     {
                         if (SelectedReason == reason.ID)
@@ -125,7 +145,10 @@ namespace Content.Client.Vanilla.UserInterface.AlertKey
 
                             // Разблокировать все кнопки
                             foreach (var btn in buttonList)
+                            {
+                                btn.Modulate = Color.White;
                                 btn.Disabled = false;
+                            }
                         }
                         else
                         {
@@ -135,8 +158,13 @@ namespace Content.Client.Vanilla.UserInterface.AlertKey
 
                             // Заблокировать все, кроме текущей
                             foreach (var btn in buttonList)
+                            {
+                                btn.Modulate = Color.White;
                                 btn.Disabled = true;
+                            }
 
+                            if (ColorMap.TryGetValue(level, out var color))
+                                reasonButton.Modulate = color;
                             reasonButton.Disabled = false;
                         }
                     };
