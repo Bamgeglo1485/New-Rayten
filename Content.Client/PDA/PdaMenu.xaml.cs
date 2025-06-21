@@ -33,7 +33,7 @@ namespace Content.Client.PDA
         private string _stationName = Loc.GetString("comp-pda-ui-unknown");
         private string _alertLevel = Loc.GetString("comp-pda-ui-unknown");
         private string _instructions = Loc.GetString("comp-pda-ui-unknown");
-        
+
 
         private int _currentView;
 
@@ -42,7 +42,7 @@ namespace Content.Client.PDA
         public event Action<EntityUid>? OnInstallButtonPressed;
 
         //vanilla-station-start
-        private float _timetodown =0;
+        private float _timetodown = 0;
         private Color _alertColor = Color.White;
         private Dictionary<string, float> _stationAlertSubLevels = new Dictionary<string, float>();
         //vanills-stat-end
@@ -132,7 +132,7 @@ namespace Content.Client.PDA
                 _clipboard.SetText(_instructions);
             };
 
-            
+
 
 
             HideAllViews();
@@ -172,7 +172,7 @@ namespace Content.Client.PDA
             _stationName = state.StationName ?? Loc.GetString("comp-pda-ui-unknown");
             StationNameLabel.SetMarkup(Loc.GetString("comp-pda-ui-station",
                 ("station", _stationName)));
-            
+
 
             var stationTime = _gameTiming.CurTime.Subtract(_gameTicker.RoundStartTimeSpan);
 
@@ -186,8 +186,14 @@ namespace Content.Client.PDA
             _alertLevel = Loc.GetString(alertLevelKey);
 
             //vanilla-station-start
+            //earth-time
+            var localTime = DateTime.Now.AddYears(1000);
+            WorldTimeLabel.SetMarkup(Loc.GetString("comp-pda-ui-world-time",
+                ("time", localTime.ToString("dd.MM.yyyy; HH\\:mm"))));
+            //alert-levels
+
             _timetodown = state.PdaOwnerInfo.StationAlertTimeToDown;
-            if(_timetodown>0)
+            if (_timetodown > 0)
             {
                 int minutes = (int)(_timetodown / 60); // целые минуты
                 int secs = (int)(_timetodown % 60);    // оставшиеся секунды
@@ -412,7 +418,19 @@ namespace Content.Client.PDA
         protected override void Draw(DrawingHandleScreen handle)
         {
             base.Draw(handle);
+            DrawAlertLevels();
+            DrawEarthTime();
+        }
+        private void DrawEarthTime()
+        {
+            var localTime = DateTime.Now.AddYears(1000);
+            WorldTimeLabel.SetMarkup(Loc.GetString("comp-pda-ui-world-time",
+                ("time", localTime.ToString("dd.MM.yyyy; HH\\:mm"))));
+        }
 
+
+        private void DrawAlertLevels()
+        {
             // Проверяем, прошло ли больше секунды
             double deltaTime = _gameTiming.CurTime.TotalSeconds - _lastUpdateTime;
             if (deltaTime >= 1f)  // если прошло 1 секунда
@@ -425,7 +443,7 @@ namespace Content.Client.PDA
                 {
                     _timetodown -= 1;
                 }
-                
+
                 foreach (var key in _stationAlertSubLevels.Keys.ToList())
                 {
                     if (_stationAlertSubLevels[key] > 0)
@@ -477,10 +495,8 @@ namespace Content.Client.PDA
                 // Если есть подуровни, показываем их
                 if (subLevelsList.Any())
                 {
-                    // Объединяем все строки в одну строку с разделением запятой
                     var subLevelsString = string.Join(", ", subLevelsList);
 
-                    // Применяем разметку с полученной строкой
                     StationSubAlertLevelLabel.SetMarkup(Loc.GetString(
                         "comp-pda-ui-station-sublevels",
                         ("sublevels", subLevelsString)
@@ -488,19 +504,13 @@ namespace Content.Client.PDA
                 }
                 else
                 {
-                    // Если подуровней нет, скрываем метку
                     StationSubAlertLevelLabel.Visible = false;
                 }
             }
             else
             {
-                // Если подуровней нет вообще, скрываем метку
                 StationSubAlertLevelLabel.Visible = false;
             }
-            // Vanilla-station-end
-
-
-
         }
     }
 

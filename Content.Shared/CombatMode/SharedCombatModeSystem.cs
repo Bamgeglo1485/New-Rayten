@@ -2,8 +2,10 @@ using Content.Shared.Actions;
 using Content.Shared.Mind;
 using Content.Shared.MouseRotator;
 using Content.Shared.Movement.Components;
+using Content.Shared.Movement.Systems;
 using Content.Shared.Popups;
 using Robust.Shared.Network;
+using Robust.Shared.Physics.Events;
 using Robust.Shared.Timing;
 
 namespace Content.Shared.CombatMode;
@@ -22,8 +24,18 @@ public abstract class SharedCombatModeSystem : EntitySystem
         SubscribeLocalEvent<CombatModeComponent, MapInitEvent>(OnMapInit);
         SubscribeLocalEvent<CombatModeComponent, ComponentShutdown>(OnShutdown);
         SubscribeLocalEvent<CombatModeComponent, ToggleCombatActionEvent>(OnActionPerform);
+        SubscribeLocalEvent<CombatModeComponent, AttemptMobCollideEvent>(OnCollide);
     }
 
+    // Rayten-start
+    private void OnCollide(EntityUid uid, CombatModeComponent component, ref AttemptMobCollideEvent args)
+    {
+        if (!component.IsInCombatMode)
+        {
+            args.Cancelled = !component.IsInCombatMode;
+        }
+    }
+    // Rayten-end
     private void OnMapInit(EntityUid uid, CombatModeComponent component, MapInitEvent args)
     {
         _actionsSystem.AddAction(uid, ref component.CombatToggleActionEntity, component.CombatToggleAction);

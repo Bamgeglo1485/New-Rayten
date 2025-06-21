@@ -64,6 +64,9 @@ public sealed class GunSkillsSystem : EntitySystem
             _skillTrainerSystem.AddExperience(skillComp, skillType.RangeWeapon, (int)component.Damage.GetTotal());
         }
 
+        if (!HasComp<StaminaComponent>(args.Target))
+            return;
+
         if (!TryComp<SkillComponent>(args.Shooter, out var skillcomp) || args.Damage == null)
             return;
 
@@ -80,9 +83,9 @@ public sealed class GunSkillsSystem : EntitySystem
             return;
 
         var headshoter = args.Shooter.Value;
-        float staminadamage = args.Damage.GetTotal().Float() * 3;
+        float staminadamage = args.Damage.GetTotal().Float();
 
-        _skillTrainerSystem.AddExperience(skillcomp, skillType.RangeWeapon, (int)staminadamage / 3);
+        _skillTrainerSystem.AddExperience(skillcomp, skillType.RangeWeapon, (int)staminadamage);
         _audio.PlayPvs("/Audio/Vanilla/SkillSystem/headshot.ogg", args.Target, AudioParams.Default.WithVolume(-7f).WithMaxDistance(5f));
 
         _stamina.TakeStaminaDamage(args.Target, staminadamage, source: headshoter, ignoreResist: true);
