@@ -32,7 +32,7 @@ public sealed class CCVVars
     /// </summary>
     public static readonly CVarDef<string> DiscordAuthApiKey = CVarDef.Create("discord_auth.api_key", "", CVar.SERVERONLY | CVar.CONFIDENTIAL);
 
-    public static readonly CVarDef<int> GameAlertLevelDownDelay = CVarDef.Create("game.alert_level_down_delay", 1200, CVar.SERVERONLY);
+    public static readonly CVarDef<int> GameAlertLevelDownDelay = CVarDef.Create("game.alert_level_down_delay", 900, CVar.SERVERONLY);
     /// <summary>
     ///  Спонсорка
     /// </summary>
