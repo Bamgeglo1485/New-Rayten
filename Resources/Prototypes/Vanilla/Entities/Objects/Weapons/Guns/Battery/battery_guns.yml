@@ -29,18 +29,12 @@
   - type: Clothing
     sprite: Vanilla/Objects/Weapons/Guns/Battery/Dominator.rsi
   - type: Gun
-    fireRate: 2
+    fireRate: 0.5
     soundGunshot:
-      path: /Audio/Weapons/Guns/Gunshots/laser_cannon.ogg
-  - type: ProjectileBatteryAmmoProvider
-    proto: BulletDisabler
+      path: /Audio/Vanilla/Weapons/Guns/Gunshots/dominator.ogg
+  - type: HitscanBatteryAmmoProvider
+    proto: Pulse
     fireCost: 150
-  - type: BatteryWeaponFireModes
-    fireModes:
-    - proto: BulletDisabler
-      fireCost: 150
-    - proto: LaserDominatorLethal
-      fireCost: 150
   - type: Item
     size: Small
     shape:
@@ -49,5 +43,5 @@
     sprite: Vanilla/Objects/Weapons/Guns/Battery/Dominator.rsi
     heldPrefix: energy
   - type: Battery
-    maxCharge: 1200
-    startingCharge: 1200
+    maxCharge: 3000
+    startingCharge: 3000

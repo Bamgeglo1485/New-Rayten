@@ -24,9 +24,6 @@ public sealed class DominatorSystem : SharedDominatorSystem
         var used = args.Used;
         var user = args.User;
 
-        if (comp.AuthorizedID != null)
-            return;
-
         if (!TryComp<IdCardComponent>(used, out var idCard))
             return;
 
@@ -36,23 +33,30 @@ public sealed class DominatorSystem : SharedDominatorSystem
         if (!TryComp<AccessReaderComponent>(uid, out var accessReader))
             return;
 
-        // ВАЖНО: проверяем доступ не у user, а у used (карты)
-        if (!_accessReader.IsAllowed(uid, used, accessReader))
+        // Повторное использование той же карты — сброс авторизации
+        if (comp.AuthorizedID == used)
         {
-            _chat.TrySendInGameICMessage(uid, Loc.GetString("Несанкционированный доступ."), InGameICChatType.Speak, true);
+            _chat.TrySendInGameICMessage(uid, Loc.GetString("dominator-auth-cleared"), InGameICChatType.Speak, true);
+            comp.AuthorizedID = null;
+            Dirty(uid, comp);
+            args.Handled = true;
             return;
         }
 
-        if (idCard != null)
+        var sources = new HashSet<EntityUid> { used };
+        var accessTags = _accessReader.FindAccessTags(used, sources);
+        _accessReader.FindStationRecordKeys(used, out var stationKeys, sources);
+
+        if (!_accessReader.IsAllowed(accessTags, stationKeys, uid, accessReader))
         {
-            var name = idCard.FullName ?? Loc.GetString("Неизвестный пользователь");
-            _chat.TrySendInGameICMessage(uid, Loc.GetString("Авторизация завершена. Здравствуйте,", ("name", name) ), InGameICChatType.Speak, true);
+            _chat.TrySendInGameICMessage(uid, Loc.GetString("dominator-auth-notallowed"), InGameICChatType.Speak, true);
+            return;
         }
-        else
-        {
-            _chat.TrySendInGameICMessage(uid, Loc.GetString("Айди авторизовано в системе."), InGameICChatType.Speak, true);
-        }
+
+        var name = idCard.FullName ?? Loc.GetString("Неизвестный пользователь");
+        _chat.TrySendInGameICMessage(uid, Loc.GetString("dominator-auth-success", ("name", name)), InGameICChatType.Speak, true);
         comp.AuthorizedID = used;
+        Dirty(uid, comp);
         args.Handled = true;
     }
 

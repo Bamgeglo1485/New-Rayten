@@ -1,10 +1,11 @@
+using Robust.Shared.GameStates;
 using Robust.Shared.Serialization;
 namespace Content.Shared.Vanilla.Dominator;
 
-[RegisterComponent]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class DominatorComponent : Component
 {
-    [DataField]
+    [DataField, AutoNetworkedField]
     public EntityUid? AuthorizedID = null;
 
     [DataField]
