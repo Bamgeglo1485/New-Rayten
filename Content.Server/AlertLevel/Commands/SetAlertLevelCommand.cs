@@ -2,16 +2,15 @@
 using Content.Server.Administration;
 using Content.Server.Station.Systems;
 using Content.Shared.Administration;
-using JetBrains.Annotations;
 using Robust.Shared.Console;
 
 namespace Content.Server.AlertLevel.Commands
 {
-    [UsedImplicitly]
     [AdminCommand(AdminFlags.Fun)]
-    public sealed class SetAlertLevelCommand : LocalizedCommands
+    public sealed class SetAlertLevelCommand : LocalizedEntityCommands
     {
-        [Dependency] private readonly IEntitySystemManager _entitySystems = default!;
+        [Dependency] private readonly AlertLevelSystem _alertLevelSystem = default!;
+        [Dependency] private readonly StationSystem _stationSystem = default!;
 
         public override string Command => "setalertlevel";
 
@@ -21,11 +20,9 @@ namespace Content.Server.AlertLevel.Commands
             var player = shell.Player;
             if (player?.AttachedEntity != null)
             {
-                var stationUid = _entitySystems.GetEntitySystem<StationSystem>().GetOwningStation(player.AttachedEntity.Value);
+                var stationUid = _stationSystem.GetOwningStation(player.AttachedEntity.Value);
                 if (stationUid != null)
-                {
                     levelNames = GetStationLevelNames(stationUid.Value);
-                }
             }
 
             return args.Length switch
@@ -60,7 +57,7 @@ namespace Content.Server.AlertLevel.Commands
                 return;
             }
 
-            var stationUid = _entitySystems.GetEntitySystem<StationSystem>().GetOwningStation(player.AttachedEntity.Value);
+            var stationUid = _stationSystem.GetOwningStation(player.AttachedEntity.Value);
             if (stationUid == null)
             {
                 shell.WriteLine(LocalizationManager.GetString("cmd-setalertlevel-invalid-grid"));
@@ -86,20 +83,18 @@ namespace Content.Server.AlertLevel.Commands
 
             if (detail?.Subcode == true)
             {
-                _entitySystems.GetEntitySystem<AlertLevelSystem>().SetSubLevel(stationUid.Value, level, true, true, true, locked);
+                _alertLevelSystem.SetSubLevel(stationUid.Value, level, true, true, true, locked);
             }
             else
             {
-                _entitySystems.GetEntitySystem<AlertLevelSystem>().SetLevel(stationUid.Value, level, true, true, true, locked);
+                _alertLevelSystem.SetLevel(stationUid.Value, level, true, true, true, locked);
             }
             // Ryaten-end
-
         }
 
         private string[] GetStationLevelNames(EntityUid station)
         {
-            var entityManager = IoCManager.Resolve<IEntityManager>();
-            if (!entityManager.TryGetComponent<AlertLevelComponent>(station, out var alertLevelComp))
+            if (!EntityManager.TryGetComponent<AlertLevelComponent>(station, out var alertLevelComp))
                 return new string[]{};
 
             if (alertLevelComp.AlertLevels == null)
