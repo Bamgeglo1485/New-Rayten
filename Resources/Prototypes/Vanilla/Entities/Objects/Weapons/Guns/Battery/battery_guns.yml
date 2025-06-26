@@ -6,6 +6,8 @@
   components:
   - type: Dominator
   - type: Speech
+  - type: VoiceEmitter
+    voicePrototypeId: Willow
   - type: AccessReader
     access: [["Security"], ["Captain"]]
   - type: Sprite

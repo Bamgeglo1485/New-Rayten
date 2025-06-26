@@ -1,0 +1,48 @@
+<controls:FancyWindow xmlns="https://spacestation14.io"
+                      xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
+                      xmlns:customControls="clr-namespace:Content.Client.Administration.UI.CustomControls"
+                      xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
+                      xmlns:ui="clr-namespace:Content.Client.Vanilla.TechAnalysis"
+                      Title="Анализатор конкурентных технологий А.К.Т. 1.0."
+                      MinSize="700 350"
+                      SetSize="980 550">
+       <BoxContainer Orientation="Horizontal" HorizontalExpand="True" VerticalExpand="True" Access="Public">
+              <BoxContainer Margin="10 10 10 10" MaxWidth="240" SetWidth="240" Orientation="Vertical" HorizontalExpand="False" VerticalExpand="True">
+                     <BoxContainer Name="InformationContainer" Orientation="Vertical" VerticalExpand="True" >
+                            <RichTextLabel Name="ItemName" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                            <RichTextLabel Name="Difficult" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                            <RichTextLabel Name="AttemptsLeftLabel" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                            <customControls:HSeparator StyleClasses="HighDivider" Margin="0 15 0 10"/>
+                            <RichTextLabel Name="ServerConnectionStatus" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                            <RichTextLabel Name="PointsLabel" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                            <customControls:HSeparator StyleClasses="HighDivider" Margin="0 15 0 10"/>
+                     </BoxContainer>
+                            <Button Name="ExtractButton" Text="Извлечь очки" Access="Public" Disabled="True"/>
+                            <Button Name="FullResetButton" Text="Начать сначала" Access="Public"/>
+                            <Button Name="ServerButton" Text="Cервер" Access="Public"/>
+              </BoxContainer>
+              <customControls:VSeparator StyleClasses="LowDivider" />
+              <BoxContainer Name="NoItemPanel" HorizontalExpand="True" VerticalExpand="True" Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center">
+                     <RichTextLabel Text="Предметы для изучения отсутствуют" HorizontalExpand="True" VerticalExpand="True" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+              </BoxContainer>
+              <BoxContainer Name="RightPanel" HorizontalExpand="True" VerticalExpand="True" Orientation="Vertical">
+                     <BoxContainer Margin="10 10 10 10" Orientation="Vertical" Name="HistoryContainer" HorizontalExpand="True" VerticalExpand="True" HorizontalAlignment="Center">
+
+                     </BoxContainer>
+                     <GridContainer Name="GenomeGrid"
+                                   Access="Public"
+                                   HorizontalAlignment="Center"
+                                   Columns="4"
+                                   Rows="1"
+                                   Margin="0 0 0 8" />
+
+                     <BoxContainer Orientation="Horizontal"
+                                   HorizontalAlignment="Center"
+                                   Margin="0 0 0 8"
+                                   SeparationOverride="6">
+                            <Button Name="SubmitButton" Text="Анализ" Access="Public"/>
+                            <Button Name="ResetButton" Text="Сбросить" Access="Public"/>
+                     </BoxContainer>
+              </BoxContainer>
+       </BoxContainer>
+</controls:FancyWindow>
