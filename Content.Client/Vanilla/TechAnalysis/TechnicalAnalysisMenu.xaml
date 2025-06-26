@@ -13,6 +13,8 @@
                             <RichTextLabel Name="Difficult" VerticalAlignment="Top" HorizontalAlignment="Left"/>
                             <RichTextLabel Name="AttemptsLeftLabel" VerticalAlignment="Top" HorizontalAlignment="Left"/>
                             <customControls:HSeparator StyleClasses="HighDivider" Margin="0 15 0 10"/>
+                            <RichTextLabel Name="ItemDesc" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                            <customControls:HSeparator StyleClasses="HighDivider" Margin="0 15 0 10"/>
                             <RichTextLabel Name="ServerConnectionStatus" VerticalAlignment="Top" HorizontalAlignment="Left"/>
                             <RichTextLabel Name="PointsLabel" VerticalAlignment="Top" HorizontalAlignment="Left"/>
                             <customControls:HSeparator StyleClasses="HighDivider" Margin="0 15 0 10"/>

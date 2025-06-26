@@ -81,17 +81,20 @@ public sealed partial class TechnicalAnalysisMenu : FancyWindow
     }
 
 
-    public void Update(List<List<CodonFeedBack>> history, int attemptscount, string itemname, CompetitiveDifficult diffictult)
+    public void Update(List<List<CodonFeedBack>> history, int attemptscount, string itemname, LocId sourceDesc, CompetitiveDifficult diffictult)
     {
         int buttoncount = diffictult == CompetitiveDifficult.easy ? 4 : 6;
         CreateGenomeInputControls(buttoncount);
         UpdateHistory(history);
         UpdateWinCondition(attemptscount);
         UpdateSubmitButtonState();
+
+        ItemDesc.SetMessage(FormattedMessage.FromMarkupOrThrow(Loc.GetString(sourceDesc)));
         ItemName.SetMessage(FormattedMessage.FromMarkupOrThrow(Loc.GetString("TechnicalAnalysis-ui-itemname", ("item", itemname))));
         Difficult.SetMessage(FormattedMessage.FromMarkupOrThrow(Loc.GetString("TechnicalAnalysis-ui-difficult", ("difficult", diffictult.ToString()))));
         FullResetButton.Disabled = diffictult == CompetitiveDifficult.hard;
     }
+
     public void UpdateHistory(List<List<CodonFeedBack>> history)
     {
         HistoryContainer.RemoveAllChildren();

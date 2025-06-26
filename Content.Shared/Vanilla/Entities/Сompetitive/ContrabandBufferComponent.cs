@@ -13,6 +13,7 @@ public sealed partial class ContrabandBufferComponent : Component
 public sealed class ContrabandAnalysisData
 {
     public string SourceName = "Неизвестный предмет";
+    public LocId SourceDesc = string.Empty;
     public List<char> Genome = new();
     public List<List<CodonFeedBack>> History = new();
     public CompetitiveDifficult Difficult = CompetitiveDifficult.medium;

@@ -67,7 +67,7 @@ public sealed class TechnicalAnalysisSystem : EntitySystem
 
         List<List<CodonFeedBack>> emptyHistory = new();
         _ui.SetUiState(uid, TechnicalAnalyzerUiKey.Key,
-            new TechnicalAnalyzerInterfaceState(emptyHistory, -1, "Отсутствует", CompetitiveDifficult.medium, researchPoints));
+            new TechnicalAnalyzerInterfaceState(emptyHistory, -1, "Отсутствует", string.Empty, CompetitiveDifficult.medium, researchPoints));
         return;
     }
 
@@ -86,10 +86,11 @@ public sealed class TechnicalAnalysisSystem : EntitySystem
         var history = analysis.History;
         var attemptsCount = analysis.AttemptsCount;
         var sourceName = analysis.SourceName;
+        var sourceDesc = analysis.SourceDesc;
         var difficult = analysis.Difficult;
 
         _ui.SetUiState(uid, TechnicalAnalyzerUiKey.Key,
-            new TechnicalAnalyzerInterfaceState(history, attemptsCount, sourceName, difficult, analyzerComp.ResearchPoints));
+            new TechnicalAnalyzerInterfaceState(history, attemptsCount, sourceName, sourceDesc, difficult, analyzerComp.ResearchPoints));
     }
 
 

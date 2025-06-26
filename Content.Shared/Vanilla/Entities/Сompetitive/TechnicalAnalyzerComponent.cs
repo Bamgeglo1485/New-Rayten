@@ -33,18 +33,21 @@ public sealed class TechnicalAnalyzerInterfaceState : BoundUserInterfaceState
     public int AttemptsCount { get; }
     public int ResearchPoints { get; }
     public string SourceName { get; }
+    public LocId SourceDesc { get; }
     public CompetitiveDifficult Difficult { get; }
 
     public TechnicalAnalyzerInterfaceState(
         List<List<CodonFeedBack>> history,
         int attemptsCount,
         string sourceName,
+        LocId sourceDesc,
         CompetitiveDifficult difficult,
         int researchPoints)
     {
         History = history;
         AttemptsCount = attemptsCount;
         SourceName = sourceName;
+        SourceDesc = sourceDesc;
         Difficult = difficult;
         ResearchPoints = researchPoints;
     }

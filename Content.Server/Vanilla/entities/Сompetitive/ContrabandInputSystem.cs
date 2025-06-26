@@ -106,6 +106,7 @@ public sealed class ContrabandInputSystem : SharedContrabandInputSystem
             Genome = genome,
             History = new List<List<CodonFeedBack>>(),
             Difficult = comp.Difficult,
+            SourceDesc = comp.SourceDesc,
             AttemptsCount = 5,
             SourceName = Name(ent),
         };
@@ -201,7 +202,7 @@ public sealed class ContrabandInputSystem : SharedContrabandInputSystem
                 Loc.GetString("contraband-analyzer-paper-content",
                     ("station", stationname),
                     ("actualname", comp.ActualName),
-                    ("hiddendesc", comp.HiddenDesc),
+                    ("hiddendesc", Loc.GetString(comp.HiddenDesc)),
                     ("enemyTechnology", comp.EnemyTechnology),
                     ("fingerprints", fingerprints.ToString().TrimEnd()),
                     ("fibers", fibers.ToString().TrimEnd()),

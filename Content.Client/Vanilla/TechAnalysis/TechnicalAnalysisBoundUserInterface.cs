@@ -49,7 +49,7 @@ public sealed class TechnicalAnalysisBoundUserInterface(EntityUid owner, Enum ui
         if (state is not TechnicalAnalyzerInterfaceState msg)
             return;
 
-        _consoleMenu?.Update(msg.History, msg.AttemptsCount, msg.SourceName, msg.Difficult);
+        _consoleMenu?.Update(msg.History, msg.AttemptsCount, msg.SourceName, msg.SourceDesc, msg.Difficult);
         _consoleMenu?.ExtractButtonUpdate(msg.ResearchPoints);
         _consoleMenu?.NoItem(msg.AttemptsCount == -1);
     }

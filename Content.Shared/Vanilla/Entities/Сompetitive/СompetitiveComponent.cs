@@ -10,7 +10,8 @@ public sealed partial class CompetitiveComponent : Component
     [DataField]
     public string ActualName = "Неизвестно";
     [DataField]
-    public string HiddenDesc = "Неизвестно";
+    public LocId HiddenDesc = string.Empty;
+
     [DataField]
     public bool EnemyTechnology = false;
 }
@@ -18,7 +19,7 @@ public sealed partial class CompetitiveComponent : Component
 [Serializable, NetSerializable]
 public enum CompetitiveDifficult
 {
-    easy, // 4 символа
-    medium, // 6 символов
-    hard, // 6 символов, без сброса
+    easy = 1, // 4 символа
+    medium = 2, // 6 символов
+    hard = 3, // 6 символов, без сброса
 }
