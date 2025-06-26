@@ -10,6 +10,8 @@
     voicePrototypeId: Willow
   - type: AccessReader
     access: [["Security"], ["Captain"]]
+  - type: VoiceEmitter
+    voice: Willow
   - type: Sprite
     sprite: Vanilla/Objects/Weapons/Guns/Battery/Dominator.rsi
     layers:

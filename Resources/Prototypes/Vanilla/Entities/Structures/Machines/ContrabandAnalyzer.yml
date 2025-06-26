@@ -57,7 +57,7 @@
   - type: ResearchClient
   - type: Speech
   - type: VoiceEmitter
-    voicePrototypeId: WX
+    voice: WX
   - type: StaticPrice
     price: 2000
   # - type: GuideHelp
