@@ -2,7 +2,7 @@
   id: MachineContrabandAnalyzer
   parent: [ BaseMachinePowered, ConstructibleMachine ]
   name: Анализатор контрабанды
-  description: Вставь в меня контрабанду чувак
+  description: Анализирует предмет на наличие запрещённых свойств.
   components:
   - type: Sprite
     sprite: Vanilla/Structures/Machines/ContrabandAnalyzer.rsi

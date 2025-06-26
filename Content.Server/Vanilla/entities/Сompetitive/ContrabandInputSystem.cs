@@ -106,7 +106,7 @@ public sealed class ContrabandInputSystem : SharedContrabandInputSystem
             Genome = genome,
             History = new List<List<CodonFeedBack>>(),
             Difficult = comp.Difficult,
-            SourceDesc = comp.SourceDesc,
+            SourceDesc = comp.HiddenDesc,
             AttemptsCount = 5,
             SourceName = Name(ent),
         };

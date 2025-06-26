@@ -3,7 +3,7 @@
   parent: BaseComputerAiAccess
   id: TechnicalAnalysisConsole
   name: Анализатор конкурентных технологий
-  description: БУБУБУ ГЫГЫГЫ
+  description: Расшифровывает поступающую от анализатора контрабанды информацию.
   components:
   - type: Sprite
     layers:
