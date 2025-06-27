@@ -17,6 +17,12 @@
   - Salvage
   - Maintenance
   - External
+  # Rayten-start
+  special:
+  - !type:AddComponentSpecial
+    components:
+      - type: CanBeLondoner
+  # Rayten-end
 
 - type: startingGear
   id: SalvageSpecialistGear

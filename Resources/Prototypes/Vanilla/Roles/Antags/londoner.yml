@@ -1,0 +1,9 @@
+- type: antag
+  id: Londoner
+  name: roles-antag-londoner-name
+  antagonist: true
+  setPreference: true
+  objective: roles-antag-londoner-objective
+  requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 360000

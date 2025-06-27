@@ -15,6 +15,11 @@
   - !type:GiveItemOnHolidaySpecial
     holiday: BoxingDay
     prototype: BoxCardboard
+  # Rayten-start
+  - !type:AddComponentSpecial
+    components:
+      - type: CanBeLondoner
+  # Rayten-end
 
 - type: startingGear
   id: CargoTechGear

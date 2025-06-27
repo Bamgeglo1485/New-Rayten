@@ -1,0 +1,43 @@
+- type: entity
+  parent: BaseItem
+  id: HandWarmer
+  name: ручная грелка
+  description: Многоразовая химическая грелка для экстренных ситуаций.
+  components:
+  - type: Sprite
+    sprite: Vanilla/Objects/Tools/HandWarmer.rsi
+    layers:
+      - map: [ enum.ExpendableLightVisualLayers.Base ]
+        state: icon
+      - map: [ enum.ExpendableLightVisualLayers.Glow ]
+        state: activated
+        visible: false
+  - type: Item
+    sprite: Vanilla/Objects/Tools/HandWarmer.rsi
+    size: Small
+    heldPrefix: unlit
+  - type: PointLight
+    enabled: false
+    radius: 0
+    energy: 0
+    color: "#5885ff"
+    netsync: false
+  - type: Appearance
+  - type: ExpendableLight
+    spentName: использованная грелка для рук
+    spentDesc: Уже бесполезна, но её можно восстановить в микроволновке.
+    glowDuration: 120
+    fadeOutDuration: 15
+    iconStateOn: activated
+    iconStateSpent: spended
+    turnOnBehaviourID: turn_on
+    fadeOutBehaviourID: fade_out
+    litSound:
+      path: /Audio/Effects/Chemistry/bubbles.ogg
+    loopedSound: null
+  - type: Warmer
+    moleRatio: 0
+    tileHeatStrength: 0
+    heatMaxTemp: 313.15
+    bodyHeatStrength: 3500
+    onlyWeared: true

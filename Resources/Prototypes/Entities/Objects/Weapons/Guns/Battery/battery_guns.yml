@@ -7,7 +7,7 @@
   - type: Item
     size: Huge
   - type: Clothing
-    sprite: Objects/Weapons/Guns/Battery/laser_retro.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Battery/laser_retro.rsi # Rayten-Resprites
     quickEquip: false
     slots:
     - Back
@@ -108,7 +108,7 @@
   description: A cheap and widely used laser pistol.
   components:
   - type: Sprite
-    sprite: Objects/Weapons/Guns/Battery/svalinn.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Battery/svalinn.rsi # Rayten-Resprites
     layers:
     - state: base
       map: ["enum.GunVisualLayers.Base"]
@@ -116,7 +116,7 @@
       map: ["enum.GunVisualLayers.MagUnshaded"]
       shader: unshaded
   - type: Item
-    sprite: Objects/Weapons/Guns/Battery/svalinn.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Battery/svalinn.rsi # Rayten-Resprites
   - type: MagazineVisuals
     magState: mag
     steps: 5
@@ -129,7 +129,7 @@
   description: A weapon using light amplified by the stimulated emission of radiation.
   components:
   - type: Sprite
-    sprite: Objects/Weapons/Guns/Battery/laser_retro.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Battery/laser_retro.rsi # Rayten-Resprites
     layers:
     - state: base
       map: ["enum.GunVisualLayers.Base"]
@@ -152,7 +152,7 @@
   description: Better pray it won't burn your hands off.
   components:
   - type: Sprite
-    sprite: Objects/Weapons/Guns/Battery/makeshift.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Battery/makeshift.rsi # Rayten-Resprites
     layers:
     - state: base
       map: ["enum.GunVisualLayers.Base"]
@@ -165,7 +165,7 @@
     zeroVisible: false
   - type: Appearance
   - type: Clothing
-    sprite: Objects/Weapons/Guns/Battery/makeshift.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Battery/makeshift.rsi # Rayten-Resprites
   - type: HitscanBatteryAmmoProvider
     proto: RedLaser
     fireCost: 62.5
@@ -180,7 +180,7 @@
   description: The power of the primordial element of lightning in your hands.
   components:
   - type: Sprite
-    sprite: Objects/Weapons/Guns/Battery/tesla_gun.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Battery/tesla_gun.rsi
     layers:
       - state: base
         map: ["enum.GunVisualLayers.Base"]
@@ -190,7 +190,7 @@
   - type: Gun
     projectileSpeed: 10
     soundGunshot:
-      path: /Audio/Effects/Lightning/lightningshock.ogg
+      path: /Audio/Effects/Lightning/lightningshock.ogg # Rayten-Resprites
       params:
         variation: 0.2
   - type: ProjectileBatteryAmmoProvider
@@ -209,7 +209,7 @@
   description: This modified laser rifle fires nearly harmless beams in the 40-watt range, for target practice.
   components:
   - type: Sprite
-    sprite: Objects/Weapons/Guns/Battery/laser_gun.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Battery/laser_gun.rsi # Rayten-Resprites
     layers:
     - state: base
       map: ["enum.GunVisualLayers.Base"]
@@ -222,7 +222,7 @@
     zeroVisible: false
   - type: Appearance
   - type: Clothing
-    sprite: Objects/Weapons/Guns/Battery/laser_gun.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Battery/laser_gun.rsi # Rayten-Resprites
   - type: Gun
     selectedMode: SemiAuto
     availableModes:
@@ -252,7 +252,7 @@
   description: A state of the art energy pistol favoured as a sidearm by the NT operatives.
   components:
   - type: Sprite
-    sprite: Objects/Weapons/Guns/Battery/pulse_pistol.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Battery/pulse_pistol.rsi # Rayten-Resprites
     layers:
     - state: base
       map: ["enum.GunVisualLayers.Base"]
@@ -265,7 +265,7 @@
     zeroVisible: false
   - type: Appearance
   - type: Clothing
-    sprite: Objects/Weapons/Guns/Battery/pulse_pistol.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Battery/pulse_pistol.rsi # Rayten-Resprites
   - type: Gun
     selectedMode: SemiAuto
     availableModes:
@@ -286,7 +286,7 @@
   description: A high tech energy carbine favoured by the NT-ERT operatives.
   components:
   - type: Sprite
-    sprite: Objects/Weapons/Guns/Battery/pulse_carbine.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Battery/pulse_carbine.rsi # Rayten-Resprites
     layers:
     - state: base
       map: ["enum.GunVisualLayers.Base"]
@@ -299,7 +299,7 @@
     zeroVisible: false
   - type: Appearance
   - type: Clothing
-    sprite: Objects/Weapons/Guns/Battery/pulse_carbine.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Battery/pulse_carbine.rsi # Rayten-Resprites
   - type: Gun
     selectedMode: SemiAuto
     fireRate: 3
@@ -322,7 +322,7 @@
   description: A weapon that is almost as infamous as its users.
   components:
   - type: Sprite
-    sprite: Objects/Weapons/Guns/Battery/pulse_rifle.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Battery/pulse_rifle.rsi # Rayten-Resprites
     layers:
     - state: base
       map: ["enum.GunVisualLayers.Base"]
@@ -335,7 +335,7 @@
     zeroVisible: false
   - type: Appearance
   - type: Clothing
-    sprite: Objects/Weapons/Guns/Battery/pulse_rifle.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Battery/pulse_rifle.rsi # Rayten-Resprites
   - type: Gun
     fireRate: 1.5
     soundGunshot:
@@ -354,7 +354,7 @@
   description: A heavy duty, high powered laser weapon.
   components:
   - type: Sprite
-    sprite: Objects/Weapons/Guns/Battery/laser_cannon.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Battery/laser_cannon.rsi # Rayten-Resprites
     layers:
     - state: base
       map: ["enum.GunVisualLayers.Base"]
@@ -367,7 +367,7 @@
     zeroVisible: false
   - type: Appearance
   - type: Clothing
-    sprite: Objects/Weapons/Guns/Battery/laser_cannon.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Battery/laser_cannon.rsi # Rayten-Resprites
   - type: Gun
     fireRate: 1.5
     soundGunshot:
@@ -393,7 +393,7 @@
       sprintModifier: 0.6
     - type: HeldSpeedModifier
     - type: Sprite
-      sprite: Objects/Weapons/Guns/Battery/particle_decelerator.rsi
+      sprite: Objects/Weapons/Guns/Battery/particle_decelerator.rsi # Rayten-Resprites
       layers:
         - state: base
           map: ["enum.GunVisualLayers.Base"]
@@ -417,7 +417,7 @@
   description: An experimental weapon that uses concentrated x-ray energy against its target.
   components:
   - type: Sprite
-    sprite: Objects/Weapons/Guns/Battery/xray.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Battery/xray.rsi # Rayten-Resprites
     layers:
     - state: base
       map: ["enum.GunVisualLayers.Base"]
@@ -425,7 +425,7 @@
       map: ["enum.GunVisualLayers.MagUnshaded"]
       shader: unshaded
   - type: Clothing
-    sprite: Objects/Weapons/Guns/Battery/xray.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Battery/xray.rsi # Rayten-Resprites
   - type: Gun
     soundGunshot:
       path: /Audio/Weapons/Guns/Gunshots/laser3.ogg
@@ -445,7 +445,7 @@
   description: A self-defense weapon that exhausts organic targets, weakening them until they collapse. This one has been undertuned for cadets making it mostly harmless.
   components:
   - type: Sprite
-    sprite: Objects/Weapons/Guns/Battery/practice_disabler.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Battery/practice_disabler.rsi # Rayten-Resprites
     layers:
     - state: base
       map: ["enum.GunVisualLayers.Base"]
@@ -453,7 +453,7 @@
       map: ["enum.GunVisualLayers.MagUnshaded"]
       shader: unshaded
   - type: Clothing
-    sprite: Objects/Weapons/Guns/Battery/practice_disabler.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Battery/practice_disabler.rsi # Rayten-Resprites
     quickEquip: false
     slots:
     - Belt
@@ -484,7 +484,7 @@
   description: A self-defense weapon that exhausts organic targets, weakening them until they collapse.
   components:
   - type: Sprite
-    sprite: Objects/Weapons/Guns/Battery/disabler.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Battery/disabler.rsi # Rayten-Resprites
     layers:
       - state: base
         map: ["enum.GunVisualLayers.Base"]
@@ -492,7 +492,7 @@
         map: ["enum.GunVisualLayers.MagUnshaded"]
         shader: unshaded
   - type: Clothing
-    sprite: Objects/Weapons/Guns/Battery/disabler.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Battery/disabler.rsi # Rayten-Resprites
     quickEquip: false
     slots:
       - suitStorage
@@ -517,7 +517,7 @@
     tags:
       - Taser
   - type: Sprite
-    sprite: Objects/Weapons/Guns/Battery/disabler_smg.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Battery/disabler_smg.rsi # Rayten-Resprites
     layers:
       - state: base
         map: ["enum.GunVisualLayers.Base"]
@@ -554,7 +554,7 @@
     - Taser
     - Sidearm
   - type: Sprite
-    sprite: Objects/Weapons/Guns/Battery/taser.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Battery/taser.rsi
     layers:
     - state: base
       map: ["enum.GunVisualLayers.Base"]
@@ -586,7 +586,7 @@
   description: This is an antique laser pistol. All craftsmanship is of the highest quality. It is decorated with a mahogany grip and chrome filigree. The object menaces with spikes of energy. On the item is an image of a captain and a clown. The clown is dead. The captain is striking a heroic pose.
   components:
   - type: Sprite
-    sprite: Objects/Weapons/Guns/Battery/antiquelasergun.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Battery/antiquelasergun.rsi # Rayten-Resprites
     layers:
     - state: base
       map: ["enum.GunVisualLayers.Base"]
@@ -594,7 +594,7 @@
       map: ["enum.GunVisualLayers.MagUnshaded"]
       shader: unshaded
   - type: Clothing
-    sprite: Objects/Weapons/Guns/Battery/antiquelasergun.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Battery/antiquelasergun.rsi # Rayten-Resprites
   - type: Gun
     soundGunshot:
       path: /Audio/Weapons/Guns/Gunshots/laser_cannon.ogg
@@ -632,7 +632,7 @@
   - type: Item
     size: Normal  # Intentionally larger than other pistols
   - type: Sprite
-    sprite: Objects/Weapons/Guns/Battery/advancedlasergun.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Battery/advancedlasergun.rsi # Rayten-Resprited
     layers:
     - state: base
       map: ["enum.GunVisualLayers.Base"]
@@ -640,7 +640,7 @@
       map: ["enum.GunVisualLayers.MagUnshaded"]
       shader: unshaded
   - type: Clothing
-    sprite: Objects/Weapons/Guns/Battery/advancedlasergun.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Battery/advancedlasergun.rsi # Rayten-Resprited
   - type: Gun
     soundGunshot:
       path: /Audio/Weapons/Guns/Gunshots/laser_cannon.ogg
@@ -666,7 +666,7 @@
   components:
   - type: GunIgnoreSkill
   - type: Sprite
-    sprite: Objects/Weapons/Guns/Revolvers/chimp.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Revolvers/chimp.rsi # Rayten-Resprites
     layers:
     - state: base
       map: ["enum.GunVisualLayers.Base"]
@@ -680,7 +680,7 @@
     steps: 3
     zeroVisible: false
   - type: Clothing
-    sprite: Objects/Weapons/Guns/Revolvers/chimp.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Revolvers/chimp.rsi # Rayten-Resprites
   - type: Gun
     projectileSpeed: 10
     fireRate: 1.5
@@ -732,7 +732,7 @@
   description: The eye of a behonker, it fires a laser when squeezed.
   components:
   - type: Sprite
-    sprite: Objects/Weapons/Guns/Battery/behonker_eye.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Battery/behonker_eye.rsi
     layers:
     - state: base
       map: ["enum.GunVisualLayers.Base"]
@@ -756,7 +756,7 @@
   description: A one-of-a-kind prototype energy weapon that uses various shotgun configurations. It offers the possibility of both lethal and non-lethal shots, making it a versatile weapon.
   components:
   - type: Sprite
-    sprite: Objects/Weapons/Guns/Battery/energy_shotgun.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Battery/energy_shotgun.rsi # Rayten-Resprites
     layers:
       - state: base
         map: ["enum.GunVisualLayers.Base"]
@@ -769,7 +769,7 @@
     zeroVisible: false
   - type: Appearance
   - type: Clothing
-    sprite: Objects/Weapons/Guns/Battery/energy_shotgun.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Battery/energy_shotgun.rsi # Rayten-Resprites
   - type: Gun
     fireRate: 2
     soundGunshot:
@@ -789,7 +789,7 @@
     size: Large
     shape:
     - 0,0,3,1
-    sprite: Objects/Weapons/Guns/Battery/inhands_64x.rsi
+    sprite: Objects/Weapons/Guns/Battery/inhands_64x.rsi # Rayten-Resprites
     heldPrefix: energy
   - type: Tag
     tags:
@@ -813,7 +813,7 @@
   description: An advanced gun that shoots body-temperature-changing beams. This probably constitutes as some kind of war crime.
   components:
   - type: Sprite
-    sprite: Objects/Weapons/Guns/Battery/temp_gun.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Battery/temp_gun.rsi # Rayten-Resprites
     layers:
     - state: base
       map: ["enum.GunVisualLayers.Base"]
@@ -830,7 +830,7 @@
     steps: 5
     zeroVisible: false
   - type: Clothing
-    sprite: Objects/Weapons/Guns/Battery/temp_gun.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Battery/temp_gun.rsi # Rayten-Resprites
   - type: Gun
     fireRate: 1
     soundGunshot:

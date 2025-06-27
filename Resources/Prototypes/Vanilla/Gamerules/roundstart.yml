@@ -29,6 +29,7 @@
   - SpaceTrafficControlEventScheduler
   - BasicRoundstartVariation
   - Whiteout
+  - Londoners
 
 - type: gamePreset
   id: WhiteoutLondoners
@@ -43,6 +44,7 @@
   - BasicRoundstartVariation
   - Whiteout
   - Revolutionary
+  - Londoners
 
 - type: entity
   id: TeamDeathMatch

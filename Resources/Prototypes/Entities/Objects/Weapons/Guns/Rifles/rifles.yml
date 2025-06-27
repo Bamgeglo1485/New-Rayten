@@ -9,7 +9,7 @@
   - type: Item
     size: Huge
   - type: Clothing
-    sprite: Objects/Weapons/Guns/Rifles/ak.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Rifles/ak.rsi # Rayten-Resprites
     quickEquip: false
     slots:
     - Back
@@ -60,7 +60,7 @@
   description: A somewhat battered combat rifle of a design originating from old Earth. Favored by criminals, militias, and terrorists due to its famed reliability and easy-to-manufacture design. Feeds from .30 rifle magazines.
   components:
   - type: Sprite
-    sprite: Objects/Weapons/Guns/Rifles/ak.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Rifles/ak.rsi # Rayten-Resprites
     layers:
       - state: base
         map: ["enum.GunVisualLayers.Base"]
@@ -108,14 +108,14 @@
   description: An older bullpup carbine model, with an attached underbarrel grenade launcher. Uses .20 rifle ammo.
   components:
   - type: Sprite
-    sprite: Objects/Weapons/Guns/Rifles/carbine.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Rifles/carbine.rsi # Rayten-Resprites
     layers:
       - state: base
         map: ["enum.GunVisualLayers.Base"]
       - state: mag-0
         map: ["enum.GunVisualLayers.Mag"]
   - type: Clothing
-    sprite: Objects/Weapons/Guns/Rifles/carbine.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Rifles/carbine.rsi # Rayten-Resprites
   - type: ItemSlots
     slots:
       gun_magazine:
@@ -152,14 +152,14 @@
   description: A high end military grade assault rifle. Uses .20 rifle ammo.
   components:
   - type: Sprite
-    sprite: Objects/Weapons/Guns/Rifles/lecter.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Rifles/lecter.rsi # Rayten-Resprites
     layers:
       - state: base
         map: ["enum.GunVisualLayers.Base"]
       - state: mag-0
         map: ["enum.GunVisualLayers.Mag"]
   - type: Clothing
-    sprite: Objects/Weapons/Guns/Rifles/lecter.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Rifles/lecter.rsi # Rayten-Resprites
   - type: Gun
     soundGunshot:
       path: /Audio/Weapons/Guns/Gunshots/ltrifle.ogg

@@ -20,8 +20,10 @@ using Content.Server.Damage;
 using Content.Server.Resist;
 using Content.Server.Audio;
 using Content.Server.Vanilla.Jammer;
+using Content.Server.Roles;
 
 using Content.Shared.GameTicking.Components;
+using Content.Shared.Shuttles.Components;
 using Content.Shared.FixedPoint;
 using Content.Shared.Weather;
 using Content.Shared.Salvage;
@@ -31,10 +33,12 @@ using Content.Shared.Audio;
 using Content.Shared.Maps;
 using Content.Shared.Tag;
 
+using Robust.Shared.EntitySerialization.Systems;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Configuration;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Utility;
 using Robust.Shared.Timing;
 using Robust.Shared.Random;
 using Robust.Shared.Player;
@@ -54,7 +58,9 @@ public sealed class WhiteoutRuleSystem : GameRuleSystem<WhiteoutRuleComponent>
     [Dependency] private readonly StationSystem _stationSystem = default!;
     [Dependency] private readonly AtmosphereSystem _atmosphere = default!;
     [Dependency] private readonly DamageableSystem _damageable = default!;
+    [Dependency] private readonly MapLoaderSystem _mapLoader = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private readonly MetaDataSystem _metaData = default!;
     [Dependency] private readonly RoundEndSystem _roundEnd = default!;
     [Dependency] private readonly IGameTiming _gameTiming = default!;
     [Dependency] private readonly IMapManager _mapManager = default!;
@@ -64,6 +70,7 @@ public sealed class WhiteoutRuleSystem : GameRuleSystem<WhiteoutRuleComponent>
     [Dependency] private readonly ChatSystem _chat = default!;
     [Dependency] private readonly JammerSystem _jammer = default!;
     [Dependency] private readonly TurfSystem _turf = default!;
+
 
     public override void Initialize()
     {
@@ -112,6 +119,7 @@ public sealed class WhiteoutRuleSystem : GameRuleSystem<WhiteoutRuleComponent>
         _jammer.SetJammer(TimeSpan.FromSeconds(comp.WhiteoutLength+comp.WhiteoutFinalLength+comp.WhiteoutPrepareTime));
 
         _chat.DispatchGlobalAnnouncement(Loc.GetString(comp.WhiteoutPrepareAnnouncement), playSound: true, announcementSound: comp.WhiteoutSoundAnnouncement, colorOverride: Color.Red);
+
     }
 
     public override void Update(float frameTime)
@@ -281,6 +289,22 @@ public sealed class WhiteoutRuleSystem : GameRuleSystem<WhiteoutRuleComponent>
 
         _chat.DispatchGlobalAnnouncement(Loc.GetString(comp.WhiteoutAnnouncement), playSound: false, colorOverride: Color.Red);
         _audio.PlayGlobal(comp.WhiteoutAlarmSound, Filter.Broadcast(), true);
+
+        // Создание карты для лондонцев
+        if (HasAnyLondoners())
+        {
+            var mapId = _mapManager.CreateMap();
+
+            var path = new ResPath("/Maps/Vanilla/Misc/NewLondon.yml");
+            _mapLoader.TryLoadGrid(mapId, path, out var grid);
+
+            comp.LondonersMapId = mapId;
+            comp.LondonersMapUid = _mapManager.GetMapEntityId(comp.LondonersMapId);
+
+            _metaData.SetEntityName(comp.LondonersMapUid, "Аванпост Новый Лондон");
+
+            AddComp<FTLDestinationComponent>(comp.LondonersMapUid);
+        }
     }
 
     // Действия при конце
@@ -467,4 +491,11 @@ public sealed class WhiteoutRuleSystem : GameRuleSystem<WhiteoutRuleComponent>
             _atmosphere.SetMapAtmosphere(ActiveMapUid, false, mixture);
         }
     }
+
+    private bool HasAnyLondoners()
+    {
+        var query = EntityQueryEnumerator<LondonerRoleComponent>();
+        return query.MoveNext(out _, out _);
+    }
+
 }

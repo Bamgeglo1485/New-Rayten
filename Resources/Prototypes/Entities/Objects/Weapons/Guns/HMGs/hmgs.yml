@@ -28,11 +28,11 @@
   description: Vzzzzzt! Rahrahrahrah! Vrrrrr! Uses .10 rifle ammo.
   components:
   - type: Sprite
-    sprite: Objects/Weapons/Guns/HMGs/minigun.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/HMGs/minigun.rsi # Rayten-Resprites
     layers:
     - state: icon
   - type: Item
-    sprite: Objects/Weapons/Guns/HMGs/minigun.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/HMGs/minigun.rsi # Rayten-Resprites
   - type: Gun
     fireRate: 15
     soundGunshot:

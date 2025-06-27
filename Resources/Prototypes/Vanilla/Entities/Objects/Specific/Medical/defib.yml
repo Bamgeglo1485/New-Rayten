@@ -1,0 +1,39 @@
+- type: entity
+  id: AdvancedDefibrillator
+  parent: [BaseDefibrillator, PowerCellSlotMediumItem]
+  name: Продвинутый дефибриллятор
+  description: Одноручный и компактный. Делает "ББЗ!" так-же хорошо, как и обычный дефибриллятор.
+  components:
+    - type: Sprite
+      sprite: Vanilla/Objects/Specific/Medical/advanced_defib.rsi
+      layers:
+        - state: defib
+        - state: defib-on
+          map: [ "enum.ToggleableVisuals.Layer" ]
+          visible: false
+          shader: unshaded
+    - type: GenericVisualizer
+      visuals:
+        enum.ToggleableVisuals.Enabled:
+          enum.ToggleableVisuals.Layer:
+            True: { visible: true }
+            False: { visible: false }
+    - type: Item
+      size: Normal
+    - type: Clothing
+      quickEquip: false
+      slots:
+      - Belt
+    - type: ToggleCellDraw
+    - type: PowerCellDraw
+      useRate: 100
+
+- type: entity
+  id: AdvancedDefibrillatorEmpty
+  parent: AdvancedDefibrillator
+  suffix: Empty
+  components:
+  - type: ItemSlots
+    slots:
+      cell_slot:
+        name: power-cell-slot-component-slot-name-default

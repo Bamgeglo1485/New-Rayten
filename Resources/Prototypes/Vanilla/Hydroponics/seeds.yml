@@ -1,0 +1,43 @@
+- type: seed
+  id: warmChili
+  name: перец жарочили
+  noun: seeds-noun-seeds
+  displayName: жарочили
+  plantRsi: Vanilla/Objects/Specific/Hydroponics/warmchili.rsi
+  packetPrototype: WarmChiliSeeds
+  productPrototypes:
+    - FoodWarmChiliPepper
+  harvestRepeat: Repeat
+  lifespan: 55
+  maturation: 6
+  production: 1
+  yield: 1
+  potency: 20
+  idealLight: 9
+  idealHeat: 223,15
+  waterConsumption: 2
+  nutrientConsumption: 2
+  chemicals:
+    Leporazine:
+      Min: 1
+      Max: 10
+      PotencyDivisor: 10
+    Nutriment:
+      Min: 1
+      Max: 4
+      PotencyDivisor: 25
+    Vitamin:
+      Min: 1
+      Max: 4
+      PotencyDivisor: 25
+
+- type: entity
+  parent: SeedBase
+  name: пакет семян (жарочили)
+  description: Горячо.
+  id: WarmChiliSeeds
+  components:
+    - type: Seed
+      seedId: warmChili
+    - type: Sprite
+      sprite: Vanilla/Objects/Specific/Hydroponics/warmchili.rsi

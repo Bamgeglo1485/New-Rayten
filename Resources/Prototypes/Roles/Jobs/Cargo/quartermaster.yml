@@ -26,6 +26,11 @@
   special:
   - !type:AddImplantSpecial
     implants: [ MindShieldImplant ]
+  # Rayten-start
+  - !type:AddComponentSpecial
+    components:
+      - type: CanBeLondoner
+  # Rayten-end
 
 - type: startingGear
   id: QuartermasterGear

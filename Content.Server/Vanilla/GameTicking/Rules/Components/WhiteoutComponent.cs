@@ -67,6 +67,8 @@ public sealed partial class WhiteoutRuleComponent : Component
     public TimeSpan NextUpdate;
     public WhiteoutState CurrentState = WhiteoutState.Ended;
     public MapId ActiveMapId = MapId.Nullspace;
+    public MapId LondonersMapId = MapId.Nullspace;
+    public EntityUid LondonersMapUid = EntityUid.Invalid;
     public EntityUid ActiveMapUid = EntityUid.Invalid;
     public TimeSpan NextGlassBreak;
     public bool PrestartPlayed = false;

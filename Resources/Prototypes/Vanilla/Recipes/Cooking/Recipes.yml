@@ -17,3 +17,11 @@
     Cellulose: 40
   solids:
     FoodBowlBig: 1
+
+- type: microwaveMealRecipe
+  id: RecipeHandWarmer
+  name: восстановление грелки
+  result: HandWarmer
+  time: 10
+  solids:
+    HandWarmer: 1

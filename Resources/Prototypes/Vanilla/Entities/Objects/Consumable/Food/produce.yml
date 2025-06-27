@@ -1,0 +1,65 @@
+- type: entity
+  name: перец жарочили
+  parent: FoodProduceBase
+  id: FoodWarmChiliPepper
+  description: В буквальном смысле ГОРЯЧО.
+  components:
+  - type: FlavorProfile
+    flavors:
+      - spicy
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 18
+        reagents:
+          - ReagentId: Nutriment
+            Quantity: 4
+          - ReagentId: Leporazine
+            Quantity: 10
+          - ReagentId: Vitamin
+            Quantity: 4
+  - type: Sprite
+    sprite: Vanilla/Objects/Specific/Hydroponics/warmchili.rsi
+    layers:
+      - map: [ enum.ExpendableLightVisualLayers.Base ]
+        state: produce
+      - map: [ enum.ExpendableLightVisualLayers.Glow ]
+        state: activated
+        visible: false
+        shader: unshaded
+  - type: Item
+    sprite: Vanilla/Objects/Specific/Hydroponics/warmchili.rsi
+    heldPrefix: unlit
+  - type: Produce
+    seedId: warmChili
+  - type: Tag
+    tags:
+    - Vegetable
+  - type: PointLight
+    enabled: false
+    color: "#e23f22"
+    radius: 1.0
+    energy: 3.0
+    netsync: false
+
+  - type: ExpendableLight
+    spentName: увязший жарочили
+    spentDesc: Пахнет гарью, но к счастью, он все ещё содержит лепоразин.
+    glowDuration: 170
+    fadeOutDuration: 15
+    iconStateOn: activated
+    iconStateSpent: used
+    turnOnBehaviourID: turn_on
+    fadeOutBehaviourID: fade_out
+    litSound:
+      path: /Audio/Items/Flare/flare_on.ogg
+    loopedSound:
+      path: /Audio/Items/Flare/flare_burn.ogg
+      params:
+        loop: true
+        volume: -10
+        maxDistance: 5
+  - type: Warmer
+    moleRatio: 0.25
+    heatMaxTemp: 323.15
+    bodyHeatStrength: 3500

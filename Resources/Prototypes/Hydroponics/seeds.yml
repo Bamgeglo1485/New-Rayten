@@ -1101,6 +1101,7 @@
     - FoodChiliPepper
   mutationPrototypes:
     - chilly
+    - warmChili # Rayten (Whiteout)
   harvestRepeat: Repeat
   lifespan: 25
   maturation: 6

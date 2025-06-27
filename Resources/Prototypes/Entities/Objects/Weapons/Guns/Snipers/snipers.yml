@@ -15,7 +15,7 @@
   - type: Item
     size: Huge
   - type: Clothing
-    sprite: Objects/Weapons/Guns/Snipers/bolt_gun_wood.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Snipers/bolt_gun_wood.rsi # Rayten-Resprites
     quickEquip: false
     slots:
     - Back
@@ -49,7 +49,7 @@
   description: A true relic, the Kardashev-Mosin has served in nearly every armed conflict since its creation 670 years ago. The bolt-action design of the rifle remains virtually identical to its original design, whether used for hunting, sniping, or endless trench warfare. Loads 10 rounds of .30 rifle.
   components:
   - type: Sprite
-    sprite: Objects/Weapons/Guns/Snipers/bolt_gun_wood.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Snipers/bolt_gun_wood.rsi # Rayten-Resprites
   - type: GunRequiresWield
   - type: StaticPrice
     price: 500
@@ -61,9 +61,9 @@
   description: A portable anti-materiel rifle. Fires armor piercing 14.5mm shells. Uses .60 anti-materiel ammo.
   components:
   - type: Sprite
-    sprite: Objects/Weapons/Guns/Snipers/heavy_sniper.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Snipers/heavy_sniper.rsi # Rayten-Resprites
   - type: Clothing
-    sprite: Objects/Weapons/Guns/Snipers/heavy_sniper.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Snipers/heavy_sniper.rsi # Rayten-Resprites
   - type: GunRequiresWield
   - type: Gun
     fireRate: 0.4
@@ -98,10 +98,10 @@
   - type: Item
     size: Large
   - type: Sprite
-    sprite: Objects/Weapons/Guns/Snipers/musket.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Snipers/musket.rsi
     state: base
   - type: Clothing
-    sprite: Objects/Weapons/Guns/Snipers/musket.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Snipers/musket.rsi
   - type: Gun
     selectedMode: SemiAuto
     availableModes:
@@ -143,9 +143,9 @@
     - 0,1,0,1
     storedRotation: 0
   - type: Sprite
-    sprite: Objects/Weapons/Guns/Snipers/flintlock.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Snipers/flintlock.rsi
   - type: Clothing
-    sprite: Objects/Weapons/Guns/Snipers/flintlock.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Snipers/flintlock.rsi
   - type: UseDelayOnShoot
   - type: UseDelay
     delay: 8 #it's a flintlock

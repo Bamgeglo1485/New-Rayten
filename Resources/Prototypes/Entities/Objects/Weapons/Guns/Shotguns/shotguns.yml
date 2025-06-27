@@ -16,7 +16,7 @@
     # If you update this also update the bulldog's size.
     size: Large
   - type: Clothing
-    sprite: Objects/Weapons/Guns/Shotguns/db_shotgun.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Shotguns/db_shotgun.rsi # Rayten-Resprites
     quickEquip: false
     slots:
     - Back
@@ -54,7 +54,7 @@
   description: An automatic magazine-fed shotgun for close-quarters combat. Kicks like a mule on steroids. Uses .50 shotgun shells.
   components:
   - type: Sprite
-    sprite: Objects/Weapons/Guns/Shotguns/bulldog.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Shotguns/bulldog.rsi # Rayten-Resprites
     layers:
     - state: base
       map: ["enum.GunVisualLayers.Base"]
@@ -63,7 +63,7 @@
   - type: Item
     size: Large
   - type: Clothing
-    sprite: Objects/Weapons/Guns/Shotguns/bulldog.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Shotguns/bulldog.rsi # Rayten-Resprites
     quickEquip: false
     slots:
     - Back
@@ -111,12 +111,12 @@
   description: An immortal classic. Uses .50 shotgun shells.
   components:
   - type: Sprite
-    sprite: Objects/Weapons/Guns/Shotguns/db_shotgun.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Shotguns/db_shotgun.rsi # Rayten-Resprites
   - type: Item
     size: Normal
     shape:
     - 0,0,4,0
-    sprite: Objects/Weapons/Guns/Shotguns/db_shotgun_inhands_64x.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Shotguns/db_shotgun_inhands_64x.rsi # Rayten-Resprites
   - type: GunRequiresWield #remove when inaccuracy on spreads is fixed
   - type: Gun
     fireRate: 3
@@ -144,11 +144,11 @@
   description: A premium semi-automatic shotgun, and the pride of all security forces. Uses .50 shotgun shells.
   components: # intend for Enforcer to have wider choke for semi-auto function
   - type: Sprite
-    sprite: Objects/Weapons/Guns/Shotguns/enforcer.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Shotguns/enforcer.rsi # Rayten-Resprites
   - type: Clothing
-    sprite: Objects/Weapons/Guns/Shotguns/enforcer.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Shotguns/enforcer.rsi # Rayten-Resprites
   - type: Item
-    sprite: Objects/Weapons/Guns/Shotguns/enforcer_inhands_64x.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Shotguns/enforcer_inhands_64x.rsi # Rayten-Resprites
   - type: BallisticAmmoProvider
   - type: GunRequiresWield #remove when inaccuracy on spreads is fixed
   - type: Gun # Corvax-Guns
@@ -176,11 +176,11 @@
     size: Normal
     shape:
     - 0,0,4,0
-    sprite: Objects/Weapons/Guns/Shotguns/pump_inhands_64x.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Shotguns/pump_inhands_64x.rsi # Rayten-Resprites
   - type: Sprite
-    sprite: Objects/Weapons/Guns/Shotguns/pump.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Shotguns/pump.rsi # Rayten-Resprites
   - type: Clothing
-    sprite: Objects/Weapons/Guns/Shotguns/pump.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Shotguns/pump.rsi # Rayten-Resprites
   - type: GunRequiresWield #remove when inaccuracy on spreads is fixed
   - type: Gun
     fireRate: 1
@@ -199,12 +199,12 @@
   description: Groovy! Uses .50 shotgun shells.
   components: # needs to be super inaccurate because you don't need to wield it
   - type: Sprite
-    sprite: Objects/Weapons/Guns/Shotguns/sawn.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Shotguns/sawn.rsi # Rayten-Resprites
   - type: Clothing
-    sprite: Objects/Weapons/Guns/Shotguns/sawn.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Shotguns/sawn.rsi # Rayten-Resprites
   - type: Item
     size: Small
-    sprite: Objects/Weapons/Guns/Shotguns/sawn_inhands_64x.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Shotguns/sawn_inhands_64x.rsi # Rayten-Resprites
   - type: Gun
     fireRate: 3
     soundGunshot: # Corvax-Guns
@@ -240,9 +240,9 @@
     size: Small
     storedRotation: 90
   - type: Sprite
-    sprite: Objects/Weapons/Guns/Shotguns/hm_pistol.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Shotguns/hm_pistol.rsi # Rayten-Resprites
   - type: Clothing
-    sprite: Objects/Weapons/Guns/Shotguns/hm_pistol.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Shotguns/hm_pistol.rsi # Rayten-Resprites
   - type: Gun
     fireRate: 4
     soundGunshot: # Corvax-Guns
@@ -268,7 +268,7 @@
     shape:
     - 0,0,4,0
   - type: Sprite
-    sprite: Objects/Weapons/Guns/Shotguns/blunderbuss.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Shotguns/blunderbuss.rsi # Rayten-Resprites
   - type: GunRequiresWield #remove when inaccuracy on spreads is fixed
   - type: Gun
     fireRate: 2
@@ -284,14 +284,14 @@
   description: A shitty, hand-made shotgun that uses .50 shotgun shells. It can only hold one round in the chamber.
   components:
   - type: Sprite
-    sprite: Objects/Weapons/Guns/Shotguns/improvised_shotgun.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Shotguns/improvised_shotgun.rsi # Rayten-Resprites
   - type: Clothing
-    sprite: Objects/Weapons/Guns/Shotguns/improvised_shotgun.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Shotguns/improvised_shotgun.rsi # Rayten-Resprites
   - type: Item
     size: Normal
     shape:
     - 0,0,4,0
-    sprite: Objects/Weapons/Guns/Shotguns/improvised_shotgun_inhands_64x.rsi
+    sprite: Vanilla/Objects/Weapons/Guns/Shotguns/improvised_shotgun_inhands_64x.rsi # Rayten-Resprites
   - type: GunRequiresWield #remove when inaccuracy on spreads is fixed
   - type: Gun
     fireRate: 4 #No reason to stifle the firerate since you have to manually reload every time anyways.
