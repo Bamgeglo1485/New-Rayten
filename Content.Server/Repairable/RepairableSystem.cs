@@ -32,7 +32,7 @@ namespace Content.Server.Repairable
             if (args.Cancelled)
                 return;
 
-            if (!EntityManager.TryGetComponent(uid, out DamageableComponent? damageable) || damageable.TotalDamage == 0)
+            if (!TryComp(uid, out DamageableComponent? damageable) || damageable.TotalDamage == 0)
                 return;
             //vanilla-station-start
             if (!EntityManager.TryGetComponent<SkillComponent>(args.User, out var skillComp))
