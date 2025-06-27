@@ -43,6 +43,14 @@ public sealed class DominatorSystem : SharedDominatorSystem
             return;
         }
 
+        //авторизация уже авторизованного доминатора
+        if (comp.AuthorizedID != null)
+        {
+            _chat.TrySendInGameICMessage(uid, Loc.GetString("dominator-auth-already-auth"), InGameICChatType.Speak, true);
+            return;
+        }
+
+
         var sources = new HashSet<EntityUid> { used };
         var accessTags = _accessReader.FindAccessTags(used, sources);
         _accessReader.FindStationRecordKeys(used, out var stationKeys, sources);
