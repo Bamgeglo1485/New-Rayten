@@ -241,4 +241,3 @@ ghost-role-information-wizard-name = Волшебник
 ghost-role-information-wizard-desc = ТЫ — ВОЛШЕБНИК! Покажи станции, на что способна твоя магия.
 ghost-role-information-emotional-support-scurret-name = Эмоциональная поддержка Скеррет
 ghost-role-information-emotional-support-scurret-description = Поддерживай команду, будь милым, часто говори «ва».
-

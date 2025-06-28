@@ -4,13 +4,11 @@
   parent: BlueTeamGearDefault
   equipment:
     shoes: ClothingShoesBootsSpeedUnrem
-    belt: ClothingBeltBandolier
     outerClothing: ClothingOuterFlannelBlue
-  storage:
-    back:
-    - BoxLethalshot
-    - MedicatedSuture
-    - BruteAutoInjector
+    belt: ClothingBeltBandolierFilled
+    pocket1: MedicatedSuture
+    pocket2: StimpackMini
+    back: BaseBallBat
   inhand:
   - WeaponShotgunDoubleBarreled
 
@@ -19,13 +17,11 @@
   parent: RedTeamGearDefault
   equipment:
     shoes: ClothingShoesBootsSpeedUnrem
-    belt: ClothingBeltBandolier
     outerClothing: ClothingOuterFlannelRed
-  storage:
-    back:
-    - BoxLethalshot
-    - MedicatedSuture
-    - BruteAutoInjector
+    belt: ClothingBeltBandolierFilled
+    pocket1: MedicatedSuture
+    pocket2: StimpackMini
+    back: BaseBallBat
   inhand:
   - WeaponShotgunDoubleBarreled
 
@@ -99,9 +95,6 @@
     back:
     - MedicatedSuture
     - MedicatedSuture
-    - BruteAutoInjector
-    - BruteAutoInjector
-    - BruteAutoInjector
     - Stimpack
     - PuncturaseBeakerSmall
   inhand:
@@ -117,9 +110,6 @@
     back:
     - MedicatedSuture
     - MedicatedSuture
-    - BruteAutoInjector
-    - BruteAutoInjector
-    - BruteAutoInjector
     - Stimpack
     - PuncturaseBeakerSmall
   inhand:
@@ -503,4 +493,18 @@
     - WallSolid
     - Window
     - ReinforcedWindow
+
+- type: entity
+  parent: ClothingBeltBandolier
+  id: ClothingBeltBandolierFilled
+  name: Патронташ
+  description: ЗАРЯЖАЙ
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: BallisticAmmoProvider
+    proto: ShellShotgun
+    whitelist:
+      tags:
+        - ShellShotgun
+    capacity: 28
 
