@@ -13,7 +13,7 @@ using Content.Shared.Vanilla.Skill;
 namespace Content.Client.Vanilla.Bureaucracy
 {
     public sealed class BureaucracyManager : EntitySystem
-    {    
+    {
         [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
         [Dependency] private readonly HandsSystem _handSystem = default!;
         public override void Initialize()
@@ -25,7 +25,7 @@ namespace Content.Client.Vanilla.Bureaucracy
         private void OnGetVerbs(GetVerbsEvent<Verb> args)
         {
             // Проверяем, если объект — это бумага
-            if (!TryComp<PaperComponent>(args.Target, out var paper)) 
+            if (!TryComp<PaperComponent>(args.Target, out var paper))
                 return;
 
             if (args.Hands == null || args.Using == null || !args.CanAccess || !args.CanInteract)
@@ -111,19 +111,14 @@ namespace Content.Client.Vanilla.Bureaucracy
         // Проверка наличия ручки у игрока
         private bool PlayerHasPen(EntityUid user)
         {
-            // Получаем предмет в активной руке игрока
-            if (_handSystem.TryGetPlayerHands(out var hands))
-            {
-                var handItem = hands.ActiveHandEntity;
 
-                // Проверяем, если у предмета есть компонент BureaucracyPen
-                if (handItem != null && HasComp<BureaucracyPenComponent>(handItem.Value))
-                {
-                    return true;
-                }
-            }
+            if (!_handSystem.TryGetActiveItem(user, out var heldEntity))
+                return false;
 
-            return false;
+            if (!HasComp<BureaucracyPenComponent>(heldEntity))
+                return false;
+
+            return true;
         }
         private bool PlayerHasSkill(EntityUid user)
         {
