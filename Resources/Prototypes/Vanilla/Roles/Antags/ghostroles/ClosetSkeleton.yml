@@ -1,5 +1,12 @@
 - type: startingGear
-  id: SkeletonWizard
+  id: SkeletonJester
+  equipment:
+    head: ClothingHeadHatRedwizard
+    outerClothing: ClothingOuterWizardRed
+    shoes: ClothingShoesWizard
+
+- type: startingGear
+  id: SkeletonKnight
   equipment:
     head: ClothingHeadHatRedwizard
     outerClothing: ClothingOuterWizardRed
