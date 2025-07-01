@@ -29,3 +29,5 @@ ent-WeaponTurretBlueTeam = турель синей команды
     .desc = Красотка.
 ent-TDMRCD = РСУ
     .desc = Ставь стеночки инженер!
+ent-ClothingBeltBandolierFilled = Патронташ
+    .desc = ЗАРЯЖАЙ

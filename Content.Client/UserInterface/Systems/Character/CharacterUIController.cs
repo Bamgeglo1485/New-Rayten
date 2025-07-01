@@ -316,13 +316,13 @@ public sealed class CharacterUIController : UIController, IOnStateEntered<Gamepl
             {
                 if (_prototypeManager.TryIndex(BackgroundComp.BabyBackground, out var bgProtoBaby))
                 {
-                    var backgroundControl = new BackgroundControl(bgProtoBaby.Name, bgProtoBaby.Description);
+                    var backgroundControl = new BackgroundControl(bgProtoBaby.Name, bgProtoBaby.Description, bgProtoBaby.SponsorOnly);
                     _window.BackgroundContainer.Children.Add(backgroundControl);
                     _window.TabBackground.Disabled = false;
                 }
                 if (_prototypeManager.TryIndex(BackgroundComp.AdultBackground, out var bgProtoAdult))
                 {
-                    var backgroundControl = new BackgroundControl(bgProtoAdult.Name, bgProtoAdult.Description);
+                    var backgroundControl = new BackgroundControl(bgProtoAdult.Name, bgProtoAdult.Description, bgProtoAdult.SponsorOnly);
                     _window.BackgroundContainer.Children.Add(backgroundControl);
                     _window.TabBackground.Disabled = false;
                 }
@@ -331,12 +331,11 @@ public sealed class CharacterUIController : UIController, IOnStateEntered<Gamepl
             {
                 if (_prototypeManager.TryIndex(BackgroundComp.GeneralBackground, out var bgProtoGeneral))
                 {
-                    var backgroundControl = new BackgroundControl(bgProtoGeneral.Name, bgProtoGeneral.Description);
+                    var backgroundControl = new BackgroundControl(bgProtoGeneral.Name, bgProtoGeneral.Description, bgProtoGeneral.SponsorOnly);
                     _window.BackgroundContainer.Children.Add(backgroundControl);
                     _window.TabBackground.Disabled = false;
                 }
             }
-
 
         }
         else

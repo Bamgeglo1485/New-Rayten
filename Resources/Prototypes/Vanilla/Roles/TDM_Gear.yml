@@ -4,7 +4,7 @@
   parent: BlueTeamGearDefault
   equipment:
     shoes: ClothingShoesBootsSpeedUnrem
-    outerClothing: ClothingOuterFlannelBlue
+    outerClothing: ClothingOuterArmorBasicSlim
     belt: ClothingBeltBandolierFilled
     pocket1: MedicatedSuture
     pocket2: StimpackMini
@@ -17,7 +17,7 @@
   parent: RedTeamGearDefault
   equipment:
     shoes: ClothingShoesBootsSpeedUnrem
-    outerClothing: ClothingOuterFlannelRed
+    outerClothing: ClothingOuterArmorBasicSlim
     belt: ClothingBeltBandolierFilled
     pocket1: MedicatedSuture
     pocket2: StimpackMini

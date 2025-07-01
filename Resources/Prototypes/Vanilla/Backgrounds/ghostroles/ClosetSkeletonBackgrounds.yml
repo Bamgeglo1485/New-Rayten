@@ -32,7 +32,7 @@
   id: ClosetSkeletonJesterBackground
   name: Проклятый Шут
   description: background-closetskeleton-desc-jester
-  # sponsorOnly: true
+  sponsorOnly: true
   specialDesc:
     - Вы антагонист
     - Вы не обладаете интеллектом

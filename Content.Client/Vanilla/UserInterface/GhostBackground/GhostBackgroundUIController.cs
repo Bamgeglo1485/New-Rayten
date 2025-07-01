@@ -78,7 +78,8 @@ public sealed class GhostBackgroundUIController : UIController,
                 bgProto.Skills,
                 bgProto.EasySkills,
                 bgProto.SkillPoints,
-                (bgProto.SponsorOnly && !sponsorman.GetClientPrototypes().Contains(bgProto.ID))
+                (bgProto.SponsorOnly && !sponsorman.GetClientPrototypes().Contains(bgProto.ID)),
+                bgProto.SponsorOnly
             );
 
             control.OnPressed += () => _backGroundSystem.TakeGhostBackground(bgProto);

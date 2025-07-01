@@ -44,7 +44,8 @@ public sealed partial class BackgroundGroupContainer : BoxContainer
                 bgProto.Skills,
                 bgProto.EasySkills,
                 bgProto.SkillPoints,
-                (bgProto.SponsorOnly && !sponsorman.GetClientPrototypes().Contains(bgProto.ID))
+                (bgProto.SponsorOnly && !sponsorman.GetClientPrototypes().Contains(bgProto.ID)),
+                bgProto.SponsorOnly
             );
 
             control.OnPressed += () =>
