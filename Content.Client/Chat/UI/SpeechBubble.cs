@@ -70,7 +70,7 @@ namespace Content.Client.Chat.UI
         protected RichTextLabel? _textLabel;
         private string _fullText = "";
         private int _revealedLength;
-        private const float LetterDelay = 0.05f;
+        private const float LetterDelay = 0.025f;
         private float _accumulatedTime;
         private Color? _fontColor;
         private bool _wasBold = false;

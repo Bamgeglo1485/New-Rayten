@@ -5,6 +5,7 @@ using Content.Server.Destructible;
 using Content.Server.Destructible.Thresholds.Triggers;
 using Content.Shared.CombatMode.Pacification;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Events;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.FixedPoint;
 using Content.Shared.Chat;
@@ -24,6 +25,8 @@ public sealed class SkeletonCurseSystem : EntitySystem
     public override void Initialize()
     {
         SubscribeLocalEvent<SkeletonCurseComponent, MapInitEvent>(OnMapInit);
+        SubscribeLocalEvent<SkeletonCurseComponent, StaminaCritEvent>(OnStamCrit);
+
         SubscribeLocalEvent<SkeletonCurseComponent, DamageChangedEvent>(OnDamageChanged, before: [typeof(MobThresholdSystem)]);
     }
     /// <summary>
@@ -99,4 +102,12 @@ public sealed class SkeletonCurseSystem : EntitySystem
             Curse(origin);
         }
     }
+    private void OnStamCrit(EntityUid uid, SkeletonCurseComponent component, StaminaCritEvent args)
+    {
+        if (TryComp<DamageableComponent>(uid, out var damagecomp))
+        {
+            _damageable.TryChangeDamage(uid, component.Damage, true, false, damagecomp);
+        }
+    }
+
 }
