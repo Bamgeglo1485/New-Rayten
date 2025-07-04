@@ -87,7 +87,7 @@
     voice: TrainingRobot
   - type: Speech
     speechVerb: Robotic
-    speechSounds: Pai
+    # speechSounds: Pai
     # This has to be installed because otherwise they're not "alive",
     #  so they can ghost and come back.
     # Note that the personal AI never "dies".

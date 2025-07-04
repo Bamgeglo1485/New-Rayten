@@ -188,7 +188,7 @@
         type: StrippableBoundUserInterface
   - type: Puller
   - type: Speech
-    speechSounds: Alto
+    # speechSounds: Alto
   - type: DamageForceSay
   - type: Vocal
     sounds:
