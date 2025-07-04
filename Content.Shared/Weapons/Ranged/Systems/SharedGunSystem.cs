@@ -77,7 +77,7 @@ public abstract partial class SharedGunSystem : EntitySystem
 
     public override void Initialize()
     {
-        SubscribeAllEvent<RequestShootEvent>(OnShootRequest);
+        SubscribeAllEvent<RTNRequestShootEvent>(OnShootRequest);
         SubscribeAllEvent<RequestStopShootEvent>(OnStopShootRequest);
         SubscribeLocalEvent<GunComponent, MeleeHitEvent>(OnGunMelee);
 
@@ -125,7 +125,7 @@ public abstract partial class SharedGunSystem : EntitySystem
         }
     }
 
-    private void OnShootRequest(RequestShootEvent msg, EntitySessionEventArgs args)
+    private void OnShootRequest(RTNRequestShootEvent msg, EntitySessionEventArgs args)
     {
         var user = args.SenderSession.AttachedEntity;
 

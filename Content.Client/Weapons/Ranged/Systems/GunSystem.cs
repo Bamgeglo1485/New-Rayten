@@ -204,7 +204,7 @@ public sealed partial class GunSystem : SharedGunSystem
 
         Log.Debug($"Sending shoot request tick {Timing.CurTick} / {Timing.CurTime}");
 
-        RaisePredictiveEvent(new RequestShootEvent
+        RaisePredictiveEvent(new RTNRequestShootEvent
         {
             Target = target,
             Coordinates = GetNetCoordinates(coordinates),

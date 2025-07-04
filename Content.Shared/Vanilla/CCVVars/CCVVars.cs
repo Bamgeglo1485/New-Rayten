@@ -12,6 +12,7 @@ public sealed class CCVVars
     /// </summary>
     public static readonly CVarDef<string> DiscordServerBansWebhook = CVarDef.Create("discord.server_bans_webhook", "", CVar.SERVERONLY | CVar.CONFIDENTIAL);
     public static readonly CVarDef<string> DiscordBridgeWebhook = CVarDef.Create("discord.bridge_webhook_url", "", CVar.SERVERONLY | CVar.CONFIDENTIAL);
+    public static readonly CVarDef<string> DiscordAntiCheatWebhook = CVarDef.Create("discord.anticheat_webhook_url", "", CVar.SERVERONLY | CVar.CONFIDENTIAL);
     /// <summary>
     ///     Controls if the connections queue is enabled. If enabled stop kicking new players after `SoftMaxPlayers` cap and instead add them to queue.
     /// </summary>
