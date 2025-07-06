@@ -70,18 +70,21 @@ public sealed class ContrabandSystem : EntitySystem
         var jobs = component.AllowedJobs.Select(p => _proto.Index(p).LocalizedName).ToArray();
         var localizedJobs = jobs.Select(p => Loc.GetString("contraband-job-plural", ("job", p)));
         var severity = _proto.Index(component.Severity);
-        String departmentExamineMessage;
+        String levelExamineMessage;
+        String? depExamineMessage = null;
         if (severity.ShowDepartmentsAndJobs)
         {
-            //creating a combined list of jobs and departments for the restricted text
-            var list = ContentLocalizationManager.FormatList(localizedDepartments.Concat(localizedJobs).ToList());
-            // department restricted text
-            departmentExamineMessage = Loc.GetString("contraband-examine-text-Restricted-department", ("departments", list));
+            // creating a combined list of jobs and departments for the restricted text
+            var combined = localizedDepartments.Concat(localizedJobs).ToList();
+            if (combined.Count > 0)
+            {
+                var list = ContentLocalizationManager.FormatList(combined);
+                depExamineMessage = Loc.GetString("contraband-examine-text-Restricted-department", ("departments", list));
+            }
         }
-        else
-        {
-            departmentExamineMessage = Loc.GetString(severity.ExamineText);
-        }
+
+
+        levelExamineMessage = Loc.GetString(severity.ExamineText);
 
         // text based on ID card
         List<ProtoId<DepartmentPrototype>> departments = new();
@@ -104,7 +107,7 @@ public sealed class ContrabandSystem : EntitySystem
             carryingMessage = Loc.GetString("contraband-examine-text-in-the-clear");
             iconTexture = "/Textures/Interface/VerbIcons/unlock-green.svg.192dpi.png";
         }
-        var examineMarkup = GetContrabandExamine(departmentExamineMessage, carryingMessage);
+        var examineMarkup = GetContrabandExamine(levelExamineMessage, carryingMessage, depExamineMessage);
         _examine.AddHoverExamineVerb(args,
             component,
             Loc.GetString("contraband-examinable-verb-text"),
@@ -112,12 +115,20 @@ public sealed class ContrabandSystem : EntitySystem
             iconTexture);
     }
 
-    private FormattedMessage GetContrabandExamine(String deptMessage, String carryMessage)
+    private FormattedMessage GetContrabandExamine(String level, String carryMessage, string? depExamineMessage)
     {
         var msg = new FormattedMessage();
-        msg.AddMarkupOrThrow(deptMessage);
+        msg.AddMarkupOrThrow(level);
         msg.PushNewline();
+
+        if (depExamineMessage != null)
+        {
+            msg.AddMarkupOrThrow(depExamineMessage);
+            msg.PushNewline();
+        }
+
         msg.AddMarkupOrThrow(carryMessage);
+
         return msg;
     }
 

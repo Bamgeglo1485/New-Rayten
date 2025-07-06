@@ -227,7 +227,7 @@
     sprite: Clothing/Head/Hats/bowler_hat.rsi
 
 - type: entity
-  parent: [ClothingHeadBase, BaseCommandContraband]
+  parent: [ClothingHeadBase, FirstCommandContraband]
   id: ClothingHeadHatCaptain
   name: captain's hardhat
   description: Feels good being the king.
@@ -340,7 +340,7 @@
     sprite: Clothing/Head/Hats/fez.rsi
 
 - type: entity
-  parent: [ClothingHeadBase, BaseCommandContraband]
+  parent: [ClothingHeadBase, FirstCommandContraband]
   id: ClothingHeadHatHopcap
   name: head of personnel's cap
   description: A stylish cap worn by the Head of Personnel. Shows paperwork who's in charge.
@@ -357,7 +357,7 @@
     - WhitelistChameleon
 
 - type: entity
-  parent: [ClothingHeadBase, BaseCommandContraband]
+  parent: [ClothingHeadBase, FirstCommandContraband]
   id: ClothingHeadHatHoshat
   name: head of security cap
   description: A stylish cap worn by the Head of Security. Shows the officers who's in charge.
@@ -921,7 +921,7 @@
         HeadSide : HEAD
 
 - type: entity
-  parent: [ClothingHeadBase, BaseCommandContraband]
+  parent: [ClothingHeadBase, FirstCommandContraband]
   id: ClothingHeadHatBeretCmo
   name: chief medical officer's beret
   description: A turquoise beret with a cross on the front. The sight of it calms you down and makes it clear that you will be cured.

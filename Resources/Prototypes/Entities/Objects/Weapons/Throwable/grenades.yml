@@ -471,7 +471,7 @@
         Quantity: 20
 
 - type: entity
-  parent: [ BaseEngineeringContraband, SmokeGrenade ]
+  parent: [ FirstEngineeringContraband, SmokeGrenade ]
   id: MetalFoamGrenade
   name: metal foam grenade
   description: An emergency tool used for patching hull breaches with special quick-set metal foam. Almost as good as real floors!
@@ -488,7 +488,7 @@
     price: 350
 
 - type: entity
-  parent: [ BaseEngineeringContraband, GrenadeBase ] # Prevent inheriting DeleteOnTrigger from SmokeGrenade
+  parent: [ FirstEngineeringContraband, GrenadeBase ] # Prevent inheriting DeleteOnTrigger from SmokeGrenade
   id: AirGrenade
   name: air grenade
   description: A special solid state chemical grenade used for quickly releasing standard air into a spaced area. Fills up to 30 tiles!

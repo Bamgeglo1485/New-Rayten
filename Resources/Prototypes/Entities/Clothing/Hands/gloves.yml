@@ -95,7 +95,7 @@
     mustBeEquippedToUse: true
 
 - type: entity
-  parent: [ClothingHandsBase, BaseCommandContraband]
+  parent: [ClothingHandsBase, FirstCommandContraband]
   id: ClothingHandsGlovesCaptain
   name: captain gloves
   description: Regal blue gloves, with a nice gold trim. Swanky.

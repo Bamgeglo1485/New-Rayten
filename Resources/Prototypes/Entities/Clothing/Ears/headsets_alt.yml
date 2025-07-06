@@ -42,7 +42,7 @@
     sprite: Clothing/Ears/Headsets/centcom.rsi
 
 - type: entity
-  parent: [ClothingHeadsetAlt, BaseCommandContraband]
+  parent: [ClothingHeadsetAlt, FirstCommandContraband]
   id: ClothingHeadsetAltCommand
   name: command over-ear headset
   components:
@@ -56,7 +56,7 @@
     sprite: Clothing/Ears/Headsets/command.rsi
 
 - type: entity
-  parent: [ClothingHeadsetAlt, BaseCommandContraband]
+  parent: [ClothingHeadsetAlt, FirstCommandContraband]
   id: ClothingHeadsetAltEngineering
   name: chief engineer's over-ear headset
   components:
@@ -72,7 +72,7 @@
     sprite: Clothing/Ears/Headsets/engineering.rsi
 
 - type: entity
-  parent: [ClothingHeadsetAlt, BaseCommandContraband]
+  parent: [ClothingHeadsetAlt, FirstCommandContraband]
   id: ClothingHeadsetAltMedical
   name: chief medical officer's over-ear headset
   components:
@@ -90,7 +90,7 @@
     stealGroup: ClothingHeadsetAltMedical
 
 - type: entity
-  parent: [ClothingHeadsetAlt, BaseCommandContraband]
+  parent: [ClothingHeadsetAlt, FirstCommandContraband]
   id: ClothingHeadsetAltSecurity
   name: head of security's over-ear headset
   components:
@@ -106,7 +106,7 @@
     sprite: Clothing/Ears/Headsets/security.rsi
 
 - type: entity
-  parent: [ClothingHeadsetAlt, BaseCommandContraband]
+  parent: [ClothingHeadsetAlt, FirstCommandContraband]
   id: ClothingHeadsetAltScience
   name: research director's over-ear headset
   components:

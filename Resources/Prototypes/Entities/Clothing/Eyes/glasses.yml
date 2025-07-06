@@ -53,7 +53,7 @@
         Blunt: 10
 
 - type: entity
-  parent: [ClothingEyesBase, BaseEngineeringContraband]
+  parent: [ClothingEyesBase, FirstEngineeringContraband]
   id: ClothingEyesGlassesMeson
   name: engineering goggles #less confusion
   description: Green-tinted goggles using a proprietary polymer that provides protection from eye damage of all types.
@@ -194,7 +194,7 @@
     coverage: EYES
 
 - type: entity
-  parent: [ClothingEyesBase, BaseCommandContraband]
+  parent: [ClothingEyesBase, SecondCommandContraband]
   id: ClothingEyesGlassesCommand
   name: administration glasses
   description: Upgraded sunglasses that provide flash immunity and show ID card status.

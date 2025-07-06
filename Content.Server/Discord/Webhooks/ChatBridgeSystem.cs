@@ -52,8 +52,8 @@ public sealed class DiscordChatRelaySystem : EntitySystem
 
         var session = args.SenderSession;
 
-        // if (_adminManager.IsAdmin(session))
-        //     return;
+        if (_adminManager.IsAdmin(session))
+            return;
 
         try
         {

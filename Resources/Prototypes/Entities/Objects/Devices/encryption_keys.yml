@@ -85,7 +85,7 @@
     - state: cap_label
 
 - type: entity
-  parent: [ EncryptionKey, BaseCommandContraband ]
+  parent: [ EncryptionKey, ThirdCommandContraband ]
   id: EncryptionKeyCommand
   name: command encryption key
   description: An encryption key used by crew's bosses.
@@ -103,7 +103,7 @@
     - EncryptionCommand
 
 - type: entity
-  parent: [ EncryptionKey, BaseEngineeringContraband ]
+  parent: [ EncryptionKey, SecondEngineeringContraband ]
   id: EncryptionKeyEngineering
   name: engineering encryption key
   description: An encryption key used by the engineers.
@@ -121,7 +121,7 @@
     - EncryptionEngineering
 
 - type: entity
-  parent: [ EncryptionKey, BaseMedicalContraband ]
+  parent: [ EncryptionKey, FirstMedicalContraband ]
   id: EncryptionKeyMedical
   name: medical encryption key
   description: An encryption key used by those who save lives.

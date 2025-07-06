@@ -100,7 +100,7 @@
     clothingPrototype: ClothingHeadHatHoodWinterBartender
 
 - type: entity
-  parent: [ClothingOuterWinterCoatToggleable, BaseCommandContraband]
+  parent: [ClothingOuterWinterCoatToggleable, FirstCommandContraband]
   id: ClothingOuterWinterCap
   name: captain's winter coat
   components:
@@ -146,7 +146,7 @@
     clothingPrototype: ClothingHeadHatHoodWinterCargo
 
 - type: entity
-  parent: [ClothingOuterWinterCoatToggleable, BaseCommandContraband]
+  parent: [ClothingOuterWinterCoatToggleable, FirstCommandContraband]
   id: ClothingOuterWinterCE
   name: chief engineer's winter coat
   components:
@@ -244,7 +244,7 @@
     clothingPrototype: ClothingHeadHatHoodWinterChem
 
 - type: entity
-  parent: [ClothingOuterWinterCoatToggleable, BaseCommandContraband]
+  parent: [ClothingOuterWinterCoatToggleable, FirstCommandContraband]
   id: ClothingOuterWinterCMO
   name: chief medical officer's winter coat
   components:
@@ -337,7 +337,7 @@
     clothingPrototype: ClothingHeadHatHoodWinterSci
 
 - type: entity
-  parent: [ClothingOuterWinterCoatToggleable, BaseCommandContraband]
+  parent: [ClothingOuterWinterCoatToggleable, FirstCommandContraband]
   id: ClothingOuterWinterHoP
   name: head of personnel's winter coat
   components:
@@ -559,7 +559,7 @@
     clothingPrototype: ClothingHeadHatHoodWinterPara
 
 - type: entity
-  parent: [ClothingOuterWinterCoatToggleable, BaseCommandContraband]
+  parent: [ClothingOuterWinterCoatToggleable, FirstCommandContraband]
   id: ClothingOuterWinterQM
   name: quartermaster's winter coat
   components:
@@ -583,7 +583,7 @@
 
 
 - type: entity
-  parent: [ClothingOuterWinterCoatToggleable, BaseCommandContraband]
+  parent: [ClothingOuterWinterCoatToggleable, FirstCommandContraband]
   id: ClothingOuterWinterRD
   name: research director's winter coat
   components:

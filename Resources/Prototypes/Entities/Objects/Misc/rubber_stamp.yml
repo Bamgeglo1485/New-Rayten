@@ -39,7 +39,7 @@
 
 - type: entity
   name: captain's rubber stamp
-  parent: [RubberStampBase, BaseCommandContraband]
+  parent: [RubberStampBase, ThirdCommandContraband]
   id: RubberStampCaptain
   categories: [ DoNotMap ]
   components:
@@ -107,7 +107,7 @@
 
 - type: entity
   name: chief engineer's rubber stamp
-  parent: [RubberStampBase, BaseCommandContraband]
+  parent: [RubberStampBase, ThirdCommandContraband]
   id: RubberStampCE
   categories: [ DoNotMap ]
   components:
@@ -120,7 +120,7 @@
 
 - type: entity
   name: chief medical officer's rubber stamp
-  parent: [RubberStampBase, BaseCommandContraband]
+  parent: [RubberStampBase, ThirdCommandContraband]
   id: RubberStampCMO
   categories: [ DoNotMap ]
   components:
@@ -133,7 +133,7 @@
 
 - type: entity
   name: head of personnel's rubber stamp
-  parent: [RubberStampBase, BaseCommandContraband]
+  parent: [RubberStampBase, ThirdCommandContraband]
   id: RubberStampHop
   categories: [ DoNotMap ]
   components:
@@ -146,7 +146,7 @@
 
 - type: entity
   name: head of security's rubber stamp
-  parent: [RubberStampBase, BaseCommandContraband]
+  parent: [RubberStampBase, ThirdCommandContraband]
   id: RubberStampHos
   categories: [ DoNotMap ]
   components:
@@ -173,7 +173,7 @@
 
 - type: entity
   name: quartermaster's rubber stamp
-  parent: [RubberStampBase, BaseCommandContraband]
+  parent: [RubberStampBase, ThirdCommandContraband]
   id: RubberStampQm
   categories: [ DoNotMap ]
   components:
@@ -186,7 +186,7 @@
 
 - type: entity
   name: research director's rubber stamp
-  parent: [RubberStampBase, BaseCommandContraband]
+  parent: [RubberStampBase, ThirdCommandContraband]
   id: RubberStampRd
   categories: [ DoNotMap ]
   components:
