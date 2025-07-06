@@ -44,7 +44,7 @@ namespace Content.Client.Vanilla.Anticheat
             if (session == null || session.AttachedEntity is not { } playerEnt)
                 return;
 
-            if (HasComp<GhostComponent>(playerEnt) || HasComp<RevenantComponent>(playerEnt))
+            if (HasComp<GhostComponent>(playerEnt) || HasComp<RevenantComponent>(playerEnt) || HasComp<AntiCheatIgnoreComponent>(playerEnt))
                 return;
 
             // Перебираем все ловушки
@@ -101,7 +101,7 @@ namespace Content.Client.Vanilla.Anticheat
 
             _nextCheck = now + TimeSpan.FromSeconds(5);
             CheckForVisibleTraps();
-            CheckDrawFovFlag();
+            // CheckDrawFovFlag();
         }
 
         private void CheckDrawFovFlag()
