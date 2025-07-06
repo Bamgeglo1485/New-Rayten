@@ -65,7 +65,7 @@
     - Security
 
 - type: entity
-  parent: [DoorRemoteDefault, BaseSecurityCommandContraband]
+  parent: [DoorRemoteDefault, SecondSecurityCommandContraband]
   id: DoorRemoteArmory
   name: armory door remote
   components:
@@ -161,7 +161,7 @@
     - Engineering
 
 - type: entity
-  parent: [DoorRemoteDefault, BaseCentcommContraband]
+  parent: [DoorRemoteDefault, SecondCommandContraband]
   id: DoorRemoteAll
   name: super door remote
   suffix: Admeme
@@ -186,7 +186,7 @@
     - Xenoborg
 
 - type: entity
-  parent: [ DoorRemoteDefault, BaseXenoborgContraband ]
+  parent: [ DoorRemoteDefault, XenoborgContraband ]
   id: DoorRemoteXenoborg
   name: xenoborg door remote
   components:

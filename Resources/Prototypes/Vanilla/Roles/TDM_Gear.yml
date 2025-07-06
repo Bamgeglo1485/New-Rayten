@@ -182,14 +182,11 @@
     belt: ClothingBeltChiefEngineer
     shoes: ClothingShoesBootsMagAdv
     pocket1: HandTeleporter
+    pocket2: Wrench
   storage:
     belt:
-    - Wrench
-    - Screwdriver
     - TDMRCD
-    - RCDAmmo
     back:
-    - SmokeGrenade
     - MedicatedSuture
     - BruteAutoInjector
   inhand:
@@ -202,14 +199,11 @@
     belt: ClothingBeltChiefEngineer
     shoes: ClothingShoesBootsMagAdv
     pocket1: HandTeleporter
+    pocket2: Wrench
   storage:
     belt:
-    - Wrench
-    - Screwdriver
     - TDMRCD
-    - RCDAmmo
     back:
-    - SmokeGrenade
     - MedicatedSuture
     - BruteAutoInjector
   inhand:
@@ -419,7 +413,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: Gun
-    fireRate: 6
+    fireRate: 9
     selectedMode: FullAuto
     availableModes:
     - FullAuto
@@ -440,7 +434,7 @@
         acts: [ "Destruction" ]
     - trigger:
         !type:DamageTrigger
-        damage: 595
+        damage: 395
       behaviors:
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
@@ -454,7 +448,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: Gun
-    fireRate: 6
+    fireRate: 9
     selectedMode: FullAuto
     availableModes:
     - FullAuto
@@ -475,7 +469,7 @@
         acts: [ "Destruction" ]
     - trigger:
         !type:DamageTrigger
-        damage: 595
+        damage: 395
       behaviors:
       - !type:DoActsBehavior
         acts: [ "Destruction" ]

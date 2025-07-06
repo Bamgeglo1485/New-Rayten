@@ -394,7 +394,7 @@
     sprite: Clothing/Uniforms/Jumpskirt/roboticist.rsi
 
 - type: entity
-  parent: [ClothingUniformSkirtBase, BaseSecurityContraband]
+  parent: [ClothingUniformSkirtBase, FirstSecurityContraband]
   id: ClothingUniformJumpskirtSec
   name: security jumpskirt
   description: A jumpskirt made of strong material, providing robust protection.
@@ -420,7 +420,7 @@
 
 
 - type: entity
-  parent: [ClothingUniformSkirtBase, BaseSecurityContraband]
+  parent: [ClothingUniformSkirtBase, FirstSecurityContraband]
   id: ClothingUniformJumpskirtWarden
   name: warden's uniform
   description: A formal security suit for officers complete with Nanotrasen belt buckle.
@@ -512,7 +512,7 @@
     sprite: Clothing/Uniforms/Jumpskirt/hosformaldress.rsi
 
 - type: entity
-  parent: [UnsensoredClothingUniformSkirtBase, BaseSyndicateContraband]
+  parent: [UnsensoredClothingUniformSkirtBase, FirstSyndicateContraband]
   id: ClothingUniformJumpskirtOperative
   name: operative jumpskirt
   description: Uniform for elite syndicate operatives performing tactical operations in deep space.
@@ -628,7 +628,7 @@
       sprite: Clothing/Uniforms/Jumpskirt/lawyergood.rsi
 
 - type: entity
-  parent: [ ClothingUniformSkirtBase, BaseSyndicateContraband ]
+  parent: [ ClothingUniformSkirtBase, FirstSyndicateContraband ]
   id: ClothingUniformJumpskirtSyndieFormalDress
   name: syndicate formal dress
   description: "The syndicate's uniform is made in an elegant style, it's even a pity to do dirty tricks in this."
@@ -694,7 +694,7 @@
     sprite: Clothing/Uniforms/Jumpskirt/senior_physician.rsi
 
 - type: entity
-  parent: [ClothingUniformSkirtBase, BaseSecurityContraband]
+  parent: [ClothingUniformSkirtBase, FirstSecurityContraband]
   id: ClothingUniformJumpskirtSeniorOfficer
   name: senior officer jumpskirt
   description: A sign of skill and prestige within the security department.
@@ -705,7 +705,7 @@
     sprite: Clothing/Uniforms/Jumpskirt/senior_officer.rsi
 
 - type: entity
-  parent: [ClothingUniformSkirtBase, BaseSecurityContraband]
+  parent: [ClothingUniformSkirtBase, FirstSecurityContraband]
   id: ClothingUniformJumpskirtSecGrey
   name: grey security jumpskirt
   description: A tactical relic of years past before Nanotrasen decided it was cheaper to dye the suits red instead of washing out the blood.

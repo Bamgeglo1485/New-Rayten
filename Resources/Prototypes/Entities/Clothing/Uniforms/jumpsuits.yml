@@ -124,7 +124,7 @@
       sprite: Clothing/Uniforms/Jumpsuit/chaplain.rsi
 
 - type: entity
-  parent: [ ClothingUniformBase, BaseCentcommContraband ]
+  parent: [ ClothingUniformBase, CentcommContraband ]
   id: ClothingUniformJumpsuitCentcomAgent
   name: CentComm agent's jumpsuit
   description: A suit worn by CentComm's legal team. Smells of burnt coffee.
@@ -135,7 +135,7 @@
     sprite: Clothing/Uniforms/Jumpsuit/centcom_agent.rsi
 
 - type: entity
-  parent: [ ClothingUniformBase, BaseCentcommContraband ]
+  parent: [ ClothingUniformBase, CentcommContraband ]
   id: ClothingUniformJumpsuitCentcomOfficial
   name: CentComm officer's suit # Corvax-Resprite
   description: It's a suit worn by CentComm's highest-tier Commanders. # Corvax-Resprite
@@ -146,7 +146,7 @@
     sprite: Clothing/Uniforms/Jumpsuit/centcom_official.rsi
 
 - type: entity
-  parent: [ ClothingUniformBase, BaseCentcommContraband ]
+  parent: [ ClothingUniformBase, CentcommContraband ]
   id: ClothingUniformJumpsuitCentcomOfficer
   name: CentComm turtleneck suit # Corvax-Resprite
   description: A casual, yet refined green turtleneck, used by CentComm Officials. It has a fragrance of aloe. # Corvax-Resprite
@@ -602,7 +602,7 @@
     sprite: Clothing/Uniforms/Jumpsuit/roboticist.rsi
 
 - type: entity
-  parent: [ClothingUniformBase, BaseSecurityContraband]
+  parent: [ClothingUniformBase, FirstSecurityContraband]
   id: ClothingUniformJumpsuitSec
   name: security jumpsuit
   description: A jumpsuit made of strong material, providing robust protection.
@@ -636,7 +636,7 @@
     sprite: Clothing/Uniforms/Jumpsuit/security_blue.rsi
 
 - type: entity
-  parent: [ClothingUniformBase, BaseSecurityContraband]
+  parent: [ClothingUniformBase, FirstSecurityContraband]
   id: ClothingUniformJumpsuitSecGrey
   name: grey security jumpsuit
   description: A tactical relic of years past before Nanotrasen decided it was cheaper to dye the suits red instead of washing out the blood.
@@ -647,7 +647,7 @@
     sprite: Clothing/Uniforms/Jumpsuit/security_grey.rsi
 
 - type: entity
-  parent: [ClothingUniformBase, BaseSecurityContraband]
+  parent: [ClothingUniformBase, FirstSecurityContraband]
   id: ClothingUniformSecurityTrooper
   name: trooper uniform
   description: A formal uniform issued to the Nanotrasen Troopers, usually it comes with a car.
@@ -658,7 +658,7 @@
     sprite: Clothing/Uniforms/Jumpsuit/security_trooper.rsi
 
 - type: entity
-  parent: [ClothingUniformBase, BaseSecurityContraband]
+  parent: [ClothingUniformBase, FirstSecurityContraband]
   id: ClothingUniformJumpsuitWarden
   name: warden's uniform
   description: A formal security suit for officers complete with Nanotrasen belt buckle.
@@ -769,7 +769,7 @@
       sprite: Clothing/Uniforms/Jumpsuit/lawyergood.rsi
 
 - type: entity
-  parent: [UnsensoredClothingUniformBase, BaseSyndicateContraband]
+  parent: [UnsensoredClothingUniformBase, FirstSyndicateContraband]
   id: ClothingUniformJumpsuitPyjamaSyndicateBlack
   name: black syndicate pyjamas
   description: For those long nights in perma.
@@ -780,7 +780,7 @@
     sprite: Clothing/Uniforms/Jumpsuit/pyjamasyndicateblack.rsi
 
 - type: entity
-  parent: [UnsensoredClothingUniformBase, BaseSyndicateContraband]
+  parent: [UnsensoredClothingUniformBase, FirstSyndicateContraband]
   id: ClothingUniformJumpsuitPyjamaSyndicatePink
   name: pink syndicate pyjamas
   description: For those long nights in perma.
@@ -791,7 +791,7 @@
     sprite: Clothing/Uniforms/Jumpsuit/pyjamasyndicatepink.rsi
 
 - type: entity
-  parent: [UnsensoredClothingUniformBase, BaseSyndicateContraband]
+  parent: [UnsensoredClothingUniformBase, FirstSyndicateContraband]
   id: ClothingUniformJumpsuitPyjamaSyndicateRed
   name: red syndicate pyjamas
   description: For those long nights in perma.
@@ -846,7 +846,7 @@
     sprite: Clothing/Uniforms/Jumpsuit/hosformal.rsi
 
 - type: entity
-  parent: [UnsensoredClothingUniformBase, BaseSyndicateContraband]
+  parent: [UnsensoredClothingUniformBase, FirstSyndicateContraband]
   id: ClothingUniformJumpsuitOperative
   name: operative jumpsuit
   description: Uniform for elite syndicate operatives performing tactical operations in deep space.
@@ -995,7 +995,7 @@
     sprite: Clothing/Uniforms/Jumpsuit/musician.rsi
 
 - type: entity
-  parent: [ BaseCentcommContraband, ClothingUniformBase ]
+  parent: [ CentcommContraband, ClothingUniformBase ]
   id: ClothingUniformJumpsuitERTChaplain
   name: ERT chaplain uniform
   description: A special suit made for Central Command's elite chaplain corps.
@@ -1006,7 +1006,7 @@
     sprite: Clothing/Uniforms/Jumpsuit/ert_chaplain.rsi
 
 - type: entity
-  parent: [ BaseCentcommContraband, ClothingUniformBase ]
+  parent: [ CentcommContraband, ClothingUniformBase ]
   id: ClothingUniformJumpsuitERTEngineer
   name: ERT engineering uniform
   description: A special suit made for the elite engineers under CentComm.
@@ -1017,7 +1017,7 @@
     sprite: Clothing/Uniforms/Jumpsuit/ert_engineer.rsi
 
 - type: entity
-  parent: [ BaseCentcommContraband, ClothingUniformBase ]
+  parent: [ CentcommContraband, ClothingUniformBase ]
   id: ClothingUniformJumpsuitERTJanitor
   name: ERT janitorial uniform
   description: A special suit made for the elite janitors under CentComm.
@@ -1028,7 +1028,7 @@
     sprite: Clothing/Uniforms/Jumpsuit/ert_janitor.rsi
 
 - type: entity
-  parent: [ BaseCentcommContraband, ClothingUniformBase ]
+  parent: [ CentcommContraband, ClothingUniformBase ]
   id: ClothingUniformJumpsuitERTLeader
   name: ERT leader uniform
   description: A special suit made for the best of the elites under CentComm.
@@ -1039,7 +1039,7 @@
     sprite: Clothing/Uniforms/Jumpsuit/ert_leader.rsi
 
 - type: entity
-  parent: [ BaseCentcommContraband, ClothingUniformBase ]
+  parent: [ CentcommContraband, ClothingUniformBase ]
   id: ClothingUniformJumpsuitERTMedic
   name: ERT medical uniform
   description: A special suit made for the elite medics under CentComm.
@@ -1050,7 +1050,7 @@
     sprite: Clothing/Uniforms/Jumpsuit/ert_medic.rsi
 
 - type: entity
-  parent: [ BaseCentcommContraband, ClothingUniformBase ]
+  parent: [ CentcommContraband, ClothingUniformBase ]
   id: ClothingUniformJumpsuitERTSecurity
   name: ERT security uniform
   description: A special suit made for the elite security under CentComm.
@@ -1153,7 +1153,7 @@
     sprite: Clothing/Uniforms/Jumpsuit/hawaiyellow.rsi
 
 - type: entity
-  parent: [ClothingUniformBase, BaseSyndicateContraband]
+  parent: [ClothingUniformBase, FirstSyndicateContraband]
   id: ClothingUniformJumpsuitSyndieFormal
   name: syndicate formal suit
   description: "The syndicate's uniform is made in an elegant style, it's even a pity to do dirty tricks in this."
@@ -1208,7 +1208,7 @@
     sprite: Clothing/Uniforms/Jumpsuit/senior_physician.rsi
 
 - type: entity
-  parent: [ClothingUniformBase, BaseSecurityContraband]
+  parent: [ClothingUniformBase, FirstSecurityContraband]
   id: ClothingUniformJumpsuitSeniorOfficer
   name: senior officer jumpsuit
   description: A sign of skill and prestige within the security department.
