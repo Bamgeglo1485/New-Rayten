@@ -81,7 +81,11 @@ public class SharedDominatorSystem : EntitySystem
 
         foreach (var target in ents)
         {
-            if (target == uid || !HasComp<MobStateComponent>(target) || target == gunuser)
+            if (target == uid || !TryComp<MobStateComponent>(target, out var mobstate) || target == gunuser)
+                continue;
+
+            //если цель критованая или мертвая - игнорируем
+            if (mobstate.CurrentState != MobState.Alive)
                 continue;
 
             //если цель за стеной - игнорируем

@@ -39,6 +39,7 @@ using Content.Shared.Tag;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Content.Shared.Vanilla.Skill;
+using Content.Shared.Vanilla.Dominator;
 using Content.Shared.NPC.Prototypes;
 
 namespace Content.Server.Zombies;
@@ -187,9 +188,10 @@ public sealed partial class ZombieSystem
             melee.Damage = zombiecomp.DamageOnBite;
 
             //Rayten-start
-            if(!TryComp<SkillComponent>(target, out var skill))
+            if (!TryComp<SkillComponent>(target, out var skill))
                 skill = EnsureComp<SkillComponent>(target);
             skill.MeleeWeaponLevel = SkillLevel.Expert;
+            AddComp<DangerMobComponent>(target);
             //Rayten-end
 
             // humanoid zombies get to pry open doors and shit
