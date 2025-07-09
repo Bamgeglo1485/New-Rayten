@@ -1,5 +1,6 @@
 using Robust.Shared.GameStates;
 using Robust.Shared.Serialization;
+using Content.Shared.Weapons.Ranged.Components;
 namespace Content.Shared.Vanilla.Dominator;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
@@ -10,12 +11,25 @@ public sealed partial class DominatorComponent : Component
 
     [DataField]
     public DominatorState CurrentState = DominatorState.Disabled;
+
+
+    [DataField(required: true)]
+    [AutoNetworkedField]
+    public List<BatteryWeaponFireMode> FireModes = new();
+
+    [DataField]
+    public float ScanRange = 14.0f;
+    [DataField]
+    public float CheckDelay = 0.5f;
+    public float Timer;
+    public TimeSpan NextSpeechTime = TimeSpan.FromSeconds(0);
+
 }
 
 [Serializable, NetSerializable]
 public enum DominatorState : byte
 {
-    Disabled = 1,
-    NonLethal = 2,
-    Lethal = 3
+    Disabled = 0,
+    NonLethal = 1,
+    Lethal = 2
 }

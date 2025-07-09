@@ -57,6 +57,7 @@ namespace Content.Client.Vanilla.Anticheat
                     cheatpoints += 5;
             }
         }
+
         private bool IsEntityVisibleToPlayer(EntityUid target, EntityUid player)
         {
             // Проверяем, что оба валидны
@@ -79,30 +80,29 @@ namespace Content.Client.Vanilla.Anticheat
 
         private void OnAimBotBait(RequestShootEvent msg, EntitySessionEventArgs args)
         {
-            cheatpoints += 10;
+            ReportCheat($"Обнаружен аимбот");
         }
 
 
-        public override void Update(float frameTime)
-        {
-            base.Update(frameTime);
+        // public override void Update(float frameTime)
+        // {
+        //     base.Update(frameTime);
 
-            var now = _timing.CurTime;
+        //     var now = _timing.CurTime;
 
-            if (now < _nextCheck)
-                return;
+        //     if (now < _nextCheck)
+        //         return;
 
-            if (cheatpoints >= 5)
-            {
-                ReportCheat($"Рейтинг подозрения: {cheatpoints}");
-                return;
-            }
+        //     if (cheatpoints >= 5)
+        //     {
+        //         ReportCheat($"Рейтинг подозрения: {cheatpoints}");
+        //         return;
+        //     }
 
-
-            _nextCheck = now + TimeSpan.FromSeconds(5);
-            CheckForVisibleTraps();
-            // CheckDrawFovFlag();
-        }
+        //     _nextCheck = now + TimeSpan.FromSeconds(5);
+        //     CheckForVisibleTraps();
+        //     // CheckDrawFovFlag();
+        // }
 
         private void CheckDrawFovFlag()
         {

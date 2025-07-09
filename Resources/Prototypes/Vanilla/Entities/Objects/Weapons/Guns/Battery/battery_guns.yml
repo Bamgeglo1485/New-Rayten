@@ -4,12 +4,6 @@
   id: WeaponDominator
   description: Высокотехнологичное оружие созданное правоохранительной организацией Sibyl System, предназначенное специально для борьбы с преступностью.
   components:
-  - type: Dominator
-  - type: Speech
-  - type: AccessReader
-    access: [["Security"], ["Captain"]]
-  - type: VoiceEmitter
-    voice: Willow
   - type: Sprite
     sprite: Vanilla/Objects/Weapons/Guns/Battery/Dominator.rsi
     layers:
@@ -35,8 +29,22 @@
     soundGunshot:
       path: /Audio/Vanilla/Weapons/Guns/Gunshots/dominator.ogg
   - type: HitscanBatteryAmmoProvider
-    proto: Pulse
-    fireCost: 150
+    proto: DominatorNonLethalShot
+    fireCost: 100
+  - type: Dominator
+    fireModes:
+    - proto: DominatorNonLethalShot
+      fireCost: 100
+      isHitscan: true
+    - proto: DominatorNonLethalShot
+      fireCost: 100
+      isHitscan: true
+    - proto: DominatorLethalShot
+      fireCost: 200
+      isHitscan: true
+  - type: Speech
+  - type: AccessReader
+    access: [["Security"], ["Captain"]]
   - type: Item
     size: Small
     shape:
@@ -45,5 +53,5 @@
     sprite: Vanilla/Objects/Weapons/Guns/Battery/Dominator.rsi
     heldPrefix: energy
   - type: Battery
-    maxCharge: 3000
-    startingCharge: 3000
+    maxCharge: 2000
+    startingCharge: 2000
