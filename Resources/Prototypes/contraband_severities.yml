@@ -29,7 +29,7 @@
   id: ThirdLevelRestricted
   examineText: contraband-examine-text-ThirdLevel
   showDepartmentsAndJobs: true
-  danger: 10
+  danger: 8
 
 - type: contrabandSeverity
   id: GrandTheft

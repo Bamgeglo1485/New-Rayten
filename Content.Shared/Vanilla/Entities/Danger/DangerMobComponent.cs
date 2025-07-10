@@ -5,10 +5,10 @@ namespace Content.Shared.Vanilla.Dominator;
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class DangerMobComponent : Component
 {
-    [DataField, AutoNetworkedField]
+    [DataField]
     public int Danger = 0;
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public int DeepDanger = 0;
 
     [DataField, AutoNetworkedField]
