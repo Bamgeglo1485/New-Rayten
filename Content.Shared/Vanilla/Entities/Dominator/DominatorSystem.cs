@@ -1,26 +1,14 @@
 using Content.Shared.Weapons.Ranged.Systems;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Events;
+using Content.Shared.Weapons.Ranged;
 using Content.Shared.PDA;
 using Content.Shared.Inventory;
 using Content.Shared.Examine;
 using Content.Shared.Access.Components;
-using Content.Shared.Access.Systems;
-using Content.Shared.Interaction;
-using Content.Shared.Mobs.Components;
-using Content.Shared.Contraband;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Hands.Components;
-using Content.Shared.Access.Components;
-using Content.Shared.CombatMode;
-using Content.Shared.Storage;
-using Content.Shared.Roles;
-using Robust.Shared.Physics.Systems;
 using Robust.Shared.Prototypes;
-using Robust.Shared.Random;
-using Robust.Shared.Utility;
-using Robust.Shared.Timing;
-using System.Linq;
 
 namespace Content.Shared.Vanilla.Dominator;
 
@@ -31,7 +19,8 @@ public class SharedDominatorSystem : EntitySystem
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly SharedHandsSystem _hands = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly SharedIdCardSystem _id = default!;
+    [Dependency] private readonly DangerMobSystem _dangermob = default!;
+    [Dependency] private readonly SharedAppearanceSystem _appearanceSystem = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -55,16 +44,13 @@ public class SharedDominatorSystem : EntitySystem
 
             var parent = xform.ParentUid;
 
-            if (!TryComp<HandsComponent>(parent, out var hands))
-                continue;
-
             if (!_hands.TryGetActiveItem(parent, out var helditem))
                 continue;
 
             if (helditem != uid)
                 continue;
 
-            var newMode = GetFireMode(uid, dom, xform, parent);
+            var newMode = GetFireMode(uid, dom, parent);
 
             if (newMode != dom.CurrentState)
             {
@@ -73,7 +59,7 @@ public class SharedDominatorSystem : EntitySystem
         }
     }
 
-    private DominatorState GetFireMode(EntityUid uid, DominatorComponent dom, TransformComponent xform, EntityUid gunuser)
+    private DominatorState GetFireMode(EntityUid uid, DominatorComponent dom, EntityUid gunuser)
     {
         var ents = _lookup.GetEntitiesInRange(uid, dom.ScanRange, LookupFlags.Dynamic | LookupFlags.Approximate);
 
@@ -81,11 +67,7 @@ public class SharedDominatorSystem : EntitySystem
 
         foreach (var target in ents)
         {
-            if (target == uid || !TryComp<MobStateComponent>(target, out var mobstate) || target == gunuser)
-                continue;
-
-            //если цель критованая или мертвая - игнорируем
-            if (mobstate.CurrentState != MobState.Alive)
+            if (target == uid || target == gunuser)
                 continue;
 
             //если цель за стеной - игнорируем
@@ -93,146 +75,47 @@ public class SharedDominatorSystem : EntitySystem
                 continue;
 
             //считаем опасность цели
-            int targetdanger = CalculateTargetDanger(target, false);
+            int targetdanger = _dangermob.GetEntityDanger(target, false);
 
             if (targetdanger > maxdanger)
                 maxdanger = targetdanger;
         }
 
-        if (maxdanger >= 10)
-            return DominatorState.Lethal;
-
-        if (maxdanger >= 4)
-            return DominatorState.NonLethal;
-
-        return DominatorState.Disabled;
+        return maxdanger switch
+        {
+            >= 10 => DominatorState.Lethal,
+            >= 4 => DominatorState.NonLethal,
+            _ => DominatorState.Disabled
+        };
     }
-
-
-    /// ВОТ ЭТО ВСЕ В ОТДЕЛЬНУЮ СИСТЕМУ
-    private int CalculateTargetDanger(EntityUid target, bool deepseek)
-    {
-        var danger = 0;
-
-        List<ProtoId<DepartmentPrototype>> departments = new();
-        var jobId = "";
-        if (_id.TryFindIdCard(target, out var id))
-        {
-            departments = id.Comp.JobDepartments;
-            if (id.Comp.LocalizedJobTitle is not null)
-            {
-                jobId = id.Comp.LocalizedJobTitle;
-            }
-        }
-
-        // --- 1. Проверка на опасных существ ---
-        if (TryComp<DangerMobComponent>(target, out var dangermob))
-        {
-            danger += dangermob.Danger;
-        }
-
-        // --- 2. Проверка на харммод ---
-        if (TryComp<CombatModeComponent>(target, out var combat) && combat.IsInCombatMode)
-        {
-            danger += 2;
-        }
-        // --- 2. Проверка рук ---
-        // Предметы в руках имеют в два раза большую опасность
-        foreach (var item in _hands.EnumerateHeld(target))
-        {
-            danger += GetItemDanger(item, departments, jobId) * 2;
-        }
-
-        // --- 3. Проверка инвентарных слотов ---
-        if (TryComp<InventoryComponent>(target, out var inventoryComp))
-        {
-            foreach (var slot in inventoryComp.Slots)
-            {
-                // Если не deepseek — пропускаем карманы
-                if (!deepseek && (slot.Name == "pocket1" || slot.Name == "pocket2"))
-                    continue;
-
-                if (_inventory.TryGetSlotEntity(target, slot.Name, out var itemUid) && itemUid is { } itemUidValue)
-                {
-                    // Учитываем опасность самого предмета
-                    danger += GetItemDanger(itemUidValue, departments, jobId);
-
-                    // Если включён deepseek, проверяем содержимое
-                    if (deepseek && TryComp<StorageComponent>(itemUidValue, out var storageComp))
-                    {
-                        foreach (var contained in storageComp.Container.ContainedEntities)
-                        {
-                            danger += GetItemDanger(contained, departments, jobId);
-                        }
-                    }
-                }
-            }
-        }
-
-
-
-        // --- 4. Проверка на карту агента ---
-        if (_inventory.TryGetSlotEntity(target, "id", out var heldId))
-        {
-            if (HasComp<AgentIDCardComponent>(heldId))
-            {
-                danger -= 2;
-            }
-            else
-            {
-                if (TryComp<PdaComponent>(heldId, out var pda) && pda.ContainedId.HasValue && HasComp<AgentIDCardComponent>(pda.ContainedId.Value))
-                {
-                    danger -= 2;
-                }
-            }
-        }
-
-        return Math.Clamp(danger, 0, 10);
-    }
-
-
-    private int GetItemDanger(EntityUid item, List<ProtoId<DepartmentPrototype>> departments, string jobId)
-    {
-        if (!TryComp<ContrabandComponent>(item, out var contraband))
-            return 0;
-
-        if (!_proto.TryIndex<ContrabandSeverityPrototype>(contraband.Severity, out var severityProto))
-            return 0;
-
-        var jobs = contraband.AllowedJobs.Select(p => _proto.Index(p).LocalizedName).ToArray();
-
-        if (departments.Intersect(contraband.AllowedDepartments).Any() || jobs.Contains(jobId))
-            return 0;
-
-        return severityProto.Danger;
-    }
-    /// ВОТ ДО СЮДА
 
     public virtual void UpdateWeaponMode(EntityUid uid, DominatorComponent component, DominatorState newMode)
     {
         component.CurrentState = newMode;
-        Dirty(uid, component);
+        // Dirty(uid, component);
 
         var fireMode = component.FireModes[(int)newMode];
-
-        if (_proto.TryIndex<EntityPrototype>(fireMode.Prototype, out var prototype))
-        {
-            // if (TryComp<AppearanceComponent>(uid, out var appearance))
-            //     _appearanceSystem.SetData(uid, BatteryWeaponFireModeVisuals.State, prototype.ID, appearance);
-        }
-
         if (fireMode.IsHitscan)
         {
+
+            if (_proto.TryIndex<HitscanPrototype>(fireMode.Prototype, out var prototype))
+            {
+                if (TryComp<AppearanceComponent>(uid, out var appearance))
+                {
+                    _appearanceSystem.SetData(uid, BatteryWeaponFireModeVisuals.State, prototype.ID, appearance);
+                }
+            }
+
             if (TryComp(uid, out HitscanBatteryAmmoProviderComponent? hitscanBatteryAmmoProviderComponent))
             {
                 // TODO: Have this get the info directly from the batteryComponent when power is moved to shared.
-                var OldFireCost = hitscanBatteryAmmoProviderComponent.FireCost;
+                var oldFireCost = hitscanBatteryAmmoProviderComponent.FireCost;
                 hitscanBatteryAmmoProviderComponent.Prototype = fireMode.Prototype;
                 hitscanBatteryAmmoProviderComponent.FireCost = fireMode.FireCost;
 
-                float FireCostDiff = (float)fireMode.FireCost / (float)OldFireCost;
-                hitscanBatteryAmmoProviderComponent.Shots = (int)Math.Round(hitscanBatteryAmmoProviderComponent.Shots / FireCostDiff);
-                hitscanBatteryAmmoProviderComponent.Capacity = (int)Math.Round(hitscanBatteryAmmoProviderComponent.Capacity / FireCostDiff);
+                float fireCostDiff = (float)fireMode.FireCost / (float)oldFireCost;
+                hitscanBatteryAmmoProviderComponent.Shots = (int)Math.Round(hitscanBatteryAmmoProviderComponent.Shots / fireCostDiff);
+                hitscanBatteryAmmoProviderComponent.Capacity = (int)Math.Round(hitscanBatteryAmmoProviderComponent.Capacity / fireCostDiff);
 
                 Dirty(uid, hitscanBatteryAmmoProviderComponent);
 
@@ -242,6 +125,14 @@ public class SharedDominatorSystem : EntitySystem
         }
         else
         {
+            if (_proto.TryIndex<EntityPrototype>(fireMode.Prototype, out var prototype))
+            {
+                if (TryComp<AppearanceComponent>(uid, out var appearance))
+                {
+                    _appearanceSystem.SetData(uid, BatteryWeaponFireModeVisuals.State, prototype.ID, appearance);
+                }
+            }
+
             if (TryComp(uid, out ProjectileBatteryAmmoProviderComponent? projectileBatteryAmmoProviderComponent))
             {
                 // TODO: Have this get the info directly from the batteryComponent when power is moved to shared.

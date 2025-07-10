@@ -10,8 +10,7 @@ public sealed partial class DominatorComponent : Component
     public EntityUid? AuthorizedID = null;
 
     [DataField]
-    public DominatorState CurrentState = DominatorState.Disabled;
-
+    public DominatorState CurrentState = DominatorState.Lethal;
 
     [DataField(required: true)]
     [AutoNetworkedField]
@@ -32,4 +31,9 @@ public enum DominatorState : byte
     Disabled = 0,
     NonLethal = 1,
     Lethal = 2
+}
+[Serializable, NetSerializable]
+public enum DominatorVisuals : byte
+{
+    firemod
 }

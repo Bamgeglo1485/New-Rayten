@@ -6,5 +6,11 @@ namespace Content.Shared.Vanilla.Dominator;
 public sealed partial class DangerMobComponent : Component
 {
     [DataField, AutoNetworkedField]
-    public int Danger = 10;
+    public int Danger = 0;
+
+    [DataField, AutoNetworkedField]
+    public int DeepDanger = 0;
+
+    [DataField, AutoNetworkedField]
+    public bool MaxDanger = true;
 }
