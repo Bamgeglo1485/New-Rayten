@@ -21,7 +21,7 @@ public sealed class DangerMobSystem : EntitySystem
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly SharedIdCardSystem _id = default!;
 
-    private float _timer;
+    private float _timer = 0;
     public float CheckDelay = 0.5f;
 
     public override void Update(float frameTime)
@@ -99,9 +99,10 @@ public sealed class DangerMobSystem : EntitySystem
                 {
                     // Учитываем опасность самого предмета
                     var itemdanger = GetItemDanger(itemUidValue, departments, jobId);
-                    deepdanger = itemdanger;
-                    if (slot.Name != "pocket1" && slot.Name == "pocket2")
-                        danger = itemdanger;
+                    deepdanger += itemdanger;
+
+                    if (slot.Name != "pocket1" && slot.Name != "pocket2")
+                        danger += itemdanger;
 
                     if (TryComp<StorageComponent>(itemUidValue, out var storageComp))
                     {
@@ -128,8 +129,8 @@ public sealed class DangerMobSystem : EntitySystem
                 }
             }
         }
-        dangercomp.Danger = Math.Clamp(deepdanger, 0, 10);
-        dangercomp.DeepDanger = Math.Clamp(danger, 0, 10);
+        dangercomp.Danger = Math.Clamp(danger, 0, 10);
+        dangercomp.DeepDanger = Math.Clamp(deepdanger, 0, 10);
     }
 
     private int GetItemDanger(EntityUid item, List<ProtoId<DepartmentPrototype>> departments, string jobId)

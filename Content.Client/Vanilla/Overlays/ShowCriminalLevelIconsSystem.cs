@@ -3,6 +3,7 @@ using Content.Shared.StatusIcon.Components;
 using Content.Shared.Vanilla.Overlays;
 using Content.Shared.Overlays;
 using Content.Client.Overlays;
+using Content.Shared.Vanilla.Dominator;
 using Robust.Shared.Prototypes;
 
 namespace Content.Client.Vanilla.Overlays;
@@ -11,18 +12,14 @@ public sealed class ShowCriminalLevelIconsSystem : EquipmentHudSystem<ShowCrimin
 {
 
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-
-    public override void Initialize()
-    {
-        base.Initialize();
-    }
+    [Dependency] private readonly DangerMobSystem _dangermob = default!;
 
     public void AddCriminalLevelIcons(EntityUid uid, ref GetStatusIconsEvent args)
     {
         if (!IsActive)
             return;
 
-        const int DangerLevel = 7;
+        var DangerLevel = _dangermob.GetEntityDanger(uid);
 
         var iconId = $"CriminalLevelIcon{DangerLevel}";
 

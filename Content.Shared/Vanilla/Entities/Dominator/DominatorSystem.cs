@@ -75,7 +75,7 @@ public class SharedDominatorSystem : EntitySystem
                 continue;
 
             //считаем опасность цели
-            int targetdanger = _dangermob.GetEntityDanger(target, false);
+            int targetdanger = _dangermob.GetEntityDanger(target);
 
             if (targetdanger > maxdanger)
                 maxdanger = targetdanger;
