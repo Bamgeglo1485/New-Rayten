@@ -5,6 +5,7 @@
   description: It's a space carp.
   abstract: true
   components:
+    - type: DangerMob #Rayten
     - type: InputMover
     - type: MobMover
     - type: HTN
