@@ -1,8 +1,5 @@
 using Robust.Shared.GameStates;
-using Content.Shared.Vanilla.Skill;
-
-namespace Content.Server.Vanilla.Skill;
-
+namespace Content.Shared.Vanilla.Skill;
 
 [RegisterComponent]
 public sealed partial class MeleeTrainerComponent : Component
@@ -12,6 +9,5 @@ public sealed partial class MeleeTrainerComponent : Component
 
     [DataField("skillType")]
     public skillType SkillType { get; set; } = skillType.MeleeWeapon;
-
 }
 

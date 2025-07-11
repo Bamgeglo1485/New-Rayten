@@ -246,17 +246,6 @@ public sealed partial class HumanoidCharacterAppearance : ICharacterAppearance, 
             markingSet.GetForwardEnumerator().ToList());
     }
     private ISawmill _log = default!;
-    public bool MemberwiseEqualsDebug(HumanoidCharacterAppearance other)
-    {
-        if (HairStyleId != other.HairStyleId) Logger.Info($"HairStyleId: {HairStyleId} != {other.HairStyleId}");
-        if (!HairColor.Equals(other.HairColor)) Logger.Info($"HairColor: {HairColor} != {other.HairColor}");
-        if (FacialHairStyleId != other.FacialHairStyleId) Logger.Info($"FacialHairStyleId: {FacialHairStyleId} != {other.FacialHairStyleId}");
-        if (!FacialHairColor.Equals(other.FacialHairColor)) Logger.Info($"FacialHairColor: {FacialHairColor} != {other.FacialHairColor}");
-        if (!EyeColor.Equals(other.EyeColor)) Logger.Info($"EyeColor: {EyeColor} != {other.EyeColor}");
-        if (!SkinColor.Equals(other.SkinColor)) Logger.Info($"SkinColor: {SkinColor} != {other.SkinColor}");
-        if (!Markings.SequenceEqual(other.Markings)) Logger.Info("Markings differ");
-        return MemberwiseEquals(other);
-    }
 
     public bool MemberwiseEquals(ICharacterAppearance maybeOther)
     {

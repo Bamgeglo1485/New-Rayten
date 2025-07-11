@@ -1,6 +1,5 @@
 using Robust.Shared.GameStates;
 using Content.Shared.Vanilla.Skill;
-using Content.Server.SkillTrainer;
 using Robust.Shared.GameObjects;
 using Robust.Shared.IoC;
 using Robust.Shared.Player;
@@ -16,7 +15,7 @@ namespace Content.Server.Vanilla.Skill;
 public sealed class EmitSkillExperienceSystem : EntitySystem
 {
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly ServerSkillTrainerSystem _skillTrainerSystem = default!;
+    [Dependency] private readonly SharedSkillTrainerSystem _skillTrainerSystem = default!;
     [Dependency] private readonly IGameTiming _gameTiming = default!;
     private TimeSpan _nextTick = TimeSpan.Zero;
     private const float Interval = 1.0f; // 1 секунда

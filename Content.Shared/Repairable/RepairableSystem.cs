@@ -5,6 +5,7 @@ using Content.Shared.DoAfter;
 using Content.Shared.Interaction;
 using Content.Shared.Popups;
 using Content.Shared.Tools.Systems;
+using Content.Shared.Vanilla.Skill;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared.Repairable;
@@ -15,7 +16,7 @@ public sealed partial class RepairableSystem : EntitySystem
     [Dependency] private readonly DamageableSystem _damageableSystem = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly ISharedAdminLogManager _adminLogger = default!;
-
+    [Dependency] private readonly SharedSkillTrainerSystem _skillTrainer = default!;
     public override void Initialize()
     {
         SubscribeLocalEvent<RepairableComponent, InteractUsingEvent>(Repair);
@@ -34,6 +35,12 @@ public sealed partial class RepairableSystem : EntitySystem
         {
             var damageChanged = _damageableSystem.TryChangeDamage(ent.Owner, ent.Comp.Damage, true, false, origin: args.User);
             _adminLogger.Add(LogType.Healed, $"{ToPrettyString(args.User):user} repaired {ToPrettyString(ent.Owner):target} by {damageChanged?.GetTotal()}");
+            //Rayten
+            if (!TryComp<SkillComponent>(args.User, out var skillComp))
+                skillComp = EnsureComp<SkillComponent>(args.User);
+            int exp = (int)(damageChanged?.GetTotal() ?? 0);
+            _skillTrainer.AddExperience(skillComp, skillType.RangeWeapon, exp);
+            //Rayten-end
         }
 
         else

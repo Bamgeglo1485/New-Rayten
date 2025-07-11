@@ -9,7 +9,6 @@ using Robust.Shared.Audio.Systems;
 using Robust.Shared.Audio;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
-using Content.Server.SkillTrainer;
 
 namespace Content.Server.Vanilla.Skill;
 
@@ -18,7 +17,7 @@ public sealed class SkillAmnesiaSystem : EntitySystem
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly IGameTiming _gameTiming = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly ServerSkillTrainerSystem _serverSkillTrainerSystem = default!;
+    [Dependency] private readonly SharedSkillTrainerSystem _serverSkillTrainerSystem = default!;
 
     const int _experienceToRestore = 1;
 
@@ -138,7 +137,7 @@ public sealed class SkillAmnesiaSystem : EntitySystem
             (skillType.Bureaucracy, inspectamensiableskill(skill, skillType.Bureaucracy), () => skill.Bureaucracy = false),
             (skillType.Atmosphere, inspectamensiableskill(skill, skillType.Atmosphere), () => skill.Atmosphere = false)
         };
-    
+
         var nonZeroSkills = skillLevels.Where(s => s.amnesiable == true).ToList();
         if (nonZeroSkills.Count == 0)
             return;
@@ -175,6 +174,6 @@ public sealed class SkillAmnesiaSystem : EntitySystem
         if (ignoredSkill != skillType.Bureaucracy) skill.BureaucracyExp = 0;
         if (ignoredSkill != skillType.Atmosphere) skill.AtmosphereExp = 0;
         if (ignoredSkill != skillType.Crime) skill.CrimeExp = 0;
-        
+
     }
 }

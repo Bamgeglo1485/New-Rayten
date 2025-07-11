@@ -8,7 +8,6 @@ using Content.Server.Popups;
 using Content.Server.PowerCell;
 using Content.Server.Traits.Assorted;
 using Content.Server.Vanilla.Skill;
-using Content.Server.SkillTrainer;
 using Content.Shared.Traits.Assorted;
 using Content.Shared.Damage;
 using Content.Shared.DoAfter;
@@ -50,7 +49,7 @@ public sealed class DefibrillatorSystem : EntitySystem
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly SharedMindSystem _mind = default!;
     [Dependency] private readonly UseDelaySystem _useDelay = default!;
-    [Dependency] private readonly ServerSkillTrainerSystem _skillTrainerSystem = default!;
+    [Dependency] private readonly SharedSkillTrainerSystem _skillTrainerSystem = default!;
     /// <inheritdoc/>
     public override void Initialize()
     {

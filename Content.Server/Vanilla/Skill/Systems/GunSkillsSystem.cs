@@ -11,7 +11,6 @@ using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Events;
 using Content.Shared.Weapons.Ranged.Systems;
 using Content.Shared.Vanilla.Skill;
-using Content.Server.SkillTrainer;
 using Content.Server.Hands.Systems;
 using Content.Server.Vanilla.Skill;
 using Robust.Shared.Audio.Systems;
@@ -28,7 +27,7 @@ public sealed class GunSkillsSystem : EntitySystem
     [Dependency] private readonly SharedGunSystem _gun = default!;
     [Dependency] private readonly HandsSystem _handsSystem = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly ServerSkillTrainerSystem _skillTrainerSystem = default!;
+    [Dependency] private readonly SharedSkillTrainerSystem _skillTrainerSystem = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly SharedStaminaSystem _stamina = default!;
 

@@ -1,4 +1,3 @@
-using Content.Server.SkillTrainer;
 using Content.Server.Roles;
 using Content.Server.Ghost.Roles;
 using Content.Server.Administration.Systems;
@@ -18,7 +17,7 @@ namespace Content.Server.Vanilla.Background;
 
 public sealed class BackGroundSystem : EntitySystem
 {
-    [Dependency] private readonly ServerSkillTrainerSystem _skillTrainer = default!;
+    [Dependency] private readonly SharedSkillTrainerSystem _skillTrainer = default!;
     [Dependency] private readonly IPrototypeManager _prototype = default!;
     [Dependency] private readonly AdminFrozenSystem _freeze = default!;
 

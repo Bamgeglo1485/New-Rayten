@@ -289,7 +289,7 @@ public sealed partial class SkillComponent : Component
         _entityManager.EventBus.RaiseLocalEvent(Owner, ev);
     }
 
-    
+
 
     //получить уровень навыка
     public SkillLevel? GetSkillLevel(skillType skill)
@@ -317,7 +317,7 @@ public sealed partial class SkillComponent : Component
             skillType.Botany => Botany,
             skillType.Bureaucracy => Bureaucracy,
             skillType.Atmosphere => Atmosphere,
-            _ => null 
+            _ => null
         };
     }
     //Это лёгкий или обычный навык?
@@ -330,7 +330,7 @@ public sealed partial class SkillComponent : Component
             skillType.Botany => true,
             skillType.Bureaucracy => true,
             skillType.Atmosphere => true,
-            _ => false 
+            _ => false
         };
     }
     //получить опыт навыка
@@ -380,10 +380,10 @@ public enum skillType : byte
 [Serializable, NetSerializable]
 public enum SkillLevel
 {
-    None = 0,   
-    Basic = 1,   
-    Advanced = 2, 
-    Expert = 3 
+    None = 0,
+    Basic = 1,
+    Advanced = 2,
+    Expert = 3
 }
 
 public sealed class SkillLevelChangedEvent : EntityEventArgs
