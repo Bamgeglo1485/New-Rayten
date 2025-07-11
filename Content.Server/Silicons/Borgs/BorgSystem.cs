@@ -1,13 +1,14 @@
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using Content.Server.Actions;
 using Content.Server.Administration.Logs;
 using Content.Server.Administration.Managers;
-using Content.Server.Body.Components;
 using Content.Server.DeviceNetwork.Systems;
 using Content.Server.Explosion.EntitySystems;
 using Content.Server.Hands.Systems;
 using Content.Server.PowerCell;
 using Content.Shared.Alert;
-using Content.Shared.Containers.ItemSlots;
+using Content.Shared.Body.Events;
 using Content.Shared.Database;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Interaction;
@@ -30,13 +31,11 @@ using Robust.Server.GameObjects;
 using Robust.Shared.Configuration;
 using Robust.Shared.Containers;
 using Robust.Shared.Player;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using Content.Shared.Vanilla.Skill;//vanilla-skill
 using Content.Server.Vanilla.Skill;//vanilla-skill
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-
 namespace Content.Server.Silicons.Borgs;
 
 /// <inheritdoc/>
@@ -65,8 +64,7 @@ public sealed partial class BorgSystem : SharedBorgSystem
     [Dependency] private readonly RequiresSkillSystem _requiresSkillSystem = default!;
     [Dependency] private readonly ISharedPlayerManager _player = default!;
 
-    [ValidatePrototypeId<JobPrototype>]
-    public const string BorgJobId = "Borg";
+    public static readonly ProtoId<JobPrototype> BorgJobId = "Borg";
 
     /// <inheritdoc/>
     public override void Initialize()
