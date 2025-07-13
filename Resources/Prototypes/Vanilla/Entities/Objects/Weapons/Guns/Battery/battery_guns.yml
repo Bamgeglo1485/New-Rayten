@@ -81,8 +81,8 @@
     visuals:
       enum.BatteryWeaponFireModeVisuals.State:
         enum.DominatorVisuals.firemod:
-          DominatorNonLethalShot: { state: unlit-safe }
-          DominatorLethalShot: { state: unlit-lethal }
+          AssaultDominatorNonLethalShot: { state: unlit-safe }
+          AssaultDominatorLethalShot: { state: unlit-lethal }
   - type: MagazineVisuals
     magState: mag
     steps: 5
@@ -92,7 +92,7 @@
     sprite: Vanilla/Objects/Weapons/Guns/Battery/AssaultDominator.rsi
   - type: Gun
     selectedMode: FullAuto
-    fireRate: 4
+    fireRate: 5
     availableModes:
       - FullAuto
     soundGunshot:

@@ -18,7 +18,7 @@
   - type: ProjectileSpread
     proto: BulletLaserDominator
     count: 5
-    spread: 30
+    spread: 25
 
 - type: entity
   name: лазерный выстрел
