@@ -29,7 +29,6 @@ namespace Content.Client.Vanilla.UserInterface.AlertKey
             { "blue", Color.DodgerBlue },
             { "violet", Color.Violet },
             { "yellow", Color.Yellow },
-            { "gray", Color.Gray },
             { "red", Color.Red },
         };
 

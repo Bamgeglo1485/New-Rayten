@@ -8,6 +8,17 @@ public sealed partial class AlertLevelAccessComponent : Component
 {
     [DataField]
     public string ResetOnLevel = "green";
+
+    [DataField]
+    public float ScanRange = 14.0f;
+    [DataField]
+    public float CheckDelay = 0.5f;
+    public float Timer;
+
+    [DataField]
+    public bool AddedByCode = false;
+
+
     [DataField]
     public HashSet<ProtoId<AccessLevelPrototype>> Blue = new();
 

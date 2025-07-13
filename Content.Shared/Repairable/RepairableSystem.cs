@@ -6,6 +6,7 @@ using Content.Shared.Interaction;
 using Content.Shared.Popups;
 using Content.Shared.Tools.Systems;
 using Content.Shared.Vanilla.Skill;
+using Content.Shared.FixedPoint;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared.Repairable;
@@ -23,7 +24,7 @@ public sealed partial class RepairableSystem : EntitySystem
         SubscribeLocalEvent<RepairableComponent, RepairFinishedEvent>(OnRepairFinished);
     }
 
-    private void OnRepairFinished(Entity<RepairableComponent> ent,  ref RepairFinishedEvent args)
+    private void OnRepairFinished(Entity<RepairableComponent> ent, ref RepairFinishedEvent args)
     {
         if (args.Cancelled)
             return;
@@ -31,24 +32,29 @@ public sealed partial class RepairableSystem : EntitySystem
         if (!TryComp(ent.Owner, out DamageableComponent? damageable) || damageable.TotalDamage == 0)
             return;
 
+        FixedPoint2 repairedAmount;//rayten
+
         if (ent.Comp.Damage != null)
         {
             var damageChanged = _damageableSystem.TryChangeDamage(ent.Owner, ent.Comp.Damage, true, false, origin: args.User);
-            _adminLogger.Add(LogType.Healed, $"{ToPrettyString(args.User):user} repaired {ToPrettyString(ent.Owner):target} by {damageChanged?.GetTotal()}");
-            //Rayten
-            if (!TryComp<SkillComponent>(args.User, out var skillComp))
-                skillComp = EnsureComp<SkillComponent>(args.User);
-            int exp = (int)(damageChanged?.GetTotal() ?? 0);
-            _skillTrainer.AddExperience(skillComp, skillType.RangeWeapon, exp);
-            //Rayten-end
-        }
+            repairedAmount = damageChanged?.GetTotal() ?? 0;//rayten
 
+            _adminLogger.Add(LogType.Healed, $"{ToPrettyString(args.User):user} repaired {ToPrettyString(ent.Owner):target} by {repairedAmount}");
+        }
         else
         {
             // Repair all damage
+            repairedAmount = damageable.TotalDamage;//rayten
             _damageableSystem.SetAllDamage(ent.Owner, damageable, 0);
+
             _adminLogger.Add(LogType.Healed, $"{ToPrettyString(args.User):user} repaired {ToPrettyString(ent.Owner):target} back to full health");
         }
+
+        //Rayten - выдача опыта за ремонт
+        var skillComp = EnsureComp<SkillComponent>(args.User);
+        int exp = (int)repairedAmount.Float();
+        _skillTrainer.AddExperience(skillComp, skillType.Building, exp);
+        //Rayten-end
 
         var str = Loc.GetString("comp-repairable-repair", ("target", ent.Owner), ("tool", args.Used!));
         _popup.PopupClient(str, ent.Owner, args.User);
@@ -56,6 +62,7 @@ public sealed partial class RepairableSystem : EntitySystem
         var ev = new RepairedEvent(ent, args.User);
         RaiseLocalEvent(ent.Owner, ref ev);
     }
+
 
     private void Repair(Entity<RepairableComponent> ent, ref InteractUsingEvent args)
     {

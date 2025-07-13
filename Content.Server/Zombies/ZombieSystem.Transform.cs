@@ -192,7 +192,10 @@ public sealed partial class ZombieSystem
             if (!TryComp<SkillComponent>(target, out var skill))
                 skill = EnsureComp<SkillComponent>(target);
             skill.MeleeWeaponLevel = SkillLevel.Expert;
-            AddComp<DangerMobComponent>(target);
+
+            if (!TryComp<DangerMobComponent>(target, out var mobdanger))
+                mobdanger = EnsureComp<DangerMobComponent>(target);
+            mobdanger.MaxDanger = true;
             //Rayten-end
 
             // humanoid zombies get to pry open doors and shit
