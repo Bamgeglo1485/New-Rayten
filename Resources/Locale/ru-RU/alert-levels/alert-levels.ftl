@@ -67,10 +67,3 @@ alert-level-epsilon = Эпсилон
 alert-level-epsilon-announcement = Все контракты расторгнуты. Спасибо, что выбрали Nanotrasen.
 alert-level-epsilon-instructions = Все контракты расторгнуты.
 alert-level-epsilon-announcement-disable = Со станцией был подписан новый контракт.
-alert-level-gray = Серый
-alert-level-gray-announcement =
-    На станции обнаружены опасные существа.
-    1. Ограничение на вооружение отдела СБ сняты.
-    2. Сотрудникам рекомендуется сообщать об опасных отсеках и избегать столкновений с опасными существами.
-alert-level-gray-instructions = Помните: даже маленькая змея может укусить. Будьте бдительны!
-alert-level-gray-announcement-disable = Все опасные существа были нейтрализованы. Службе безопасности необходимо вернуть оружие в оружейную комнату.
