@@ -91,15 +91,19 @@ public sealed class SharedAssSystem : EntitySystem
             {
                 case "red":
                     TryAddTags(extraAccessComp.Red, accessComp, extraAccessComp);
+                    extraAccessComp.AddedByCode = true;
                     break;
                 case "blue":
                     TryAddTags(extraAccessComp.Blue, accessComp, extraAccessComp);
+                    extraAccessComp.AddedByCode = true;
                     break;
                 case "gamma":
                     TryAddTags(extraAccessComp.Gamma, accessComp, extraAccessComp);
+                    extraAccessComp.AddedByCode = true;
                     break;
                 case "delta":
                     TryAddTags(extraAccessComp.Delta, accessComp, extraAccessComp);
+                    extraAccessComp.AddedByCode = true;
                     break;
             }
             Dirty(uid, accessComp);
@@ -115,7 +119,6 @@ public sealed class SharedAssSystem : EntitySystem
     }
     private void TryAddTags(HashSet<ProtoId<AccessLevelPrototype>> tags, AccessComponent accessComp, AlertLevelAccessComponent extraAccessComp)
     {
-        extraAccessComp.AddedByCode = true;
         foreach (var tag in tags)
         {
             if (!accessComp.Tags.Contains(tag))

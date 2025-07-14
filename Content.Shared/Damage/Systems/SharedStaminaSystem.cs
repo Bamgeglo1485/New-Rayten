@@ -382,15 +382,13 @@ public abstract partial class SharedStaminaSystem : EntitySystem
         //vanilla-station-start
         RaiseLocalEvent(uid, new StaminaCritEvent(), true);
         var StunTime = component.StunTime;
-        if(TryComp<SkillComponent>(uid, out var skill) && skill.MeleeWeaponLevel>=SkillLevel.Advanced)
+        if(TryComp<SkillComponent>(uid, out var skill) && skill.MeleeWeaponLevel == SkillLevel.Expert && _random.Prob(0.35f))
         {
-            StunTime -= TimeSpan.FromSeconds(2f);
-            if (skill.MeleeWeaponLevel == SkillLevel.Expert && _random.Prob(0.35f))
-                    StunTime = TimeSpan.FromSeconds(0.25f);
+            StunTime = TimeSpan.FromSeconds(0.25f);
         }
 
         //vanilla-station-end
-        _stunSystem.TryParalyze(uid, StunTime, true);
+        _stunSystem.TryParalyze(uid, component.StunTime, true);
 
         // Give them buffer before being able to be re-stunned
         component.NextUpdate = _timing.CurTime + component.StunTime + StamCritBufferTime;

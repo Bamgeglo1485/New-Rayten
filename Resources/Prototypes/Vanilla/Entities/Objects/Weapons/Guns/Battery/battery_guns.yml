@@ -92,7 +92,7 @@
     sprite: Vanilla/Objects/Weapons/Guns/Battery/AssaultDominator.rsi
   - type: Gun
     selectedMode: FullAuto
-    fireRate: 5
+    fireRate: 4
     availableModes:
       - FullAuto
     soundGunshot:
