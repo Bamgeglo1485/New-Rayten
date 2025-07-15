@@ -336,7 +336,7 @@ public sealed class FaxSystem : EntitySystem
                             uid,
                             printout,
                             args.SenderAddress,
-                            TimeSpan.FromMinutes(0.5)
+                            TimeSpan.FromMinutes(5f)
                         ));
                     }
                     else
