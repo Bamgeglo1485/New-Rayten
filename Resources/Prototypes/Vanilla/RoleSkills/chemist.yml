@@ -1,6 +1,0 @@
-- type: roleSkills
-  id: JobChemist
-  basicSkills:
-    RangeWeapon: 3
-  easySkills:
-  - Atmosphere
