@@ -31,7 +31,6 @@ public sealed class HealingSystem : EntitySystem
     [Dependency] private readonly MobThresholdSystem _mobThresholdSystem = default!;
     [Dependency] private readonly SharedPopupSystem _popupSystem = default!;
     [Dependency] private readonly SharedSolutionContainerSystem _solutionContainerSystem = default!;
-    [Dependency] private readonly SharedSkillTrainerSystem _skillTrainer = default!;
 
     public override void Initialize()
     {
@@ -58,12 +57,6 @@ public sealed class HealingSystem : EntitySystem
             return;
         }
 
-        //vanilla-station-start
-        if (!TryComp<SkillComponent>(args.User, out var skillComp))
-            skillComp = EnsureComp<SkillComponent>(args.User);
-
-        _skillTrainer.AddExperience(skillComp, skillType.Medicine, 12);
-        //vanilla-station-end
         TryComp<BloodstreamComponent>(target, out var bloodstream);
 
         // Heal some bloodloss damage.

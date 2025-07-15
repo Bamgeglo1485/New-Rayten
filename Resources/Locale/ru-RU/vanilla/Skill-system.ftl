@@ -38,7 +38,8 @@ skill-system-UI-Lvllabel = Ур. [color={ $color }]{ $lvl }[/color] [color=red]{
 skill-system-UI-ExpLabel = { $exp }/600[color=red]{ $amnesia }[/color]
 skill-system-UI-ExpLabel-maxlvl = Макс.
 skill-system-UI-Easy-SkillInfoLabel = Опыт: { $exp }/600
-skill-system-UI-Easy-SkillInfoLabel-Have = Изучен.
+skill-system-UI-Easy-SkillInfoLabel-Have = Изучен
+skill-system-UI-Easy-SkillInfoLabel-NotHave = Не изучен
 skill-system-UI-Easy-AmnesiaLabel = [color=red]Амнезия: { $exptorestore }[/color]
 skill-system-UI-Tooltip-RangeWeapon = Данный навык отвечает за разброс огнестрельного оружия.
 skill-system-UI-Tooltip-MeleeWeapon =

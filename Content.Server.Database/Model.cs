@@ -372,22 +372,22 @@ namespace Content.Server.Database
                 .Property(p => p.Type)
                 .HasDefaultValue(HwidType.Legacy);
             //Rayten-start
-            modelBuilder.Entity<ProfileRoleBackground>()
+            modelBuilder.Entity<ProfileRoleSkills>()
                 .HasOne(e => e.Profile)
-                .WithMany(e => e.Backgrounds)
+                .WithMany(e => e.RoleSkills)
                 .HasForeignKey(e => e.ProfileId)
                 .IsRequired();
 
             modelBuilder.Entity<ProfileBasicSkill>()
-                .HasOne(e => e.ProfileRoleBackground)
+                .HasOne(e => e.ProfileRoleSkills)
                 .WithMany(e => e.AddedBasicSkills)
-                .HasForeignKey(e => e.ProfileRoleBackgroundId)
+                .HasForeignKey(e => e.ProfileRoleSkillsId)
                 .IsRequired();
 
             modelBuilder.Entity<ProfileEasySkill>()
-                .HasOne(e => e.ProfileRoleBackground)
+                .HasOne(e => e.ProfileRoleSkills)
                 .WithMany(e => e.AddedEasySkills)
-                .HasForeignKey(e => e.ProfileRoleBackgroundId)
+                .HasForeignKey(e => e.ProfileRoleSkillsId)
                 .IsRequired();
             //Rayten-end
 
@@ -441,7 +441,7 @@ namespace Content.Server.Database
         public List<Trait> Traits { get; } = new();
 
         public List<ProfileRoleLoadout> Loadouts { get; } = new();
-        public List<ProfileRoleBackground> Backgrounds { get; } = new(); //Rayten-Background
+        public List<ProfileRoleSkills> RoleSkills { get; } = new(); //Rayten-RoleSkills
         [Column("pref_unavailable")] public DbPreferenceUnavailableMode PreferenceUnavailable { get; set; }
 
         public int PreferenceId { get; set; }
@@ -486,7 +486,7 @@ namespace Content.Server.Database
     }
     //RAYTEN-START
     #region предыстории
-    public class ProfileRoleBackground
+    public class ProfileRoleSkills
     {
         public int Id { get; set; }
 
@@ -496,14 +496,6 @@ namespace Content.Server.Database
 
         public string RoleName { get; set; } = string.Empty;
 
-        public string? SelectedBabyBackground { get; set; }
-
-        public string? SelectedAdultBackground { get; set; }
-
-        public string? SelectedGeneralBackground { get; set; }
-
-        public int SkillpointCredit { get; set; } = 0;
-
         public List<ProfileBasicSkill> AddedBasicSkills { get; set; } = new();
 
         public List<ProfileEasySkill> AddedEasySkills { get; set; } = new();
@@ -512,9 +504,9 @@ namespace Content.Server.Database
     {
         public int Id { get; set; }
 
-        public int ProfileRoleBackgroundId { get; set; }
+        public int ProfileRoleSkillsId { get; set; }
 
-        public ProfileRoleBackground ProfileRoleBackground { get; set; } = null!;
+        public ProfileRoleSkills ProfileRoleSkills { get; set; } = null!;
 
         public string SkillId { get; set; } = string.Empty;
 
@@ -523,8 +515,8 @@ namespace Content.Server.Database
     public class ProfileEasySkill
     {
         public int Id { get; set; }
-        public int ProfileRoleBackgroundId { get; set; }
-        public ProfileRoleBackground ProfileRoleBackground { get; set; } = null!;
+        public int ProfileRoleSkillsId { get; set; }
+        public ProfileRoleSkills ProfileRoleSkills { get; set; } = null!;
         public string SkillId { get; set; } = string.Empty;
     }
     #endregion

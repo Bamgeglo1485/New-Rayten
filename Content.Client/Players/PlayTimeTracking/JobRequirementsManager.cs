@@ -13,7 +13,7 @@ using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
-using Content.Shared.Vanilla.Background;
+using Content.Shared.Vanilla.RoleSkills;
 
 namespace Content.Client.Players.PlayTimeTracking;
 
@@ -108,14 +108,14 @@ public sealed class JobRequirementsManager : ISharedPlaytimeManager
         if (player == null)
             return true;
         //Rayten-Start
-        if (!_prototypes.TryIndex<RoleBackgroundPrototype>(SharedBackgroundSystem.GetJobPrototype(job.ID), out var roleBackgroundProto))
+        if (!_prototypes.TryIndex<RoleSkillsPrototype>(SharedRoleSkillsSystem.GetJobPrototype(job.ID), out var roleSkillsProto))
         {
             return CheckRoleRequirements(job, profile, out reason);
         }
 
-        if (profile == null || !profile.Backgrounds.TryGetValue(SharedBackgroundSystem.GetJobPrototype(job.ID), out var background))
+        if (profile == null || !profile.RoleSkills.TryGetValue(SharedRoleSkillsSystem.GetJobPrototype(job.ID), out var roleSkills)|| !roleSkills.IsValid)
         {
-            reason = FormattedMessage.FromUnformatted("Не выбрана предыстория");
+            reason = FormattedMessage.FromUnformatted("Не выбраны навыки");
             return false;
         }
         //Rayten-end

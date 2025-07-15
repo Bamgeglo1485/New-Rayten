@@ -13,9 +13,9 @@ using Robust.Shared.Player;
 
 namespace Content.Server.Vanilla.Skill;
 
-public class SkillTrainerSystem : SharedSkillTrainerSystem
+public class SkillTrainerSystem : EntitySystem
 {
-
+    const int _EXPERIENCETONEWLVL = 600;
     const int _EXPERIENCEFROMSKILLPOINT = 600;
     public override void Initialize()
     {
@@ -53,5 +53,161 @@ public class SkillTrainerSystem : SharedSkillTrainerSystem
         // Добавляем опыт
         AddExperience(skillComp, msg.skill, _EXPERIENCEFROMSKILLPOINT, multiplyed: false);
     }
+    public bool AddExperience(SkillComponent skillComp, skillType skillType, int experienceAmount, bool multiplyed = true)
+    {
+        if (multiplyed)
+        {
+            if ((int)skillComp.ResearchLevel == 3)
+                experienceAmount *= 2;
+        }
+        if (SkillComponent.IsEasySkill(skillType))
+        {
+            bool? lvl = skillComp.GetEasySkill(skillType);
 
+            if (lvl != false)
+                return false;
+
+            int exp = skillComp.GetSkillExp(skillType);
+
+            exp += experienceAmount;
+
+            if (exp >= _EXPERIENCETONEWLVL)
+            {
+                SetEasySkill(skillComp, skillType);
+                SetSkillExp(skillComp, skillType, 0);
+                return true;
+            }
+            SetSkillExp(skillComp, skillType, exp);
+            return false;
+        }
+        else
+        {
+            SkillLevel? level = skillComp.GetSkillLevel(skillType);
+            int exp = skillComp.GetSkillExp(skillType);
+
+            if (level == null || level >= SkillLevel.Expert)
+                return false;
+
+            exp += experienceAmount;
+
+            if (exp >= _EXPERIENCETONEWLVL)
+            {
+                SetSkillLevel(skillComp, skillType, level.Value + 1);
+                SetSkillExp(skillComp, skillType, exp - _EXPERIENCETONEWLVL);
+                return true;
+            }
+            SetSkillExp(skillComp, skillType, exp);
+            return false;
+        }
+
+    }
+    public void SetEasySkill(SkillComponent skillComp, skillType skill)
+    {
+        switch (skill)
+        {
+            case skillType.Piloting:
+                skillComp.Piloting = true;
+                break;
+            case skillType.Botany:
+                skillComp.Botany = true;
+                break;
+            case skillType.MusInstruments:
+                skillComp.MusInstruments = true;
+                break;
+            case skillType.Bureaucracy:
+                skillComp.Bureaucracy = true;
+                break;
+            case skillType.Atmosphere:
+                skillComp.Atmosphere = true;
+                break;
+            default:
+                break;
+        }
+        skillComp.Dirty();
+    }
+
+    public void SetSkillLevel(SkillComponent skillComp, skillType skill, SkillLevel level)
+    {
+        switch (skill)
+        {
+            case skillType.RangeWeapon:
+                skillComp.RangeWeaponLevel = level;
+                break;
+            case skillType.MeleeWeapon:
+                skillComp.MeleeWeaponLevel = level;
+                break;
+            case skillType.Medicine:
+                skillComp.MedicineLevel = level;
+                break;
+            case skillType.Chemistry:
+                skillComp.ChemistryLevel = level;
+                break;
+            case skillType.Engineering:
+                skillComp.EngineeringLevel = level;
+                break;
+            case skillType.Building:
+                skillComp.BuildingLevel = level;
+                break;
+            case skillType.Research:
+                skillComp.ResearchLevel = level;
+                break;
+            case skillType.Crime:
+                skillComp.CrimeLevel = level;
+                break;
+            default:
+                break;
+        }
+        skillComp.Dirty();
+    }
+
+    private void SetSkillExp(SkillComponent skillComp, skillType skill, int exp)
+    {
+        if (exp < 0) return;
+
+        switch (skill)
+        {
+            case skillType.Piloting:
+                skillComp.PilotingExp = exp;
+                break;
+            case skillType.RangeWeapon:
+                skillComp.RangeWeaponExp = exp;
+                break;
+            case skillType.MeleeWeapon:
+                skillComp.MeleeWeaponExp = exp;
+                break;
+            case skillType.Medicine:
+                skillComp.MedicineExp = exp;
+                break;
+            case skillType.Chemistry:
+                skillComp.ChemistryExp = exp;
+                break;
+            case skillType.Engineering:
+                skillComp.EngineeringExp = exp;
+                break;
+            case skillType.Building:
+                skillComp.BuildingExp = exp;
+                break;
+            case skillType.Research:
+                skillComp.ResearchExp = exp;
+                break;
+            case skillType.Crime:
+                skillComp.CrimeExp = exp;
+                break;
+            case skillType.Botany:
+                skillComp.BotanyExp = exp;
+                break;
+            case skillType.MusInstruments:
+                skillComp.MusInstrumentsExp = exp;
+                break;
+            case skillType.Bureaucracy:
+                skillComp.BureaucracyExp = exp;
+                break;
+            case skillType.Atmosphere:
+                skillComp.AtmosphereExp = exp;
+                break;
+            default:
+                break;
+        }
+        skillComp.Dirty();
+    }
 }

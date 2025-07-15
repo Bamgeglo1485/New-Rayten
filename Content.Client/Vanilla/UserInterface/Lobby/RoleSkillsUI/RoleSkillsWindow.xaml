@@ -11,8 +11,6 @@
         <BoxContainer Orientation="Horizontal" HorizontalExpand="True" Margin="20">
             <Button Disabled="True" HorizontalExpand="True" VerticalExpand="True" StyleClasses="chatSelectorOptionButton" Margin="5">
                 <BoxContainer Orientation="Vertical" Margin="5" VerticalExpand="True" HorizontalExpand="True">
-                    <RichTextLabel Name="SelectedBackgrounds" HorizontalExpand="True" Access="Public"/>
-                    <RichTextLabel Name="SelectedSpecials" HorizontalExpand="True" Access="Public"/>
                     <RichTextLabel Name="Skillpoints" HorizontalExpand="True" Access="Public"/>
                     <BoxContainer Orientation="Vertical" VerticalExpand="True" HorizontalExpand="True" SizeFlagsStretchRatio="10" VerticalAlignment="Bottom" />
                     <Button Name="ButtonSave"
@@ -43,9 +41,9 @@
                 </BoxContainer>
             </BoxContainer>
         </BoxContainer>
-        <VerticalTabContainer Name="LoadoutGroupsContainer"
+        <!-- <VerticalTabContainer Name="LoadoutGroupsContainer"
                               VerticalExpand="True"
                               HorizontalExpand="True">
-        </VerticalTabContainer>
+        </VerticalTabContainer> -->
     </BoxContainer>
 </controls:FancyWindow>

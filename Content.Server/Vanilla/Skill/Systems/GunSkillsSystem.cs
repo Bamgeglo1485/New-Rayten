@@ -27,7 +27,6 @@ public sealed class GunSkillsSystem : EntitySystem
     [Dependency] private readonly SharedGunSystem _gun = default!;
     [Dependency] private readonly HandsSystem _handsSystem = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedSkillTrainerSystem _skillTrainerSystem = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly SharedStaminaSystem _stamina = default!;
 
@@ -38,30 +37,11 @@ public sealed class GunSkillsSystem : EntitySystem
         SubscribeLocalEvent<GunComponent, GunRefreshModifiersEvent>(OnGunRefreshModifiers);//перегрузка обновления модификаторов
         SubscribeLocalEvent<GunCanBeFallComponent, GunShotEvent>(RangeWeaponFalldownOnShoot);//выпадение оружия при стрельбе
         SubscribeLocalEvent<ProjectileComponent, ProjectileHitEvent>(OnHit);
-        SubscribeLocalEvent<SkillComponent, HitscanHitEvent>(TrainOnHitscanShoot);
-    }
-    private void TrainOnHitscanShoot(EntityUid uid, SkillComponent skillComp, ref HitscanHitEvent args)
-    {
-        if (args.Target == null || uid == args.Target)
-            return;
-
-        if (HasComp<ActorComponent>(args.Target) || HasComp<GunTrainerComponent>(args.Target))
-        {
-            _skillTrainerSystem.AddExperience(skillComp, skillType.RangeWeapon, (int)args.dmg.GetTotal());
-        }
     }
     private void OnHit(EntityUid uid, ProjectileComponent component, ref ProjectileHitEvent args)
     {
         if (args.Shooter == null || args.Shooter == args.Target)
             return;
-
-        if (HasComp<ActorComponent>(args.Target) || HasComp<GunTrainerComponent>(args.Target))
-        {
-            if (!TryComp<SkillComponent>(args.Shooter.Value, out var skillComp))
-                skillComp = EnsureComp<SkillComponent>(args.Shooter.Value);
-
-            _skillTrainerSystem.AddExperience(skillComp, skillType.RangeWeapon, (int)component.Damage.GetTotal());
-        }
 
         if (!HasComp<StaminaComponent>(args.Target))
             return;
@@ -72,9 +52,9 @@ public sealed class GunSkillsSystem : EntitySystem
         float chance = skillcomp.RangeWeaponLevel switch
         {
             SkillLevel.None => 0.01f,
-            SkillLevel.Basic => 0.1f,
-            SkillLevel.Advanced => 0.2f,
-            SkillLevel.Expert => 0.3f,
+            SkillLevel.Basic => 0.05f,
+            SkillLevel.Advanced => 0.1f,
+            SkillLevel.Expert => 0.15f,
             _ => 0f
         };
 
@@ -84,8 +64,7 @@ public sealed class GunSkillsSystem : EntitySystem
         var headshoter = args.Shooter.Value;
         float staminadamage = args.Damage.GetTotal().Float();
 
-        _skillTrainerSystem.AddExperience(skillcomp, skillType.RangeWeapon, (int)staminadamage);
-        _audio.PlayPvs("/Audio/Vanilla/SkillSystem/headshot.ogg", args.Target, AudioParams.Default.WithVolume(-7f).WithMaxDistance(5f));
+        _audio.PlayPvs("/Audio/Vanilla/SkillSystem/headshot.ogg", args.Target, AudioParams.Default.WithVolume(-9f).WithMaxDistance(5f));
 
         _stamina.TakeStaminaDamage(args.Target, staminadamage, source: headshoter, ignoreResist: true);
 

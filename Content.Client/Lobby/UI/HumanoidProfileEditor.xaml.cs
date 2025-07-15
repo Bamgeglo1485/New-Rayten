@@ -35,8 +35,8 @@ using Robust.Shared.Enums;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 using Direction = Robust.Shared.Maths.Direction;
-using Content.Shared.Vanilla.Background;
-using Content.Client.Vanilla.UserInterface.Lobby.BackgroundUI;
+using Content.Shared.Vanilla.RoleSkills;
+using Content.Client.Vanilla.UserInterface.Lobby.RoleSkillsUI;
 
 namespace Content.Client.Lobby.UI
 {
@@ -65,7 +65,7 @@ namespace Content.Client.Lobby.UI
 
         // One at a time.
         private LoadoutWindow? _loadoutWindow;
-        private BackgroundWindow? _backgroundWindow; //RAYTEN
+        private RoleSkillsWindow? _roleSkillsWindow; //RAYTEN
         private bool _exporting;
         private bool _imaging;
 
@@ -719,9 +719,9 @@ namespace Content.Client.Lobby.UI
         {
             _loadoutWindow?.Dispose();
         }
-        public void RefreshBackgrounds()
+        public void RefreshRoleSkills()
         {
-            _backgroundWindow?.Dispose();
+            _roleSkillsWindow?.Dispose();
         }
         /// <summary>
         /// Reloads the entire dummy entity for preview.
@@ -783,7 +783,7 @@ namespace Content.Client.Lobby.UI
             RefreshAntags();
             RefreshJobs();
             RefreshLoadouts();
-            RefreshBackgrounds();
+            RefreshRoleSkills();
             RefreshSpecies();
             RefreshTraits();
             RefreshFlavorText();
@@ -940,15 +940,15 @@ namespace Content.Client.Lobby.UI
                     {
                         selector.LockRequirements(reason);
 
-                        if (protoManager.TryIndex<RoleBackgroundPrototype>(SharedBackgroundSystem.GetJobPrototype(job.ID), out _))
+                        if (protoManager.TryIndex<RoleSkillsPrototype>(SharedRoleSkillsSystem.GetJobPrototype(job.ID), out _))
                         {
-                            RoleBackground? background = null;
-                            Profile?.Backgrounds.TryGetValue(SharedBackgroundSystem.GetJobPrototype(job.ID), out background);
-                            if (background == null)
+                            RoleSkills? roleSkills = null;
+                            Profile?.RoleSkills.TryGetValue(SharedRoleSkillsSystem.GetJobPrototype(job.ID), out roleSkills);
+                            if (roleSkills == null || !roleSkills.IsValid)
                             {
-                                var LargebackgroundWindowBtn = CreateBackgroundButton(job, protoManager, true);
+                                var LargeRoleSkillsWindowBtn = CreateRoleSkillsButton(job, protoManager, true);
                                 selector.LockRequirements(reason, false);
-                                selector.OptionsContainer.AddChild(LargebackgroundWindowBtn);
+                                selector.OptionsContainer.AddChild(LargeRoleSkillsWindowBtn);
                             }
 
                         }
@@ -986,9 +986,9 @@ namespace Content.Client.Lobby.UI
                         UpdateJobPriorities();
                         SetDirty();
                     };
-                    //Rayten-background-start
-                    var backgroundWindowBtn = CreateBackgroundButton(job, protoManager);
-                    //Rayten-background-end
+                    //Rayten-RoleSkills-start
+                    var roleSkillsWindowBtn = CreateRoleSkillsButton(job, protoManager);
+                    //Rayten-RoleSkills-end
                     var loadoutWindowBtn = new Button()
                     {
                         Text = Loc.GetString("loadout-window"),
@@ -1028,7 +1028,7 @@ namespace Content.Client.Lobby.UI
                     _jobPriorities.Add((job.ID, selector));
                     jobContainer.AddChild(selector);
                     jobContainer.AddChild(loadoutWindowBtn);
-                    jobContainer.AddChild(backgroundWindowBtn);
+                    jobContainer.AddChild(roleSkillsWindowBtn);
                     category.AddChild(jobContainer);
                 }
             }
@@ -1036,12 +1036,12 @@ namespace Content.Client.Lobby.UI
             UpdateJobPriorities();
         }
         //RAYTEN-START
-        private Button CreateBackgroundButton(JobPrototype job, IPrototypeManager protoManager, bool expand = false)
+        private Button CreateRoleSkillsButton(JobPrototype job, IPrototypeManager protoManager, bool expand = false)
         {
-            var protoId = SharedBackgroundSystem.GetJobPrototype(job.ID);
+            var protoId = SharedRoleSkillsSystem.GetJobPrototype(job.ID);
 
             // Сначала достаём прототип
-            if (!protoManager.TryIndex<RoleBackgroundPrototype>(protoId, out var roleBackgroundProto))
+            if (!protoManager.TryIndex<RoleSkillsPrototype>(protoId, out var roleSkillsProto))
             {
                 // Если прототипа нет — создаём отключённую кнопку
                 return new Button
@@ -1054,12 +1054,11 @@ namespace Content.Client.Lobby.UI
                     Margin = new Thickness(3f, 3f, 0f, 0f),
                 };
             }
+            // Получаем RoleSkills из профиля
+            RoleSkills? roleSkills = null;
+            Profile?.RoleSkills.TryGetValue(protoId, out roleSkills);
 
-            // Получаем background из профиля
-            RoleBackground? background = null;
-            Profile?.Backgrounds.TryGetValue(protoId, out background);
-
-            var backgroundWindowBtn = new Button
+            var roleSkillsWindowBtn = new Button
             {
                 Text = Loc.GetString("background-window"),
                 HorizontalExpand = expand,
@@ -1070,36 +1069,34 @@ namespace Content.Client.Lobby.UI
                 Margin = expand ? new Thickness(0f, 0f, 0f, 0f) : new Thickness(3f, 3f, 0f, 0f),
             };
 
-            backgroundWindowBtn.OnPressed += args =>
+            roleSkillsWindowBtn.OnPressed += args =>
             {
-                var backgroundClone = background?.Clone() ?? new RoleBackground(roleBackgroundProto.ID);
-                OpenBackground(job, backgroundClone, roleBackgroundProto);
+                var roleSkillsClone = roleSkills?.Clone() ?? new RoleSkills(roleSkillsProto.ID);
+                OpenRoleSkills(job, roleSkillsClone, roleSkillsProto);
             };
 
-            return backgroundWindowBtn;
+            return roleSkillsWindowBtn;
         }
 
-        private void OpenBackground(JobPrototype? jobProto, RoleBackground roleBackground, RoleBackgroundPrototype roleBackgroundProto)
+        private void OpenRoleSkills(JobPrototype? jobProto, RoleSkills roleSkills, RoleSkillsPrototype roleSkillsProto)
         {
-            _backgroundWindow?.Dispose();
-            _backgroundWindow = null;
+            _roleSkillsWindow?.Dispose();
+            _roleSkillsWindow = null;
             var collection = IoCManager.Instance;
 
             if (collection == null || _playerManager.LocalSession == null || Profile == null)
                 return;
 
-            var session = _playerManager.LocalSession;
-            _backgroundWindow = new BackgroundWindow(Profile, roleBackground, roleBackgroundProto, _playerManager.LocalSession, collection)
+            _roleSkillsWindow = new RoleSkillsWindow(Profile, roleSkills, roleSkillsProto, collection)
             {
                 Title = jobProto?.LocalizedName,
             };
-            LayoutContainer.SetAnchorPreset(_backgroundWindow, LayoutContainer.LayoutPreset.Wide);
-            _backgroundWindow.Open();
+            LayoutContainer.SetAnchorPreset(_roleSkillsWindow, LayoutContainer.LayoutPreset.Wide);
+            _roleSkillsWindow.Open();
 
-            _backgroundWindow.OnSavePressed += (savedroleBackground) =>
+            _roleSkillsWindow.OnSavePressed += (savedRoleSkills) =>
             {
-                Logger.Info($"сохранено: {savedroleBackground.SelectedGeneralBackground}");
-                Profile = Profile?.WithBackground(savedroleBackground);
+                Profile = Profile?.WithRoleSkills(savedRoleSkills);
                 IsDirty = true;
             };
         }
@@ -1257,8 +1254,8 @@ namespace Content.Client.Lobby.UI
             _loadoutWindow?.Dispose();
             _loadoutWindow = null;
             //Rayten-start
-            _backgroundWindow?.Dispose();
-            _backgroundWindow = null;
+            _roleSkillsWindow?.Dispose();
+            _roleSkillsWindow = null;
             //Rayten-end
         }
 
@@ -1332,7 +1329,7 @@ namespace Content.Client.Lobby.UI
             RefreshJobs();
             // In case there's species restrictions for loadouts
             RefreshLoadouts();
-            RefreshBackgrounds();
+            RefreshRoleSkills();//Rayten
             UpdateSexControls(); // update sex for new species
             UpdateSpeciesGuidebookIcon();
             ReloadPreview();

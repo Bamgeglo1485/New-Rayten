@@ -13,22 +13,6 @@ using Robust.Shared.Random;
 
 namespace Content.Shared.Vanilla.Background;
 
-public sealed class SharedBackgroundSystem : EntitySystem
-{
-    public override void Initialize()
-    {
-        base.Initialize();
-    }
-
-    public static string GetJobPrototype(string? background)
-    {
-        if (string.IsNullOrEmpty(background))
-            return string.Empty;
-        return "Job" + background;
-    }
-
-}
-
 [Serializable, NetSerializable]
 public sealed class TakeGhostBackgroundEvent : EntityEventArgs
 {

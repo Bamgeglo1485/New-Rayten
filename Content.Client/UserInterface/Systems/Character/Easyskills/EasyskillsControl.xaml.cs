@@ -34,7 +34,7 @@ public sealed partial class EasyskillsControl : Control
         else
         {
             iconlvl = resCache.GetResource<TextureResource>("/Textures/Vanilla/Interface/SkillLvlIcons/EasySkillNo.png");
-            skillinfomessage.AddMarkupOrThrow(Loc.GetString("skill-system-UI-Easy-SkillInfoLabel", ("exp", _exp), ("amnesia", "") ));
+            skillinfomessage.AddMarkupOrThrow(Loc.GetString("skill-system-UI-Easy-SkillInfoLabel-NotHave"));
         }
         SkillTexture.Texture = iconlvl;
         InfoLabel.SetMessage(skillinfomessage);

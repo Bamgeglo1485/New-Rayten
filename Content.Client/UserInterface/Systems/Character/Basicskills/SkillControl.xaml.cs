@@ -13,13 +13,15 @@ namespace Content.Client.UserInterface.Systems.Character.Basicskills;
 public sealed partial class SkillControl : Control
 {
     public Action? OnPressed;
-    private int _exp=0;
-    private int _lvl=0;
+    private int _exp = 0;
+    private int _lvl = 0;
     private Color _colorlvl = Color.FromHex("#8F969B");
- 
+
     public SkillControl(skillType SkillName, SkillLevel Level, int Experience, bool haveskillpoint)
     {
         RobustXamlLoader.Load(this);
+        ExpLabel.Visible = false;
+
         var resCache = IoCManager.Resolve<IResourceCache>();
         var iconlvl = resCache.GetResource<TextureResource>("/Textures/Vanilla/Interface/SkillLvlIcons/lvl0.png");
         _exp = Experience;
@@ -55,26 +57,19 @@ public sealed partial class SkillControl : Control
         var Lvlmessage = new FormattedMessage();
         Lvlmessage.AddMarkupOrThrow(Loc.GetString( "skill-system-UI-Lvllabel", ("lvl", _lvl), ("color", _colorlvl), ("amnesia", "") ) );
 
-        var Expmessage = new FormattedMessage();
-        if(_lvl < 3)
-            Expmessage.AddMarkupOrThrow(Loc.GetString( "skill-system-UI-ExpLabel", ("exp", _exp), ("amnesia", "") ));
-        else
-            Expmessage.AddMarkupOrThrow(Loc.GetString("skill-system-UI-ExpLabel-maxlvl"));
-
         SkillNameLabel.SetMessage(skillnamemessage);
         LvlLabel.SetMessage(Lvlmessage);
-        ExpLabel.SetMessage(Expmessage);
 
         MainButton.OnPressed += _ => OnPressed?.Invoke();
         MainButton.Disabled = !haveskillpoint || _lvl == 3;
         MainButton.ToolTip = Loc.GetString($"skill-system-UI-Tooltip-{SkillName.ToString()}");
-        
+
     }
     public void updateamnesia(skillType skill, int exptorestore)
     {
+        ExpLabel.Visible = true;
         var Lvlmessage = new FormattedMessage();
         var Expmessage = new FormattedMessage();
-
         Lvlmessage.AddMarkupOrThrow(Loc.GetString( "skill-system-UI-Lvllabel", ("lvl", _lvl), ("color", _colorlvl), ("amnesia", "(амнезия)") ) );
         LvlLabel.SetMessage(Lvlmessage);
 

@@ -17,7 +17,7 @@ using Robust.Shared.Random;
 using Robust.Shared.Serialization;
 using Robust.Shared.Utility;
 using Content.Shared.Vanilla.VoiceSpeech;
-using Content.Shared.Vanilla.Background;
+using Content.Shared.Vanilla.RoleSkills;
 
 using Robust.Shared.Log;
 namespace Content.Shared.Preferences
@@ -64,10 +64,10 @@ namespace Content.Shared.Preferences
         private Dictionary<string, RoleLoadout> _loadouts = new();
 
         //RAYTEN-START
-        public IReadOnlyDictionary<string, RoleBackground> Backgrounds => _backgrounds;
+        public IReadOnlyDictionary<string, RoleSkills> RoleSkills => _roleSkills;
 
         [DataField]
-        private Dictionary<string, RoleBackground> _backgrounds = new();
+        private Dictionary<string, RoleSkills> _roleSkills = new();
         //RAYTEN-END
 
         [DataField]
@@ -155,7 +155,7 @@ namespace Content.Shared.Preferences
             HashSet<ProtoId<AntagPrototype>> antagPreferences,
             HashSet<ProtoId<TraitPrototype>> traitPreferences,
             Dictionary<string, RoleLoadout> loadouts,
-            Dictionary<string, RoleBackground> backgrounds)//Rayten-Background
+            Dictionary<string, RoleSkills> roleSkills)//Rayten-roleSkills
         {
             Name = name;
             FlavorText = flavortext;
@@ -173,7 +173,7 @@ namespace Content.Shared.Preferences
             _antagPreferences = antagPreferences;
             _traitPreferences = traitPreferences;
             _loadouts = loadouts;
-            _backgrounds = backgrounds; //Rayten-background
+            _roleSkills = roleSkills; //Rayten-roleSkills
             var hasHighPrority = false;
             foreach (var (key, value) in _jobPriorities)
             {
@@ -206,7 +206,7 @@ namespace Content.Shared.Preferences
                 new HashSet<ProtoId<AntagPrototype>>(other.AntagPreferences),
                 new HashSet<ProtoId<TraitPrototype>>(other.TraitPreferences),
                 new Dictionary<string, RoleLoadout>(other.Loadouts),
-                new Dictionary<string, RoleBackground>(other.Backgrounds)) //Rayten-Backgrounds
+                new Dictionary<string, RoleSkills>(other.RoleSkills)) //Rayten-RoleSkills
         {
         }
 
@@ -513,7 +513,7 @@ namespace Content.Shared.Preferences
             if (!_antagPreferences.SequenceEqual(other._antagPreferences)) return false;
             if (!_traitPreferences.SequenceEqual(other._traitPreferences)) return false;
             if (!Loadouts.SequenceEqual(other.Loadouts)) return false;
-            if (!Backgrounds.SequenceEqual(other.Backgrounds)) return false;
+            if (!RoleSkills.SequenceEqual(other.RoleSkills)) return false;
             if (FlavorText != other.FlavorText) return false;
             return Appearance.MemberwiseEquals(other.Appearance);
         }
@@ -698,23 +698,23 @@ namespace Content.Shared.Preferences
                 VoicePitch = 1.5f;
             // Rayten-TTS-End
 
-            // Rayten-Backgrounds-start
-            var backgroundstoRemove = new ValueList<string>();
+            // Rayten-RoleSkills-start
+            var roleSkillsstoRemove = new ValueList<string>();
 
-            foreach (var (roleName, backgrounds) in _backgrounds)
+            foreach (var (roleName, roleSkills) in _roleSkills)
             {
 
-                if (!prototypeManager.HasIndex<RoleBackgroundPrototype>(roleName))
+                if (!prototypeManager.HasIndex<RoleSkillsPrototype>(roleName))
                 {
-                    backgroundstoRemove.Add(roleName);
+                    roleSkillsstoRemove.Add(roleName);
                     continue;
                 }
-                backgrounds.EnsureValid(this, session, collection);
+                roleSkills.EnsureValid(this, session, collection);
             }
 
-            foreach (var value in backgroundstoRemove)
-                _backgrounds.Remove(value);
-            // Rayten-Backgrounds-end
+            foreach (var value in roleSkillsstoRemove)
+                _roleSkills.Remove(value);
+            // Rayten-RoleSkills-end
 
 
             // Checks prototypes exist for all loadouts and dump / set to default if not.
@@ -811,7 +811,7 @@ namespace Content.Shared.Preferences
             hashCode.Add(_antagPreferences);
             hashCode.Add(_traitPreferences);
             hashCode.Add(_loadouts);
-            hashCode.Add(_backgrounds);
+            hashCode.Add(_roleSkills);
             hashCode.Add(Name);
             hashCode.Add(FlavorText);
             hashCode.Add(Species);
@@ -847,24 +847,24 @@ namespace Content.Shared.Preferences
             profile._loadouts = copied;
             return profile;
         }
-        public HumanoidCharacterProfile WithBackground(RoleBackground background)
+        public HumanoidCharacterProfile WithRoleSkills(RoleSkills roleSkills)
         {
-            var copied = new Dictionary<string, RoleBackground>();
+            var copied = new Dictionary<string, RoleSkills>();
 
-            foreach (var proto in _backgrounds)
+            foreach (var proto in _roleSkills)
             {
 
-                if (proto.Key == background.Role)
+                if (proto.Key == roleSkills.Role)
                     continue;
 
                 copied[proto.Key] = proto.Value.Clone();
             }
 
-            copied[background.Role] = background.Clone();
+            copied[roleSkills.Role] = roleSkills.Clone();
 
             var profile = Clone();
 
-            profile._backgrounds = copied;
+            profile._roleSkills = copied;
 
             return profile;
         }

@@ -889,9 +889,9 @@ namespace Content.Server.Database.Migrations.Sqlite
                         .HasColumnType("INTEGER")
                         .HasColumnName("level");
 
-                    b.Property<int>("ProfileRoleBackgroundId")
+                    b.Property<int>("ProfileRoleSkillsId")
                         .HasColumnType("INTEGER")
-                        .HasColumnName("profile_role_background_id");
+                        .HasColumnName("profile_role_skills_id");
 
                     b.Property<string>("SkillId")
                         .IsRequired()
@@ -901,7 +901,7 @@ namespace Content.Server.Database.Migrations.Sqlite
                     b.HasKey("Id")
                         .HasName("PK_profile_basic_skill");
 
-                    b.HasIndex("ProfileRoleBackgroundId");
+                    b.HasIndex("ProfileRoleSkillsId");
 
                     b.ToTable("profile_basic_skill", (string)null);
                 });
@@ -913,9 +913,9 @@ namespace Content.Server.Database.Migrations.Sqlite
                         .HasColumnType("INTEGER")
                         .HasColumnName("profile_easy_skill_id");
 
-                    b.Property<int>("ProfileRoleBackgroundId")
+                    b.Property<int>("ProfileRoleSkillsId")
                         .HasColumnType("INTEGER")
-                        .HasColumnName("profile_role_background_id");
+                        .HasColumnName("profile_role_skills_id");
 
                     b.Property<string>("SkillId")
                         .IsRequired()
@@ -925,7 +925,7 @@ namespace Content.Server.Database.Migrations.Sqlite
                     b.HasKey("Id")
                         .HasName("PK_profile_easy_skill");
 
-                    b.HasIndex("ProfileRoleBackgroundId");
+                    b.HasIndex("ProfileRoleSkillsId");
 
                     b.ToTable("profile_easy_skill", (string)null);
                 });
@@ -978,46 +978,6 @@ namespace Content.Server.Database.Migrations.Sqlite
                     b.ToTable("profile_loadout_group", (string)null);
                 });
 
-            modelBuilder.Entity("Content.Server.Database.ProfileRoleBackground", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("profile_role_background_id");
-
-                    b.Property<int>("ProfileId")
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("profile_id");
-
-                    b.Property<string>("RoleName")
-                        .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasColumnName("role_name");
-
-                    b.Property<string>("SelectedAdultBackground")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("selected_adult_background");
-
-                    b.Property<string>("SelectedBabyBackground")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("selected_baby_background");
-
-                    b.Property<string>("SelectedGeneralBackground")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("selected_general_background");
-
-                    b.Property<int>("SkillpointCredit")
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("skillpoint_credit");
-
-                    b.HasKey("Id")
-                        .HasName("PK_profile_role_background");
-
-                    b.HasIndex("ProfileId");
-
-                    b.ToTable("profile_role_background", (string)null);
-                });
-
             modelBuilder.Entity("Content.Server.Database.ProfileRoleLoadout", b =>
                 {
                     b.Property<int>("Id")
@@ -1045,6 +1005,30 @@ namespace Content.Server.Database.Migrations.Sqlite
                     b.HasIndex("ProfileId");
 
                     b.ToTable("profile_role_loadout", (string)null);
+                });
+
+            modelBuilder.Entity("Content.Server.Database.ProfileRoleSkills", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("profile_role_skills_id");
+
+                    b.Property<int>("ProfileId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("profile_id");
+
+                    b.Property<string>("RoleName")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("role_name");
+
+                    b.HasKey("Id")
+                        .HasName("PK_profile_role_skills");
+
+                    b.HasIndex("ProfileId");
+
+                    b.ToTable("profile_role_skills", (string)null);
                 });
 
             modelBuilder.Entity("Content.Server.Database.RoleWhitelist", b =>
@@ -1781,26 +1765,26 @@ namespace Content.Server.Database.Migrations.Sqlite
 
             modelBuilder.Entity("Content.Server.Database.ProfileBasicSkill", b =>
                 {
-                    b.HasOne("Content.Server.Database.ProfileRoleBackground", "ProfileRoleBackground")
+                    b.HasOne("Content.Server.Database.ProfileRoleSkills", "ProfileRoleSkills")
                         .WithMany("AddedBasicSkills")
-                        .HasForeignKey("ProfileRoleBackgroundId")
+                        .HasForeignKey("ProfileRoleSkillsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("FK_profile_basic_skill_profile_role_background_profile_role_background_id");
+                        .HasConstraintName("FK_profile_basic_skill_profile_role_skills_profile_role_skills_id");
 
-                    b.Navigation("ProfileRoleBackground");
+                    b.Navigation("ProfileRoleSkills");
                 });
 
             modelBuilder.Entity("Content.Server.Database.ProfileEasySkill", b =>
                 {
-                    b.HasOne("Content.Server.Database.ProfileRoleBackground", "ProfileRoleBackground")
+                    b.HasOne("Content.Server.Database.ProfileRoleSkills", "ProfileRoleSkills")
                         .WithMany("AddedEasySkills")
-                        .HasForeignKey("ProfileRoleBackgroundId")
+                        .HasForeignKey("ProfileRoleSkillsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("FK_profile_easy_skill_profile_role_background_profile_role_background_id");
+                        .HasConstraintName("FK_profile_easy_skill_profile_role_skills_profile_role_skills_id");
 
-                    b.Navigation("ProfileRoleBackground");
+                    b.Navigation("ProfileRoleSkills");
                 });
 
             modelBuilder.Entity("Content.Server.Database.ProfileLoadout", b =>
@@ -1827,18 +1811,6 @@ namespace Content.Server.Database.Migrations.Sqlite
                     b.Navigation("ProfileRoleLoadout");
                 });
 
-            modelBuilder.Entity("Content.Server.Database.ProfileRoleBackground", b =>
-                {
-                    b.HasOne("Content.Server.Database.Profile", "Profile")
-                        .WithMany("Backgrounds")
-                        .HasForeignKey("ProfileId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("FK_profile_role_background_profile_profile_id");
-
-                    b.Navigation("Profile");
-                });
-
             modelBuilder.Entity("Content.Server.Database.ProfileRoleLoadout", b =>
                 {
                     b.HasOne("Content.Server.Database.Profile", "Profile")
@@ -1847,6 +1819,18 @@ namespace Content.Server.Database.Migrations.Sqlite
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("FK_profile_role_loadout_profile_profile_id");
+
+                    b.Navigation("Profile");
+                });
+
+            modelBuilder.Entity("Content.Server.Database.ProfileRoleSkills", b =>
+                {
+                    b.HasOne("Content.Server.Database.Profile", "Profile")
+                        .WithMany("RoleSkills")
+                        .HasForeignKey("ProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_profile_role_skills_profile_profile_id");
 
                     b.Navigation("Profile");
                 });
@@ -2132,11 +2116,11 @@ namespace Content.Server.Database.Migrations.Sqlite
                 {
                     b.Navigation("Antags");
 
-                    b.Navigation("Backgrounds");
-
                     b.Navigation("Jobs");
 
                     b.Navigation("Loadouts");
+
+                    b.Navigation("RoleSkills");
 
                     b.Navigation("Traits");
                 });
@@ -2146,16 +2130,16 @@ namespace Content.Server.Database.Migrations.Sqlite
                     b.Navigation("Loadouts");
                 });
 
-            modelBuilder.Entity("Content.Server.Database.ProfileRoleBackground", b =>
+            modelBuilder.Entity("Content.Server.Database.ProfileRoleLoadout", b =>
+                {
+                    b.Navigation("Groups");
+                });
+
+            modelBuilder.Entity("Content.Server.Database.ProfileRoleSkills", b =>
                 {
                     b.Navigation("AddedBasicSkills");
 
                     b.Navigation("AddedEasySkills");
-                });
-
-            modelBuilder.Entity("Content.Server.Database.ProfileRoleLoadout", b =>
-                {
-                    b.Navigation("Groups");
                 });
 
             modelBuilder.Entity("Content.Server.Database.Round", b =>

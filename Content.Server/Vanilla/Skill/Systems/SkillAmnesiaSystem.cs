@@ -1,6 +1,6 @@
-using System.Linq;
-using System.Threading;
+
 using Content.Server.Vanilla.MemoryShield;
+using Content.Server.Vanilla.Skill;
 using Content.Shared.Mobs;
 using Content.Shared.Vanilla.Skill;
 using Robust.Shared.Random;
@@ -9,15 +9,15 @@ using Robust.Shared.Audio.Systems;
 using Robust.Shared.Audio;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
-
+using System.Linq;
+using System.Threading;
 namespace Content.Server.Vanilla.Skill;
 
 public sealed class SkillAmnesiaSystem : EntitySystem
 {
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly IGameTiming _gameTiming = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedSkillTrainerSystem _serverSkillTrainerSystem = default!;
+    [Dependency] private readonly SkillTrainerSystem _serverSkillTrainerSystem = default!;
 
     const int _experienceToRestore = 1;
 

@@ -22,8 +22,8 @@ using Robust.Shared.Map;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
-using Content.Shared.Vanilla.Background;
-using Content.Server.Vanilla.Background;
+using Content.Shared.Vanilla.RoleSkills;
+using Content.Server.Vanilla.RoleSkillsSystem;
 namespace Content.Server.Station.Systems;
 
 /// <summary>
@@ -42,7 +42,7 @@ public sealed class StationSpawningSystem : SharedStationSpawningSystem
     [Dependency] private readonly MetaDataSystem _metaSystem = default!;
     [Dependency] private readonly PdaSystem _pdaSystem = default!;
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly BackGroundSystem _bgsys = default!;
+    [Dependency] private readonly RoleSkillsSystem _rolesys = default!;
 
     /// <summary>
     /// Attempts to spawn a player character onto the given station.
@@ -165,9 +165,9 @@ public sealed class StationSpawningSystem : SharedStationSpawningSystem
         DoJobSpecials(job, entity.Value);
         _identity.QueueIdentityUpdate(entity.Value);
         //Rayten-start
-        RoleBackground? background = null;
-        profile?.Backgrounds.TryGetValue(SharedBackgroundSystem.GetJobPrototype(prototype?.ID), out background);
-        _bgsys.ApplyBackground(entity.Value, background);
+        RoleSkills? roleSkills = null;
+        profile?.RoleSkills.TryGetValue(SharedRoleSkillsSystem.GetJobPrototype(prototype?.ID), out roleSkills);
+        _rolesys.ApplyRoleSkills(entity.Value, roleSkills);
         //Rayten-end
         return entity.Value;
     }

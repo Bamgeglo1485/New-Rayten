@@ -17,7 +17,6 @@ public sealed partial class RepairableSystem : EntitySystem
     [Dependency] private readonly DamageableSystem _damageableSystem = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly ISharedAdminLogManager _adminLogger = default!;
-    [Dependency] private readonly SharedSkillTrainerSystem _skillTrainer = default!;
     public override void Initialize()
     {
         SubscribeLocalEvent<RepairableComponent, InteractUsingEvent>(Repair);
@@ -32,29 +31,21 @@ public sealed partial class RepairableSystem : EntitySystem
         if (!TryComp(ent.Owner, out DamageableComponent? damageable) || damageable.TotalDamage == 0)
             return;
 
-        FixedPoint2 repairedAmount;//rayten
 
         if (ent.Comp.Damage != null)
         {
             var damageChanged = _damageableSystem.TryChangeDamage(ent.Owner, ent.Comp.Damage, true, false, origin: args.User);
-            repairedAmount = damageChanged?.GetTotal() ?? 0;//rayten
 
-            _adminLogger.Add(LogType.Healed, $"{ToPrettyString(args.User):user} repaired {ToPrettyString(ent.Owner):target} by {repairedAmount}");
+            _adminLogger.Add(LogType.Healed, $"{ToPrettyString(args.User):user} repaired {ToPrettyString(ent.Owner):target} by {damageChanged?.GetTotal()}");
         }
         else
         {
             // Repair all damage
-            repairedAmount = damageable.TotalDamage;//rayten
             _damageableSystem.SetAllDamage(ent.Owner, damageable, 0);
 
             _adminLogger.Add(LogType.Healed, $"{ToPrettyString(args.User):user} repaired {ToPrettyString(ent.Owner):target} back to full health");
         }
 
-        //Rayten - выдача опыта за ремонт
-        var skillComp = EnsureComp<SkillComponent>(args.User);
-        int exp = (int)repairedAmount.Float();
-        _skillTrainer.AddExperience(skillComp, skillType.Building, exp);
-        //Rayten-end
 
         var str = Loc.GetString("comp-repairable-repair", ("target", ent.Owner), ("tool", args.Used!));
         _popup.PopupClient(str, ent.Owner, args.User);

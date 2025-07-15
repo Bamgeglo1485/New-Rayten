@@ -17,7 +17,7 @@ using Content.Shared.Preferences;
 using Content.Shared.Preferences.Loadouts;
 using Content.Shared.Roles;
 using Content.Shared.Traits;
-using Content.Shared.Vanilla.Background;
+using Content.Shared.Vanilla.RoleSkills;
 using Content.Shared.Vanilla.Skill;
 using Microsoft.EntityFrameworkCore;
 using Robust.Shared.Enums;
@@ -57,10 +57,10 @@ namespace Content.Server.Database
                     .ThenInclude(group => group.Loadouts)
                 // RAYTEN-START
                 .Include(p => p.Profiles)
-                    .ThenInclude(h => h.Backgrounds)
+                    .ThenInclude(h => h.RoleSkills)
                     .ThenInclude(b => b.AddedBasicSkills)
                 .Include(p => p.Profiles)
-                    .ThenInclude(h => h.Backgrounds)
+                    .ThenInclude(h => h.RoleSkills)
                     .ThenInclude(b => b.AddedEasySkills)
                 // RAYTEN-END
                 .AsSplitQuery()
@@ -278,33 +278,28 @@ namespace Content.Server.Database
 
                 loadouts[role.RoleName] = loadout;
             }
-            //Rayten-background-start
-            var backgrounds = new Dictionary<string, RoleBackground>();
-    
-            foreach (var role in profile.Backgrounds)
+            //Rayten-RoleSkills-start
+            var roleSkills = new Dictionary<string, RoleSkills>();
+
+            foreach (var role in profile.RoleSkills)
             {
-                var background = new RoleBackground(role.RoleName)
+                var roleSkill = new RoleSkills(role.RoleName)
                 {
-                    SelectedBabyBackground = role.SelectedBabyBackground,
-                    SelectedAdultBackground = role.SelectedAdultBackground,
-                    SelectedGeneralBackground = role.SelectedGeneralBackground,
-                    SkillpointCredit = role.SkillpointCredit,
-                    
                     // Преобразуем ProfileBasicSkills в словарь
                     AddedBasicSkills = role.AddedBasicSkills.ToDictionary(
                         skill => Enum.Parse<skillType>(skill.SkillId),
                         skill => (SkillLevel)skill.Level
                     ),
-                    
+
                     // Преобразуем ProfileEasySkills в коллекцию skillType
                     AddedEasySkills = new(role.AddedEasySkills.Select(skill => Enum.Parse<skillType>(skill.SkillId)))
                 };
 
-                backgrounds[role.RoleName] = background;
+                roleSkills[role.RoleName] = roleSkill;
             }
 
 
-            //Rayten-background-end
+            //Rayten-RoleSkills-end
 
             return new HumanoidCharacterProfile(
                 profile.CharacterName,
@@ -331,7 +326,7 @@ namespace Content.Server.Database
                 antags.ToHashSet(),
                 traits.ToHashSet(),
                 loadouts,
-                backgrounds //Rayten-Background
+                roleSkills //Rayten-RoleSkills
             );
         }
 
@@ -414,10 +409,10 @@ namespace Content.Server.Database
 
                 profile.Loadouts.Add(dz);
             }
-            
+
             // RAYTEN-START
-            profile.Backgrounds.Clear();
-            foreach (var (roleId, rb) in humanoid.Backgrounds)
+            profile.RoleSkills.Clear();
+            foreach (var (roleId, rb) in humanoid.RoleSkills)
             {
                 // Преобразование базовых навыков
                 var basic = rb.AddedBasicSkills
@@ -431,13 +426,9 @@ namespace Content.Server.Database
                     .Select(s => s.ToString())
                     .ToList();
 
-                var prb = new ProfileRoleBackground
+                var prb = new ProfileRoleSkills
                 {
                     RoleName = roleId,
-                    SelectedBabyBackground = rb.SelectedBabyBackground,
-                    SelectedAdultBackground = rb.SelectedAdultBackground,
-                    SelectedGeneralBackground = rb.SelectedGeneralBackground,
-                    SkillpointCredit = rb.SkillpointCredit,
                     AddedBasicSkills = basic
                         .Select(pair => new ProfileBasicSkill
                         {
@@ -453,7 +444,7 @@ namespace Content.Server.Database
                         .ToList()
                 };
 
-                profile.Backgrounds.Add(prb);
+                profile.RoleSkills.Add(prb);
             }
             //RAYTEN-END
 
