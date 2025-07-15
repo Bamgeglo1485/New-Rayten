@@ -142,7 +142,8 @@ public sealed partial class RoleSkillsWindow : FancyWindow
         //Основные навыки
         foreach (var (skillName, level, experience) in generalbasicskills)
         {
-            var skillControl = new SkillControl(skillName, level, experience, skillpoints > 0);
+            bool canBeModified = skillName != skillType.Crime && skillpoints > 0;
+            var skillControl = new SkillControl(skillName, level, experience, canBeModified);
             skillControl.OnPressed += () => AddSkill(skillName, collection);
 
             BasicSkillContainer.Children.Add(skillControl);
