@@ -96,15 +96,24 @@ public sealed partial class RoleSkillsWindow : FancyWindow
                     continue;
 
                 var current = generalbasicskills[index];
-                int total = (int)current.Level + (int)level;
+                int currentLevel = (int)current.Level;
+                int addedLevel = (int)level;
+                int total = currentLevel + addedLevel;
+
                 SkillLevel newLevel = total > (int)SkillLevel.Expert
                     ? SkillLevel.Expert
                     : (SkillLevel)total;
 
+                int finalLevel = (int)newLevel;
+
+                // Вернём излишек, если превышен максимум
                 if (total > (int)SkillLevel.Expert)
                     skillpoints += total - (int)SkillLevel.Expert;
 
-                skillpoints -= (int)newLevel;
+                // Списываем только разницу между новым и текущим уровнями
+                int delta = finalLevel - currentLevel;
+                skillpoints -= delta;
+
                 generalbasicskills[index] = (skill, newLevel, 0);
             }
         }

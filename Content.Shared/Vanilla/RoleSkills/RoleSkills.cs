@@ -82,7 +82,7 @@ public sealed partial class RoleSkills : IEquatable<RoleSkills>
         }
 
         // 2. Проверка на навыки
-        void CalculateCreditFromBasicSkills(Dictionary<skillType, SkillLevel>? Skills)
+        void ApplyBasicSkills(Dictionary<skillType, SkillLevel>? Skills)
         {
             if (Skills == null)
                 return;
@@ -94,18 +94,26 @@ public sealed partial class RoleSkills : IEquatable<RoleSkills>
                     continue;
 
                 var current = generalbasicskills[index];
-                int total = (int)current.Level + (int)level;
+                int currentLevel = (int)current.Level;
+                int addedLevel = (int)level;
+                int total = currentLevel + addedLevel;
+
                 SkillLevel newLevel = total > (int)SkillLevel.Expert
                     ? SkillLevel.Expert
                     : (SkillLevel)total;
 
+                int finalLevel = (int)newLevel;
+
                 if (total > (int)SkillLevel.Expert)
                     skillpoints += total - (int)SkillLevel.Expert;
-                skillpoints -= (int)newLevel;
+
+                int delta = finalLevel - currentLevel;
+                skillpoints -= delta;
+
                 generalbasicskills[index] = (skill, newLevel, 0);
             }
         }
-        void CalculateCreditFromEasySkills(HashSet<skillType>? Skills)
+        void ApplyEasySkills(HashSet<skillType>? Skills)
         {
             if (Skills == null)
                 return;
@@ -129,11 +137,11 @@ public sealed partial class RoleSkills : IEquatable<RoleSkills>
             }
         }
         //считаем выбор игрока
-        CalculateCreditFromBasicSkills(AddedBasicSkills);
-        CalculateCreditFromEasySkills(AddedEasySkills);
+        ApplyBasicSkills(AddedBasicSkills);
+        ApplyEasySkills(AddedEasySkills);
         //считаем навыки роли
-        CalculateCreditFromBasicSkills(roleProto.BasicSkills);
-        CalculateCreditFromEasySkills(roleProto.EasySkills);
+        ApplyBasicSkills(roleProto.BasicSkills);
+        ApplyEasySkills(roleProto.EasySkills);
 
         if (skillpoints != 0)
         {
