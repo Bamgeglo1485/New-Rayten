@@ -45,6 +45,7 @@
   - type: VoiceEmitter # Rayten-TTS
   - type: RequireProjectileTarget
     active: False
+  - type: StunVisuals
 
 - type: entity
   save: false

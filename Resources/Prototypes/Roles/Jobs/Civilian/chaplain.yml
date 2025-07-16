@@ -13,21 +13,6 @@
   - !type:AddComponentSpecial
     components:
     - type: BibleUser #Lets them heal with bibles
-    - type: Skill
-      RangeWeaponLevel: 0
-      MeleeWeaponLevel: 1
-      MedicineLevel: 2
-      ChemistryLevel: 0
-      EngineeringLevel: 0
-      BuildingLevel: 0
-      ResearchLevel: 0
-      Atmosphere: false
-      Piloting: false
-      MusInstruments: true
-      Botany: false
-      Bureaucracy: true
-    - type: AddSkillPoints
-      Points: 1
 
 - type: startingGear
   id: ChaplainGear
@@ -37,7 +22,6 @@
     ears: ClothingHeadsetService
   storage:
     back:
-    - Bible
     - RubberStampChaplain
 
 - type: chameleonOutfit

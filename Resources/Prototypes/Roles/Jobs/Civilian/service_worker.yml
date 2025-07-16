@@ -17,24 +17,6 @@
   - Kitchen
   extendedAccess:
   - Hydroponics
-  special:
-  - !type:AddComponentSpecial
-    components:
-    - type: Skill
-      RangeWeaponLevel: 0
-      MeleeWeaponLevel: 1
-      MedicineLevel: 1
-      ChemistryLevel: 0
-      EngineeringLevel: 0
-      BuildingLevel: 1
-      ResearchLevel: 0
-      Atmosphere: false
-      Piloting: false
-      MusInstruments: true
-      Botany: true
-      Bureaucracy: false
-    - type: AddSkillPoints
-      Points: 1
 
 - type: startingGear
   id: ServiceWorkerGear

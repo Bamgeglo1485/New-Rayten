@@ -14,5 +14,6 @@
     sprite: Corvax/Objects/Consumable/Drinks/campari.rsi
   - type: SolutionContainerVisuals
     maxFillLevels: 10
+    inHandsMaxFillLevels: 0
     fillBaseName: fill-
   - type: Sealable

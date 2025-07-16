@@ -17,24 +17,6 @@
   extendedAccess:
   - Kitchen
   - Hydroponics
-  special:
-  - !type:AddComponentSpecial
-    components:
-      - type: Skill
-        RangeWeaponLevel: 2
-        MeleeWeaponLevel: 0
-        MedicineLevel: 0
-        ChemistryLevel: 0
-        EngineeringLevel: 0
-        BuildingLevel: 0
-        ResearchLevel: 0
-        Atmosphere: false
-        Piloting: false
-        MusInstruments: true
-        Botany: true
-        Bureaucracy: false
-      - type: AddSkillPoints
-        Points: 1
 
 - type: startingGear
   id: BartenderGear

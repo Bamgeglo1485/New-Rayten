@@ -16,24 +16,6 @@
   - Lawyer
   - Brig
   - Maintenance
-  special:
-  - !type:AddComponentSpecial
-    components:
-    - type: Skill
-      RangeWeaponLevel: 0
-      MeleeWeaponLevel: 2
-      MedicineLevel: 0
-      ChemistryLevel: 0
-      EngineeringLevel: 0
-      BuildingLevel: 0
-      ResearchLevel: 0
-      Atmosphere: false
-      Piloting: true
-      MusInstruments: true
-      Botany: false
-      Bureaucracy: true
-    - type: AddSkillPoints
-      Points: 1
 
 
 

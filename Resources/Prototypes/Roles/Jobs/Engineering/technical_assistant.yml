@@ -16,24 +16,6 @@
   - Maintenance
   - Engineering
   - External
-  special:
-  - !type:AddComponentSpecial
-    components:
-      - type: Skill
-        RangeWeaponLevel: 0
-        MeleeWeaponLevel: 0
-        MedicineLevel: 0
-        ChemistryLevel: 0
-        EngineeringLevel: 2
-        BuildingLevel: 3
-        ResearchLevel: 0
-        Atmosphere: true
-        Piloting: false
-        MusInstruments: true
-        Botany: false
-        Bureaucracy: true
-      - type: AddSkillPoints
-        Points: 1
 
 - type: startingGear
   id: TechnicalAssistantGear

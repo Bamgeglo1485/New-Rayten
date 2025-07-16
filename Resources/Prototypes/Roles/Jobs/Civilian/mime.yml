@@ -18,21 +18,6 @@
     - type: MimePowers
       preventWriting: true
     - type: FrenchAccent
-    - type: Skill
-      RangeWeaponLevel: 0
-      MeleeWeaponLevel: 1
-      MedicineLevel: 1
-      ChemistryLevel: 0
-      EngineeringLevel: 0
-      BuildingLevel: 1
-      ResearchLevel: 0
-      Atmosphere: false
-      Piloting: false
-      MusInstruments: true
-      Botany: false
-      Bureaucracy: true
-    - type: AddSkillPoints
-      Points: 1
 
 - type: startingGear
   id: MimeGear

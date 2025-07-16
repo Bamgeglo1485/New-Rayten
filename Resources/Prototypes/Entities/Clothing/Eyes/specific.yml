@@ -12,7 +12,7 @@
       enemyTechnology: true
     - type: Tag
       tags: # intentionally no WhitelistChameleon tag
-      - CorgiWearable 
+      - PetWearable 
     - type: Sprite
       sprite: Clothing/Eyes/Glasses/sunglasses.rsi
     - type: Clothing

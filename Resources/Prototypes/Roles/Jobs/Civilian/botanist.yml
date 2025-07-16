@@ -14,23 +14,6 @@
   - Kitchen
   - Bar
   special:
-  - !type:AddComponentSpecial
-    components:
-      - type: Skill
-        RangeWeaponLevel: 0
-        MeleeWeaponLevel: 0
-        MedicineLevel: 0
-        ChemistryLevel: 2
-        EngineeringLevel: 0
-        BuildingLevel: 0
-        ResearchLevel: 0
-        Atmosphere: false
-        Piloting: false
-        MusInstruments: true
-        Botany: true
-        Bureaucracy: true
-      - type: AddSkillPoints
-        Points: 1
   - !type:GiveItemOnHolidaySpecial
     holiday: FourTwenty
     prototype: CannabisSeeds

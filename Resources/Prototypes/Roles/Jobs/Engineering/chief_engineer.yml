@@ -35,21 +35,6 @@
   - !type:AddComponentSpecial
     components:
       - type: CommandStaff
-      - type: Skill
-        RangeWeaponLevel: 0
-        MeleeWeaponLevel: 0
-        MedicineLevel: 0
-        ChemistryLevel: 2
-        EngineeringLevel: 3
-        BuildingLevel: 3
-        ResearchLevel: 0
-        Atmosphere: true
-        Piloting: true
-        MusInstruments: true
-        Botany: false
-        Bureaucracy: true
-      - type: AddSkillPoints
-        Points: 1
 
 - type: startingGear
   id: ChiefEngineerGear

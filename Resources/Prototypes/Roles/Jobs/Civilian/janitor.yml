@@ -14,23 +14,6 @@
   - !type:GiveItemOnHolidaySpecial
     holiday: GarbageDay
     prototype: WeaponRevolverInspector
-  - !type:AddComponentSpecial
-    components:
-    - type: Skill
-      RangeWeaponLevel: 0
-      MeleeWeaponLevel: 1
-      MedicineLevel: 0
-      ChemistryLevel: 2
-      EngineeringLevel: 0
-      BuildingLevel: 0
-      ResearchLevel: 0
-      Atmosphere: false
-      Piloting: false
-      MusInstruments: true
-      Botany: false
-      Bureaucracy: false
-    - type: AddSkillPoints
-      Points: 1
 
 - type: startingGear
   id: JanitorGear
