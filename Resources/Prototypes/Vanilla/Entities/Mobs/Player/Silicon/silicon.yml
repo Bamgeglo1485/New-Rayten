@@ -62,9 +62,9 @@
           Quantity: 200
   - type: Explosive
     explosionType: DemolitionCharge
-    totalIntensity: 30
+    totalIntensity: 20
     intensitySlope: 5
-    maxIntensity: 30
+    maxIntensity: 20
     canCreateVacuum: false
   - type: Damageable
     damageContainer: Silicon
@@ -149,14 +149,14 @@
   - type: BloodSucker
     heal:
       groups:
-        Brute: -0.7
-        Burn: -0.7
+        Brute: -1
+        Burn: -1
     bloodlessPenalty:
       types:
         Heat: 20
   - type: MovementSpeedModifier
-    baseWalkSpeed : 6
-    baseSprintSpeed : 6
+    baseWalkSpeed : 5.5
+    baseSprintSpeed : 5.5
 
 - type: entity
   parent: R1Base
@@ -341,8 +341,8 @@
   - type: BloodSucker
     heal:
       groups:
-        Brute: -0.5
-        Burn: -0.5
+        Brute: -0.6
+        Burn: -0.6
     bloodlessPenalty:
       types:
         Heat: 4
@@ -356,6 +356,7 @@
         Heat: 1
   - type: HealForDamage
     healMultiplier: 1
+
 - type: entity
   categories: [ Spawner ]
   name: R-2

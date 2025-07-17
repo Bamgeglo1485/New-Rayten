@@ -1,0 +1,39 @@
+- type: constructionGraph
+  id: EphedronexBagConstruct
+  start: start
+  graph:
+  - node: start
+    entity: BlueSkyPiece
+    edges:
+    - to: icon
+      steps:
+      - tag: Bag
+        name: construction-graph-tag-bag
+        icon:
+          sprite: Vanilla/Objects/Specific/Chemistry/bag.rsi
+          state: icon
+  - node: icon
+    entity: EphedronexBag
+
+- type: constructionGraph
+  id: EphedronexBag
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: icon
+      steps:
+      - tag: Bag
+        name: construction-graph-tag-bag
+        icon:
+          sprite: Vanilla/Objects/Specific/Chemistry/bag.rsi
+          state: icon
+        doAfter: 0.1
+      - tag: EphedronexPiece
+        name: construction-graph-tag-bluesky
+        icon:
+          sprite: Vanilla/Objects/Consumable/Food/BlueSky.rsi
+          state: BlueSkyPiece
+        doAfter: 0.1
+  - node: icon
+    entity: EphedronexBag

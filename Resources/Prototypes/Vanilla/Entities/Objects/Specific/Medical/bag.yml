@@ -1,0 +1,40 @@
+- type: entity
+  name: пакетик
+  description: Стерильный пакетик для хранения медицинских приборов, не наркотиков.
+  id: Bag
+  parent: BaseStorageItem
+  components:
+  - type: Sprite
+    sprite: Vanilla/Objects/Specific/Chemistry/bag.rsi
+    state: icon
+  - type: Storage
+    maxItemSize: Small
+    grid:
+    - 0,0,0,0
+    quickInsert: true
+  - type: UseDelay
+    delay: 0.5
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - Bag
+
+- type: entity
+  name: пакетик эфедронекса
+  description: Офицер, уверяю, это стиральный порошок!
+  id: EphedronexBag
+  parent: BaseItem
+  components:
+  - type: Sprite
+    sprite: Vanilla/Objects/Specific/Chemistry/bag.rsi
+    state: ephedronex
+  - type: Item
+    size: Small
+  - type: SpawnItemsOnUse
+    items:
+      - id: BlueSkyPieceBagged
+      - id: Bag
+  - type: Construction
+    graph: EphedronexBagConstruct
+    node: icon

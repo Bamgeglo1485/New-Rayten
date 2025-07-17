@@ -1,0 +1,6 @@
+- type: latheRecipe
+  id: BagRecipe
+  completetime: 2
+  result: Bag
+  materials:
+    Plastic: 100

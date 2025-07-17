@@ -1,10 +1,10 @@
 # Blue Sky
 
 - type: entity
-  parent: [FoodInjectableBase, SecondContraband]
-  name: blue sky plate
+  parent: FoodInjectableBase
+  name: плита голубого неба
   id: BlueSkyPlate
-  description: A plate of pure ephedronex. Clean glass 5-7 centimeters in length.
+  description: Плита эфедронекса. Чистое стекло 5-7 сантиметов в длину.
   abstract: false
   components:
   - type: Sprite
@@ -38,13 +38,14 @@
   - type: Tag
     tags:
     - ReptilianFood
-
+  - type: StaticPrice
+    price: 2000
 
 - type: entity
   parent: BlueSkyPlate
-  name: blue sky piece
+  name: кусок голубого неба
   id: BlueSkyPiece
-  description: Ephedronex crystals that exude 99.1% purity. Real art.
+  description: Кристаллы эфедронекса с 99.1% чистотой. Настоящее искусство.
   abstract: false
   components:
   - type: Sprite
@@ -60,6 +61,32 @@
     size: Tiny
     shape:
     - 0,0,0,0
+  - type: StaticPrice
+    price: 550
+  - type: Tag
+    tags:
+    - EphedronexPiece
+  - type: Construction
+    graph: EphedronexBagConstruct
+    node: start
+
+- type: entity
+  parent: BlueSkyPiece
+  name: рыхлый кусок голубого неба
+  id: BlueSkyPieceBagged
+  description: Кристаллы эфедронекса из пакетика. Не подлежит к продаже.
+  abstract: false
+  components:
+  - type: StaticPrice
+    price: 900
+  - type: CargoSellBlacklist
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 10
+        reagents:
+        - ReagentId: Ephedronex
+          Quantity: 10
 
 # Sawdust Oatmeal
 
