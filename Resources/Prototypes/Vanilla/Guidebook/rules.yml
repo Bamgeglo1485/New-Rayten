@@ -1,5 +1,5 @@
 - type: guideEntry
-  id: VanillaRulset
+  id: MRPRulset
   name: Правила сервера
   priority: 0
   ruleEntry: true
@@ -12,6 +12,7 @@
   - VanillaRule13
   - VanillaRule14
   - VanillaRule15
+  - VanillaRule16
   - VanillaRule2
   - VanillaRule21
   - VanillaRule3
@@ -72,64 +73,71 @@
   text: "/ServerInfo/Vanilla/Guidebook/ServerRules/Rule15.xml"
 
 - type: guideEntry
+  id: VanillaRule16
+  name: Правило 1.6
+  priority: 8
+  ruleEntry: true
+  text: "/ServerInfo/Vanilla/Guidebook/ServerRules/Rule16.xml"
+
+- type: guideEntry
   id: VanillaRule2
   name: Правило 2
-  priority: 8
+  priority: 9
   ruleEntry: true
   text: "/ServerInfo/Vanilla/Guidebook/ServerRules/Rule2.xml"
 
 - type: guideEntry
   id: VanillaRule21
   name: Правило 2.1
-  priority: 9
+  priority: 10
   ruleEntry: true
   text: "/ServerInfo/Vanilla/Guidebook/ServerRules/Rule21.xml"
 
 - type: guideEntry
   id: VanillaRule3
   name: Правило 3
-  priority: 10
+  priority: 11
   ruleEntry: true
   text: "/ServerInfo/Vanilla/Guidebook/ServerRules/Rule3.xml"
 
 - type: guideEntry
   id: VanillaRule31
   name: Правило 3.1
-  priority: 11
+  priority: 12
   ruleEntry: true
   text: "/ServerInfo/Vanilla/Guidebook/ServerRules/Rule31.xml"
 
 - type: guideEntry
   id: VanillaRule32
   name: Правило 3.2
-  priority: 12
+  priority: 13
   ruleEntry: true
   text: "/ServerInfo/Vanilla/Guidebook/ServerRules/Rule32.xml"
 
 - type: guideEntry
   id: VanillaRule4
   name: Правило 4
-  priority: 13
+  priority: 14
   ruleEntry: true
   text: "/ServerInfo/Vanilla/Guidebook/ServerRules/Rule4.xml"
 
 - type: guideEntry
   id: VanillaRule5
   name: Правило 5
-  priority: 14
+  priority: 15
   ruleEntry: true
   text: "/ServerInfo/Vanilla/Guidebook/ServerRules/Rule5.xml"
 
 - type: guideEntry
   id: VanillaRule6
   name: Правило 6
-  priority: 15
+  priority: 16
   ruleEntry: true
   text: "/ServerInfo/Vanilla/Guidebook/ServerRules/Rule6.xml"
 
 - type: guideEntry
   id: VanillaRule61
   name: Правило 6.1
-  priority: 16
+  priority: 17
   ruleEntry: true
   text: "/ServerInfo/Vanilla/Guidebook/ServerRules/Rule61.xml"

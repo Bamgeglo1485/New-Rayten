@@ -70,10 +70,10 @@ server = "https://auth.fallback.spacestation14.com/"
 maximum_width = 29
 
 [server]
-rules_file = "VanillaRulset"
+rules_file = "MRPRulset"
 
 [rules]
-time = 1
+time = 210
 
 [replay]
 auto_record = true
