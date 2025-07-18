@@ -30,30 +30,10 @@ namespace Content.Client.Vanilla.Anticheat
             SubscribeLocalEvent<RequestShootEvent>(OnAimBotBait);
         }
 
-        private void CheckForVisibleTraps()
-        {
-            var session = _playerManager.LocalSession;
-            if (session == null || session.AttachedEntity is not { } playerEnt)
-                return;
-
-            if (HasComp<GhostComponent>(playerEnt) || HasComp<RevenantComponent>(playerEnt) || HasComp<AntiCheatIgnoreComponent>(playerEnt))
-                return;
-
-            // Перебираем все ловушки
-            var query = EntityQueryEnumerator<AnticheatTrapComponent>();
-            while (query.MoveNext(out var trapUid, out _))
-            {
-                //игрок не должен видеть ловушку
-                if (_examine.InRangeUnOccluded(playerEnt, trapUid, 10f, ignoreInsideBlocker: false))
-                    ReportCheat($"Увидел крысиную ловушку");
-            }
-        }
-
         private void OnAimBotBait(RequestShootEvent msg, EntitySessionEventArgs args)
         {
             ReportCheat($"Обнаружен аимбот");
         }
-
 
         public override void Update(float frameTime)
         {
@@ -65,7 +45,6 @@ namespace Content.Client.Vanilla.Anticheat
                 return;
 
             _nextCheck = now + TimeSpan.FromSeconds(5);
-            CheckForVisibleTraps();
             CheckDrawFovFlag();
         }
 

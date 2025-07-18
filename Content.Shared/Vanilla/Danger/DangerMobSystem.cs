@@ -77,19 +77,14 @@ public sealed class DangerMobSystem : EntitySystem
         }
 
         var danger = 0;
-        // --- 2. Проверка на харммод ---
-        if (TryComp<CombatModeComponent>(target, out var combat) && combat.IsInCombatMode)
-        {
-            danger += 2;
-        }
-        // --- 3. Проверка рук ---
+        // --- 2. Проверка рук ---
         // Предметы в руках имеют в два раза большую опасность
         foreach (var item in _hands.EnumerateHeld(target))
         {
             danger += GetItemDanger(item, departments, jobId) * 2;
         }
 
-        // --- 4. Проверка инвентарных слотов ---
+        // --- 3. Проверка инвентарных слотов ---
         var deepdanger = danger;
         if (TryComp<InventoryComponent>(target, out var inventoryComp))
         {
@@ -114,7 +109,7 @@ public sealed class DangerMobSystem : EntitySystem
                 }
             }
         }
-        // --- 5. Проверка на карту агента ---
+        // --- 4. Проверка на карту агента ---
         if (_inventory.TryGetSlotEntity(target, "id", out var heldId))
         {
             if (HasComp<AgentIDCardComponent>(heldId))
@@ -128,6 +123,14 @@ public sealed class DangerMobSystem : EntitySystem
                     danger -= 2;
                 }
             }
+        }
+        // --- 2. Проверка на харммод ---
+        if (TryComp<CombatModeComponent>(target, out var combat) && combat.IsInCombatMode)
+        {
+            if (danger>0)
+                danger += 2;
+
+            deepdanger += 2;
         }
         dangercomp.Danger = Math.Clamp(danger, 0, 10);
         dangercomp.DeepDanger = Math.Clamp(deepdanger, 0, 10);

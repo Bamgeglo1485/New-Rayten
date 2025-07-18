@@ -1,13 +1,20 @@
 using Content.Server.Discord;
 using Content.Server.Administration.Managers;
+using Content.Shared.Administration.Notes;
+using Content.Server.Administration;
 using Content.Server.Chat.Systems;
 using Content.Shared.Chat;
+using Content.Shared.Database;
 using Content.Shared.Vanilla.Anticheat;
 using Content.Shared.Vanilla.CCVars;
+using Content.Shared.CCVar;
 using Robust.Shared.Player;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using Robust.Shared.Configuration;
+using System.Net;
+using System.Net.Sockets;
+
 
 using System.Text.RegularExpressions;
 
@@ -18,6 +25,12 @@ public sealed class DiscordChatRelaySystem : EntitySystem
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly IConfigurationManager _cfg = default!;
     [Dependency] private readonly IAdminManager _adminManager = default!;
+
+    [Dependency] private readonly IBanManager _bans = default!;
+    [Dependency] private readonly IPlayerLocator _locator = default!;
+    [Dependency] private readonly ILogManager _logManager = default!;
+    private const int Ipv4_CIDR = 32;
+    private const int Ipv6_CIDR = 128;
     private string _webhookUrl = "";
     private string _anticheatwebhookUrl = "";
 
@@ -82,13 +95,56 @@ public sealed class DiscordChatRelaySystem : EntitySystem
             };
 
             await _discordWebhook.CreateMessage(new WebhookIdentifier(id, token), payload);
+            AutoBanCheater(session, "Пункт 6. Нечестная игра. Модификация клиента игры, использование читов.");
         }
         catch (Exception ex)
         {
             Log.Error($"[Античит] Ошибка при отправке вебхука: {ex.Message}");
         }
     }
+    private async void AutoBanCheater(ICommonSession session, string reason, uint? minutes = 0)
+    {
+        if (_adminManager.IsAdmin(session))
+            return;
 
+        var located = await _locator.LookupIdByNameOrIdAsync(session.Name);
+        if (located == null)
+        {
+            Log.Warning($"[Античит] Не удалось найти игрока {session.Name}, бан не выполнен.");
+            return;
+        }
+
+        if (!Enum.TryParse(_cfg.GetCVar(CCVars.ServerBanDefaultSeverity), out NoteSeverity severity))
+        {
+            Log.Warning("Server ban severity could not be parsed from config! Defaulting to High.");
+            severity = NoteSeverity.High;
+        }
+
+        // IP и маска
+        (IPAddress, int)? addressRange = null;
+        var lastAddress = located.LastAddress;
+
+        if (lastAddress is not null)
+        {
+            var cidr = lastAddress.AddressFamily == AddressFamily.InterNetworkV6 ? Ipv6_CIDR : Ipv4_CIDR;
+            addressRange = (lastAddress, cidr);
+        }
+
+        var targetUid = located.UserId;
+        var targetHWid = located.LastHWId;
+        var targetName = session.Name;
+
+        _bans.CreateServerBan(
+            target: targetUid,
+            targetUsername: targetName,
+            banningAdmin: null,
+            addressRange: addressRange,
+            hwid: targetHWid,
+            minutes: minutes,
+            severity: severity,
+            reason: $"{reason}"
+        );
+    }
 
     private async void OnEntitySpoke(EntitySpokeEvent ev)
     {
