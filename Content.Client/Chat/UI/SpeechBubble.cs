@@ -1,21 +1,22 @@
 using System.Numerics;
 using Content.Client.Chat.Managers;
+using Content.Client.Vanilla.VoiceSpeech;
 using Content.Shared.CCVar;
 using Content.Shared.Chat;
 using Content.Shared.Speech;
+using Content.Shared.Vanilla.VoiceSpeech;
+using Content.Shared.Audio;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Configuration;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
-using Content.Shared.Vanilla.VoiceSpeech;
-using Content.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Audio;
-using Content.Client.Vanilla.VoiceSpeech;
 using Robust.Shared.Prototypes;
 using System.Text.RegularExpressions;
+using System.Numerics;
 namespace Content.Client.Chat.UI
 {
     public abstract class SpeechBubble : Control
@@ -70,10 +71,14 @@ namespace Content.Client.Chat.UI
         protected RichTextLabel? _textLabel;
         private string _fullText = "";
         private int _revealedLength;
-        private const float LetterDelay = 0.035f;
+        private const float LetterDelay = 0.045f;
+        private const float PunctuationDelay = 0.2f;
+        private float _fadeElapsed = 0;
         private float _accumulatedTime;
         private Color? _fontColor;
         private bool _wasBold = false;
+        private IEntityManager _entMan = default!;
+        private VoiceSpeechSystem _speechSys = default!;
         protected virtual void InitializeText(ChatMessage message, Color? fontColor = null)
         {
             _fullText = SharedChatSystem.GetStringInsideTag(message, "BubbleContent");
@@ -132,7 +137,8 @@ namespace Content.Client.Chat.UI
             IoCManager.InjectDependencies(this);
             _senderEntity = senderEntity;
             _transformSystem = _entityManager.System<SharedTransformSystem>();
-
+            _entMan = IoCManager.Resolve<IEntityManager>();
+            _speechSys = _entMan.System<VoiceSpeechSystem>();
             // Use text clipping so new messages don't overlap old ones being pushed up.
             RectClipContent = true;
 
@@ -182,35 +188,33 @@ namespace Content.Client.Chat.UI
             // RAYTEN-START
             if (_entityManager.TryGetComponent<VoiceEmitterComponent>(_senderEntity, out var comp) && comp.VoicePrototypeId != null)
             {
-                var entMan = IoCManager.Resolve<IEntityManager>();
-                var speechsys = entMan.System<VoiceSpeechSystem>();
-
                 if (_textLabel != null && _revealedLength < _fullText.Length)
                 {
                     _accumulatedTime += args.DeltaSeconds;
 
-                    if (_accumulatedTime >= LetterDelay * (_fullText.Length - _revealedLength))
-                    {
-                        _revealedLength = _fullText.Length;
-                        speechsys.Beep(_senderEntity, comp);
-                    }
-                    else if (_accumulatedTime >= LetterDelay)
+                    // Показываем новую букву, если пришло время
+                    if (_accumulatedTime >= LetterDelay)
                     {
                         _accumulatedTime -= LetterDelay;
 
                         var newChar = _fullText[_revealedLength];
-                        if (newChar != ' ' && newChar != ',' && newChar != '.')
-                            speechsys.Beep(_senderEntity, comp);
+
+                        // Звук только на нормальные символы
+                        if (!char.IsWhiteSpace(newChar) && newChar != ',' && newChar != '.' && newChar != '…')
+                        {
+                            _speechSys.Beep(_senderEntity, comp);
+                        }
+
+                        // Учитываем пунктуацию — добавляем паузу
+                        if (newChar == ',' || newChar == '.' || newChar == '…' || newChar == '!' || newChar == '?')
+                        {
+                            _accumulatedTime -= PunctuationDelay; // замедляем вывод
+                        }
 
                         _revealedLength++;
-                        timeLeft += LetterDelay;
-
-                        if (_revealedLength >= 55)
-                        {
-                            _revealedLength = _fullText.Length;
-                        }
                     }
 
+                    // Форматирование видимого и скрытого текста
                     var visible = _fullText.Substring(0, _revealedLength);
                     var hidden = _fullText.Substring(_revealedLength);
                     if (_wasBold)
@@ -223,17 +227,19 @@ namespace Content.Client.Chat.UI
                     _textLabel.SetMessage(formatted);
                 }
             }
-            // RAYTEN-END
-            if (timeLeft <= FadeTime.TotalSeconds)
+            // --- RAYTEN-END ---
+            // Плавный фейд текста
+            _fadeElapsed += args.DeltaSeconds;
+            if (_fadeElapsed <= FadeTime.TotalSeconds)
             {
-                // Update alpha if we're fading.
-                Modulate = Color.White.WithAlpha(timeLeft / (float)FadeTime.TotalSeconds);
+                var alpha = MathHelper.Clamp(_fadeElapsed / (float)FadeTime.TotalSeconds, 0f, 1f);
+                Modulate = Color.White.WithAlpha(alpha);
             }
             else
             {
-                // Make opaque otherwise, because it might have been hidden before
                 Modulate = Color.White;
             }
+
 
             var baseOffset = 0f;
 

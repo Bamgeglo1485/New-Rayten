@@ -43,6 +43,7 @@ public sealed class VoiceSpeechSystem : EntitySystem
     {
         return AudioParams.Default
                 .WithPitchScale(comp.Pitch)
+                .WithVariation(0.05f)
                 .WithVolume(AdjustVolume(whisper))
                 .WithMaxDistance(whisper ? SharedChatSystem.WhisperMuffledRange : SharedChatSystem.VoiceRange);
     }
