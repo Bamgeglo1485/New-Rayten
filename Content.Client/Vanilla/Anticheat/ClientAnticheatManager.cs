@@ -22,7 +22,6 @@ namespace Content.Client.Vanilla.Anticheat
     {
         [Dependency] private readonly IGameTiming _timing = default!;
         [Dependency] private readonly IPlayerManager _playerManager = default!;
-        [Dependency] private readonly ExamineSystemShared _examine = default!;
         private TimeSpan _nextCheck = TimeSpan.Zero;
 
         public override void Initialize()
@@ -48,28 +47,31 @@ namespace Content.Client.Vanilla.Anticheat
             CheckDrawFovFlag();
         }
 
-    private void CheckDrawFovFlag()
-    {
-        var session = _playerManager.LocalSession;
-        if (session == null)
-            return;
-
-        var playerEnt = session.AttachedEntity;
-        if (playerEnt == null)
-            return;
-
-        if (HasComp<GhostComponent>(playerEnt.Value) || HasComp<RevenantComponent>(playerEnt.Value))
-            return;
-
-        if (TryComp<EyeComponent>(playerEnt.Value, out var eye) && !eye.NetSyncEnabled)
+        private void CheckDrawFovFlag()
         {
-            ReportCheat("Отключена синхронизация EyeComponent");
+            var session = _playerManager.LocalSession;
+
+            if (session == null)
+                return;
+
+            var playerEnt = session.AttachedEntity;
+
+            if (playerEnt == null)
+                return;
+
+
+            if (TryComp<EyeComponent>(playerEnt.Value, out var eye) && !eye.NetSyncEnabled)
+            {
+                ReportCheat("Отключена синхронизация EyeComponent");
+                return;
+            }
+
+            if (TryComp<ContentEyeComponent>(playerEnt.Value, out var contentEye) && !contentEye.NetSyncEnabled)
+            {
+                ReportCheat("Отключена синхронизация ContentEyeComponent");
+                return;
+            }
         }
-        if (TryComp<ContentEyeComponent>(playerEnt.Value, out var contentEye) && !contentEye.NetSyncEnabled)
-        {
-            ReportCheat("Отключена синхронизация ContentEyeComponent");
-        }
-    }
 
         private void ReportCheat(string reason)
         {
