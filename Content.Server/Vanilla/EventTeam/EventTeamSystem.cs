@@ -269,7 +269,7 @@ public sealed class EventTeamSystem : EntitySystem
                 continue;
             // Если маркера нет, спавним в центре шаттла
             var coordinates = FindSpawnCoordinates(spawnMarker, shuttle);
-            SpawnEntity(spawnEntry, coordinates);
+            EntityManager.SpawnEntity(spawnEntry, coordinates);
         }
     }
 
@@ -308,22 +308,8 @@ public sealed class EventTeamSystem : EntitySystem
         while (counter > 0)
         {
             counter--;
-            SpawnEntity(proto.RegularUnit, _random.Pick(spawns));
+            EntityManager.SpawnEntity(proto.RegularUnit, _random.Pick(spawns));
         }
     }
-    private EntityUid SpawnEntity(string protoName, EntityCoordinates coordinates)
-    {
 
-        var uid = EntityManager.SpawnEntity(protoName, coordinates);
-        if (TryComp<GhostRoleMobSpawnerComponent>(uid, out var mobSpawnerComponent) &&
-            mobSpawnerComponent.Prototype != null &&
-            _prototypes.TryIndex<EntityPrototype>(mobSpawnerComponent.Prototype, out var spawnObj) &&
-            spawnObj.TryGetComponent<GhostRoleComponent>(out var tplGhostRoleComponent, _componentFactory))
-        {
-            var comp = _serialization.CreateCopy(tplGhostRoleComponent, notNullableOverride: true);
-            EntityManager.AddComponent(uid, comp);
-        }
-
-        return uid;
-    }
 }
