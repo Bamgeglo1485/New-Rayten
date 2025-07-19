@@ -135,16 +135,21 @@ public sealed partial class HumanoidProfileEditor
             if (_previewBeepIndex >= previewBeepText.Length)
                 return;
 
+            AudioParams audioparms = AudioParams.Default
+                    .WithPitchScale(Profile.VoicePitch)
+                    .WithVariation(0.05f)
+                    .WithVolume(1f);
+
             var nextChar = previewBeepText[_previewBeepIndex];
 
-            _audio.PlayGlobal(Sound, Filter.Local(), true, AudioParams.Default.WithPitchScale(Profile.VoicePitch).WithVolume(1f));
+            _audio.PlayGlobal(Sound, Filter.Local(), true, audioparms);
             _previewBeepIndex++;
 
             if (_previewBeepIndex < previewBeepText.Length && _previewBeepIndex <= 55)
             {
-                Timer.Spawn(TimeSpan.FromSeconds(rng.NextFloat(0.05f, 0.2f)), BeepStep);
+                Timer.Spawn(TimeSpan.FromSeconds(0.045f), BeepStep);
             }
         }
-        Timer.Spawn(TimeSpan.FromSeconds(rng.NextFloat(0.05f, 0.2f)), BeepStep);
+        Timer.Spawn(TimeSpan.FromSeconds(0.045f), BeepStep);
     }
 }

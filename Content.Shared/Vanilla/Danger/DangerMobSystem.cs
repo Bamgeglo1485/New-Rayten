@@ -28,17 +28,18 @@ public sealed class DangerMobSystem : EntitySystem
     {
         base.Update(frameTime);
 
+        _timer += frameTime;
+
+        if (_timer < CheckDelay)
+            return;
+
+        _timer = 0;
+
         var query = EntityQueryEnumerator<DangerMobComponent>();
         while (query.MoveNext(out var uid, out var mobdanger))
         {
-            _timer += frameTime;
-
-            if (_timer < CheckDelay)
-                continue;
-
-            _timer = 0;
-
             CalculateDanger(uid, mobdanger);
+            Dirty(uid, mobdanger);
         }
     }
 
@@ -130,7 +131,8 @@ public sealed class DangerMobSystem : EntitySystem
             if (danger>0)
                 danger += 2;
 
-            deepdanger += 2;
+            if (deepdanger > 0)
+                deepdanger += 2;
         }
         dangercomp.Danger = Math.Clamp(danger, 0, 10);
         dangercomp.DeepDanger = Math.Clamp(deepdanger, 0, 10);
