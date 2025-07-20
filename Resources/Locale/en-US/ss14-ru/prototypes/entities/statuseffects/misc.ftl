@@ -8,5 +8,7 @@ ent-StatusEffectSSDSleeping = forced sleep
     .desc = { ent-MobStatusEffectBase.desc }
 ent-StatusEffectDrowsiness = drowsiness
     .desc = { ent-MobStatusEffectBase.desc }
+ent-StatusEffectFriction = friction
+    .desc = { ent-MobStatusEffectBase.desc }
 ent-StatusEffectSeeingRainbow = hallucinations
     .desc = { ent-MobStatusEffectBase.desc }

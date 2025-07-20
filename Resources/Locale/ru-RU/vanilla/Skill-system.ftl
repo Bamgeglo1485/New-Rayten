@@ -12,12 +12,12 @@ Skill-issue-easyskill-message-bureaucracy-unskilled = Требуется нав�
 Skill-issue-easyskill-message-atmosphere-unskilled = Требуется навык атмосферы.
 Skill-issue-easyskill-message-crime-unskilled = Требуется навык преступности.
 shared-solution-container-component-on-examine-main-text-skill-issue = { "" }
-construction-menu-skill-building = [color=#FFBF00]Требуется { $lvl } ур. строительства[/color]
-construction-menu-skill-engineering = [color=#ff6600]Требуется { $lvl } ур. инженерии[/color]
-construction-menu-skill-atmosphere = [color=#4ebed7]Требуется знание атмосферы[/color]
+construction-menu-skill-building =  [color=#FFBF00]Требуется { $lvl } ур. строительства[/color]
+construction-menu-skill-engineering =  [color=#ff6600]Требуется { $lvl } ур. инженерии[/color]
+construction-menu-skill-atmosphere =  [color=#4ebed7]Требуется знание атмосферы[/color]
 skill-system-bonusskillpoints-message = Вы получили { $skillpoints } очков навыков, т.к. было менее 10 готовых игроков.
 examine-skilltrainer-part-2 = доступно { $SkillExpToLearn } опыта.
-skill-system-UI-SkillNameLabel = [color=#EFBF04]{ $skillname ->
+skill-system-UI-SkillNameLabel =  [color=#EFBF04]{ $skillname ->
         [Piloting] Пилотирование
         [RangeWeapon] Стрельба
         [MeleeWeapon] Ближний бой
@@ -40,7 +40,7 @@ skill-system-UI-ExpLabel-maxlvl = Макс.
 skill-system-UI-Easy-SkillInfoLabel = Опыт: { $exp }/600
 skill-system-UI-Easy-SkillInfoLabel-Have = Изучен
 skill-system-UI-Easy-SkillInfoLabel-NotHave = Не изучен
-skill-system-UI-Easy-AmnesiaLabel = [color=red]Амнезия: { $exptorestore }[/color]
+skill-system-UI-Easy-AmnesiaLabel =  [color=red]Амнезия: { $exptorestore }[/color]
 skill-system-UI-Tooltip-RangeWeapon =
     0 ур:
     - 100% Шанс выронить дробовик, снайперскую винтовку из руки при выстреле
@@ -139,6 +139,9 @@ skill-system-UI-Tooltip-Research =
     - Использование синхронизатора аномалий
     - 1000% скорости сканирования
     - Распознание опасности аномалий осмотром
+skill-system-UI-Tooltip-Instrumentation =
+    Данный навык отвечает за крафт различных приборов, предметов,
+    киборгов, экзоскелетов и т.д., а также за возможность их разборки.
 skill-system-UI-Tooltip-Crime =
     1 ур:
     - Шаги и инструменты (сварка,лом,кусачки,челюсти итд) становятся намного тише.
@@ -150,8 +153,7 @@ skill-system-UI-Tooltip-Crime =
     3 ур:
     - 60% шанс не оставить никаких отпечатков.
     - Возможность скрытно воровать предметы.
-skill-system-UI-Tooltip-Piloting =
-    - Использование консоли управления шаттлом
+skill-system-UI-Tooltip-Piloting = - Использование консоли управления шаттлом
 skill-system-UI-Tooltip-Botany =
     - Взаимодействие с анализатором растений и биофабрикатором
     - Скрещивание растений
@@ -162,5 +164,4 @@ skill-system-UI-Tooltip-Bureaucracy =
 skill-system-UI-Tooltip-Atmosphere =
     - Создание труб, смесителей газов, насосов и прочих атмосферных устройств
     - Взаимодействие с охладителем, нагревателем, насосами, воздушной сигнализацией и прочими атмосферными устройствами
-skill-system-UI-Tooltip-MusInstruments =
-    - Игра на музыкальных инструментах
+skill-system-UI-Tooltip-MusInstruments = - Игра на музыкальных инструментах
