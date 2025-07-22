@@ -14,34 +14,12 @@ using System.Linq;
 
 namespace Content.Shared.Vanilla.Dominator;
 
-public sealed class DangerMobSystem : EntitySystem
+public sealed class SharedDangerMobSystem : EntitySystem
 {
     [Dependency] private readonly InventorySystem _inventory = default!;
     [Dependency] private readonly SharedHandsSystem _hands = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly SharedIdCardSystem _id = default!;
-
-    private float _timer = 0;
-    public float CheckDelay = 0.5f;
-
-    public override void Update(float frameTime)
-    {
-        base.Update(frameTime);
-
-        _timer += frameTime;
-
-        if (_timer < CheckDelay)
-            return;
-
-        _timer = 0;
-
-        var query = EntityQueryEnumerator<DangerMobComponent>();
-        while (query.MoveNext(out var uid, out var mobdanger))
-        {
-            CalculateDanger(uid, mobdanger);
-            Dirty(uid, mobdanger);
-        }
-    }
 
     public int GetEntityDanger(EntityUid target, bool deepseek = false)
     {
