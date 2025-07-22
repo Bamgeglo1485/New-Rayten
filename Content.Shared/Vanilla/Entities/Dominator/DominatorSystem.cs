@@ -19,8 +19,9 @@ public class SharedDominatorSystem : EntitySystem
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly SharedHandsSystem _hands = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly DangerMobSystem _dangermob = default!;
+    [Dependency] private readonly SharedDangerMobSystem _dangermob = default!;
     [Dependency] private readonly SharedAppearanceSystem _appearanceSystem = default!;
+
     public override void Initialize()
     {
         base.Initialize();

@@ -14,7 +14,7 @@ using System.Linq;
 
 namespace Content.Shared.Vanilla.Dominator;
 
-public sealed class SharedDangerMobSystem : EntitySystem
+public class SharedDangerMobSystem : EntitySystem
 {
     [Dependency] private readonly InventorySystem _inventory = default!;
     [Dependency] private readonly SharedHandsSystem _hands = default!;
@@ -38,7 +38,7 @@ public sealed class SharedDangerMobSystem : EntitySystem
         return deepseek ? dangerComp.DeepDanger : dangerComp.Danger;
     }
 
-    private void CalculateDanger(EntityUid target, DangerMobComponent dangercomp)
+    protected void CalculateDanger(EntityUid target, DangerMobComponent dangercomp)
     {
         // --- 1. Проверка на опасных существ ---
         if (dangercomp.MaxDanger)

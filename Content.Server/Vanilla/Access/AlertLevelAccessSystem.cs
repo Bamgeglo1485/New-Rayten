@@ -9,11 +9,11 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.Vanilla.Access.AlertLevelAccess;
 
-public sealed class SharedAssSystem : EntitySystem
+public class SharedAssSystem : EntitySystem
 {
     [Dependency] private readonly StationSystem _station = default!;
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly DangerMobSystem _dangermob = default!;
+    [Dependency] private readonly SharedDangerMobSystem _dangermob = default!;
     [Dependency] private readonly ExamineSystemShared _examine = default!;
     public override void Initialize()
     {

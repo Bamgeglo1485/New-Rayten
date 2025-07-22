@@ -12,7 +12,7 @@ public sealed class ShowCriminalLevelIconsSystem : EquipmentHudSystem<ShowCrimin
 {
 
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly DangerMobSystem _dangermob = default!;
+    [Dependency] private readonly SharedDangerMobSystem _dangermob = default!;
 
     public void AddCriminalLevelIcons(EntityUid uid, ref GetStatusIconsEvent args)
     {

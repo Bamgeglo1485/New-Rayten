@@ -5,7 +5,6 @@ namespace Content.Server.Vanilla.Dominator;
 
 public sealed class DangerMobSystem : SharedDangerMobSystem
 {
-
     private float _timer = 0;
     public float CheckDelay = 0.5f;
     /// <summary>
@@ -14,8 +13,6 @@ public sealed class DangerMobSystem : SharedDangerMobSystem
     /// <param name="frameTime"></param>
     public override void Update(float frameTime)
     {
-        base.Update(frameTime);
-
         _timer += frameTime;
 
         if (_timer < CheckDelay)
