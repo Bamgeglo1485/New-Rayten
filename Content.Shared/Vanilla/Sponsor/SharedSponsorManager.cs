@@ -113,6 +113,7 @@ public sealed class SharedSponsorManager
                 case sponsorRank.GrayTide:
                     current.Add("ClosetSkeletonJesterBackground");
                     current.Add("NukeOpfreelancerBackground");
+                    current.Add("Trottine");
                     break;
 
 
@@ -175,8 +176,6 @@ public sealed class SharedSponsorManager
                     current.Add("Willow");
                     current.Add("Warly");
                     current.Add("Megalovania");
-                //предыстории
-                    current.Add("CadetWizardBackground");
                     break;
 
 
