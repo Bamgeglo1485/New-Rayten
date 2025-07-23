@@ -2639,3 +2639,12 @@
   id: 140
   time: '2025-07-22T22:03:43.0000000+00:00'
   url: https://github.com/RaytenCorp/Rayten/pull/325
+- author: thefuckmybrain
+  changes:
+  - message: "\u0422\u0440\u043E\u0442\u0442\u0438\u043D\u0430\u043C \u0434\u043E\u0431\
+      \u0430\u0432\u043B\u0435\u043D\u044B \u043F\u043E\u0440\u043E\u0441\u044F\u0447\
+      \u0438\u0435 \u0437\u0432\u0443\u043A\u0438"
+    type: Add
+  id: 141
+  time: '2025-07-23T02:05:44.0000000+00:00'
+  url: https://github.com/RaytenCorp/Rayten/pull/328
