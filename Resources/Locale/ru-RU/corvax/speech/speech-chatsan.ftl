@@ -269,6 +269,3 @@ corvax-chatsan-word-134 = окак
 corvax-chatsan-replacement-134 = { "" }
 corvax-chatsan-word-135 = увы
 corvax-chatsan-replacement-135 = { "" }
-# Некоторые дегенераты меня поражают
-corvax-chatsan-word-136 = о как
-corvax-chatsan-replacement-136 = { "" }

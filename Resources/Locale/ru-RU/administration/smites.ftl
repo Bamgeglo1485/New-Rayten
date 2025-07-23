@@ -59,7 +59,6 @@ admin-smite-kill-sign-name = Знак смерти
 admin-smite-omni-accent-name = Мультиакцент
 admin-smite-crawler-name = Ползун
 
-
 ## Smite descriptions
 
 admin-smite-explode-description = Взрывает цель.
