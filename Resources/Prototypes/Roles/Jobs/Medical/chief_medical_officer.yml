@@ -9,6 +9,7 @@
     - !type:SpeciesRequirement
       species:
       - Vox
+      inverted: true
     - !type:RoleTimeRequirement
       role: JobChemist
       time: 9000 #2.5 hrs

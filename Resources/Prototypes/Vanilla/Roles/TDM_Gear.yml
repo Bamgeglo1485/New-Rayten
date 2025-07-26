@@ -10,7 +10,7 @@
     pocket2: StimpackMini
     back: BaseBallBat
   inhand:
-  - WeaponShotgunDoubleBarreled
+  - WeaponShotgunSawn
 
 - type: startingGear
   id: RedGuyScout
@@ -23,7 +23,7 @@
     pocket2: StimpackMini
     back: BaseBallBat
   inhand:
-  - WeaponShotgunDoubleBarreled
+  - WeaponShotgunSawn
 
 # СОЛДАТ
 - type: startingGear

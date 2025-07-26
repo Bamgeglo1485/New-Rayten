@@ -4,6 +4,10 @@
   description: job-description-ce
   playTimeTracker: JobChiefEngineer
   requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Vox
+      inverted: true
     - !type:RoleTimeRequirement
       role: JobAtmosphericTechnician
       time: 36000 #10 hrs # vanilla-RoleTime
