@@ -80,3 +80,7 @@ ent-FoodCakeSuppermatter = суперматерия
     .desc = Чрезвычайно плотная и мощная пища.
 ent-FoodCakeSuppermatterSlice = осколок суперматерии
     .desc = Одна порция мощи.
+ent-FoodCakeCotton = ватный торт
+    .desc = Торт с волокнистой глазурью и комочком ваты сверху.
+ent-FoodCakeCottonSlice = кусочек ватного торта
+    .desc = Ломтик ватного торта. Можно просто слизать глазурь, и так сойдёт.

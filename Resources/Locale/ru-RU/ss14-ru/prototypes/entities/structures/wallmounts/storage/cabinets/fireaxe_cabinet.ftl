@@ -1,0 +1,11 @@
+ent-FireAxeCabinet = шкаф с пожарным топором
+    .desc = На табличке написано "Только для экстренных случаев" и инструкция по безопасному использованию. Ну да, конечно.
+ent-FireAxeCabinetOpen = { ent-FireAxeCabinet }
+    .suffix = Открытый
+    .desc = { ent-FireAxeCabinet.desc }
+ent-FireAxeCabinetFilled = { ent-FireAxeCabinet }
+    .suffix = Заполнен
+    .desc = { ent-FireAxeCabinet.desc }
+ent-FireAxeCabinetFilledOpen = { ent-FireAxeCabinetFilled }
+    .suffix = Заполнен, Открытый
+    .desc = { ent-FireAxeCabinetFilled.desc }
