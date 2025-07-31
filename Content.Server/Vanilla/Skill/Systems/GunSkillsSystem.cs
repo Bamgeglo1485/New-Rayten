@@ -30,6 +30,8 @@ public sealed class GunSkillsSystem : EntitySystem
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly SharedStaminaSystem _stamina = default!;
 
+    private const float HEADSHOTCHANCE = 0.3f;
+
     public override void Initialize()
     {
         base.Initialize();
@@ -38,6 +40,7 @@ public sealed class GunSkillsSystem : EntitySystem
         SubscribeLocalEvent<GunCanBeFallComponent, GunShotEvent>(RangeWeaponFalldownOnShoot);//выпадение оружия при стрельбе
         SubscribeLocalEvent<ProjectileComponent, ProjectileHitEvent>(OnHit);
     }
+
     private void OnHit(EntityUid uid, ProjectileComponent component, ref ProjectileHitEvent args)
     {
         if (args.Shooter == null || args.Shooter == args.Target)
@@ -49,24 +52,18 @@ public sealed class GunSkillsSystem : EntitySystem
         if (!TryComp<SkillComponent>(args.Shooter, out var skillcomp) || args.Damage == null)
             return;
 
-        float chance = skillcomp.RangeWeaponLevel switch
-        {
-            SkillLevel.None => 0.01f,
-            SkillLevel.Basic => 0.05f,
-            SkillLevel.Advanced => 0.1f,
-            SkillLevel.Expert => 0.15f,
-            _ => 0f
-        };
+        if (skillcomp.RangeWeaponLevel != SkillLevel.Expert)
+            return;
 
-        if (!_random.Prob(chance))
+        if (!_random.Prob(HEADSHOTCHANCE))
             return;
 
         var headshoter = args.Shooter.Value;
         float staminadamage = args.Damage.GetTotal().Float();
 
-        _audio.PlayPvs("/Audio/Vanilla/SkillSystem/headshot.ogg", args.Target, AudioParams.Default.WithVolume(-9f).WithMaxDistance(5f));
+        _audio.PlayPvs("/Audio/Vanilla/SkillSystem/headshot.ogg", args.Target, AudioParams.Default.WithVolume(-10f).WithMaxDistance(5f));
 
-        _stamina.TakeStaminaDamage(args.Target, staminadamage, source: headshoter, ignoreResist: true);
+        _stamina.TakeStaminaDamage(args.Target, staminadamage, source: headshoter, ignoreResist: false);
 
     }
     private void OnHandPickUp(EntityUid uid, GunComponent gunComp, GotEquippedHandEvent args)
