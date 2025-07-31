@@ -15,7 +15,7 @@
   description: Док, чувак ты где?!
   sponsorOnly: false
   skills:
-    RangeWeapon: 3
+    RangeWeapon: 2
     MeleeWeapon: 3
     Medicine: 2
   specialDesc:
@@ -40,7 +40,7 @@
   description: А рокетджамп здесь есть?
   sponsorOnly: false
   skills:
-    RangeWeapon: 3
+    RangeWeapon: 2
     MeleeWeapon: 3
     Medicine: 2
   specialDesc:
@@ -201,7 +201,7 @@
   description: Док, чувак ты где?!
   sponsorOnly: false
   skills:
-    RangeWeapon: 3
+    RangeWeapon: 2
     MeleeWeapon: 3
     Medicine: 2
   specialDesc:
@@ -226,7 +226,7 @@
   description: А рокетджамп здесь есть?
   sponsorOnly: false
   skills:
-    RangeWeapon: 3
+    RangeWeapon: 2
     MeleeWeapon: 3
     Medicine: 2
   specialDesc:
