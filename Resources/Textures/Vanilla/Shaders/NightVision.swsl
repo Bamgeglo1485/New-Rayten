@@ -1,0 +1,13 @@
+uniform sampler2D SCREEN_TEXTURE;
+
+void fragment() {
+    highp vec4 color = zTextureSpec(SCREEN_TEXTURE, UV);
+    highp float luminance = zGrayscale(color.rgb);
+
+    // Мягкое усиление теней
+    luminance = pow(luminance, 0.5);
+
+    vec3 nightVisionColor = vec3(0.1, 1.0, 0.1) * luminance;
+
+    COLOR = vec4(nightVisionColor, color.a);
+}

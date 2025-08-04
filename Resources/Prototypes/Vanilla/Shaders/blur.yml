@@ -1,4 +1,0 @@
-- type: shader
-  id: ThermalVision
-  kind: source
-  path: "/Textures/Vanilla/Shaders/thermal_vision.swsl"
