@@ -99,6 +99,7 @@
   - type: NightVision 
   - type: PointLight
     radius: 9
+    energy: 1.5
     color: "#013220"
     enabled: false
     netsync: false

@@ -1,9 +1,34 @@
 - type: entity
   parent: ClothingEyesBase
-  id: ClothingEyesNightVisionDevice
+  id: ClothingEyesNightVisionDeviceEmpty
   name: прибор ночного видения
+  suffix: Пустой
   description: Позволяет разглядеть всё, что прячется в темноте. Даже тех, кто думал, что их не видно.
   components:
+  - type: Sprite
+    sprite: Vanilla/Clothing/Eyes/Hud/night_vision_device.rsi
+    layers:
+      - state: icon
+      - state: icon-on
+        visible: true
+        shader: unshaded
+        map: [ "enum.ToggleableVisuals.Layer" ]
+  - type: Appearance
+  - type: Clothing
+    sprite: Vanilla/Clothing/Eyes/Hud/night_vision_device.rsi
+    equippedPrefix: off
+  - type: ToggleableVisuals
+    spriteLayer: enum.ToggleableVisuals.Layer
+    clothingVisuals:
+      eyes:
+      - state: on-equipped-EYES
+        shader: unshaded
+  - type: GenericVisualizer
+    visuals:
+      enum.ToggleableVisuals.Enabled:
+        enum.ToggleableVisuals.Layer:
+          True: {visible: true}
+          False: {visible: false}
   - type: ToggleClothing
     action: ActionToggleNightVision
     mustEquip: true
@@ -15,7 +40,7 @@
     soundActivate:
       path: /Audio/Vanilla/Effects/Actions/nightvisionswitch.ogg
     soundDeactivate:
-      collection: WelderOff
+      path: /Audio/Machines/button.ogg
     soundFailToActivate:
       path: /Audio/Machines/button.ogg
   - type: ItemToggleActiveSound
@@ -23,36 +48,10 @@
       path: /Audio/Vanilla/Effects/Actions/nightvisionambient.ogg
       params:
         volume: -4
+        maxDistance: 5
   - type: ComponentToggler
     components:
     - type: NightVisionOverlay
-
-
-  - type: Sprite
-    sprite: Vanilla/Clothing/Eyes/Hud/night_vision_device.rsi
-    layers:
-      - state: icon
-      - state: icon-light
-        visible: false
-        shader: unshaded
-        map: [ "light" ]
-
-  - type: Appearance
-
-  - type: Clothing
-    sprite: Vanilla/Clothing/Eyes/Hud/night_vision_device.rsi
-    equippedPrefix: off
-
-  - type: ToggleableVisuals
-    spriteLayer: light
-    clothingVisuals:
-      eyes:
-      - state: on-equipped-eyes
-        shader: unshaded
-
-
-
-
   - type: PowerCellSlot
     cellSlotId: cell_slot
   - type: ContainerContainer
@@ -62,7 +61,6 @@
     slots:
       cell_slot:
         name: power-cell-slot-component-slot-name-default
-        startingItem: PowerCellSmall
   - type: PowerCellDraw
     drawRate: 2
     useRate: 20
@@ -72,6 +70,18 @@
     energy: 0.2
     enabled: false
     netsync: false
+
+- type: entity
+  parent: ClothingEyesNightVisionDeviceEmpty
+  id: ClothingEyesNightVisionDevice
+  suffix: Заполнен
+  components:
+  - type: ItemSlots
+    slots:
+      cell_slot:
+        name: power-cell-slot-component-slot-name-default
+        startingItem: PowerCellSmall
+
 
 - type: entity
   parent: BaseAction

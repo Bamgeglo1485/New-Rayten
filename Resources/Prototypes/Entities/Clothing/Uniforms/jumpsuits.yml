@@ -5,9 +5,9 @@
   description: Advanced armored jumpsuit used by special forces in special operations.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/deathsquad.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/deathsquad.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/deathsquad.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/deathsquad.rsi # Rayten Resprites
 
 - type: entity
   parent: ClothingUniformBase
@@ -16,9 +16,9 @@
   description: A terribly ragged and frayed grey jumpsuit. It looks like it hasn't been washed in over a decade.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/ancient.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/ancient.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/ancient.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/ancient.rsi # Rayten Resprites
 
 - type: entity
   parent: ClothingUniformBase
@@ -27,9 +27,9 @@
   description: A nice and tidy uniform. Shame about the bar though.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/bartender.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/bartender.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/bartender.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/bartender.rsi # Rayten Resprites
 
 - type: entity
   parent: ClothingUniformBase
@@ -38,9 +38,9 @@
   description: A decent jacket, for a decent monkey.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/punpun.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/punpun.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/punpun.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/punpun.rsi # Rayten Resprites
   - type: SuitSensor
     controlsLocked: false
     randomMode: false
@@ -53,9 +53,9 @@
   description: A special purple outfit to serve drinks.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/bartender_purple.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/bartender_purple.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/bartender_purple.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/bartender_purple.rsi # Rayten Resprites
 
 - type: entity
   parent: [ClothingUniformBase, FirstCommandContraband]
@@ -64,9 +64,9 @@
   description: It's a blue jumpsuit with some gold markings denoting the rank of "Captain".
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/captain.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/captain.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/captain.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/captain.rsi # Rayten Resprites
 
 - type: entity
   parent: ClothingUniformBase
@@ -75,9 +75,9 @@
   description: A sturdy jumpsuit, issued to members of the Cargo department.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/cargotech.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/cargotech.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/cargotech.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/cargotech.rsi # Rayten Resprites
 
 - type: entity
   parent: ClothingUniformBase
@@ -86,9 +86,9 @@
   description: It's a snappy jumpsuit with a sturdy set of overalls. It's very dirty.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/salvage.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/salvage.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/salvage.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/salvage.rsi # Rayten Resprites
 
 - type: entity
   parent: [ClothingUniformBase, FirstCommandContraband]
@@ -97,9 +97,9 @@
   description: It's a high visibility jumpsuit given to those engineers insane enough to achieve the rank of Chief Engineer.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/ce.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/ce.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/ce.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/ce.rsi # Rayten Resprites
 
 - type: entity
   parent: [ClothingUniformBase, FirstCommandContraband]
@@ -108,9 +108,9 @@
   description: A yellow turtleneck designed specifically for work in conditions of the engineering department.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/ce_turtle.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/ce_turtle.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/ce_turtle.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/ce_turtle.rsi # Rayten Resprites
 
 - type: entity
   parent: ClothingUniformBase
@@ -119,9 +119,9 @@
   description: It's a black jumpsuit, often worn by religious folk.
   components:
     - type: Sprite
-      sprite: Clothing/Uniforms/Jumpsuit/chaplain.rsi
+      sprite: Vanilla/Clothing/Uniforms/Jumpsuit/chaplain.rsi # Rayten Resprites
     - type: Clothing
-      sprite: Clothing/Uniforms/Jumpsuit/chaplain.rsi
+      sprite: Vanilla/Clothing/Uniforms/Jumpsuit/chaplain.rsi # Rayten Resprites
 
 - type: entity
   parent: [ ClothingUniformBase, CentcommContraband ]
@@ -130,9 +130,9 @@
   description: A suit worn by CentComm's legal team. Smells of burnt coffee.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/centcom_agent.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/centcom_agent.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/centcom_agent.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/centcom_agent.rsi # Rayten Resprites
 
 - type: entity
   parent: [ ClothingUniformBase, CentcommContraband ]
@@ -141,9 +141,9 @@
   description: It's a suit worn by CentComm's highest-tier Commanders. # Corvax-Resprite
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/centcom_official.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/centcom_official.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/centcom_official.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/centcom_official.rsi # Rayten Resprites
 
 - type: entity
   parent: [ ClothingUniformBase, CentcommContraband ]
@@ -152,9 +152,9 @@
   description: A casual, yet refined green turtleneck, used by CentComm Officials. It has a fragrance of aloe. # Corvax-Resprite
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/centcom_officer.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/centcom_officer.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/centcom_officer.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/centcom_officer.rsi # Rayten Resprites
 
 - type: entity
   parent: ClothingUniformBase
@@ -163,9 +163,9 @@
   description: Can't cook without this.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/chef.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/chef.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/chef.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/chef.rsi # Rayten Resprites
 
 - type: entity
   parent: ClothingUniformBase
@@ -174,9 +174,9 @@
   description: There's some odd stains on this jumpsuit. Hm.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/chemistry.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/chemistry.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/chemistry.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/chemistry.rsi # Rayten Resprites
 
 - type: entity
   parent: ClothingUniformBase
@@ -185,9 +185,9 @@
   description: It's made of a special fiber that gives special protection against biohazards. It has a virologist rank stripe on it.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/virology.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/virology.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/virology.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/virology.rsi # Rayten Resprites
 
 - type: entity
   parent: ClothingUniformBase
@@ -196,9 +196,9 @@
   description: It's made of a special fiber that gives special protection against biohazards. It has a geneticist rank stripe on it.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/genetics.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/genetics.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/genetics.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/genetics.rsi # Rayten Resprites
 
 - type: entity
   parent: ClothingUniformBase
@@ -207,9 +207,9 @@
   description: HONK!
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/clown.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/clown.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/clown.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/clown.rsi # Rayten Resprites
   - type: Tag
     tags:
     - ClownSuit
@@ -221,9 +221,9 @@
   name: banana clown suit
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/clown_banana.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/clown_banana.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/clown_banana.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/clown_banana.rsi # Rayten Resprites
   - type: Construction
     graph: BananaClownJumpsuit
     node: jumpsuit
@@ -239,18 +239,18 @@
   description: A jolly dress, well suited to entertain your master, nuncle.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/jester.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/jester.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/jester.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/jester.rsi # Rayten Resprites
 
 - type: entity
   parent: ClothingUniformJumpsuitJester
   id: ClothingUniformJumpsuitJesterAlt
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/jester2.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/jester2.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/jester2.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/jester2.rsi # Rayten Resprites
 
 - type: entity
   parent: [ClothingUniformBase, FirstCommandContraband]
@@ -259,9 +259,9 @@
   description: It's a jumpsuit worn by those with the experience to be Chief Medical Officer. It provides minor biological protection.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/cmo.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/cmo.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/cmo.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/cmo.rsi # Rayten Resprites
 
 - type: entity
   parent: [ClothingUniformBase, FirstCommandContraband]
@@ -270,9 +270,9 @@
   description: It's a turtleneck worn by those with the experience to be Chief Medical Officer. It provides minor biological protection.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/cmo_turtle.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/cmo_turtle.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/cmo_turtle.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/cmo_turtle.rsi # Rayten Resprites
 
 - type: entity
   parent: ClothingUniformBase
@@ -281,9 +281,9 @@
   description: Someone who wears this means business.
   components:
     - type: Sprite
-      sprite: Clothing/Uniforms/Jumpsuit/detective.rsi
+      sprite: Vanilla/Clothing/Uniforms/Jumpsuit/detective.rsi # Rayten Resprites
     - type: Clothing
-      sprite: Clothing/Uniforms/Jumpsuit/detective.rsi
+      sprite: Vanilla/Clothing/Uniforms/Jumpsuit/detective.rsi # Rayten Resprites
 
 - type: entity
   parent: ClothingUniformBase
@@ -292,9 +292,9 @@
   description: A hard-boiled private investigator's grey suit, complete with tie clip.
   components:
     - type: Sprite
-      sprite: Clothing/Uniforms/Jumpsuit/detective_grey.rsi
+      sprite: Vanilla/Clothing/Uniforms/Jumpsuit/detective_grey.rsi # Rayten Resprites
     - type: Clothing
-      sprite: Clothing/Uniforms/Jumpsuit/detective_grey.rsi
+      sprite: Vanilla/Clothing/Uniforms/Jumpsuit/detective_grey.rsi # Rayten Resprites
 
 - type: entity
   parent: ClothingUniformBase
@@ -303,9 +303,9 @@
   description: If this suit was non-conductive, maybe engineers would actually do their damn job.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/engineering.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/engineering.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/engineering.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/engineering.rsi # Rayten Resprites
 
 - type: entity
   parent: ClothingUniformBase
@@ -314,9 +314,9 @@
   description: Woven in a grungy, warm orange. Lets others around you know that you really mean business when it comes to work.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/engineering_hazard.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/engineering_hazard.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/engineering_hazard.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/engineering_hazard.rsi # Rayten Resprites
 
 - type: entity
   parent: [ClothingUniformBase, FirstCommandContraband]
@@ -325,9 +325,9 @@
   description: Rather bland and inoffensive. Perfect for vanishing off the face of the universe.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/hop.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/hop.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/hop.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/hop.rsi # Rayten Resprites
 
 - type: entity
   parent: [ClothingUniformBase, FirstCommandContraband]
@@ -336,20 +336,20 @@
   description: It's bright red and rather crisp, much like security's victims tend to be.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/hos.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/hos.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/hos.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/hos.rsi # Rayten Resprites
   - type: Item
     inhandVisuals:
       left:
       - state: inhand-left
         color: "#C12D30"
-        sprite: Clothing/Uniforms/Jumpsuit/color.rsi
+        sprite: Vanilla/Clothing/Uniforms/Jumpsuit/color.rsi # Rayten Resprites
       - state: overlay-inhand-left
       right:
       - state: inhand-right
         color: "#C12D30"
-        sprite: Clothing/Uniforms/Jumpsuit/color.rsi
+        sprite: Vanilla/Clothing/Uniforms/Jumpsuit/color.rsi # Rayten Resprites
       - state: overlay-inhand-right
 
 - type: entity
@@ -359,9 +359,9 @@
   description: It's a turtleneck worn by those strong and disciplined enough to achieve the position of Head of Security.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/hos_alt.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/hos_alt.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/hos_alt.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/hos_alt.rsi # Rayten Resprites
 
 - type: entity
   parent: [ClothingUniformBase, FirstCommandContraband]
@@ -370,9 +370,9 @@
   description: A blue jumpsuit of Head of Security.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/hos_blue.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/hos_blue.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/hos_blue.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/hos_blue.rsi # Rayten Resprites
 
 - type: entity
   parent: [ClothingUniformBase, FirstCommandContraband]
@@ -381,9 +381,9 @@
   description: A grey jumpsuit of Head of Security, which make him look somewhat like a passenger.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/hos_grey.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/hos_grey.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/hos_grey.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/hos_grey.rsi # Rayten Resprites
 
 - type: entity
   parent: [ClothingUniformBase, FirstCommandContraband]
@@ -392,9 +392,9 @@
   description: A male head of security's luxury-wear, for special occasions.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/hos_parade.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/hos_parade.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/hos_parade.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/hos_parade.rsi # Rayten Resprites
 
 - type: entity
   parent: [ ClothingUniformBase, FirstCommandContraband ]
@@ -403,9 +403,9 @@
   description: A generic Command-colored jumpsuit not associated with any particular department.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/commandgeneric.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/commandgeneric.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/commandgeneric.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/commandgeneric.rsi # Rayten Resprites
 
 - type: entity
   parent: ClothingUniformBase
@@ -414,9 +414,9 @@
   description: Has a strong earthy smell to it. Hopefully it's merely dirty as opposed to soiled.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/hydro.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/hydro.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/hydro.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/hydro.rsi # Rayten Resprites
 
 - type: entity
   parent: ClothingUniformBase
@@ -425,9 +425,9 @@
   description: The jumpsuit for the poor sop with a mop.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/janitor.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/janitor.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/janitor.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/janitor.rsi # Rayten Resprites
 
 - type: entity
   parent: ClothingUniformBase
@@ -436,9 +436,9 @@
   description: Traditional chinese clothing.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/kimono.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/kimono.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/kimono.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/kimono.rsi # Rayten Resprites
 
 - type: entity
   parent: ClothingUniformBase
@@ -447,9 +447,9 @@
   description: It's made of a special fiber that provides minor protection against biohazards. It has a cross on the chest denoting that the wearer is trained medical personnel.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/medical.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/medical.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/medical.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/medical.rsi # Rayten Resprites
 
 - type: entity
   parent: ClothingUniformBase
@@ -458,9 +458,9 @@
   description: ...
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/mime.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/mime.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/mime.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/mime.rsi # Rayten Resprites
 
 - type: entity
   parent: ClothingUniformBase
@@ -469,9 +469,9 @@
   description: It's got a plus on it, that's a good thing right?
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/paramedic.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/paramedic.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/paramedic.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/paramedic.rsi # Rayten Resprites
 
 - type: entity
   parent: ClothingUniformBase
@@ -480,9 +480,9 @@
   description: This uniform is issued to qualified personnel who have been trained. No one cares that the training took half a day.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/brigmedic.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/brigmedic.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/brigmedic.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/brigmedic.rsi # Rayten Resprites
 
 - type: entity
   parent: ClothingUniformBase
@@ -491,7 +491,7 @@
   description: A jumpsuit used for prisoners. It has suit sensors automatically enabled at all times.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/color.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/color.rsi # Rayten Resprites
     layers:
     - state: icon
       color: "#ff8300"
@@ -507,7 +507,7 @@
         color: "#ff8300"
       - state: prisoner-inhand-right
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/color.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/color.rsi # Rayten Resprites
     clothingVisuals:
       jumpsuit:
       - state: equipped-INNERCLOTHING
@@ -531,9 +531,9 @@
   description: 'What can brown do for you?'
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/qm.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/qm.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/qm.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/qm.rsi # Rayten Resprites
 
 - type: entity
   parent: [ClothingUniformBase, FirstCommandContraband]
@@ -542,9 +542,9 @@
   description: A sharp turtleneck made for the hardy work environment of supply.
   components:
     - type: Sprite
-      sprite: Clothing/Uniforms/Jumpsuit/qmturtle.rsi
+      sprite: Vanilla/Clothing/Uniforms/Jumpsuit/qmturtle.rsi # Rayten Resprites
     - type: Clothing
-      sprite: Clothing/Uniforms/Jumpsuit/qmturtle.rsi
+      sprite: Vanilla/Clothing/Uniforms/Jumpsuit/qmturtle.rsi # Rayten Resprites
 
 - type: entity
   parent: [ClothingUniformBase, FirstCommandContraband]
@@ -553,9 +553,9 @@
   description: Inspired by the quartermasters of military's past, the perfect outfit for supplying a formal occasion.
   components:
     - type: Sprite
-      sprite: Clothing/Uniforms/Jumpsuit/qmformal.rsi
+      sprite: Vanilla/Clothing/Uniforms/Jumpsuit/qmformal.rsi # Rayten Resprites
     - type: Clothing
-      sprite: Clothing/Uniforms/Jumpsuit/qmformal.rsi
+      sprite: Vanilla/Clothing/Uniforms/Jumpsuit/qmformal.rsi # Rayten Resprites
 
 - type: entity
   parent: [ClothingUniformBase, FirstCommandContraband]
@@ -564,9 +564,9 @@
   description: It's a turtleneck worn by those with the know-how to achieve the position of Research Director. Its fabric provides minor protection from biological contaminants.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/rnd.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/rnd.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/rnd.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/rnd.rsi # Rayten Resprites
 
 - type: entity
   parent: ClothingUniformBase
@@ -575,9 +575,9 @@
   description: It's made of a special fiber that increases perceived intelligence and decreases personal ethics. It has markings that denote the wearer as a scientist.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/scientist.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/scientist.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/scientist.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/scientist.rsi # Rayten Resprites
 
 - type: entity
   parent: ClothingUniformBase
@@ -586,9 +586,9 @@
   description: A uniform for sophisticated scientists, best worn with its matching tie.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/scientist_formal.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/scientist_formal.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/scientist_formal.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/scientist_formal.rsi # Rayten Resprites
 
 - type: entity
   parent: ClothingUniformBase
@@ -597,9 +597,9 @@
   description: It's a slimming black with reinforced seams; great for industrial work.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/roboticist.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/roboticist.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/roboticist.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/roboticist.rsi # Rayten Resprites
 
 - type: entity
   parent: [ClothingUniformBase, FirstSecurityContraband]
@@ -608,20 +608,20 @@
   description: A jumpsuit made of strong material, providing robust protection.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/security.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/security.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/security.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/security.rsi # Rayten Resprites
   - type: Item
     inhandVisuals:
       left:
       - state: inhand-left
         color: "#C12D30"
-        sprite: Clothing/Uniforms/Jumpsuit/color.rsi
+        sprite: Vanilla/Clothing/Uniforms/Jumpsuit/color.rsi # Rayten Resprites
       - state: overlay-inhand-left
       right:
       - state: inhand-right
         color: "#C12D30"
-        sprite: Clothing/Uniforms/Jumpsuit/color.rsi
+        sprite: Vanilla/Clothing/Uniforms/Jumpsuit/color.rsi # Rayten Resprites
       - state: overlay-inhand-right
 
 - type: entity
@@ -631,9 +631,9 @@
   description: I'm a little busy right now, Calhoun.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/security_blue.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/security_blue.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/security_blue.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/security_blue.rsi # Rayten Resprites
 
 - type: entity
   parent: [ClothingUniformBase, FirstSecurityContraband]
@@ -642,9 +642,9 @@
   description: A tactical relic of years past before Nanotrasen decided it was cheaper to dye the suits red instead of washing out the blood.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/security_grey.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/security_grey.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/security_grey.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/security_grey.rsi # Rayten Resprites
 
 - type: entity
   parent: [ClothingUniformBase, FirstSecurityContraband]
@@ -653,9 +653,9 @@
   description: A formal uniform issued to the Nanotrasen Troopers, usually it comes with a car.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/security_trooper.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/security_trooper.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/security_trooper.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/security_trooper.rsi # Rayten Resprites
 
 - type: entity
   parent: [ClothingUniformBase, FirstSecurityContraband]
@@ -664,20 +664,20 @@
   description: A formal security suit for officers complete with Nanotrasen belt buckle.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/warden.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/warden.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/warden.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/warden.rsi # Rayten Resprites
   - type: Item
     inhandVisuals:
       left:
       - state: inhand-left
         color: "#C12D30"
-        sprite: Clothing/Uniforms/Jumpsuit/color.rsi
+        sprite: Vanilla/Clothing/Uniforms/Jumpsuit/color.rsi # Rayten Resprites
       - state: overlay-inhand-left
       right:
       - state: inhand-right
         color: "#C12D30"
-        sprite: Clothing/Uniforms/Jumpsuit/color.rsi
+        sprite: Vanilla/Clothing/Uniforms/Jumpsuit/color.rsi # Rayten Resprites
       - state: overlay-inhand-right
 
 - type: entity
@@ -687,9 +687,9 @@
   description: Great for working outdoors.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/overalls.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/overalls.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/overalls.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/overalls.rsi # Rayten Resprites
 
 - type: entity
   parent: ClothingUniformBase
@@ -698,9 +698,9 @@
   description: It's very... sensible. # Corvax-Resprite
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/librarian.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/librarian.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/librarian.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/librarian.rsi # Rayten Resprites
 
 - type: entity
   parent: ClothingUniformBase
@@ -709,9 +709,9 @@
   description: It's sensible. Too sensible...
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/curator.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/curator.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/curator.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/curator.rsi # Rayten Resprites
 
 - type: entity
   parent: ClothingUniformBase
@@ -720,9 +720,9 @@
   description: A flashy red suit worn by lawyers and show-offs.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/lawyerred.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/lawyerred.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/lawyerred.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/lawyerred.rsi # Rayten Resprites
 
 - type: entity
   parent: ClothingUniformBase
@@ -731,9 +731,9 @@
   description: A flashy blue suit worn by lawyers and show-offs.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/lawyerblue.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/lawyerblue.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/lawyerblue.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/lawyerblue.rsi # Rayten Resprites
 
 - type: entity
   parent: ClothingUniformBase
@@ -742,9 +742,9 @@
   description: A subtle black suit worn by lawyers and gangsters.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/lawyerblack.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/lawyerblack.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/lawyerblack.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/lawyerblack.rsi # Rayten Resprites
 
 - type: entity
   parent: ClothingUniformBase
@@ -753,9 +753,9 @@
   description: A stylish purple piece worn by lawyers and show people.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/lawyerpurple.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/lawyerpurple.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/lawyerpurple.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/lawyerpurple.rsi # Rayten Resprites
 
 - type: entity
   parent: ClothingUniformBase
@@ -764,9 +764,9 @@
   description: A tacky suit perfect for a CRIMINAL lawyer!
   components:
     - type: Sprite
-      sprite: Clothing/Uniforms/Jumpsuit/lawyergood.rsi
+      sprite: Vanilla/Clothing/Uniforms/Jumpsuit/lawyergood.rsi # Rayten Resprites
     - type: Clothing
-      sprite: Clothing/Uniforms/Jumpsuit/lawyergood.rsi
+      sprite: Vanilla/Clothing/Uniforms/Jumpsuit/lawyergood.rsi # Rayten Resprites
 
 - type: entity
   parent: [UnsensoredClothingUniformBase, FirstSyndicateContraband]
@@ -775,9 +775,9 @@
   description: For those long nights in perma.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/pyjamasyndicateblack.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/pyjamasyndicateblack.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/pyjamasyndicateblack.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/pyjamasyndicateblack.rsi # Rayten Resprites
 
 - type: entity
   parent: [UnsensoredClothingUniformBase, FirstSyndicateContraband]
@@ -786,9 +786,9 @@
   description: For those long nights in perma.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/pyjamasyndicatepink.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/pyjamasyndicatepink.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/pyjamasyndicatepink.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/pyjamasyndicatepink.rsi # Rayten Resprites
 
 - type: entity
   parent: [UnsensoredClothingUniformBase, FirstSyndicateContraband]
@@ -797,9 +797,9 @@
   description: For those long nights in perma.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/pyjamasyndicatered.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/pyjamasyndicatered.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/pyjamasyndicatered.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/pyjamasyndicatered.rsi # Rayten Resprites
 
 - type: entity
   parent: ClothingUniformBase
@@ -808,9 +808,9 @@
   description: A stately blue jumpsuit to represent NanoTrasen.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/nanotrasen.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/nanotrasen.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/nanotrasen.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/nanotrasen.rsi # Rayten Resprites
 
 - type: entity
   parent: [ClothingUniformBase, FirstCommandContraband]
@@ -819,9 +819,9 @@
   description: A suit for special occasions.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/capformal.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/capformal.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/capformal.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/capformal.rsi # Rayten Resprites
 
 - type: entity
   parent: ClothingUniformBase
@@ -830,9 +830,9 @@
   description: A suit for special occasions.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/centcomformal.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/centcomformal.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/centcomformal.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/centcomformal.rsi # Rayten Resprites
 
 - type: entity
   parent: [ClothingUniformBase, FirstCommandContraband]
@@ -841,9 +841,9 @@
   description: A suit for special occasions.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/hosformal.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/hosformal.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/hosformal.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/hosformal.rsi # Rayten Resprites
 
 - type: entity
   parent: [UnsensoredClothingUniformBase, FirstSyndicateContraband]
@@ -852,9 +852,9 @@
   description: Uniform for elite syndicate operatives performing tactical operations in deep space.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/operative.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/operative.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/operative.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/operative.rsi # Rayten Resprites
   - type: StaticPrice
     price: 500
 
@@ -865,9 +865,9 @@
   description: Uniform for subpar operative LARPers performing tactical insulated glove theft in deep space.
   components:
     - type: Sprite
-      sprite: Clothing/Uniforms/Jumpsuit/tacticool.rsi
+      sprite: Vanilla/Clothing/Uniforms/Jumpsuit/tacticool.rsi # Rayten Resprites
     - type: Clothing
-      sprite: Clothing/Uniforms/Jumpsuit/tacticool.rsi
+      sprite: Vanilla/Clothing/Uniforms/Jumpsuit/tacticool.rsi # Rayten Resprites
     # Too cool for sensors to be on
     - type: SuitSensor
       randomMode: false
@@ -880,9 +880,9 @@
   description: Clothing for real mercenaries who have gone through fire, water and the jungle of planets flooded with dangerous monsters or targets for which a reward has been assigned.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/mercenary.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/mercenary.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/mercenary.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/mercenary.rsi # Rayten Resprites
 
 - type: entity
   parent: UnsensoredClothingUniformBase
@@ -891,9 +891,9 @@
   description: A nano-enhanced jumpsuit designed for maximum comfort and tacticality.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/ninja.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/ninja.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/ninja.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/ninja.rsi # Rayten Resprites
 
 - type: entity
   parent: ClothingUniformBase
@@ -902,9 +902,9 @@
   description: I am at work. I can't leave work. Work is breathing. I am testing air quality.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/atmos.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/atmos.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/atmos.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/atmos.rsi # Rayten Resprites
 
 - type: entity
   parent: ClothingUniformBase
@@ -913,9 +913,9 @@
   description: Might as well relax with a job as easy as yours.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/atmos_casual.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/atmos_casual.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/atmos_casual.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/atmos_casual.rsi # Rayten Resprites
 
 - type: entity
   parent: ClothingUniformBase
@@ -924,9 +924,9 @@
   description: I don't lose things. I place things in locations which later elude me.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/psychologist.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/psychologist.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/psychologist.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/psychologist.rsi # Rayten Resprites
 
 - type: entity
   parent: ClothingUniformBase
@@ -935,31 +935,31 @@
   description: A good reporter remains a skeptic all their life.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/reporter.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/reporter.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/reporter.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/reporter.rsi # Rayten Resprites
 
 - type: entity
   parent: ClothingUniformBase
   id: ClothingUniformJumpsuitSafari
   name: safari suit
-  description: Perfect for a jungle excursion.
+  description: Perfect for a jungle excursi # Rayten Respriteson.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/safari.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/safari.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/safari.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/safari.rsi # Rayten Resprites
 
 - type: entity
   parent: ClothingUniformBase
   id: ClothingUniformJumpsuitJournalist
   name: journalist suit
-  description: If journalism is good, it is controversial, by nature.
+  description: If journalism is good, it is controversi # Rayten Respritesal, by nature.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/journalist.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/journalist.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/journalist.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/journalist.rsi # Rayten Resprites
 
 - type: entity
   parent: ClothingUniformBase
@@ -968,9 +968,9 @@
   description: It's a dark robe, often worn by religious folk.
   components:
     - type: Sprite
-      sprite: Clothing/Uniforms/Jumpsuit/monastic_robe_dark.rsi
+      sprite: Vanilla/Clothing/Uniforms/Jumpsuit/monastic_robe_dark.rsi # Rayten Resprites
     - type: Clothing
-      sprite: Clothing/Uniforms/Jumpsuit/monastic_robe_dark.rsi
+      sprite: Vanilla/Clothing/Uniforms/Jumpsuit/monastic_robe_dark.rsi # Rayten Resprites
 
 - type: entity
   parent: ClothingUniformBase
@@ -979,9 +979,9 @@
   description: It's a light robe, often worn by religious folk.
   components:
     - type: Sprite
-      sprite: Clothing/Uniforms/Jumpsuit/monastic_robe_light.rsi
+      sprite: Vanilla/Clothing/Uniforms/Jumpsuit/monastic_robe_light.rsi # Rayten Resprites
     - type: Clothing
-      sprite: Clothing/Uniforms/Jumpsuit/monastic_robe_light.rsi
+      sprite: Vanilla/Clothing/Uniforms/Jumpsuit/monastic_robe_light.rsi # Rayten Resprites
 
 - type: entity
   parent: ClothingUniformBase
@@ -990,9 +990,9 @@
   description: An luxurious suit made with only the finest scales, perfect for any lounge act! # Corvax-Resprite
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/musician.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/musician.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/musician.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/musician.rsi # Rayten Resprites
 
 - type: entity
   parent: [ CentcommContraband, ClothingUniformBase ]
@@ -1001,9 +1001,9 @@
   description: A special suit made for Central Command's elite chaplain corps.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/ert_chaplain.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/ert_chaplain.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/ert_chaplain.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/ert_chaplain.rsi # Rayten Resprites
 
 - type: entity
   parent: [ CentcommContraband, ClothingUniformBase ]
@@ -1012,9 +1012,9 @@
   description: A special suit made for the elite engineers under CentComm.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/ert_engineer.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/ert_engineer.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/ert_engineer.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/ert_engineer.rsi # Rayten Resprites
 
 - type: entity
   parent: [ CentcommContraband, ClothingUniformBase ]
@@ -1023,9 +1023,9 @@
   description: A special suit made for the elite janitors under CentComm.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/ert_janitor.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/ert_janitor.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/ert_janitor.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/ert_janitor.rsi # Rayten Resprites
 
 - type: entity
   parent: [ CentcommContraband, ClothingUniformBase ]
@@ -1034,9 +1034,9 @@
   description: A special suit made for the best of the elites under CentComm.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/ert_leader.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/ert_leader.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/ert_leader.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/ert_leader.rsi # Rayten Resprites
 
 - type: entity
   parent: [ CentcommContraband, ClothingUniformBase ]
@@ -1045,9 +1045,9 @@
   description: A special suit made for the elite medics under CentComm.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/ert_medic.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/ert_medic.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/ert_medic.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/ert_medic.rsi # Rayten Resprites
 
 - type: entity
   parent: [ CentcommContraband, ClothingUniformBase ]
@@ -1056,9 +1056,9 @@
   description: A special suit made for the elite security under CentComm.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/ert_security.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/ert_security.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/ert_security.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/ert_security.rsi # Rayten Resprites
 
 - type: entity
   parent: ClothingUniformJumpsuitClown
@@ -1068,9 +1068,9 @@
   description: Cursed cluwne suit.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/cluwne.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/cluwne.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/cluwne.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/cluwne.rsi # Rayten Resprites
   - type: Unremoveable
 
 - type: entity
@@ -1080,9 +1080,9 @@
   description: Baka mitai...
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/damedaneoutfit.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/damedaneoutfit.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/damedaneoutfit.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/damedaneoutfit.rsi # Rayten Resprites
 
 - type: entity
   parent: ClothingUniformBase
@@ -1091,9 +1091,9 @@
   description: A pirate variation of a space sailor's jumpsuit.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/pirate.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/pirate.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/pirate.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/pirate.rsi # Rayten Resprites
   - type: AddAccentClothing
     accent: PirateAccent
 
@@ -1104,9 +1104,9 @@
   description: The good old pants and brigantine.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/cossack.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/cossack.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/cossack.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/cossack.rsi # Rayten Resprites
 
 - type: entity
   parent: ClothingUniformBase
@@ -1115,9 +1115,9 @@
   description: Black as a starry night.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/hawaiblack.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/hawaiblack.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/hawaiblack.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/hawaiblack.rsi # Rayten Resprites
 
 - type: entity
   parent: ClothingUniformBase
@@ -1126,9 +1126,9 @@
   description: Blue as a huge ocean.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/hawaiblue.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/hawaiblue.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/hawaiblue.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/hawaiblue.rsi # Rayten Resprites
 
 - type: entity
   parent: ClothingUniformBase
@@ -1137,9 +1137,9 @@
   description: Red as a juicy watermelons.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/hawaired.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/hawaired.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/hawaired.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/hawaired.rsi # Rayten Resprites
 
 - type: entity
   parent: ClothingUniformBase
@@ -1148,9 +1148,9 @@
   description: Yellow as a bright sun.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/hawaiyellow.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/hawaiyellow.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/hawaiyellow.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/hawaiyellow.rsi # Rayten Resprites
 
 - type: entity
   parent: [ClothingUniformBase, FirstSyndicateContraband]
@@ -1159,9 +1159,9 @@
   description: "The syndicate's uniform is made in an elegant style, it's even a pity to do dirty tricks in this."
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/syndieformal.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/syndieformal.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/syndieformal.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/syndieformal.rsi # Rayten Resprites
 
 - type: entity
   parent: ClothingUniformBase
@@ -1170,9 +1170,9 @@
   description: Smells like someones been grillin'.
   components:
     - type: Sprite
-      sprite: Clothing/Uniforms/Jumpsuit/flannel.rsi
+      sprite: Vanilla/Clothing/Uniforms/Jumpsuit/flannel.rsi # Rayten Resprites
     - type: Clothing
-      sprite: Clothing/Uniforms/Jumpsuit/flannel.rsi
+      sprite: Vanilla/Clothing/Uniforms/Jumpsuit/flannel.rsi # Rayten Resprites
 
 - type: entity
   parent: ClothingUniformBase
@@ -1181,9 +1181,9 @@
   description: A sign of skill and prestige within the engineering department.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/senior_engineer.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/senior_engineer.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/senior_engineer.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/senior_engineer.rsi # Rayten Resprites
 
 - type: entity
   parent: ClothingUniformBase
@@ -1192,9 +1192,9 @@
   description: A sign of skill and prestige within the science department.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/senior_researcher.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/senior_researcher.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/senior_researcher.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/senior_researcher.rsi # Rayten Resprites
 
 - type: entity
   parent: ClothingUniformBase
@@ -1203,9 +1203,9 @@
   description: A sign of skill and prestige within the medical department.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/senior_physician.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/senior_physician.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/senior_physician.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/senior_physician.rsi # Rayten Resprites
 
 - type: entity
   parent: [ClothingUniformBase, FirstSecurityContraband]
@@ -1214,9 +1214,9 @@
   description: A sign of skill and prestige within the security department.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/senior_officer.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/senior_officer.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/senior_officer.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/senior_officer.rsi # Rayten Resprites
 
 - type: entity
   parent: ClothingUniformBase
@@ -1225,9 +1225,9 @@
   description: Makes it clear that you are one with the webs.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/web.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/web.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/web.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/web.rsi # Rayten Resprites
   - type: Butcherable
     butcheringType: Knife
     spawned:
@@ -1256,9 +1256,9 @@
   description: A long stretch of fabric that wraps around your body for comfort.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/loungewear.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/loungewear.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/loungewear.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/loungewear.rsi # Rayten Resprites
 
 - type: entity
   parent: ClothingUniformBase
@@ -1267,9 +1267,9 @@
   description: Made for true gladiators (or Ash Walkers).
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/gladiator.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/gladiator.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/gladiator.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/gladiator.rsi # Rayten Resprites
 
 - type: entity
   parent: ClothingUniformBase
@@ -1278,7 +1278,7 @@
   description: A loose worn blue shirt with a grey pants, perfect for someone looking to relax.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/casual.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/casual.rsi # Rayten Resprites
     layers:
     - state: icon-jumpsuit
     - state: icon-shirt
@@ -1294,7 +1294,7 @@
       - state: inhand-right-shirt
         color: "#134fc1"
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/casual.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/casual.rsi # Rayten Resprites
     clothingVisuals:
       jumpsuit:
       - state: equipped-INNERCLOTHING-jumpsuit
@@ -1308,7 +1308,7 @@
   description: A loose worn purple shirt with a grey pants, perfect for someone looking to relax.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/casual.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/casual.rsi # Rayten Resprites
     layers:
     - state: icon-jumpsuit
     - state: icon-shirt
@@ -1324,7 +1324,7 @@
       - state: inhand-right-shirt
         color: "#9c0dff"
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/casual.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/casual.rsi # Rayten Resprites
     clothingVisuals:
       jumpsuit:
       - state: equipped-INNERCLOTHING-jumpsuit
@@ -1338,7 +1338,7 @@
   description: A loose worn red shirt with a grey pants, perfect for someone looking to relax.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/casual.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/casual.rsi # Rayten Resprites
     layers:
     - state: icon-jumpsuit
     - state: icon-shirt
@@ -1354,7 +1354,7 @@
       - state: inhand-right-shirt
         color: "#b30000"
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/casual.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/casual.rsi # Rayten Resprites
     clothingVisuals:
       jumpsuit:
       - state: equipped-INNERCLOTHING-jumpsuit
@@ -1368,7 +1368,7 @@
   description: A loose worn green shirt with a grey pants, perfect for someone looking to relax.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/casual.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/casual.rsi # Rayten Resprites
     layers:
     - state: icon-jumpsuit
     - state: icon-shirt
@@ -1384,7 +1384,7 @@
       - state: inhand-right-shirt
         color: "#00661D"
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/casual.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/casual.rsi # Rayten Resprites
     clothingVisuals:
       jumpsuit:
       - state: equipped-INNERCLOTHING-jumpsuit
@@ -1398,6 +1398,6 @@
   description: Makes you remember the time you did something funny.
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/familiar_garbs.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/familiar_garbs.rsi # Rayten Resprites
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/familiar_garbs.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/familiar_garbs.rsi # Rayten Resprites
