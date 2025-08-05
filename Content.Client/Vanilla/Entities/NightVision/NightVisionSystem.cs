@@ -27,26 +27,29 @@ public sealed class NightVisionSystem : EquipmentHudSystem<NightVisionOverlayCom
         base.Initialize();
         SubscribeLocalEvent<NightVisionComponent, LocalPlayerAttachedEvent>(OnAttached);
         SubscribeLocalEvent<NightVisionComponent, LocalPlayerDetachedEvent>(OnDetached);
-
-        SubscribeLocalEvent<NightVisionOverlayComponent, ComponentInit>(OnNightVisionInit);
-        SubscribeLocalEvent<NightVisionOverlayComponent, ComponentShutdown>(OnNightVisionShutdown);
-
-        // SubscribeLocalEvent<NightVisionOverlayComponent, InventoryRelayedEvent<ComponentInit>>(
-        //     (e, c, ev) => OnNightVisionInit(e, c, ev.Args));
-        // SubscribeLocalEvent<NightVisionOverlayComponent, InventoryRelayedEvent<ComponentShutdown>>(
-        //     (e, c, ev) => OnNightVisionShutdown(e, c, ev.Args));
         _overlay = new();
     }
+    
     protected override void UpdateInternal(RefreshEquipmentHudEvent<NightVisionOverlayComponent> component)
     {
         base.UpdateInternal(component);
         _overlayMan.AddOverlay(_overlay);
+
+        var playerEntity = _player.LocalSession?.AttachedEntity;
+        if (playerEntity == null)
+            return;
+
+        switchlight(playerEntity.Value, true);
     }
 
     protected override void DeactivateInternal()
     {
         base.DeactivateInternal();
         _overlayMan.RemoveOverlay(_overlay);
+        var playerEntity = _player.LocalSession?.AttachedEntity;
+        if (playerEntity == null)
+            return;
+        switchlight(playerEntity.Value, false);
     }
 
     private void OnAttached(EntityUid uid, NightVisionComponent component, LocalPlayerAttachedEvent args)
@@ -55,15 +58,6 @@ public sealed class NightVisionSystem : EquipmentHudSystem<NightVisionOverlayCom
     }
 
     private void OnDetached(EntityUid uid, NightVisionComponent component, LocalPlayerDetachedEvent args)
-    {
-        switchlight(uid, false);
-    }
-
-    private void OnNightVisionInit(EntityUid uid, NightVisionOverlayComponent component, ComponentInit args)
-    {
-        switchlight(uid, true);
-    }
-    private void OnNightVisionShutdown(EntityUid uid, NightVisionOverlayComponent component, ComponentShutdown args)
     {
         switchlight(uid, false);
     }
