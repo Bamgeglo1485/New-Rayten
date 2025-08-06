@@ -2,17 +2,14 @@ using Content.Shared.Vanilla.Entities.NightVision;
 using Content.Shared.Inventory;
 using Content.Shared.Inventory.Events;
 using Content.Client.Vanilla.NightVision;
-using Content.Client.Audio;
 using Content.Client.Overlays;
 
 using Robust.Shared.Player;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Client.Player;
-using Robust.Shared.Audio.Systems;
-using Robust.Shared.Audio;
 
-namespace Content.Shared.Vanilla.Entities.NightVision;
+namespace Content.Client.Vanilla.Entities.NightVision;
 
 public sealed class NightVisionSystem : EquipmentHudSystem<NightVisionOverlayComponent>
 {
