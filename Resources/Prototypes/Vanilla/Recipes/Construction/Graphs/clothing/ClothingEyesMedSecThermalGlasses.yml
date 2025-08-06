@@ -1,0 +1,40 @@
+- type: constructionGraph
+  id: MedSecThermalGlasses
+  start: start
+  graph:
+    - node: start
+      edges:
+        - to: medsecthermalglasses
+          steps:
+            - tag: ThermalGlasses
+              name: construction-graph-tag-thermal-glasses
+              icon:
+                sprite: Vanilla/Clothing/Eyes/Hud/med_sec_thermal_glasses.rsi
+                state: icon
+              doAfter: 5
+            - tag: HudMedical
+              name: construction-graph-tag-medical-hud
+              icon:
+                sprite: Clothing/Eyes/Hud/med.rsi
+                state: icon
+              doAfter: 5
+            - tag: HudSecurity
+              name: construction-graph-tag-security-hud
+              icon:
+                sprite: Clothing/Eyes/Hud/sec.rsi
+                state: icon
+              doAfter: 5
+            - material: Cable
+              amount: 5
+              doAfter: 5
+            - tag: Radio
+              name: construction-graph-tag-radio
+              icon:
+                sprite: Objects/Devices/communication.rsi
+                state: walkietalkie
+              doAfter: 5
+            - material: Manipulator
+              amount: 2
+              doAfter: 5
+    - node: medsecthermalglasses
+      entity: ClothingEyesMedSecThermalGlasses

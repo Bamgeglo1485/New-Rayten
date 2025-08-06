@@ -185017,7 +185017,7 @@ entities:
     missingComponents:
     - ExplodeOnTrigger
     - Explosive
-    - OnUseTimerTrigger
+    - TimerTrigger
     - PointLight
     - HiddenDescription
     - Contraband

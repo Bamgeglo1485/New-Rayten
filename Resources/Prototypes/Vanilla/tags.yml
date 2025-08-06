@@ -22,3 +22,5 @@
   id: EphedronexPiece
 - type: Tag
   id: HardsuitHelmet
+- type: Tag
+  id: ThermalGlasses

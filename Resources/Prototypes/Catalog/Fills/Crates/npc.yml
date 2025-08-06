@@ -181,7 +181,7 @@
   components:
   - type: StorageFill
     contents:
-      - id: MobParrotSmart # Corvax-Next-Parrot: replaced MobParrot
+      - id: MobParrot
         amount: 3
 
 - type: entity

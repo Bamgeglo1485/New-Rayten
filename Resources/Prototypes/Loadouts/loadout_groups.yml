@@ -37,17 +37,12 @@
   - ClothingNeckTransPin
   - ClothingNeckAutismPin
   - ClothingNeckGoldAutismPin
-  #  # Corvax-Loadouts-Start
-  # - ClothingNeckAtharaPin
-  # - ClothingNeckCorvaxPin
-  # - ClothingNeckEchoPin
-  # - ClothingNeckElysiumPin
-  # - ClothingNeckMainPin
-  # - ClothingNeckNebulaPin
-  # - ClothingNeckNovaPin
-  # - ClothingNeckSolarisPin
-  # - ClothingNeckWhiteListPin
-  # # Corvax-Loadouts-End
+  - OffsetCane
+  - OffsetCaneWood
+  - OffsetCaneClown
+  - OffsetCaneMime
+  - OffsetCaneNT
+  - Cane
   - TowelColorBlack
   - TowelColorDarkBlue
   - TowelColorDarkGreen

@@ -80,6 +80,8 @@ ent-BorgModuleHarvesting = урожайный модуль киборга
     .desc = { ent-BaseBorgModule.desc }
 ent-BorgModuleClowning = клоунский модуль киборга
     .desc = { ent-BaseBorgModule.desc }
+ent-BorgModuleAdvancedClowning = усовершенствованный модуль клоунады для киборга
+    .desc = Продвинутый сервисный модуль для самых смешных киборгов! В комплекте встроенная печь, которая со временем автоматически печёт пироги, голокожурковый проектор и клаксон.
 # Corvax-HiddenDesc-Start
 ent-BorgModuleSyndicateWeapon = кроваво-красный модуль киборга
     .desc = { ent-BaseBorgModule.desc }
@@ -122,6 +124,8 @@ ent-XenoborgModuleChameleonProjector = модуль хамелеона
     .desc = Модуль с проектором оптического камуфляжа.
 ent-XenoborgModuleCloakDevice = модуль невидимости
     .desc = Система временной маскировки для ксеноборгов.
+ent-XenoborgModuleSuperCloakDevice = модуль маскировки ксеноборга
+    .desc = Модуль с устройством, позволяющим ксеноборгам становиться по-настоящему невидимыми, но на короткое время.
 
 # Corvax-HiddenDesc-End
 

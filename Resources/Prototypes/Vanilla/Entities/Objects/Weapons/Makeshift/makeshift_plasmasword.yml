@@ -184,7 +184,7 @@
       - !type:DoActsBehavior
         acts: ["Destruction"]
       - !type:ExplodeBehavior
-  - type: OnUseTimerTrigger
+  - type: TimerTrigger
     delay: 0.1
     examinable: false
     initialBeepDelay: 0

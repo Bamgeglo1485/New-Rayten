@@ -15,11 +15,13 @@
     intensitySlope: 15
     maxIntensity: 12
     canCreateVacuum: false
-  - type: OnUseTimerTrigger
+  - type: TimerTrigger
     delay: 5
+    keysIn:
+    - startTimer
+    keyOut: trigger
     examinable: false
     initialBeepDelay: 0
-    startOnStick: true
     beepSound:
       path: /Audio/Weapons/Guns/MagOut/pistol_magout.ogg
       params:
@@ -28,7 +30,8 @@
     min: 0
     max: 25
   - type: ExplodeOnTrigger
-  - type: TimerStartOnSignal
+  - type: TriggerOnUse
+    keyOut: startTimer
   - type: GenericVisualizer
     visuals:
       enum.Trigger.TriggerVisuals.VisualState:

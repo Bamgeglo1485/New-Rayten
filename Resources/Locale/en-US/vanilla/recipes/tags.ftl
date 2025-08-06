@@ -6,3 +6,4 @@ construction-graph-tag-emittercircuitboard = эмиттер (машинная п
 construction-graph-tag-plasma-baloon = баллон плазмы
 construction-graph-tag-bag = пакетик
 construction-graph-tag-bluesky = кусок голубого неба
+construction-graph-tag-thermal-glasses = термальные очки

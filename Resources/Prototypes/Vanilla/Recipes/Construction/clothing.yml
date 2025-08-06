@@ -1,0 +1,8 @@
+- type: construction
+  id: ClothingEyesMedSecThermalGlasses
+  graph: MedSecThermalGlasses
+  RequiresEngineeringLevel: 3
+  startNode: start
+  targetNode: medsecthermalglasses
+  category: construction-category-clothing
+  objectType: Item
