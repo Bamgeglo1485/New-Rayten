@@ -5,30 +5,6 @@
   name: термальные очки
   description: Пара сложных очков с наложенной матрицей сенсоров, способной регистрировать тепловое излучение в пределах видимого спектра. Линзы мерцают слабым красноватым свечением.
   components:
-  - type: Sprite
-    sprite: Vanilla/Clothing/Eyes/Hud/thermal_glasses.rsi
-    layers:
-      - state: icon
-      - state: icon-on
-        visible: true
-        shader: unshaded
-        map: [ "enum.ToggleableVisuals.Layer" ]
-  - type: Appearance
-  - type: Clothing
-    sprite: Vanilla/Clothing/Eyes/Hud/thermal_glasses.rsi
-    equippedPrefix: off
-  - type: ToggleableVisuals
-    spriteLayer: enum.ToggleableVisuals.Layer
-    clothingVisuals:
-      eyes:
-      - state: on-equipped-EYES
-        shader: unshaded
-  - type: GenericVisualizer
-    visuals:
-      enum.ToggleableVisuals.Enabled:
-        enum.ToggleableVisuals.Layer:
-          True: {visible: true}
-          False: {visible: false}
   - type: ToggleClothing
     action: ActionToggleThermalVision
     mustEquip: true
@@ -42,7 +18,7 @@
     soundDeactivate:
       path: /Audio/Vanilla/Effects/Actions/nightvisionoff.ogg
       params:
-        volume: -4
+        volume: -5
         maxDistance: 5
     soundFailToActivate: 
       path: /Audio/Machines/button.ogg
