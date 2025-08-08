@@ -241,7 +241,7 @@ public sealed class TTTSystem : EntitySystem
                     );
                 }
 
-                SpawnGuns(uid, _random.Next(rule.Playercount, rule.Playercount * 3));
+                SpawnGuns(uid, _random.Next(rule.Playercount * 2, rule.Playercount * 5));
 
                 rule.CurrentStatus = TTTStatus.AwaitRolesToAdd; //Вот теперь матч реально начался
             }
@@ -259,7 +259,9 @@ public sealed class TTTSystem : EntitySystem
                 {
                     int traitorsCount = GetTraitorCount(rule.Playercount);
                     int deccount = 0;
-                    foreach (var player in rule.Players)
+                    var shuffledPlayers = rule.Players.ToList();
+                    _random.Shuffle(shuffledPlayers); // теперь перемешаем список
+                    foreach (var player in shuffledPlayers)
                     {
                         var filter = Filter.Empty().AddPlayer(player);
                         var message = Loc.GetString("ttt-traitor-brief", ("color", Color.Red));
@@ -274,6 +276,8 @@ public sealed class TTTSystem : EntitySystem
                         if (traitorsCount>0)
                         {
                             marker.Role = TTTRole.traitor;
+                            AddComp<ShowTTTTraitorsIconsComponent>(player.AttachedEntity.Value);
+                            AddComp<TTTTRAITORComponent>(player.AttachedEntity.Value);
                             rule.PlayerCharacters[player.AttachedEntity.Value] = marker.Role; 
                             traitorsCount--;
                             _audio.PlayGlobal("/Audio/Ambience/Antag/traitor_start.ogg", filter, true);
