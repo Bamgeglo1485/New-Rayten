@@ -46,13 +46,14 @@ public sealed class TTTSystem : EntitySystem
 {
     private static readonly string[] GUNS = new[] 
     { 
-        "Musket", "WeaponPistolFlintlock", "WeaponLaserSvalinn", 
+        "Musket", "WeaponPistolFlintlock", "WeaponLaserSvalinn", "WeaponDominator", "WeaponEnergyShotgun", "WeaponAssaultDominator", "MakeshiftShield",
         "WeaponMakeshiftLaser", "WeaponLaserCarbinePractice", "WeaponLaserCarbine", 
         "WeaponLaserCannon", "WeaponPistolViper", "WeaponPistolCobra", "WeaponPistolMk58", "WeaponPistolN1984",
         "WeaponRevolverDeckard","WeaponRevolverInspector","WeaponRevolverMateba","WeaponRevolverPython","WeaponRevolverPirate","WeaponRifleLecter","WeaponRifleEstoc","WeaponRifleFoam","WeaponShotgunDoubleBarreled",
         "WeaponShotgunKammerer","WeaponShotgunSawn","WeaponShotgunHandmade","WeaponShotgunBlunderbuss","WeaponShotgunImprovised","WeaponSubMachineGunC20r","WeaponSubMachineGunDrozd","WeaponSubMachineGunWt550","WeaponImprovisedPneumaticCannon"
     };        
-
+    private Dictionary<ICommonSession, int> KARMA = new();
+    
     private sealed class PlayerStats
     {
         public string Name { get; set; }
@@ -92,7 +93,7 @@ public sealed class TTTSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
-        //SubscribeLocalEvent<TTTMarkerComponent, DamageModifyEvent>(OnDamageModify);    //Туду урон в зависимости от крамы
+        SubscribeLocalEvent<TTTMarkerComponent, DamageModifyEvent>(OnDamageModify);    //Туду урон в зависимости от крамы
         SubscribeLocalEvent<TTTMarkerComponent, MobStateChangedEvent>(OnMobStateChanged); //Вычёркиваем
         SubscribeLocalEvent<TTTMarkerComponent, MapInitEvent>(OnMarkerInit);
 
@@ -123,12 +124,22 @@ public sealed class TTTSystem : EntitySystem
         if (rule.CurrentStatus != TTTStatus.awaitstart)
             return;
 
+        if (!KARMA.ContainsKey(session))
+        {
+            KARMA[session] = 1000;
+        }
+        else if (KARMA[session]<=0)
+        {
+            return;
+        }
+
+
         if (rule.Players.Contains(session))
             return;
 
         rule.Playercount++;
         rule.Players.Add(session);
-        //Сообщаем о том что добавился новый игрок ТУДУ
+        //Сообщаем о том что добавился новый игрок
         var info = new TTTInformation(rule.Playercount, rule.TimeForPlayersJoin, rule.CurrentStatus == TTTStatus.awaitstart);
         RaiseNetworkEvent(info, Filter.Broadcast());
         if (session.AttachedEntity != null)
@@ -241,7 +252,7 @@ public sealed class TTTSystem : EntitySystem
                     );
                 }
 
-                SpawnGuns(uid, _random.Next(rule.Playercount * 2, rule.Playercount * 5));
+                SpawnGuns(uid, _random.Next(rule.Playercount * 2, rule.Playercount * 4));
 
                 rule.CurrentStatus = TTTStatus.AwaitRolesToAdd; //Вот теперь матч реально начался
             }
@@ -258,9 +269,9 @@ public sealed class TTTSystem : EntitySystem
                 else
                 {
                     int traitorsCount = GetTraitorCount(rule.Playercount);
-                    int deccount = 0;
+                    int deccount = GetDecCount(rule.Playercount);
                     var shuffledPlayers = rule.Players.ToList();
-                    _random.Shuffle(shuffledPlayers); // теперь перемешаем список
+                    _random.Shuffle(shuffledPlayers); 
                     foreach (var player in shuffledPlayers)
                     {
                         var filter = Filter.Empty().AddPlayer(player);
@@ -292,9 +303,10 @@ public sealed class TTTSystem : EntitySystem
                             continue;
                         }
 
-                        if (deccount>0)
+                        if ( deccount > 0 && KARMA.TryGetValue(player, out var karma) && karma > 700)
                         {
                             marker.Role = TTTRole.detective;
+                            AddComp<TTTDetectiveComponent>(player.AttachedEntity.Value);
                             rule.PlayerCharacters[player.AttachedEntity.Value] = marker.Role; 
                             deccount--;
                             _audio.PlayGlobal("/Audio/Vanilla/Effects/TTT/decbrief.ogg", filter, true);
@@ -398,7 +410,7 @@ public sealed class TTTSystem : EntitySystem
 
         var query = EntityQueryEnumerator<TTTMarkerComponent>();
 
-        while (query.MoveNext(out var player, out var marker))
+        while (query.MoveNext(out var unit, out var marker))
         {
             if (!TryComp<TTTRuleComponent>(marker.RuleLink, out var rulelink))
                 continue;
@@ -406,9 +418,14 @@ public sealed class TTTSystem : EntitySystem
             if (rulelink != rule)
                 continue;
 
-            var name = MetaData(player).EntityName; //туду сикей
+            if (!TryComp<ActorComponent>(unit, out var actor))
+                return;
 
-            statsList.Add(new PlayerStats(name, marker.TotalKills, 1000, marker.Role));
+            KARMA[actor.PlayerSession] += 50;
+                
+            var name = actor.PlayerSession.Name;
+
+            statsList.Add(new PlayerStats(name, marker.TotalKills, KARMA[actor.PlayerSession], marker.Role));
         }
 
         var sorted = statsList
@@ -467,6 +484,65 @@ public sealed class TTTSystem : EntitySystem
         NewCycle(uid, rule);
     }
 
+    private void OnDamageModify(EntityUid uid, TTTMarkerComponent component, DamageModifyEvent args)
+    {
+        if (!TryComp<TTTMarkerComponent>(args.Origin, out var sourcecomp) 
+            || !TryComp<ActorComponent>(args.Origin, out var actor) 
+            || args.Origin == uid
+            || !KARMA.TryGetValue(actor.PlayerSession, out var attackerKarma))
+        {
+            return;
+        }
+        if (sourcecomp.Role == TTTRole.await)
+        {
+            args.Damage = new DamageSpecifier();
+            return;
+        }
+        // 1. Сначала вычисляем изменение кармы
+        int damage = (int)args.Damage.GetTotal();
+        int karmaChange = 0;
+
+        if (sourcecomp.Role == TTTRole.traitor && component.Role == TTTRole.traitor)
+        {
+            karmaChange = -2 * damage;
+        }
+        else if ((sourcecomp.Role == TTTRole.inocent || sourcecomp.Role == TTTRole.detective) 
+                && component.Role == TTTRole.inocent)
+        {
+            karmaChange = -2 * damage;
+        }
+        else if ((sourcecomp.Role == TTTRole.inocent || sourcecomp.Role == TTTRole.detective) 
+                && component.Role == TTTRole.detective)
+        {
+            karmaChange = -3 * damage;
+        }
+
+        var newKarma = attackerKarma + karmaChange;
+
+        KARMA[actor.PlayerSession] = Math.Clamp(newKarma, 0, 1000);
+
+        // 2. Затем применяем модификатор урона на основе новой кармы
+        var karmaFraction = Math.Clamp(newKarma / 1000f, 0f, 1f);
+
+        var modify = new DamageModifierSet
+        {
+            Coefficients = new Dictionary<string, float>
+            {
+                ["Slash"] = karmaFraction,
+                ["Piercing"] = karmaFraction,
+                ["Blunt"] = karmaFraction,
+                ["Heat"] = karmaFraction,
+                ["Shock"] = karmaFraction,
+                ["Cold"] = karmaFraction,
+                ["Poison"] = karmaFraction,
+                ["Radiation"] = karmaFraction,
+                ["Asphyxiation"] = karmaFraction,
+                ["Bloodloss"] = karmaFraction
+            }
+        };
+
+        args.Damage = DamageSpecifier.ApplyModifierSet(args.Damage, modify);
+    }
     //Метод добавляет игрока на арену
     public void AddPlayerToArena(ICommonSession session, EntityUid ruleEnt)
     {
@@ -487,6 +563,8 @@ public sealed class TTTSystem : EntitySystem
         //Добавляем метку
         var marker = EnsureComp<TTTMarkerComponent>(mobUid);
         marker.RuleLink = ruleEnt;
+        //Все видят детектива
+        AddComp<ShowTTTDetectiveIconsComponent>(mobUid);
         //Добавляем навыки
         var skill = EnsureComp<SkillComponent>(mobUid);
         skill.FuckSkills(false);
@@ -525,8 +603,21 @@ public sealed class TTTSystem : EntitySystem
 
         if (args.Origin != null && TryComp<TTTMarkerComponent>(args.Origin, out var sourcecomp))
         {
-            if (args.Origin.Value != uid)
-                sourcecomp.TotalKills++;
+            // пред убил преда
+            if (sourcecomp.Role == TTTRole.traitor && component.Role == TTTRole.traitor)
+            {
+                sourcecomp.TotalKills--;
+            }
+            // Мирный или детектив убил мирного или детектива
+            else if ((sourcecomp.Role == TTTRole.inocent || sourcecomp.Role == TTTRole.detective) 
+                    && (component.Role == TTTRole.inocent || component.Role == TTTRole.detective))
+            {
+                sourcecomp.TotalKills--; 
+            }
+            else if (args.Origin.Value != uid)
+            {
+                sourcecomp.TotalKills++;  // Награда за убийство врага
+            }
         }
 
         var traitors = rulecomp.PlayerCharacters.Count(p => p.Value == TTTRole.traitor);
@@ -627,12 +718,20 @@ public sealed class TTTSystem : EntitySystem
     }
     int GetTraitorCount(int playerCount)
     {
-        if (playerCount < 6)
-            return 1;
         if (playerCount < 8)
-            return 2;
+            return 1;
         if (playerCount < 12)
+            return 2;
+        if (playerCount < 16)
             return 3;
         return playerCount / 4;
+    }
+    int GetDecCount(int playerCount)
+    {
+        if (playerCount < 6)
+            return 0;
+        if (playerCount < 12)
+            return 1;
+        return 2;
     }
 }

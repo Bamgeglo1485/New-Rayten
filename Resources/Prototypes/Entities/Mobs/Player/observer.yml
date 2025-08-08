@@ -40,6 +40,7 @@
   description: Boo!
   categories: [ HideSpawnMenu ]
   components:
+  - type: ShowTTTTraitorsIcons # Rayten
   - type: Sprite
     sprite: Mobs/Ghosts/ghost_human.rsi
     color: "#fff8"

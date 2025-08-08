@@ -18,3 +18,12 @@ public sealed partial class TTTTRAITORComponent : Component
 }
 [RegisterComponent, NetworkedComponent]
 public sealed partial class ShowTTTTraitorsIconsComponent : Component {}
+
+[RegisterComponent, NetworkedComponent]
+public sealed partial class TTTDetectiveComponent : Component
+{
+    [DataField("DecStatusIcon", customTypeSerializer: typeof(PrototypeIdSerializer<FactionIconPrototype>))]
+    public string DecStatusIcon = "TTTDetectiveFaction";
+}
+[RegisterComponent, NetworkedComponent]
+public sealed partial class ShowTTTDetectiveIconsComponent : Component {}
