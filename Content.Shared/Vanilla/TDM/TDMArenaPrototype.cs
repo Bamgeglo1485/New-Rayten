@@ -23,14 +23,4 @@ public sealed partial class TDMMapPrototype : IPrototype
     /// </summary>
     [DataField("arenaparty")]
     public int ArenaParty = 20;
-    /// <summary>
-    /// Экипировка синей команды
-    /// </summary>
-    [DataField("blueteamgear")]
-    public List<ProtoId<StartingGearPrototype>> BlueTeamGear = new();
-    /// <summary>
-    /// Экипировка красной команды
-    /// </summary>
-    [DataField("redteamgear")]
-    public List<ProtoId<StartingGearPrototype>> RedTeamGear = new();
 }

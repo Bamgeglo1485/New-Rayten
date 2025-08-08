@@ -11,17 +11,24 @@ public sealed class TDMSystem : EntitySystem
 
     [Dependency] private readonly IGameTiming _gameTiming = default!;
     public event Action<TimeSpan, int>? TDMInfoUpdated;
+    public event Action<TimeSpan, int>? TTTInfoUpdated;
 
-    private int Playercount = 0;
+    private int PlayercountTDM = 0;
+    private int PlayercountTTT = 0;
+
     private TimeSpan TimeToStartTDM = TimeSpan.FromSeconds(-1);
-    private bool CanJoin = false;
+    private TimeSpan TimeToStartTTT = TimeSpan.FromSeconds(-1);
+
+    private bool CanJoinTDM = false;
+    private bool CanJoinTTT = false;
 
     public TimeSpan NextUpdate;
 
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeNetworkEvent<TDMInformation>(RefreshInformation);
+        SubscribeNetworkEvent<TDMInformation>(RefreshTDMInformation);
+        SubscribeNetworkEvent<TTTInformation>(RefreshTTTInformation);
         SubscribeNetworkEvent<RoundEndMessageEvent>(OnRoundEndMessage);
     }
 
@@ -36,7 +43,7 @@ public sealed class TDMSystem : EntitySystem
         {
             _tdmWindow.Dispose();
             _tdmWindow = null;
-            TPMeToArena();
+            TPMeToTDM();
         };
 
         _tdmWindow.DenyButton.OnPressed += _ =>
@@ -48,11 +55,17 @@ public sealed class TDMSystem : EntitySystem
         _tdmWindow.OpenCentered();
     }
 
-    private void RefreshInformation(TDMInformation msg, EntitySessionEventArgs args)
+    private void RefreshTDMInformation(TDMInformation msg, EntitySessionEventArgs args)
     {
-        Playercount = msg.PlayerCount;
+        PlayercountTDM = msg.PlayerCount;
         TimeToStartTDM = msg.TimeToStart;
-        CanJoin = msg.CanJoin;
+        CanJoinTDM = msg.CanJoin;
+    }
+    private void RefreshTTTInformation(TTTInformation msg, EntitySessionEventArgs args)
+    {
+        PlayercountTTT = msg.PlayerCount;
+        TimeToStartTTT = msg.TimeToStart;
+        CanJoinTTT = msg.CanJoin;
     }
 
     public override void Update(float frameTime)
@@ -62,30 +75,54 @@ public sealed class TDMSystem : EntitySystem
 
         if (currentTime < NextUpdate)
             return;
-
+        TDMCHECK();
+        TTTCHECK();
         NextUpdate = currentTime + TimeSpan.FromSeconds(1);
+    }
 
-        if (!CanJoin)
+    private void TDMCHECK()
+    {
+        if (!CanJoinTDM)
         {
-            TDMInfoUpdated?.Invoke(TimeSpan.FromSeconds(-1), Playercount);
+            TDMInfoUpdated?.Invoke(TimeSpan.FromSeconds(-1), PlayercountTDM);
             return;
         }
+        TDMInfoUpdated?.Invoke(TimeToStartTDM, PlayercountTDM);
 
-        TDMInfoUpdated?.Invoke(TimeToStartTDM, Playercount);
+        if (PlayercountTDM < 2)
+            return;
+        TimeToStartTDM -= TimeSpan.FromSeconds(1);
+    }
+    
+    private void TTTCHECK()
+    {
+        if (!CanJoinTTT)
+        {
+            TTTInfoUpdated?.Invoke(TimeSpan.FromSeconds(-1), PlayercountTTT);
+            return;
+        }
+        TTTInfoUpdated?.Invoke(TimeToStartTTT, PlayercountTTT);
 
-        if (Playercount < 2)
+        if (PlayercountTTT < 4)
             return;
 
-
-        TimeToStartTDM -= TimeSpan.FromSeconds(1);
+        TimeToStartTTT -= TimeSpan.FromSeconds(1);
     }
 
     /// <summary>
     /// Отправляем запрос на участие в тдме
     /// </summary>
-    public void TPMeToArena()
+    public void TPMeToTDM()
     {
         var msg = new TPMeToTDMEvent();
+        RaiseNetworkEvent(msg);
+    }
+    /// <summary>
+    /// Отправляем запрос на участие в TTT
+    /// </summary>
+    public void TPMeToTTT()
+    {
+        var msg = new TPMeToTTTEvent();
         RaiseNetworkEvent(msg);
     }
 }

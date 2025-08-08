@@ -15,6 +15,7 @@ public sealed partial class GhostGui : UIWidget
     public event Action? ReturnToBodyPressed;
     public event Action? GhostRolesPressed;
     public event Action? TDMArenaButtonPressed;
+    public event Action? TTTArenaButtonPressed;
     private int _prevNumberRoles;
 
     public GhostGui()
@@ -26,6 +27,7 @@ public sealed partial class GhostGui : UIWidget
         MouseFilter = MouseFilterMode.Ignore;
 
         TDMArenaButton.OnPressed += _ => TDMArenaButtonPressed?.Invoke();//RAYTEN
+        TTTArenaButton.OnPressed += _ => TTTArenaButtonPressed?.Invoke();//RAYTEN
 
         GhostWarpButton.OnPressed += _ => RequestWarpsPressed?.Invoke();
         ReturnToBodyButton.OnPressed += _ => ReturnToBodyPressed?.Invoke();
@@ -59,7 +61,6 @@ public sealed partial class GhostGui : UIWidget
     }
     public void TDMUpdate(TimeSpan TimeToNewCycle, int tdmwannajoin)
     {
-        //Rayten-start
         if (TimeToNewCycle <= TimeSpan.FromSeconds(-1))
         {
             TDMArenaButton.Text = Loc.GetString("TDM-NotAvailable");
@@ -72,8 +73,21 @@ public sealed partial class GhostGui : UIWidget
             TDMArenaButton.Text = Loc.GetString("TDM-Available", ("blueguys", blueguys), ("redguys", redguys), ("timer", TimeToNewCycle));
             TDMArenaButton.Disabled = false;
         }
-        //Rayten-end
     }
+    public void TTTUpdate(TimeSpan TimeToNewCycle, int TTTwannajoin)
+    {
+        if (TimeToNewCycle <= TimeSpan.FromSeconds(-1))
+        {
+            TTTArenaButton.Text = Loc.GetString("TTT-NotAvailable");
+            TTTArenaButton.Disabled = true;
+        }
+        else
+        {
+            TTTArenaButton.Text = Loc.GetString("TTT-Available", ("players", TTTwannajoin), ("timer", TimeToNewCycle));
+            TTTArenaButton.Disabled = false;
+        }
+    }
+
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);

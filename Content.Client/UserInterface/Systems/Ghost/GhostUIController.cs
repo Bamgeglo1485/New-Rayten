@@ -56,24 +56,34 @@ public sealed class GhostUIController : UIController, IOnSystemChanged<GhostSyst
         system.GhostWarpsResponse -= OnWarpsResponse;
         system.GhostRoleCountUpdated -= OnRoleCountUpdated;
     }
+    //RAYTEN-START
     public void OnSystemLoaded(TDMSystem system)
     {
-        system.TDMInfoUpdated += OnTdmInfoUpdated;
+        system.TDMInfoUpdated += OnTDMInfoUpdated;
+        system.TTTInfoUpdated += OnTTTInfoUpdated;
     }
 
     public void OnSystemUnloaded(TDMSystem system)
     {
-        system.TDMInfoUpdated -= OnTdmInfoUpdated;
+        system.TDMInfoUpdated -= OnTDMInfoUpdated;
+        system.TTTInfoUpdated -= OnTTTInfoUpdated;
     }
 
-    private void OnTdmInfoUpdated(TimeSpan TimeForPlayersJoin, int Playercount)
+    private void OnTDMInfoUpdated(TimeSpan TimeForPlayersJoin, int Playercount)
     {
         if (Gui == null)
-        {
             return;
-        }
+
         Gui.TDMUpdate(TimeForPlayersJoin, Playercount);
     }
+    private void OnTTTInfoUpdated(TimeSpan TimeForPlayersJoin, int Playercount)
+    {
+        if (Gui == null)
+            return;
+
+        Gui.TTTUpdate(TimeForPlayersJoin, Playercount);
+    }
+    //RAYTEN-END
     public void UpdateGui()
     {
         if (Gui == null)
@@ -139,9 +149,10 @@ public sealed class GhostUIController : UIController, IOnSystemChanged<GhostSyst
     {
         if (Gui == null)
             return;
-
-        Gui.TDMArenaButtonPressed += TDMArena;
-
+        //Rayten-start
+        Gui.TDMArenaButtonPressed += TPMeToTDM;
+        Gui.TTTArenaButtonPressed += TPMeToTTT;
+        //Rayten-end
         Gui.RequestWarpsPressed += RequestWarps;
         Gui.ReturnToBodyPressed += ReturnToBody;
         Gui.GhostRolesPressed += GhostRolesPressed;
@@ -155,8 +166,10 @@ public sealed class GhostUIController : UIController, IOnSystemChanged<GhostSyst
     {
         if (Gui == null)
             return;
-        Gui.TDMArenaButtonPressed -= TDMArena;
-
+        //Rayten-start
+        Gui.TDMArenaButtonPressed -= TPMeToTDM;
+        Gui.TTTArenaButtonPressed -= TPMeToTTT;
+        //Rayten-end
         Gui.RequestWarpsPressed -= RequestWarps;
         Gui.ReturnToBodyPressed -= ReturnToBody;
         Gui.GhostRolesPressed -= GhostRolesPressed;
@@ -165,9 +178,13 @@ public sealed class GhostUIController : UIController, IOnSystemChanged<GhostSyst
         Gui.Hide();
     }
 
-    private void TDMArena()
+    private void TPMeToTDM()
     {
-        _TDM?.TPMeToArena();
+        _TDM?.TPMeToTDM();
+    }
+    private void TPMeToTTT()
+    {
+        _TDM?.TPMeToTTT();
     }
 
     private void ReturnToBody()

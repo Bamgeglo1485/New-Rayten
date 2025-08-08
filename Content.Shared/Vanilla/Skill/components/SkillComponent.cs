@@ -354,6 +354,23 @@ public sealed partial class SkillComponent : Component
             _ => -1
         };
     }
+    // Перегрузка для основных навыков
+    public void FuckSkills(bool withCrime)
+    {
+        Piloting = true;
+        MusInstruments = true;
+        Botany = true;
+        Bureaucracy = true;
+        Atmosphere = true;
+        RangeWeaponLevel = SkillLevel.Expert;
+        MeleeWeaponLevel = SkillLevel.Expert;
+        MedicineLevel = SkillLevel.Expert;
+        ChemistryLevel = SkillLevel.Expert;
+        EngineeringLevel = SkillLevel.Expert;
+        BuildingLevel = SkillLevel.Expert;
+        ResearchLevel = SkillLevel.Expert;
+        CrimeLevel = withCrime ? SkillLevel.Expert : CrimeLevel;
+    }
 #endregion
 }
 

@@ -1,0 +1,13 @@
+
+- type: startingGear
+  id: TTTGearInnocent
+  equipment:
+    head: ClothingHeadHatBeaverHat
+    jumpsuit: ClothingUniformJumpsuitLoungewear
+    eyes: ClothingEyesGlassesJamjar
+    gloves: ClothingHandsMercGlovesCombat
+    outerClothing: ClothingOuterFlannelGreen
+    shoes: ClothingShoesBootsWinter
+    belt: ClothingBeltMilitaryWebbing
+    neck: ClothingNeckNanoTrasenPin
+    id: PassengerPDAUnrem

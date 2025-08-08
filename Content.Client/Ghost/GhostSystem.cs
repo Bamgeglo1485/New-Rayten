@@ -147,6 +147,7 @@ namespace Content.Client.Ghost
             GhostVisibility = true;
             PlayerAttached?.Invoke(component);
             RaiseNetworkEvent(new TDMInfoRequest());//Rayten
+            RaiseNetworkEvent(new TTTInfoRequest());//Rayten
         }
 
         private void OnGhostState(EntityUid uid, GhostComponent component, ref AfterAutoHandleStateEvent args)
