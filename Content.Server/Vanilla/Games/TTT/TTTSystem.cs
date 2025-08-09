@@ -520,6 +520,10 @@ public sealed class TTTSystem : EntitySystem
 
         KARMA[sourcecomp.Session] = Math.Clamp(newKarma, 0, 1000);
 
+        //у предателей урон не уменьшается
+        if (sourcecomp.Role == TTTRole.traitor)
+            return;
+            
         // 2. Затем применяем модификатор урона на основе новой кармы
         var karmaFraction = Math.Clamp(newKarma / 1000f, 0f, 1f);
 
