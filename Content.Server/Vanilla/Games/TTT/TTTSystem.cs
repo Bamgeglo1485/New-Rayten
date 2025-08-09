@@ -419,7 +419,7 @@ public sealed class TTTSystem : EntitySystem
                 continue;
 
             if (!TryComp<ActorComponent>(unit, out var actor))
-                return;
+                continue;
 
             KARMA[actor.PlayerSession] += 50;
                 
