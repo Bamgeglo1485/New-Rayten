@@ -418,14 +418,11 @@ public sealed class TTTSystem : EntitySystem
             if (rulelink != rule)
                 continue;
 
-            if (!TryComp<ActorComponent>(unit, out var actor))
-                continue;
-
-            KARMA[actor.PlayerSession] += 50;
+            KARMA[marker.Session] += 50;
                 
-            var name = actor.PlayerSession.Name;
+            var name = marker.Session.Name;
 
-            statsList.Add(new PlayerStats(name, marker.TotalKills, KARMA[actor.PlayerSession], marker.Role));
+            statsList.Add(new PlayerStats(name, marker.TotalKills, KARMA[marker.Session], marker.Role));
         }
 
         var sorted = statsList
@@ -487,9 +484,8 @@ public sealed class TTTSystem : EntitySystem
     private void OnDamageModify(EntityUid uid, TTTMarkerComponent component, DamageModifyEvent args)
     {
         if (!TryComp<TTTMarkerComponent>(args.Origin, out var sourcecomp) 
-            || !TryComp<ActorComponent>(args.Origin, out var actor) 
             || args.Origin == uid
-            || !KARMA.TryGetValue(actor.PlayerSession, out var attackerKarma))
+            || !KARMA.TryGetValue(sourcecomp.Session, out var attackerKarma))
         {
             return;
         }
@@ -519,7 +515,7 @@ public sealed class TTTSystem : EntitySystem
 
         var newKarma = attackerKarma + karmaChange;
 
-        KARMA[actor.PlayerSession] = Math.Clamp(newKarma, 0, 1000);
+        KARMA[sourcecomp.Session] = Math.Clamp(newKarma, 0, 1000);
 
         // 2. Затем применяем модификатор урона на основе новой кармы
         var karmaFraction = Math.Clamp(newKarma / 1000f, 0f, 1f);
@@ -563,6 +559,7 @@ public sealed class TTTSystem : EntitySystem
         //Добавляем метку
         var marker = EnsureComp<TTTMarkerComponent>(mobUid);
         marker.RuleLink = ruleEnt;
+        marker.Session = session;
         //Все видят детектива
         AddComp<ShowTTTDetectiveIconsComponent>(mobUid);
         //Добавляем навыки

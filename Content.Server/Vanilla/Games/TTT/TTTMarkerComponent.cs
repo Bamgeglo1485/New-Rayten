@@ -1,6 +1,6 @@
 using Content.Shared.FixedPoint;
 using Content.Shared.Damage;
-
+using Robust.Shared.Player;
 namespace Content.Shared.Vanilla.Games.TTT;
 
 [RegisterComponent]
@@ -15,6 +15,9 @@ public sealed partial class TTTMarkerComponent : Component
     [DataField]
     public int TotalKills = 0;
 
+    [DataField]
+    public ICommonSession Session;
+
     public DamageSpecifier Damage = new()
     {
         DamageDict = new()
@@ -22,6 +25,9 @@ public sealed partial class TTTMarkerComponent : Component
             { "Poison", 1200 }
         }
     };
+    //только для отображения
+    [DataField]
+    public int Karma = 0;
 }
 public enum TTTRole : byte
 {
