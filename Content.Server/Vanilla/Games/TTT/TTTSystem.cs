@@ -252,7 +252,7 @@ public sealed class TTTSystem : EntitySystem
                     );
                 }
 
-                SpawnGuns(uid, _random.Next(rule.Playercount * 2, rule.Playercount * 4));
+                SpawnGuns(uid, _random.Next(rule.Playercount, rule.Playercount * 2));
 
                 rule.CurrentStatus = TTTStatus.AwaitRolesToAdd; //Вот теперь матч реально начался
             }
@@ -348,6 +348,7 @@ public sealed class TTTSystem : EntitySystem
 
                 if (timetoend < TimeSpan.FromMinutes(5) && rule.anoncments == 0)
                 {
+                    SpawnGuns(uid, _random.Next(rule.Playercount, rule.Playercount * 2));
                     DispatchMonospaceAnnouncement(
                         Filter.Empty().AddPlayers(rule.Players),
                         Loc.GetString("ttt-timetoend-5"),
@@ -357,6 +358,7 @@ public sealed class TTTSystem : EntitySystem
                 }
                 if (timetoend < TimeSpan.FromMinutes(3) && rule.anoncments == 1)
                 {
+                    SpawnGuns(uid, _random.Next(rule.Playercount, rule.Playercount * 2));
                     DispatchMonospaceAnnouncement(
                         Filter.Empty().AddPlayers(rule.Players),
                         Loc.GetString("ttt-timetoend-3"),
@@ -366,6 +368,7 @@ public sealed class TTTSystem : EntitySystem
                 }
                 if (timetoend < TimeSpan.FromMinutes(1) && rule.anoncments == 2)
                 {
+                    SpawnGuns(uid, _random.Next(rule.Playercount, rule.Playercount * 2));
                     DispatchMonospaceAnnouncement(
                         Filter.Empty().AddPlayers(rule.Players),
                         Loc.GetString("ttt-timetoend-1"),
