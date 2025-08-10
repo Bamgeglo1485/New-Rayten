@@ -1,0 +1,21 @@
+- type: entity
+  id: StrobeSCP
+  parent: PoweredStrobeLightEmpty
+  name: стробоскоп
+  components:
+  - type: AmbientSound
+    volume: -10
+    range: 10
+    sound:
+      path: /Audio/Vanilla/Effects/alarm.ogg
+  - type: ContainerContainer
+    containers:
+      light_bulb: !type:ContainerSlot
+  - type: PoweredLight
+    hasLampOnSpawn: LightTubeCrystalRed
+  - type: PointLight
+    color: "#d82020"
+    energy: 0.5
+    raduis: 5
+  - type: AutoLinkReceiver
+    channel: Alarm1

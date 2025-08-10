@@ -1,0 +1,11 @@
+- type: entity
+  id: LockableButtonAmogus
+  name: кнопка экстренного сбора
+  parent: LockableButton
+  description: Не нажимай его просто так.
+  components:
+  - type: AutoLinkTransmitter
+    channel: Alarm1
+  - type: SignalSwitch
+    clickSound:
+      path: /Audio/Vanilla/Effects/reportAmogus.ogg
