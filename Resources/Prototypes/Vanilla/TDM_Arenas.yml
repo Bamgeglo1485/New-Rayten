@@ -7,3 +7,8 @@
   id: Office
   arena: Maps/Vanilla/Misc/TDM/TDM_Office.yml
   arenaparty: 30
+
+- type: TDMMap
+  id: Complex
+  arena: Maps/Vanilla/Misc/TTT/Complex.yml
+  arenaparty: 30
