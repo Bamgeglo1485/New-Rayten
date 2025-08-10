@@ -6,6 +6,8 @@ using Content.Server.Chat.Managers;
 using Content.Server.Respawn;
 using Content.Shared.Chat;
 using Content.Shared.Administration;
+using Content.Shared.Humanoid;
+using Content.Shared.Humanoid.Prototypes;
 using Content.Shared.GameTicking;
 using Content.Shared.CombatMode.Pacification;
 using Content.Shared.Vanilla.CCVars;
@@ -19,6 +21,7 @@ using Content.Shared.Mobs.Systems;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Ghost;
 using Content.Shared.Roles;
+using Content.Shared.Implants;
 using Robust.Server.GameObjects;
 using Robust.Shared.Utility;
 using Robust.Server.Player;
@@ -59,9 +62,9 @@ public sealed class TTTSystem : EntitySystem
         public string Name { get; set; }
         public int Kills { get; set; }
         public int Karma { get; set; }
-        public TTTRole Role { get; set; }
+        public string Role { get; set; }
 
-        public PlayerStats(string name, int kills, int karma, TTTRole role)
+        public PlayerStats(string name, int kills, int karma, string role)
         {
             Name = name;
             Kills = kills;
@@ -87,15 +90,16 @@ public sealed class TTTSystem : EntitySystem
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly SpecialRespawnSystem _specialRespawn = default!;
     [Dependency] private readonly LoadoutSystem _loadout = default!;
-    
+    [Dependency] private readonly SharedSubdermalImplantSystem _implant = default!;
+    [Dependency] private readonly MetaDataSystem _metaSystem = default!;
     EntityUid? Currentrule = null;
 
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<TTTMarkerComponent, DamageModifyEvent>(OnDamageModify);    //Туду урон в зависимости от крамы
+        SubscribeLocalEvent<TTTMarkerComponent, DamageModifyEvent>(OnDamageModify);    //Урон в зависимости от крамы
+        SubscribeLocalEvent<TTTMarkerComponent, DamageChangedEvent>(OnDamageChange);    //Начисляем бонусы в виде кармы за урон
         SubscribeLocalEvent<TTTMarkerComponent, MobStateChangedEvent>(OnMobStateChanged); //Вычёркиваем
-        SubscribeLocalEvent<TTTMarkerComponent, MapInitEvent>(OnMarkerInit);
 
         SubscribeLocalEvent<TTTRuleComponent, MapInitEvent>(OnRuleInit);//новый геймрул кайф
         SubscribeLocalEvent<TTTRuleComponent, ComponentShutdown>(OnRuleShutDown); // это конец
@@ -105,6 +109,7 @@ public sealed class TTTSystem : EntitySystem
 
         _playerManager.PlayerStatusChanged += OnPlayerStatusChanged;
     }
+
     public override void Shutdown()
     {
         base.Shutdown();
@@ -128,17 +133,18 @@ public sealed class TTTSystem : EntitySystem
         {
             KARMA[session] = 1000;
         }
+
         else if (KARMA[session]<=0)
         {
             return;
         }
-
 
         if (rule.Players.Contains(session))
             return;
 
         rule.Playercount++;
         rule.Players.Add(session);
+
         //Сообщаем о том что добавился новый игрок
         var info = new TTTInformation(rule.Playercount, rule.TimeForPlayersJoin, rule.CurrentStatus == TTTStatus.awaitstart);
         RaiseNetworkEvent(info, Filter.Broadcast());
@@ -271,25 +277,37 @@ public sealed class TTTSystem : EntitySystem
                     int traitorsCount = GetTraitorCount(rule.Playercount);
                     int deccount = GetDecCount(rule.Playercount);
                     var shuffledPlayers = rule.Players.ToList();
-                    _random.Shuffle(shuffledPlayers); 
+                    _random.Shuffle(shuffledPlayers);
+
+                    int skippedtraitors = 0;
+
                     foreach (var player in shuffledPlayers)
                     {
                         var filter = Filter.Empty().AddPlayer(player);
                         var message = Loc.GetString("ttt-traitor-brief", ("color", Color.Red));
                         var wrappedMessage = Loc.GetString("chat-manager-server-wrap-message", ("message", message));
 
-                        if (!TryComp<TTTMarkerComponent>(player.AttachedEntity, out var marker))
+                        if (!player.AttachedEntity.HasValue)
+                            continue;
+
+                        var playerent = player.AttachedEntity.Value;
+
+                        if (!TryComp<TTTMarkerComponent>(playerent, out var marker))
                             continue;
 
                         if (marker.Role != TTTRole.await)
                             continue;
 
-                        if (traitorsCount>0)
+                        if (!KARMA.TryGetValue(player, out var karma))
+                            continue;
+
+                        if ( traitorsCount > 0 )
                         {
+                            _implant.AddImplant(playerent, "TraitorShopImplant");
                             marker.Role = TTTRole.traitor;
-                            AddComp<ShowTTTTraitorsIconsComponent>(player.AttachedEntity.Value);
-                            AddComp<TTTTRAITORComponent>(player.AttachedEntity.Value);
-                            rule.PlayerCharacters[player.AttachedEntity.Value] = marker.Role; 
+                            AddComp<ShowTTTTraitorsComponent>(playerent);
+                            AddComp<TTTTRAITORComponent>(playerent);
+                            rule.PlayerCharacters[playerent] = marker.Role; 
                             traitorsCount--;
                             _audio.PlayGlobal("/Audio/Ambience/Antag/traitor_start.ogg", filter, true);
                             _chatManager.ChatMessageToOne(
@@ -300,14 +318,15 @@ public sealed class TTTSystem : EntitySystem
                                 false,
                                 player.Channel
                             );
+                            Dirty(playerent,marker);
                             continue;
                         }
 
-                        if ( deccount > 0 && KARMA.TryGetValue(player, out var karma) && karma > 700)
+                        if ( deccount > 0 && karma > 700)
                         {
+                            _implant.AddImplant(playerent, "DetectiveShopImplant");
                             marker.Role = TTTRole.detective;
-                            AddComp<TTTDetectiveComponent>(player.AttachedEntity.Value);
-                            rule.PlayerCharacters[player.AttachedEntity.Value] = marker.Role; 
+                            rule.PlayerCharacters[playerent] = marker.Role; 
                             deccount--;
                             _audio.PlayGlobal("/Audio/Vanilla/Effects/TTT/decbrief.ogg", filter, true);
                             message = Loc.GetString("ttt-detective-brief", ("color", Color.DodgerBlue));
@@ -320,6 +339,7 @@ public sealed class TTTSystem : EntitySystem
                                 false,
                                 player.Channel
                             );
+                            Dirty(playerent,marker);
                             continue;
                         }
 
@@ -336,6 +356,7 @@ public sealed class TTTSystem : EntitySystem
                             false,
                             player.Channel
                         );
+                        Dirty(playerent,marker);
                     }
                     rule.CurrentStatus = TTTStatus.RoundInProgress;
                     return;
@@ -411,8 +432,10 @@ public sealed class TTTSystem : EntitySystem
 
         List<PlayerStats> statsList = new();
 
-        var query = EntityQueryEnumerator<TTTMarkerComponent>();
 
+        var traitorSessions = new List<ICommonSession>();
+        var innocentSessions = new List<ICommonSession>();
+        var query = EntityQueryEnumerator<TTTMarkerComponent>();
         while (query.MoveNext(out var unit, out var marker))
         {
             if (!TryComp<TTTRuleComponent>(marker.RuleLink, out var rulelink))
@@ -425,7 +448,12 @@ public sealed class TTTSystem : EntitySystem
                 
             var name = marker.Session.Name;
 
-            statsList.Add(new PlayerStats(name, marker.TotalKills, KARMA[marker.Session], marker.Role));
+            statsList.Add(new PlayerStats(name, marker.TotalKills, KARMA[marker.Session], marker.GetRoleName()));
+            //музыка
+            if (marker.Role == TTTRole.traitor)
+                traitorSessions.Add(marker.Session);
+            else if (marker.Role == TTTRole.inocent || marker.Role == TTTRole.detective)
+                innocentSessions.Add(marker.Session);
         }
 
         var sorted = statsList
@@ -438,7 +466,7 @@ public sealed class TTTSystem : EntitySystem
         foreach (var stat in sorted)
         {
             string name = stat.Name.Length > 32 ? stat.Name[..32] : stat.Name;
-            result += name.PadRight(32) + "| " + stat.Role.ToString().PadRight(10) + "| " + stat.Kills.ToString().PadRight(7) + "| " + stat.Karma.ToString().PadRight(5) + "\n";
+            result += name.PadRight(32) + "| " + stat.Role.PadRight(10) + "| " + stat.Kills.ToString().PadRight(7) + "| " + stat.Karma.ToString().PadRight(5) + "\n";
         }
 
         var message = Loc.GetString("ttt-gameover",
@@ -450,38 +478,50 @@ public sealed class TTTSystem : EntitySystem
             message,
             winner ? Color.Red : Color.Green);
 
-        //музыка
-        var traitorSessions = new List<ICommonSession>();
-        var innocentSessions = new List<ICommonSession>();
-
-        foreach (var (ent, role) in rule.PlayerCharacters)
-        {
-            if (!_playerManager.TryGetSessionByEntity(ent, out var session))
-                continue;
-
-            if (role == TTTRole.traitor)
-                traitorSessions.Add(session);
-            else if (role == TTTRole.inocent || role == TTTRole.detective)
-                innocentSessions.Add(session);
-        }
-
         var traitorFilter = Filter.Empty().AddPlayers(traitorSessions);
         var innocentFilter = Filter.Empty().AddPlayers(innocentSessions);
 
         if (winner)
         {
-            _audio.PlayGlobal("/Audio/Vanilla/Effects/TTT/winsound.ogg", traitorFilter, true);
-            _audio.PlayGlobal("/Audio/Vanilla/Effects/TTT/losesound.ogg", innocentFilter, true);
+            _audio.PlayGlobal("/Audio/Vanilla/Effects/TTT/winsound.ogg", traitorFilter, false);
+            _audio.PlayGlobal("/Audio/Vanilla/Effects/TTT/losesound.ogg", innocentFilter, false);
         }
         else
         {
-            _audio.PlayGlobal("/Audio/Vanilla/Effects/TTT/winsound.ogg", innocentFilter, true);
-            _audio.PlayGlobal("/Audio/Vanilla/Effects/TTT/losesound.ogg", traitorFilter, true);
+            _audio.PlayGlobal("/Audio/Vanilla/Effects/TTT/winsound.ogg", innocentFilter, false);
+            _audio.PlayGlobal("/Audio/Vanilla/Effects/TTT/losesound.ogg", traitorFilter, false);
         }
         //Удаляем прошлую арену
         Timer.Spawn(TimeSpan.FromSeconds(1), () => QueueDel(rule.Arena)); 
 
         NewCycle(uid, rule);
+    }
+
+    private void OnDamageChange(EntityUid uid, TTTMarkerComponent component, DamageChangedEvent args)
+    {
+        if (!args.DamageIncreased 
+            || args.DamageDelta == null 
+            || args.DamageDelta.GetTotal() <= 0
+            || !TryComp<TTTMarkerComponent>(args.Origin, out var sourcecomp)
+            || args.Origin == uid
+            || !KARMA.TryGetValue(sourcecomp.Session, out var attackerKarma))
+        {
+            return;
+        }
+
+        int damage = (int)args.DamageDelta.GetTotal();
+        int karmaChange = 0;
+
+        if (sourcecomp.Role == TTTRole.traitor && component.Role == TTTRole.traitor)
+            karmaChange = -2 * damage;
+        else if ((sourcecomp.Role == TTTRole.inocent || sourcecomp.Role == TTTRole.detective) 
+                && component.Role == TTTRole.inocent)
+            karmaChange = -2 * damage;
+        else if ((sourcecomp.Role == TTTRole.inocent || sourcecomp.Role == TTTRole.detective) 
+                && component.Role == TTTRole.detective)
+            karmaChange = -5 * damage;
+
+        KARMA[sourcecomp.Session] = Math.Clamp(attackerKarma + karmaChange, -1, 1500);
     }
 
     private void OnDamageModify(EntityUid uid, TTTMarkerComponent component, DamageModifyEvent args)
@@ -492,40 +532,18 @@ public sealed class TTTSystem : EntitySystem
         {
             return;
         }
+
         if (sourcecomp.Role == TTTRole.await)
         {
             args.Damage = new DamageSpecifier();
             return;
         }
-        // 1. Сначала вычисляем изменение кармы
-        int damage = (int)args.Damage.GetTotal();
-        int karmaChange = 0;
 
-        if (sourcecomp.Role == TTTRole.traitor && component.Role == TTTRole.traitor)
-        {
-            karmaChange = -2 * damage;
-        }
-        else if ((sourcecomp.Role == TTTRole.inocent || sourcecomp.Role == TTTRole.detective) 
-                && component.Role == TTTRole.inocent)
-        {
-            karmaChange = -2 * damage;
-        }
-        else if ((sourcecomp.Role == TTTRole.inocent || sourcecomp.Role == TTTRole.detective) 
-                && component.Role == TTTRole.detective)
-        {
-            karmaChange = -3 * damage;
-        }
-
-        var newKarma = attackerKarma + karmaChange;
-
-        KARMA[sourcecomp.Session] = Math.Clamp(newKarma, 0, 1000);
-
-        //у предателей урон не уменьшается
-        if (sourcecomp.Role == TTTRole.traitor)
+        //у предателей и детективов урон не уменьшается
+        if (sourcecomp.Role == TTTRole.traitor || sourcecomp.Role == TTTRole.detective)
             return;
-            
-        // 2. Затем применяем модификатор урона на основе новой кармы
-        var karmaFraction = Math.Clamp(newKarma / 1000f, 0f, 1f);
+        //  применяем модификатор урона на основе новой кармы
+        var karmaFraction = Math.Clamp(attackerKarma / 1000f, 0f, 1f);
 
         var modify = new DamageModifierSet
         {
@@ -557,9 +575,12 @@ public sealed class TTTSystem : EntitySystem
         if (targetCoords == null)
             targetCoords = Transform(rule.Arena).Coordinates;
 
-        var profile = _gameTicker.GetPlayerProfile(session);
-        var mobUid = _spawning.SpawnPlayerMob(targetCoords, null, profile, null);
+        if (!_prototypeManager.TryIndex<SpeciesPrototype>(SharedHumanoidAppearanceSystem.DefaultSpecies, out var species))
+            throw new ArgumentException($"Invalid species prototype was used: {SharedHumanoidAppearanceSystem.DefaultSpecies}");
 
+        var mobUid = Spawn(species.Prototype, targetCoords);
+        _metaSystem.SetEntityName(mobUid, "Подозрительный человек");
+        
         if (_mindSystem.TryGetMind(session.AttachedEntity!.Value, out var mindId, out var mindComp))
             _mindSystem.TransferTo(mindId, mobUid, true, mind: mindComp);
 
@@ -567,6 +588,9 @@ public sealed class TTTSystem : EntitySystem
         var marker = EnsureComp<TTTMarkerComponent>(mobUid);
         marker.RuleLink = ruleEnt;
         marker.Session = session;
+        marker.Name = session.Name;
+        Dirty(mobUid,marker);
+
         //Все видят детектива
         AddComp<ShowTTTDetectiveIconsComponent>(mobUid);
         //Добавляем навыки
@@ -674,11 +698,6 @@ public sealed class TTTSystem : EntitySystem
 
         return _random.Pick(validPrototypes);
     }
-    private void OnMarkerInit(EntityUid uid, TTTMarkerComponent marker, MapInitEvent args)
-    {
-        marker.RuleLink = Currentrule;
-    }
-
     private void OnRuleInit(EntityUid uid, TTTRuleComponent rule, MapInitEvent args)
     {
         Currentrule = uid;
@@ -724,18 +743,28 @@ public sealed class TTTSystem : EntitySystem
     {
         if (playerCount < 8)
             return 1;
-        if (playerCount < 12)
+        if (playerCount < 13)
             return 2;
-        if (playerCount < 16)
+        if (playerCount < 17)
             return 3;
+        if (playerCount < 21)
+            return 4;
+        if (playerCount < 25)
+            return 5;
         return playerCount / 4;
     }
     int GetDecCount(int playerCount)
     {
-        if (playerCount < 6)
+        if (playerCount < 4)
             return 0;
-        if (playerCount < 12)
+        if (playerCount < 10)
             return 1;
+        if (playerCount < 14)
+            return 2;
+        if (playerCount < 21)
+            return 3;
+        if (playerCount < 25)
+            return 4;
         return 2;
     }
 }

@@ -1,5 +1,6 @@
 using System.Numerics;
 using Content.Shared.Hands;
+using Content.Shared.Mobs;
 using Content.Shared.Interaction;
 using Content.Shared.Interaction.Components;
 using Content.Shared.Item;
@@ -17,6 +18,7 @@ using Robust.Shared.Audio.Systems;
 using Robust.Shared.Random;
 using Robust.Shared.Audio;
 using Robust.Shared.Player;
+using Content.Shared.Mobs.Components;
 using Content.Shared.Projectiles;
 
 namespace Content.Server.Vanilla.Skill;
@@ -38,18 +40,23 @@ public sealed class GunSkillsSystem : EntitySystem
         SubscribeLocalEvent<GunComponent, GotEquippedHandEvent>(OnHandPickUp);//обновляет модификаторы при взятии оружия в руки
         SubscribeLocalEvent<GunComponent, GunRefreshModifiersEvent>(OnGunRefreshModifiers);//перегрузка обновления модификаторов
         SubscribeLocalEvent<GunCanBeFallComponent, GunShotEvent>(RangeWeaponFalldownOnShoot);//выпадение оружия при стрельбе
-        SubscribeLocalEvent<ProjectileComponent, ProjectileHitEvent>(OnHit);
+        SubscribeLocalEvent<MobStateComponent, DamageChangedEvent>(OnHit);
     }
-
-    private void OnHit(EntityUid uid, ProjectileComponent component, ref ProjectileHitEvent args)
+    
+    private void OnHit(EntityUid uid, MobStateComponent component, ref DamageChangedEvent args)
     {
-        if (args.Shooter == null || args.Shooter == args.Target)
+        if (args.Origin == null || args.Origin == uid|| args.DamageDelta == null || args.DamageDelta.GetTotal() <= 0)
             return;
 
-        if (!HasComp<StaminaComponent>(args.Target))
+        if (!HasComp<StaminaComponent>(uid))
             return;
 
-        if (!TryComp<SkillComponent>(args.Shooter, out var skillcomp) || args.Damage == null)
+        if (component.CurrentState == MobState.Dead)
+            return;
+
+        var headshoter = args.Origin.Value;
+
+        if (!TryComp<SkillComponent>(headshoter, out var skillcomp))
             return;
 
         if (skillcomp.RangeWeaponLevel != SkillLevel.Expert)
@@ -58,14 +65,18 @@ public sealed class GunSkillsSystem : EntitySystem
         if (!_random.Prob(HEADSHOTCHANCE))
             return;
 
-        var headshoter = args.Shooter.Value;
-        float staminadamage = args.Damage.GetTotal().Float();
+        float staminadamage = (float)args.DamageDelta.GetTotal();
 
-        _audio.PlayPvs("/Audio/Vanilla/SkillSystem/headshot.ogg", args.Target, AudioParams.Default.WithVolume(-10f).WithMaxDistance(5f));
+        // Звук выстрела в голову
+        // _audio.PlayPvs("/Audio/Vanilla/SkillSystem/headshot.ogg", uid, AudioParams.Default
+        //     .WithVolume(-10f)
+        //     .WithMaxDistance(5f));
 
-        _stamina.TakeStaminaDamage(args.Target, staminadamage, source: headshoter, ignoreResist: false);
-
+        // Наносим урон по выносливости
+        if (staminadamage > 0)
+            _stamina.TakeStaminaDamage(uid, staminadamage, source: headshoter, ignoreResist: true);
     }
+
     private void OnHandPickUp(EntityUid uid, GunComponent gunComp, GotEquippedHandEvent args)
     {
         if (HasComp<GunIgnoreSkillComponent>(uid))
