@@ -47,16 +47,16 @@ namespace Content.Server.Vanilla.Games.TTT;
 
 public sealed class TTTSystem : EntitySystem
 {
-    private static readonly string[] GUNS = new[] 
-    { 
+    private static readonly string[] GUNS = new[]
+    {
         "Musket", "WeaponPistolFlintlock", "WeaponLaserSvalinn", "WeaponDominator", "WeaponEnergyShotgun", "WeaponAssaultDominator", "MakeshiftShield",
-        "WeaponMakeshiftLaser", "WeaponLaserCarbinePractice", "WeaponLaserCarbine", 
+        "WeaponMakeshiftLaser", "WeaponLaserCarbinePractice", "WeaponLaserCarbine",
         "WeaponLaserCannon", "WeaponPistolViper", "WeaponPistolCobra", "WeaponPistolMk58", "WeaponPistolN1984",
         "WeaponRevolverDeckard","WeaponRevolverInspector","WeaponRevolverMateba","WeaponRevolverPython","WeaponRevolverPirate","WeaponRifleLecter","WeaponRifleEstoc","WeaponRifleFoam","WeaponShotgunDoubleBarreled",
         "WeaponShotgunKammerer","WeaponShotgunSawn","WeaponShotgunHandmade","WeaponShotgunBlunderbuss","WeaponShotgunImprovised","WeaponSubMachineGunC20r","WeaponSubMachineGunDrozd","WeaponSubMachineGunWt550","WeaponImprovisedPneumaticCannon"
-    };        
+    };
     private Dictionary<ICommonSession, int> KARMA = new();
-    
+
     private sealed class PlayerStats
     {
         public string Name { get; set; }
@@ -76,10 +76,8 @@ public sealed class TTTSystem : EntitySystem
     [Dependency] private readonly MapSystem _mapSystem = default!;
     [Dependency] private readonly IMapManager _mapManager = default!;
     [Dependency] private readonly MapLoaderSystem _mapLoader = default!;
-    [Dependency] private readonly GameTicker _gameTicker = default!;
     [Dependency] private readonly IGameTiming _gameTiming = default!;
     [Dependency] private readonly MindSystem _mindSystem = default!;
-    [Dependency] private readonly StationSpawningSystem _spawning = default!;
     [Dependency] protected readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
@@ -307,7 +305,7 @@ public sealed class TTTSystem : EntitySystem
                             marker.Role = TTTRole.traitor;
                             AddComp<ShowTTTTraitorsComponent>(playerent);
                             AddComp<TTTTRAITORComponent>(playerent);
-                            rule.PlayerCharacters[playerent] = marker.Role; 
+                            rule.PlayerCharacters[playerent] = marker.Role;
                             traitorsCount--;
                             _audio.PlayGlobal("/Audio/Ambience/Antag/traitor_start.ogg", filter, true);
                             _chatManager.ChatMessageToOne(
@@ -326,7 +324,7 @@ public sealed class TTTSystem : EntitySystem
                         {
                             _implant.AddImplant(playerent, "DetectiveShopImplant");
                             marker.Role = TTTRole.detective;
-                            rule.PlayerCharacters[playerent] = marker.Role; 
+                            rule.PlayerCharacters[playerent] = marker.Role;
                             deccount--;
                             _audio.PlayGlobal("/Audio/Vanilla/Effects/TTT/decbrief.ogg", filter, true);
                             message = Loc.GetString("ttt-detective-brief", ("color", Color.DodgerBlue));
@@ -344,7 +342,7 @@ public sealed class TTTSystem : EntitySystem
                         }
 
                         marker.Role = TTTRole.inocent;
-                        rule.PlayerCharacters[player.AttachedEntity.Value] = marker.Role; 
+                        rule.PlayerCharacters[player.AttachedEntity.Value] = marker.Role;
                         _audio.PlayGlobal("/Audio/Vanilla/Effects/TTT/innocentbrief.ogg", filter, true);
                         message = Loc.GetString("ttt-innocent-brief", ("color", Color.Green));
                         wrappedMessage = Loc.GetString("chat-manager-server-wrap-message", ("message", message));
@@ -444,11 +442,9 @@ public sealed class TTTSystem : EntitySystem
             if (rulelink != rule)
                 continue;
 
-            KARMA[marker.Session] += 50;
-                
-            var name = marker.Session.Name;
+            KARMA[marker.Session] += Math.Clamp(KARMA[marker.Session] + 50, -51, 1500);
 
-            statsList.Add(new PlayerStats(name, marker.TotalKills, KARMA[marker.Session], marker.GetRoleName()));
+            statsList.Add(new PlayerStats(marker.Session.Name, marker.TotalKills, KARMA[marker.Session], marker.GetRoleName()));
             //музыка
             if (marker.Role == TTTRole.traitor)
                 traitorSessions.Add(marker.Session);
@@ -492,15 +488,15 @@ public sealed class TTTSystem : EntitySystem
             _audio.PlayGlobal("/Audio/Vanilla/Effects/TTT/losesound.ogg", traitorFilter, false);
         }
         //Удаляем прошлую арену
-        Timer.Spawn(TimeSpan.FromSeconds(1), () => QueueDel(rule.Arena)); 
+        Timer.Spawn(TimeSpan.FromSeconds(1), () => QueueDel(rule.Arena));
 
         NewCycle(uid, rule);
     }
 
     private void OnDamageChange(EntityUid uid, TTTMarkerComponent component, DamageChangedEvent args)
     {
-        if (!args.DamageIncreased 
-            || args.DamageDelta == null 
+        if (!args.DamageIncreased
+            || args.DamageDelta == null
             || args.DamageDelta.GetTotal() <= 0
             || !TryComp<TTTMarkerComponent>(args.Origin, out var sourcecomp)
             || args.Origin == uid
@@ -513,20 +509,20 @@ public sealed class TTTSystem : EntitySystem
         int karmaChange = 0;
 
         if (sourcecomp.Role == TTTRole.traitor && component.Role == TTTRole.traitor)
-            karmaChange = -2 * damage;
-        else if ((sourcecomp.Role == TTTRole.inocent || sourcecomp.Role == TTTRole.detective) 
-                && component.Role == TTTRole.inocent)
-            karmaChange = -2 * damage;
-        else if ((sourcecomp.Role == TTTRole.inocent || sourcecomp.Role == TTTRole.detective) 
-                && component.Role == TTTRole.detective)
             karmaChange = -5 * damage;
+        else if ((sourcecomp.Role == TTTRole.inocent || sourcecomp.Role == TTTRole.detective)
+                && component.Role == TTTRole.inocent)
+            karmaChange = -5 * damage;
+        else if ((sourcecomp.Role == TTTRole.inocent || sourcecomp.Role == TTTRole.detective)
+                && component.Role == TTTRole.detective)
+            karmaChange = -7 * damage;
 
-        KARMA[sourcecomp.Session] = Math.Clamp(attackerKarma + karmaChange, -1, 1500);
+        KARMA[sourcecomp.Session] = Math.Clamp(attackerKarma + karmaChange, -51, 1500);
     }
 
     private void OnDamageModify(EntityUid uid, TTTMarkerComponent component, DamageModifyEvent args)
     {
-        if (!TryComp<TTTMarkerComponent>(args.Origin, out var sourcecomp) 
+        if (!TryComp<TTTMarkerComponent>(args.Origin, out var sourcecomp)
             || args.Origin == uid
             || !KARMA.TryGetValue(sourcecomp.Session, out var attackerKarma))
         {
@@ -580,7 +576,7 @@ public sealed class TTTSystem : EntitySystem
 
         var mobUid = Spawn(species.Prototype, targetCoords);
         _metaSystem.SetEntityName(mobUid, "Подозрительный человек");
-        
+
         if (_mindSystem.TryGetMind(session.AttachedEntity!.Value, out var mindId, out var mindComp))
             _mindSystem.TransferTo(mindId, mobUid, true, mind: mindComp);
 
@@ -637,10 +633,10 @@ public sealed class TTTSystem : EntitySystem
                 sourcecomp.TotalKills--;
             }
             // Мирный или детектив убил мирного или детектива
-            else if ((sourcecomp.Role == TTTRole.inocent || sourcecomp.Role == TTTRole.detective) 
+            else if ((sourcecomp.Role == TTTRole.inocent || sourcecomp.Role == TTTRole.detective)
                     && (component.Role == TTTRole.inocent || component.Role == TTTRole.detective))
             {
-                sourcecomp.TotalKills--; 
+                sourcecomp.TotalKills--;
             }
             else if (args.Origin.Value != uid)
             {
@@ -755,16 +751,14 @@ public sealed class TTTSystem : EntitySystem
     }
     int GetDecCount(int playerCount)
     {
-        if (playerCount < 4)
+        if (playerCount < 6)
             return 0;
-        if (playerCount < 10)
-            return 1;
         if (playerCount < 14)
-            return 2;
+            return 1;
         if (playerCount < 21)
-            return 3;
+            return 2;
         if (playerCount < 25)
-            return 4;
-        return 2;
+            return 3;
+        return 4;
     }
 }
