@@ -24,6 +24,8 @@ using Content.Server.Roles;
 
 using Content.Shared.GameTicking.Components;
 using Content.Shared.Shuttles.Components;
+using Content.Shared.Station.Components;
+using Content.Shared.Light.Components;
 using Content.Shared.FixedPoint;
 using Content.Shared.Weather;
 using Content.Shared.Salvage;
@@ -95,7 +97,7 @@ public sealed class WhiteoutRuleSystem : GameRuleSystem<WhiteoutRuleComponent>
         while (stationQuery.MoveNext(out var stationUid, out var stationData))
         {
 
-            var gridUid = _stationSystem.GetLargestGrid(stationData);
+            var gridUid = _stationSystem.GetLargestGrid(stationUid);
             if (gridUid == null)
                 continue;
 

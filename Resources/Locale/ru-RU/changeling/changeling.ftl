@@ -1,0 +1,14 @@
+roles-antag-changeling-name = Генокрад
+roles-antag-changeling-objective = Разумный хищник, принимающий облик своих жертв.
+changeling-devour-attempt-failed-rotting = Этот труп содержит лишь сгнившую биомассу.
+changeling-devour-attempt-failed-protected = Биомасса этой жертвы защищена.
+changeling-devour-begin-windup-self = Наш жуткий рот раскрывается с потусторонним голодом.
+changeling-devour-begin-windup-others = Жуткий рот { CAPITALIZE(POSS-ADJ($user)) } раскрывается с потусторонним голодом.
+changeling-devour-begin-consume-self = Жуткий рот впивается глубоко в жертву.
+changeling-devour-begin-consume-others = Жуткий рот { CAPITALIZE(POSS-ADJ($user)) } впивается глубоко в его жертву.
+changeling-devour-consume-failed-not-dead = Это тело ещё живо! Мы не можем пожирать его при жизни!
+changeling-devour-consume-complete-self = Наш жуткий рот скрывается, биомасса поглощена.
+changeling-devour-consume-complete-others = Жуткий рот { CAPITALIZE(POSS-ADJ($user)) } скрывается.
+changeling-transform-attempt-self = Наши кости трещат, мышцы рвутся — одно тело превращается в другое.
+changeling-transform-attempt-others = Кости { CAPITALIZE(POSS-ADJ($user)) } трещат, мышцы рвутся, тело меняется в иной облик.
+changeling-paused-map-name = Карта хранения личности генокрада

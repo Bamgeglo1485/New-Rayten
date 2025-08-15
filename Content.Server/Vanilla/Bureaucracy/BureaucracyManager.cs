@@ -1,16 +1,16 @@
+using Content.Server.Station.Systems;
+using Content.Server.Mind;
+using Content.Server.Roles;
+using Content.Server.Roles.Jobs;
+using Content.Shared.Vanilla.Bureaucracy;
+using Content.Shared.Paper;
+using Content.Shared.Station.Components;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Audio;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
-using Content.Shared.Vanilla.Bureaucracy;
-using Content.Shared.Paper;
 using Robust.Shared.Prototypes;
-using Content.Server.Station.Systems;
-using Content.Server.Station.Components;
-using Content.Server.Mind;
-using Content.Server.Roles;
-using Content.Server.Roles.Jobs;
 using Robust.Shared.Random;
 using System.Linq;
 
@@ -26,13 +26,11 @@ public sealed class BureaucracyManager : EntitySystem
     [Dependency] private readonly StationSystem _station = default!;
     [Dependency] private readonly JobSystem _jobs = default!;
     [Dependency] private readonly MindSystem _minds = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
     public override void Initialize()
     {
         base.Initialize();
         SubscribeNetworkEvent<RequestWriteOnDockEvent>(WriteOnDock);
     }
-
 
     private void WriteOnDock(RequestWriteOnDockEvent msg, EntitySessionEventArgs args)
     {
@@ -70,10 +68,7 @@ public sealed class BureaucracyManager : EntitySystem
 
         foreach (var stationUid in stations)
         {
-            if(!TryComp<StationDataComponent>(stationUid, out var stationData))
-                continue;
-
-            var largestGrid = _station.GetLargestGrid(stationData);
+            var largestGrid = _station.GetLargestGrid(stationUid);
             var grid = Transform(paperUid).GridUid;
 
             if (grid.HasValue && largestGrid == grid.Value)

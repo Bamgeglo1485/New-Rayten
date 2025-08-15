@@ -48,7 +48,6 @@ air-alarm-ui-pressure-bound-externalbound = Привязка к внешнему
 air-alarm-ui-pressure-bound-both = Привязка к обоим
 air-alarm-ui-widget-gas-filters = Фильтры газа
 
-
 ## Widgets
 
 
@@ -74,7 +73,6 @@ air-alarm-ui-scrubber-volume-rate-label = Объём (Л)
 air-alarm-ui-scrubber-wide-net-label = ШирокаяСеть
 air-alarm-ui-scrubber-select-all-gases-label = Выбрать все
 air-alarm-ui-scrubber-deselect-all-gases-label = Снять выбор со всех
-
 
 ### Thresholds
 

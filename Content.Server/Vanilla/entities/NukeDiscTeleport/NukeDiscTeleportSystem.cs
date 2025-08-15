@@ -1,13 +1,14 @@
 using Content.Server.Chat.Systems;
 using Content.Server.Station.Systems;
-using Content.Server.Station.Components;
+using Content.Server.Respawn;
 using Content.Server.Shuttles.Components;
+using Content.Shared.Station.Components;
+using Content.Shared.Nuke;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
 using Robust.Shared.Timing;
-using Content.Shared.Nuke;
 using Robust.Shared.GameObjects;
-using Content.Server.Respawn;
+
 namespace Content.Server.Vanilla.Nuke;
 
 public sealed class NukeDiskTeleportSystem : EntitySystem
@@ -45,7 +46,7 @@ public sealed class NukeDiskTeleportSystem : EntitySystem
                 _chat.TrySendInGameICMessage(uid, Loc.GetString("nukediscteleport-warning"),
                     InGameICChatType.Speak, true);
                 continue;
-            } 
+            }
 
             TeleportNukeDisk(uid);
         }
@@ -57,9 +58,9 @@ public sealed class NukeDiskTeleportSystem : EntitySystem
             return false;
 
         var query = EntityQueryEnumerator<StationDataComponent>();
-        while (query.MoveNext(out var stationUid, out var stationData))
+        while (query.MoveNext(out var stationUid, out _))
         {
-            if (_stationSystem.GetLargestGrid(stationData) == gridUid)
+            if (_stationSystem.GetLargestGrid(stationUid) == gridUid)
                 return true;
         }
         return false;
@@ -83,9 +84,9 @@ public sealed class NukeDiskTeleportSystem : EntitySystem
             return;
 
         var query = EntityQueryEnumerator<StationDataComponent>();
-        while (query.MoveNext(out var stationUid, out var stationData))
+        while (query.MoveNext(out var stationUid, out _))
         {
-            var largestGrid = _stationSystem.GetLargestGrid(stationData);
+            var largestGrid = _stationSystem.GetLargestGrid(stationUid);
             if (largestGrid == null)
                 continue;
 

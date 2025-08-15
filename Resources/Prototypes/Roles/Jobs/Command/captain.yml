@@ -44,8 +44,8 @@
   id: CaptainGear
   equipment:
     shoes: ClothingShoesBootsLaceup
-    eyes: ClothingEyesGlassesSunglasses
-    # gloves: ClothingHandsGlovesCaptain #vanilla-loadouts
+    eyes: ClothingEyesGlassesCommand
+    # gloves: ClothingHandsGlovesCaptain
     id: CaptainPDA
     ears: ClothingHeadsetAltCommand
   storage:

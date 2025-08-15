@@ -1,0 +1,29 @@
+- type: entity
+  parent: IDCardStandard
+  id: TTTInnocentID
+  name: айди карта террориста
+  description: Игрока в террарию
+  components:
+  - type: Sprite
+    layers:
+    - state: default
+    - state: idpassenger
+  - type: PresetIdCard
+    job: Passenger
+
+- type: entity
+  parent: TTTInnocentID
+  id: TTTTraitorID
+  components:
+  - type: Access
+    tags:
+    - SyndicateAgent
+    - NuclearOperative
+
+- type: entity
+  parent: TTTInnocentID
+  id: TTTDetectiveID
+  components:
+  - type: Access
+    tags:
+    - Detective

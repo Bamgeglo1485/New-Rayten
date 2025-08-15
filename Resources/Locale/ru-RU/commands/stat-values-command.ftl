@@ -6,6 +6,15 @@ stat-values-invalid = { $arg } не является действительно�
 stat-cargo-values = Цена продажи груза
 stat-cargo-id = ID
 stat-cargo-price = Цена
+# Melee
+stat-melee-values = Урон в ближнем бою
+stat-melee-id = ID
+stat-melee-base-damage = Базовый урон
+stat-melee-wield-damage = Урон в двуручном хвате
+stat-melee-attack-rate = Скорость атаки
+stat-melee-dps = DPS
+stat-melee-structural-damage = Структурный урон
+stat-melee-structural-wield-damage = Структурный урон в двуручном хвате
 # Lathe
 stat-lathe-values = Стоимость печати в лате
 stat-lathe-id = ID

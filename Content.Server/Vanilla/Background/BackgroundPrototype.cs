@@ -5,6 +5,7 @@ using Content.Server.Ghost.Roles;
 using Content.Server.Actions;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Mind;
+using Content.Shared.Roles.Components;
 using Content.Shared.Roles;
 using Content.Shared.Actions;
 using Content.Shared.Vanilla.Jammer;

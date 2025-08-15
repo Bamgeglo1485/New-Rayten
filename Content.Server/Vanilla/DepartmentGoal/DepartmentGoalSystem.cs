@@ -1,4 +1,3 @@
-using System.Linq;
 using Content.Server.Fax;
 using Content.Server.GameTicking.Events;
 using Content.Server.Station.Components;
@@ -6,17 +5,18 @@ using Content.Server.Station.Systems;
 using Content.Server.Corvax.StationGoal;
 using Content.Server.Cargo.Components;
 using Content.Server.Cargo.Systems;
-using Content.Server.Station.Components;
+using Content.Server.Chat.Systems;
+using Content.Shared.Station.Components;
 using Content.Shared.Fax.Components;
 using Content.Shared.GameTicking;
 using Content.Shared.Paper;
 using Content.Shared.Research.Components;
-using Content.Server.Chat.Systems;
 using Content.Shared.Cargo.Prototypes;
 using Robust.Server.Player;
 using Robust.Shared.Configuration;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
+using System.Linq;
 
 namespace Content.Server.Vanilla.DepartmentGoal;
 /// <summary>
@@ -47,13 +47,13 @@ public sealed class DepartmentGoalSystem : EntitySystem
 
         // Группируем цели по отделам
         var goalsByDepartment = allGoals.GroupBy(g => g.Department);
-        
+
         // Перемешиваем порядок отделов
         goalsByDepartment = goalsByDepartment.OrderBy(_ => _random.Next()).ToList();
 
         // Перебираем все станции с компонентом StationGoalComponent
-        var query = EntityQueryEnumerator<StationGoalComponent>();
-        while (query.MoveNext(out var stationUid, out var station))
+        var query = EntityQueryEnumerator<StationDataComponent, StationGoalComponent>();
+        while (query.MoveNext(out var stationUid, out _, out _))
         {
             // Локальный список для хранения выбранных целей для текущей станции
             var departmentGoals = new List<DepartmentGoalPrototype>();
@@ -104,28 +104,12 @@ public sealed class DepartmentGoalSystem : EntitySystem
             }
         }
     }
-    public bool SendStationGoal(EntityUid? ent, ProtoId<DepartmentGoalPrototype> goal)
+
+    public void SendStationGoal(EntityUid ent, DepartmentGoalPrototype goal)
     {
-        return SendStationGoal(ent, _proto.Index(goal));
-    }
-
-    /// <summary>
-    ///     Send a station goal on selected station to all faxes which are authorized to receive it.
-    /// </summary>
-    /// <returns>True if at least one fax received paper</returns>
-    public bool SendStationGoal(EntityUid? ent, DepartmentGoalPrototype goal)
-    {
-        // Если передана пустая сущность, не отправляем цель
-        if (ent is null)
-            return false;
-
-        // Проверяем наличие компонента данных о станции
-        if (!TryComp<StationDataComponent>(ent, out var stationData))
-            return false;
-
         // Создание факса с текстом цели
         var printout = new FaxPrintout(
-            Loc.GetString(goal.Text, ("station", MetaData(ent.Value).EntityName), ("dep", goal.Department.ToString())),
+            Loc.GetString(goal.Text, ("station", MetaData(ent).EntityName), ("dep", goal.Department.ToString())),
             Loc.GetString("station-goal-fax-paper-name"),
             null,
             null,
@@ -135,32 +119,24 @@ public sealed class DepartmentGoalSystem : EntitySystem
                 new() { StampedName = Loc.GetString("stamp-component-stamped-name-centcom"), StampedColor = Color.FromHex("#006600") },
             });
 
-        bool wasSent = false;
-
         // Перебираем все факс-устройства в мире
         var query = EntityQueryEnumerator<FaxMachineComponent>();
         while (query.MoveNext(out var faxUid, out var fax))
         {
             // Если факс не поддерживает прием целей, пропускаем
             if (!fax.ReceiveStationGoal)
-            {
                 continue;
-            }
 
             // Получаем наибольшую сетку для станции и проверяем, на ней ли факс
-            var largestGrid = _station.GetLargestGrid(stationData);
+            var largestGrid = _station.GetLargestGrid(ent);
             var grid = Transform(faxUid).GridUid;
 
             if (grid is not null && largestGrid == grid.Value)
             {
                 // Отправляем факс с данными
                 _fax.Receive(faxUid, printout, null, fax);
-
-                wasSent = true;
             }
         }
-
-        return wasSent;
     }
     #endregion
     #region принятие целей
@@ -184,12 +160,12 @@ public sealed class DepartmentGoalSystem : EntitySystem
             department.ENG => "Engineering",
             department.SEC => "Security",
             department.SRV => "Service",
-            _ => "Cargo" 
+            _ => "Cargo"
         };
-        
+
         _cargo.UpdateBankAccount(station, randomValue, account);
         DispatchAnnouncement(goal.Department, randomValue);
-        return true; 
+        return true;
     }
 
     private void DispatchAnnouncement(department dep, int randomValue)

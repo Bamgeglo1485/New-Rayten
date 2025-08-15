@@ -1,5 +1,5 @@
 - type: entity
-  parent: ClothingMaskBase
+  parent: [ClothingMaskBase, BaseChameleon]
   id: ClothingMaskGasChameleon
   name: gas mask
   description: A face-covering mask that can be connected to an air supply.
@@ -21,10 +21,6 @@
       default: ClothingMaskGas
     - type: BreathMask
     - type: IdentityBlocker # need that for default ClothingMaskGas
-    - type: UserInterface
-      interfaces:
-        enum.ChameleonUiKey.Key:
-          type: ChameleonBoundUserInterface
     - type: HideLayerClothing
       slots:
       - Snout
@@ -55,6 +51,12 @@
       hiddenDesc: hidden-desc-ClothingMaskGasVoiceChameleon
       enemyTechnology: true
     - type: VoiceMask
+    - type: UIRequiresLock
+      userInterfaceKeys:
+        - enum.ChameleonUiKey.Key
+        - enum.VoiceMaskUIKey.Key
+      accessDeniedSound: null
+      popup: null
     - type: HideLayerClothing
       slots:
       - Snout

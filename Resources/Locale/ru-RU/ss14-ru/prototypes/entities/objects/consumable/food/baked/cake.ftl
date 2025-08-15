@@ -88,4 +88,3 @@ ent-FoodCakeBerryDelight = ягодное наслаждение
     .desc = Это торт, который уже приближается.
 ent-FoodCakeBerryDelightSlice = кусок ягодного наслаждения
     .desc = Воткни вилку и утоли свой голод в уединении.
-

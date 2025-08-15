@@ -8,11 +8,11 @@
     - state: syndicate
     - state: icon-radiation
   - type: ItemBorgModule
-    items:
-    - R1arm
-    - WeaponSlabRevoler
-    - WeaponPiercerRevolver
-    - WeaponCoreEjectShotgun
+    hands:
+    - item: R1arm
+    - item: WeaponSlabRevoler
+    - item: WeaponPiercerRevolver
+    - item: WeaponCoreEjectShotgun
   - type: BorgModuleIcon
     icon: { sprite: Vanilla/Objects/Weapons/Guns/Piercer.rsi, state: module }
 
@@ -26,9 +26,9 @@
     - state: syndicate
     - state: icon-radiation
   - type: ItemBorgModule
-    items:
-    - WeaponRailcannon
-    - WeaponNailgun
+    hands:
+    - item: WeaponRailcannon
+    - item: WeaponNailgun
   - type: BorgModuleIcon
     icon: { sprite: Vanilla/Objects/Weapons/Guns/Railgun.rsi, state: module }
 
@@ -84,11 +84,11 @@
   name: R2 weapon module
   components:
   - type: ItemBorgModule
-    items:
-    - R2arm
-    - WeaponSlabRevoler
-    - WeaponPiercerRevolver
-    - WeaponCoreEjectShotgun
+    hands:
+    - item: R2arm
+    - item: WeaponSlabRevoler
+    - item: WeaponPiercerRevolver
+    - item: WeaponCoreEjectShotgun
 
 # music modules
 
@@ -136,8 +136,8 @@
   name: musique R1 module
   components:
   - type: ItemBorgModule
-    items:
-    - R1MusicCircuit
+    hands:
+    - item: R1MusicCircuit
   - type: BorgModuleIcon
     icon: { sprite: Vanilla/Objects/Devices/music_module.rsi, state: r1 }
 
@@ -147,7 +147,7 @@
   name: musique R2 module
   components:
   - type: ItemBorgModule
-    items:
-    - R2MusicCircuit
+    hands:
+    - item: R2MusicCircuit
   - type: BorgModuleIcon
     icon: { sprite: Vanilla/Objects/Devices/music_module.rsi, state: r2 }

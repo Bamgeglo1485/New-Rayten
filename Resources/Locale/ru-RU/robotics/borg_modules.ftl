@@ -1,0 +1,12 @@
+borg-slot-cables-empty = Кабели
+borg-slot-construction-empty = Строительные материалы
+borg-slot-circuitboards-empty = Платы
+borg-slot-flatpacks-empty = Флэтпаки
+borg-slot-tiles-empty = Напольная плитка
+borg-slot-topicals-empty = Мази и кремы
+borg-slot-small-containers-empty = Малые контейнеры
+borg-slot-chemical-containers-empty = Контейнеры для химикатов
+borg-slot-documents-empty = Книги и бумаги
+borg-slot-soap-empty = Мыло
+borg-slot-instruments-empty = Инструменты
+borg-slot-beakers-empty = Колбы

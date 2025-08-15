@@ -22,6 +22,11 @@
   id: AlphaWarhead
   name: альфа боеголовка
   components:
+  - type: Physics
+    canCollide: False
+    bodyType: Static
+  - type: Transform
+    anchored: false
   - type: Sprite
     layers:
     - state: green
@@ -46,9 +51,9 @@
     - Trigger
   - type: Explosive
     explosionType: FireKeepTiles
-    totalIntensity: 12000000
+    totalIntensity: 800000
     intensitySlope: 5
-    maxIntensity: 30000000
+    maxIntensity: 800000
     canCreateVacuum: true
   - type: ExplodeOnTrigger
     keysIn:
@@ -68,3 +73,71 @@
     layers:
     - state: green
 
+- type: entity
+  id: IntercomTTTReceiver
+  suffix: TTT, Ресивер
+  name: интерком
+  description: ЭСИПИ СОСАААААААААТЬ!
+  parent: BaseWallmountMachine
+  components:
+  - type: ActiveRadio
+    channels:
+    - Handheld
+  - type: Sprite
+    noRot: false
+    drawdepth: SmallObjects
+    sprite: Structures/Wallmounts/intercom.rsi
+    layers:
+    - state: base
+    - state: unshaded
+      map: ["enum.PowerDeviceVisualLayers.Powered"]
+      shader: unshaded
+    - state: broadcasting
+      map: ["enum.RadioDeviceVisualLayers.Broadcasting"]
+      shader: unshaded
+      visible: false
+    - state: speaker
+      map: ["enum.RadioDeviceVisualLayers.Speaker"]
+      shader: unshaded
+      visible: false
+    - state: panel
+      map: ["enum.WiresVisualLayers.MaintenancePanel"]
+      visible: false
+  - type: RadioSpeaker
+    channels:
+    - Handheld
+    enabled: true
+  - type: TelecomExempt
+  - type: Speech
+    speechVerb: Robotic
+
+- type: entity
+  id: IntercomTTTTransmitter
+  suffix: TTT, Трансмиттер
+  name: интерком
+  description: ЭСИПИ СОСАААААААААТЬ!
+  parent: BaseWallmountMachine
+  components:
+  - type: Sprite
+    noRot: false
+    drawdepth: SmallObjects
+    sprite: Structures/Wallmounts/intercom.rsi
+    layers:
+    - state: base
+    - state: unshaded
+      map: ["enum.PowerDeviceVisualLayers.Powered"]
+      shader: unshaded
+    - state: broadcasting
+      map: ["enum.RadioDeviceVisualLayers.Broadcasting"]
+      shader: unshaded
+      visible: false
+    - state: speaker
+      map: ["enum.RadioDeviceVisualLayers.Speaker"]
+      shader: unshaded
+      visible: false
+    - state: panel
+      map: ["enum.WiresVisualLayers.MaintenancePanel"]
+      visible: false
+  - type: RadioMicrophone
+    broadcastChannel: Handheld
+  - type: TelecomExempt

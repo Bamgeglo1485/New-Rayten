@@ -21,9 +21,3 @@ implanter-label-inject = [color=green]{ $implantName }[/color]
 implanter-label-draw = [color=red]{ $implantName }[/color]
     Режим: [color=white]{ $modeString }[/color]
 implanter-contained-implant-text = [color=green]{ $desc }[/color]
-
-## Implanter Actions
-
-scramble-implant-activated-popup = Вы превратились в { $identity }
-deathrattle-implant-dead-message = Зафиксирована смерть { $user } { $position }.
-deathrattle-implant-critical-message = Жизненные показатели { $user } критические, требуется немедленная помощь { $position }.

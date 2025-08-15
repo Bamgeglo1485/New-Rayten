@@ -8,6 +8,8 @@
   - type: Sprite
   - type: Item
     size: Large
+    shape:
+    - 0,0,2,1
   - type: Clothing
     sprite: Vanilla/Objects/Weapons/Guns/SMGs/atreides.rsi # Rayten-Resprites
     quickEquip: false

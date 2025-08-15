@@ -1,0 +1,12 @@
+ent-WarheadTimerActivator = { "" }
+    .desc = { "" }
+ent-AlphaWarhead = альфа боеголовка
+    .desc = { ent-MarkerBase.desc }
+ent-AlphaWarheadIntercom = { ent-MarkerBase }
+    .desc = { ent-MarkerBase.desc }
+ent-IntercomTTTReceiver = интерком
+    .desc = ЭСИПИ СОСАААААААААТЬ!
+    .suffix = TTT, Ресивер
+ent-IntercomTTTTransmitter = интерком
+    .desc = ЭСИПИ СОСАААААААААТЬ!
+    .suffix = TTT, Трансмиттер
