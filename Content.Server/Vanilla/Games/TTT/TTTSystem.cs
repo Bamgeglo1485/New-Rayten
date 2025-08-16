@@ -442,7 +442,7 @@ public sealed class TTTSystem : EntitySystem
             if (rulelink != rule)
                 continue;
 
-            KARMA[marker.Session] += Math.Clamp(KARMA[marker.Session] + 50, -51, 1500);
+            KARMA[marker.Session] = Math.Clamp(KARMA[marker.Session] + 50, -51, 1500);
 
             statsList.Add(new PlayerStats(marker.Session.Name, marker.TotalKills, KARMA[marker.Session], marker.GetRoleName()));
             //музыка
