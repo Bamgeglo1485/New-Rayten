@@ -20,9 +20,9 @@ public sealed class ThermalVisionSystem : EquipmentHudSystem<ThermalVisionOverla
     public override void Initialize()
     {
         base.Initialize();
-        _overlay = new(5f,1f);
+        _overlay = new(7f,1f);
     }
-    
+
     protected override void UpdateInternal(RefreshEquipmentHudEvent<ThermalVisionOverlayComponent> component)
     {
         base.UpdateInternal(component);

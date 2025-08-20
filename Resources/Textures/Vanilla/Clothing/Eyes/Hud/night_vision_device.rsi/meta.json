@@ -12,6 +12,14 @@
     },
 	  {
       "name": "icon-on"
+    },
+    {
+      "name": "off-equipped-EYES",
+      "directions": 4
+    },
+	  {
+      "name": "on-equipped-EYES",
+      "directions": 4
     }
   ]
 }

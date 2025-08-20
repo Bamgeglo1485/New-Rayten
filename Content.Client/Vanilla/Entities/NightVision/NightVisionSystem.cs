@@ -18,7 +18,7 @@ public sealed class NightVisionSystem : EquipmentHudSystem<NightVisionOverlayCom
     [Dependency] private readonly IOverlayManager _overlayMan = default!;
 
     private NightVisionOverlay _overlay = default!;
-
+    private EntityUid? _localplayer = null;
     public override void Initialize()
     {
         base.Initialize();
@@ -26,27 +26,30 @@ public sealed class NightVisionSystem : EquipmentHudSystem<NightVisionOverlayCom
         SubscribeLocalEvent<NightVisionComponent, LocalPlayerDetachedEvent>(OnDetached);
         _overlay = new();
     }
-    
+
     protected override void UpdateInternal(RefreshEquipmentHudEvent<NightVisionOverlayComponent> component)
     {
         base.UpdateInternal(component);
         _overlayMan.AddOverlay(_overlay);
 
-        var playerEntity = _player.LocalSession?.AttachedEntity;
-        if (playerEntity == null)
+        _localplayer = _player.LocalSession?.AttachedEntity;
+
+        if (_localplayer == null)
             return;
 
-        switchlight(playerEntity.Value, true);
+        switchlight(_localplayer.Value, true);
     }
 
     protected override void DeactivateInternal()
     {
         base.DeactivateInternal();
         _overlayMan.RemoveOverlay(_overlay);
-        var playerEntity = _player.LocalSession?.AttachedEntity;
-        if (playerEntity == null)
+
+        if (_localplayer == null)
             return;
-        switchlight(playerEntity.Value, false);
+
+        switchlight(_localplayer.Value, false);
+        _localplayer = null;
     }
 
     private void OnAttached(EntityUid uid, NightVisionComponent component, LocalPlayerAttachedEvent args)

@@ -17,14 +17,12 @@ public sealed class NightVisionOverlay : Overlay
     public override OverlaySpace Space => OverlaySpace.WorldSpace;
     private readonly ShaderInstance _greyscaleShader;
     private readonly ShaderInstance _circleMaskShader;
-    private readonly ShaderInstance _nightShader;
 
     public NightVisionOverlay()
     {
         IoCManager.InjectDependencies(this);
         _greyscaleShader = _prototypeManager.Index<ShaderPrototype>("GreyscaleFullscreen").InstanceUnique();
         _circleMaskShader = _prototypeManager.Index<ShaderPrototype>("CircleMask").InstanceUnique();
-        _nightShader = _prototypeManager.Index<ShaderPrototype>("NightVision").InstanceUnique();
     }
 
     protected override void Draw(in OverlayDrawArgs args)
@@ -43,11 +41,13 @@ public sealed class NightVisionOverlay : Overlay
             _circleMaskShader?.SetParameter("Zoom", content.Zoom.X / 14); // Neh, but looks nice
         }
 
-        _nightShader?.SetParameter("SCREEN_TEXTURE", ScreenTexture);
+        _greyscaleShader?.SetParameter("SCREEN_TEXTURE", ScreenTexture);
 
         var worldHandle = args.WorldHandle;
         var viewport = args.WorldBounds;
-        worldHandle.UseShader(_nightShader);
+        worldHandle.UseShader(_greyscaleShader);
+        worldHandle.DrawRect(viewport, Color.Green);
+        worldHandle.UseShader(_circleMaskShader);
         worldHandle.DrawRect(viewport, Color.Gray);
         worldHandle.UseShader(null);
     }
