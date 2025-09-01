@@ -12,7 +12,7 @@ public sealed class ServerAssSystem : EntitySystem
     [Dependency] private readonly SharedContainerSystem _container = default!;
     public const string BaseStorageId = "storagebase";
     public override void Initialize()
-    {   
+    {
         SubscribeLocalEvent<AssComponent, ComponentStartup>(OnInit);
         SubscribeLocalEvent<AssComponent, ComponentShutdown>(OnShutdown);
     }
@@ -22,24 +22,21 @@ public sealed class ServerAssSystem : EntitySystem
         ent.Comp.ImplantUid = _subdermalImplant.AddImplant(ent, ent.Comp.AssImplant);
     }
 
-    private void OnShutdown(Entity<AssComponent> ent, ref ComponentShutdown args)
+    private void OnShutdown(EntityUid uid, AssComponent component, ComponentShutdown args)
     {
-        if(ent.Comp.ImplantUid == null)
+        if(component.ImplantUid == null)
             return;
 
-        if(ent.Comp.ImplantUid == null)
-            return;
-
-        if (!_container.TryGetContainer(ent.Comp.ImplantUid.Value, BaseStorageId, out var AssImplant))
+        if (!_container.TryGetContainer(component.ImplantUid.Value, BaseStorageId, out var AssImplant))
             return;
 
         var containedEntites = AssImplant.ContainedEntities.ToArray();
 
         foreach (var entity in containedEntites)
         {
-                _transformSystem.DropNextTo(entity, ent.Comp.Owner);
+            _transformSystem.DropNextTo(entity, uid);
         }
 
-        _subdermalImplant.ForceRemove(ent, ent.Comp.ImplantUid.Value);
+        _subdermalImplant.ForceRemove(uid, component.ImplantUid.Value);
     }
 }

@@ -63,13 +63,13 @@ public sealed class ServerSkillChangeListener : EntitySystem
         }
         if (component.CrimeLevel == SkillLevel.Advanced)
         {
-            AddComp<AssComponent>(uid);
+            EnsureComp<AssComponent>(uid);
             RemComp<ThievingComponent>(uid);
         }
         if (component.CrimeLevel == SkillLevel.Expert)
         {
-            AddComp<ThievingComponent>(uid);
-            AddComp<AssComponent>(uid);
+            EnsureComp<ThievingComponent>(uid);
+            EnsureComp<AssComponent>(uid);
         }
     }
 
