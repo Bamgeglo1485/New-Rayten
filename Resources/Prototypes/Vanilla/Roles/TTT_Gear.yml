@@ -8,6 +8,5 @@
     gloves: ClothingHandsMercGlovesCombat
     outerClothing: ClothingOuterFlannelGreen
     shoes: ClothingShoesBootsWinter
-    belt: ClothingBeltMilitaryWebbing
     neck: ClothingNeckNanoTrasenPin
     id: PassengerPDAUnrem
