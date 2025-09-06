@@ -89,7 +89,6 @@ public sealed class TDMSystem : EntitySystem
     public override void Shutdown()
     {
         base.Shutdown();
-
         _playerManager.PlayerStatusChanged -= OnPlayerStatusChanged;
     }
     private void OnRoundEnded(RoundEndTextAppendEvent ev)
@@ -102,20 +101,11 @@ public sealed class TDMSystem : EntitySystem
             EnsureComp<PacifiedComponent>(entityId);
         }
 
-        if (Currentrule == null)
+        if (TryComp<TDMRuleComponent>(Currentrule, out var rule))
         {
-            _gameTicker.RestartRound();
-            return;
+            GameOver(Currentrule.Value, rule);
+            rule.LastRound = true;
         }
-
-        if (!TryComp<TDMRuleComponent>(Currentrule, out var rule))
-        {
-            _gameTicker.RestartRound();
-            return;
-        }
-
-        GameOver(Currentrule.Value, rule);
-        rule.LastRound = true;
     }
 
     private void OnArenaJoinRequest(TPMeToTDMEvent msg, EntitySessionEventArgs args)
