@@ -1,0 +1,108 @@
+- type: reagent
+  id: PortalJuice
+  name: reagent-name-portal-juice
+  desc: reagent-desc-portal-juice
+  physicalDesc: reagent-physical-desc-unstable-acid
+  flavor: acid
+  color: "#00ff37"
+  meltingPoint: 69
+  boilingPoint: 1485
+  metabolisms:
+    Poison:
+      effects:
+      - !type:HealthChange
+        damage:
+          types:
+            Caustic: 5
+  reactiveEffects:
+    Acidic:
+      methods: [ Touch ]
+      effects:
+      - !type:HealthChange
+        scaleByQuantity: true
+        ignoreResistances: false
+        damage:
+          types:
+            Caustic: 3
+      - !type:Emote
+        emote: Scream
+        probability: 0.3
+
+- type: reagent
+  id: OmegaPortalJuice
+  name: reagent-name-omega-portal-juice
+  desc: reagent-desc-omega-portal-juice
+  physicalDesc: reagent-physical-desc-stable-quantum
+  flavor: acid
+  color: "#fffb1f"
+  meltingPoint: 69
+  boilingPoint: 1485
+  metabolisms:
+    Poison:
+      effects:
+      - !type:HealthChange
+        damage:
+          types:
+            Caustic: 1
+  reactiveEffects:
+    Acidic:
+      methods: [ Touch ]
+      effects:
+      - !type:HealthChange
+        scaleByQuantity: true
+        ignoreResistances: false
+        damage:
+          types:
+            Caustic: 1
+      - !type:Emote
+        emote: Scream
+        probability: 0.1
+
+- type: reagent
+  id: TurbulentNectar
+  name: reagent-name-turbulent-nectar
+  desc: reagent-desc-turbulent-nectar
+  physicalDesc: reagent-physical-desc-bubble-quantum
+  flavor: bitter
+  color: "#cc98ce"
+  meltingPoint: 69
+  boilingPoint: 1485
+  tileReactions:
+    - !type:CleanTileReaction {}
+    - !type:CleanDecalsReaction {}
+    - !type:SpillTileReaction
+  evaporationSpeed: 0.1
+  slipData:
+    requiredSlipSpeed: 1
+    superSlippery: true
+  friction: 0.05
+
+- type: reagent
+  id: QuantumFlux
+  name: reagent-name-quantum-flux
+  desc: reagent-desc-quantum-flux
+  physicalDesc: reagent-physical-desc-unstable-quantum
+  flavor: acid
+  color: "#e02222"
+  meltingPoint: 69
+  boilingPoint: 1485
+  metabolisms:
+    Poison:
+      effects:
+      - !type:HealthChange
+        damage:
+          types:
+            Caustic: 7
+  reactiveEffects:
+    Acidic:
+      methods: [ Touch ]
+      effects:
+      - !type:HealthChange
+        scaleByQuantity: true
+        ignoreResistances: false
+        damage:
+          types:
+            Caustic: 5
+      - !type:Emote
+        emote: Scream
+        probability: 0.5

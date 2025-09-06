@@ -1,0 +1,46 @@
+- type: entity
+  name: плюмбус
+  parent: BaseItem
+  id: Plumbus
+  description: Все знают, что он делает, поэтому нет причин объяснять это.
+  components:
+  - type: Sprite
+    sprite: Vanilla/Objects/Misc/plumbus.rsi
+    state: base
+  - type: StaticPrice
+    price: 5000
+  - type: Spillable
+    solution: absorbed
+    spillWhenThrown: false
+    preventMelee: false
+  - type: DrainableSolution
+    solution: absorbed
+  - type: IncreaseDamageOnWield
+    damage:
+      types:
+        Blunt: 5
+  - type: Absorbent
+    useAbsorberSolution: true
+  - type: SolutionContainerManager
+    solutions:
+      absorbed:
+        maxVol: 100
+  - type: UseDelay
+    delay: 1
+  - type: DnaSubstanceTrace
+  - type: Plunger
+  - type: Tool
+    qualities:
+    - Brushing
+    useSound:
+      path: /Audio/Items/wirebrushing.ogg
+  - type: Item
+    size: Normal
+  - type: Extractable
+    juiceSolution:
+      reagents:
+      - ReagentId: TurbulentNectar
+        Quantity: 5
+  - type: Tag
+    tags:
+    - Plumbus

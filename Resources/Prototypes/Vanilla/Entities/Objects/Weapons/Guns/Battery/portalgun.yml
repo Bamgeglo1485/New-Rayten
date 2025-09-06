@@ -1,0 +1,227 @@
+- type: entity
+  name: портальная пушка
+  parent: BaseItem
+  id: PortalGunBase
+  description: Устройство для безответственных приключений.
+  abstract: true
+  components:
+  - type: Sprite
+    sprite: Vanilla/Objects/Devices/portal_gun.rsi
+    layers:
+    - state: base
+    - state: fill1
+      map: [ "enum.SolutionContainerLayers.Fill" ]
+      visible: false
+  - type: Appearance
+  - type: SolutionContainerVisuals
+    maxFillLevels: 6
+    fillBaseName: fill
+  - type: BatteryWeaponFireModes
+    fireModes:
+    - proto: ProjectilePortalGun
+      fireCost: 5
+    - proto: ProjectilePortalGunStation
+      fireCost: 5
+    - proto: ProjectilePortalGunDimensional
+      fireCost: 10
+  - type: ProjectileBatteryAmmoProvider
+    proto: ProjectilePortalGun
+    fireCost: 5
+  - type: PortalGun
+  - type: Gun
+  - type: SolutionContainerManager
+    solutions:
+      portal:
+        maxVol: 50
+  - type: MixableSolution
+    solution: portal
+  - type: FitsInDispenser
+    solution: portal
+  - type: RefillableSolution
+    solution: portal
+  - type: DrainableSolution
+    solution: portal
+  - type: ExaminableSolution
+    solution: portal
+    exactVolume: true
+  - type: DrawableSolution
+    solution: portal
+  - type: InjectableSolution
+    solution: portal
+  - type: Damageable
+  - type: DamageOnLand
+    damage:
+      types:
+        Blunt: 30
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 40
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          HandTeleporter:
+            min: 1
+            max: 2
+          ScrapGlass:
+            min: 2
+            max: 3
+          ScrapSteel:
+            min: 1
+            max: 2
+  - type: Item
+    size: Small
+    shape:
+    - 0,0,1,0
+    - 0,1,0,1
+    storedOffset: 0,-4
+
+- type: entity
+  parent: PortalGunBase
+  id: PortalGun
+  components:
+  - type: Construction
+    graph: PortalGunGraph
+    node: end
+  - type: Tag
+    tags:
+    - PortalGun
+
+- type: entity
+  name: кустарная портальная пушка
+  parent: PortalGunBase
+  id: MakeshiftPortalGun
+  description: Ещё более безоветственное устройство для безответственных приключений.
+  components:
+  - type: Sprite
+    layers:
+    - state: makeshift
+    - state: fill1
+      map: [ "enum.SolutionContainerLayers.Fill" ]
+      visible: false
+  - type: BatteryWeaponFireModes
+    fireModes:
+    - proto: ProjectilePortalGun
+      fireCost: 5
+    - proto: ProjectilePortalGunDimensional
+      fireCost: 10
+  - type: SolutionContainerManager
+    solutions:
+      portal:
+        maxVol: 10
+  - type: Construction
+    graph: MakeshiftPortalGunGraph
+    node: end
+
+- type: entity
+  name: великолепная портальная пушка
+  parent: PortalGunBase
+  id: GorgeousPortalGun
+  description: Ответственное устройство для безответственных приключений. Использует омега портальную жидкость и намного более экономная.
+  components:
+  - type: Sprite
+    sprite: Vanilla/Objects/Devices/portal_gun.rsi
+    layers:
+    - state: gorgeous
+    - state: gorgfill1
+      map: [ "enum.SolutionContainerLayers.Fill" ]
+      visible: false
+  - type: SolutionContainerVisuals
+    maxFillLevels: 6
+    fillBaseName: gorgfill
+  - type: PortalGun
+    reagentName: OmegaPortalJuice
+  - type: SolutionContainerManager
+    solutions:
+      portal:
+        maxVol: 100
+  - type: BatteryWeaponFireModes
+    fireModes:
+    - proto: ProjectilePortalGunOmega
+      fireCost: 3
+    - proto: ProjectilePortalGunStationOmega
+      fireCost: 3
+    - proto: ProjectilePortalGunDimensionalOmega
+      fireCost: 8
+  - type: ProjectileBatteryAmmoProvider
+    proto: ProjectilePortalGun
+    fireCost: 3
+  - type: Construction
+    graph: GorgeousPortalGunGraph
+    node: end
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          HandTeleporter:
+            min: 1
+            max: 1
+          ScrapGlass:
+            min: 2
+            max: 3
+          ScrapSteel:
+            min: 1
+            max: 2
+
+- type: entity
+  name: продвинутая портальная пушка
+  parent: BaseWeaponBattery
+  id: PortalGunDebug
+  description: Устройство для безответственных приключений.
+  components:
+  - type: Sprite
+    sprite: Vanilla/Objects/Devices/portal_gun.rsi
+    layers:
+    - state: base
+    - state: fill1
+      map: [ "enum.SolutionContainerLayers.Fill" ]
+      visible: false
+  - type: Appearance
+  - type: SolutionContainerVisuals
+    maxFillLevels: 6
+    fillBaseName: fill
+  - type: BatteryWeaponFireModes
+    fireModes:
+    - proto: ProjectilePortalGun
+      fireCost: 1
+    - proto: ProjectilePortalGunStation
+      fireCost: 1
+    - proto: ProjectilePortalGunDimensional
+      fireCost: 1
+  - type: ProjectileBatteryAmmoProvider
+    proto: ProjectilePortalGun
+    fireCost: 1
+  - type: Gun
+  - type: Damageable
+  - type: DamageOnLand
+    damage:
+      types:
+        Blunt: 30
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 40
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          HandTeleporter:
+            min: 1
+            max: 1
+          ScrapGlass:
+            min: 2
+            max: 3
+          ScrapSteel:
+            min: 1
+            max: 2

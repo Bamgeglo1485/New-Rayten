@@ -1,0 +1,113 @@
+- type: entity
+  parent: MarkerBase
+  id: SpawnGoliath
+  name: спавнер голиафа
+  components:
+  - type: Sprite
+    layers:
+    - state: green
+    - state: goliath
+      sprite: Mobs/Aliens/Asteroid/goliath.rsi
+  - type: ConditionalSpawner
+    prototypes:
+    - MobGoliath
+
+- type: entity
+  parent: MarkerBase
+  id: SpawnWatcher
+  name: спавнер наблюдателя
+  suffix: Обычный
+  components:
+  - type: Sprite
+    layers:
+    - state: green
+    - state: base
+      sprite: Mobs/Aliens/Lavaland/watcher.rsi
+  - type: ConditionalSpawner
+    prototypes:
+    - MobWatcherLavaland
+
+- type: entity
+  parent: MarkerBase
+  id: SpawnWatcherIcewing
+  name: спавнер наблюдателя
+  suffix: Ледокрыл
+  components:
+  - type: Sprite
+    layers:
+    - state: green
+    - state: base
+      sprite: Mobs/Aliens/Lavaland/watcher.rsi
+  - type: ConditionalSpawner
+    prototypes:
+    - MobWatcherIcewing
+
+- type: entity
+  parent: MarkerBase
+  id: SpawnCatShadow
+  name: спавнер теневого кота
+  components:
+  - type: Sprite
+    layers:
+    - state: green
+    - state: cat
+      sprite: Mobs/Pets/cat.rsi
+  - type: ConditionalSpawner
+    prototypes:
+    - MobCatShadow
+
+- type: entity
+  parent: MarkerBase
+  id: SpawnerLeviathing
+  name: спавнер левиазверя
+  components:
+  - type: Sprite
+    layers:
+    - state: green
+    - state: leviathing
+      sprite: Mobs/Aliens/Argocyte/argocyte_large.rsi
+  - type: ConditionalSpawner
+    prototypes:
+    - MobArgocyteLeviathing
+
+- type: entity
+  parent: MarkerBase
+  id: SpawnerCrawler
+  name: спавнер ползун
+  components:
+  - type: Sprite
+    layers:
+    - state: green
+    - state: crawler
+      sprite: Mobs/Aliens/Argocyte/argocyte_common.rsi
+  - type: ConditionalSpawner
+    prototypes:
+    - MobArgocyteCrawler
+
+- type: entity
+  parent: MarkerBase
+  id: SpawnerHarvester
+  name: спавнер ползун
+  components:
+  - type: Sprite
+    layers:
+    - state: green
+    - state: harvester
+      sprite: Mobs/Aliens/Argocyte/argocyte_common.rsi
+  - type: ConditionalSpawner
+    prototypes:
+    - MobArgocyteHarvester
+
+- type: entity
+  parent: MarkerBase
+  id: SpawnerBasilisk
+  name: спавнер василиска
+  components:
+  - type: Sprite
+    layers:
+    - state: green
+    - state: basilisk
+      sprite: Mobs/Aliens/Asteroid/basilisk.rsi
+  - type: ConditionalSpawner
+    prototypes:
+    - MobBasilisk

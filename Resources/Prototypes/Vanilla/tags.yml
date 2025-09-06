@@ -24,3 +24,11 @@
   id: HardsuitHelmet
 - type: Tag
   id: ThermalGlasses
+- type: Tag
+  id: PortalGun
+- type: Tag
+  id: Plumbus
+- type: Tag
+  id: Ultraseed
+- type: Tag
+  id: Teleporter

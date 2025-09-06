@@ -1,0 +1,26 @@
+- type: construction
+  id: PortalGun
+  graph: PortalGunGraph
+  startNode: start
+  targetNode: end
+  RequiresEngineeringLevel: 2
+  category: construction-category-misc
+  objectType: Item
+
+- type: construction
+  id: MakeshiftPortalGun
+  graph: MakeshiftPortalGunGraph
+  startNode: start
+  targetNode: end
+  RequiresEngineeringLevel: 3
+  category: construction-category-misc
+  objectType: Item
+
+- type: construction
+  id: GorgeousPortalGun
+  graph: GorgeousPortalGunGraph
+  startNode: start
+  targetNode: end
+  RequiresEngineeringLevel: 3
+  category: construction-category-misc
+  objectType: Item

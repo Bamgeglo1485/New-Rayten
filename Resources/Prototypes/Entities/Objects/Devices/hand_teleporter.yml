@@ -12,6 +12,7 @@
   - type: Tag
     tags:
     - HighRiskItem
+    - Teleporter # Rayten
   - type: StealTarget
     stealGroup: HandTeleporter
 

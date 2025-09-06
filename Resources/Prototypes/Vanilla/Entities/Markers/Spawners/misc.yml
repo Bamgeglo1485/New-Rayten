@@ -1,0 +1,29 @@
+- type: entity
+  name: спавнер плюмбуса
+  id: PlumbusSpawner
+  parent: MarkerBase
+  components:
+    - type: Sprite
+      layers:
+        - state: red
+        - sprite: Vanilla/Objects/Misc/plumbus.rsi
+          state: base
+    - type: RandomSpawner
+      prototypes:
+        - Plumbus
+
+- type: entity
+  name: спавнер тепловой лампы
+  id: HeatLampSpawner
+  parent: MarkerBase
+  components:
+    - type: Sprite
+      layers:
+        - state: red
+        - sprite: Vanilla/Objects/Devices/heatlamp.rsi
+          state: base
+    - type: RandomSpawner
+      prototypes:
+        - HeatLamp
+        - OldHeatLamp
+        - FoodSawdustMeal

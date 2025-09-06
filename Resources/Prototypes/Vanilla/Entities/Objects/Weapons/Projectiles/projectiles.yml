@@ -32,3 +32,95 @@
       types:
         Heat: 6
         Cellular: 2
+
+- type: entity
+  id: ProjectilePortalGun
+  parent: BaseBullet
+  name: Внестанционная дислокация
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Projectiles/magic.rsi
+    layers:
+    - state: spell
+      color: '#00FF00'
+  - type: Projectile
+    damage:
+      types:
+        Cellular: 5
+  - type: TriggerOnCollide
+    fixtureID: projectile
+  - type: RepeatingTrigger
+    delay: 0.5
+  - type: DeleteOnTrigger
+  - type: SpawnOnTrigger
+    proto: RandomPortalEntry
+  - type: Fixtures
+    fixtures:
+      projectile:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.3,-0.3,0.3,0.3"
+        hard: false
+        mask:
+        - Impassable
+        - BulletImpassable
+      fly-by: &flybyfixture
+        shape: !type:PhysShapeCircle
+          radius: 1.5
+        layer:
+        - Impassable
+        - MidImpassable
+        - HighImpassable
+        - LowImpassable
+        hard: False
+
+- type: entity
+  id: ProjectilePortalGunDimensional
+  parent: ProjectilePortalGun
+  name: Межпространственная дислокация
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SpawnOnTrigger
+    proto: RandomPortalDimensionalEntry
+
+- type: entity
+  id: ProjectilePortalGunStation
+  parent: ProjectilePortalGun
+  name: Станционная дислокация
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SpawnOnTrigger
+    proto: RandomPortalInStationEntry
+
+- type: entity
+  id: ProjectilePortalGunOmega
+  parent: ProjectilePortalGun
+  name: Внестанционная дислокация
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Projectiles/magic.rsi
+    layers:
+    - state: spell
+      color: "#ffe600"
+  - type: SpawnOnTrigger
+    proto: RandomPortalEntryOmega
+
+- type: entity
+  id: ProjectilePortalGunDimensionalOmega
+  parent: ProjectilePortalGunOmega
+  name: Межпространственная дислокация
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SpawnOnTrigger
+    proto: RandomPortalDimensionalEntryOmega
+
+- type: entity
+  id: ProjectilePortalGunStationOmega
+  parent: ProjectilePortalGunOmega
+  name: Станционная дислокация
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SpawnOnTrigger
+    proto: RandomPortalInStationEntryOmega

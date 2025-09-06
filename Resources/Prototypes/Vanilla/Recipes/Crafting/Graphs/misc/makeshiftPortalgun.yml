@@ -1,0 +1,45 @@
+- type: constructionGraph
+  id: MakeshiftPortalGunGraph
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: end
+      steps:
+      - tag: Handcuffs
+        icon:
+          sprite: Objects/Misc/cablecuffs.rsi
+          state: cuff
+          color: red
+        name: construction-graph-tag-cuffs
+      - tag: ModularReceiver
+        icon:
+          sprite: Objects/Misc/modular_receiver.rsi
+          state: icon
+        name: construction-graph-tag-modular-receiver
+      - material: Steel
+        amount: 13
+        doAfter: 2
+      - material: Plasma
+        amount: 20
+        doAfter: 2
+      - material: Uranium
+        amount: 6
+        doAfter: 2
+      - material: Plasteel
+        amount: 4
+        doAfter: 0.5
+      - material: CableMV
+        amount: 5
+        doAfter: 0.5
+      - material: CableHV
+        amount: 5
+        doAfter: 0.5
+      - material: Manipulator
+        amount: 10
+        doAfter: 0.5
+      - material: Cloth
+        amount: 3
+        doAfter: 10
+  - node: end
+    entity: MakeshiftPortalGun

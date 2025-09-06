@@ -1,0 +1,23 @@
+- type: reaction
+  id: PortalJuiceReaction
+  reactants:
+    Uranium:
+      amount: 4
+    Plasma:
+      amount: 4
+    SpaceMountainWind:
+      amount: 7
+  products:
+    PortalJuice: 2
+
+- type: reaction
+  id: OmegaPortalJuiceReaction
+  reactants:
+    QuantumFlux:
+      amount: 1
+    TurbulentNectar:
+      amount: 1
+    PortalJuice:
+      amount: 1
+  products:
+    OmegaPortalJuice: 7

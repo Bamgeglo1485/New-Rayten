@@ -1,0 +1,184 @@
+﻿- type: entity
+  id: RandomPortalEntry
+  parent: BasePortal
+  description: Давай, ассистент, вошли и вышли, приключение на 20 минут!
+  name: Зелёный портал
+  components:
+  - type: Sprite
+    sprite: /Textures/Vanilla/Effects/portal.rsi
+    layers:
+    - state: green
+      shader: unshaded
+  - type: PointLight
+    color: Green
+    radius: 6
+    energy: 4
+    netsync: false
+  - type: RandomPortal
+  - type: TimedDespawn
+    lifetime: 10
+  - type: TriggerOnSpawn
+  - type: EmitSoundOnTrigger
+    sound: /Audio/Vanilla/Effects/randomPortal.ogg
+  - type: Portal
+    canTeleportToOtherMaps: true
+  - type: Fixtures
+    fixtures:
+      portalFixture:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.45,-0.6,0.45,0.68"
+        mask:
+        - FullTileMask
+        layer:
+        - WallLayer
+        hard: false
+
+- type: entity
+  id: RandomPortalDimensionalEntry
+  parent: RandomPortalEntry
+  components:
+  - type: RandomPortal
+    onlyInMapTeleport: false
+
+- type: entity
+  id: RandomPortalInStationEntry
+  parent: RandomPortalDimensionalEntry
+  components:
+  - type: RandomPortal
+    onlyInStationTeleport: true
+
+- type: entity
+  id: RandomPortalExit
+  name: зелёный портал
+  description: Нет пути назад.
+  components:
+  - type: Portal
+    canTeleportToOtherMaps: true
+  - type: PointLight
+    color: Green
+    radius: 6
+    energy: 4
+    netsync: false
+  - type: Transform
+    anchored: True
+  - type: InteractionOutline
+  - type: Clickable
+  - type: Physics
+    bodyType: Static
+  - type: Sprite
+    sprite: /Textures/Vanilla/Effects/portal.rsi
+    layers:
+    - state: green
+      shader: unshaded
+  - type: Fixtures
+    fixtures:
+      portalFixture:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.45,-0.6,0.45,0.68"
+        mask:
+        - FullTileMask
+        layer:
+        - WallLayer
+        hard: false
+  - type: TimedDespawn
+    lifetime: 10
+  - type: TriggerOnSpawn
+  - type: EmitSoundOnTrigger
+    sound: /Audio/Vanilla/Effects/randomPortal.ogg
+
+# Жёлтый
+
+- type: entity
+  id: RandomPortalEntryOmega
+  parent: BasePortal
+  description: Самое время начать тост со зловещими нотками...
+  name: жёлтый портал
+  components:
+  - type: Sprite
+    sprite: /Textures/Vanilla/Effects/portal.rsi
+    layers:
+    - state: yellow
+      shader: unshaded
+  - type: PointLight
+    color: Orange
+    radius: 6
+    energy: 4
+    netsync: false
+  - type: RandomPortal
+    secondPortalPrototype: RandomPortalExitOmega
+  - type: LinkedEntity
+    deleteOnEmptyLinks: false
+  - type: TimedDespawn
+    lifetime: 4
+  - type: TriggerOnSpawn
+  - type: EmitSoundOnTrigger
+    sound: /Audio/Vanilla/Effects/randomPortalOmega.ogg
+  - type: Portal
+    canTeleportToOtherMaps: true
+  - type: Fixtures
+    fixtures:
+      portalFixture:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.45,-0.6,0.45,0.68"
+        mask:
+        - FullTileMask
+        layer:
+        - WallLayer
+        hard: false
+
+- type: entity
+  id: RandomPortalDimensionalEntryOmega
+  parent: RandomPortalEntryOmega
+  components:
+  - type: RandomPortal
+    onlyInMapTeleport: false
+
+- type: entity
+  id: RandomPortalInStationEntryOmega
+  parent: RandomPortalDimensionalEntryOmega
+  components:
+  - type: RandomPortal
+    onlyInStationTeleport: true
+
+- type: entity
+  id: RandomPortalExitOmega
+  name: жёлтый портал
+  description: Ещё один день в раю.
+  components:
+  - type: PointLight
+    color: Orange
+    radius: 6
+    energy: 4
+    netsync: false
+  - type: Transform
+    anchored: True
+  - type: InteractionOutline
+  - type: Clickable
+  - type: Physics
+    bodyType: Static
+  - type: Sprite
+    sprite: /Textures/Vanilla/Effects/portal.rsi
+    layers:
+    - state: yellow
+      shader: unshaded
+  - type: Fixtures
+    fixtures:
+      portalFixture:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.45,-0.6,0.45,0.68"
+        mask:
+        - FullTileMask
+        layer:
+        - WallLayer
+        hard: false
+  - type: TimedDespawn
+    lifetime: 4
+  - type: TriggerOnSpawn
+  - type: EmitSoundOnTrigger
+    sound: /Audio/Vanilla/Effects/randomPortalOmega.ogg
+  - type: Portal
+    canTeleportToOtherMaps: true

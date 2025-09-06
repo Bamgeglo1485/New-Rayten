@@ -1,0 +1,28 @@
+- type: constructionGraph
+  id: GorgeousPortalGunGraph
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: end
+      steps:
+      - tag: PortalGun
+        icon:
+          sprite: Vanilla/Objects/Devices/portal_gun.rsi
+          state: base
+        name: construction-graph-tag-portalgun
+      - tag: Plumbus
+        icon:
+          sprite: Vanilla/Objects/Misc/plumbus.rsi
+          state: base
+        name: construction-graph-tag-plumbus
+      - tag: Ultraseed
+        icon:
+          sprite: Vanilla/Objects/Misc/ultraseed.rsi
+          state: ultraseed
+        name: construction-graph-tag-ultraseed
+      - material: Gold
+        amount: 20
+        doAfter: 4
+  - node: end
+    entity: GorgeousPortalGun

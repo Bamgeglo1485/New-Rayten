@@ -50,4 +50,5 @@
   id: TeamDeathMatch
   parent: BaseGameRule
   components:
+  - type: TDMRule
   - type: TTTRule

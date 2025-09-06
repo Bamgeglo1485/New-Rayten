@@ -1,0 +1,75 @@
+- type: entity
+  name: ультрадерево
+  parent: BaseStructure
+  id: Ultratree
+  description: Довольно обычное дерево, похоже оно прошло цензуру.
+  components:
+    - type: Sprite
+      sprite: Vanilla/Objects/Misc/ultraseed.rsi
+      state: tree
+    - type: Transform
+      anchored: true
+    - type: Physics
+      bodyType: Static
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape:
+            !type:PhysShapeCircle
+            radius: 0.2
+    - type: InteractionOutline
+    - type: Damageable
+      damageContainer: StructuralInorganic
+      damageModifierSet: Wood
+    - type: Destructible
+      thresholds:
+      - trigger:
+          !type:DamageTrigger
+          damage: 100
+        behaviors:
+        - !type:PlaySoundBehavior
+          sound:
+            path: /Audio/Effects/tree_fell.ogg
+            params:
+              volume: 5
+              variation: 0.05
+        - !type:DoActsBehavior
+          acts: [ "Destruction" ]
+        - !type:SpawnEntitiesBehavior
+          spawn:
+            FoodUltraseed:
+              min: 1
+              max: 4
+
+- type: entity
+  name: ультрасемя
+  parent: FoodProduceBase
+  id: FoodUltraseed
+  description: Не спрашивайте у контрабандистов, как они проносили ультрасемя через межсистемную таможню. Известно своим повышением ума при поедании.
+  components:
+  - type: Produce
+  - type: Sprite
+    sprite: Vanilla/Objects/Misc/ultraseed.rsi
+    state: ultraseed
+  - type: FlavorProfile
+    flavors:
+      - fiber
+  - type: Extractable
+    juiceSolution:
+      reagents:
+      - ReagentId: FourteenLoko
+        Quantity: 20
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 3
+        reagents:
+        - ReagentId: Cognizine
+          Quantity: 1
+        - ReagentId: QuantumFlux
+          Quantity: 2
+  - type: StaticPrice
+    price: 5000
+  - type: Tag
+    tags:
+    - Ultraseed
