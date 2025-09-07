@@ -24,6 +24,8 @@ public sealed class DominatorSystem : SharedDominatorSystem
     private const float ScanDoAfterDuration = 5f;
     private SoundSpecifier? CompleteSound = new SoundPathSpecifier("/Audio/Items/beep.ogg");
 
+    private Dictionary<EntityUid, TimeSpan> ScannedEntities = new();
+
     public override void Initialize()
     {
         SubscribeLocalEvent<DominatorComponent, InteractUsingEvent>(OnInteractUsing);
@@ -41,6 +43,40 @@ public sealed class DominatorSystem : SharedDominatorSystem
 
         if (!args.CanReach)
             return;
+
+        var curTime = _timing.CurTime;
+
+        // Проверяем был ли уже скан
+        if (ScannedEntities.TryGetValue(target, out var lastScan))
+        {
+            // Кулдаун 5 минут
+            var cooldown = TimeSpan.FromMinutes(5);
+            var remaining = (lastScan + cooldown) - curTime;
+
+            if (remaining > TimeSpan.Zero)
+            {
+                string timeText;
+                if (remaining.TotalMinutes >= 1)
+                {
+                    if (remaining.Seconds > 0)
+                        timeText = $"{remaining.Minutes} мин. {remaining.Seconds} сек.";
+                    else
+                        timeText = $"{remaining.Minutes} мин.";
+                }
+                else
+                {
+                    timeText = $"{remaining.Seconds} сек.";
+                }
+
+                _chat.TrySendInGameICMessage(uid,
+                    Loc.GetString("dominator-scanner-cooldown", ("time", timeText)),
+                    InGameICChatType.Speak, true);
+                return;
+            }
+        }
+
+        // Обновляем время скана (или добавляем нового)
+        ScannedEntities[target] = curTime;
 
         _chat.TrySendInGameICMessage(uid, Loc.GetString("dominator-scanner-start"), InGameICChatType.Speak, true);
 
