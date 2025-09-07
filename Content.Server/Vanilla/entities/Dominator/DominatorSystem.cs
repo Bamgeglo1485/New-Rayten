@@ -68,17 +68,16 @@ public sealed class DominatorSystem : SharedDominatorSystem
                     timeText = $"{remaining.Seconds} сек.";
                 }
 
-                _chat.TrySendInGameICMessage(uid,
-                    Loc.GetString("dominator-scanner-cooldown", ("time", timeText)),
-                    InGameICChatType.Speak, true);
+                if (CanSay(component))
+                    _chat.TrySendInGameICMessage(uid,
+                        Loc.GetString("dominator-scanner-cooldown", ("time", timeText)),
+                        InGameICChatType.Speak, true);
+
                 return;
             }
         }
-
-        // Обновляем время скана (или добавляем нового)
-        ScannedEntities[target] = curTime;
-
-        _chat.TrySendInGameICMessage(uid, Loc.GetString("dominator-scanner-start"), InGameICChatType.Speak, true);
+        if (CanSay(component))
+            _chat.TrySendInGameICMessage(uid, Loc.GetString("dominator-scanner-start"), InGameICChatType.Speak, true);
 
         _doAfter.TryStartDoAfter(new DoAfterArgs(EntityManager, args.User, ScanDoAfterDuration, new DominatorDoAfterEvent(), uid, target: target, used: uid)
         {
@@ -90,11 +89,15 @@ public sealed class DominatorSystem : SharedDominatorSystem
     {
         if (args.Cancelled || args.Handled || args.Args.Target == null)
             return;
+
         _audio.PlayPvs(CompleteSound, uid);
+
         int targetdanger = _dangermob.GetEntityDanger(args.Args.Target.Value, deepseek: true);
 
         _chat.TrySendInGameICMessage(uid, Loc.GetString("dominator-scanner-end", ("danger", targetdanger)), InGameICChatType.Speak, true);
 
+        // Обновляем время скана (или добавляем нового)
+        ScannedEntities[args.Args.Target.Value] = _timing.CurTime;
         args.Handled = true;
     }
 
