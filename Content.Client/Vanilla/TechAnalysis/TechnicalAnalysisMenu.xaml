@@ -9,18 +9,13 @@
        <BoxContainer Orientation="Horizontal" HorizontalExpand="True" VerticalExpand="True" Access="Public">
               <BoxContainer Margin="10 10 10 10" MaxWidth="240" SetWidth="240" Orientation="Vertical" HorizontalExpand="False" VerticalExpand="True">
                      <BoxContainer Name="InformationContainer" Orientation="Vertical" VerticalExpand="True" >
-                            <RichTextLabel Name="ItemName" VerticalAlignment="Top" HorizontalAlignment="Left"/>
-                            <RichTextLabel Name="Difficult" VerticalAlignment="Top" HorizontalAlignment="Left"/>
                             <RichTextLabel Name="AttemptsLeftLabel" VerticalAlignment="Top" HorizontalAlignment="Left"/>
-                            <customControls:HSeparator StyleClasses="HighDivider" Margin="0 15 0 10"/>
-                            <RichTextLabel Name="ItemDesc" VerticalAlignment="Top" HorizontalAlignment="Left"/>
                             <customControls:HSeparator StyleClasses="HighDivider" Margin="0 15 0 10"/>
                             <RichTextLabel Name="ServerConnectionStatus" VerticalAlignment="Top" HorizontalAlignment="Left"/>
                             <RichTextLabel Name="PointsLabel" VerticalAlignment="Top" HorizontalAlignment="Left"/>
                             <customControls:HSeparator StyleClasses="HighDivider" Margin="0 15 0 10"/>
                      </BoxContainer>
                             <Button Name="ExtractButton" Text="Извлечь очки" Access="Public" Disabled="True"/>
-                            <Button Name="FullResetButton" Text="Начать сначала" Access="Public"/>
                             <Button Name="ServerButton" Text="Cервер" Access="Public"/>
               </BoxContainer>
               <customControls:VSeparator StyleClasses="LowDivider" />

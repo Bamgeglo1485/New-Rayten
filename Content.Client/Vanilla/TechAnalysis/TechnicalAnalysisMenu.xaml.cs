@@ -22,7 +22,6 @@ public sealed partial class TechnicalAnalysisMenu : FancyWindow
     private readonly AudioSystem _audio;
     private readonly ItemSlotsSystem _slots;
     public event Action<List<char>>? OnSubmitPressed;
-    public event Action? OnFullResetPressed;
     public event Action? OnExtractPressed;
     public event Action? OnServerSelectionButtonPressed;
     private bool ForceDisableSubmitBtn = false;
@@ -49,7 +48,6 @@ public sealed partial class TechnicalAnalysisMenu : FancyWindow
         {
             OnServerSelectionButtonPressed?.Invoke();
         };
-        FullResetButton.OnPressed += _ => OnFullResetPressed?.Invoke();
         ResetButton.OnPressed += _ => ResetGenomeButtons();
     }
     public void NoItem(bool noitem)
@@ -57,11 +55,6 @@ public sealed partial class TechnicalAnalysisMenu : FancyWindow
         RightPanel.Visible = !noitem;
         NoItemPanel.Visible = noitem;
         AttemptsLeftLabel.Visible = !noitem;
-        if (noitem)
-        {
-            FullResetButton.Disabled = true;
-            Difficult.SetMessage(FormattedMessage.FromMarkupOrThrow(Loc.GetString("TechnicalAnalysis-ui-difficult", ("difficult", "error"))));
-        }
     }
     public void ExtractButtonUpdate(int points)
     {
@@ -81,18 +74,12 @@ public sealed partial class TechnicalAnalysisMenu : FancyWindow
     }
 
 
-    public void Update(List<List<CodonFeedBack>> history, int attemptscount, string itemname, LocId sourceDesc, CompetitiveDifficult diffictult)
+    public void Update(List<List<CodonFeedBack>> history, int attemptscount)
     {
-        int buttoncount = diffictult == CompetitiveDifficult.easy ? 4 : 6;
-        CreateGenomeInputControls(buttoncount);
+        CreateGenomeInputControls(6);
         UpdateHistory(history);
         UpdateWinCondition(attemptscount);
         UpdateSubmitButtonState();
-
-        ItemDesc.SetMessage(FormattedMessage.FromMarkupOrThrow(Loc.GetString(sourceDesc)));
-        ItemName.SetMessage(FormattedMessage.FromMarkupOrThrow(Loc.GetString("TechnicalAnalysis-ui-itemname", ("item", itemname))));
-        Difficult.SetMessage(FormattedMessage.FromMarkupOrThrow(Loc.GetString("TechnicalAnalysis-ui-difficult", ("difficult", diffictult.ToString()))));
-        FullResetButton.Disabled = diffictult == CompetitiveDifficult.hard;
     }
 
     public void UpdateHistory(List<List<CodonFeedBack>> history)

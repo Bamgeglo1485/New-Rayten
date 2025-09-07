@@ -2,9 +2,11 @@ using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Vanilla.Competitive;
 using Content.Shared.Research.Components;
 using Content.Server.Research.Systems;
+using Content.Server.Radio.EntitySystems;
 using Robust.Server.GameObjects;
 using Robust.Server.Audio;
 using Robust.Shared.Random;
+using Robust.Shared.Timing;
 using System.Linq;
 
 namespace Content.Server.Vanilla.Competitive;
@@ -12,18 +14,43 @@ namespace Content.Server.Vanilla.Competitive;
 public sealed class TechnicalAnalysisSystem : EntitySystem
 {
     private static readonly char[] Alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+    public TimeSpan NextSpawn = TimeSpan.Zero;
     [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly ItemSlotsSystem _slots = default!;
     [Dependency] private readonly UserInterfaceSystem _ui = default!;
     [Dependency] private readonly ResearchSystem _research = default!;
     [Dependency] private readonly AudioSystem _audio = default!;
+    [Dependency] private readonly IGameTiming Timing = default!;
+    [Dependency] private readonly RadioSystem _radio = default!;
     public override void Initialize()
     {
         base.Initialize();
         SubscribeLocalEvent<TechnicalAnalyzerComponent, BoundUIOpenedEvent>(OnUIOpened);
         SubscribeLocalEvent<TechnicalAnalyzerComponent, TechnicalAnalyzerButtonPressedMessage>(OnAnalyze);
-        SubscribeLocalEvent<TechnicalAnalyzerComponent, TechnicalAnalyzerFullResetMessage>(OnGenomeReset);
         SubscribeLocalEvent<TechnicalAnalyzerComponent, TechnicalAnalyzerExtractMessage>(OnExtract);
+    }
+    public override void Update(float frameTime)
+    {
+        if (Timing.CurTime < NextSpawn)
+            return;
+
+        NextSpawn += TimeSpan.FromMinutes(_random.Next(6, 12));
+
+        var query = EntityQueryEnumerator<ContrabandBufferComponent>();
+        while (query.MoveNext(out var uid, out var buffer))
+        {
+            _radio.SendRadioMessage(uid, Loc.GetString("TechnicalAnalysis-radio-message"), "Science", uid);
+            var shuffled = Alphabet.ToList();
+            _random.Shuffle(shuffled);
+            var genome = shuffled.Take(6).ToList();
+
+            var analysisData = new ContrabandAnalysisData
+            {
+                Genome = genome,
+                History = new List<List<CodonFeedBack>>(),
+                AttemptsCount = 5,
+            };
+            buffer.AnalyzedItems.Add(analysisData);
+        }
     }
     private void OnUIOpened(Entity<TechnicalAnalyzerComponent> console, ref BoundUIOpenedEvent args)
     {
@@ -67,7 +94,7 @@ public sealed class TechnicalAnalysisSystem : EntitySystem
 
         List<List<CodonFeedBack>> emptyHistory = new();
         _ui.SetUiState(uid, TechnicalAnalyzerUiKey.Key,
-            new TechnicalAnalyzerInterfaceState(emptyHistory, -1, "Отсутствует", string.Empty, CompetitiveDifficult.medium, researchPoints));
+            new TechnicalAnalyzerInterfaceState(emptyHistory, -1, researchPoints));
         return;
     }
 
@@ -85,12 +112,9 @@ public sealed class TechnicalAnalysisSystem : EntitySystem
 
         var history = analysis.History;
         var attemptsCount = analysis.AttemptsCount;
-        var sourceName = analysis.SourceName;
-        var sourceDesc = analysis.SourceDesc;
-        var difficult = analysis.Difficult;
 
         _ui.SetUiState(uid, TechnicalAnalyzerUiKey.Key,
-            new TechnicalAnalyzerInterfaceState(history, attemptsCount, sourceName, sourceDesc, difficult, analyzerComp.ResearchPoints));
+            new TechnicalAnalyzerInterfaceState(history, attemptsCount, analyzerComp.ResearchPoints));
     }
 
 
@@ -105,28 +129,6 @@ public sealed class TechnicalAnalysisSystem : EntitySystem
         _research.ModifyServerPoints(server.Value, ent.Comp.ResearchPoints, serverComponent);
         _audio.PlayPvs(ent.Comp.ExtractSound, ent);
         ent.Comp.ResearchPoints = 0;
-        UpdateUI(ent);
-    }
-
-    private void OnGenomeReset(Entity<TechnicalAnalyzerComponent> ent, ref TechnicalAnalyzerFullResetMessage args)
-    {
-        var analyzerComp = ent.Comp;
-
-        if (analyzerComp.CurrentAnalysisData is not { } data)
-            return;
-
-        if (data.Difficult == CompetitiveDifficult.hard)
-            return;
-
-        var shuffled = Alphabet.ToList();
-        _random.Shuffle(shuffled);
-
-        int genomeCount = data.Difficult == CompetitiveDifficult.easy ? 4 : 6;
-        var genome = shuffled.Take(genomeCount).ToList();
-        data.Genome = genome;
-        data.History = new();
-        data.AttemptsCount = 5;
-
         UpdateUI(ent);
     }
 
@@ -152,11 +154,8 @@ public sealed class TechnicalAnalysisSystem : EntitySystem
 
         if (analyzerComp.CurrentAnalysisData.AttemptsCount <= 0)
         {
-            if (analyzerComp.CurrentAnalysisData.Difficult == CompetitiveDifficult.hard)
-            {
-                buffer.AnalyzedItems.Remove(analyzerComp.CurrentAnalysisData);
-                analyzerComp.CurrentAnalysisData = null;
-            }
+            buffer.AnalyzedItems.Remove(analyzerComp.CurrentAnalysisData);
+            analyzerComp.CurrentAnalysisData = null;
             UpdateUI(ent);
             return;
         }
@@ -164,19 +163,7 @@ public sealed class TechnicalAnalysisSystem : EntitySystem
         var submitted = args.SubmittedGenome;
         var correct = analyzerComp.CurrentAnalysisData.Genome;
 
-        if (submitted.Count != correct.Count)
-        {
-            UpdateUI(ent);
-            return;
-        }
-
-        if (!submitted.All(c => Alphabet.Contains(c)))
-        {
-            UpdateUI(ent);
-            return;
-        }
-
-        if (submitted.Distinct().Count() != submitted.Count)
+        if (submitted.Count != correct.Count || submitted.Distinct().Count() != submitted.Count || !submitted.All(c => Alphabet.Contains(c)))
         {
             UpdateUI(ent);
             return;
@@ -235,7 +222,7 @@ public sealed class TechnicalAnalysisSystem : EntitySystem
         if (win)
         {
             _audio.PlayPvs(analyzerComp.WinSound, ent);
-            analyzerComp.ResearchPoints += analyzerComp.CurrentAnalysisData.CalculateResearchPointsAward();
+            analyzerComp.ResearchPoints += ContrabandAnalysisData.Award;
             buffer.AnalyzedItems.Remove(analyzerComp.CurrentAnalysisData);
             analyzerComp.CurrentAnalysisData = null;
         }
@@ -249,8 +236,6 @@ public sealed class TechnicalAnalysisSystem : EntitySystem
             if (buffer.AnalyzedItems.Count != 0)
                 analyzerComp.CurrentAnalysisData = buffer.AnalyzedItems[0];
         }
-
         UpdateUI(ent);
     }
-
 }

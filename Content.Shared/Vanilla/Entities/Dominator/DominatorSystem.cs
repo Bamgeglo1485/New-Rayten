@@ -19,7 +19,7 @@ public class SharedDominatorSystem : EntitySystem
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly SharedHandsSystem _hands = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly SharedDangerMobSystem _dangermob = default!;
+    [Dependency] protected readonly SharedDangerMobSystem _dangermob = default!;
     [Dependency] private readonly SharedAppearanceSystem _appearanceSystem = default!;
 
     public override void Initialize()
@@ -93,7 +93,6 @@ public class SharedDominatorSystem : EntitySystem
     public virtual void UpdateWeaponMode(EntityUid uid, DominatorComponent component, DominatorState newMode)
     {
         component.CurrentState = newMode;
-        // Dirty(uid, component);
 
         var fireMode = component.FireModes[(int)newMode];
         if (fireMode.IsHitscan)

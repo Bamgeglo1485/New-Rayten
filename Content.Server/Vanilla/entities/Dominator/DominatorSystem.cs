@@ -5,6 +5,9 @@ using Content.Shared.Interaction;
 using Content.Shared.Access.Components;
 using Content.Shared.Access.Systems;
 using Content.Shared.Inventory;
+using Content.Shared.DoAfter;
+using Robust.Shared.Audio;
+using Robust.Shared.Audio.Systems;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
@@ -16,10 +19,47 @@ public sealed class DominatorSystem : SharedDominatorSystem
     [Dependency] private readonly AccessReaderSystem _accessReader = default!;
     [Dependency] private readonly ChatSystem _chat = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
+    private const float ScanDoAfterDuration = 5f;
+    private SoundSpecifier? CompleteSound = new SoundPathSpecifier("/Audio/Items/beep.ogg");
 
     public override void Initialize()
     {
         SubscribeLocalEvent<DominatorComponent, InteractUsingEvent>(OnInteractUsing);
+        SubscribeLocalEvent<DominatorComponent, AfterInteractEvent>(OnScannerAfterInteract);
+        SubscribeLocalEvent<DominatorComponent, DominatorDoAfterEvent>(OnDoAfter);
+    }
+
+    private void OnScannerAfterInteract(EntityUid uid, DominatorComponent component, AfterInteractEvent args)
+    {
+        if (args.Target is not { } target)
+            return;
+
+        if (!HasComp<DangerMobComponent>(target))
+            return;
+
+        if (!args.CanReach)
+            return;
+
+        _chat.TrySendInGameICMessage(uid, Loc.GetString("dominator-scanner-start"), InGameICChatType.Speak, true);
+
+        _doAfter.TryStartDoAfter(new DoAfterArgs(EntityManager, args.User, ScanDoAfterDuration, new DominatorDoAfterEvent(), uid, target: target, used: uid)
+        {
+            DistanceThreshold = 2f
+        });
+    }
+
+    private void OnDoAfter(EntityUid uid, DominatorComponent component, DoAfterEvent args)
+    {
+        if (args.Cancelled || args.Handled || args.Args.Target == null)
+            return;
+        _audio.PlayPvs(CompleteSound, uid);
+        int targetdanger = _dangermob.GetEntityDanger(args.Args.Target.Value, deepseek: true);
+
+        _chat.TrySendInGameICMessage(uid, Loc.GetString("dominator-scanner-end", ("danger", targetdanger)), InGameICChatType.Speak, true);
+
+        args.Handled = true;
     }
 
     public override void UpdateWeaponMode(EntityUid uid, DominatorComponent dom, DominatorState newMode)
@@ -35,8 +75,8 @@ public sealed class DominatorSystem : SharedDominatorSystem
         string message = newMode switch
         {
             DominatorState.Disabled => "Деактивация",
-            DominatorState.NonLethal => "Текущий режим — станнер. Спокойно прицельтесь и обезвредьте цель",
-            DominatorState.Lethal => "Мера наказания изменена. Текущий режим — летальный. Спокойно прицельтесь и уничтожьте цель",
+            DominatorState.NonLethal => "Текущий режим — станнер.",
+            DominatorState.Lethal => "Текущий режим — летальный.",
             _ => "Обнаружен неизвестный режим. Ошибка."
         };
 

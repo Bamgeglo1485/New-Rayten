@@ -1,6 +1,7 @@
 using Robust.Shared.GameStates;
 using Robust.Shared.Serialization;
 using Content.Shared.Weapons.Ranged.Components;
+using Content.Shared.DoAfter;
 namespace Content.Shared.Vanilla.Dominator;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
@@ -36,4 +37,8 @@ public enum DominatorState : byte
 public enum DominatorVisuals : byte
 {
     firemod
+}
+[Serializable, NetSerializable]
+public sealed partial class DominatorDoAfterEvent : SimpleDoAfterEvent
+{
 }
