@@ -18,7 +18,9 @@
     - Human
     - Moth
     - Reptilian
-    - Vulpkanin # Corvax-MRP
+    - Vulpkanin
+    - Trottine # Rayten
+    - Skrell # Rayten
 
 - type: loadoutEffectGroup
   id: EffectSpeciesVox
@@ -76,6 +78,9 @@
     - Dwarf
     - Human
     - Reptilian
+    - Vulpkanin
+    - Trottine # Rayten
+    - Skrell # Rayten
 
 - type: loadoutEffectGroup
   id: OxygenBreatherMimeMoth

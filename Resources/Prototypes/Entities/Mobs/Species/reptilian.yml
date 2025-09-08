@@ -97,7 +97,7 @@
             state: shoes
     # Corvax-Displacements-End
     # Rayten-start
-  - type: NightVision 
+  - type: NightVision
   - type: PointLight
     radius: 9
     energy: 1.5

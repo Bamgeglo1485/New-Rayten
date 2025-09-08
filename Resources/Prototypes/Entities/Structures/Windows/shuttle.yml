@@ -1,7 +1,7 @@
 - type: entity
   id: ShuttleWindow
   name: shuttle window
-  parent: WindowRCDResistant
+  parent: [BaseDeltaPressureReinforcedGlass, WindowRCDResistant]
   components:
   - type: RequiresSkill
     RequiresBuildingLevel: 3

@@ -1,6 +1,11 @@
 set-game-preset-command-description = Установить игровой пресет для текущего раунда.
 set-game-preset-command-help-text = setgamepreset <id>
+set-game-preset-command-hint-1 = <id>
+set-game-preset-command-hint-2 = [number of rounds]
+set-game-preset-command-hint-3 = [decoy preset]
 set-game-preset-optional-argument-not-integer = 2 аргумент должен быть числом
 set-game-preset-preset-error = Не удаётся найти игровой пресет "{ $preset }"
-#set-game-preset-preset-set = Set game preset to "{$preset}"
-set-game-preset-preset-set-finite = Установить игровой пресет на "{ $preset }" для следующего { $rounds } раунда.
+set-game-preset-decoy-error = Если указан третий аргумент, он должен быть корректным пресетом. Не удаётся найти игровой пресет "{ $preset }"
+#set-game-preset-preset-set = Установить игровой пресет на "{ $preset }"
+set-game-preset-preset-set-finite = Установить игровой пресет "{ $preset }" для следующих { $rounds } раундов.
+set-game-preset-preset-set-finite-with-decoy = Установить игровой пресет "{ $preset }" для следующих { $rounds } раундов, показывая в лобби { $decoy }.

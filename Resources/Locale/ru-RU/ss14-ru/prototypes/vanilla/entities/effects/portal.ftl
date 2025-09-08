@@ -1,0 +1,16 @@
+ent-RandomPortalEntry = Зелёный портал
+    .desc = Давай, ассистент, вошли и вышли, приключение на 20 минут!
+ent-RandomPortalDimensionalEntry = { ent-RandomPortalEntry }
+    .desc = { ent-RandomPortalEntry.desc }
+ent-RandomPortalInStationEntry = { ent-RandomPortalDimensionalEntry }
+    .desc = { ent-RandomPortalDimensionalEntry.desc }
+ent-RandomPortalExit = зелёный портал
+    .desc = Нет пути назад.
+ent-RandomPortalEntryOmega = жёлтый портал
+    .desc = Самое время начать тост со зловещими нотками...
+ent-RandomPortalDimensionalEntryOmega = { ent-RandomPortalEntryOmega }
+    .desc = { ent-RandomPortalEntryOmega.desc }
+ent-RandomPortalInStationEntryOmega = { ent-RandomPortalDimensionalEntryOmega }
+    .desc = { ent-RandomPortalDimensionalEntryOmega.desc }
+ent-RandomPortalExitOmega = жёлтый портал
+    .desc = Ещё один день в раю.

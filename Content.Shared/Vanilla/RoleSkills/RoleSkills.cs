@@ -51,7 +51,7 @@ public sealed partial class RoleSkills : IEquatable<RoleSkills>
     public void EnsureValid(HumanoidCharacterProfile profile, ICommonSession session, IDependencyCollection collection)
     {
         var protoManager = collection.Resolve<IPrototypeManager>();
-        int skillpoints = 12; //Хардкодет
+        var skillpoints = SharedRoleSkillsSystem.skillpoints;
 
         List<(skillType Skill, SkillLevel Level, int Experience)> generalbasicskills = new List<(skillType Skill, SkillLevel Level, int Experience)>
         {

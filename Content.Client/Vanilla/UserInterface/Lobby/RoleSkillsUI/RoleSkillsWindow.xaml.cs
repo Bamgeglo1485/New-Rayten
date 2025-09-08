@@ -61,7 +61,7 @@ public sealed partial class RoleSkillsWindow : FancyWindow
         BasicSkillContainer.Children.Clear();
         EasySkillContainer.Children.Clear();
         Skillpoints.Visible = false;
-        int skillpoints = 12;//ХАРДКОДЕТ
+        int skillpoints = SharedRoleSkillsSystem.skillpoints;
 
         //навыки
         List<(skillType Skill, SkillLevel Level, int Experience)> generalbasicskills = new List<(skillType Skill, SkillLevel Level, int Experience)>
