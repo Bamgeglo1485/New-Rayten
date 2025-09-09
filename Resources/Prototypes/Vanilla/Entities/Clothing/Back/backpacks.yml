@@ -6,3 +6,33 @@
   components:
     - type: Sprite
       sprite: Vanilla/Clothing/Back/Backpacks/formalCMO.rsi
+
+
+- type: entity
+  parent: ClothingBackpack
+  id: ClothingBackpackAbsolute
+  name: абсолютный рюкзак
+  description: Рюкзак, открывающий локальное пространство блюспейса, также имеет два манипулятора.
+  components:
+  - type: Sprite
+    sprite: Vanilla/Clothing/Back/Backpacks/absolutepack.rsi
+    layers:
+    - state: icon
+    - state: unlit
+      shader: unshaded
+  - type: Clothing
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Huge
+    grid:
+    - 0,0,19,9
+  - type: ExtraHandsEquipment
+    hands:
+      extra_hand_1:
+        location: Middle
+      extra_hand_2:
+        location: Middle
+  - type: Construction
+    graph: ClothingBackpackAbsoluteGraph
+    node: end

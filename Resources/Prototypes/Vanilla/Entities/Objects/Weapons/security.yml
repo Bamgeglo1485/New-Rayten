@@ -1,0 +1,45 @@
+- type: entity
+  name: двойная дубинка-шокер
+  parent: Stunbaton
+  id: DoubleStunbaton
+  description: NanoTrasen явно стоит взять на вооружение эту идею.
+  components:
+  - type: Sprite
+    sprite: Vanilla/Objects/Weapons/Melee/doublestunbaton.rsi
+    layers:
+    - state: stunbaton_off
+      map: [ "enum.ToggleableVisuals.Layer" ]
+  - type: Battery
+    maxCharge: 2000
+    startingCharge: 2000
+  - type: Item
+    sprite: Vanilla/Objects/Weapons/Melee/doublestunbaton_inhands.rsi
+    heldPrefix: off
+    size: Huge
+  - type: Clothing
+    sprite: Vanilla/Objects/Weapons/Melee/doublestunbaton.rsi
+    quickEquip: false
+    slots:
+    - Back
+    - SuitStorage
+  - type: StaticPrice
+    price: 160
+  - type: PhysicalComposition
+    materialComposition:
+      Steel: 200
+      Plastic: 200
+  - type: MeleeWeapon
+    wideAnimationRotation: -135
+    damage:
+      types:
+        Blunt: 7
+    bluntStaminaDamageFactor: 2.0
+    angle: 60
+    attackRate: 1.5
+    animation: WeaponArcThrust
+  - type: DisarmMalus
+    malus: 0.7
+  - type: MultiHandedItem
+  - type: Construction
+    graph: DoubleStunbatonGraph
+    node: end

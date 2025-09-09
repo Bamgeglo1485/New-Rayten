@@ -1,9 +1,14 @@
-# Reporting a security vulnerability
-You can report a security vulnerability through Discord or through email.
+# Security Policy — Rayten
 
-If you want to send an email, you can contact us at <telecommunications@spacestation14.com>.
-If you want to contact us through Discord, you can join [our server](https://discord.gg/MwDDf6t)
-and then **privately** message anyone with the `@Wizard` or `@SS14 Maintainer` role.
+## Сообщение об уязвимости
+Если вы нашли уязвимость или потенциальную проблему безопасности в проекте **Rayten**:  
+- Пожалуйста, **не публикуйте её публично**, пока команда не даст на это разрешения.  
+- Сообщите о проблеме в Discord: отправьте личное сообщение хосту проекта 
 
-In either case, **do not publicly disclose the vulnerability until we explicitly give
-you permission to do so**.
+## Что происходит дальше
+- Мы подтверждаем получение отчёта в течение 72 часов. 
+- Мы анализируем проблему и работаем над исправлением.
+- Когда исправление будет готово и опубликовано, мы уведомим вас.
+
+## Поддерживаемые версии
+На данный момент исправления безопасности выпускаются только для **актуальной ветки разработки Rayten**.  
