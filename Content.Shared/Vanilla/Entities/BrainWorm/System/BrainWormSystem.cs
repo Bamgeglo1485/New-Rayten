@@ -12,6 +12,7 @@ using Content.Shared.Movement.Events;
 using Content.Shared.Mobs;
 using Content.Shared.Popups;
 using Content.Shared.Sprite;
+using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 using Robust.Shared.Containers;
 using Robust.Shared.Prototypes;
@@ -26,7 +27,7 @@ public partial class BrainWormSystem : EntitySystem
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly SharedScaleVisualsSystem _scaleVisuals = default!;
-
+    [Dependency] private readonly IGameTiming _timing = default!;
     private static readonly EntProtoId BrainWormShopId = "ActionBrainWormShop";
     private static readonly EntProtoId BrainWormChemicalsId = "ActionBrainWormChemicals";
 
@@ -243,6 +244,7 @@ public partial class BrainWormSystem : EntitySystem
 
     private void OnMapInit(EntityUid uid, BrainWormComponent component, MapInitEvent args)
     {
+        component.NextChemicalsTime = _timing.CurTime;
         _scaleVisuals.SetSpriteScale(uid, new Vector2(0.5f, 0.5f));
 
         if (!TryComp(uid, out ActionsComponent? comp))

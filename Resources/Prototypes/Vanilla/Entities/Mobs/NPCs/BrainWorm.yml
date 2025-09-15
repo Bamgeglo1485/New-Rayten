@@ -14,6 +14,10 @@
     layers:
     - map: ["enum.DamageStateVisualLayers.Base"]
       state: cockroach
+  - type: Tag
+    tags:
+    - Trash
+    - VimPilot
   - type: MobThresholds
     thresholds:
       0: Alive
