@@ -464,7 +464,7 @@ public sealed partial class ChatSystem : SharedChatSystem
             ("fontSize", speech.FontSize),
             ("message", FormattedMessage.EscapeText(message)));
 
-        SendInVoiceRange(ChatChannel.Local, message, wrappedMessage, source, range);
+        SendInVoiceRange(ChatChannel.Local, message, wrappedMessage, source, range, receiver: receiver);
 
         var ev = new EntitySpokeEvent(source, message, originalMessage, null, null);
         RaiseLocalEvent(source, ev, true);
@@ -537,8 +537,8 @@ public sealed partial class ChatSystem : SharedChatSystem
         var wrappedUnknownMessage = Loc.GetString("chat-manager-entity-whisper-unknown-wrap-message",
             ("message", FormattedMessage.EscapeText(obfuscatedMessage)));
 
-        int rangewithskill = (TryComp<SkillComponent>(source, out var skill) && skill.CrimeLevel > 0) ? SkillWhisperMuffledRange : WhisperMuffledRange;
 
+        int rangewithskill = (TryComp<SkillComponent>(source, out var skill) && skill.CrimeLevel > 0) ? SkillWhisperMuffledRange : WhisperMuffledRange;//rayten-skills
         foreach (var (session, data) in GetRecipients(source, rangewithskill))
         {
             EntityUid listener;
@@ -546,6 +546,10 @@ public sealed partial class ChatSystem : SharedChatSystem
             if (session.AttachedEntity is not { Valid: true } playerEntity)
                 continue;
             listener = session.AttachedEntity.Value;
+            //rayten-start
+            if (receiver != null && (listener != receiver|| listener != source))
+                continue;
+            //rayten-end
 
             if (MessageRangeCheck(session, data, range) != MessageRangeCheckResult.Full)
                 continue; // Won't get logged to chat, and ghosts are too far away to see the pop-up, so we just won't send it to them.
@@ -723,23 +727,23 @@ public sealed partial class ChatSystem : SharedChatSystem
     /// </summary>
     private void SendInVoiceRange(ChatChannel channel, string message, string wrappedMessage, EntityUid source, ChatTransmitRange range, NetUserId? author = null, EntityUid? receiver = null)
     {
-        //RAYTEN
-        if (receiver != null)
-        {
-            if (TryComp<ActorComponent>(receiver.Value, out var receiverActor))
-            {
-                _chatManager.ChatMessageToOne(channel,message, wrappedMessage, source, hideChat: false, receiverActor.PlayerSession.Channel, author: author);
-                _replay.RecordServerMessage(new ChatMessage(channel,message, wrappedMessage, GetNetEntity(source), null, false));
-            }
-            return;
-        }
-        //Rayten-end
 
         foreach (var (session, data) in GetRecipients(source, VoiceRange))
         {
+            //rayten-start
+            if (session.AttachedEntity.HasValue)
+            {
+                EntityUid listener = session.AttachedEntity.Value;
+
+                if (receiver != null && (listener != receiver || listener != source))
+                    continue;
+            }
+            //rayten-end
+
             var entRange = MessageRangeCheck(session, data, range);
             if (entRange == MessageRangeCheckResult.Disallowed)
                 continue;
+
             var entHideChat = entRange == MessageRangeCheckResult.HideChat;
             _chatManager.ChatMessageToOne(channel, message, wrappedMessage, source, entHideChat, session.Channel, author: author);
         }

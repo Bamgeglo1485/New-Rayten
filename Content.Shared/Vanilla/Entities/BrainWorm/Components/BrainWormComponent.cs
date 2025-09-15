@@ -47,7 +47,7 @@ public sealed partial class BrainWormComponent : Component
         { "Epinephrine",   30f },
         { "Desoxyephedrine", 50f },
         { "Charcoal",       30f },
-        { "Inaprovaline",   30f },
+        { "Ethylredoxrazine",30f },
         { "Tricordrazine",  30f },
         { "Bruizine",       30f },
         { "Pyrazine",      30f },
