@@ -79,7 +79,7 @@ public sealed class ServerBrainWormSystem : EntitySystem
             if (_timing.CurTime < wormcomp.NextChemicalsTime)
                 continue;
 
-            wormcomp.NextChemicalsTime += TimeSpan.FromSeconds(wormcomp.ChemicalsTime);
+            wormcomp.NextChemicalsTime = _timing.CurTime + TimeSpan.FromSeconds(wormcomp.ChemicalsTime);
 
             if (!wormcomp.Host.HasValue)
                 continue;
