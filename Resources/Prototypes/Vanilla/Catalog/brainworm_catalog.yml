@@ -1,0 +1,72 @@
+- type: listing
+  id: BrainWormForceSay
+  name: Заставить носителя сказать
+  description: Заставьте носителя сказать какую-то несусветную чушь, которая взбредет в ваш паразитический ум.
+  productAction: ActionBrainWormForceSay
+  cost:
+    EvolutionPoints: 3
+  categories:
+  - BrainWormAbilities
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1
+
+- type: listing
+  id: BrainWormInsertBrain
+  name: Проникающий отросток
+  description: Уменьшает длительность проникновения в мозг до 2 секунд
+  productEvent: !type:BrainWormUpgradeEvent
+    upgrade: inserbrain
+  raiseProductEventOnUser: true
+  cost:
+    EvolutionPoints: 2
+  categories:
+  - BrainWormAbilities
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1
+
+- type: listing
+  id: BrainWormReproduce
+  name: Плодовое ядро
+  description: Уменьшает расходы на размножение на 30%, шанс 10% на то что родится 2 или 5% на то что родится 3 мозговых червя
+  productEvent: !type:BrainWormUpgradeEvent
+    upgrade: reproduce
+  raiseProductEventOnUser: true
+  cost:
+    EvolutionPoints: 5
+  categories:
+  - BrainWormAbilities
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1
+
+- type: listing
+  id: BrainWormMicroSprite
+  name: Компактная форма
+  description: Уменьшает размер спрайта червя в 4 раза
+  productEvent: !type:BrainWormUpgradeEvent
+    upgrade: microsprite
+  raiseProductEventOnUser: true
+  cost:
+    EvolutionPoints: 4
+  categories:
+  - BrainWormAbilities
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1
+
+- type: listing
+  id: BrainWormChemUpgrade
+  name: Секреторная железа
+  description: Увеличивает восстановление химикатов на 0.5 в тик, повышает скорость захвата носителя на 50%
+  productEvent: !type:BrainWormUpgradeEvent
+    upgrade: chemupgrade
+  raiseProductEventOnUser: true
+  cost:
+    EvolutionPoints: 8
+  categories:
+  - BrainWormAbilities
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1

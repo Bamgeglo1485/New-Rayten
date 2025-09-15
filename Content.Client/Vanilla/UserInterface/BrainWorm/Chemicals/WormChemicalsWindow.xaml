@@ -1,0 +1,12 @@
+<DefaultWindow xmlns="https://spacestation14.io"
+            Title="{Loc 'brainworm-chemicals-window-title'}"
+            SetSize="820 700"
+            Resizable="False">
+    <BoxContainer Orientation="Vertical" HorizontalAlignment="Stretch">
+        <Label Name="Chemicals" MinSize="120 0" Access="Public" VerticalExpand="True" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+        <BoxContainer Orientation="Vertical" HorizontalAlignment="Stretch">
+            <GridContainer Name="ChemicalsContainer" Rows="3" Columns="2" HorizontalAlignment="Stretch" HorizontalExpand="true" VerticalExpand="True" Access="Public" HSeparationOverride="1" VSeparationOverride="1" >
+            </GridContainer>
+        </BoxContainer>
+    </BoxContainer>
+</DefaultWindow>

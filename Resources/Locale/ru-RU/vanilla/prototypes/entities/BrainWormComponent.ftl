@@ -1,0 +1,11 @@
+brainworm-chemicals-window-title = Выделить химикаты
+brainworm-popup-worm-get-sleep = Сахар заставляет вас уснуть!
+brainworm-popup-host-already-wormed = В теле жертвы уже есть мозговой червь.
+brainworm-popup-host-not-humanoid = Жертва должна быть гуманоидом
+brainworm-popup-host-mindshield = Носитель защищён имплантом защиты разума!
+brainworm-popup-host-not-alive = Мозг носителя не поддаётся вам.
+brainworm-host-mind-control = { CAPITALIZE($user) } пытается захватить над вами контроль!
+force-say-window-title = Заставить носителя говорить
+force-say-text = Заставьте носителя сказать какую-то несусветную чушь, которая взбредет в ваш паразитический ум.
+force-say-placeholder = Что-то...
+force-say-send-button = Сказать

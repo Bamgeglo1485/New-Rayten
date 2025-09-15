@@ -1,0 +1,55 @@
+<Control xmlns="https://spacestation14.io"
+         xmlns:customControls="clr-namespace:Content.Client.Administration.UI.CustomControls"
+         VerticalExpand="True"
+         HorizontalAlignment="Stretch"
+         MaxWidth="400"
+         MinWidth="150">
+
+    <BoxContainer Name="MainContainer"
+                  Orientation="Vertical"
+                  HorizontalExpand="True"
+                  VerticalExpand="True"
+                  HorizontalAlignment="Stretch"
+                  Margin="5">
+
+        <!-- Панелька-фон -->
+        <PanelContainer Name="Background"
+                        StyleClasses="SkillTopRoundedBackground"
+                        MinHeight="20"
+                        VerticalExpand="False"
+                        HorizontalExpand="True"/>
+
+        <!-- Кнопка для выбора химиката -->
+        <Button Name="ChemicalButton"
+                HorizontalExpand="True"
+                VerticalExpand="True"
+                StyleClasses="SkillBottomRoundedButton"
+                Access="Public"
+                Margin="0">
+
+            <BoxContainer Orientation="Vertical"
+                          VerticalExpand="True"
+                          Margin="0">
+
+                <!-- Название -->
+                <RichTextLabel Name="ChemicalNameLabel"
+                               HorizontalAlignment="Center"
+                               HorizontalExpand="True"
+                               StyleClasses="LabelBig"
+                               Margin="0 2 0 2"/>
+
+                <!-- Разделитель -->
+                <customControls:HSeparator StyleClasses="LowDivider" Margin="0 4 0 4"/>
+
+                <!-- Описание -->
+                <RichTextLabel Name="ChemicalDescLabel"
+                               HorizontalAlignment="Left"
+                               HorizontalExpand="True"
+                               VerticalExpand="True"
+                               StyleClasses="LabelSubText"
+                               VerticalAlignment="Top"
+                               Margin="0 2 0 2"/>
+            </BoxContainer>
+        </Button>
+    </BoxContainer>
+</Control>
