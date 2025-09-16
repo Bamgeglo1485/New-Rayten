@@ -46,7 +46,6 @@ public sealed partial class CryoPodSystem : SharedCryoPodSystem
         {
             healthAnalyzer.ScannedEntity = entity.Comp.BodyContainer.ContainedEntity;
         }
-
         // TODO: This should be a state my dude
         _uiSystem.ServerSendUiMessage(
             entity.Owner,
@@ -59,7 +58,8 @@ public sealed partial class CryoPodSystem : SharedCryoPodSystem
                 : 0,
             null,
             null,
-            null
+            null,
+            false
         ));
     }
 

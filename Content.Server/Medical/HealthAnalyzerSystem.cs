@@ -14,6 +14,7 @@ using Content.Shared.MedicalScanner;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Popups;
 using Content.Shared.Traits.Assorted;
+using Content.Shared.Vanilla.Entities.BrainWorm;
 using Robust.Server.GameObjects;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
@@ -211,13 +212,20 @@ public sealed class HealthAnalyzerSystem : EntitySystem
         if (TryComp<UnrevivableComponent>(target, out var unrevivableComp) && unrevivableComp.Analyzable)
             unrevivable = true;
 
+        //rayten-start
+        var brainwormed = false;
+
+        if (TryComp<BrainWormHostComponent>(target, out var hostcomp) && !hostcomp.WormInStealth)
+            brainwormed = true;
+        //rayten-end
         _uiSystem.ServerSendUiMessage(healthAnalyzer, HealthAnalyzerUiKey.Key, new HealthAnalyzerScannedUserMessage(
             GetNetEntity(target),
             bodyTemperature,
             bloodAmount,
             scanMode,
             bleeding,
-            unrevivable
+            unrevivable,
+            brainwormed //rayten
         ));
     }
 }

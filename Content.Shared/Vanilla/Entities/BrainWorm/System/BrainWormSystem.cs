@@ -10,8 +10,10 @@ using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Body.Components;
 using Content.Shared.Movement.Events;
 using Content.Shared.Mobs;
+using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
 using Content.Shared.Sprite;
+using Content.Shared.Atmos.Components;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 using Robust.Shared.Containers;
@@ -20,14 +22,17 @@ using System.Numerics;
 
 namespace Content.Shared.Vanilla.Entities.BrainWorm;
 
-public partial class BrainWormSystem : EntitySystem
+public abstract partial class SharedBrainWormSystem : EntitySystem
 {
     [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly SharedActionsSystem _action = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedScaleVisualsSystem _scaleVisuals = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] protected readonly SharedActionsSystem _action = default!;
+    [Dependency] protected readonly SharedDoAfterSystem _doAfter = default!;
+    [Dependency] protected readonly SharedPopupSystem _popup = default!;
+    [Dependency] protected readonly SharedScaleVisualsSystem _scaleVisuals = default!;
+    [Dependency] protected readonly IGameTiming _timing = default!;
+    [Dependency] protected readonly MobStateSystem _mob = default!;
+    [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private readonly SharedInjectorSystem _injector = default!;
     private static readonly EntProtoId BrainWormShopId = "ActionBrainWormShop";
     private static readonly EntProtoId BrainWormChemicalsId = "ActionBrainWormChemicals";
 
@@ -127,8 +132,10 @@ public partial class BrainWormSystem : EntitySystem
     {
         if (!TryComp<BrainWormComponent>(uid, out var component))
             return;
+
         if (!component.TryGetHost(out var host))
             return;
+
         // Выселяем червя
         if (TryComp<BrainWormHostComponent>(host, out var hostComponent))
         {
@@ -151,6 +158,8 @@ public partial class BrainWormSystem : EntitySystem
         // Удаляем приватное общение
         RemComp<PrivateTalkComponent>(uid);
         component.EjectDoAfter = null;
+        // Убираем резист к поджогу
+        EnsureComp<FlammableComponent>(uid);
         component.SetHost(null);
     }
 
@@ -167,10 +176,9 @@ public partial class BrainWormSystem : EntitySystem
         _container.Insert(worm, hostcomp.BrainWormContainer);
         hostcomp.HostedBrainWorm = worm;
         wormcomp.SetHost(target);
-
         var privatetalkcomp = EnsureComp<PrivateTalkComponent>(worm);
         privatetalkcomp.receiver = target;
-
+        RemComp<FlammableComponent>(worm);
         if (TryComp(worm, out ActionsComponent? comp))
         {
             var actions = new Entity<ActionsComponent?>(worm, comp);

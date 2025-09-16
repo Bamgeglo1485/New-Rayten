@@ -110,7 +110,7 @@ namespace Content.Client.HealthAnalyzer.UI
 
             // Alerts
 
-            var showAlerts = msg.Unrevivable == true || msg.Bleeding == true;
+            var showAlerts = msg.Unrevivable == true || msg.Bleeding == true || msg.Brainwormed == true;
 
             AlertsDivider.Visible = showAlerts;
             AlertsContainer.Visible = showAlerts;
@@ -133,7 +133,15 @@ namespace Content.Client.HealthAnalyzer.UI
                     Margin = new Thickness(0, 4),
                     MaxWidth = 300
                 });
-
+            //rayten-start
+            if (msg.Brainwormed == true)
+                AlertsContainer.AddChild(new RichTextLabel
+                {
+                    Text = Loc.GetString("health-analyzer-window-entity-brainwormed-text"),
+                    Margin = new Thickness(0, 4),
+                    MaxWidth = 300
+                });
+            //rayten-end
             // Damage Groups
 
             var damageSortedGroups =

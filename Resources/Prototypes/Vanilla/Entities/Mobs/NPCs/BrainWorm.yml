@@ -54,6 +54,8 @@
     - Trash
     - VimPilot
   # хп
+  - type: Flammable
+  - type: TemperatureProtection
   - type: MobThresholds
     thresholds:
       0: Alive
@@ -69,8 +71,8 @@
         Toxin: -0.05
         Airloss: -0.05
   - type: MovementSpeedModifier
-    baseWalkSpeed : 2.5
-    baseSprintSpeed : 4.5
+    baseWalkSpeed: 2.5
+    baseSprintSpeed: 3.5
   - type: HTN
     constantlyReplan: false
     rootTask:

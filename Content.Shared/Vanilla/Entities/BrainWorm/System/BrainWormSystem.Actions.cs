@@ -2,18 +2,13 @@ using Content.Shared.DoAfter;
 using Content.Shared.Humanoid;
 using Content.Shared.Mindshield.Components;
 using Content.Shared.IdentityManagement;
-using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
 using Content.Shared.Chemistry.EntitySystems;
 using Robust.Shared.Player;
 namespace Content.Shared.Vanilla.Entities.BrainWorm;
 
-public partial class BrainWormSystem : EntitySystem
+public abstract partial class SharedBrainWormSystem : EntitySystem
 {
-    [Dependency] private readonly MobStateSystem _mob = default!;
-    [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
-    [Dependency] private readonly SharedInjectorSystem _injector = default!;
-
     private void OnReturnControl(EntityUid uid, BrainWormHostComponent component, BrainWormReturnControlActionEvent args)
     {
         var ev = new ReControlEvent();

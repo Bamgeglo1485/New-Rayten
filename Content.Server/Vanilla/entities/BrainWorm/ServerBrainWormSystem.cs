@@ -15,7 +15,7 @@ using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
 using Content.Shared.Sprite;
 using Content.Shared.Popups;
-using Content.Server.Popups;
+using Content.Server.Temperature.Components;
 using Content.Server.Mind;
 using Content.Server.Store.Systems;
 using Content.Server.Medical;
@@ -33,16 +33,12 @@ using System;
 
 namespace Content.Server.Vanilla.Entities.BrainWorm;
 
-public sealed class ServerBrainWormSystem : EntitySystem
+public sealed class BrainWormSystem : SharedBrainWormSystem
 {
     [Dependency] private readonly StoreSystem _store = default!;
     [Dependency] private readonly VomitSystem _vomit = default!;
     [Dependency] private readonly MindSystem _mindSystem = default!;
     [Dependency] private readonly MetaDataSystem _metaSystem = default!;
-    [Dependency] private readonly SharedActionsSystem _action = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly MobStateSystem _mob = default!;
     [Dependency] private readonly UserInterfaceSystem _uiSystem = default!;
     [Dependency] private readonly IPrototypeManager _prototype = default!;
     [Dependency] private readonly SolutionContainerSystem _solutions = default!;
@@ -50,9 +46,7 @@ public sealed class ServerBrainWormSystem : EntitySystem
     [Dependency] private readonly ChatSystem _chat = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly SharedScaleVisualsSystem _scaleVisuals = default!;
     [Dependency] private readonly MobThresholdSystem _mobthreshold = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
 
     public override void Initialize()
     {
@@ -71,6 +65,13 @@ public sealed class ServerBrainWormSystem : EntitySystem
         SubscribeLocalEvent<BrainWormComponent, ChemicalSelectMessage>(OnChemInjection);
         //Заставляем сказать
         SubscribeLocalEvent<BrainWormComponent, ForceSayMessage>(OnForceSay);
+        //даем защиту от огня если червь в бошке
+        SubscribeLocalEvent<BrainWormComponent, GetTemperatureProtectionEvent>(OnTemperatureProtection);
+    }
+    private void OnTemperatureProtection(EntityUid uid, BrainWormComponent comp, ref GetTemperatureProtectionEvent args)
+    {
+        if (comp.TryGetHost(out var host))
+            args.Coefficient *= 0;
     }
     public override void Update(float frameTime)
     {
@@ -341,7 +342,6 @@ public sealed class ServerBrainWormSystem : EntitySystem
             return;
         }
     }
-
     private void ApplyUpgrades(EntityUid uid, int newHp, float regen)
     {
         _mobthreshold.SetMobStateThreshold(uid, newHp, MobState.Dead);
@@ -363,4 +363,5 @@ public sealed class ServerBrainWormSystem : EntitySystem
         wormcomp.Chemicals -= ammount;
         return true;
     }
+
 }

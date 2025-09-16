@@ -19,7 +19,7 @@ public sealed partial class BrainWormHostComponent : Component
     [DataField, AutoNetworkedField]
     public bool MindUnderControl = false;
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public bool WormInStealth = false;
 
     [ViewVariables]

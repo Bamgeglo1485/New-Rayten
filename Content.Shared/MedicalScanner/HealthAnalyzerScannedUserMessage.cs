@@ -14,8 +14,8 @@ public sealed class HealthAnalyzerScannedUserMessage : BoundUserInterfaceMessage
     public bool? ScanMode;
     public bool? Bleeding;
     public bool? Unrevivable;
-
-    public HealthAnalyzerScannedUserMessage(NetEntity? targetEntity, float temperature, float bloodLevel, bool? scanMode, bool? bleeding, bool? unrevivable)
+    public bool Brainwormed;//rayten
+    public HealthAnalyzerScannedUserMessage(NetEntity? targetEntity, float temperature, float bloodLevel, bool? scanMode, bool? bleeding, bool? unrevivable, bool brainwormed)
     {
         TargetEntity = targetEntity;
         Temperature = temperature;
@@ -23,6 +23,7 @@ public sealed class HealthAnalyzerScannedUserMessage : BoundUserInterfaceMessage
         ScanMode = scanMode;
         Bleeding = bleeding;
         Unrevivable = unrevivable;
+        Brainwormed = brainwormed; //rayten
     }
 }
 
