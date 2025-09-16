@@ -11,6 +11,45 @@
   - !type:ListingLimitedStockCondition
     stock: 1
 
+# - type: listing
+#   id: BrainWormCheckStatus
+#   name: Проверить состояние носителя
+#   description: 	Вы можете смотреть жизненные показатели носителя
+#   productAction: ActionBrainWormCheckStatus
+#   cost:
+#     EvolutionPoints: 3
+#   categories:
+#   - BrainWormAbilities
+#   conditions:
+#   - !type:ListingLimitedStockCondition
+#     stock: 1
+
+# - type: listing
+#   id: BrainWormTormentHost
+#   name: Наказать носителя
+#   description: Ваш носитель не нравится вам? ЗАСТАВЬТЕ ЕГО ИСПЫТАТЬ МОРЕ БОЛИ, ДОСТАВЛЕННОЙ ПРЯМО В МОЗГ.
+#   productAction: ActionBrainWormTormentHost
+#   cost:
+#     EvolutionPoints: 1
+#   categories:
+#   - BrainWormAbilities
+#   conditions:
+#   - !type:ListingLimitedStockCondition
+#     stock: 1
+
+# - type: listing
+#   id: BrainWormHide
+#   name: Спрятаться
+#   description: Позволяет скрыться от медицинских сканеров ценой полной остановки выработки химикатов.
+#   productAction: ActionBrainWormHide
+#   cost:
+#     EvolutionPoints: 1
+#   categories:
+#   - BrainWormAbilities
+#   conditions:
+#   - !type:ListingLimitedStockCondition
+#     stock: 1
+
 - type: listing
   id: BrainWormInsertBrain
   name: Проникающий отросток
@@ -21,7 +60,7 @@
   cost:
     EvolutionPoints: 2
   categories:
-  - BrainWormAbilities
+  - BrainWormEvolution
   conditions:
   - !type:ListingLimitedStockCondition
     stock: 1
@@ -36,22 +75,7 @@
   cost:
     EvolutionPoints: 5
   categories:
-  - BrainWormAbilities
-  conditions:
-  - !type:ListingLimitedStockCondition
-    stock: 1
-
-- type: listing
-  id: BrainWormMicroSprite
-  name: Компактная форма
-  description: Уменьшает размер спрайта червя в 4 раза
-  productEvent: !type:BrainWormUpgradeEvent
-    upgrade: microsprite
-  raiseProductEventOnUser: true
-  cost:
-    EvolutionPoints: 4
-  categories:
-  - BrainWormAbilities
+  - BrainWormEvolution
   conditions:
   - !type:ListingLimitedStockCondition
     stock: 1
@@ -64,9 +88,9 @@
     upgrade: chemupgrade
   raiseProductEventOnUser: true
   cost:
-    EvolutionPoints: 8
+    EvolutionPoints: 7
   categories:
-  - BrainWormAbilities
+  - BrainWormEvolution
   conditions:
   - !type:ListingLimitedStockCondition
     stock: 1

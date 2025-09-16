@@ -1,0 +1,7 @@
+- type: radioChannel
+  id: BrainWorm
+  name: Коллективный разум
+  keycode: 'ч'
+  frequency: 3232
+  color: "#800080"
+  longRange: true

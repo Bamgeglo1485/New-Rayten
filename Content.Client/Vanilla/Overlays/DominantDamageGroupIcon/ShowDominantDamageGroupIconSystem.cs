@@ -6,12 +6,12 @@ using Content.Shared.FixedPoint;
 using Content.Shared.Overlays;
 using Content.Shared.Inventory.Events;
 using Content.Shared.Vanilla.Overlays;
+using Content.Shared.Vanilla.Entities.BrainWorm;
 using Robust.Shared.Prototypes;
 using System.Linq;
 
 namespace Content.Client.Vanilla.Overlays;
 
-//Rayten-start
 public sealed class ShowDominantDamageGroupIconSystem : EquipmentHudSystem<ShowDominantDamageGroupIconComponent>
 {
     [Dependency] private readonly IPrototypeManager _prototype = default!;
@@ -46,16 +46,22 @@ public sealed class ShowDominantDamageGroupIconSystem : EquipmentHudSystem<ShowD
         RefreshOverlay();
     }
 
-    private void OnGetStatusIconsEvent(Entity<DamageableComponent> entity, ref GetStatusIconsEvent args)
+    private bool GetBrainWormIcon(EntityUid uid, out DamageIconPrototype icon)
     {
-        if (!IsActive)
-            return;
+        icon = null!;
 
-        var icons = GetDamageIcons(entity.Comp);
-        args.StatusIcons.AddRange(icons);
+        if (TryComp<BrainWormHostComponent>(uid, out var hostcomp) && hostcomp.MindUnderControl)
+        {
+            if (_prototype.TryIndex<DamageIconPrototype>("BrainWorm", out var foundIcon))
+            {
+                icon = foundIcon;
+                return true;
+            }
+        }
+        return false;
     }
 
-    public IReadOnlyList<DamageIconPrototype> GetDamageIcons(DamageableComponent damageable)
+    public List<DamageIconPrototype> GetDamageIcons(DamageableComponent damageable)
     {
         var icons = new List<DamageIconPrototype>();
 
@@ -88,8 +94,13 @@ public sealed class ShowDominantDamageGroupIconSystem : EquipmentHudSystem<ShowD
         if (!IsActive)
             return;
 
-        var icons = GetDamageIcons(entity.Comp);
+        var icons = new List<DamageIconPrototype>();
+
+        if (GetBrainWormIcon(entity, out var brainwormicon))
+            icons.Add(brainwormicon);
+        else
+            icons = GetDamageIcons(entity.Comp);
+
         args.StatusIcons.AddRange(icons);
     }
 }
-//Rayten-end

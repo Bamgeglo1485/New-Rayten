@@ -4,6 +4,7 @@ using Content.Shared.Mindshield.Components;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
+using Content.Shared.Chemistry.EntitySystems;
 using Robust.Shared.Player;
 namespace Content.Shared.Vanilla.Entities.BrainWorm;
 
@@ -11,6 +12,8 @@ public partial class BrainWormSystem : EntitySystem
 {
     [Dependency] private readonly MobStateSystem _mob = default!;
     [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private readonly SharedInjectorSystem _injector = default!;
+
     private void OnReturnControl(EntityUid uid, BrainWormHostComponent component, BrainWormReturnControlActionEvent args)
     {
         var ev = new ReControlEvent();
@@ -39,13 +42,13 @@ public partial class BrainWormSystem : EntitySystem
 
     private void EjectBrain(EntityUid uid, BrainWormComponent component, EjectBrainEvent args)
     {
-        if (!component.Host.HasValue)
+        if (!component.TryGetHost(out var host))
             return;
 
         if (component.IsSleep)
             return;
 
-        var doAfterEventArgs = new DoAfterArgs(EntityManager, uid, BrainWormComponent.EjectBrainTime, new EjectBrainDoAfterEvent(), eventTarget: uid, target: component.Host.Value)
+        var doAfterEventArgs = new DoAfterArgs(EntityManager, uid, BrainWormComponent.EjectBrainTime, new EjectBrainDoAfterEvent(), eventTarget: uid, target: host)
         {
             DistanceThreshold = 2f,
             BreakOnMove = true,
@@ -81,7 +84,12 @@ public partial class BrainWormSystem : EntitySystem
             _popup.PopupClient(Loc.GetString("brainworm-popup-host-not-humanoid"), worm, worm, PopupType.Medium);
             return;
         }
+        if (_injector.HasInjectionProtection(target))
+        {
+            _popup.PopupClient(Loc.GetString("injector-component-inject-target-protected"), target, worm);
+            return;
 
+        }
         var doAfterEventArgs = new DoAfterArgs(EntityManager, worm, wormcomp.InsertDoAfterTime, new InsertBrainDoAfterEvent(), eventTarget: worm, target: target)
         {
             DistanceThreshold = 2f,
@@ -97,12 +105,12 @@ public partial class BrainWormSystem : EntitySystem
 
     private void OnMindControl(EntityUid uid, BrainWormComponent component, MindControlEvent args)
     {
-        if (!component.Host.HasValue)
+        if (!component.TryGetHost(out var host))
             return;
 
         if (component.IsSleep)
             return;
-        var host = component.Host.Value;
+
         if (HasComp<MindShieldComponent>(host))
         {
             _popup.PopupClient(Loc.GetString("brainworm-popup-host-mindshield"), uid, uid, PopupType.Medium);
@@ -117,7 +125,7 @@ public partial class BrainWormSystem : EntitySystem
 
         _popup.PopupClient(Loc.GetString("brainworm-host-mind-control", ("user", Identity.Entity(uid, EntityManager))), host, host, PopupType.Medium);
 
-        var doAfterEventArgs = new DoAfterArgs(EntityManager, uid, component.MindControlDoAfterTime, new MindControlDoAfterEvent(), eventTarget: uid, target: component.Host.Value)
+        var doAfterEventArgs = new DoAfterArgs(EntityManager, uid, component.MindControlDoAfterTime, new MindControlDoAfterEvent(), eventTarget: uid, target: host)
         {
             DistanceThreshold = 2f,
             BreakOnMove = true,

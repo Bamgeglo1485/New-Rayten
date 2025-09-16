@@ -5,18 +5,22 @@ using Robust.Shared.Audio;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
+using Robust.Shared.GameStates;
 
 namespace Content.Shared.Vanilla.Entities.BrainWorm;
 
-[RegisterComponent]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class BrainWormHostComponent : Component
 {
 
     [DataField]
     public EntityUid HostedBrainWorm;
 
-    [DataField]
+    [DataField, AutoNetworkedField]
     public bool MindUnderControl = false;
+
+    [DataField, AutoNetworkedField]
+    public bool WormInStealth = false;
 
     [ViewVariables]
     public ContainerSlot BrainWormContainer = default!;

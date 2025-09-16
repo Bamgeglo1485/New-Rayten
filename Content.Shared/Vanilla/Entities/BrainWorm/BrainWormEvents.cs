@@ -77,6 +77,5 @@ public enum UpgradeType : byte
 {
     inserbrain = 1, //проникающий отросток
     reproduce = 2, //Плодовое ядро
-    microsprite = 3, //Компактная форма
-    chemupgrade = 4, //Секреторная железа
+    chemupgrade = 3, //Секреторная железа
 }

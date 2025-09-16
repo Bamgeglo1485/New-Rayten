@@ -1,5 +1,6 @@
 using Content.Shared.DoAfter;
 using Content.Shared.Store;
+using Content.Shared.Damage;
 using Robust.Shared.Audio;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
@@ -17,8 +18,22 @@ public sealed partial class BrainWormComponent : Component
     /// носитель мозгового червя
     /// </summary>
     [DataField]
-    public EntityUid? Host;
+    private EntityUid? _host;
+    public bool TryGetHost(out EntityUid host)
+    {
+        if (_host.HasValue)
+        {
+            host = _host.Value;
+            return true;
+        }
 
+        host = default;
+        return false;
+    }
+    public void SetHost(EntityUid? host)
+    {
+        _host = host;
+    }
     /// <summary>
     /// флаг неактивности червя (если хост сожрал сахар)
     /// </summary>
@@ -68,8 +83,16 @@ public sealed partial class BrainWormComponent : Component
 
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer))]
     public TimeSpan NextChemicalsTime = TimeSpan.Zero;
+    public DamageSpecifier Heal = new()
+    {
+        DamageDict = new()
+        {
+            { "Brute", -0.4f },
+            { "Burn", -0.4f }
+        }
+    };
 
-    # endregion
+    #endregion
 
     #region actions
     public float InsertDoAfterTime = 5.0f;

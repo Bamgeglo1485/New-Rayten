@@ -14,6 +14,8 @@ using Content.Shared.Chemistry.Components.SolutionManager;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
 using Content.Shared.Sprite;
+using Content.Shared.Popups;
+using Content.Server.Popups;
 using Content.Server.Mind;
 using Content.Server.Store.Systems;
 using Content.Server.Medical;
@@ -50,6 +52,7 @@ public sealed class ServerBrainWormSystem : EntitySystem
     [Dependency] private readonly DamageableSystem _damageable = default!;
     [Dependency] private readonly SharedScaleVisualsSystem _scaleVisuals = default!;
     [Dependency] private readonly MobThresholdSystem _mobthreshold = default!;
+    [Dependency] private readonly PopupSystem _popup = default!;
 
     public override void Initialize()
     {
@@ -81,8 +84,8 @@ public sealed class ServerBrainWormSystem : EntitySystem
 
             wormcomp.NextChemicalsTime += TimeSpan.FromSeconds(wormcomp.ChemicalsTime);
 
-            if (!wormcomp.Host.HasValue)
-                continue;
+            if (!wormcomp.TryGetHost(out var host))
+                return;
 
             if (wormcomp.IsSleep)
                 continue;
@@ -97,29 +100,29 @@ public sealed class ServerBrainWormSystem : EntitySystem
             if (wormcomp.Currentstage != BrainWormLifeStage.Elder)
                 continue;
 
-            var host = wormcomp.Host.Value;
-
             if (_mob.IsDead(host))
                 continue;
 
             // Лечим
-            var heal = new DamageSpecifier();
-            heal.DamageDict["Brute"] = -0.4f;
-            heal.DamageDict["Burn"] = -0.4f;
-
-            _damageable.TryChangeDamage(host, heal);
+            if (TryComp<DamageableComponent>(host, out var damage))
+                _damageable.TryChangeDamage(host, wormcomp.Heal, true, false, damage);
         }
     }
 
     private void OnForceSay(EntityUid uid, BrainWormComponent component, ForceSayMessage args)
     {
-        if (!component.Host.HasValue)
+        if (!component.TryGetHost(out var host))
             return;
 
-        if (_mob.IsIncapacitated(component.Host.Value))
+        if (_mob.IsIncapacitated(host))
             return;
 
-        _chat.TrySendInGameICMessage(component.Host.Value, args.Text, InGameICChatType.Speak, true);
+        if (!BuyAction(component, 30f))
+        {
+            _popup.PopupEntity(Loc.GetString("brainworm-popup-no-chemiclas", ("chems", 30)), uid, uid, PopupType.Medium);
+        }
+
+        _chat.TrySendInGameICMessage(host, args.Text, InGameICChatType.Speak, true);
     }
 
     private void OnChemInjection(EntityUid uid, BrainWormComponent component, ChemicalSelectMessage args)
@@ -130,21 +133,26 @@ public sealed class ServerBrainWormSystem : EntitySystem
         if (!_prototype.HasIndex<ReagentPrototype>(args.Selected))
             return;
 
-        if (!component.Host.HasValue || !TryComp<SolutionContainerManagerComponent>(component.Host, out var solMan))
+        if (!component.TryGetHost(out var host))
+            return;
+
+        if (!TryComp<SolutionContainerManagerComponent>(host, out var solMan))
             return;
 
         // Получаем solution через систему
-        if (!_solutions.TryGetSolution((component.Host.Value, solMan), "chemicals", out var solution))
+        if (!_solutions.TryGetSolution((host, solMan), "chemicals", out var solution))
             return;
 
         if (!BuyAction(component, cost))
-            return;
+        {
+            _popup.PopupEntity(Loc.GetString("brainworm-popup-no-chemiclas", ("chems", cost)), uid, uid, PopupType.Medium);
+        }
 
         var sound = new SoundPathSpecifier("/Audio/Items/hypospray.ogg");
         var filter = Filter.Empty();
         if (TryComp<ActorComponent>(uid, out var wormActor))
             filter.AddPlayer(wormActor.PlayerSession);
-        if (component.Host.HasValue && TryComp<ActorComponent>(component.Host.Value, out var hostActor))
+        if (TryComp<ActorComponent>(host, out var hostActor))
             filter.AddPlayer(hostActor.PlayerSession);
 
         _audio.PlayEntity(sound, filter, uid, recordReplay: false);
@@ -184,6 +192,7 @@ public sealed class ServerBrainWormSystem : EntitySystem
             _action.RemoveAction(actions, component.ActionBrainWormReproduceEntity);
             _action.RemoveAction(actions, component.ActionBrainWormReturnControlEntity);
         }
+        Dirty(uid, component);
     }
 
     private void OnReturnControlDoAfter(EntityUid uid, BrainWormHostComponent component, DoAfterEvent args)
@@ -200,20 +209,19 @@ public sealed class ServerBrainWormSystem : EntitySystem
         if (args.Cancelled || args.Handled || args.Args.Target == null)
             return;
 
-        if (!component.Host.HasValue)
+        if (!component.TryGetHost(out var host))
             return;
 
         if (component.IsSleep)
             return;
 
-        if (HasComp<MindShieldComponent>(component.Host.Value))
+        if (HasComp<MindShieldComponent>(host))
             return;
 
-        if (!_mob.IsAlive(component.Host.Value))
+        if (!_mob.IsAlive(host))
             return;
 
         var worm = uid;
-        var host = component.Host.Value;
 
         if (!TryComp<BrainWormHostComponent>(host, out var hostcomp))
             return;
@@ -244,6 +252,7 @@ public sealed class ServerBrainWormSystem : EntitySystem
 
         hostcomp.MindUnderControl = true;
         args.Handled = true;
+        Dirty(host, hostcomp);
     }
 
     private void OnShop(EntityUid uid, BrainWormComponent component, BrainWormShopActionEvent args)
@@ -263,7 +272,9 @@ public sealed class ServerBrainWormSystem : EntitySystem
             cost *= 0.7f;
 
         if (!BuyAction(wormcomp, cost))
-            return;
+        {
+            _popup.PopupEntity(Loc.GetString("brainworm-popup-no-chemiclas", ("chems", cost)), uid, uid, PopupType.Medium);
+        }
 
         _store.TryAddCurrency(
             new Dictionary<string, FixedPoint2>
@@ -300,9 +311,11 @@ public sealed class ServerBrainWormSystem : EntitySystem
     {
         if (wormcomp.Reproducecount >= 3 && wormcomp.Currentstage < BrainWormLifeStage.Mature)
         {
-            _scaleVisuals.SetSpriteScale(uid, new Vector2(2f, 2f));
+            var scale = _scaleVisuals.GetSpriteScale(uid) * 2f;
+            _scaleVisuals.SetSpriteScale(uid, scale);
+
             wormcomp.Currentstage = BrainWormLifeStage.Mature;
-            ApplyUpgrades(uid, 20, -0.1f);
+            ApplyUpgrades(uid, 15, -0.1f);
             return;
         }
 
@@ -310,17 +323,21 @@ public sealed class ServerBrainWormSystem : EntitySystem
         {
             wormcomp.ChemicalsPerTick += 0.2f;
             wormcomp.ChemicalsCup += 20f;
+
             wormcomp.Currentstage = BrainWormLifeStage.Adult;
-            ApplyUpgrades(uid, 30, -0.2f);
+            ApplyUpgrades(uid, 25, -0.2f);
             return;
         }
 
         if (wormcomp.Reproducecount > 19 && wormcomp.Currentstage < BrainWormLifeStage.Elder)
         {
+            var scale = _scaleVisuals.GetSpriteScale(uid) * 2f;
+            _scaleVisuals.SetSpriteScale(uid, scale);
+
             wormcomp.ChemicalsPerTick += 0.3f;
             wormcomp.ChemicalsCup += 30f;
             wormcomp.Currentstage = BrainWormLifeStage.Elder;
-            ApplyUpgrades(uid, 50, -0.4f);
+            ApplyUpgrades(uid, 35, -0.3f);
             return;
         }
     }

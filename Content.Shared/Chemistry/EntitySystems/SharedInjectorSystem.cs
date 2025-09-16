@@ -573,7 +573,7 @@ public abstract class SharedInjectorSystem : EntitySystem
         Dirty(injector);
     }
     // vanilla-station start
-    private bool HasInjectionProtection(EntityUid entity)
+    public bool HasInjectionProtection(EntityUid entity)
     {
         // ClothingOuterHardsuitBase
         // ClothingHeadHardsuitBase

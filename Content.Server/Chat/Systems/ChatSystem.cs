@@ -547,7 +547,7 @@ public sealed partial class ChatSystem : SharedChatSystem
                 continue;
             listener = session.AttachedEntity.Value;
             //rayten-start
-            if (receiver != null && listener != receiver && listener != source)
+            if (receiver != null && listener != receiver && listener != source && !data.Observer)
                 continue;
             //rayten-end
 
@@ -735,7 +735,7 @@ public sealed partial class ChatSystem : SharedChatSystem
             {
                 EntityUid listener = session.AttachedEntity.Value;
 
-                if (receiver != null && listener != receiver && listener != source)
+                if (receiver != null && listener != receiver && listener != source && !data.Observer)
                     continue;
             }
             //rayten-end

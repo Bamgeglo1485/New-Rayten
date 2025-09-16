@@ -8,16 +8,52 @@
   id: MobBrainWorm
   description: УБЕРИТЕ ЕГО ОТ МЕНЯ, УБЕРИТЕ
   components:
+  # спрайт
   - type: Sprite
     drawdepth: SmallMobs
-    sprite: Mobs/Animals/cockroach.rsi
+    sprite: Vanilla/Mobs/Animals/brainworm.rsi
     layers:
     - map: ["enum.DamageStateVisualLayers.Base"]
-      state: cockroach
+      state: brainworm
+  - type: DamageStateVisuals
+    states:
+      Alive:
+        Base: brainworm
+      Critical:
+        Base: brainworm_dead
+      Dead:
+        Base: brainworm_dead
+  # радио
+  - type: IntrinsicRadioTransmitter
+    channels: [ BrainWorm ]
+  - type: IntrinsicRadioReceiver
+  - type: ActiveRadio
+    channels: [ BrainWorm ]
+  # ночное зрение
+  - type: NightVision
+  - type: PointLight
+    radius: 9
+    energy: 1.5
+    color: "#013220"
+    enabled: false
+    netsync: false
+  # гостролька
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: Мозговой червь
+    description: Вы должны выжить и размножиться.
+    rules: ghost-role-information-freeagent-rules
+    mindRoles:
+    - MindRoleGhostRoleFreeAgentHarmless
+  - type: GhostTakeoverAvailable
+  - type: Speech
   - type: Tag
     tags:
     - Trash
     - VimPilot
+  # хп
   - type: MobThresholds
     thresholds:
       0: Alive
@@ -35,23 +71,6 @@
   - type: MovementSpeedModifier
     baseWalkSpeed : 2.5
     baseSprintSpeed : 4.5
-  - type: DamageStateVisuals
-    states:
-      Alive:
-        Base: cockroach
-      Critical:
-        Base: cockroach_dead
-      Dead:
-        Base: cockroach_dead
-  - type: Destructible
-    thresholds:
-    - trigger:
-        !type:DamageTypeTrigger
-        damageType: Blunt
-        damage: 50
-      behaviors:
-      - !type:GibBehavior
-        recursive: false
   - type: HTN
     constantlyReplan: false
     rootTask:
@@ -80,17 +99,18 @@
   - type: Store
     categories:
     - BrainWormAbilities
+    - BrainWormEvolution
+    - BrainWormHostUpgrades
     currencyWhitelist:
     - EvolutionPoints
 
 - type: entity
   parent: BaseEntitySpellAction
   id: ActionInsertBrain
-  name: проникнуть в мозг
+  name: Проникнуть в мозг
   description: Позволяет заползти в ухо и присосаться к мозгу.
   components:
   - type: Action
-    useDelay: 60
     icon:
       sprite: Vanilla/Interface/Actions/brainworm.rsi
       state: insertbrain
@@ -110,7 +130,7 @@
   description: Позволяет взять под контроль тело носителя. Он всё ещё может освободиться.
   components:
   - type: Action
-    useDelay: 10
+    useDelay: 15
     icon:
       sprite: Vanilla/Interface/Actions/brainworm.rsi
       state: mindcontrol
@@ -135,7 +155,7 @@
 - type: entity
   parent: BaseAction
   id: ActionBrainWormChemicals
-  name: Выделить химикаты
+  name: Выделить реагенты
   description: ввести в кровь носителя химикаты
   components:
   - type: Action

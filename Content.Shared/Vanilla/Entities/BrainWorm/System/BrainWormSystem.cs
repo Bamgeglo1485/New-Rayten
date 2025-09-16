@@ -72,11 +72,6 @@ public partial class BrainWormSystem : EntitySystem
                 component.HasReproduceUpgrade = true;
                 break;
 
-            case UpgradeType.microsprite:
-                // уменьшить визуальный спрайт
-                _scaleVisuals.SetSpriteScale(uid, new Vector2(0.25f, 0.25f));
-                break;
-
             case UpgradeType.chemupgrade:
                 // апгрейд химсекреции
                 component.ChemicalsPerTick += 0.5f;
@@ -94,11 +89,11 @@ public partial class BrainWormSystem : EntitySystem
         if (args.NewMobState == MobState.Alive)
             return;
 
-        if (!component.Host.HasValue)
+        if (!component.TryGetHost(out var host))
             return;
 
         var ev = new ReControlEvent();
-        RaiseLocalEvent(component.Host.Value, ref ev);
+        RaiseLocalEvent(host, ref ev);
         EjectWorm(uid);
     }
 
@@ -113,7 +108,7 @@ public partial class BrainWormSystem : EntitySystem
         if (args.Cancelled || args.Handled || args.Args.Target == null)
             return;
 
-        if (!component.Host.HasValue)
+        if (!component.TryGetHost(out var host))
             return;
 
         if (component.IsSleep)
@@ -132,12 +127,13 @@ public partial class BrainWormSystem : EntitySystem
     {
         if (!TryComp<BrainWormComponent>(uid, out var component))
             return;
-
+        if (!component.TryGetHost(out var host))
+            return;
         // Выселяем червя
-        if (component.Host.HasValue && TryComp<BrainWormHostComponent>(component.Host.Value, out var hostComponent))
+        if (TryComp<BrainWormHostComponent>(host, out var hostComponent))
         {
             _container.Remove(uid, hostComponent.BrainWormContainer);
-            RemComp<BrainWormHostComponent>(component.Host.Value);
+            RemComp<BrainWormHostComponent>(host);
         }
 
         if (!TryComp(uid, out ActionsComponent? comp))
@@ -155,6 +151,7 @@ public partial class BrainWormSystem : EntitySystem
         // Удаляем приватное общение
         RemComp<PrivateTalkComponent>(uid);
         component.EjectDoAfter = null;
+        component.SetHost(null);
     }
 
     private void OnInsertDoAfter(EntityUid worm, BrainWormComponent wormcomp, DoAfterEvent args)
@@ -169,7 +166,7 @@ public partial class BrainWormSystem : EntitySystem
         var hostcomp = EnsureComp<BrainWormHostComponent>(target);
         _container.Insert(worm, hostcomp.BrainWormContainer);
         hostcomp.HostedBrainWorm = worm;
-        wormcomp.Host = target;
+        wormcomp.SetHost(target);
 
         var privatetalkcomp = EnsureComp<PrivateTalkComponent>(worm);
         privatetalkcomp.receiver = target;
@@ -221,6 +218,8 @@ public partial class BrainWormSystem : EntitySystem
     {
         //инициализируем контейнер
         component.BrainWormContainer = _container.EnsureContainer<ContainerSlot>(uid, "BrainWormContainer");
+        component.BrainWormContainer.ShowContents = false;
+        component.BrainWormContainer.OccludesLight = true;
 
         //добавляем рутконтейнер как контейнер для разума, лочим его общение только с основным телом.
         if (!TryComp<BodyComponent>(uid, out var body) || body.RootContainer.ContainedEntity == null)
@@ -245,8 +244,8 @@ public partial class BrainWormSystem : EntitySystem
     private void OnMapInit(EntityUid uid, BrainWormComponent component, MapInitEvent args)
     {
         component.NextChemicalsTime = _timing.CurTime;
-        _scaleVisuals.SetSpriteScale(uid, new Vector2(0.5f, 0.5f));
-
+        var scale = _scaleVisuals.GetSpriteScale(uid) * 0.5f;
+        _scaleVisuals.SetSpriteScale(uid, scale);
         if (!TryComp(uid, out ActionsComponent? comp))
             return;
         _action.AddAction(uid, ref component.ActionInsertBrainEntity, component.ActionInsertBrain, component: comp);
