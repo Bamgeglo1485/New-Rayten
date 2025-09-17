@@ -121,6 +121,7 @@ public sealed class BrainWormSystem : SharedBrainWormSystem
         if (!BuyAction(component, 30f))
         {
             _popup.PopupEntity(Loc.GetString("brainworm-popup-no-chemiclas", ("chems", 30)), uid, uid, PopupType.Medium);
+            return;
         }
 
         _chat.TrySendInGameICMessage(host, args.Text, InGameICChatType.Speak, true);
@@ -147,6 +148,7 @@ public sealed class BrainWormSystem : SharedBrainWormSystem
         if (!BuyAction(component, cost))
         {
             _popup.PopupEntity(Loc.GetString("brainworm-popup-no-chemiclas", ("chems", cost)), uid, uid, PopupType.Medium);
+            return;
         }
 
         var sound = new SoundPathSpecifier("/Audio/Items/hypospray.ogg");
@@ -275,6 +277,7 @@ public sealed class BrainWormSystem : SharedBrainWormSystem
         if (!BuyAction(wormcomp, cost))
         {
             _popup.PopupEntity(Loc.GetString("brainworm-popup-no-chemiclas", ("chems", cost)), uid, uid, PopupType.Medium);
+            return;
         }
 
         _store.TryAddCurrency(

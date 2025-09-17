@@ -1,6 +1,6 @@
 - type: radioChannel
   id: BrainWorm
-  name: Коллективный разум
+  name: chat-radio-brainworm
   keycode: 'ч'
   frequency: 3232
   color: "#800080"
