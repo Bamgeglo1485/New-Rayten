@@ -65,7 +65,7 @@ public sealed partial class BrainWormComponent : Component
         { "Tricordrazine",  30f },
         { "Lacerinol",       50f },
         { "Bruizine",      50f },
-        { "Charcoal",       100f },//заменить на инсулин
+        { "Insulin",       100f },
         { "Pyrazine",      100f },
     };
 
