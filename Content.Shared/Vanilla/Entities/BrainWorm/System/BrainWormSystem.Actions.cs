@@ -43,6 +43,12 @@ public abstract partial class SharedBrainWormSystem : EntitySystem
         if (component.IsSleep)
             return;
 
+        if (component.Currentstage == BrainWormLifeStage.Elder)
+        {
+            _popup.PopupClient(Loc.GetString("brainworm-popup-cant-eject-elder"), uid, uid, PopupType.Medium);
+            return;
+        }
+
         var doAfterEventArgs = new DoAfterArgs(EntityManager, uid, BrainWormComponent.EjectBrainTime, new EjectBrainDoAfterEvent(), eventTarget: uid, target: host)
         {
             DistanceThreshold = 2f,

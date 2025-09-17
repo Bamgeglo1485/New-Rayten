@@ -125,6 +125,9 @@ public abstract partial class SharedBrainWormSystem : EntitySystem
         if (component.IsMindController)
             return;
 
+        if (component.Currentstage == BrainWormLifeStage.Elder)
+            return;
+
         EjectWorm(uid);
     }
 

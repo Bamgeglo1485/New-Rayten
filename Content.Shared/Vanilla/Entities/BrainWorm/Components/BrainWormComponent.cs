@@ -61,12 +61,12 @@ public sealed partial class BrainWormComponent : Component
     {
         { "Epinephrine",   30f },
         { "Desoxyephedrine", 50f },
-        { "Charcoal",       30f },
         { "Ethylredoxrazine",30f },
         { "Tricordrazine",  30f },
-        { "Bruizine",       30f },
-        { "Pyrazine",      30f },
-        { "Necrosol",      50f }
+        { "Lacerinol",       50f },
+        { "Bruizine",      50f },
+        { "Charcoal",       100f },//заменить на инсулин
+        { "Pyrazine",      100f },
     };
 
     [DataField, AutoNetworkedField]
@@ -87,8 +87,13 @@ public sealed partial class BrainWormComponent : Component
     {
         DamageDict = new()
         {
-            { "Brute", -0.4f },
-            { "Burn", -0.4f }
+            { "Slash", -0.4f },
+            { "Piercing", -0.4f },
+            { "Blunt", -0.4f },
+            { "Heat", -0.4f },
+            { "Shock", -0.4f },
+            { "Cold", -0.4f },
+            { "Caustic", -0.4f }
         }
     };
 
