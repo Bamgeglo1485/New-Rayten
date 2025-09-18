@@ -1093,7 +1093,7 @@
       - NanoTaskCartridge
 
 - type: entity
-  parent: [ SyndiPDA, BaseSyndicateContraband ]
+  parent: [ SyndiPDA, ThirdSyndicateContraband ]
   id: SyndiOperativePDA
   name: syndicate operative PDA
   description: Death to NT!
@@ -1109,7 +1109,7 @@
     state: pda-syndi-operative
 
 - type: entity
-  parent: [ SyndiOperativePDA, BaseSyndicateContraband ]
+  parent: [ SyndiOperativePDA, ThirdSyndicateContraband ]
   id: SyndiCorpsmanPDA
   name: syndicate corpsman PDA
   description: Commander... I need to cook!
@@ -1131,7 +1131,7 @@
       - MedTekCartridge
 
 - type: entity
-  parent: [ SyndiOperativePDA, BaseSyndicateContraband ]
+  parent: [ SyndiOperativePDA, ThirdSyndicateContraband ]
   id: SyndiCommanderPDA
   name: syndicate commander PDA
   description: So what are we, some kind of Nukie squad?

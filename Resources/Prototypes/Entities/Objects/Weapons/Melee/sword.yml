@@ -147,7 +147,7 @@
   description: A katana infused with strong energy.
   components:
   - type: Contraband
-    severity: HighlyIllegal
+    severity: ThirdLevel
   - type: Sprite
     sprite: Objects/Weapons/Melee/energykatana.rsi
   - type: MeleeWeapon

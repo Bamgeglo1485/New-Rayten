@@ -59,15 +59,6 @@
       description: eventteam-ert-leader-desc
       raffle:
         settings: default
-      requirements:
-        - !type:DepartmentTimeRequirement
-          department: Command
-          time: 36000 # 10 часов
-        - !type:DepartmentTimeRequirement
-          department: Security
-          time: 36000 # 10 часов
-        - !type:OverallPlaytimeRequirement
-          time: 360000 # 100 часов
 
 - type: entity
   id: SpawnMobERTMedic
@@ -86,12 +77,6 @@
       rules: ghost-role-information-nonantagonist-rules
       raffle:
         settings: default
-      requirements:
-        - !type:DepartmentTimeRequirement
-          department: Medical
-          time: 36000 # 10 часов
-        - !type:OverallPlaytimeRequirement
-          time: 360000 # 100 часов
 
 - type: entity
   id: SpawnMobERTRegular
@@ -110,12 +95,6 @@
       rules: ghost-role-information-nonantagonist-rules
       raffle:
         settings: default
-      requirements:
-        - !type:DepartmentTimeRequirement
-          department: Security
-          time: 36000 # 10 часов
-        - !type:OverallPlaytimeRequirement
-          time: 360000 # 100 часов
 
 - type: entity
   id: SpawnMobERTEngineer
@@ -134,12 +113,6 @@
       rules: ghost-role-information-nonantagonist-rules
       raffle:
         settings: default
-      requirements:
-        - !type:DepartmentTimeRequirement
-          department: Engineering
-          time: 36000 # 10 часов
-        - !type:OverallPlaytimeRequirement
-          time: 360000 # 100 часов
 
 # Роли
 - type: entity

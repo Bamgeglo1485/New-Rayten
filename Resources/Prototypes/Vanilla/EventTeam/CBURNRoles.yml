@@ -49,15 +49,6 @@
     rules: ghost-role-information-nonantagonist-rules
     raffle:
       settings: short
-    requirements:
-      - !type:DepartmentTimeRequirement
-        department: Command
-        time: 36000 # 10 часов
-      - !type:DepartmentTimeRequirement
-        department: Security
-        time: 36000 # 10 часов
-      - !type:OverallPlaytimeRequirement
-        time: 360000 # 100 часов
   - type: Loadout
     prototypes: [MobCBURNRegularLoot]
   - type: Skill
@@ -89,12 +80,6 @@
     rules: ghost-role-information-nonantagonist-rules
     raffle:
       settings: short
-    requirements:
-      - !type:DepartmentTimeRequirement
-        department: Security
-        time: 36000 # 10 часов
-      - !type:OverallPlaytimeRequirement
-        time: 360000 # 100 часов
   - type: Loadout
     prototypes: [MobCBURNRegularLoot]
   - type: Skill

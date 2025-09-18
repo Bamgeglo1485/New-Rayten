@@ -32,7 +32,7 @@
   id: IAAGear
   equipment:
     shoes: ClothingShoesColorBlack
-    id: IAAPDA
+    id: LawyerPDA
     eyes: ClothingEyesGlassesSunglasses
     pocket2: BookSpaceLaw
   inhand:

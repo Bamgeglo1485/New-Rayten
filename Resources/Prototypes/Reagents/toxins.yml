@@ -6,7 +6,7 @@
   flavor: bitter
   color: "#cf3600"
   physicalDesc: reagent-physical-desc-opaque
-  contrabandSeverity: Minor
+  contrabandSeverity: SecondLevel
   plantMetabolism:
   - !type:PlantAdjustToxins
     amount: 10
@@ -128,7 +128,7 @@
   group: Toxins
   desc: reagent-desc-polytrinic-acid
   physicalDesc: reagent-physical-desc-strong-smelling
-  contrabandSeverity: Major
+  contrabandSeverity: SecondLevel
   flavor: acid
   color: "#a1000b"
   boilingPoint: 78.2 # This isn't a real chemical...
@@ -197,7 +197,7 @@
   group: Toxins
   desc: reagent-desc-fluorosulfuric-acid
   physicalDesc: reagent-physical-desc-strong-smelling
-  contrabandSeverity: Minor
+  contrabandSeverity: SecondLevel
   flavor: acid
   color: "#5050ff"
   boilingPoint: 165
@@ -312,7 +312,7 @@
   group: Toxins
   desc: reagent-desc-heartbreaker-toxin
   physicalDesc: reagent-physical-desc-strong-smelling
-  contrabandSeverity: Major
+  contrabandSeverity: SecondLevel
   color: "#5f959c"
   metabolisms:
     Poison:
@@ -331,7 +331,7 @@
   group: Toxins
   desc: reagent-desc-lexorin
   physicalDesc: reagent-physical-desc-pungent
-  contrabandSeverity: Syndicate
+  contrabandSeverity: ThirdLevel
   color: "#6b0007"
   metabolisms:
     Poison:
@@ -433,7 +433,7 @@
   group: Toxins
   desc: reagent-desc-amatoxin
   physicalDesc: reagent-physical-desc-nondescript
-  contrabandSeverity: Major
+  contrabandSeverity: SecondLevel
   color: "#D6CE7B"
   metabolisms:
     Poison:
@@ -466,7 +466,7 @@
   group: Toxins
   desc: reagent-desc-romerol
   physicalDesc: reagent-physical-desc-necrotic
-  contrabandSeverity: Syndicate
+  contrabandSeverity: ThirdLevel
   flavor: bitter
   color: "#7e916e"
   worksOnTheDead: true
@@ -612,7 +612,7 @@
   group: Toxins
   desc: reagent-desc-lead
   physicalDesc: reagent-physical-desc-metallic
-  contrabandSeverity: Major
+  contrabandSeverity: SecondLevel
   color: "#5C6274"
   metabolisms:
     Poison:
@@ -629,7 +629,7 @@
   group: Toxins
   desc: reagent-desc-bungotoxin
   physicalDesc: reagent-physical-desc-nondescript
-  contrabandSeverity: Major
+  contrabandSeverity: SecondLevel
   color: "#EBFF8E"
   metabolisms:
     Poison:
@@ -646,7 +646,7 @@
   group: Toxins
   desc: reagent-desc-vestine
   physicalDesc: reagent-physical-desc-shiny
-  contrabandSeverity: Syndicate
+  contrabandSeverity: ThirdLevel
   flavor: medicine
   color: "#435166"
   metabolisms:
@@ -670,7 +670,7 @@
   group: Toxins
   desc: reagent-desc-tazinide
   physicalDesc: reagent-physical-desc-metallic
-  contrabandSeverity: Syndicate
+  contrabandSeverity: ThirdLevel
   flavor: shocking
   color: "#FDD023"
   metabolisms:
