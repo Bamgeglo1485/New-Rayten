@@ -57,6 +57,7 @@
       rules: ghost-role-information-nonantagonist-rules
       raffle:
         settings: default
+      job: CentralCommandOfficial
     - type: Loadout
       prototypes: [ CentcomGear ]
       roleLoadout: [ RoleSurvivalStandard ]

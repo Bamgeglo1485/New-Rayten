@@ -25,9 +25,9 @@ public sealed class RoleSkillsSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<IsJobAllowedEvent>(OnIsJobAllowed);
+        SubscribeLocalEvent<IsRoleAllowedEvent>(OnIsRoleAllowed);
     }
-    private void OnIsJobAllowed(ref IsJobAllowedEvent ev)
+    private void OnIsRoleAllowed(ref IsRoleAllowedEvent ev)
     {
         var prefManager = IoCManager.Resolve<IServerPreferencesManager>();
         var prefs = prefManager.GetPreferences(ev.Player.UserId);
@@ -36,28 +36,34 @@ public sealed class RoleSkillsSystem : EntitySystem
         if (profile == null)
             return;
 
-        if (!_prototype.TryIndex<JobPrototype>(ev.JobId, out var jobProto))
+        // Если в ивенте нет конкретных профессий, ничего не проверяем
+        if (ev.Jobs == null || ev.Jobs.Count == 0)
             return;
 
-        var jobProtoId = SharedRoleSkillsSystem.GetJobPrototype(jobProto.ID);
-
-        if (!_prototype.TryIndex<RoleSkillsPrototype>(jobProtoId, out var roleSkillsProto))
+        foreach (var jobId in ev.Jobs)
         {
-            return;
-        }
+            if (!_prototype.TryIndex<JobPrototype>(jobId, out var jobProto))
+                continue;
 
-        if (!profile.RoleSkills.TryGetValue(jobProtoId, out var roleSkills))
-        {
-            ev.Cancelled = true;
-            return;
-        }
+            var jobProtoId = SharedRoleSkillsSystem.GetJobPrototype(jobProto.ID);
 
-        if (!roleSkills.IsValid)
-        {
-            ev.Cancelled = true;
-        }
+            if (!_prototype.TryIndex<RoleSkillsPrototype>(jobProtoId, out var roleSkillsProto))
+                continue;
 
+            if (!profile.RoleSkills.TryGetValue(jobProtoId, out var roleSkills))
+            {
+                ev.Cancelled = true;
+                return;
+            }
+
+            if (!roleSkills.IsValid)
+            {
+                ev.Cancelled = true;
+                return;
+            }
+        }
     }
+
 
     public void ApplyRoleSkills(EntityUid uid, RoleSkills? roleSkills)
     {
