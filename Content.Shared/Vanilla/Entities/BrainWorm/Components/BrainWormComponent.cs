@@ -17,7 +17,7 @@ public sealed partial class BrainWormComponent : Component
     /// <summary>
     /// носитель мозгового червя
     /// </summary>
-    [DataField]
+    [ViewVariables(VVAccess.ReadOnly)]
     private EntityUid? _host;
     public bool TryGetHost(out EntityUid host)
     {
@@ -37,11 +37,11 @@ public sealed partial class BrainWormComponent : Component
     /// <summary>
     /// флаг неактивности червя (если хост сожрал сахар)
     /// </summary>
-    [DataField]
+    [AutoNetworkedField]
     public bool IsSleep = false;
-    [DataField]
+    [AutoNetworkedField]
+    public bool FastMindControl = false;
     public bool IsMindController = false;
-
     public DoAfterId? EjectDoAfter;
     public DoAfterId? MindControlDoAfter;
 
@@ -65,7 +65,7 @@ public sealed partial class BrainWormComponent : Component
         { "Tricordrazine",  30f },
         { "Lacerinol",       50f },
         { "Bruizine",      50f },
-        { "Insulin",       100f },
+        { "Insulin",       70f },
         { "Pyrazine",      100f },
     };
 

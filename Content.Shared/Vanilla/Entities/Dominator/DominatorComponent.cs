@@ -1,7 +1,11 @@
-using Robust.Shared.GameStates;
-using Robust.Shared.Serialization;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.DoAfter;
+using Content.Shared.Dataset;
+using Robust.Shared.GameStates;
+using Robust.Shared.Serialization;
+using Robust.Shared.Audio;
+using Robust.Shared.Prototypes;
+
 namespace Content.Shared.Vanilla.Dominator;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
@@ -19,11 +23,16 @@ public sealed partial class DominatorComponent : Component
 
     [DataField]
     public float ScanRange = 14.0f;
+
     [DataField]
     public float CheckDelay = 0.5f;
-    public float Timer;
-    public TimeSpan NextSpeechTime = TimeSpan.FromSeconds(0);
 
+    public float Timer;
+    public ProtoId<LocalizedDatasetPrototype> Dataset = "DominatorPhrases";
+    public TimeSpan NextSpeechTime = TimeSpan.FromSeconds(0);
+    public SoundSpecifier? CompleteSound = new SoundPathSpecifier("/Audio/Items/beep.ogg");
+    [AutoNetworkedField]
+    public bool AllowGhostTakeover = true;
 }
 
 [Serializable, NetSerializable]

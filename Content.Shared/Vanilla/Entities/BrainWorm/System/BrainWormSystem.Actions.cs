@@ -125,8 +125,9 @@ public abstract partial class SharedBrainWormSystem : EntitySystem
         }
 
         _popup.PopupClient(Loc.GetString("brainworm-host-mind-control", ("user", Identity.Entity(uid, EntityManager))), host, host, PopupType.Medium);
+        var controltime = component.FastMindControl ? component.MindControlDoAfterTime * 0.25f : component.MindControlDoAfterTime;
 
-        var doAfterEventArgs = new DoAfterArgs(EntityManager, uid, component.MindControlDoAfterTime, new MindControlDoAfterEvent(), eventTarget: uid, target: host)
+        var doAfterEventArgs = new DoAfterArgs(EntityManager, uid, controltime, new MindControlDoAfterEvent(), eventTarget: uid, target: host)
         {
             DistanceThreshold = 2f,
             BreakOnMove = true,

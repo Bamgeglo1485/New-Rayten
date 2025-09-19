@@ -2,10 +2,10 @@ using Content.Shared.Weapons.Ranged.Systems;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Events;
 using Content.Shared.Weapons.Ranged;
+using Content.Shared.Access.Components;
 using Content.Shared.PDA;
 using Content.Shared.Inventory;
 using Content.Shared.Examine;
-using Content.Shared.Access.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Hands.Components;
 using Robust.Shared.Prototypes;
@@ -14,7 +14,7 @@ namespace Content.Shared.Vanilla.Dominator;
 
 public class SharedDominatorSystem : EntitySystem
 {
-    [Dependency] private readonly InventorySystem _inventory = default!;
+    [Dependency] protected readonly InventorySystem _inventory = default!;
     [Dependency] private readonly ExamineSystemShared _examine = default!;
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly SharedHandsSystem _hands = default!;
@@ -28,6 +28,7 @@ public class SharedDominatorSystem : EntitySystem
         SubscribeLocalEvent<DominatorComponent, AttemptShootEvent>(OnAttemptShoot);
         SubscribeLocalEvent<DominatorComponent, ExaminedEvent>(OnExamined);
     }
+
 
     public override void Update(float frameTime)
     {

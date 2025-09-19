@@ -35,8 +35,6 @@ public abstract partial class SharedBrainWormSystem : EntitySystem
     [Dependency] private readonly SharedInjectorSystem _injector = default!;
     private static readonly EntProtoId BrainWormShopId = "ActionBrainWormShop";
     private static readonly EntProtoId BrainWormChemicalsId = "ActionBrainWormChemicals";
-
-    private static readonly ReagentId SugarId = new ReagentId("Sugar", null);
     public override void Initialize()
     {
         base.Initialize();
@@ -46,7 +44,6 @@ public abstract partial class SharedBrainWormSystem : EntitySystem
         SubscribeLocalEvent<BrainWormComponent, EjectBrainDoAfterEvent>(OnEjectDoAfter);
         SubscribeLocalEvent<BrainWormComponent, MapInitEvent>(OnMapInit);
         SubscribeLocalEvent<BrainWormComponent, ComponentShutdown>(OnShutdown);
-        SubscribeLocalEvent<BrainWormHostComponent, SolutionContainerChangedEvent>(OnSolutionChanged);
         SubscribeLocalEvent<BrainWormHostComponent, ComponentInit>(OnHostInit);
         SubscribeLocalEvent<BrainWormHostComponent, ComponentShutdown>(OnHostShutdown);
 
@@ -195,30 +192,7 @@ public abstract partial class SharedBrainWormSystem : EntitySystem
         args.Handled = true;
     }
 
-    private void OnSolutionChanged(EntityUid uid, BrainWormHostComponent comp, ref SolutionContainerChangedEvent args)
-    {
-        if (args.Solution.Name != "chemicals")
-            return;
 
-        if (!TryComp<BrainWormComponent>(comp.HostedBrainWorm, out var wormComp))
-            return;
-
-        var hasSugar = args.Solution.GetReagentQuantity(SugarId) > 0;
-
-        if (hasSugar && !wormComp.IsSleep)
-        {
-            _popup.PopupClient(Loc.GetString("brainworm-popup-worm-get-sleep"), comp.HostedBrainWorm, comp.HostedBrainWorm, PopupType.Large);
-        }
-
-        wormComp.IsSleep = hasSugar;
-
-        if (hasSugar)
-        {
-            CancelDoAfter(wormComp);
-            var ev = new ReControlEvent();
-            RaiseLocalEvent(uid, ref ev);
-        }
-    }
 
     private void OnRelayMovement(EntityUid uid, BrainWormComponent wormComp, ref MoveInputEvent args)
     {
@@ -275,7 +249,7 @@ public abstract partial class SharedBrainWormSystem : EntitySystem
     }
 
     //Корректно завершает все дуафтеры
-    private void CancelDoAfter(BrainWormComponent wormComp)
+    protected void CancelDoAfter(BrainWormComponent wormComp)
     {
         _doAfter.Cancel(wormComp.EjectDoAfter);
         _doAfter.Cancel(wormComp.MindControlDoAfter);

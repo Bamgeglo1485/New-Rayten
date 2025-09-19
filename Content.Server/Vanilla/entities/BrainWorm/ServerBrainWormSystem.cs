@@ -20,6 +20,7 @@ using Content.Server.Mind;
 using Content.Server.Store.Systems;
 using Content.Server.Medical;
 using Content.Server.Chemistry.Containers.EntitySystems;
+using Content.Shared.Chemistry.EntitySystems;
 using Content.Server.Chat.Systems;
 using Robust.Shared.Timing;
 using Robust.Shared.Prototypes;
@@ -47,7 +48,8 @@ public sealed class BrainWormSystem : SharedBrainWormSystem
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly DamageableSystem _damageable = default!;
     [Dependency] private readonly MobThresholdSystem _mobthreshold = default!;
-
+    private static readonly ReagentId SugarId = new ReagentId("Sugar", null);
+    private static readonly ReagentId MannitolId = new ReagentId("Mannitol", null);
     public override void Initialize()
     {
         base.Initialize();
@@ -67,6 +69,8 @@ public sealed class BrainWormSystem : SharedBrainWormSystem
         SubscribeLocalEvent<BrainWormComponent, ForceSayMessage>(OnForceSay);
         //даем защиту от огня если червь в бошке
         SubscribeLocalEvent<BrainWormComponent, GetTemperatureProtectionEvent>(OnTemperatureProtection);
+        //сожрали сахар
+        SubscribeLocalEvent<BrainWormHostComponent, SolutionContainerChangedEvent>(OnSolutionChanged);
     }
     private void OnTemperatureProtection(EntityUid uid, BrainWormComponent comp, ref GetTemperatureProtectionEvent args)
     {
@@ -319,7 +323,7 @@ public sealed class BrainWormSystem : SharedBrainWormSystem
             _scaleVisuals.SetSpriteScale(uid, scale);
 
             wormcomp.Currentstage = BrainWormLifeStage.Mature;
-            ApplyUpgrades(uid, 15, -0.1f);
+            _mobthreshold.SetMobStateThreshold(uid, 15, MobState.Dead);
             return;
         }
 
@@ -329,7 +333,7 @@ public sealed class BrainWormSystem : SharedBrainWormSystem
             wormcomp.ChemicalsCup += 20f;
 
             wormcomp.Currentstage = BrainWormLifeStage.Adult;
-            ApplyUpgrades(uid, 25, -0.2f);
+            _mobthreshold.SetMobStateThreshold(uid, 20, MobState.Dead);
             return;
         }
 
@@ -341,21 +345,8 @@ public sealed class BrainWormSystem : SharedBrainWormSystem
             wormcomp.ChemicalsPerTick += 0.3f;
             wormcomp.ChemicalsCup += 30f;
             wormcomp.Currentstage = BrainWormLifeStage.Elder;
-            ApplyUpgrades(uid, 35, -0.3f);
+            _mobthreshold.SetMobStateThreshold(uid, 25, MobState.Dead);
             return;
-        }
-    }
-    private void ApplyUpgrades(EntityUid uid, int newHp, float regen)
-    {
-        _mobthreshold.SetMobStateThreshold(uid, newHp, MobState.Dead);
-
-        if (TryComp<PassiveDamageComponent>(uid, out var passive))
-        {
-            passive.Damage.DamageDict["Brute"] = regen;
-            passive.Damage.DamageDict["Burn"] = regen;
-            passive.Damage.DamageDict["Toxin"] = regen;
-            passive.Damage.DamageDict["Airloss"] = regen;
-            Dirty(uid, passive);
         }
     }
     private static bool BuyAction(BrainWormComponent wormcomp, float ammount)
@@ -366,5 +357,33 @@ public sealed class BrainWormSystem : SharedBrainWormSystem
         wormcomp.Chemicals -= ammount;
         return true;
     }
+    private void OnSolutionChanged(EntityUid uid, BrainWormHostComponent comp, ref SolutionContainerChangedEvent args)
+    {
+        if (args.Solution.Name != "chemicals")
+            return;
 
+        if (!TryComp<BrainWormComponent>(comp.HostedBrainWorm, out var wormComp))
+            return;
+        //Сахар
+        var hasSugar = args.Solution.GetReagentQuantity(SugarId) > 0;
+
+        if (hasSugar && !wormComp.IsSleep)
+            _popup.PopupEntity(Loc.GetString("brainworm-popup-worm-get-sleep"), comp.HostedBrainWorm, comp.HostedBrainWorm, PopupType.Large);
+
+        wormComp.IsSleep = hasSugar;
+        if (hasSugar)
+        {
+            CancelDoAfter(wormComp);
+            var ev = new ReControlEvent();
+            RaiseLocalEvent(uid, ref ev);
+        }
+        //Маннитол
+        var hasMannitol = args.Solution.GetReagentQuantity(MannitolId) > 0;
+
+        if (hasMannitol && !wormComp.FastMindControl)
+            _popup.PopupEntity(Loc.GetString("brainworm-popup-worm-get-die"), comp.HostedBrainWorm, comp.HostedBrainWorm, PopupType.LargeCaution);
+
+        wormComp.FastMindControl = hasMannitol;
+        Dirty(comp.HostedBrainWorm, wormComp);
+    }
 }

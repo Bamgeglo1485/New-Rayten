@@ -153,6 +153,9 @@ public sealed class JobRequirementsManager : ISharedPlaytimeManager
         if (!CheckRoleRequirements(reqs, profile, out reason))
             return false;
         //Rayten-Start
+        if (!_prototypes.TryIndex<RoleSkillsPrototype>(SharedRoleSkillsSystem.GetJobPrototype(job.ID), out var roleSkillsProto))
+            return true;
+
         if (profile == null || !profile.RoleSkills.TryGetValue(SharedRoleSkillsSystem.GetJobPrototype(job.ID), out var roleSkills) || !roleSkills.IsValid)
         {
             reason = FormattedMessage.FromUnformatted("Не выбраны навыки");
