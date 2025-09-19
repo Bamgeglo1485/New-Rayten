@@ -49013,13 +49013,6 @@ entities:
     - type: Transform
       pos: -66.234634,36.47222
       parent: 2
-- proto: DrinkBadTouchGlass
-  entities:
-  - uid: 7111
-    components:
-    - type: Transform
-      pos: 1.6892707,-10.946355
-      parent: 2
 - proto: DrinkBeerBottleFull
   entities:
   - uid: 7112

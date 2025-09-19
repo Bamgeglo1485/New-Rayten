@@ -17,6 +17,15 @@
             "name": "returncontrol"
         },
         {
+            "name": "reproduce"
+        },
+        {
+            "name": "evolution"
+        },
+        {
+            "name": "chemicals"
+        },
+        {
             "name": "insertbrain"
         }
     ]

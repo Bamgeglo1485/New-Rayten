@@ -25,7 +25,6 @@
       components:
       - HijackShuttleCondition
       - KillPersonCondition
-      - RandomTraitorAlive
       - RandomTraitorProgress
       - DieCondition
       - StealCondition

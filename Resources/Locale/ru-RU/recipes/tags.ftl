@@ -93,6 +93,7 @@ construction-graph-tag-ripley-peripherals-control-module = модуль упра
 construction-graph-tag-door-electronics-circuit-board = микросхема шлюза
 construction-graph-tag-firelock-electronics-circuit-board = микросхема пожарного шлюза
 construction-graph-tag-conveyor-belt-assembly = конвейерная лента
+construction-graph-tag-station-ai-core-electronics = микросхема ядра ии
 # Инструменты
 construction-graph-tag-multitool = мультитул
 construction-graph-tag-health-analyzer = медицинский сканер
@@ -132,4 +133,4 @@ construction-graph-tag-fire-helmet = пожарный шлем
 # Спасоборудование
 construction-graph-tag-spationaut-hardsuit = скафандр космонавта
 # clothing
-construction-graph-tag-backpack = backpack
+construction-graph-tag-backpack = рюкзак

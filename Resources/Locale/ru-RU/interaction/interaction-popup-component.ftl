@@ -99,7 +99,6 @@ hugging-success-generic-target = { CAPITALIZE($user) } обнимает вас.
 petting-success-soft-floofy-vulp = Вы гладите { $target } по его мягкой пушистой голове.
 petting-success-soft-floofy-vulp-others = { CAPITALIZE($user) } гладит { $target } по его мягкой пушистой голове.
 
-
 ## Other
 
 petting-success-tesla = Вы гладите { $target }, попутно нарушая законы природы и физики.

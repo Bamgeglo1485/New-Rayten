@@ -34908,13 +34908,6 @@ entities:
     - type: Transform
       pos: 4.6302586,19.89504
       parent: 2
-- proto: DrinkBadTouchGlass
-  entities:
-  - uid: 4698
-    components:
-    - type: Transform
-      pos: 4.127999,17.60534
-      parent: 2
 - proto: DrinkBeerBottleFull
   entities:
   - uid: 4699

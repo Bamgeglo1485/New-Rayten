@@ -161,7 +161,9 @@
   description: ввести в кровь носителя химикаты
   components:
   - type: Action
-    icon: Interface/Actions/shop.png
+    icon:
+      sprite: Vanilla/Interface/Actions/brainworm.rsi
+      state: chemicals
     priority: -98
   - type: InstantAction
     event: !type:BrainWormChemicalsActionEvent
@@ -173,7 +175,9 @@
   description: получение новых способностей
   components:
   - type: Action
-    icon: Interface/Actions/shop.png
+    icon:
+      sprite: Vanilla/Interface/Actions/brainworm.rsi
+      state: evolution
     priority: -97
   - type: InstantAction
     event: !type:BrainWormShopActionEvent
@@ -200,8 +204,8 @@
   components:
   - type: Action
     icon:
-      sprite: Interface/Actions/actions_rat_king.rsi
-      state: stayOff
+      sprite: Vanilla/Interface/Actions/brainworm.rsi
+      state: reproduce
     priority: -99
   - type: InstantAction
     event: !type:BrainWormReproduceEvent

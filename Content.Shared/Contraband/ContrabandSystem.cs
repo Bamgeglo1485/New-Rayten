@@ -66,22 +66,22 @@ public sealed class ContrabandSystem : EntitySystem
         // two strings:
         // one, the actual informative 'this is restricted'
         // then, the 'you can/shouldn't carry this around' based on the ID the user is wearing
-        var localizedDepartments = component.AllowedDepartments.Select(p => Loc.GetString("contraband-department-plural", ("department", Loc.GetString(_proto.Index(p).Name))));
-        var jobs = component.AllowedJobs.Select(p => _proto.Index(p).LocalizedName).ToArray();
-        var localizedJobs = jobs.Select(p => Loc.GetString("contraband-job-plural", ("job", p)));
         var severity = _proto.Index(component.Severity);
         String levelExamineMessage;
         String? depExamineMessage = null;
         if (severity.ShowDepartmentsAndJobs)
         {
-            // creating a combined list of jobs and departments for the restricted text
-            var combined = localizedDepartments.Concat(localizedJobs).ToList();
-            if (combined.Count > 0)
-            {
-                var list = ContentLocalizationManager.FormatList(combined);
-                depExamineMessage = Loc.GetString("contraband-examine-text-Restricted-department", ("departments", list));
-            }
+            depExamineMessage = GenerateDepartmentExamineMessage(
+                component.AllowedDepartments,
+                component.AllowedJobs,
+                ContrabandItemType.Item);
         }
+        else
+        {
+            depExamineMessage = Loc.GetString(severity.ExamineText);
+        }
+
+
 
 
         levelExamineMessage = Loc.GetString(severity.ExamineText);
@@ -98,6 +98,7 @@ public sealed class ContrabandSystem : EntitySystem
             }
         }
 
+        var jobs = component.AllowedJobs.Select(p => _proto.Index(p).LocalizedName).ToArray();
         // if it is fully restricted, you're department-less, or your department isn't in the allowed list, you cannot carry it. Otherwise, you can.
         var carryingMessage = Loc.GetString("contraband-examine-text-avoid-carrying-around");
         var iconTexture = "/Textures/Interface/VerbIcons/lock-red.svg.192dpi.png";
@@ -114,8 +115,29 @@ public sealed class ContrabandSystem : EntitySystem
             examineMarkup.ToMarkup(),
             iconTexture);
     }
+    public string GenerateDepartmentExamineMessage(
+        HashSet<ProtoId<DepartmentPrototype>> allowedDepartments,
+        HashSet<ProtoId<JobPrototype>> allowedJobs,
+        ContrabandItemType itemType = ContrabandItemType.Item)
+    {
+        var localizedDepartments = allowedDepartments
+            .Select(p => Loc.GetString("contraband-department-plural",
+                ("department", Loc.GetString(_proto.Index(p).Name))));
+        var jobs = allowedJobs.Select(p => _proto.Index(p).LocalizedName).ToArray();
+        var localizedJobs = jobs.Select(p => Loc.GetString("contraband-job-plural", ("job", p)));
 
-    private FormattedMessage GetContrabandExamine(String level, String carryMessage, string? depExamineMessage)
+        var list = ContentLocalizationManager.FormatList(localizedDepartments.Concat(localizedJobs).ToList());
+
+        if (string.IsNullOrEmpty(list))
+            return string.Empty;
+
+        return Loc.GetString(
+            "contraband-examine-text-Restricted-department",
+            ("departments", list),
+            ("type", itemType));
+    }
+
+    private FormattedMessage GetContrabandExamine(string level, string carryMessage, string? depExamineMessage)
     {
         var msg = new FormattedMessage();
         msg.AddMarkupOrThrow(level);
@@ -132,6 +154,7 @@ public sealed class ContrabandSystem : EntitySystem
         return msg;
     }
 
+
     private void SetContrabandExamine(bool val)
     {
         _contrabandExamineEnabled = val;
@@ -141,4 +164,13 @@ public sealed class ContrabandSystem : EntitySystem
     {
         _contrabandExamineOnlyInHudEnabled = val;
     }
+}
+
+/// <summary>
+/// The item type that the contraband text should follow in the description text.
+/// </summary>
+public enum ContrabandItemType
+{
+    Item,
+    Reagent
 }

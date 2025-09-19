@@ -42,4 +42,3 @@ marking-VoxTailDocked-vox_tail_docked = Хвост вокса (рудимент�
 marking-VoxTailDocked = Хвост вокса (рудиментарный)
 marking-VoxTailSplit-vox_tail_split = Хвост вокса (раздвоенный)
 marking-VoxTailSplit = Хвост вокса (раздвоенный)
-

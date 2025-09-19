@@ -13,7 +13,7 @@
   - type: VentCrittersRule
     specialEntries:
     - id: MobBrainWorm
-      prob: 0.001
+      prob: 0.005
     entries:
     - id: MobBrainWorm
-      prob: 0.01
+      prob: 0.02
