@@ -1,6 +1,9 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 using Content.Shared.Administration;
 using Content.Shared.CCVar.CVarAccess;
 using Robust.Shared.Configuration;
+using Robust.Shared.Physics.Components;
 
 namespace Content.Shared.CCVar;
 
@@ -92,13 +95,13 @@ public sealed partial class CCVars
     ///     How long the final stage of FTL before arrival should be.
     /// </summary>
     public static readonly CVarDef<float> FTLArrivalTime =
-        CVarDef.Create("shuttle.arrival_time", 5f, CVar.SERVERONLY);
+        CVarDef.Create("shuttle.arrival_time", 10f, CVar.SERVERONLY); // Frontier edit: 5 -> 10
 
     /// <summary>
     ///     How much time in seconds that needs to pass before a non-arrivals shuttle can FTL again.
     /// </summary>
     public static readonly CVarDef<float> FTLCooldown =
-        CVarDef.Create("shuttle.cooldown", 60f, CVar.SERVERONLY);
+        CVarDef.Create("shuttle.cooldown", 90f, CVar.SERVERONLY);
 
     /// <summary>
     ///     How much time in seconds that needs to pass before the arrivals shuttle can FTL again.

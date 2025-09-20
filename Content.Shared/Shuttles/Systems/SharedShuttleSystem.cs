@@ -1,5 +1,7 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
+using Content.Shared._NF.Shuttles;
 using Content.Shared.Containers.ItemSlots;
-using Content.Shared.Shuttles.BUIStates;
 using Content.Shared.Shuttles.Components;
 using Content.Shared.Shuttles.UI.MapObjects;
 using Content.Shared.Whitelist;
@@ -14,20 +16,21 @@ namespace Content.Shared.Shuttles.Systems;
 
 public abstract partial class SharedShuttleSystem : EntitySystem
 {
-    [Dependency] private IMapManager _mapManager = default!;
-    [Dependency] private ItemSlotsSystem _itemSlots = default!;
-    [Dependency] protected FixtureSystem Fixtures = default!;
-    [Dependency] protected SharedMapSystem Maps = default!;
-    [Dependency] protected SharedPhysicsSystem Physics = default!;
-    [Dependency] protected SharedTransformSystem XformSystem = default!;
-    [Dependency] private EntityWhitelistSystem _whitelistSystem = default!;
+    [Dependency] private readonly IMapManager _mapManager = default!;
+    [Dependency] private readonly ItemSlotsSystem _itemSlots = default!;
+    [Dependency] protected readonly FixtureSystem Fixtures = default!;
+    [Dependency] protected readonly SharedMapSystem Maps = default!;
+    [Dependency] protected readonly SharedPhysicsSystem Physics = default!;
+    [Dependency] protected readonly SharedTransformSystem XformSystem = default!;
+    [Dependency] private readonly EntityWhitelistSystem _whitelistSystem = default!;
 
     public const float FTLRange = 256f;
     public const float FTLBufferRange = 8f;
     public const float TileDensityMultiplier = 0.5f;
 
-    [Dependency] private EntityQuery<MapGridComponent> _gridQuery = default!;
-    [Dependency] private EntityQuery<PhysicsComponent> _physicsQuery = default!;
+    private EntityQuery<MapGridComponent> _gridQuery;
+    private EntityQuery<PhysicsComponent> _physicsQuery;
+    private EntityQuery<TransformComponent> _xformQuery;
 
     private List<Entity<MapGridComponent>> _grids = new();
 
@@ -36,6 +39,10 @@ public abstract partial class SharedShuttleSystem : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<FixturesComponent, GridFixtureChangeEvent>(OnGridFixtureChange);
+
+        _gridQuery = GetEntityQuery<MapGridComponent>();
+        _physicsQuery = GetEntityQuery<PhysicsComponent>();
+        _xformQuery = GetEntityQuery<TransformComponent>();
     }
 
     private void OnGridFixtureChange(EntityUid uid, FixturesComponent manager, GridFixtureChangeEvent args)
@@ -53,7 +60,7 @@ public abstract partial class SharedShuttleSystem : EntitySystem
     public bool CanFTLTo(EntityUid shuttleUid, MapId targetMap, EntityUid consoleUid)
     {
         var mapUid = Maps.GetMapOrInvalid(targetMap);
-        var shuttleMap = Transform(shuttleUid).MapID;
+        var shuttleMap = _xformQuery.GetComponent(shuttleUid).MapID;
 
         if (shuttleMap == targetMap)
             return true;
@@ -166,7 +173,13 @@ public abstract partial class SharedShuttleSystem : EntitySystem
         return HasComp<MapComponent>(coordinates.EntityId);
     }
 
-    public float GetFTLRange(EntityUid shuttleUid) => FTLRange;
+    /// <summary>
+    /// Frontier edit
+    /// </summary>
+    public float GetFTLRange(EntityUid shuttleUid, FTLDriveComponent? ftl = null)
+    {
+        return !Resolve(shuttleUid, ref ftl) ? 0f : ftl.Data.Range;
+    }
 
     public float GetFTLBufferRange(EntityUid shuttleUid, MapGridComponent? grid = null)
     {
@@ -182,10 +195,11 @@ public abstract partial class SharedShuttleSystem : EntitySystem
     /// <summary>
     /// Returns true if the spot is free to be FTLd to (not close to any objects and in range).
     /// </summary>
-    public bool FTLFree(EntityUid shuttleUid, EntityCoordinates coordinates, Angle angle, List<ShuttleExclusionObject>? exclusionZones)
+    public bool FTLFree(EntityUid shuttleUid, EntityCoordinates coordinates, Angle angle, List<ShuttleExclusionObject>? exclusionZones, FTLDriveComponent? ftl = null) // Frontier edit - FTL drive
     {
         if (!_physicsQuery.TryGetComponent(shuttleUid, out var shuttlePhysics) ||
-            !TryComp(shuttleUid, out TransformComponent? shuttleXform))
+            !_xformQuery.TryGetComponent(shuttleUid, out var shuttleXform)
+            || !Resolve(shuttleUid, ref ftl, false))
         {
             return false;
         }
@@ -199,8 +213,15 @@ public abstract partial class SharedShuttleSystem : EntitySystem
         // This is the already adjusted position
         var targetPosition = mapCoordinates.Position;
 
+        // Frontier edit start
+        // FTL on the same map won't work without a bluespace drive on board.
+        if (mapCoordinates.MapId == shuttleXform.MapID
+            && !ftl.Data.FTLToSameMap)
+            return false;
+        // Frontier edit end
+
         // Check range even if it's cross-map.
-        if ((targetPosition - ourPos).Length() > FTLRange)
+        if ((targetPosition - ourPos).Length() > GetFTLRange(shuttleUid, ftl)) // Frontier edit - FTL range
         {
             return false;
         }
@@ -266,4 +287,3 @@ public enum FTLState : byte
     Arriving = 1 << 3,
     Cooldown = 1 << 4,
 }
-
