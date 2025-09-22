@@ -12,5 +12,5 @@ force-say-window-title = Заставить носителя говорить
 force-say-text = Заставьте носителя сказать какую-то несусветную чушь, которая взбредет в ваш паразитический ум.
 force-say-placeholder = Что-то...
 force-say-send-button = Сказать
-health-analyzer-window-entity-brainwormed-text =  [color=red]В мозгу пациента обнаружен мозговой червь![/color]
+health-analyzer-window-entity-brainwormed-text = [color=red]В мозгу пациента обнаружен мозговой червь![/color]
 reagent-effect-guidebook-brainworm-damage = Наносит { $amount } ед. Яды мозговому червю.

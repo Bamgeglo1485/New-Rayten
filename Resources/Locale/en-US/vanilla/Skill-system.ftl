@@ -1,16 +1,18 @@
 Skill-issue-message-medicine-unskilled = Требуется { $lvl } ур. медицины
 Skill-issue-message-chemistry-unskilled = Требуется { $lvl } ур. химии
 Skill-issue-message-rangeweapon-unskilled = Требуется { $lvl } ур. стрельбы
-Skill-issue-message-research-unskilled = Требуется { $lvl } ур. исследования
-Skill-issue-message-instrumentation-unskilled = Требуется { $lvl } ур. приборостроения
-Skill-issue-message-building-unskilled = Требуется { $lvl } ур. строительства
+Skill-issue-message-meleeweapon-unskilled = Требуется { $lvl } ур. ближнего боя
 Skill-issue-message-engineering-unskilled = Требуется { $lvl } ур. инженерии
+Skill-issue-message-crime-unskilled = Требуется { $lvl } ур. преступности
+
 Skill-issue-easyskill-message-piloting-unskilled = Требуется навык пилотирования.
 Skill-issue-easyskill-message-botany-unskilled = Требуется навык ботаники.
 Skill-issue-easyskill-message-musinstruments-unskilled = Требуется навык музыкальных инструментов.
 Skill-issue-easyskill-message-bureaucracy-unskilled = Требуется навык бюрократии.
 Skill-issue-easyskill-message-atmosphere-unskilled = Требуется навык атмосферы.
 Skill-issue-easyskill-message-crime-unskilled = Требуется навык преступности.
+Skill-issue-easyskill-message-research-unskilled = Требуется навык исследований.
+
 shared-solution-container-component-on-examine-main-text-skill-issue = { "" }
 construction-menu-skill-building =  [color=#FFBF00]Требуется { $lvl } ур. строительства[/color]
 construction-menu-skill-engineering =  [color=#ff6600]Требуется { $lvl } ур. инженерии[/color]
@@ -58,20 +60,20 @@ skill-system-UI-Tooltip-RangeWeapon =
 skill-system-UI-Tooltip-MeleeWeapon =
     0 ур:
     - Урон: 50%
-    - Шансы толкнуть: 10%-25% 
+    - Шансы толкнуть: 10%-25%
     - Длительность заковывания: 3.5с. - 5с.
     1 ур:
     - Урон: 70%
-    - Шансы толкнуть: 15%-30% 
+    - Шансы толкнуть: 15%-30%
     - Длительность заковывания: 3с. - 4.5с.
     2 ур:
     - Урон: 100%
-    - Шансы толкнуть: 20%-35% 
+    - Шансы толкнуть: 20%-35%
     - Длительность заковывания: 2.5с. - 4с.
     3 ур:
     - 35% шанс моментально встать после оглушения
     - Урон: 100%
-    - Шансы толкнуть: 25%-40% 
+    - Шансы толкнуть: 25%-40%
     - Длительность заковывания: 2с. - 3.5с.
 skill-system-UI-Tooltip-Medicine =
     0 ур:
@@ -118,34 +120,13 @@ skill-system-UI-Tooltip-Engineering =
     - Тесла, Сингулярность
     - Киборги
     - 75% шанс избежать удара током.
-skill-system-UI-Tooltip-Building =
-    0 ур:
-    - Скорость работы с инструментами На 400% медленнее.
-    1 ур:
-    - Создание и разборка урановых, плазменных, серебрянных, деревянных, пластиковых, золотых, бананиумных и простых стен (и окон), деревянного забора и сетки-рябицы
-    - Скорость работы с инструментами На 125% медленнее.
-    2 ур:
-    - Создание и разборка бронеокон и бронестен, латунных окон и стен.
-    - 100% скорости работы с инструментами.
-    3 ур:
-    - Создание и разборка потайной стены
-    - Создание и разборка стен и окон шаттла
-    - Создание и разборка статуй
-    - Скорость работы с инструментами На 75% быстрее.
 skill-system-UI-Tooltip-Research =
-    1 ур:
     - Использование сканера аномалий
-    - 10% скорости сканирования
-    2 ур:
     - Использование генератора аномалий
     - Использование консоли исследований
     - Использование аналитической консоли
     - Использование А.К.Т.
-    - 100% скорости сканирования
-    3 ур:
     - Использование синхронизатора аномалий
-    - 1000% скорости сканирования
-    - Распознание опасности аномалий осмотром
 skill-system-UI-Tooltip-Crime =
     1 ур:
     - Шаги и инструменты (сварка,лом,кусачки,челюсти итд) становятся намного тише.

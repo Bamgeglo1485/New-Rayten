@@ -332,13 +332,15 @@ public abstract partial class SharedMoverController : VirtualController
             if (!weightless && MobMoverQuery.TryGetComponent(uid, out var mobMover) &&
                 TryGetSound(weightless, uid, mover, mobMover, xform, out var sound, tileDef: tileDef))
             {
-                var soundModifier = mover.Sprinting ? 3.5f : 1.5f;
+                var soundModifier = mover.Sprinting ? InputMoverComponent.SprintingSoundModifier
+                    : InputMoverComponent.WalkingSoundModifier;
+
+                //rayten-start
                 var newvolume = sound.Params.Volume + soundModifier;
-                
+
                 if (TryComp<SkillComponent>(uid, out var skillComp) && (int)skillComp.CrimeLevel>0)
-                {
                     newvolume = -6.0f;
-                }
+                //reyten-end
 
                 var audioParams = sound.Params
                     .WithVolume(newvolume)

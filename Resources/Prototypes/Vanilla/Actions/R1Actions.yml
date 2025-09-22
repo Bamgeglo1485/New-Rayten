@@ -142,7 +142,9 @@
     icon:
       sprite: Vanilla/Actions/R1.rsi
       state: Repair
-    iconOn: Vanilla/Actions/R1.rsi/Repair2.png
+    iconOn:
+      sprite: Vanilla/Actions/R1.rsi
+      state: Repair2
   - type: InstantAction
     event: !type:ToggleHealingActionEvent
 

@@ -8,3 +8,4 @@ dominator-scanner-end = Опасность цели: { $danger }
 dominator-scanner-start = Анализ
 dominator-verb-disable-ghost = Отключить ИИ
 dominator-verb-enable-ghost = Включить ИИ
+dominator-scanner-cooldown = Следующий анализ будет доступен через: { $time }

@@ -55,7 +55,7 @@
     - LogProbeCartridge
     - PhoneInstrument
   inhand:
-  - WeaponPulseCarbine
+  - WeaponRifleLecterXL8
 
 - type: chameleonOutfit
   id: ERTLeaderChameleonOutfit

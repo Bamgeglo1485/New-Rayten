@@ -39,13 +39,6 @@
     zeroVisible: false
   - type: Clothing
     sprite: Vanilla/Objects/Weapons/Guns/Battery/Dominator.rsi
-  - type: Item
-    size: Small
-    shape:
-    - 0,0,1,0
-    - 0,1,0,1
-    sprite: Vanilla/Objects/Weapons/Guns/Battery/Dominator.rsi
-    heldPrefix: energy
   - type: GhostRole
     makeSentient: true
     allowSpeech: true
@@ -87,6 +80,14 @@
   parent: BaseWeaponDominator
   id: WeaponDominator
   description: Высокотехнологичное оружие созданное правоохранительной организацией Sibyl System, предназначенное специально для борьбы с преступностью.
+  components:
+  - type: Item
+    size: Small
+    shape:
+    - 0,0,1,0
+    - 0,1,0,1
+    sprite: Vanilla/Objects/Weapons/Guns/Battery/Dominator.rsi
+    heldPrefix: energy
 
 - type: entity
   name: штурмовой доминатор
