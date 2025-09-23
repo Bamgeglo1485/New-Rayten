@@ -819,26 +819,29 @@ public abstract partial class SharedSolutionContainerSystem : EntitySystem
             }
 
             // Push amount of reagent
-            //vanilla-station-start
-            if (TryComp<SkillComponent>(args.Examiner, out var skillComponent) &&
-                skillComponent.ChemistryLevel >= SkillLevel.Advanced)
-            {
-                args.PushMarkup(Loc.GetString(entity.Comp.LocVolume,
-                    ("fillLevel", ExaminedVolume(entity, solution, args.Examiner)),
-                    ("current", solution.Volume),
-                    ("max", solution.MaxVolume)));
-            }
-            //vanilla-station-end
+
+            args.PushMarkup(Loc.GetString(entity.Comp.LocVolume,
+                ("fillLevel", ExaminedVolume(entity, solution, args.Examiner)),
+                ("current", solution.Volume),
+                ("max", solution.MaxVolume)));
+
 
             // Push the physical description of the primary reagent
 
             var colorHex = solution.GetColor(PrototypeManager)
                 .ToHexNoAlpha(); //TODO: If the chem has a dark color, the examine text becomes black on a black background, which is unreadable.
 
-            args.PushMarkup(Loc.GetString(entity.Comp.LocPhysicalQuality,
-                                        ("color", colorHex),
-                                        ("desc", primary.LocalizedPhysicalDescription),
-                                        ("chemCount", solution.Contents.Count) ));
+            //vanilla-station-start
+            if (TryComp<SkillComponent>(args.Examiner, out var skillComponent) &&
+                skillComponent.ChemistryLevel >= SkillLevel.Advanced)
+            {
+                args.PushMarkup(Loc.GetString(entity.Comp.LocPhysicalQuality,
+                                            ("color", colorHex),
+                                            ("desc", primary.LocalizedPhysicalDescription),
+                                            ("chemCount", solution.Contents.Count)));
+            }
+            //vanilla-station-end
+
 
             // Push the recognizable reagents
 
