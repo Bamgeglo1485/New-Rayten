@@ -227,10 +227,8 @@ public sealed class HealingSystem : EntitySystem
                     skillmodifier = 1.5f;
                     break;
                 case SkillLevel.Advanced:
-                    skillmodifier = 1f;
-                    break;
                 case SkillLevel.Expert:
-                    skillmodifier = 0.5f;
+                    skillmodifier = 1f;
                     break;
             }
 

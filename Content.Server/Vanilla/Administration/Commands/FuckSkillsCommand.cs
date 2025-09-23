@@ -36,13 +36,13 @@ public sealed class FuckSkillsCommand : IConsoleCommand
             skillComp.Botany = true;
             skillComp.Bureaucracy = true;
             skillComp.Atmosphere = true;
+            skillComp.Research = true;
             skillComp.RangeWeaponLevel = SkillLevel.Expert;
             skillComp.MeleeWeaponLevel = SkillLevel.Expert;
             skillComp.MedicineLevel = SkillLevel.Expert;
             skillComp.ChemistryLevel = SkillLevel.Expert;
             skillComp.EngineeringLevel = SkillLevel.Expert;
-            skillComp.BuildingLevel = SkillLevel.Expert;
-            skillComp.ResearchLevel = SkillLevel.Expert;
+
 
             _entityManager.Dirty(skillComp);
         }
@@ -52,7 +52,7 @@ public sealed class FuckSkillsCommand : IConsoleCommand
             LogType.AdminMessage,
             LogImpact.Extreme,
             $"Admin {(shell.Player != null ? shell.Player.Name : "An administrator")} gave max skills to all entities under player control.");
-        
+
         shell.WriteLine("Все навыки выданы всем сущностям под управлением игроков.");
     }
 

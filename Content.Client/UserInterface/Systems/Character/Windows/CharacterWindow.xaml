@@ -55,8 +55,8 @@
                 <Label Text="Основные навыки" VerticalAlignment="Top" HorizontalAlignment="Center"/>
                 <cc:HLine Color="#05014a" Thickness="2" />
                 <cc:HSpacer Spacing="10" />
-                
-                <GridContainer Name="BasicSkillContainer" Rows="2" Columns="4" HorizontalAlignment="Stretch" HorizontalExpand="true" Access="Public" HSeparationOverride="1" VSeparationOverride="1">
+
+                <GridContainer Name="BasicSkillContainer" Rows="2" Columns="3" HorizontalAlignment="Stretch" HorizontalExpand="true" Access="Public" HSeparationOverride="1" VSeparationOverride="1">
                 </GridContainer>
                 <Label Name="Skillpointslabel" MinSize="120 0" Access="Public" />
 

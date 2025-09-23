@@ -78,8 +78,6 @@ public sealed class RoleSkillsSystem : EntitySystem
             { skillType.Medicine, SkillLevel.None },
             { skillType.Chemistry, SkillLevel.None },
             { skillType.Engineering, SkillLevel.None },
-            { skillType.Building, SkillLevel.None },
-            { skillType.Research, SkillLevel.None },
             { skillType.Crime, SkillLevel.None }
         };
         HashSet<skillType> generaleasyskills = new();

@@ -351,12 +351,6 @@ namespace Content.Server.Construction
                 _popup.PopupEntity(Loc.GetString("Skill-issue-message-engineering-unskilled", ("lvl", constructionPrototype.RequiresEngineeringLevel)), user, user);
                 return false;
             }
-            //Строительство
-            if (!_requiresSkillSystem.HasSkillLevel(user, constructionPrototype.RequiresBuildingLevel, skillComponent => skillComponent.BuildingLevel))
-            {
-                _popup.PopupEntity(Loc.GetString("Skill-issue-message-building-unskilled", ("lvl", constructionPrototype.RequiresBuildingLevel)), user, user);
-                return false;
-            }
             //Атмосфера
             if (!_requiresSkillSystem.HasEasySkill(user, constructionPrototype.RequiresAtmosphere, skillComponent => skillComponent.Atmosphere))
             {
@@ -459,12 +453,6 @@ namespace Content.Server.Construction
             if (!_requiresSkillSystem.HasSkillLevel(user, constructionPrototype.RequiresEngineeringLevel, skillComponent => skillComponent.EngineeringLevel))
             {
                 _popup.PopupEntity(Loc.GetString("Skill-issue-message-engineering-unskilled", ("lvl", constructionPrototype.RequiresEngineeringLevel)), user, user);
-                return;
-            }
-            //Строительство
-            if (!_requiresSkillSystem.HasSkillLevel(user, constructionPrototype.RequiresBuildingLevel, skillComponent => skillComponent.BuildingLevel))
-            {
-                _popup.PopupEntity(Loc.GetString("Skill-issue-message-building-unskilled", ("lvl", constructionPrototype.RequiresBuildingLevel)), user, user);
                 return;
             }
             //Атмосфера

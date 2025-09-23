@@ -55,11 +55,6 @@ public class SkillTrainerSystem : EntitySystem
     }
     public bool AddExperience(SkillComponent skillComp, skillType skillType, int experienceAmount, bool multiplyed = true)
     {
-        if (multiplyed)
-        {
-            if ((int)skillComp.ResearchLevel == 3)
-                experienceAmount *= 2;
-        }
         if (SkillComponent.IsEasySkill(skillType))
         {
             bool? lvl = skillComp.GetEasySkill(skillType);
@@ -120,6 +115,9 @@ public class SkillTrainerSystem : EntitySystem
             case skillType.Atmosphere:
                 skillComp.Atmosphere = true;
                 break;
+            case skillType.Research:
+                skillComp.Research = true;
+                break;
             default:
                 break;
         }
@@ -144,12 +142,6 @@ public class SkillTrainerSystem : EntitySystem
                 break;
             case skillType.Engineering:
                 skillComp.EngineeringLevel = level;
-                break;
-            case skillType.Building:
-                skillComp.BuildingLevel = level;
-                break;
-            case skillType.Research:
-                skillComp.ResearchLevel = level;
                 break;
             case skillType.Crime:
                 skillComp.CrimeLevel = level;
@@ -183,9 +175,6 @@ public class SkillTrainerSystem : EntitySystem
                 break;
             case skillType.Engineering:
                 skillComp.EngineeringExp = exp;
-                break;
-            case skillType.Building:
-                skillComp.BuildingExp = exp;
                 break;
             case skillType.Research:
                 skillComp.ResearchExp = exp;

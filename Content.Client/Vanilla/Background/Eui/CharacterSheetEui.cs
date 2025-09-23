@@ -123,8 +123,6 @@ public sealed class CharacterSheetEui : BaseEui
             (skillType.Medicine, SkillLevel.None, 0),
             (skillType.Chemistry, SkillLevel.None, 0),
             (skillType.Engineering, SkillLevel.None, 0),
-            (skillType.Building, SkillLevel.None, 0),
-            (skillType.Research, SkillLevel.None, 0),
             (skillType.Crime, SkillLevel.None, 0)
         };
 
@@ -134,7 +132,8 @@ public sealed class CharacterSheetEui : BaseEui
             (skillType.Botany, false, 0),
             (skillType.MusInstruments, false, 0),
             (skillType.Bureaucracy, false, 0),
-            (skillType.Atmosphere, false, 0)
+            (skillType.Atmosphere, false, 0),
+            (skillType.Research, false, 0)
         };
 
         if (_entManager.TryGetComponent<SkillComponent>(user, out var skillComponent))
@@ -146,8 +145,6 @@ public sealed class CharacterSheetEui : BaseEui
                 (skillType.Medicine, skillComponent.MedicineLevel, skillComponent.MedicineExp),
                 (skillType.Chemistry, skillComponent.ChemistryLevel, skillComponent.ChemistryExp),
                 (skillType.Engineering, skillComponent.EngineeringLevel, skillComponent.EngineeringExp),
-                (skillType.Building, skillComponent.BuildingLevel, skillComponent.BuildingExp),
-                (skillType.Research, skillComponent.ResearchLevel, skillComponent.ResearchExp),
                 (skillType.Crime, skillComponent.CrimeLevel, skillComponent.CrimeExp)
             };
             easyskills = new List<(skillType Skill, bool have, int Experience)>
@@ -156,7 +153,8 @@ public sealed class CharacterSheetEui : BaseEui
                 (skillType.Botany, skillComponent.Botany, skillComponent.BotanyExp),
                 (skillType.MusInstruments, skillComponent.MusInstruments, skillComponent.MusInstrumentsExp),
                 (skillType.Bureaucracy, skillComponent.Bureaucracy, skillComponent.BureaucracyExp),
-                (skillType.Atmosphere, skillComponent.Atmosphere, skillComponent.AtmosphereExp)
+                (skillType.Atmosphere, skillComponent.Atmosphere, skillComponent.AtmosphereExp),
+                (skillType.Research, skillComponent.Research, skillComponent.ResearchExp)
             };
             skillpoints = skillComponent.SkillPoints;
         }

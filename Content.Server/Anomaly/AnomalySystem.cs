@@ -17,9 +17,6 @@ using Robust.Shared.Configuration;
 using Robust.Shared.Physics.Events;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
-using Content.Server.Vanilla.Skill;
-using Content.Shared.Vanilla.Skill;
-using Content.Shared.Examine;
 using Robust.Shared.Utility;
 
 namespace Content.Server.Anomaly;
@@ -42,7 +39,6 @@ public sealed partial class AnomalySystem : SharedAnomalySystem
     [Dependency] private readonly RadiationSystem _radiation = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly UserInterfaceSystem _ui = default!;
-    [Dependency] private readonly RequiresSkillSystem _requiresSkillSystem = default!;
 
     public const float MinParticleVariation = 0.8f;
     public const float MaxParticleVariation = 1.2f;
@@ -56,7 +52,6 @@ public sealed partial class AnomalySystem : SharedAnomalySystem
         SubscribeLocalEvent<AnomalyComponent, MapInitEvent>(OnMapInit);
         SubscribeLocalEvent<AnomalyComponent, ComponentShutdown>(OnShutdown);
         SubscribeLocalEvent<AnomalyComponent, StartCollideEvent>(OnStartCollide);
-        SubscribeLocalEvent<AnomalyComponent, ExaminedEvent>(OnExamine);
         SubscribeLocalEvent<AnomalyStabilityChangedEvent>(OnVesselAnomalyStabilityChanged);
 
         InitializeGenerator();
@@ -222,38 +217,6 @@ public sealed partial class AnomalySystem : SharedAnomalySystem
     }
     #endregion
 
-    private void OnExamine(EntityUid uid, AnomalyComponent component, ExaminedEvent args)
-    {
-        if (EntityManager.TryGetComponent<RequiresSkillComponent>(uid, out var RequiresSkillComp) && RequiresSkillComp != null)
-        {
-            if(!_requiresSkillSystem.HasRequiredSkills(args.Examiner, RequiresSkillComp, false))
-                return;
-
-            if (args.IsInDetailsRange)
-            {
-                TryComp<SecretDataAnomalyComponent>(uid, out var secret);
-                //опасность
-                if (secret != null && secret.Secret.Contains(AnomalySecretData.Severity))
-                    args.PushMarkup(Loc.GetString("anomaly-scanner-severity-percentage-unknown"));
-                else
-                    args.PushMarkup(Loc.GetString("anomaly-scanner-severity-percentage", ("percent", component.Severity.ToString("P"))));
-                //стабильность
-                if (secret != null && secret.Secret.Contains(AnomalySecretData.Stability))
-                    args.PushMarkup(Loc.GetString("anomaly-scanner-stability-unknown"));
-                else
-                {
-                    string stateLoc;
-                    if (component.Stability < component.DecayThreshold)
-                        stateLoc = Loc.GetString("anomaly-scanner-stability-low");
-                    else if (component.Stability > component.GrowthThreshold)
-                        stateLoc = Loc.GetString("anomaly-scanner-stability-high");
-                    else
-                        stateLoc = Loc.GetString("anomaly-scanner-stability-medium");
-                     args.PushMarkup(stateLoc);
-                }
-            }
-        }
-    }
     #region Information
     /// <summary>
     /// Get a formatted message with a summary of all anomaly information for putting on a UI.

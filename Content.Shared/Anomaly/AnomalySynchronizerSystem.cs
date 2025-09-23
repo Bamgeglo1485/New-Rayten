@@ -154,9 +154,10 @@ public sealed partial class AnomalySynchronizerSystem : EntitySystem
     private void OnInteractHand(Entity<AnomalySynchronizerComponent> ent, ref InteractHandEvent args)
     {
         //vanilla-station-skill-issue-start
-        if (TryComp<RequiresSkillComponent>(ent, out var RequiresSkillComp))
-            if (!_requiresSkillSystem.HasRequiredSkills(args.User, RequiresSkillComp, true))
+        if (TryComp<RequiresSkillComponent>(ent, out var reqskillcomp))
+            if (!_requiresSkillSystem.HasRequiredSkills(args.User, reqskillcomp))
             {
+                args.Handled = true;
                 return;
             }
         //vanilla-station-skill-issue-end

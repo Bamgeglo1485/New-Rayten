@@ -153,10 +153,8 @@ public sealed class DefibrillatorSystem : EntitySystem
                     skillmodifier = 1.5;
                     break;
                 case SkillLevel.Advanced:
-                    skillmodifier = 1.0;
-                    break;
                 case SkillLevel.Expert:
-                    skillmodifier = 0.5;
+                    skillmodifier = 1.0;
                     break;
             }
 

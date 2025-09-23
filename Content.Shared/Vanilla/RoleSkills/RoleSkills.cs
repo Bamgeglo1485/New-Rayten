@@ -60,8 +60,6 @@ public sealed partial class RoleSkills : IEquatable<RoleSkills>
             (skillType.Medicine, SkillLevel.None, 0),
             (skillType.Chemistry, SkillLevel.None, 0),
             (skillType.Engineering, SkillLevel.None, 0),
-            (skillType.Building, SkillLevel.None, 0),
-            (skillType.Research, SkillLevel.None, 0),
             (skillType.Crime, SkillLevel.None, 0)
         };
 
@@ -71,7 +69,8 @@ public sealed partial class RoleSkills : IEquatable<RoleSkills>
             (skillType.Botany, false, 0),
             (skillType.MusInstruments, false, 0),
             (skillType.Bureaucracy, false, 0),
-            (skillType.Atmosphere, false, 0)
+            (skillType.Atmosphere, false, 0),
+            (skillType.Research, false, 0)
         };
 
         // 1. Проверка, что прототип навыксета существует

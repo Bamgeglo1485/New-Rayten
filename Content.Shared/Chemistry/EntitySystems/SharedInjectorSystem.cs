@@ -257,14 +257,6 @@ public abstract class SharedInjectorSystem : EntitySystem
                     $"{ToPrettyString(user):user} is attempting to draw {injector.Comp.CurrentTransferAmount.ToString()} units from themselves.");
             }
         }
-        //vanilla-station-skill-issue-start
-        if (EntityManager.TryGetComponent<SkillComponent>(user, out var Skill))
-        {
-            // Преобразуем длительность в секунды или миллисекунды
-            double seconds = (Skill.MedicineLevel == SkillLevel.Expert) ? actualDelay.TotalSeconds * 0.5 : actualDelay.TotalSeconds;
-            actualDelay = TimeSpan.FromSeconds(seconds);
-        }
-        //vanilla-station-skill-issue-end
         _doAfter.TryStartDoAfter(new DoAfterArgs(EntityManager, user, actualDelay, new InjectorDoAfterEvent(), injector.Owner, target: target, used: injector.Owner)
         {
             BreakOnMove = true,

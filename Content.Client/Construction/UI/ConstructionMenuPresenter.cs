@@ -368,8 +368,7 @@ namespace Content.Client.Construction.UI
             var playerEntity = _playerManager.LocalPlayer?.ControlledEntity;
             if (prototype != null && playerEntity != null && _entManager.TryGetComponent<SkillComponent>(playerEntity, out var skillComp))
             {
-                craftable = (skillComp.EngineeringLevel >= prototype.RequiresEngineeringLevel) 
-                            &&  ( skillComp.BuildingLevel >= prototype.RequiresBuildingLevel ) 
+                craftable = (skillComp.EngineeringLevel >= prototype.RequiresEngineeringLevel)
                             &&  ( prototype.RequiresAtmosphere == false || ( prototype.RequiresAtmosphere == true &&  prototype.RequiresAtmosphere == skillComp.Atmosphere) );
             }
             //Rayten-end
@@ -388,7 +387,7 @@ namespace Content.Client.Construction.UI
                 prototype.Description!,
                 proto,
                 prototype.Type != ConstructionType.Item,
-                !_favoritedRecipes.Contains(prototype), prototype.RequiresEngineeringLevel, prototype.RequiresBuildingLevel, prototype.RequiresAtmosphere, craftable);
+                !_favoritedRecipes.Contains(prototype), prototype.RequiresEngineeringLevel, prototype.RequiresAtmosphere, craftable);
 
             var stepList = _constructionView.RecipeStepList;
             GenerateStepList(prototype, stepList);

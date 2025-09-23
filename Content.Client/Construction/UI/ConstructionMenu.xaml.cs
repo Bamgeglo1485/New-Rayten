@@ -42,7 +42,7 @@ namespace Content.Client.Construction.UI
         event EventHandler ClearAllGhosts;
 
         void ClearRecipeInfo();
-        void SetRecipeInfo(string name, string description, EntityPrototype? targetPrototype, bool isItem, bool isFavorite, SkillLevel Engineering, SkillLevel Building, bool Atmosphere, bool craftable);
+        void SetRecipeInfo(string name, string description, EntityPrototype? targetPrototype, bool isItem, bool isFavorite, SkillLevel Engineering, bool Atmosphere, bool craftable);
         void ResetPlacement();
 
         #region Window Control
@@ -164,10 +164,9 @@ namespace Content.Client.Construction.UI
             string description,
             EntityPrototype? targetPrototype,
             bool isItem,
-            bool isFavorite, 
-            SkillLevel Engineering, 
-            SkillLevel Building, 
-            bool Atmosphere, 
+            bool isFavorite,
+            SkillLevel Engineering,
+            bool Atmosphere,
             bool craftable)
         {
             BuildButton.Disabled = !craftable;
@@ -176,17 +175,13 @@ namespace Content.Client.Construction.UI
 
             //Rayten-start
             ReqEngineering.Visible = (int)Engineering > 0;
-            ReqBuilding.Visible = (int)Building > 0;
             ReqAtmosphere.Visible = Atmosphere;
-            
+
             var Engineeringmessage = new FormattedMessage();
-            var Buildingmessage = new FormattedMessage();
             var Atmospheremessage = new FormattedMessage();
             Engineeringmessage.AddMarkupOrThrow(Loc.GetString("construction-menu-skill-engineering", ("lvl", (int)Engineering)));
-            Buildingmessage.AddMarkupOrThrow(Loc.GetString("construction-menu-skill-building", ("lvl", (int)Building)));
             Atmospheremessage.AddMarkupOrThrow(Loc.GetString("construction-menu-skill-atmosphere"));
             ReqEngineering.SetMessage(Engineeringmessage);
-            ReqBuilding.SetMessage(Buildingmessage);
             ReqAtmosphere.SetMessage(Atmospheremessage);
             //Rayten-end
 

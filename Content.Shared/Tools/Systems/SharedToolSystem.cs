@@ -1,3 +1,4 @@
+
 using Content.Shared.Administration.Logs;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.DoAfter;
@@ -7,8 +8,6 @@ using Content.Shared.Item.ItemToggle;
 using Content.Shared.Maps;
 using Content.Shared.Popups;
 using Content.Shared.Tools.Components;
-using Content.Shared.Vanilla.Skill;
-using Content.Shared.Audio;
 using JetBrains.Annotations;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
@@ -96,19 +95,7 @@ public abstract partial class SharedToolSystem : EntitySystem
         if (tool.UseSound == null)
             return;
 
-        if(user == null)
-        {
-            _audioSystem.PlayPredicted(tool.UseSound, uid, user);
-            return;
-        }
-
-        var newvolume = (TryComp<SkillComponent>(user.Value, out var skillComp) && (int)skillComp.CrimeLevel > 0) ? -6.0f  : tool.UseSound.Params.Volume;
-
-        var audioParams = tool.UseSound.Params
-            .WithVolume(newvolume)
-            .WithVariation(tool.UseSound.Params.Variation);
-
-        _audioSystem.PlayPredicted(tool.UseSound, uid, user, audioParams);
+        _audioSystem.PlayPredicted(tool.UseSound, uid, user);
     }
 
     /// <summary>
@@ -182,40 +169,8 @@ public abstract partial class SharedToolSystem : EntitySystem
         if (!CanStartToolUse(tool, user, target, fuel, toolQualitiesNeeded, toolComponent))
             return false;
 
-        //vanilla-station-skill-issue-start
-        TimeSpan skilldelay = delay;
-        if (EntityManager.TryGetComponent<SkillComponent>(user, out var Skill))
-        {
-            double skillmodifier = 1.0;
-
-            switch (Skill.BuildingLevel)
-            {
-                case SkillLevel.None:
-                    skillmodifier = 5.0;
-                    break;
-                case SkillLevel.Basic:
-                    skillmodifier = 2.25;
-                    break;
-                case SkillLevel.Advanced:
-                    skillmodifier = 1.0;
-                    break;
-                case SkillLevel.Expert:
-                    skillmodifier = 0.25;
-                    break;
-            }
-
-            // Преобразуем длительность в секунды или миллисекунды
-            double seconds = skilldelay.TotalSeconds * skillmodifier;
-            skilldelay = TimeSpan.FromSeconds(seconds);
-        }
-        else
-        {
-            skilldelay = TimeSpan.FromSeconds(delay.TotalSeconds * 5); // если компонента навыка нет, умножаем на 4
-        }
-        //vanilla-station-skill-issue-end
-
         var toolEvent = new ToolDoAfterEvent(fuel, doAfterEv, GetNetEntity(target));
-        var doAfterArgs = new DoAfterArgs(EntityManager, user, skilldelay / toolComponent.SpeedModifier, toolEvent, tool, target: target, used: tool)
+        var doAfterArgs = new DoAfterArgs(EntityManager, user, delay / toolComponent.SpeedModifier, toolEvent, tool, target: target, used: tool)
         {
             BreakOnDamage = true,
             BreakOnMove = true,

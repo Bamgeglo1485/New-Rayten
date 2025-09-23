@@ -127,15 +127,14 @@ public sealed class SkillAmnesiaSystem : EntitySystem
             (skillType.MeleeWeapon, inspectamensiableskill(skill, skillType.MeleeWeapon), () => skill.MeleeWeaponLevel = 0),
             (skillType.Medicine, inspectamensiableskill(skill, skillType.Medicine), () => skill.MedicineLevel = 0),
             (skillType.Chemistry, inspectamensiableskill(skill, skillType.Chemistry), () => skill.ChemistryLevel = 0),
-            (skillType.Building, inspectamensiableskill(skill, skillType.Building), () => skill.BuildingLevel = 0),
-            (skillType.Research, inspectamensiableskill(skill, skillType.Research), () => skill.ResearchLevel = 0),
             (skillType.Crime, inspectamensiableskill(skill, skillType.Crime), () => skill.CrimeLevel = 0),
             //Лёгкие навыки
             (skillType.Piloting, inspectamensiableskill(skill, skillType.Piloting), () => skill.Piloting = false),
             (skillType.MusInstruments, inspectamensiableskill(skill, skillType.MusInstruments), () => skill.MusInstruments = false),
             (skillType.Botany, inspectamensiableskill(skill, skillType.Botany), () => skill.Botany = false),
             (skillType.Bureaucracy, inspectamensiableskill(skill, skillType.Bureaucracy), () => skill.Bureaucracy = false),
-            (skillType.Atmosphere, inspectamensiableskill(skill, skillType.Atmosphere), () => skill.Atmosphere = false)
+            (skillType.Atmosphere, inspectamensiableskill(skill, skillType.Atmosphere), () => skill.Atmosphere = false),
+            (skillType.Research, inspectamensiableskill(skill, skillType.Research), () => skill.Research = false)
         };
 
         var nonZeroSkills = skillLevels.Where(s => s.amnesiable == true).ToList();
@@ -167,7 +166,6 @@ public sealed class SkillAmnesiaSystem : EntitySystem
         if (ignoredSkill != skillType.MeleeWeapon) skill.MeleeWeaponExp = 0;
         if (ignoredSkill != skillType.Medicine) skill.MedicineExp = 0;
         if (ignoredSkill != skillType.Chemistry) skill.ChemistryExp = 0;
-        if (ignoredSkill != skillType.Building) skill.BuildingExp = 0;
         if (ignoredSkill != skillType.Research) skill.ResearchExp = 0;
         if (ignoredSkill != skillType.Botany) skill.BotanyExp = 0;
         if (ignoredSkill != skillType.MusInstruments) skill.MusInstrumentsExp = 0;

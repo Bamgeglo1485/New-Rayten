@@ -857,7 +857,7 @@ public abstract partial class SharedSolutionContainerSystem : EntitySystem
                 {
                     //vanilla-station
                     //Человек с 3 химией распознаёт абсолютно всё и ему всё равно
-                    if ( skillComponent == null || skillComponent.ChemistryLevel != SkillLevel.Expert )
+                    if (skillComponent == null || skillComponent.ChemistryLevel != SkillLevel.Expert)
                         continue;
                 }
 
@@ -917,14 +917,6 @@ public abstract partial class SharedSolutionContainerSystem : EntitySystem
     {
         if (!args.CanInteract || !args.CanAccess)
             return;
-
-        //vanilla-station-skill-issue-start
-        if(!TryComp<SkillComponent>(args.User, out var skill))
-            skill = EnsureComp<SkillComponent>(args.User);
-
-        if(skill.ChemistryLevel <= SkillLevel.Advanced)
-            return;
-        //vanilla-station-skill-issue-end
 
         var scanEvent = new SolutionScanEvent();
         RaiseLocalEvent(args.User, scanEvent);

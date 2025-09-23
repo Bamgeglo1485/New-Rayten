@@ -694,6 +694,7 @@ public sealed class TTTSystem : EntitySystem
 
         return _random.Pick(validPrototypes);
     }
+
     private void OnRuleInit(EntityUid uid, TTTRuleComponent rule, MapInitEvent args)
     {
         Currentrule = uid;

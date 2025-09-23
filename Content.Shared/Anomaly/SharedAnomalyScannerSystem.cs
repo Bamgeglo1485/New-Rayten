@@ -3,6 +3,7 @@ using Content.Shared.DoAfter;
 using Content.Shared.Interaction;
 using Content.Shared.Popups;
 using Content.Shared.Vanilla.Skill;
+
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Timing;
 
@@ -56,34 +57,15 @@ public abstract class SharedAnomalyScannerSystem : EntitySystem
         if (!args.CanReach)
             return;
 
-        //Vanilla-Station-START
-        float skillduration = component.ScanDoAfterDuration;
-        if (TryComp<RequiresSkillComponent>(uid, out var RequiresSkillComponent))
-        {
-            if(!_requiresSkillSystem.HasRequiredSkills(args.User, RequiresSkillComponent))
-                return;
-
-            if(TryComp<SkillComponent>(args.User, out var SkillComp)){
-                switch (SkillComp.ResearchLevel)
-                {
-                    case SkillLevel.None:
-                    case SkillLevel.Basic:
-                        skillduration *= 10;
-                        break;
-                    case SkillLevel.Advanced:
-                        break;
-                    case SkillLevel.Expert:
-                        skillduration /= 10;
-                        break;
-                }
-            }
-        }
-        //Vanilla-Sttion-END
+        //rayten-start
+        if (TryComp<RequiresSkillComponent>(uid, out var reqskillcomp) && !_requiresSkillSystem.HasRequiredSkills(args.User, reqskillcomp))
+            return;
+        //rayten-end
 
         var doAfterArgs = new DoAfterArgs(
             EntityManager,
             args.User,
-            skillduration,
+            component.ScanDoAfterDuration,
             new ScannerDoAfterEvent(),
             uid,
             target: target,
