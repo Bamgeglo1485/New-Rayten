@@ -48,7 +48,7 @@ public sealed class VoiceSpeechSystem : EntitySystem
                 .WithMaxDistance(whisper ? SharedChatSystem.WhisperMuffledRange : SharedChatSystem.VoiceRange);
     }
 
-    private float AdjustVolume(bool isWhisper)
+    public float AdjustVolume(bool isWhisper)
     {
         float volume = -10f + SharedAudioSystem.GainToVolume(_volume);
 

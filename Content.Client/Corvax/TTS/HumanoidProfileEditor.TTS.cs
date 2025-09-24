@@ -125,7 +125,7 @@ public sealed partial class HumanoidProfileEditor
 
         var voice = Profile.Voice;
 
-        if(!_prototypeManager.TryIndex<VoiceSpeechPrototype>(voice, out var protoVoice))
+        if (!_prototypeManager.TryIndex<VoiceSpeechPrototype>(voice, out var protoVoice))
             return;
 
         var Sound = protoVoice.Voice;
@@ -138,7 +138,7 @@ public sealed partial class HumanoidProfileEditor
             AudioParams audioparms = AudioParams.Default
                     .WithPitchScale(Profile.VoicePitch)
                     .WithVariation(0.05f)
-                    .WithVolume(1f);
+                    .WithVolume(_undsys.AdjustVolume(false));
 
             var nextChar = previewBeepText[_previewBeepIndex];
 
@@ -147,9 +147,9 @@ public sealed partial class HumanoidProfileEditor
 
             if (_previewBeepIndex < previewBeepText.Length && _previewBeepIndex <= 55)
             {
-                Timer.Spawn(TimeSpan.FromSeconds(0.045f), BeepStep);
+                Timer.Spawn(TimeSpan.FromSeconds(rng.NextFloat(0.065f, 0.095f)), BeepStep);
             }
         }
-        Timer.Spawn(TimeSpan.FromSeconds(0.045f), BeepStep);
+        Timer.Spawn(TimeSpan.FromSeconds(0.085f), BeepStep);
     }
 }
