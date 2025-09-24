@@ -4,5 +4,5 @@
   startNode: start
   targetNode: end
   RequiresEngineeringLevel: 3
-  category: construction-category-weapons
+  category: construction-category-clothing
   objectType: Item

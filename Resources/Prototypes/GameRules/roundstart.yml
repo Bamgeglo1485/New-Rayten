@@ -225,7 +225,7 @@
       - MindRoleTraitor
       components:
       - type: AddSkillPoints
-        Points: 5
+        Points: 3
 
 - type: entity
   id: TraitorReinforcement

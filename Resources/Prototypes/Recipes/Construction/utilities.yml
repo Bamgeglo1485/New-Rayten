@@ -298,6 +298,7 @@
   graph: GasPipeSensor
   startNode: start
   targetNode: sensorAlt1
+  RequiresAtmosphere: true
   category: construction-category-structures
   placementMode: AlignAtmosPipeLayers
   objectType: Structure
@@ -313,6 +314,7 @@
   graph: GasPipeSensor
   startNode: start
   targetNode: sensorAlt2
+  RequiresAtmosphere: true
   category: construction-category-structures
   placementMode: AlignAtmosPipeLayers
   objectType: Structure
@@ -329,6 +331,7 @@
   graph: GasPipe
   startNode: start
   targetNode: half
+  RequiresAtmosphere: true
   category: construction-category-utilities
   placementMode: AlignAtmosPipeLayers
   canBuildInImpassable: true
@@ -343,6 +346,7 @@
   graph: GasPipe
   startNode: start
   targetNode: halfAlt1
+  RequiresAtmosphere: true
   category: construction-category-utilities
   placementMode: AlignAtmosPipeLayers
   canBuildInImpassable: true
@@ -357,6 +361,7 @@
   graph: GasPipe
   startNode: start
   targetNode: halfAlt2
+  RequiresAtmosphere: true
   category: construction-category-utilities
   placementMode: AlignAtmosPipeLayers
   canBuildInImpassable: true
@@ -370,6 +375,7 @@
   graph: GasPipe
   startNode: start
   targetNode: straight
+  RequiresAtmosphere: true
   category: construction-category-utilities
   placementMode: AlignAtmosPipeLayers
   canBuildInImpassable: true
@@ -384,6 +390,7 @@
   graph: GasPipe
   startNode: start
   targetNode: straightAlt1
+  RequiresAtmosphere: true
   category: construction-category-utilities
   placementMode: AlignAtmosPipeLayers
   canBuildInImpassable: true
@@ -398,6 +405,7 @@
   graph: GasPipe
   startNode: start
   targetNode: straightAlt2
+  RequiresAtmosphere: true
   category: construction-category-utilities
   placementMode: AlignAtmosPipeLayers
   canBuildInImpassable: true
@@ -412,6 +420,7 @@
   graph: GasPipe
   startNode: start
   targetNode: bend
+  RequiresAtmosphere: true
   category: construction-category-utilities
   placementMode: AlignAtmosPipeLayers
   canBuildInImpassable: true
@@ -426,6 +435,7 @@
   graph: GasPipe
   startNode: start
   targetNode: bendAlt1
+  RequiresAtmosphere: true
   category: construction-category-utilities
   placementMode: AlignAtmosPipeLayers
   canBuildInImpassable: true
@@ -440,6 +450,7 @@
   graph: GasPipe
   startNode: start
   targetNode: bendAlt2
+  RequiresAtmosphere: true
   category: construction-category-utilities
   placementMode: AlignAtmosPipeLayers
   canBuildInImpassable: true
@@ -454,6 +465,7 @@
   graph: GasPipe
   startNode: start
   targetNode: tjunction
+  RequiresAtmosphere: true
   category: construction-category-utilities
   placementMode: AlignAtmosPipeLayers
   canBuildInImpassable: true
@@ -468,6 +480,7 @@
   graph: GasPipe
   startNode: start
   targetNode: tjunctionAlt1
+  RequiresAtmosphere: true
   category: construction-category-utilities
   placementMode: AlignAtmosPipeLayers
   canBuildInImpassable: true
@@ -482,6 +495,7 @@
   graph: GasPipe
   startNode: start
   targetNode: tjunctionAlt2
+  RequiresAtmosphere: true
   category: construction-category-utilities
   placementMode: AlignAtmosPipeLayers
   canBuildInImpassable: true
@@ -496,6 +510,7 @@
   graph: GasPipe
   startNode: start
   targetNode: fourway
+  RequiresAtmosphere: true
   category: construction-category-utilities
   placementMode: AlignAtmosPipeLayers
   canBuildInImpassable: true
@@ -510,6 +525,7 @@
   graph: GasPipe
   startNode: start
   targetNode: fourwayAlt1
+  RequiresAtmosphere: true
   category: construction-category-utilities
   placementMode: AlignAtmosPipeLayers
   canBuildInImpassable: true
@@ -524,6 +540,7 @@
   graph: GasPipe
   startNode: start
   targetNode: fourwayAlt2
+  RequiresAtmosphere: true
   category: construction-category-utilities
   placementMode: AlignAtmosPipeLayers
   canBuildInImpassable: true
@@ -537,6 +554,7 @@
   graph: GasPipe
   startNode: start
   targetNode: manifold
+  RequiresAtmosphere: true
   category: construction-category-utilities
   placementMode: SnapgridCenter
   canBuildInImpassable: true
@@ -613,6 +631,7 @@
   graph: GasBinary
   startNode: start
   targetNode: pressurepumpAlt1
+  RequiresAtmosphere: true
   category: construction-category-utilities
   placementMode: AlignAtmosPipeLayers
   canBuildInImpassable: false
@@ -629,6 +648,7 @@
   graph: GasBinary
   startNode: start
   targetNode: pressurepumpAlt2
+  RequiresAtmosphere: true
   category: construction-category-utilities
   placementMode: AlignAtmosPipeLayers
   canBuildInImpassable: false
@@ -661,6 +681,7 @@
   graph: GasBinary
   startNode: start
   targetNode: volumepumpAlt1
+  RequiresAtmosphere: true
   category: construction-category-utilities
   placementMode: AlignAtmosPipeLayers
   canBuildInImpassable: false
@@ -677,6 +698,7 @@
   graph: GasBinary
   startNode: start
   targetNode: volumepumpAlt2
+  RequiresAtmosphere: true
   category: construction-category-utilities
   placementMode: AlignAtmosPipeLayers
   canBuildInImpassable: false
@@ -709,6 +731,7 @@
   graph: GasBinary
   startNode: start
   targetNode: passivegateAlt1
+  RequiresAtmosphere: true
   category: construction-category-utilities
   placementMode: AlignAtmosPipeLayers
   canBuildInImpassable: false
@@ -725,6 +748,7 @@
   graph: GasBinary
   startNode: start
   targetNode: passivegateAlt2
+  RequiresAtmosphere: true
   category: construction-category-utilities
   placementMode: AlignAtmosPipeLayers
   canBuildInImpassable: false
@@ -740,6 +764,7 @@
   graph: GasBinary
   startNode: start
   targetNode: pressureregulator
+  RequiresAtmosphere: true
   category: construction-category-utilities
   placementMode: AlignAtmosPipeLayers
   canBuildInImpassable: false
@@ -756,6 +781,7 @@
   graph: GasBinary
   startNode: start
   targetNode: pressureregulatorAlt1
+  RequiresAtmosphere: true
   category: construction-category-utilities
   placementMode: AlignAtmosPipeLayers
   canBuildInImpassable: false
@@ -772,6 +798,7 @@
   graph: GasBinary
   startNode: start
   targetNode: pressureregulatorAlt2
+  RequiresAtmosphere: true
   category: construction-category-utilities
   placementMode: AlignAtmosPipeLayers
   canBuildInImpassable: false
@@ -804,6 +831,7 @@
   graph: GasBinary
   startNode: start
   targetNode: valveAlt1
+  RequiresAtmosphere: true
   category: construction-category-utilities
   placementMode: AlignAtmosPipeLayers
   canBuildInImpassable: false
@@ -820,6 +848,7 @@
   graph: GasBinary
   startNode: start
   targetNode: valveAlt2
+  RequiresAtmosphere: true
   category: construction-category-utilities
   placementMode: AlignAtmosPipeLayers
   canBuildInImpassable: false
@@ -848,9 +877,11 @@
 
 - type: construction
   id: SignalControlledValveAlt1
+  hide: true
   graph: GasBinary
   startNode: start
   targetNode: signalvalveAlt1
+  RequiresAtmosphere: true
   category: construction-category-utilities
   placementMode: AlignAtmosPipeLayers
   canBuildInImpassable: false
@@ -863,9 +894,11 @@
 
 - type: construction
   id: SignalControlledValveAlt2
+  hide: true
   graph: GasBinary
   startNode: start
   targetNode: signalvalveAlt2
+  RequiresAtmosphere: true
   category: construction-category-utilities
   placementMode: AlignAtmosPipeLayers
   canBuildInImpassable: false
@@ -914,6 +947,7 @@
   graph: GasBinary
   startNode: start
   targetNode: bendradiator
+  RequiresAtmosphere: true
   category: construction-category-utilities
   placementMode: SnapgridCenter
   canBuildInImpassable: false

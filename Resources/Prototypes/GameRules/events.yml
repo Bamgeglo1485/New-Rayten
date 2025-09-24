@@ -750,7 +750,7 @@
         - AntagImmune
       components:
       - type: AddSkillPoints
-        Points: 4
+        Points: 3
       mindRoles:
       - MindRoleTraitorSleeper
 
