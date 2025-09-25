@@ -2,13 +2,14 @@
 using Content.Server.StationEvents.Components;
 using Content.Shared.GameTicking.Components;
 using Content.Shared.Station.Components;
+using Content.Server.Vanilla.LowPop;
 
 namespace Content.Server.StationEvents.Events;
 
 public sealed class AnomalySpawnRule : StationEventSystem<AnomalySpawnRuleComponent>
 {
     [Dependency] private readonly AnomalySystem _anomaly = default!;
-
+    [Dependency] private readonly LowPopSystem _lowpop = default!;
     protected override void Added(EntityUid uid, AnomalySpawnRuleComponent component, GameRuleComponent gameRule, GameRuleAddedEvent args)
     {
         if (!TryComp<StationEventComponent>(uid, out var stationEvent))
@@ -35,6 +36,11 @@ public sealed class AnomalySpawnRule : StationEventSystem<AnomalySpawnRuleCompon
 
         if (grid is null)
             return;
+
+        //rayten-start
+        if (_lowpop.GetScientistCount() == 0)
+            return;
+        //rayten-end
 
         var amountToSpawn = 1;
         for (var i = 0; i < amountToSpawn; i++)
