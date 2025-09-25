@@ -89,7 +89,6 @@ marking-VulpTailVulp = Вулпканин
 marking-VulpTailVulpFade-vulp = Хвост вулпканина (Основа)
 marking-VulpTailVulpFade-vulp-fade = Хвост вулпканина (Переход)
 marking-VulpTailVulpFade = Вулпканин (Переход)
-
 # Chest
 marking-VulpBellyCrest-belly_crest = Живот
 marking-VulpBellyCrest = Вулпканин — Гребень на животе
@@ -97,7 +96,6 @@ marking-VulpBellyFull-belly_full = Живот
 marking-VulpBellyFull = Вулпканин — Полный живот
 marking-VulpBellyFox-belly_fox = Живот
 marking-VulpBellyFox = Вулпканин — Лисий живот
-
 
 # Arms
 
@@ -196,4 +194,3 @@ marking-VulpFacialHairElder = Старческий
 marking-VulpFacialHairElderChin = Старческий подбородок
 marking-VulpFacialHairKita = Кита
 marking-VulpFacialHairGoatee = Борода (козлиная на морде)
-

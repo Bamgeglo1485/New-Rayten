@@ -3,7 +3,7 @@ contraband-examine-text-SecondLevel = [color=orange]Это предмет [bold]
 contraband-examine-text-ThirdLevel = [color=red]Это предмет [bold]3[/bold] класса опасности.[/color]
 contraband-examine-text-Restricted-department =
     { $type ->
-        *[item] [color=yellow]Этот предмет может носить: { $departments }[/color]
+       *[item] [color=yellow]Этот предмет может носить: { $departments }[/color]
         [reagent] [color=yellow]Оборот этого вещества разрешен только: { $departments }[/color]
     }
 contraband-examine-text-GrandTheft = [color=red]Это особо-ценный предмет![/color]

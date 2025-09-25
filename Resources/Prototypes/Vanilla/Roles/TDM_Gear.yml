@@ -328,10 +328,18 @@
   id: ClothingOuterArmorHeavyUnrem
   categories: [ HideSpawnMenu ]
   components:
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.1
+        Slash: 0.1
+        Piercing: 0.1
+        Heat: 0.5
+        Caustic: 0.75
   - type: Unremoveable
   - type: ClothingSpeedModifier
-    walkModifier: 0.55
-    sprintModifier: 0.55
+    walkModifier: 0.7
+    sprintModifier: 0.7
 
 
 - type: entity

@@ -1,16 +1,17 @@
+
 Skill-issue-message-medicine-unskilled = Требуется { $lvl } ур. медицины
 Skill-issue-message-chemistry-unskilled = Требуется { $lvl } ур. химии
 Skill-issue-message-rangeweapon-unskilled = Требуется { $lvl } ур. стрельбы
-Skill-issue-message-research-unskilled = Требуется { $lvl } ур. исследования
-Skill-issue-message-instrumentation-unskilled = Требуется { $lvl } ур. приборостроения
-Skill-issue-message-building-unskilled = Требуется { $lvl } ур. строительства
+Skill-issue-message-meleeweapon-unskilled = Требуется { $lvl } ур. ближнего боя
 Skill-issue-message-engineering-unskilled = Требуется { $lvl } ур. инженерии
+Skill-issue-message-crime-unskilled = Требуется { $lvl } ур. преступности
 Skill-issue-easyskill-message-piloting-unskilled = Требуется навык пилотирования.
 Skill-issue-easyskill-message-botany-unskilled = Требуется навык ботаники.
 Skill-issue-easyskill-message-musinstruments-unskilled = Требуется навык музыкальных инструментов.
 Skill-issue-easyskill-message-bureaucracy-unskilled = Требуется навык бюрократии.
 Skill-issue-easyskill-message-atmosphere-unskilled = Требуется навык атмосферы.
 Skill-issue-easyskill-message-crime-unskilled = Требуется навык преступности.
+Skill-issue-easyskill-message-research-unskilled = Требуется навык исследований.
 shared-solution-container-component-on-examine-main-text-skill-issue = { "" }
 construction-menu-skill-building = [color=#FFBF00]Требуется { $lvl } ур. строительства[/color]
 construction-menu-skill-engineering = [color=#ff6600]Требуется { $lvl } ур. инженерии[/color]
@@ -26,7 +27,6 @@ skill-system-UI-SkillNameLabel = [color=#EFBF04]{ $skillname ->
         [Engineering] Инженерия
         [Building] Строительство
         [Research] Исследование
-        [Instrumentation] Приборостроение
         [Botany] Ботаника
         [MusInstruments] Муз. инструменты
         [Bureaucracy] Бюрократия
@@ -82,22 +82,24 @@ skill-system-UI-Tooltip-Medicine =
     - Обычная длительность лечения при помощи наборов от ушибов, бинтов, мази, регенеративной сети и медицинской нити.
     - Использование шприцов.
     3 ур:
+    - -50% к длительности дефибрилляции, лечения при помощи шприцов, наборов от ушибов, бинтов, мази, регенеративной сети и медицинской нити
     - Крионика
     - Клонирование
     - Введение имплантов
 skill-system-UI-Tooltip-Chemistry =
     1 ур:
-    - Использование очков химического анализа
-    - Возможность прочесть этикетку на таблетках, таблетницах, шприцах, кувшинах и мензурках.
-    2 ур:
     - Использование ХимкоМата
     - Использование ХимМастера
     - Использование раздатчика химикатов
+    2 ур:
+    - Использование очков химического анализа
+    - Возможность прочесть этикетку на таблетках, таблетницах, шприцах, кувшинах и мензурках.
     - Распознание свойств веществ
     - Истинный цвет веществ
     3 ур:
     - Использование центрифуги и электролизной установки
     - Распознавание любых веществ
+    - 40% Защиты от кислотного урона, ядов и взрывов.
 skill-system-UI-Tooltip-Engineering =
     1 ур:
     - Взлом
@@ -115,7 +117,13 @@ skill-system-UI-Tooltip-Engineering =
     3 ур:
     - Тесла, Сингулярность
     - Киборги
-    - Еще больше крафтов!
+skill-system-UI-Tooltip-Research =
+    - Использование сканера аномалий
+    - Использование генератора аномалий
+    - Использование консоли исследований
+    - Использование аналитической консоли
+    - Использование А.К.Т.
+    - Использование синхронизатора аномалий
 skill-system-UI-Tooltip-Crime =
     1 ур:
     - Шаги и инструменты (сварка,лом,кусачки,челюсти итд) становятся намного тише.
@@ -139,10 +147,3 @@ skill-system-UI-Tooltip-Atmosphere =
     - Создание труб, смесителей газов, насосов и прочих атмосферных устройств
     - Взаимодействие с охладителем, нагревателем, насосами, воздушной сигнализацией и прочими атмосферными устройствами
 skill-system-UI-Tooltip-MusInstruments = - Игра на музыкальных инструментах
-skill-system-UI-Tooltip-Research =
-    - Использование сканера аномалий
-    - Использование генератора аномалий
-    - Использование консоли исследований
-    - Использование аналитической консоли
-    - Использование А.К.Т.
-    - Использование синхронизатора аномалий

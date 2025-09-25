@@ -79,3 +79,7 @@ marking-LizardChestFin = Унатх, грудь (плавник)
 marking-LizardSnoutSplotch = Унатх, морда лица (Пятно)
 marking-LizardSnoutSplotch-snout_splotch_primary = Морда
 marking-LizardSnoutSplotch-snout_splotch_secondary = Нос
+marking-LizardSnoutVisageSharp = Морда ящера (острая)
+marking-LizardSnoutVisageSharp-visage_sharp = Морда ящера (острая)
+marking-LizardSnoutVisageRound = Морда ящера (круглая)
+marking-LizardSnoutVisageRound-visage_round = Морда ящера (круглая)
