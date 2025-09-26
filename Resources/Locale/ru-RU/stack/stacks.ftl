@@ -40,6 +40,11 @@ stack-hv-cable =
         [1] ВВ кабелей
        *[other] ВВ кабелей
     }
+stack-explosive-cord =
+    { $amount ->
+        [1] взрывной шнур
+       *[other] взрывных шнуров
+    }
 stack-wood-plank =
     { $amount ->
         [1] деревянных досок

@@ -4,6 +4,7 @@
     - survival
   name: survival-title
   showInVote: false # secret
+  minPlayers: 15 # RAYTEN-NOSURVIVAL
   description: survival-description
   rules:
     - TeamDeathMatch # RAYTEN-TDM

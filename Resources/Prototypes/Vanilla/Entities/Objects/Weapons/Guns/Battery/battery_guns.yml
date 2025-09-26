@@ -57,9 +57,6 @@
     fireRate: 0.5
     soundGunshot:
       path: /Audio/Vanilla/Weapons/Guns/Gunshots/dominator.ogg
-  - type: HitscanBatteryAmmoProvider
-    proto: DominatorNonLethalShot
-    fireCost: 80
   - type: Dominator
     fireModes:
     - proto: DominatorNonLethalShot
@@ -81,6 +78,9 @@
   id: WeaponDominator
   description: Высокотехнологичное оружие созданное правоохранительной организацией Sibyl System, предназначенное специально для борьбы с преступностью.
   components:
+  - type: HitscanBatteryAmmoProvider
+    proto: DominatorNonLethalShot
+    fireCost: 80
   - type: Item
     size: Small
     shape:

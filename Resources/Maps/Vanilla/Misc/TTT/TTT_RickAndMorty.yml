@@ -1,16 +1,16 @@
 meta:
   format: 7
-  category: Map
-  engineVersion: 266.0.0
-  forkId: ""
-  forkVersion: ""
-  time: 09/21/2025 18:48:28
-  entityCount: 1082
-maps:
-- 217
+  category: Grid
+  engineVersion: 267.1.0
+  forkId: Vanilla
+  forkVersion: fad1c56e52bd9810f4c3389c335c5e429b676a5c
+  time: 09/26/2025 20:19:50
+  entityCount: 1081
+maps: []
 grids:
 - 1
-orphans: []
+orphans:
+- 1
 nullspace: []
 tilemap:
   7: Space
@@ -50,7 +50,7 @@ entities:
       name: grid
     - type: Transform
       pos: -20,-25
-      parent: 217
+      parent: invalid
     - type: MapGrid
       chunks:
         0,0:
@@ -1695,16 +1695,6 @@ entities:
         chunkSize: 4
     - type: GasTileOverlay
     - type: RadiationGridResistance
-  - uid: 217
-    components:
-    - type: MetaData
-      name: Map Entity
-    - type: Transform
-    - type: Map
-      mapPaused: True
-    - type: GridTree
-    - type: Broadphase
-    - type: OccluderTree
 - proto: AirlockGlass
   entities:
   - uid: 606

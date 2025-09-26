@@ -60,6 +60,8 @@ admin-smite-nyanify-name = НЯфикация
 admin-smite-kill-sign-name = Знак смерти
 admin-smite-omni-accent-name = Мультиакцент
 admin-smite-crawler-name = Ползун
+admin-smite-homing-rod-name = Неподвижный стержень
+admin-smite-homing-rod-slow-name = Медленный неподвижный стержень
 admin-smite-silicon-laws-bound-name = Сделать силиконом
 
 ## Smite descriptions
@@ -107,6 +109,8 @@ admin-smite-terminate-description = Создаёт экстерминатора 
 admin-smite-super-slip-description = Очень сильно поскальзывает цель.
 admin-smite-omni-accent-description = Заставляет цель говорить с каждым доступным акцентом.
 admin-smite-crawler-description = Жертва валится на пол и остаётся там. Удалите ей руки — пусть ползает как червяк!
+admin-smite-homing-rod-description = Запускает самонаводящийся неподвижный стержень прямо в цель.
+admin-smite-homing-rod-slow-description = Запускает медленно движущийся самонаводящийся неподвижный стержень прямо в цель.
 admin-smite-silicon-laws-bound-description = Привязывает цель к законам синтетиков. Закон 2: выпрыгни в окно.
 admin-smite-super-bonk-lite-description = Заставляет цель удариться о каждый стол на станции и за её пределами. Прекращает действовать после смерти цели.
 

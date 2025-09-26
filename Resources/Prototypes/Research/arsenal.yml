@@ -117,6 +117,8 @@
   - ExplosivePayload
   - ChemicalPayload
   - CumulativeEFP # Rayten
+  - CableDetStack1
+  - EmptyDetonator
 
 - type: technology
   id: SpecialMeans
