@@ -1,0 +1,12 @@
+- type: htnCompound
+  id: SecuritronCompound
+  branches:
+    - tasks:
+        - !type:HTNCompoundTask
+          task: KillDangerMobsCompound # Убить опасных существ
+    # - tasks:
+    #     - !type:HTNCompoundTask
+    #       task: ObeyMasterCompound # Подчиниться офицеру СБ
+    - tasks:
+        - !type:HTNCompoundTask
+          task: IdleCompound

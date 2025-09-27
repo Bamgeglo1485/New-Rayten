@@ -1,0 +1,44 @@
+- type: entity
+  parent:
+  - MobSiliconBase
+  - StripableInventoryBase
+  id: Mobsecuritron
+  name: Секьюритрон
+  description: Бип буп. Вы арестованы
+  components:
+  - type: Sprite
+    sprite: Vanilla/Mobs/Silicon/Bots/securitron.rsi
+    state: securitron
+  - type: Skill
+    RangeWeaponLevel: 3
+    MeleeWeaponLevel: 3
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 2.5
+    baseSprintSpeed: 4.5
+  - type: CombatMode
+  - type: HTN
+    rootTask:
+      task: SecuritronCompound
+  - type: InteractionPopup
+    interactSuccessString: petting-success-cleanbot
+    interactFailureString: petting-failure-cleanbot
+    interactSuccessSound:
+      path: /Audio/Ambience/Objects/periodic_beep.ogg
+  - type: Gun
+    fireRate: 1
+    soundGunshot:
+      path: /Audio/Vanilla/Weapons/Guns/Gunshots/dominator.ogg
+  - type: HitscanBatteryAmmoProvider
+    proto: DominatorLethalShot
+    fireCost: 80
+  - type: Battery
+    maxCharge: 4000
+    startingCharge: 4000
+  - type: BatterySelfRecharger
+    autoRecharge: true
+    autoRechargeRate: 25
+  - type: Vocalizer
+  - type: Speech
+  - type: SecurityMarker
+  # - type: DatasetVocalizer
+  #   dataset: MedibotAds # туду переделать

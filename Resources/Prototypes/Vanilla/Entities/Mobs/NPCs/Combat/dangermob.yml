@@ -1,0 +1,51 @@
+- type: htnCompound
+  id: KillDangerMobsCompound
+  branches:
+    - preconditions:
+        - !type:GunAmmoPrecondition
+          minPercent: 0.001
+      tasks:
+        - !type:HTNCompoundTask
+          task: GunCombatDangermobCompound
+
+# расстрел всех кто жив и представляет опасность
+- type: htnCompound
+  id: GunCombatDangermobCompound
+  branches:
+    - tasks:
+        # Ищем опасную цель (только живую сделать в будущем)
+        - !type:HTNPrimitiveTask
+          operator: !type:UtilityOperator
+            proto: NearbyDangerMobTargets
+        # бегаем за ней
+        - !type:HTNPrimitiveTask
+          operator: !type:MoveToOperator
+            shutdownState: PlanFinished
+            pathfindInPlanning: true
+            removeKeyOnFinish: false
+            targetKey: TargetCoordinates
+            pathfindKey: TargetPathfind
+            stopOnLineOfSight: true
+            rangeKey: MeleeRange
+        # джукаем
+        - !type:HTNPrimitiveTask
+          operator: !type:JukeOperator
+            jukeType: AdjacentTile
+        # стреляем
+        - !type:HTNPrimitiveTask
+          preconditions:
+            - !type:KeyExistsPrecondition
+              key: Target
+          operator: !type:GunOperator
+            targetKey: Target
+          services:
+            - !type:UtilityService
+              id: RangedService
+              proto: NearbyDangerMobTargets
+              key: Target
+        # говорим
+        - !type:HTNPrimitiveTask
+          operator: !type:SpeakOperator
+            speech: medibot-start-inject
+            hidden: true
+        # туду - передача по рации местоположения, имени преступника и всякое такое

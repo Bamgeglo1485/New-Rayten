@@ -7,10 +7,10 @@ public sealed class DangerMobSystem : SharedDangerMobSystem
 {
     private float _timer = 0;
     public float CheckDelay = 0.5f;
+
     /// <summary>
     /// Вся обработка только на сервере, т.к. невозможно выстроить предикт
     /// </summary>
-    /// <param name="frameTime"></param>
     public override void Update(float frameTime)
     {
         _timer += frameTime;

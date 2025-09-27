@@ -6,6 +6,8 @@ using Content.Server.NPC.Queries.Curves;
 using Content.Server.NPC.Queries.Queries;
 using Content.Server.Nutrition.Components;
 using Content.Server.Temperature.Components;
+using Content.Server.Vanilla.Dominator;
+using Content.Server.Vanilla.NPC.Queries.Considerations;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Damage;
 using Content.Shared.Examine;
@@ -54,7 +56,7 @@ public sealed class NPCUtilitySystem : EntitySystem
     [Dependency] private readonly EntityWhitelistSystem _whitelistSystem = default!;
     [Dependency] private readonly MobThresholdSystem _thresholdSystem = default!;
     [Dependency] private readonly TurretTargetSettingsSystem _turretTargetSettings = default!;
-
+    [Dependency] private readonly DangerMobSystem _dangermob = default!;
     private EntityQuery<PuddleComponent> _puddleQuery;
     private EntityQuery<TransformComponent> _xformQuery;
 
@@ -333,6 +335,13 @@ public sealed class NPCUtilitySystem : EntitySystem
 
                 return _examine.InRangeUnOccluded(owner, targetUid, radius + bufferRange, null) ? 1f : 0f;
             }
+            //rayten-start
+            case TargetIsDangerCon:
+            {
+                int targetdanger = _dangermob.GetEntityDanger(targetUid);
+                return targetdanger > 8 ? 1f : 0f;
+            }
+            //rayten-end
             case TargetIsAliveCon:
             {
                 return _mobState.IsAlive(targetUid) ? 1f : 0f;
