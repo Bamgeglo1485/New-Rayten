@@ -1,4 +1,3 @@
-
 - type: utilityQuery
   id: NearbyDangerMobTargets
   query:
@@ -18,3 +17,4 @@
       curve: !type:BoolCurve
     - !type:TargetInLOSOrCurrentCon
       curve: !type:BoolCurve
+

@@ -1,7 +1,15 @@
 - type: entity
-  parent:
-  - MobSiliconBase
-  - StripableInventoryBase
+  parent: Mobsecuritron
+  id: MobBeepsky
+  name: Офицер Бипски
+  description: особенный секьюритрон, вооружённый дубинкой, доминатором и неутомимой решимостью ловить преступников. Его колёсики скрипят, но закон — вечен.
+  components:
+  - type: DatasetVocalizer
+    dataset: BeepskyAds
+
+
+- type: entity
+  parent: MobSiliconBase
   id: Mobsecuritron
   name: Секьюритрон
   description: Бип буп. Вы арестованы
@@ -15,7 +23,6 @@
   - type: MovementSpeedModifier
     baseWalkSpeed: 2.5
     baseSprintSpeed: 4.5
-  - type: CombatMode
   - type: HTN
     rootTask:
       task: SecuritronCompound
@@ -24,21 +31,37 @@
     interactFailureString: petting-failure-cleanbot
     interactSuccessSound:
       path: /Audio/Ambience/Objects/periodic_beep.ogg
+  # голос
+  - type: Vocalizer
+  - type: Speech
+  - type: SecurityMarker
+  - type: DatasetVocalizer
+    dataset: SecuritronAds
+  # оружие
+  - type: CombatMode
+  - type: Stunbaton
+    energyPerUse: 50
+  - type: MeleeWeapon
+    wideAnimationRotation: -135
+    angle: 60
+    animation: WeaponArcThrust
+    damage:
+      types:
+        Blunt: 0
+    hidden: true
+  - type: StaminaDamageOnHit
+    damage: 35
+    sound: /Audio/Weapons/egloves.ogg
   - type: Gun
-    fireRate: 1
+    fireRate: 0.5
     soundGunshot:
       path: /Audio/Vanilla/Weapons/Guns/Gunshots/dominator.ogg
   - type: HitscanBatteryAmmoProvider
     proto: DominatorLethalShot
     fireCost: 80
   - type: Battery
-    maxCharge: 4000
-    startingCharge: 4000
+    maxCharge: 2000
+    startingCharge: 2000
   - type: BatterySelfRecharger
     autoRecharge: true
-    autoRechargeRate: 25
-  - type: Vocalizer
-  - type: Speech
-  - type: SecurityMarker
-  # - type: DatasetVocalizer
-  #   dataset: MedibotAds # туду переделать
+    autoRechargeRate: 5

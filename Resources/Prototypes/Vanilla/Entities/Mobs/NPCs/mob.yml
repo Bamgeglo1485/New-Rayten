@@ -4,9 +4,9 @@
     - tasks:
         - !type:HTNCompoundTask
           task: KillDangerMobsCompound # Убить опасных существ
-    # - tasks:
-    #     - !type:HTNCompoundTask
-    #       task: ObeyMasterCompound # Подчиниться офицеру СБ
+    - tasks:
+        - !type:HTNCompoundTask
+          task: SecuritronMeleeCompound # не трогай офицера паскуда
     - tasks:
         - !type:HTNCompoundTask
           task: IdleCompound

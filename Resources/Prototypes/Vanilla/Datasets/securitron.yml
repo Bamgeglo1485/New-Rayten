@@ -1,0 +1,20 @@
+- type: localizedDataset
+  id: SecuritonTargetDead
+  values:
+    prefix: securitron-phrases-target-dead-dataset-
+    count: 19
+
+- type: localizedDataset
+  id: SecuritonPull
+  values:
+    prefix: securitron-phrases-pull-dataset-
+    count: 20
+
+- type: localizedDataset
+  id: SecuritonTargetWarning
+  values:
+    prefix: securitron-phrases-target-warning-dataset-
+    count: 20
+
+
+

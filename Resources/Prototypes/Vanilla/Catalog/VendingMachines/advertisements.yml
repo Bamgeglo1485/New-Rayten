@@ -1,0 +1,11 @@
+- type: localizedDataset
+  id: SecuritronAds
+  values:
+    prefix: advertisement-securitron-
+    count: 20
+
+- type: localizedDataset
+  id: BeepskyAds
+  values:
+    prefix: advertisement-beepsky-
+    count: 20

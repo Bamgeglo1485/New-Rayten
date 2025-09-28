@@ -31,6 +31,16 @@
         - !type:HTNPrimitiveTask
           operator: !type:JukeOperator
             jukeType: AdjacentTile
+
+        # сообщаем информацию
+        - !type:HTNPrimitiveTask
+          preconditions:
+            - !type:KeyExistsPrecondition
+              key: Target
+          operator: !type:SpeakDatasetOperator
+            dataset: SecuritonTargetWarning
+            radio: true
+
         # стреляем
         - !type:HTNPrimitiveTask
           preconditions:
@@ -43,9 +53,44 @@
               id: RangedService
               proto: NearbyDangerMobTargets
               key: Target
-        # говорим
+
+        # сообщаем в рацию
         - !type:HTNPrimitiveTask
-          operator: !type:SpeakOperator
-            speech: medibot-start-inject
+          operator: !type:SpeakDatasetOperator
+            dataset: SecuritonTargetDead
+            radio: true
+        # и просто в чатик для фанчика
+        - !type:HTNPrimitiveTask
+          operator: !type:SpeakDatasetOperator
+            dataset: SecuritonTargetDead
             hidden: true
-        # туду - передача по рации местоположения, имени преступника и всякое такое
+
+- type: htnCompound
+  id: SecuritronMeleeCompound
+  branches:
+    - preconditions:
+        - !type:PulledPrecondition
+          isPulled: true
+      tasks:
+        - !type:HTNPrimitiveTask
+          operator: !type:PulledOperator
+            key: Puller
+
+        - !type:HTNPrimitiveTask
+          preconditions:
+            - !type:KeyExistsPrecondition
+              key: Puller
+          operator: !type:SingleMeleeAttackOperator
+            targetKey: Puller
+
+        - !type:HTNPrimitiveTask
+          operator: !type:SpeakDatasetOperator
+            dataset: SecuritonPull
+            hidden: true
+
+        - !type:HTNPrimitiveTask
+          operator: !type:UnPullOperator
+          shutdownState: TaskFinished
+
+
+
