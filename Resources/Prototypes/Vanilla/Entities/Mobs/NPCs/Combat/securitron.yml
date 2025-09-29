@@ -80,12 +80,6 @@
           preconditions:
             - !type:KeyExistsPrecondition
               key: Puller
-            - !type:TargetInRangePrecondition
-              targetKey: Puller
-              rangeKey: MovementRange
-            - !type:TargetInLOSPrecondition
-              targetKey: Puller
-              rangeKey: MovementRange
           operator: !type:SingleMeleeAttackOperator
             targetKey: Puller
 

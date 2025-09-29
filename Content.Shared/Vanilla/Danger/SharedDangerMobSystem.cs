@@ -56,15 +56,24 @@ public class SharedDangerMobSystem : EntitySystem
         }
 
         var danger = 0;
+        var deepdanger = danger;
         // --- 2. Проверка рук ---
         // Предметы в руках имеют в два раза большую опасность
         foreach (var item in _hands.EnumerateHeld(target))
         {
             danger += GetItemDanger(item, departments, jobId) * 2;
+            deepdanger += danger;
+            //проверка всяких сумок в руках итд
+            if (TryComp<StorageComponent>(item, out var storageComp))
+            {
+                foreach (var contained in storageComp.Container.ContainedEntities)
+                {
+                    deepdanger += GetItemDanger(contained, departments, jobId);
+                }
+            }
         }
 
         // --- 3. Проверка инвентарных слотов ---
-        var deepdanger = danger;
         if (TryComp<InventoryComponent>(target, out var inventoryComp))
         {
             foreach (var slot in inventoryComp.Slots)
@@ -106,7 +115,7 @@ public class SharedDangerMobSystem : EntitySystem
         // --- 2. Проверка на харммод ---
         if (TryComp<CombatModeComponent>(target, out var combat) && combat.IsInCombatMode)
         {
-            if (danger>0)
+            if (danger > 0)
                 danger += 2;
 
             if (deepdanger > 0)
@@ -126,7 +135,7 @@ public class SharedDangerMobSystem : EntitySystem
 
         var jobs = contraband.AllowedJobs.Select(p => _proto.Index(p).LocalizedName).ToArray();
 
-        if (departments.Intersect(contraband.AllowedDepartments).Any() || jobs.Contains(jobId))
+        if (departments.Intersect(contraband.AllowedDepartments).Any() || jobs.Contains(jobId) || jobId == "капитан")
             return 0;
 
         return severityProto.Danger;

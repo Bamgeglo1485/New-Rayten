@@ -78,7 +78,7 @@ public sealed class ContrabandSystem : EntitySystem
         }
         else
         {
-            depExamineMessage = Loc.GetString(severity.ExamineText);
+            //depExamineMessage = Loc.GetString(severity.ExamineText);
         }
 
 
@@ -103,7 +103,7 @@ public sealed class ContrabandSystem : EntitySystem
         var carryingMessage = Loc.GetString("contraband-examine-text-avoid-carrying-around");
         var iconTexture = "/Textures/Interface/VerbIcons/lock-red.svg.192dpi.png";
         if (departments.Intersect(component.AllowedDepartments).Any()
-            || jobs.Contains(jobId))
+            || jobs.Contains(jobId) || jobId == "капитан")
         {
             carryingMessage = Loc.GetString("contraband-examine-text-in-the-clear");
             iconTexture = "/Textures/Interface/VerbIcons/unlock-green.svg.192dpi.png";
