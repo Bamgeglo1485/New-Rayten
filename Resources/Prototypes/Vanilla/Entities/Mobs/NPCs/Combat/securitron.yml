@@ -80,17 +80,29 @@
           preconditions:
             - !type:KeyExistsPrecondition
               key: Puller
+            - !type:TargetInRangePrecondition
+              targetKey: Puller
+              rangeKey: MovementRange
+            - !type:TargetInLOSPrecondition
+              targetKey: Puller
+              rangeKey: MovementRange
           operator: !type:SingleMeleeAttackOperator
             targetKey: Puller
+
+        - !type:HTNPrimitiveTask
+          preconditions:
+            - !type:TargetInLOSPrecondition
+              targetKey: Puller
+              rangeKey: MovementRange
+          operator: !type:UnPullOperator
+            shutdownState: TaskFinished
 
         - !type:HTNPrimitiveTask
           operator: !type:SpeakDatasetOperator
             dataset: SecuritonPull
             hidden: true
 
-        - !type:HTNPrimitiveTask
-          operator: !type:UnPullOperator
-          shutdownState: TaskFinished
+
 
 
 

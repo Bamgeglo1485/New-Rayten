@@ -20,6 +20,9 @@
   - type: Skill
     RangeWeaponLevel: 3
     MeleeWeaponLevel: 3
+  - type: NpcFactionMember
+    factions:
+    - NanoTrasen
   - type: MovementSpeedModifier
     baseWalkSpeed: 2.5
     baseSprintSpeed: 4.5
@@ -58,7 +61,7 @@
       path: /Audio/Vanilla/Weapons/Guns/Gunshots/dominator.ogg
   - type: HitscanBatteryAmmoProvider
     proto: DominatorLethalShot
-    fireCost: 80
+    fireCost: 125
   - type: Battery
     maxCharge: 2000
     startingCharge: 2000
