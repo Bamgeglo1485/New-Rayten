@@ -7,7 +7,7 @@
 - type: roleSkills
   id: JobZookeeper
   basicSkills:
-    Medicine: 3
+    Medicine: 2
   easySkills:
   - MusInstruments
   - Bureaucracy
@@ -23,9 +23,7 @@
 - type: roleSkills
   id: JobPsychologist
   basicSkills:
-    Chemistry: 3
-    Medicine: 3
+    Medicine: 2
   easySkills:
   - MusInstruments
-  - Botany
   - Bureaucracy

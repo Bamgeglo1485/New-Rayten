@@ -128,6 +128,29 @@ reagent-effect-guidebook-status-effect-delay =
                *[other] устраняют
             } { NATURALFIXED($time, 3) } { MANY("секунду", $time) } эффекта { LOC($key) }
     } после задержки { NATURALFIXED($delay, 3) } { MANY("секунду", $delay) }
+reagent-effect-guidebook-knockdown =
+    { $type ->
+        [update]
+            { $chance ->
+                [1] Вызывает
+               *[other] вызывают
+            } { LOC($key) } как минимум на { NATURALFIXED($time, 3) } { MANY("секунду", $time) }
+        [add]
+            { $chance ->
+                [1] Вызывает
+               *[other] вызывают
+            } нокдаун как минимум на { NATURALFIXED($time, 3) } { MANY("секунду", $time) } эфект накапливается
+       *[set]
+            { $chance ->
+                [1] Вызывает
+               *[other] вызывают
+            } нокдаун как минимум на { NATURALFIXED($time, 3) } { MANY("секунду", $time) }
+        [remove]
+            { $chance ->
+                [1] Убирает
+               *[other] убирают
+            } { NATURALFIXED($time, 3) } { MANY("секунду", $time) } нокдауна
+    }
 reagent-effect-guidebook-set-solution-temperature-effect =
     { $chance ->
         [1] Устанавливает

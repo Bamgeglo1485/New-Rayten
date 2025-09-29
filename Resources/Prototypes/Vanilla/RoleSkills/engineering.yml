@@ -4,7 +4,6 @@
     Engineering: 3
   easySkills:
   - Atmosphere
-  - Piloting
   - Bureaucracy
 
 - type: roleSkills
@@ -13,16 +12,14 @@
     Engineering: 3
   easySkills:
   - Atmosphere
-  - Piloting
   - Bureaucracy
 
 - type: roleSkills
   id: JobAtmosphericTechnician
   basicSkills:
-    Engineering: 3
+    Engineering: 2
   easySkills:
   - Atmosphere
-  - Piloting
   - Bureaucracy
 
 - type: roleSkills
@@ -31,5 +28,4 @@
     Engineering: 3
   easySkills:
   - Atmosphere
-  - Piloting
   - Bureaucracy
