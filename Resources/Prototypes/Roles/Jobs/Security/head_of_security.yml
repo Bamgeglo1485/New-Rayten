@@ -55,7 +55,6 @@
     id: HoSPDA
     gloves: ClothingHandsGlovesCombat
     ears: ClothingHeadsetAltSecurity
-    suitstorage: WeaponAssaultDominator
   storage:
     back:
     - Flash

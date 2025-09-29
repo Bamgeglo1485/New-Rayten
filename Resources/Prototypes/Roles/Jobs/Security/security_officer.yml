@@ -33,7 +33,6 @@
   equipment:
     eyes: ClothingEyesGlassesSecurity
     ears: ClothingHeadsetSecurity
-    pocket1: WeaponDominator
   storage:
     back:
     - Flash
