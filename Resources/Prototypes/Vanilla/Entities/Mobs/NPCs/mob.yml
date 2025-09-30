@@ -4,9 +4,19 @@
     - tasks:
         - !type:HTNCompoundTask
           task: KillDangerMobsCompound # Убить опасных существ
+
     - tasks:
         - !type:HTNCompoundTask
           task: SecuritronMeleeCompound # не трогай офицера паскуда
+
+    # - tasks: # Атакуем того, на кого нам указал наш мастер
+    #   - !type:HTNCompoundTask
+    #     task: RatServantTargetAttackCompound
+
+    - tasks: # следуем за дунувшим
+        - !type:HTNCompoundTask
+          task: FollowCompound
+
     - tasks:
         - !type:HTNCompoundTask
           task: IdleCompound
