@@ -1,16 +1,31 @@
 using Content.Shared.Vanilla.Dominator;
 using Content.Shared.Damage;
+using Robust.Shared.Containers;
 using System.Linq;
 
 namespace Content.Server.Vanilla.Dominator;
 
 public sealed class SecuritronSystem : EntitySystem
 {
+    [Dependency] private readonly SharedContainerSystem _container = default!;
+
     public override void Initialize()
     {
         base.Initialize();
         SubscribeLocalEvent<SecurityMarkerComponent, DamageChangedEvent>(OnDamageChange);//напавшего на секьюритрона делаем опасным челом
+        SubscribeLocalEvent<SecurityMarkerComponent, ComponentInit>(OnSecuritronInit);//напавшего на секьюритрона делаем опасным челом
     }
+
+    private void OnSecuritronInit(EntityUid uid, SecurityMarkerComponent component, ComponentInit args)
+    {
+        //инициализируем контейнер
+        component.HandCuffContainer = _container.EnsureContainer<ContainerSlot>(uid, "HandCuffContainer");
+
+        var spawned = Spawn("Handcuffs", Transform(uid).Coordinates);
+
+        _container.Insert(spawned, component.HandCuffContainer);
+    }
+
 
     private void OnDamageChange(EntityUid uid, SecurityMarkerComponent component, DamageChangedEvent args)
     {

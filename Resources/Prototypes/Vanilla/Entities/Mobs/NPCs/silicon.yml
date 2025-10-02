@@ -29,6 +29,11 @@
   - type: HTN
     rootTask:
       task: SecuritronCompound
+    blackboard:
+      FollowCloseRange: !type:Single
+        2.0
+      FollowRange: !type:Single
+        3.0
   - type: InteractionPopup
     interactSuccessString: petting-success-cleanbot
     interactFailureString: petting-failure-cleanbot
@@ -40,12 +45,21 @@
   - type: SecurityMarker
   - type: DatasetVocalizer
     dataset: SecuritronAds
+  - type: Hands
+    hands:
+      hand_right1:
+        location: Right
+      hand_left1:
+        location: Left
+    sortedHands:
+    - hand_right1
+    - hand_left1
+  - type: DoAfter
   # оружие
   - type: CombatMode
   - type: Stunbaton
     energyPerUse: 50
   - type: MeleeWeapon
-    wideAnimationRotation: -135
     angle: 60
     animation: WeaponArcThrust
     damage:

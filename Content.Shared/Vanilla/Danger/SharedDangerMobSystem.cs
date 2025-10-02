@@ -20,6 +20,8 @@ public class SharedDangerMobSystem : EntitySystem
     [Dependency] private readonly SharedHandsSystem _hands = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly SharedIdCardSystem _id = default!;
+    [Dependency] private readonly SharedCombatModeSystem _combat = default!;
+
 
     public int GetEntityDanger(EntityUid target, bool deepseek = false)
     {
@@ -100,20 +102,25 @@ public class SharedDangerMobSystem : EntitySystem
         // --- 4. Проверка на карту агента ---
         if (_inventory.TryGetSlotEntity(target, "id", out var heldId))
         {
-            if (HasComp<AgentIDCardComponent>(heldId))
+            AgentIDCardComponent? cardcomp = null;
+
+            if (TryComp<AgentIDCardComponent>(heldId, out var directCard))
             {
-                danger -= 2;
+                cardcomp = directCard;
             }
-            else
+            else if (TryComp<PdaComponent>(heldId, out var pda) &&
+                    pda.ContainedId.HasValue &&
+                    TryComp<AgentIDCardComponent>(pda.ContainedId.Value, out var pdaCard))
             {
-                if (TryComp<PdaComponent>(heldId, out var pda) && pda.ContainedId.HasValue && HasComp<AgentIDCardComponent>(pda.ContainedId.Value))
-                {
-                    danger -= 2;
-                }
+                cardcomp = pdaCard;
             }
+
+            if (cardcomp?.HideDeepScan == true)
+                deepdanger = danger;
         }
+
         // --- 2. Проверка на харммод ---
-        if (TryComp<CombatModeComponent>(target, out var combat) && combat.IsInCombatMode)
+        if (_combat.IsInCombatMode(target))
         {
             if (danger > 0)
                 danger += 2;
@@ -121,6 +128,7 @@ public class SharedDangerMobSystem : EntitySystem
             if (deepdanger > 0)
                 deepdanger += 2;
         }
+
         dangercomp.Danger = Math.Clamp(danger, 0, 10);
         dangercomp.DeepDanger = Math.Clamp(deepdanger, 0, 10);
     }

@@ -16,7 +16,7 @@
         # Ищем опасную цель (только живую сделать в будущем)
         - !type:HTNPrimitiveTask
           operator: !type:UtilityOperator
-            proto: NearbyDangerMobTargets
+            proto: NearbyDangerDangerMobTargets
         # бегаем за ней
         - !type:HTNPrimitiveTask
           operator: !type:MoveToOperator
@@ -27,7 +27,6 @@
             pathfindKey: TargetPathfind
             stopOnLineOfSight: true
             rangeKey: MeleeRange
-        # джукаем
         - !type:HTNPrimitiveTask
           operator: !type:JukeOperator
             jukeType: AdjacentTile
@@ -48,25 +47,110 @@
               key: Target
           operator: !type:GunOperator
             targetKey: Target
+            requireLOS: true
+            opaqueKey: true
           services:
             - !type:UtilityService
               id: RangedService
-              proto: NearbyDangerMobTargets
+              proto: NearbyDangerDangerMobTargets
               key: Target
 
-        # сообщаем в рацию
-        - !type:HTNPrimitiveTask
-          operator: !type:SpeakDatasetOperator
-            dataset: SecuritonTargetDead
-            radio: true
-        # и просто в чатик для фанчика
         - !type:HTNPrimitiveTask
           operator: !type:SpeakDatasetOperator
             dataset: SecuritonTargetDead
             hidden: true
 
 - type: htnCompound
-  id: SecuritronMeleeCompound
+  id: SecuritronArrestCompound
+  branches:
+#1. Заковываем всех кто в крите
+    - tasks:
+        - !type:HTNCompoundTask
+          task: SecuritronCuffCompound
+    - tasks:
+        - !type:HTNCompoundTask
+          task: SecuritronStunCompound
+
+
+#2. Кафаем Тех кто в стане
+- type: htnCompound
+  id: SecuritronCuffCompound
+  branches:
+    - tasks:
+        - !type:HTNPrimitiveTask
+          operator: !type:UtilityOperator
+            proto: NearbyCuffableDangerMobTargets
+            key: cuff_target
+            keyCoordinates: cuff_targetCoordinates
+
+        - !type:HTNPrimitiveTask
+          operator: !type:MoveToOperator
+            shutdownState: TaskFinished
+            pathfindInPlanning: true
+            targetKey: cuff_targetCoordinates
+            pathfindKey: TargetPathfind
+            rangeKey: MeleeRange
+          preconditions:
+            - !type:CoordinatesNotInRangePrecondition
+              targetKey: cuff_targetCoordinates
+              rangeKey: MeleeRange
+
+        - !type:HTNPrimitiveTask
+          operator: !type:CuffOperator
+            targetKey: cuff_target
+            cuffKey: Handcuff
+          preconditions:
+            - !type:KeyExistsPrecondition
+              key: cuff_target
+            - !type:TargetInRangePrecondition
+              targetKey: cuff_target
+              rangeKey: MeleeRange
+          services:
+            - !type:UtilityService
+              id: CuffService
+              proto: NearbyCuffableDangerMobTargets
+              key: cuff_target
+
+- type: htnCompound
+  id: SecuritronStunCompound
+  branches:
+#2. Бьем всех кто не в крите
+    - tasks:
+        - !type:HTNPrimitiveTask
+          operator: !type:UtilityOperator
+            proto: NearbyUnstunnedDangerMobTargets
+            key: melee_target
+            keyCoordinates: melee_targetCoordinates
+        # бегаем за ней
+        - !type:HTNPrimitiveTask
+          operator: !type:MoveToOperator
+            shutdownState: PlanFinished
+            pathfindInPlanning: true
+            removeKeyOnFinish: false
+            targetKey: melee_targetCoordinates
+            pathfindKey: TargetPathfind
+            rangeKey: MeleeRange
+        - !type:HTNPrimitiveTask
+          operator: !type:JukeOperator
+            jukeType: Away
+
+        - !type:HTNPrimitiveTask
+          operator: !type:MeleeOperator
+            targetKey: melee_target
+          preconditions:
+            - !type:KeyExistsPrecondition
+              key: melee_target
+            - !type:TargetInRangePrecondition
+              targetKey: melee_target
+              rangeKey: MeleeRange
+          services:
+            - !type:UtilityService
+              id: MeleeService
+              proto: NearbyUnstunnedDangerMobTargets
+              key: melee_target
+
+- type: htnCompound
+  id: PreventPullCompound
   branches:
     - preconditions:
         - !type:PulledPrecondition
@@ -84,10 +168,6 @@
             targetKey: Puller
 
         - !type:HTNPrimitiveTask
-          preconditions:
-            - !type:TargetInLOSPrecondition
-              targetKey: Puller
-              rangeKey: MovementRange
           operator: !type:UnPullOperator
             shutdownState: TaskFinished
 
@@ -95,8 +175,3 @@
           operator: !type:SpeakDatasetOperator
             dataset: SecuritonPull
             hidden: true
-
-
-
-
-

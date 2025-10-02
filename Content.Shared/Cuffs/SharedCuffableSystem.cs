@@ -523,11 +523,11 @@ namespace Content.Shared.Cuffs
             }
 
             var cuffTime = handcuffComponent.CuffTime;
-            
+
             //vanilla-station-start
             int cufferskilllevel = TryComp<SkillComponent>(user, out var cufferskill) ? (int)cufferskill.MeleeWeaponLevel : 2;
             int cuffedskilllevel = TryComp<SkillComponent>(target, out var cuffedskill) ? (int)cuffedskill.MeleeWeaponLevel : 2;
-            float skillDifference = (float)(cufferskilllevel - cuffedskilllevel); 
+            float skillDifference = (float)(cufferskilllevel - cuffedskilllevel);
             cuffTime -= skillDifference * 0.45f;
             //vanilla-stat-end
 

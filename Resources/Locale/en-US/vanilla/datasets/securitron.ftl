@@ -60,3 +60,4 @@ securitron-phrases-target-warning-dataset-17 = Обнаружен объект �
 securitron-phrases-target-warning-dataset-18 = Предупреждение: присутствие опасного биологического агента.
 securitron-phrases-target-warning-dataset-19 = Внимание, персонал: опасное существо в зоне действия.
 securitron-phrases-target-warning-dataset-20 = Контакт установлен. Требуется немедленная реакция охраны.
+

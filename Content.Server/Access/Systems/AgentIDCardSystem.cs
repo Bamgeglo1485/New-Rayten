@@ -8,6 +8,7 @@ using Content.Shared.StatusIcon;
 using Robust.Server.GameObjects;
 using Robust.Shared.Prototypes;
 using Content.Shared.Roles;
+using Content.Shared.Verbs;
 using System.Diagnostics.CodeAnalysis;
 using Content.Server.Clothing.Systems;
 using Content.Server.Implants;
@@ -15,6 +16,7 @@ using Content.Shared.Implants;
 using Content.Shared.Inventory;
 using Content.Shared.Lock;
 using Content.Shared.PDA;
+using Robust.Shared.Utility;
 
 namespace Content.Server.Access.Systems
 {
@@ -38,6 +40,8 @@ namespace Content.Server.Access.Systems
             SubscribeLocalEvent<AgentIDCardComponent, AgentIDCardJobChangedMessage>(OnJobChanged);
             SubscribeLocalEvent<AgentIDCardComponent, AgentIDCardJobIconChangedMessage>(OnJobIconChanged);
             SubscribeLocalEvent<AgentIDCardComponent, InventoryRelayedEvent<ChameleonControllerOutfitSelectedEvent>>(OnChameleonControllerOutfitChangedItem);
+            //rayten
+            SubscribeLocalEvent<AgentIDCardComponent, GetVerbsEvent<InteractionVerb>>(OnVerb);
         }
 
         private void OnChameleonControllerOutfitChangedItem(Entity<AgentIDCardComponent> ent, ref InventoryRelayedEvent<ChameleonControllerOutfitSelectedEvent> args)
@@ -153,5 +157,21 @@ namespace Content.Server.Access.Systems
             job = null;
             return false;
         }
+        //rayten-start
+        private void OnVerb(Entity<AgentIDCardComponent> ent, ref GetVerbsEvent<InteractionVerb> args)
+        {
+            if (!args.CanAccess || !args.CanInteract || _lock.IsLocked(ent.Owner))
+                return;
+
+            bool hideDeepScan = ent.Comp.HideDeepScan;
+
+            args.Verbs.Add(new InteractionVerb()
+            {
+                Text = hideDeepScan ? "Не скрывать сканирование" : "Скрывать сканирование",
+                Icon = new SpriteSpecifier.Texture(new("/Textures/Interface/VerbIcons/examine.svg.192dpi.png")),
+                Act = () => ent.Comp.HideDeepScan = !hideDeepScan
+            });
+        }
+        //rayten-end
     }
 }

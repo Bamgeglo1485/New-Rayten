@@ -1,22 +1,25 @@
 - type: htnCompound
   id: SecuritronCompound
   branches:
+  #1. Найти и убить опасных существ
     - tasks:
         - !type:HTNCompoundTask
-          task: KillDangerMobsCompound # Убить опасных существ
-
+          task: KillDangerMobsCompound
+  #2. Не давай себя таскать
     - tasks:
         - !type:HTNCompoundTask
-          task: SecuritronMeleeCompound # не трогай офицера паскуда
-
-    # - tasks: # Атакуем того, на кого нам указал наш мастер
-    #   - !type:HTNCompoundTask
-    #     task: RatServantTargetAttackCompound
-
-    - tasks: # следуем за дунувшим
+          task: PreventPullCompound
+  #3. Лови преступников
+    - tasks:
+      - !type:HTNCompoundTask
+        task: SecuritronArrestCompound
+  #4. Следуй за офицером
+    - tasks:
         - !type:HTNCompoundTask
           task: FollowCompound
-
+  #5. Следуй за офицером
+  # Патрулируй
+  #6. Делай че хочешь
     - tasks:
         - !type:HTNCompoundTask
           task: IdleCompound

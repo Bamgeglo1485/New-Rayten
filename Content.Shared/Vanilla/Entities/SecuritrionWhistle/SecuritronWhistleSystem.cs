@@ -19,9 +19,19 @@ public abstract class SharedSecuritronWhistleSystem : EntitySystem
         SubscribeLocalEvent<SecuritronWhistleComponent, UseInHandEvent>(OnUseInHand);
     }
 
-    private void ExclamateTarget(EntityUid target, SecuritronWhistleComponent component)
+    public override void Update(float frameTime)
     {
-        SpawnAttachedTo(component.Effect, target.ToCoordinates());
+        base.Update(frameTime);
+        var query = EntityQueryEnumerator<SecuritronMasterComponent>();
+        var currentTime = _timing.CurTime;
+
+        while (query.MoveNext(out var uid, out var master))
+        {
+            if (master.UnFollowOn.GetValueOrDefault() < currentTime)
+            {
+                RemComp<SecuritronMasterComponent>(uid);
+            }
+        }
     }
 
     public void OnUseInHand(EntityUid uid, SecuritronWhistleComponent component, UseInHandEvent args)
@@ -37,11 +47,17 @@ public abstract class SharedSecuritronWhistleSystem : EntitySystem
         if (!Resolve(uid, ref component, false) || component.Distance <= 0)
             return false;
 
-        MakeLoudWhistle(uid, owner, component);
+        if (HasComp<SecuritronMasterComponent>(owner))
+            return false;
+
+        var mastercomp = EnsureComp<SecuritronMasterComponent>(owner);
+        mastercomp.UnFollowOn = _timing.CurTime + TimeSpan.FromSeconds(mastercomp.FollowTime);
+
+        MakeLoudWhistle(uid, owner, component, mastercomp);
         return true;
     }
 
-    private void MakeLoudWhistle(EntityUid uid, EntityUid owner, SecuritronWhistleComponent component)
+    private void MakeLoudWhistle(EntityUid uid, EntityUid owner, SecuritronWhistleComponent component, SecuritronMasterComponent mastercomp)
     {
         foreach (var iterator in
             _entityLookup.GetEntitiesInRange<SecurityMarkerComponent>(_transform.GetMapCoordinates(uid), component.Distance))
@@ -49,10 +65,11 @@ public abstract class SharedSecuritronWhistleSystem : EntitySystem
             if (iterator.Owner == owner)
                 continue;
 
-            ExclamateTarget(iterator, component);
-            FollowMe(iterator, owner, iterator.Comp);
+            SpawnAttachedTo(component.Effect, iterator.Owner.ToCoordinates());
+
+            FollowMe(iterator, owner, iterator.Comp, mastercomp);
         }
     }
     //выполнение только на сервере
-    protected abstract void FollowMe(EntityUid target, EntityUid master, SecurityMarkerComponent comp);
+    protected abstract void FollowMe(EntityUid target, EntityUid master, SecurityMarkerComponent comp, SecuritronMasterComponent mastercomp);
 }
