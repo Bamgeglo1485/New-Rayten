@@ -18,6 +18,12 @@ public sealed class AutoEyeClosingSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
+        SubscribeLocalEvent<AutoEyeClosingComponent, ComponentShutdown>(OnComponentShutdown);
+    }
+
+    private void OnComponentShutdown(EntityUid uid, AutoEyeClosingComponent comp, ref ComponentShutdown args)
+    {
+        _eyeClosingSystem.SetEyelids(uid, false);
     }
 
     public override void Update(float frameTime)
