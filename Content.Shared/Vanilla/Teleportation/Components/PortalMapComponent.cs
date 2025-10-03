@@ -1,12 +1,15 @@
 using Robust.Shared.GameStates;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared.Teleportation.Components;
+namespace Content.Shared.Vanilla.Teleportation.Components;
 
 [RegisterComponent, NetworkedComponent]
 public sealed partial class PortalMapComponent : Component
 {
-    [DataField("updateRate")]
+    [DataField]
+    public bool Enabled = true;
+
+    [DataField]
     public float UpdateRate = 60f;
 
     [ViewVariables]

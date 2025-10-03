@@ -1,0 +1,17 @@
+- type: entity
+  parent: BaseItem
+  id: ArchonScanner
+  name: сканер архонтов
+  description: Устройство для сохранения сигнатуры Архонта, с навязчивой рекламой казалось бы секретной организации.
+  components:
+  - type: Sprite
+    sprite: Vanilla/Objects/Specific/Research/ArchonScanner.rsi
+    layers:
+      - state: icon
+      - state: unlit
+        shader: unshaded
+  #- type: ArchonScanner
+  - type: Item
+    storedRotation: -90
+  - type: RequiresSkill
+    RequiresResearch: true

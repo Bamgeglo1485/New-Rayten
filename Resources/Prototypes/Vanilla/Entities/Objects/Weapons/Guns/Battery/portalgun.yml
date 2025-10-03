@@ -17,6 +17,7 @@
     maxFillLevels: 6
     fillBaseName: fill
   - type: BatteryWeaponFireModes
+    changeModeOnUse: false
     fireModes:
     - proto: ProjectilePortalGun
       fireCost: 5
@@ -24,11 +25,15 @@
       fireCost: 5
     - proto: ProjectilePortalGunDimensional
       fireCost: 10
+    - proto: ProjectilePortalGunCoordinated
+      fireCost: 8
   - type: ProjectileBatteryAmmoProvider
     proto: ProjectilePortalGun
     fireCost: 5
   - type: PortalGun
   - type: Gun
+    soundEmpty: null
+    showExamineText: false
   - type: SolutionContainerManager
     solutions:
       portal:
@@ -80,15 +85,19 @@
     storedOffset: 0,-4
 
 - type: entity
-  parent: PortalGunBase
+  parent: [ PortalGunBase, GrandTheftContraband ]
   id: PortalGun
   components:
+  - type: PortalGun
+    canSaveCoordinates: true
   - type: Construction
     graph: PortalGunGraph
     node: end
   - type: Tag
     tags:
     - PortalGun
+  - type: StealTarget
+    stealGroup: HandTeleporter
 
 - type: entity
   name: кустарная портальная пушка
@@ -118,9 +127,9 @@
 
 - type: entity
   name: великолепная портальная пушка
-  parent: PortalGunBase
+  parent: [ PortalGunBase, GrandTheftContraband ]
   id: GorgeousPortalGun
-  description: Ответственное устройство для безответственных приключений. Использует омега портальную жидкость и намного более экономная.
+  description: Ответственное устройство для безответственных приключений. Использует омега портальную жидкость и намного более экономный.
   components:
   - type: Sprite
     sprite: Vanilla/Objects/Devices/portal_gun.rsi
@@ -134,15 +143,21 @@
     fillBaseName: gorgfill
   - type: PortalGun
     reagentName: OmegaPortalJuice
+    coordinatedPortalProjectile: ProjectilePortalGunCoordinatedOmega
+    canSaveCoordinates: true
+    canTypeCoordinates: true
   - type: SolutionContainerManager
     solutions:
       portal:
         maxVol: 100
   - type: BatteryWeaponFireModes
+    changeModeOnUse: false
     fireModes:
     - proto: ProjectilePortalGunOmega
       fireCost: 3
     - proto: ProjectilePortalGunStationOmega
+      fireCost: 3
+    - proto: ProjectilePortalGunCoordinatedOmega
       fireCost: 3
     - proto: ProjectilePortalGunDimensionalOmega
       fireCost: 8
@@ -171,6 +186,8 @@
           ScrapSteel:
             min: 1
             max: 2
+  - type: StealTarget
+    stealGroup: HandTeleporter
 
 - type: entity
   name: продвинутая портальная пушка
