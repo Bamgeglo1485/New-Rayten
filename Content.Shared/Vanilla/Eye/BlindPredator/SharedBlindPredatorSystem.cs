@@ -116,5 +116,5 @@ public abstract class SharedBlindPredatorSystem : EntitySystem
     }
 
     protected abstract void Say(EntityUid uid, string msg, string? name);
-    protected abstract void ChangeVictimVisablity(EntityUid target, bool visible);
+    protected abstract void ChangeVictimVisablity(EntityUid target, bool visible, bool force = false);
 }

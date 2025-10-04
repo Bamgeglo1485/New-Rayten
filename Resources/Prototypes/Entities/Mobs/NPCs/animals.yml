@@ -4,6 +4,14 @@
   id: MobBat
   description: Some cultures find them terrifying, others crunchy on the teeth.
   components:
+  #ночное зрение
+  - type: NightVision
+  - type: PointLight
+    radius: 9
+    energy: 1.5
+    color: "#013220"
+    enabled: false
+    netsync: false
   - type: MovementSpeedModifier
     baseWalkSpeed : 3
     baseSprintSpeed : 6
@@ -2504,6 +2512,14 @@
   id: MobSpiderBase
   abstract: true
   components:
+  #ночное зрение
+  - type: NightVision
+  - type: PointLight
+    radius: 9
+    energy: 1.5
+    color: "#013220"
+    enabled: false
+    netsync: false
   - type: Physics
   - type: Fixtures
     fixtures:
@@ -3082,6 +3098,14 @@
   id: MobCat
   description: Feline pet, very funny.
   components:
+  #ночное зрение
+  - type: NightVision
+  - type: PointLight
+    radius: 9
+    energy: 1.5
+    color: "#013220"
+    enabled: false
+    netsync: false
   - type: Sprite
     drawdepth: Mobs
     sprite: Mobs/Pets/cat.rsi

@@ -14,7 +14,7 @@ public sealed class BlindPredatorSystem : SharedBlindPredatorSystem
             nameOverride: name, ignoreActionBlocker: true);
     }
 
-    protected override void ChangeVictimVisablity(EntityUid target, bool visible)
+    protected override void ChangeVictimVisablity(EntityUid target, bool visible, bool force = false)
     {
         if (visible)
         {

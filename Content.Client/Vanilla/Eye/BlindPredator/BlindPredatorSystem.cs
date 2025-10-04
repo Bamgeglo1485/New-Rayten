@@ -4,7 +4,7 @@ using Robust.Shared.Player;
 using Robust.Client.GameObjects;
 using Robust.Client.Player;
 
-namespace Content.Client.Vanilla.Eye.Systems;
+namespace Content.Client.Vanilla.Eye.BlindPredator;
 
 public sealed class BlindPredatorSystem : SharedBlindPredatorSystem
 {
@@ -19,13 +19,9 @@ public sealed class BlindPredatorSystem : SharedBlindPredatorSystem
     //Делаем всех снова видимыми если игрок гостанулся
     private void OnPlayerDetached(EntityUid uid, BlindPredatorComponent component, LocalPlayerDetachedEvent args)
     {
-        foreach (var target in component.VisibleEnts)
-        {
-            if (!TryComp<SpriteComponent>(target, out var sprite))
-                continue;
-
-            sprite.Visible = true;
-        }
+        var moverQuery = EntityQueryEnumerator<InputMoverComponent>();
+        while (moverQuery.MoveNext(out var target, out _))
+            ChangeVictimVisablity(target, true, force: true);
     }
     //Делаем спрайты всех мобов невидимыми
     private void OnPlayerAttached(EntityUid uid, BlindPredatorComponent component, LocalPlayerAttachedEvent args)
@@ -40,9 +36,9 @@ public sealed class BlindPredatorSystem : SharedBlindPredatorSystem
         }
     }
 
-    protected override void ChangeVictimVisablity(EntityUid target, bool visible)
+    protected override void ChangeVictimVisablity(EntityUid target, bool visible, bool force = false)
     {
-        if (!HasComp<BlindPredatorComponent>(_playerManager.LocalSession?.AttachedEntity))
+        if (force && !HasComp<BlindPredatorComponent>(_playerManager.LocalSession?.AttachedEntity))
             return;
 
         if (!TryComp<SpriteComponent>(target, out var sprite))
