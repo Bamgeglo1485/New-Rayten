@@ -35,7 +35,7 @@
                         <TextureRect Stretch="KeepAspectCentered"
                                      TexturePath="/Textures/Interface/NavMap/beveled_triangle.png"
                                      SetSize="20 20"
-                                     Modulate="#fbff19ff"
+                                     Modulate="#19ff8c"
                                      Margin="10 0 5 0"/>
                         <Label Text="{Loc 'surveillance-camera-monitor-ui-legend-selected'}"/>
 
@@ -49,9 +49,18 @@
                         <TextureRect Stretch="KeepAspectCentered"
                                      TexturePath="/Textures/Interface/NavMap/beveled_square.png"
                                      SetSize="20 20"
-                                     Modulate="#fa1f1fff"
+                                     Modulate="#fbff19ff"
                                      Margin="10 0 5 0"/>
                         <Label Text="{Loc 'surveillance-camera-monitor-ui-legend-invalid'}"/>
+
+                        <!-- RAYTEN STARTS -->
+                        <TextureRect Stretch="KeepAspectCentered"
+                                     TexturePath="/Textures/Interface/NavMap/beveled_circle.png"
+                                     SetSize="20 20"
+                                     Modulate="#ff1952"
+                                     Margin="10 0 5 0"/>
+                        <Label Text="Аномальная сущность"/>
+                        <!-- RAYTEN ENDS -->
                     </BoxContainer>
                     <Button Name="SubnetRefreshButtonMap" Text="{Loc 'surveillance-camera-monitor-ui-refresh-subnets'}"/>
                 </BoxContainer>

@@ -52,6 +52,11 @@ public partial struct CameraMarker
     /// </summary>
     [DataField]
     public bool Visible = true;
+
+    // RAYTEN STARTS
+    [DataField]
+    public bool JustMarker = false;
+    // RAYTEN ENDS
 }
 
 /// <summary>

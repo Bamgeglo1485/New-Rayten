@@ -87,4 +87,15 @@ public sealed class CCCVars
     /// </summary>
     public static readonly CVarDef<bool> StationGoal =
         CVarDef.Create("game.station_goal", true, CVar.SERVERONLY);
+
+    /// Activate announcer in round by their special calendar.
+    /// </summary>
+    public static readonly CVarDef<bool> CalendarAnnouncerEnabled =
+        CVarDef.Create("announcer.calendar", true, CVar.SERVERONLY);
+
+    /// <summary>
+    /// Maximum count of moles in tile for barotrauma sound effect.
+    /// </summary>
+    public static readonly CVarDef<float> SoundBarotraumaMoles =
+        CVarDef.Create("sound.barotraumamoles", 10f, CVar.SERVERONLY);
 }

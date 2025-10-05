@@ -13,7 +13,7 @@
   # Rayten
   - type: SinCityOverlay
   - type: GrainOverlay
-  - type: VignetteOverlay
+  #- type: VignetteOverlay # Вырубил из-за хуевости
   # Rayten-End
   - type: Sprite
     noRot: true

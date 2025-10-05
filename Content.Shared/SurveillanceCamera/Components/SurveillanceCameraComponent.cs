@@ -54,4 +54,9 @@ public sealed partial class SurveillanceCameraComponent : Component
     // This has to be device network frequency prototypes.
     [DataField("setupAvailableNetworks")]
     public List<ProtoId<DeviceFrequencyPrototype>> AvailableNetworks { get; private set; } = new();
+
+    // RAYTEN STARTS
+    [DataField]
+    public bool JustMarker = false;
+    // RAYTEN ENDS
 }

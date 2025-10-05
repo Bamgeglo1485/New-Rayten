@@ -104,7 +104,10 @@ public sealed partial class SurveillanceCameraMapSystem : EntitySystem
             Active = active,
             Address = address,
             Subnet = subnet,
-            Visible = visible
+            Visible = visible,
+            // RAYTEN STARTS
+            JustMarker = comp.JustMarker
+            // RAYTEN ENDS
         };
         Dirty(gridUid.Value, mapComp);
     }

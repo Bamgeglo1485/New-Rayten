@@ -1,0 +1,13 @@
+- type: entity
+  abstract: true
+  save: false
+  id: BaseDangerMarker
+  components:
+  - type: DeviceNetwork
+    deviceNetId: Wired
+    receiveFrequencyId: SurveillanceCameraGeneral
+    transmitFrequencyId: SurveillanceCamera
+  - type: SurveillanceCamera
+    active: false
+    networkSet: true
+    justMarker: true
