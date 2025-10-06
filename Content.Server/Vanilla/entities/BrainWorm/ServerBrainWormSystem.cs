@@ -18,7 +18,7 @@ using Content.Shared.Popups;
 using Content.Server.Temperature.Components;
 using Content.Server.Mind;
 using Content.Server.Store.Systems;
-using Content.Server.Medical;
+using Content.Shared.Medical;
 using Content.Server.Chemistry.Containers.EntitySystems;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Server.Chat.Systems;

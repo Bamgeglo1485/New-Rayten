@@ -1,3 +1,4 @@
+using Content.Shared.Power.Components;
 using Content.Server.Power.Components;
 using Content.Shared.GameTicking;
 using Content.Server.Power.SMES;
