@@ -38,7 +38,7 @@ public sealed class BlindPredatorSystem : SharedBlindPredatorSystem
 
     protected override void ChangeVictimVisablity(EntityUid target, bool visible, bool force = false)
     {
-        if (force && !HasComp<BlindPredatorComponent>(_playerManager.LocalSession?.AttachedEntity))
+        if (!force && !HasComp<BlindPredatorComponent>(_playerManager.LocalSession?.AttachedEntity))
             return;
 
         if (!TryComp<SpriteComponent>(target, out var sprite))

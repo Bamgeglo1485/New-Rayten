@@ -16,3 +16,7 @@ ent-ProjectilePortalGunDimensionalOmega = Межпространственная
     .desc = { ent-ProjectilePortalGunOmega.desc }
 ent-ProjectilePortalGunStationOmega = Станционная дислокация
     .desc = { ent-ProjectilePortalGunOmega.desc }
+ent-ProjectilePortalGunCoordinated = Координатная дислокация
+    .desc = { ent-BaseBullet.desc }
+ent-ProjectilePortalGunCoordinatedOmega = { ent-ProjectilePortalGunCoordinated }
+    .desc = { ent-ProjectilePortalGunCoordinated.desc }

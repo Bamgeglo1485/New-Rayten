@@ -1,0 +1,14 @@
+ent-ClothingUniformJumpsuitMTF = тактический комбинезон МОГ
+    .desc = Косплеер мог это носить...
+ent-ClothingHeadHelmetMTF = шлем МОГ
+    .desc = А ведь пулемёт мог прошить его...
+ent-ClothingOuterArmorMTF = бронежилет МОГ
+    .desc = Кто то мог его надеть и выжить...
+ent-ClothingMaskGasMTF = маска МОГ
+    .desc = Тритий не мог через него пройти...
+ent-ClothingMilitaryBackpackMTFSoldier = { ent-ClothingMilitaryBackpack }
+    .suffix = Заполнен
+    .desc = { ent-ClothingMilitaryBackpack.desc }
+ent-ClothingMilitaryBackpackMTFCommandos = { ent-ClothingMilitaryBackpack }
+    .suffix = Заполнен
+    .desc = { ent-ClothingMilitaryBackpack.desc }

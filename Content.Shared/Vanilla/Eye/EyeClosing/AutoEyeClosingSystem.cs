@@ -23,7 +23,8 @@ public sealed class AutoEyeClosingSystem : EntitySystem
 
     private void OnComponentShutdown(EntityUid uid, AutoEyeClosingComponent comp, ref ComponentShutdown args)
     {
-        _eyeClosingSystem.SetEyelids(uid, false);
+        if (HasComp<EyeClosingComponent>(uid))
+            _eyeClosingSystem.SetEyelids(uid, false);
     }
 
     public override void Update(float frameTime)
