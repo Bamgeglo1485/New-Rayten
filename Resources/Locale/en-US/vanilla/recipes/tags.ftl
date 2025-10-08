@@ -15,3 +15,4 @@ construction-graph-tag-teleporter = ручной телепортер
 construction-graph-tag-Stunbaton = дубинка-шокер
 construction-graph-tag-BagOfHolding = Бездонная сумка
 construction-graph-tag-HARMPACK = Р.У.К.З.А.К.
+construction-graph-tag-gps = GPS

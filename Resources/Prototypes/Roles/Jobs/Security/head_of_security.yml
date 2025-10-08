@@ -10,10 +10,16 @@
       inverted: true
     - !type:RoleTimeRequirement
       role: JobWarden
-      time: 18000 #5 hrs # Vanilla-RoleTime
+      time: 1h
     - !type:RoleTimeRequirement
       role: JobDetective
-      time: 18000 #5 hrs # Vanilla-RoleTime
+      time: 1h # knowing how to use the tools is important
+    - !type:RoleTimeRequirement
+      role: JobSecurityOfficer
+      time: 5h
+    - !type:DepartmentTimeRequirement
+      department: Security
+      time: 10h
     - !type:AgeRequirement
       requiredAge: 28
   weight: 10

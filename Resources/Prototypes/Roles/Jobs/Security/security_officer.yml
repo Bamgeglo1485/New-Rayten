@@ -10,7 +10,7 @@
       inverted: true
     - !type:DepartmentTimeRequirement
       department: Security
-      time: 36000 #10 hrs # Corvax-RoleTime
+      time: 2.5h
     - !type:AgeRequirement
       requiredAge: 20
   startingGear: SecurityOfficerGear

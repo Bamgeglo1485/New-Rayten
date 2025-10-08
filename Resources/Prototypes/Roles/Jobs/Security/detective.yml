@@ -10,7 +10,7 @@
     inverted: true
   - !type:RoleTimeRequirement
     role: JobSecurityOfficer
-    time: 18000 #5 hrs
+    time: 5h
   - !type:AgeRequirement
     requiredAge: 25
   startingGear: DetectiveGear

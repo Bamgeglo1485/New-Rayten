@@ -4,15 +4,15 @@
   description: job-description-warden
   playTimeTracker: JobWarden
   requirements:
-    - !type:SpeciesRequirement
-      species:
-      - Vox
-      inverted: true
+    - !type:RoleTimeRequirement
+      role: JobSecurityOfficer
+      time: 5h
     - !type:DepartmentTimeRequirement
       department: Security
-      time: 72000 #20 hrs # Corvax-RoleTime
+      time: 10h
     - !type:AgeRequirement
       requiredAge: 26
+  weight: 5
   startingGear: WardenGear
   icon: "JobIconWarden"
   supervisors: job-supervisors-hos

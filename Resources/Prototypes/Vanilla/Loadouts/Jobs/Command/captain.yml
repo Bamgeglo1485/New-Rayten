@@ -1,20 +1,11 @@
 - type: loadoutEffectGroup
-  id: MasterCap
-  effects:
-  - !type:JobRequirementLoadoutEffect
-    requirement:
-      !type:RoleTimeRequirement
-      role: JobCaptain
-      time: 72000 #20 hrs
-
-- type: loadoutEffectGroup
   id: SuperMasterCap
   effects:
   - !type:JobRequirementLoadoutEffect
     requirement:
       !type:RoleTimeRequirement
       role: JobCaptain
-      time: 360000 #100 hrs
+      time: 100h
 
 # Jumpsuit
 

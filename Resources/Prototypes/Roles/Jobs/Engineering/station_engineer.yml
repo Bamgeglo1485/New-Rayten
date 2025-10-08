@@ -6,7 +6,7 @@
   requirements:
     - !type:DepartmentTimeRequirement
       department: Engineering
-      time: 18000 #5 hrs # Vanilla-RoleTime
+      time: 2.5h
     - !type:AgeRequirement
       requiredAge: 22 # Vanilla
   startingGear: StationEngineerGear

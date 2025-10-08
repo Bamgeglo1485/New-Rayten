@@ -4,15 +4,14 @@
   description: job-description-rd
   playTimeTracker: JobResearchDirector
   requirements:
-    - !type:SpeciesRequirement
-      species:
-      - Vox
-      inverted: true
-    - !type:DepartmentTimeRequirement
-      department: Science
-      time: 54000 #15 hrs # Vanilla-RoleTime
-    - !type:AgeRequirement
-      requiredAge: 26 # Vanilla
+  - !type:RoleTimeRequirement
+    role: JobScientist
+    time: 5h
+  - !type:DepartmentTimeRequirement
+    department: Science
+    time: 10h
+  - !type:AgeRequirement
+    requiredAge: 26 # Vanilla
   weight: 10
   startingGear: ResearchDirectorGear
   icon: "JobIconResearchDirector"

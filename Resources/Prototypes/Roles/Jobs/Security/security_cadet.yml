@@ -9,7 +9,7 @@
       - Vox
       inverted: true
     - !type:OverallPlaytimeRequirement
-      time: 36000 #10 hrs # Vanilla-RoleTime
+      time: 10h
     - !type:AgeRequirement
       requiredAge: 20
   startingGear: SecurityCadetGear
