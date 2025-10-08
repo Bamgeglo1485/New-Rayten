@@ -61,8 +61,7 @@
       # TODO: WizardComp as needed
       components:
       - type: Skill
-        RangeWeaponLevel: 2
-        MeleeWeaponLevel: 2
+        WeaponLevel: 2
         MedicineLevel: 2
         EngineeringLevel: 1
         BuildingLevel: 2

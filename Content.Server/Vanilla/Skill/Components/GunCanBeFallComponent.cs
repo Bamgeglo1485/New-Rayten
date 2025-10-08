@@ -6,7 +6,7 @@ namespace Content.Server.Vanilla.Skill
     [RegisterComponent]
     public sealed partial class GunCanBeFallComponent : Component
     {
-        [DataField("RequiresRangeWeaponLevel")]
+        [DataField("RequiresWeaponLevel")]
         public SkillLevel RequiresWeaponLevel { get; set; } = SkillLevel.Basic;
 
         [DataField("Recoil")]

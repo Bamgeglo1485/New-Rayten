@@ -29,8 +29,7 @@
     - Пиратская экипировка.
     - Вам выдали 5 телекристаллов, правда вы не знаете как ими пользоваться...
   skills:
-    RangeWeapon: 3
-    MeleeWeapon: 3
+    Weapon: 3
     Medicine: 2
   easySkills:
   - Piloting
@@ -59,8 +58,7 @@
   specialDesc:
     - Вам выдали допонительные 5 телекристаллов в честь первого задания
   skills:
-    RangeWeapon: 2
-    MeleeWeapon: 2
+    Weapon: 2
     Medicine: 2
     Engineering: 1
   easySkills:
@@ -75,8 +73,7 @@
   name: background-nukeops-name-Animal
   description: background-nukeops-desc-Animal
   skills:
-    RangeWeapon: 3
-    MeleeWeapon: 3
+    Weapon: 3
     Medicine: 3
 
 
@@ -88,7 +85,7 @@
   specialDesc:
     - Глушилка длится на 5 минут дольше.
   skills:
-    RangeWeapon: 3
+    Weapon: 3
     Engineering: 3
     Medicine: 2
   easySkills:
@@ -105,8 +102,7 @@
   name: background-NukeOpComander-name-Greedy
   description: background-NukeOpComander-desc-Greedy
   skills:
-    RangeWeapon: 3
-    MeleeWeapon: 3
+    Weapon: 3
     Medicine: 3
   easySkills:
   - Piloting
@@ -116,8 +112,7 @@
   name: background-NukeOpComander-name-Warior
   description: background-NukeOpComander-desc-Warior
   skills:
-    RangeWeapon: 3
-    MeleeWeapon: 3
+    Weapon: 3
     Medicine: 3
   easySkills:
   - Piloting
@@ -133,7 +128,7 @@
   skills:
     Medicine: 3
     Engineering: 3
-    RangeWeapon: 1
+    Weapon: 1
   specials:
   - !type:AddItemSpecial
     items:
@@ -144,7 +139,6 @@
   name: background-NukeOpMedic-name-Warior
   description: background-NukeOpMedic-desc-Warior
   skills:
-    RangeWeapon: 3
-    MeleeWeapon: 3
+    Weapon: 3
     Medicine: 3
 

@@ -18,8 +18,7 @@
     sprite: Vanilla/Mobs/Silicon/Bots/securitron.rsi
     state: securitron
   - type: Skill
-    RangeWeaponLevel: 3
-    MeleeWeaponLevel: 3
+    WeaponLevel: 3
   - type: NpcFactionMember
     factions:
     - NanoTrasen

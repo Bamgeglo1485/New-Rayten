@@ -21,9 +21,8 @@
         - VisitorWalter
       roleLoadout: [ RoleSurvivalExtended ]
     - type: Skill
-      RangeWeaponLevel: 2
-      MeleeWeaponLevel: 0
-      MedicineLevel: 3
+      WeaponLevel: 0
+      MedicineLevel: 2
       EngineeringLevel: 2
       Research: false
       Atmosphere: true
@@ -55,8 +54,7 @@
         - VisitorJessy
       roleLoadout: [ RoleSurvivalExtended ]
     - type: Skill
-      RangeWeaponLevel: 2
-      MeleeWeaponLevel: 2
+      WeaponLevel: 2
       MedicineLevel: 2
       EngineeringLevel: 0
       Research: false

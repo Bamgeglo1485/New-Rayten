@@ -52,8 +52,7 @@
   - type: Loadout
     prototypes: [MobDeathSquadRegularLoot]
   - type: Skill
-    RangeWeaponLevel: 3
-    MeleeWeaponLevel: 3
+    WeaponLevel: 3
     MedicineLevel: 3
     EngineeringLevel: 3
     Research: true
@@ -81,8 +80,7 @@
   - type: Loadout
     prototypes: [MobDeathSquadRegularLoot]
   - type: Skill
-    RangeWeaponLevel: 3
-    MeleeWeaponLevel: 3
+    WeaponLevel: 3
     MedicineLevel: 3
     EngineeringLevel: 3
     Research: true

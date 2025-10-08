@@ -1,39 +1,35 @@
 - type: roleSkills
   id: JobDetective
   basicSkills:
-    RangeWeapon: 2
+    Weapon: 2
   easySkills:
   - Bureaucracy
 
 - type: roleSkills
   id: JobHeadOfSecurity
   basicSkills:
-    MeleeWeapon: 2
-    RangeWeapon: 2
+    Weapon: 2
   easySkills:
   - Bureaucracy
 
 - type: roleSkills
   id: JobSecurityCadet
   basicSkills:
-    MeleeWeapon: 2
-    RangeWeapon: 2
+    Weapon: 2
   easySkills:
   - Bureaucracy
 
 - type: roleSkills
   id: JobSecurityOfficer
   basicSkills:
-    MeleeWeapon: 2
-    RangeWeapon: 2
+    Weapon: 2
   easySkills:
   - Bureaucracy
 
 - type: roleSkills
   id: JobWarden
   basicSkills:
-    MeleeWeapon: 2
-    RangeWeapon: 2
+    Weapon: 2
   easySkills:
   - Bureaucracy
 

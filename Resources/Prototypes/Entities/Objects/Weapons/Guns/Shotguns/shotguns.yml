@@ -6,7 +6,7 @@
   abstract: true
   components:
   - type: GunCanBeFall
-    RequiresRangeWeaponLevel: 2
+    RequiresWeaponLevel: 2
     ChanceToFallPerLevel: 0.5
   - type: Sprite
     layers:

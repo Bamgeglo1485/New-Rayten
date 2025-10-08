@@ -15,7 +15,7 @@
 - type: roleSkills
   id: JobBoxer
   basicSkills:
-    MeleeWeapon: 3
+    Weapon: 3
   easySkills:
   - MusInstruments
   - Bureaucracy

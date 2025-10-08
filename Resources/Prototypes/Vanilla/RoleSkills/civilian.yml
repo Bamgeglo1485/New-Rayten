@@ -1,7 +1,7 @@
 - type: roleSkills
   id: JobBartender
   basicSkills:
-    RangeWeapon: 2
+    Weapon: 2
   easySkills:
   - MusInstruments
   - Bureaucracy

@@ -865,7 +865,7 @@
   description: A prominent representative of monkeys with unlimited access to alcohol.
   components:
   - type: Skill
-    MeleeWeaponLevel: 2
+    WeaponLevel: 2
     Piloting: false
     MusInstruments: true
     Botany: true

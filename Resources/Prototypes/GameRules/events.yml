@@ -262,8 +262,7 @@
         sound: /Audio/Misc/ninja_greeting.ogg
       components:
       - type: Skill
-        RangeWeaponLevel: 0
-        MeleeWeaponLevel: 3
+        WeaponLevel: 3
         MedicineLevel: 3
         EngineeringLevel: 0
         Research: true
@@ -370,8 +369,7 @@
       components:
       - type: SetJammerOnSpawn # 10 минут
       - type: Skill
-        RangeWeaponLevel: 0
-        MeleeWeaponLevel: 3
+        WeaponLevel: 2
         MedicineLevel: 3
         EngineeringLevel: 2
         Research: false

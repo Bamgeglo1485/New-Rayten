@@ -50,8 +50,7 @@
   - type: ContentEye
     maxZoom: 1.44,1.44
   - type: Skill
-    RangeWeaponLevel: 3
-    MeleeWeaponLevel: 3
+    WeaponLevel: 3
     MedicineLevel: 3
     EngineeringLevel: 3
     Research: true

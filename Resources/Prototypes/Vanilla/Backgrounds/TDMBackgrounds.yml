@@ -15,8 +15,7 @@
   description: Док, чувак ты где?!
   sponsorOnly: false
   skills:
-    RangeWeapon: 3
-    MeleeWeapon: 3
+    Weapon: 2
     Medicine: 3
   specialDesc:
     - Вы очень быстры, но убить вас тоже крайне легко.
@@ -40,8 +39,7 @@
   description: А рокетджамп здесь есть?
   sponsorOnly: false
   skills:
-    RangeWeapon: 2
-    MeleeWeapon: 3
+    Weapon: 2
     Medicine: 2
   specialDesc:
     - У вас стандартный АКМС, стандартная броня и... да в целом у вас всё стандартное
@@ -64,8 +62,7 @@
   description: Некоторые считают, что они умнее меня. Посмотрим, посмотрим. Я еще не встречал никого умнее пули
   sponsorOnly: false
   skills:
-    RangeWeapon: 3
-    MeleeWeapon: 3
+    Weapon: 3
     Medicine: 2
   specialDesc:
     - Тяжелобронированный пулемётчик, хоть и не очень мобильный.
@@ -88,7 +85,7 @@
   description: А теперь попрактикуемся в медицине!
   sponsorOnly: false
   skills:
-    RangeWeapon: 1
+    Weapon: 1
     Medicine: 3
   specialDesc:
     - У вас буквально нет оружия. Но зато у вас есть куча медицины и гипоспрей!
@@ -113,8 +110,7 @@
   specialDesc:
     - Христов и стандартная броня, стандарт профессионалов.
   skills:
-    RangeWeapon: 3
-    MeleeWeapon: 3
+    Weapon: 2
     Medicine: 2
   specials:
   - !type:EquipSpecial
@@ -137,8 +133,7 @@
   specialDesc:
     - Вы оделись в одежду другой команды?! Коварно...
   skills:
-    RangeWeapon: 3
-    MeleeWeapon: 3
+    Weapon: 3
     Medicine: 2
   specials:
   - !type:EquipSpecial
@@ -160,8 +155,7 @@
   description: Слушай, парень, я ведь инженер, и умею решать проблемы. Не проблемы типа «что есть добро?», потому что с такими вопросами должны разбираться долбанные философы. Я решаю практические проблемы.
   # sponsorOnly: true
   skills:
-    RangeWeapon: 2
-    MeleeWeapon: 2
+    Weapon: 2
     Engineering: 3
   specialDesc:
     - Вы можете строить, у вас есть турель, а также телепорт!
@@ -198,8 +192,7 @@
   description: Док, чувак ты где?!
   sponsorOnly: false
   skills:
-    RangeWeapon: 2
-    MeleeWeapon: 3
+    Weapon: 2
     Medicine: 2
   specialDesc:
     - Вы очень быстры, но убить вас тоже крайне легко.
@@ -223,8 +216,7 @@
   description: А рокетджамп здесь есть?
   sponsorOnly: false
   skills:
-    RangeWeapon: 2
-    MeleeWeapon: 3
+    Weapon: 2
     Medicine: 2
   specialDesc:
     - У вас стандартный АКМС, стандартная броня и... да в целом у вас всё стандартное
@@ -247,8 +239,7 @@
   description: Некоторые считают, что они умнее меня. Посмотрим, посмотрим. Я еще не встречал никого умнее пули
   sponsorOnly: false
   skills:
-    RangeWeapon: 3
-    MeleeWeapon: 3
+    Weapon: 3
     Medicine: 2
   specialDesc:
     - Тяжелобронированный пулемётчик, хоть и не очень мобильный.
@@ -271,7 +262,7 @@
   description: А теперь попрактикуемся в медицине!
   sponsorOnly: false
   skills:
-    RangeWeapon: 1
+    Weapon: 1
     Medicine: 3
   specialDesc:
     - У вас буквально нет оружия. Но зато у вас есть куча медицины и гипоспрей!
@@ -294,8 +285,7 @@
   description: Мне нравится быть снайпером! Интересная работа на свежем воздухе. И прибыльная к тому же. В конце концов, если во всем мире останется два человека, то один из них захочет убить другого.
   sponsorOnly: false
   skills:
-    RangeWeapon: 3
-    MeleeWeapon: 3
+    Weapon: 2
     Medicine: 2
   specialDesc:
     - Христов и стандартная броня, стандарт профессионалов.
@@ -319,8 +309,7 @@
   description: Этот шпион уже прорвал нашу оборону!
   sponsorOnly: true
   skills:
-    RangeWeapon: 3
-    MeleeWeapon: 3
+    Weapon: 3
     Medicine: 2
   specialDesc:
     - Вы оделись в одежду другой команды?! Коварно...
@@ -344,8 +333,7 @@
   description: Слушай, парень, я ведь инженер, и умею решать проблемы. Не проблемы типа «что есть добро?», потому что с такими вопросами должны разбираться долбанные философы. Я решаю практические проблемы.
   # sponsorOnly: true
   skills:
-    RangeWeapon: 2
-    MeleeWeapon: 2
+    Weapon: 2
     Engineering: 3
   specialDesc:
     - Вы можете строить, у вас есть турель, а также телепорт!

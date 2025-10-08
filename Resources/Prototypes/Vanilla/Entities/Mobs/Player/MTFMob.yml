@@ -12,8 +12,7 @@
     prototypes: [MTFSoldier]
   - type: Skill
     MedicineLevel: 3
-    RangeWeaponLevel: 3
-    MeleeWeaponLevel: 2
+    WeaponLevel: 3
     Piloting: true
     Bureaucracy: true
     Research: true

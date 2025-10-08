@@ -43,8 +43,7 @@
   - type: Loadout
     prototypes: [AuditorLoot]
   - type: Skill
-    RangeWeaponLevel: 1
-    MeleeWeaponLevel: 1
+    WeaponLevel: 1
     MedicineLevel: 1
     EngineeringLevel: 1
     Research: true

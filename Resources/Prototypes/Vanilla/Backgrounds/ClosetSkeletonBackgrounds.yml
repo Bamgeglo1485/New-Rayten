@@ -67,7 +67,7 @@
     - У вас есть клеймор и броня
   skills:
     Medicine: 2
-    MeleeWeapon: 3
+    Weapon: 3
   easySkills:
   - Botany
   - MusInstruments
@@ -86,7 +86,7 @@
     - Вы антагонист
     - Вы не обладаете интеллектом
   skills:
-    MeleeWeapon: 3
+    Weapon: 3
     Medicine: 2
   specials:
   - !type:ChangeMindSpecial
@@ -109,7 +109,7 @@
     - Вы не обладаете интеллектом
     - Вы Пацифист
   skills:
-    MeleeWeapon: 3
+    Weapon: 3
     Medicine: 2
   specials:
   - !type:ChangeMindSpecial
@@ -131,8 +131,7 @@
   specialDesc:
     - Вы антагонист
   skills:
-    RangeWeapon: 3
-    MeleeWeapon: 1
+    Weapon: 3
     Engineering: 1
   easySkills:
   - Piloting

@@ -353,8 +353,7 @@
       components:
       - type: SetJammerOnSpawn # 10 минут
       - type: Skill
-        RangeWeaponLevel: 2
-        MeleeWeaponLevel: 3
+        WeaponLevel: 2
         MedicineLevel: 2
         EngineeringLevel: 0
         BuildingLevel: 1
