@@ -18,7 +18,6 @@
     components:
       - type: Skill
         MedicineLevel: 3
-        ChemistryLevel: 3
         RangeWeaponLevel: 3
         PilotingLevel: 3
   - !type:AddImplantSpecial
@@ -86,7 +85,6 @@
     - type: BibleUser #Lets them heal with bibles
     - type: Skill
       MedicineLevel: 3
-      ChemistryLevel: 3
       RangeWeaponLevel: 3
       PilotingLevel: 3
   - !type:AddImplantSpecial
@@ -153,7 +151,6 @@
     components:
       - type: Skill
         MedicineLevel: 3
-        ChemistryLevel: 3
         RangeWeaponLevel: 2
         PilotingLevel: 3
   - !type:AddImplantSpecial
@@ -219,7 +216,6 @@
     components:
       - type: Skill
         MedicineLevel: 3
-        ChemistryLevel: 3
         RangeWeaponLevel: 3
         PilotingLevel: 3
   - !type:AddImplantSpecial
@@ -281,7 +277,6 @@
     components:
       - type: Skill
         MedicineLevel: 3
-        ChemistryLevel: 3
         RangeWeaponLevel: 2
         PilotingLevel: 3
   - !type:AddImplantSpecial
@@ -364,7 +359,6 @@
     components:
       - type: Skill
         MedicineLevel: 3
-        ChemistryLevel: 3
         RangeWeaponLevel: 2
         PilotingLevel: 3
   - !type:AddImplantSpecial

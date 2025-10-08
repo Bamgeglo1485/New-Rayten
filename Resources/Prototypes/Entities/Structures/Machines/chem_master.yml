@@ -114,4 +114,4 @@
     - Chemist
   - type: OreSiloClient # rayten
   - type: RequiresSkill #rayten-skill-issue
-    RequiresChemistryLevel: 2
+    RequiresMedicineLevel: 2

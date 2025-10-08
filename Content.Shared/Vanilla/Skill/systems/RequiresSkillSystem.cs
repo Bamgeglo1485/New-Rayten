@@ -30,7 +30,7 @@ public sealed class RequiresSkillSystem : EntitySystem
     }
     private void OnChemScan(EntityUid uid, SkillComponent component, ref SolutionScanEvent args)
     {
-        if (component.ChemistryLevel > SkillLevel.None)
+        if (component.MedicineLevel > SkillLevel.None)
             return;
         args.CanScan = false;
     }
@@ -96,17 +96,6 @@ public sealed class RequiresSkillSystem : EntitySystem
         if (!TryComp<SkillComponent>(user, out var skill))
             skill = EnsureComp<SkillComponent>(user);
 
-        // Проверка уровня химии
-        if (!HasSkillLevel(user, component.RequiresChemistryLevel, skillComponent => skillComponent.ChemistryLevel))
-        {
-            if (popup)
-            {
-                _popup.PopupCursor(Loc.GetString("Skill-issue-message-chemistry-unskilled", ("lvl", (int)component.RequiresChemistryLevel)));
-                if (_net.IsClient) _audio.PlayGlobal("/Audio/Vanilla/SkillSystem/meep-merp.ogg", Filter.Local(), false);
-            }
-
-            return false;
-        }
         // Проверка уровня медицины
         if (!HasSkillLevel(user, component.RequiresMedicineLevel, skillComponent => skillComponent.MedicineLevel))
         {

@@ -39,8 +39,6 @@
 
 - type: roleSkills
   id: JobJanitor
-  basicSkills:
-    Chemistry: 2
   easySkills:
   - MusInstruments
   - Bureaucracy

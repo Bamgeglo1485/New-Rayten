@@ -55,7 +55,6 @@
     RangeWeaponLevel: 3
     MeleeWeaponLevel: 3
     MedicineLevel: 3
-    ChemistryLevel: 3
     EngineeringLevel: 0
     Research: true
     Atmosphere: true
@@ -85,7 +84,6 @@
     RangeWeaponLevel: 2
     MeleeWeaponLevel: 2
     MedicineLevel: 3
-    ChemistryLevel: 3
     EngineeringLevel: 0
     Research: true
     Atmosphere: true

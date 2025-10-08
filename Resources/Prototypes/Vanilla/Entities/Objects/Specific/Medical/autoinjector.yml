@@ -5,8 +5,7 @@
   description: Стерильный инъектор для быстрого введения лекарств пациентам. Его нельзя перезаправить.
   components:
   - type: RequiresSkill
-    RequiresChemistryLevel: 1
-    RequiresMedicineLevel: 2
+    RequiresMedicineLevel: 1
   - type: Sprite
     sprite: Vanilla/Objects/Specific/Medical/medipen.rsi
     layers:

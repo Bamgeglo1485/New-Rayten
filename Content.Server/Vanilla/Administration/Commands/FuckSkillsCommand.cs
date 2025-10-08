@@ -40,9 +40,7 @@ public sealed class FuckSkillsCommand : IConsoleCommand
             skillComp.RangeWeaponLevel = SkillLevel.Expert;
             skillComp.MeleeWeaponLevel = SkillLevel.Expert;
             skillComp.MedicineLevel = SkillLevel.Expert;
-            skillComp.ChemistryLevel = SkillLevel.Expert;
             skillComp.EngineeringLevel = SkillLevel.Expert;
-
 
             _entityManager.Dirty(skillComp);
         }

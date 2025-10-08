@@ -13,7 +13,6 @@
       RangeWeaponLevel: 0
       MeleeWeaponLevel: 0
       MedicineLevel: 0
-      ChemistryLevel: 0
       EngineeringLevel: 0
       Research: false
       Atmosphere: false
@@ -118,7 +117,6 @@
       RangeWeaponLevel: 3
       MeleeWeaponLevel: 3
       MedicineLevel: 0
-      ChemistryLevel: 0
       EngineeringLevel: 0
       Research: false
       Atmosphere: false
@@ -183,7 +181,6 @@
       RangeWeaponLevel: 2
       MeleeWeaponLevel: 2
       MedicineLevel: 2
-      ChemistryLevel: 0
       EngineeringLevel: 0
       Research: false
       Atmosphere: false
@@ -228,7 +225,6 @@
       RangeWeaponLevel: 0
       MeleeWeaponLevel: 0
       MedicineLevel: 0
-      ChemistryLevel: 1
       EngineeringLevel: 3
       Research: false
       Atmosphere: true
@@ -283,7 +279,6 @@
       RangeWeaponLevel: 0
       MeleeWeaponLevel: 0
       MedicineLevel: 3
-      ChemistryLevel: 3
       EngineeringLevel: 1
       Research: false
       Atmosphere: false
@@ -388,7 +383,6 @@
       RangeWeaponLevel: 0
       MeleeWeaponLevel: 0
       MedicineLevel: 0
-      ChemistryLevel: 0
       EngineeringLevel: 3
       Research: false
       Atmosphere: true
@@ -433,7 +427,6 @@
       RangeWeaponLevel: 0
       MeleeWeaponLevel: 0
       MedicineLevel: 0
-      ChemistryLevel: 0
       EngineeringLevel: 0
       Research: false
       Atmosphere: false

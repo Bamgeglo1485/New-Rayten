@@ -58,7 +58,6 @@ public sealed partial class RoleSkills : IEquatable<RoleSkills>
             (skillType.RangeWeapon, SkillLevel.None, 0),
             (skillType.MeleeWeapon, SkillLevel.None, 0),
             (skillType.Medicine, SkillLevel.None, 0),
-            (skillType.Chemistry, SkillLevel.None, 0),
             (skillType.Engineering, SkillLevel.None, 0)
         };
 

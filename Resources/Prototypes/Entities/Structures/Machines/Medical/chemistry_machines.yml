@@ -4,7 +4,7 @@
   abstract: true
   components:
   - type: RequiresSkill
-    RequiresChemistryLevel: 3
+    RequiresMedicineLevel: 3
   - type: Transform
     anchored: true
   - type: SolutionContainerMixer

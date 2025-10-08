@@ -28,23 +28,23 @@ public sealed class FakeChemSystem : EntitySystem
 
         var playerEntity = _player.LocalPlayer?.ControlledEntity;
 
-        if(playerEntity == null)
+        if (playerEntity == null)
             return;
 
-        if(_globPlayerEntity == null )
+        if (_globPlayerEntity == null)
             _globPlayerEntity = playerEntity.Value;
 
-        if(_globPlayerEntity == playerEntity)
+        if (_globPlayerEntity == playerEntity)
         {
-            if(!TryComp<SkillComponent>(playerEntity, out var skillComp))
+            if (!TryComp<SkillComponent>(playerEntity, out var skillComp))
                 return;
 
-            if(skillComp.ChemistryLevel == _lastlvl)
+            if (skillComp.MedicineLevel == _lastlvl)
                 return;
 
             updateallchem(skillComp);
             _globPlayerEntity = playerEntity.Value;
-            _lastlvl = skillComp.ChemistryLevel;
+            _lastlvl = skillComp.MedicineLevel;
         }
         else
         {
@@ -61,7 +61,7 @@ public sealed class FakeChemSystem : EntitySystem
         while (query.MoveNext(out var uid, out var component, out var appearance))
         {
             UpdateVisualsForSolutionContainer(uid, component, skillComp);
-        }  
+        }
     }
 
     private void UpdateVisualsForSolutionContainer(EntityUid uid, SolutionContainerVisualsComponent component, SkillComponent? skillComp)
@@ -137,7 +137,7 @@ public sealed class FakeChemSystem : EntitySystem
 
         if (fillLevel > 0)
         {
-            
+
             if (fillBaseName != null)
             {
                 var stateName = fillBaseName + fillLevel;
@@ -175,11 +175,11 @@ public sealed class FakeChemSystem : EntitySystem
     {
         if (TryComp<FakeChemComponent>(uid, out var fakeChem))
         {
-            if(skillComp ==null)
+            if (skillComp == null)
             {
                 color = fakeChem.FakeColor;
             }
-            else if (skillComp.ChemistryLevel == SkillLevel.None || skillComp.ChemistryLevel == SkillLevel.Basic)
+            else if (skillComp.MedicineLevel == SkillLevel.None || skillComp.MedicineLevel == SkillLevel.Basic)
             {
                 color = fakeChem.FakeColor;
             }

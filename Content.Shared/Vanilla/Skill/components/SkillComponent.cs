@@ -70,25 +70,6 @@ public sealed partial class SkillComponent : Component
         set => SetSkill(ref _medicineExp, value, skillType.Medicine);
     }
 
-    //Химия
-    [DataField("ChemistryLevel")]
-    private SkillLevel _chemistryLevel = SkillLevel.None;
-    private int _chemistryExp = 0;
-
-    [AutoNetworkedField]
-    public SkillLevel ChemistryLevel
-    {
-        get => _chemistryLevel;
-        set => SetSkill(ref _chemistryLevel, value, skillType.Chemistry);
-    }
-
-    [AutoNetworkedField]
-    public int ChemistryExp
-    {
-        get => _chemistryExp;
-        set => SetSkill(ref _chemistryExp, value, skillType.Chemistry);
-    }
-
     //Инженерия
     [DataField("EngineeringLevel")]
     private SkillLevel _engineeringLevel = SkillLevel.None;
@@ -260,7 +241,6 @@ public sealed partial class SkillComponent : Component
     {
         return skill switch
         {
-            skillType.Chemistry => ChemistryLevel,
             skillType.Medicine => MedicineLevel,
             skillType.RangeWeapon => RangeWeaponLevel,
             skillType.MeleeWeapon => MeleeWeaponLevel,
@@ -301,7 +281,6 @@ public sealed partial class SkillComponent : Component
     {
         return skill switch
         {
-            skillType.Chemistry => ChemistryExp,
             skillType.Medicine => MedicineExp,
             skillType.RangeWeapon => RangeWeaponExp,
             skillType.MeleeWeapon => MeleeWeaponExp,
@@ -327,7 +306,6 @@ public sealed partial class SkillComponent : Component
         RangeWeaponLevel = SkillLevel.Expert;
         MeleeWeaponLevel = SkillLevel.Expert;
         MedicineLevel = SkillLevel.Expert;
-        ChemistryLevel = SkillLevel.Expert;
         EngineeringLevel = SkillLevel.Expert;
     }
     #endregion
@@ -342,13 +320,12 @@ public enum skillType : byte
     RangeWeapon = 1,
     MeleeWeapon = 2,
     Medicine = 3,
-    Chemistry = 4,
-    Engineering = 5,
-    Research = 6,
-    MusInstruments = 7,
-    Botany = 8,
-    Bureaucracy = 9,
-    Atmosphere = 10,
+    Engineering = 4,
+    Research = 5,
+    MusInstruments = 6,
+    Botany = 7,
+    Bureaucracy = 8,
+    Atmosphere = 9,
 }
 
 [Serializable, NetSerializable]

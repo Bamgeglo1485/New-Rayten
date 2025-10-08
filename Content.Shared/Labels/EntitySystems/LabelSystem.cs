@@ -71,7 +71,7 @@ public sealed partial class LabelSystem : EntitySystem
         //Rayten-Start
         if (TryComp<RequiresSkillComponent>(ent, out var component))
         {
-            if(!_requiresSkillSystem.HasSkillLevel(args.Examiner, component.RequiresChemistryLevel, skillComponent => skillComponent.ChemistryLevel))
+            if(!_requiresSkillSystem.HasSkillLevel(args.Examiner, component.RequiresMedicineLevel, skillComponent => skillComponent.MedicineLevel))
                 return;
         }
         //Rayten-END

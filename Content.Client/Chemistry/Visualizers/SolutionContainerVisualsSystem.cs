@@ -161,7 +161,7 @@ public sealed class SolutionContainerVisualsSystem : VisualizerSystem<SolutionCo
             if (playerEntity != null && TryComp<SkillComponent>(playerEntity, out var skillComp))
             {
                 // Применяем фейковый цвет, если у игрока низкий уровень химии
-                if (skillComp.ChemistryLevel == SkillLevel.None || skillComp.ChemistryLevel == SkillLevel.Basic)
+                if (skillComp.MedicineLevel == SkillLevel.None || skillComp.MedicineLevel == SkillLevel.Basic)
                 {
                     color = fakeChem.FakeColor;
                 }

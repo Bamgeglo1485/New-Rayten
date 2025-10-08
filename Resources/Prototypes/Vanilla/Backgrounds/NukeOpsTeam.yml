@@ -132,7 +132,6 @@
     - За время подготовки к миссии вы быстренького смастерили саботажного киборга Синдиката
   skills:
     Medicine: 3
-    Chemistry: 2
     Engineering: 3
     RangeWeapon: 1
   specials:
@@ -148,5 +147,4 @@
     RangeWeapon: 3
     MeleeWeapon: 3
     Medicine: 3
-    Chemistry: 3
 

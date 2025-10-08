@@ -319,7 +319,6 @@
   components:
   - type: Skill
     MedicineLevel: 3
-    ChemistryLevel: 3
   - type: Medibot
     treatments:
       Alive:

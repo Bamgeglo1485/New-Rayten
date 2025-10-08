@@ -69,7 +69,6 @@ public sealed partial class RoleSkillsWindow : FancyWindow
             (skillType.RangeWeapon, SkillLevel.None, 0),
             (skillType.MeleeWeapon, SkillLevel.None, 0),
             (skillType.Medicine, SkillLevel.None, 0),
-            (skillType.Chemistry, SkillLevel.None, 0),
             (skillType.Engineering, SkillLevel.None, 0)
         };
         List<(skillType Skill, bool have, int Experience)> generaleasyskills = new List<(skillType Skill, bool have, int Experience)>

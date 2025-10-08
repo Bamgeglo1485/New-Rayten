@@ -46,7 +46,6 @@
     RangeWeaponLevel: 1
     MeleeWeaponLevel: 1
     MedicineLevel: 1
-    ChemistryLevel: 1
     EngineeringLevel: 1
     Research: true
     Atmosphere: true

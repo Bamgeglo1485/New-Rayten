@@ -265,7 +265,6 @@
         RangeWeaponLevel: 0
         MeleeWeaponLevel: 3
         MedicineLevel: 3
-        ChemistryLevel: 0
         EngineeringLevel: 0
         Research: true
         InstrumentationLevel: 0
@@ -374,7 +373,6 @@
         RangeWeaponLevel: 0
         MeleeWeaponLevel: 3
         MedicineLevel: 3
-        ChemistryLevel: 0
         EngineeringLevel: 2
         Research: false
         Piloting: false

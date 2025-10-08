@@ -1,7 +1,6 @@
 - type: roleSkills
   id: JobCaptain
   basicSkills:
-    Chemistry: 2
     Engineering: 2
   easySkills:
   - Piloting

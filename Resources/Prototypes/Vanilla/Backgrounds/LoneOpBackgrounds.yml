@@ -52,7 +52,6 @@
     RangeWeapon: 2
     MeleeWeapon: 2
     Medicine: 3
-    Chemistry: 2
   easySkills:
   - Piloting
   specials:

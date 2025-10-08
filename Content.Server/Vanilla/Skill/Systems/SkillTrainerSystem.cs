@@ -137,9 +137,6 @@ public class SkillTrainerSystem : EntitySystem
             case skillType.Medicine:
                 skillComp.MedicineLevel = level;
                 break;
-            case skillType.Chemistry:
-                skillComp.ChemistryLevel = level;
-                break;
             case skillType.Engineering:
                 skillComp.EngineeringLevel = level;
                 break;
@@ -166,9 +163,6 @@ public class SkillTrainerSystem : EntitySystem
                 break;
             case skillType.Medicine:
                 skillComp.MedicineExp = exp;
-                break;
-            case skillType.Chemistry:
-                skillComp.ChemistryExp = exp;
                 break;
             case skillType.Engineering:
                 skillComp.EngineeringExp = exp;

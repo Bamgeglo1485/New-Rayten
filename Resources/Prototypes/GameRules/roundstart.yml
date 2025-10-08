@@ -356,7 +356,6 @@
         RangeWeaponLevel: 2
         MeleeWeaponLevel: 3
         MedicineLevel: 2
-        ChemistryLevel: 0
         EngineeringLevel: 0
         BuildingLevel: 1
         Research: false

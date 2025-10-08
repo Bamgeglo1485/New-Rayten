@@ -833,7 +833,7 @@ public abstract partial class SharedSolutionContainerSystem : EntitySystem
 
             //vanilla-station-start
             if (TryComp<SkillComponent>(args.Examiner, out var skillComponent) &&
-                skillComponent.ChemistryLevel >= SkillLevel.Advanced)
+                skillComponent.MedicineLevel >= SkillLevel.Advanced)
             {
                 args.PushMarkup(Loc.GetString(entity.Comp.LocPhysicalQuality,
                                             ("color", colorHex),
@@ -859,8 +859,8 @@ public abstract partial class SharedSolutionContainerSystem : EntitySystem
                 if (!proto.Recognizable)
                 {
                     //vanilla-station
-                    //Человек с 3 химией распознаёт абсолютно всё и ему всё равно
-                    if (skillComponent == null || skillComponent.ChemistryLevel != SkillLevel.Expert)
+                    //Человек с 3 медициной распознаёт абсолютно всё и ему всё равно
+                    if (skillComponent == null || skillComponent.MedicineLevel != SkillLevel.Expert)
                         continue;
                 }
 

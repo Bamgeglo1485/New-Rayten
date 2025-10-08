@@ -90,7 +90,6 @@
   skills:
     RangeWeapon: 1
     Medicine: 3
-    Chemistry: 3
   specialDesc:
     - У вас буквально нет оружия. Но зато у вас есть куча медицины и гипоспрей!
   specials:
@@ -141,7 +140,6 @@
     RangeWeapon: 3
     MeleeWeapon: 3
     Medicine: 2
-    Crime: 3
   specials:
   - !type:EquipSpecial
     removeSlotID:
@@ -275,7 +273,6 @@
   skills:
     RangeWeapon: 1
     Medicine: 3
-    Chemistry: 3
   specialDesc:
     - У вас буквально нет оружия. Но зато у вас есть куча медицины и гипоспрей!
   specials:
@@ -325,7 +322,6 @@
     RangeWeapon: 3
     MeleeWeapon: 3
     Medicine: 2
-    Crime: 3
   specialDesc:
     - Вы оделись в одежду другой команды?! Коварно...
   specials:
