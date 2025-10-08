@@ -26,9 +26,6 @@ public sealed class ServerSkillChangeListener : EntitySystem
 
         switch (args.Skill)
         {
-            case skillType.Crime:
-                ReactOnCrimeLevelChanged(uid, component);
-                break;
             case skillType.RangeWeapon:
                 ReactOnRangeWeaponLevelChanged(uid, component);
                 break;
@@ -48,29 +45,4 @@ public sealed class ServerSkillChangeListener : EntitySystem
             _gun.RefreshModifiers(heldEntity.Value);
         }
     }
-
-    private void ReactOnCrimeLevelChanged(EntityUid uid, SkillComponent component)
-    {
-        if (component.CrimeLevel == SkillLevel.None)
-        {
-            RemComp<AssComponent>(uid);
-            RemComp<ThievingComponent>(uid);
-        }
-        if (component.CrimeLevel == SkillLevel.Basic)
-        {
-            RemComp<AssComponent>(uid);
-            RemComp<ThievingComponent>(uid);
-        }
-        if (component.CrimeLevel == SkillLevel.Advanced)
-        {
-            EnsureComp<AssComponent>(uid);
-            RemComp<ThievingComponent>(uid);
-        }
-        if (component.CrimeLevel == SkillLevel.Expert)
-        {
-            EnsureComp<ThievingComponent>(uid);
-            EnsureComp<AssComponent>(uid);
-        }
-    }
-
 }

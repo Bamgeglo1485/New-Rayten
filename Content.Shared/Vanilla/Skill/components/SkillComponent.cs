@@ -108,24 +108,6 @@ public sealed partial class SkillComponent : Component
         set => SetSkill(ref _engineeringExp, value, skillType.Engineering);
     }
 
-    //Преступность
-    [DataField("CrimeLevel")]
-    private SkillLevel _crimeLevel = SkillLevel.None;
-    private int _crimeExp = 0;
-
-    [AutoNetworkedField]
-    public SkillLevel CrimeLevel
-    {
-        get => _crimeLevel;
-        set => SetSkill(ref _crimeLevel, value, skillType.Crime);
-    }
-
-    [AutoNetworkedField]
-    public int CrimeExp
-    {
-        get => _crimeExp;
-        set => SetSkill(ref _crimeExp, value, skillType.Crime);
-    }
     //Пилотирование
     [DataField("Piloting")]
     private bool _ezpiloting = false;
@@ -282,7 +264,6 @@ public sealed partial class SkillComponent : Component
             skillType.Medicine => MedicineLevel,
             skillType.RangeWeapon => RangeWeaponLevel,
             skillType.MeleeWeapon => MeleeWeaponLevel,
-            skillType.Crime => CrimeLevel,
             skillType.Engineering => EngineeringLevel,
             _ => null // Возвращаем null, если skillType неизвестен
         };
@@ -324,7 +305,6 @@ public sealed partial class SkillComponent : Component
             skillType.Medicine => MedicineExp,
             skillType.RangeWeapon => RangeWeaponExp,
             skillType.MeleeWeapon => MeleeWeaponExp,
-            skillType.Crime => CrimeExp,
             skillType.Engineering => EngineeringExp,
             skillType.Piloting => PilotingExp,
             skillType.MusInstruments => MusInstrumentsExp,
@@ -336,7 +316,7 @@ public sealed partial class SkillComponent : Component
         };
     }
     // Перегрузка для основных навыков
-    public void FuckSkills(bool withCrime)
+    public void FuckSkills()
     {
         Piloting = true;
         MusInstruments = true;
@@ -349,7 +329,6 @@ public sealed partial class SkillComponent : Component
         MedicineLevel = SkillLevel.Expert;
         ChemistryLevel = SkillLevel.Expert;
         EngineeringLevel = SkillLevel.Expert;
-        CrimeLevel = withCrime ? SkillLevel.Expert : CrimeLevel;
     }
     #endregion
 }
@@ -366,11 +345,10 @@ public enum skillType : byte
     Chemistry = 4,
     Engineering = 5,
     Research = 6,
-    Crime = 7,
-    MusInstruments = 8,
-    Botany = 9,
-    Bureaucracy = 10,
-    Atmosphere = 11,
+    MusInstruments = 7,
+    Botany = 8,
+    Bureaucracy = 9,
+    Atmosphere = 10,
 }
 
 [Serializable, NetSerializable]

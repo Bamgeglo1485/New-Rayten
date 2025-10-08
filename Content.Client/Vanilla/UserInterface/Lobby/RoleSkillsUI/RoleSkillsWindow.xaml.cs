@@ -70,8 +70,7 @@ public sealed partial class RoleSkillsWindow : FancyWindow
             (skillType.MeleeWeapon, SkillLevel.None, 0),
             (skillType.Medicine, SkillLevel.None, 0),
             (skillType.Chemistry, SkillLevel.None, 0),
-            (skillType.Engineering, SkillLevel.None, 0),
-            (skillType.Crime, SkillLevel.None, 0)
+            (skillType.Engineering, SkillLevel.None, 0)
         };
         List<(skillType Skill, bool have, int Experience)> generaleasyskills = new List<(skillType Skill, bool have, int Experience)>
         {
@@ -150,7 +149,7 @@ public sealed partial class RoleSkillsWindow : FancyWindow
         //Основные навыки
         foreach (var (skillName, level, experience) in generalbasicskills)
         {
-            bool canBeModified = skillName != skillType.Crime && skillpoints > 0;
+            bool canBeModified = skillpoints > 0;
             var skillControl = new SkillControl(skillName, level, experience, canBeModified);
             skillControl.OnPressed += () => AddSkill(skillName, collection);
 

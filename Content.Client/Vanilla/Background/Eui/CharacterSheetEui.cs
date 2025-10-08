@@ -122,8 +122,7 @@ public sealed class CharacterSheetEui : BaseEui
             (skillType.MeleeWeapon, SkillLevel.None, 0),
             (skillType.Medicine, SkillLevel.None, 0),
             (skillType.Chemistry, SkillLevel.None, 0),
-            (skillType.Engineering, SkillLevel.None, 0),
-            (skillType.Crime, SkillLevel.None, 0)
+            (skillType.Engineering, SkillLevel.None, 0)
         };
 
         var easyskills = new List<(skillType Skill, bool have, int Experience)>
@@ -144,8 +143,7 @@ public sealed class CharacterSheetEui : BaseEui
                 (skillType.MeleeWeapon, skillComponent.MeleeWeaponLevel, skillComponent.MeleeWeaponExp),
                 (skillType.Medicine, skillComponent.MedicineLevel, skillComponent.MedicineExp),
                 (skillType.Chemistry, skillComponent.ChemistryLevel, skillComponent.ChemistryExp),
-                (skillType.Engineering, skillComponent.EngineeringLevel, skillComponent.EngineeringExp),
-                (skillType.Crime, skillComponent.CrimeLevel, skillComponent.CrimeExp)
+                (skillType.Engineering, skillComponent.EngineeringLevel, skillComponent.EngineeringExp)
             };
             easyskills = new List<(skillType Skill, bool have, int Experience)>
             {

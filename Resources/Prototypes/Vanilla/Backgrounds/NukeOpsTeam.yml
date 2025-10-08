@@ -62,7 +62,6 @@
     RangeWeapon: 2
     MeleeWeapon: 2
     Medicine: 2
-    Crime: 2
     Engineering: 1
   easySkills:
   - Piloting
@@ -109,7 +108,6 @@
     RangeWeapon: 3
     MeleeWeapon: 3
     Medicine: 3
-    Crime: 2
   easySkills:
   - Piloting
 

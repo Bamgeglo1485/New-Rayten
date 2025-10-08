@@ -591,7 +591,7 @@ public sealed class TTTSystem : EntitySystem
         AddComp<ShowTTTDetectiveIconsComponent>(mobUid);
         //Добавляем навыки
         var skill = EnsureComp<SkillComponent>(mobUid);
-        skill.FuckSkills(false);
+        skill.FuckSkills();
         //одеваем
         List<ProtoId<StartingGearPrototype>> gear = new()
         {

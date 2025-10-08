@@ -33,7 +33,6 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Replays;
 using Robust.Shared.Utility;
-using Content.Shared.Vanilla.Skill;
 using Content.Shared.Vanilla.Voices;
 namespace Content.Server.Chat.Systems;
 
@@ -537,9 +536,7 @@ public sealed partial class ChatSystem : SharedChatSystem
         var wrappedUnknownMessage = Loc.GetString("chat-manager-entity-whisper-unknown-wrap-message",
             ("message", FormattedMessage.EscapeText(obfuscatedMessage)));
 
-
-        int rangewithskill = (TryComp<SkillComponent>(source, out var skill) && skill.CrimeLevel > 0) ? SkillWhisperMuffledRange : WhisperMuffledRange;//rayten-skills
-        foreach (var (session, data) in GetRecipients(source, rangewithskill))
+        foreach (var (session, data) in GetRecipients(source, WhisperMuffledRange))
         {
             EntityUid listener;
 
@@ -557,7 +554,7 @@ public sealed partial class ChatSystem : SharedChatSystem
             if (data.Range <= WhisperClearRange || data.Observer)
                 _chatManager.ChatMessageToOne(ChatChannel.Whisper, message, wrappedMessage, source, false, session.Channel);
             //If listener is too far, they only hear fragments of the message
-            else if (_examineSystem.InRangeUnOccluded(source, listener, rangewithskill))
+            else if (_examineSystem.InRangeUnOccluded(source, listener, WhisperMuffledRange))
                 _chatManager.ChatMessageToOne(ChatChannel.Whisper, obfuscatedMessage, wrappedobfuscatedMessage, source, false, session.Channel);
             //If listener is too far and has no line of sight, they can't identify the whisperer's identity
             else

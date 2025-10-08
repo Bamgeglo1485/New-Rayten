@@ -23,7 +23,6 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 using PullableComponent = Content.Shared.Movement.Pulling.Components.PullableComponent;
-using Content.Shared.Vanilla.Skill;
 
 namespace Content.Shared.Movement.Systems;
 
@@ -335,15 +334,8 @@ public abstract partial class SharedMoverController : VirtualController
                 var soundModifier = mover.Sprinting ? InputMoverComponent.SprintingSoundModifier
                     : InputMoverComponent.WalkingSoundModifier;
 
-                //rayten-start
-                var newvolume = sound.Params.Volume + soundModifier;
-
-                if (TryComp<SkillComponent>(uid, out var skillComp) && (int)skillComp.CrimeLevel>0)
-                    newvolume = -6.0f;
-                //reyten-end
-
                 var audioParams = sound.Params
-                    .WithVolume(newvolume)
+                    .WithVolume(sound.Params.Volume + soundModifier)
                     .WithVariation(sound.Params.Variation ?? mobMover.FootstepVariation);
 
                 // If we're a relay target then predict the sound for all relays.

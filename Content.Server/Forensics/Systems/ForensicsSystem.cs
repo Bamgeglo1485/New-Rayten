@@ -21,7 +21,6 @@ using Robust.Shared.Random;
 using Content.Shared.Verbs;
 using Robust.Shared.Utility;
 using Content.Shared.Hands.Components;
-using Content.Shared.Vanilla.Skill;
 namespace Content.Server.Forensics
 {
     public sealed class ForensicsSystem : SharedForensicsSystem
@@ -295,14 +294,6 @@ namespace Content.Server.Forensics
         {
             if (HasComp<IgnoresFingerprintsComponent>(target))
                 return;
-            //Rayten-start
-            if (TryComp<SkillComponent>(user, out var skill))
-            {
-                float skipchance = 0.2f * (int)skill.CrimeLevel;
-                if(_random.Prob(skipchance))
-                    return;
-            }
-            //Rayten-end
             var component = EnsureComp<ForensicsComponent>(target);
             if (_inventory.TryGetSlotEntity(user, "gloves", out var gloves))
             {

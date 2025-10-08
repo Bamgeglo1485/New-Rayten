@@ -143,9 +143,6 @@ public class SkillTrainerSystem : EntitySystem
             case skillType.Engineering:
                 skillComp.EngineeringLevel = level;
                 break;
-            case skillType.Crime:
-                skillComp.CrimeLevel = level;
-                break;
             default:
                 break;
         }
@@ -178,9 +175,6 @@ public class SkillTrainerSystem : EntitySystem
                 break;
             case skillType.Research:
                 skillComp.ResearchExp = exp;
-                break;
-            case skillType.Crime:
-                skillComp.CrimeExp = exp;
                 break;
             case skillType.Botany:
                 skillComp.BotanyExp = exp;

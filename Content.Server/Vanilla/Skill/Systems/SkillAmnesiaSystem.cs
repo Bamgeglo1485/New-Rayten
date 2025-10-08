@@ -127,7 +127,6 @@ public sealed class SkillAmnesiaSystem : EntitySystem
             (skillType.MeleeWeapon, inspectamensiableskill(skill, skillType.MeleeWeapon), () => skill.MeleeWeaponLevel = 0),
             (skillType.Medicine, inspectamensiableskill(skill, skillType.Medicine), () => skill.MedicineLevel = 0),
             (skillType.Chemistry, inspectamensiableskill(skill, skillType.Chemistry), () => skill.ChemistryLevel = 0),
-            (skillType.Crime, inspectamensiableskill(skill, skillType.Crime), () => skill.CrimeLevel = 0),
             //Лёгкие навыки
             (skillType.Piloting, inspectamensiableskill(skill, skillType.Piloting), () => skill.Piloting = false),
             (skillType.MusInstruments, inspectamensiableskill(skill, skillType.MusInstruments), () => skill.MusInstruments = false),
@@ -171,7 +170,5 @@ public sealed class SkillAmnesiaSystem : EntitySystem
         if (ignoredSkill != skillType.MusInstruments) skill.MusInstrumentsExp = 0;
         if (ignoredSkill != skillType.Bureaucracy) skill.BureaucracyExp = 0;
         if (ignoredSkill != skillType.Atmosphere) skill.AtmosphereExp = 0;
-        if (ignoredSkill != skillType.Crime) skill.CrimeExp = 0;
-
     }
 }

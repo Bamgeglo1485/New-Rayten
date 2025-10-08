@@ -89,7 +89,6 @@
   skills:
     MeleeWeapon: 3
     Medicine: 2
-    Crime: 1
   specials:
   - !type:ChangeMindSpecial
     mindRoles:
@@ -113,7 +112,6 @@
   skills:
     MeleeWeapon: 3
     Medicine: 2
-    Crime: 1
   specials:
   - !type:ChangeMindSpecial
     mindRoles:
