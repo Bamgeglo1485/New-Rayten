@@ -218,7 +218,7 @@ public sealed partial class ZombieSystem
             //Rayten-start
             if (!TryComp<SkillComponent>(target, out var skill))
                 skill = EnsureComp<SkillComponent>(target);
-            skill.MeleeWeaponLevel = SkillLevel.Expert;
+            skill.WeaponLevel = SkillLevel.Expert;
 
             if (!TryComp<DangerMobComponent>(target, out var mobdanger))
                 mobdanger = EnsureComp<DangerMobComponent>(target);

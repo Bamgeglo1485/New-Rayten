@@ -66,8 +66,7 @@ public sealed partial class RoleSkillsWindow : FancyWindow
         //навыки
         List<(skillType Skill, SkillLevel Level, int Experience)> generalbasicskills = new List<(skillType Skill, SkillLevel Level, int Experience)>
         {
-            (skillType.RangeWeapon, SkillLevel.None, 0),
-            (skillType.MeleeWeapon, SkillLevel.None, 0),
+            (skillType.Weapon, SkillLevel.None, 0),
             (skillType.Medicine, SkillLevel.None, 0),
             (skillType.Engineering, SkillLevel.None, 0)
         };

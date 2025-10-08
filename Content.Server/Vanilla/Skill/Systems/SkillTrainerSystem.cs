@@ -128,11 +128,8 @@ public class SkillTrainerSystem : EntitySystem
     {
         switch (skill)
         {
-            case skillType.RangeWeapon:
-                skillComp.RangeWeaponLevel = level;
-                break;
-            case skillType.MeleeWeapon:
-                skillComp.MeleeWeaponLevel = level;
+            case skillType.Weapon:
+                skillComp.WeaponLevel = level;
                 break;
             case skillType.Medicine:
                 skillComp.MedicineLevel = level;
@@ -155,11 +152,8 @@ public class SkillTrainerSystem : EntitySystem
             case skillType.Piloting:
                 skillComp.PilotingExp = exp;
                 break;
-            case skillType.RangeWeapon:
-                skillComp.RangeWeaponExp = exp;
-                break;
-            case skillType.MeleeWeapon:
-                skillComp.MeleeWeaponExp = exp;
+            case skillType.Weapon:
+                skillComp.WeaponExp = exp;
                 break;
             case skillType.Medicine:
                 skillComp.MedicineExp = exp;

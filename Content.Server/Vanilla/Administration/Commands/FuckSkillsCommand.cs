@@ -37,8 +37,7 @@ public sealed class FuckSkillsCommand : IConsoleCommand
             skillComp.Bureaucracy = true;
             skillComp.Atmosphere = true;
             skillComp.Research = true;
-            skillComp.RangeWeaponLevel = SkillLevel.Expert;
-            skillComp.MeleeWeaponLevel = SkillLevel.Expert;
+            skillComp.WeaponLevel = SkillLevel.Expert;
             skillComp.MedicineLevel = SkillLevel.Expert;
             skillComp.EngineeringLevel = SkillLevel.Expert;
 

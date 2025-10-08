@@ -12,43 +12,23 @@ public sealed partial class SkillComponent : Component
     public int SkillPoints { get; set; } = 0;
 
     #region НАВЫКИ
-
-    // Стрельба
-    [DataField("RangeWeaponLevel")]
-    private SkillLevel _rangeWeaponLevel = SkillLevel.None;
-    private int _rangeWeaponExp = 0;
-
-    [AutoNetworkedField]
-    public SkillLevel RangeWeaponLevel
-    {
-        get => _rangeWeaponLevel;
-        set => SetSkill(ref _rangeWeaponLevel, value, skillType.RangeWeapon);
-    }
-
-    [AutoNetworkedField]
-    public int RangeWeaponExp
-    {
-        get => _rangeWeaponExp;
-        set => SetSkill(ref _rangeWeaponExp, value, skillType.RangeWeapon);
-    }
-
     //Ближний бой
-    [DataField("MeleeWeaponLevel")]
-    private SkillLevel _meleeWeaponLevel = SkillLevel.None;
-    private int _meleeWeaponExp = 0;
+    [DataField("WeaponLevel")]
+    private SkillLevel _weaponLevel = SkillLevel.None;
+    private int _weaponExp = 0;
 
     [AutoNetworkedField]
-    public SkillLevel MeleeWeaponLevel
+    public SkillLevel WeaponLevel
     {
-        get => _meleeWeaponLevel;
-        set => SetSkill(ref _meleeWeaponLevel, value, skillType.MeleeWeapon);
+        get => _weaponLevel;
+        set => SetSkill(ref _weaponLevel, value, skillType.Weapon);
     }
 
     [AutoNetworkedField]
-    public int MeleeWeaponExp
+    public int WeaponExp
     {
-        get => _meleeWeaponExp;
-        set => SetSkill(ref _meleeWeaponExp, value, skillType.MeleeWeapon);
+        get => _weaponExp;
+        set => SetSkill(ref _weaponExp, value, skillType.Weapon);
     }
 
     //Медицина
@@ -242,8 +222,7 @@ public sealed partial class SkillComponent : Component
         return skill switch
         {
             skillType.Medicine => MedicineLevel,
-            skillType.RangeWeapon => RangeWeaponLevel,
-            skillType.MeleeWeapon => MeleeWeaponLevel,
+            skillType.Weapon => WeaponLevel,
             skillType.Engineering => EngineeringLevel,
             _ => null // Возвращаем null, если skillType неизвестен
         };
@@ -282,8 +261,7 @@ public sealed partial class SkillComponent : Component
         return skill switch
         {
             skillType.Medicine => MedicineExp,
-            skillType.RangeWeapon => RangeWeaponExp,
-            skillType.MeleeWeapon => MeleeWeaponExp,
+            skillType.Weapon => WeaponExp,
             skillType.Engineering => EngineeringExp,
             skillType.Piloting => PilotingExp,
             skillType.MusInstruments => MusInstrumentsExp,
@@ -303,8 +281,7 @@ public sealed partial class SkillComponent : Component
         Bureaucracy = true;
         Atmosphere = true;
         Research = true;
-        RangeWeaponLevel = SkillLevel.Expert;
-        MeleeWeaponLevel = SkillLevel.Expert;
+        WeaponLevel = SkillLevel.Expert;
         MedicineLevel = SkillLevel.Expert;
         EngineeringLevel = SkillLevel.Expert;
     }
@@ -317,15 +294,14 @@ public sealed partial class SkillComponent : Component
 public enum skillType : byte
 {
     Piloting = 0,
-    RangeWeapon = 1,
-    MeleeWeapon = 2,
-    Medicine = 3,
-    Engineering = 4,
-    Research = 5,
-    MusInstruments = 6,
-    Botany = 7,
-    Bureaucracy = 8,
-    Atmosphere = 9,
+    Weapon = 1,
+    Medicine = 2,
+    Engineering = 3,
+    Research = 4,
+    MusInstruments = 5,
+    Botany = 6,
+    Bureaucracy = 7,
+    Atmosphere = 8,
 }
 
 [Serializable, NetSerializable]

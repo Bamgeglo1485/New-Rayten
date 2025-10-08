@@ -26,7 +26,7 @@ public sealed class ServerSkillChangeListener : EntitySystem
 
         switch (args.Skill)
         {
-            case skillType.RangeWeapon:
+            case skillType.Weapon:
                 ReactOnRangeWeaponLevelChanged(uid, component);
                 break;
         }

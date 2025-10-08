@@ -64,11 +64,11 @@ public abstract class SharedSolutionContainerMixerSystem : EntitySystem
         }
         //vanilla-station-skill-issue-start
         if (user != null)
-            if (TryComp<RequiresSkillComponent>(user.Value, out var RequiresSkillComponent))
-                if (!_requiresSkillSystem.HasRequiredSkills(user.Value, RequiresSkillComponent))
+            if (TryComp<RequiresSkillComponent>(user.Value, out var requiresSkillComponent))
+                if (!_requiresSkillSystem.HasRequiredSkills(user.Value, requiresSkillComponent))
                 {
                     _popup.PopupEntity(
-                        Loc.GetString("Skill-issue-message-chemistry-unskilled", ("lvl", RequiresSkillComponent.RequiresChemistryLevel)),
+                        Loc.GetString("Skill-issue-message-chemistry-unskilled", ("lvl", requiresSkillComponent.RequiresMedicineLevel)),
                         user.Value, user.Value);
                     return;
                 }

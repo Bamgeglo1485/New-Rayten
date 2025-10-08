@@ -42,7 +42,7 @@ public sealed class GunSkillsSystem : EntitySystem
         SubscribeLocalEvent<GunCanBeFallComponent, GunShotEvent>(RangeWeaponFalldownOnShoot);//выпадение оружия при стрельбе
         SubscribeLocalEvent<MobStateComponent, DamageChangedEvent>(OnHit);
     }
-    
+
     private void OnHit(EntityUid uid, MobStateComponent component, ref DamageChangedEvent args)
     {
         if (args.Origin == null || args.Origin == uid|| args.DamageDelta == null || args.DamageDelta.GetTotal() <= 0)
@@ -59,22 +59,22 @@ public sealed class GunSkillsSystem : EntitySystem
         if (!TryComp<SkillComponent>(headshoter, out var skillcomp))
             return;
 
-        if (skillcomp.RangeWeaponLevel != SkillLevel.Expert)
+        if (skillcomp.WeaponLevel != SkillLevel.Expert)
             return;
 
         if (!_random.Prob(HEADSHOTCHANCE))
             return;
 
-        float staminadamage = (float)args.DamageDelta.GetTotal();
+        float staminadamage = (float)args.DamageDelta.GetTotal() * 2;
 
         // Звук выстрела в голову
-        // _audio.PlayPvs("/Audio/Vanilla/SkillSystem/headshot.ogg", uid, AudioParams.Default
-        //     .WithVolume(-10f)
-        //     .WithMaxDistance(5f));
+        _audio.PlayPvs("/Audio/Vanilla/SkillSystem/headshot.ogg", uid, AudioParams.Default
+            .WithVolume(-8f)
+            .WithMaxDistance(5f));
 
         // Наносим урон по выносливости
         if (staminadamage > 0)
-            _stamina.TakeStaminaDamage(uid, staminadamage, source: headshoter, ignoreResist: true);
+            _stamina.TakeStaminaDamage(uid, staminadamage, source: headshoter, ignoreResist: false);
     }
 
     private void OnHandPickUp(EntityUid uid, GunComponent gunComp, GotEquippedHandEvent args)
@@ -97,7 +97,7 @@ public sealed class GunSkillsSystem : EntitySystem
 
     public void UnskilledWeaponRefreshModifiers(SkillComponent skillComp, UnskilledWeaponComponent unskilledComp)
     {
-        switch (skillComp.RangeWeaponLevel)
+        switch (skillComp.WeaponLevel)
         {
             case SkillLevel.None:
                 unskilledComp.MinAnglePenalty = Angle.FromDegrees(50);
@@ -131,12 +131,12 @@ public sealed class GunSkillsSystem : EntitySystem
         if (!EntityManager.TryGetComponent<SkillComponent>(args.User, out var skillComp))
             skillComp = EnsureComp<SkillComponent>(args.User);
 
-        if(HasComp<GunIgnoreSkillComponent>(uid))
+        if (HasComp<GunIgnoreSkillComponent>(uid))
             return;
 
-        if (skillComp.RangeWeaponLevel < component.RequiresRangeWeaponLevel)
+        if (skillComp.WeaponLevel < component.RequiresWeaponLevel)
         {
-            float FallChance = component.RequiresRangeWeaponLevel - skillComp.RangeWeaponLevel;
+            float FallChance = component.RequiresWeaponLevel - skillComp.WeaponLevel;
 
             FallChance = (FallChance > 0) ? FallChance * component.ChanceToFallPerLevel : 0;
 

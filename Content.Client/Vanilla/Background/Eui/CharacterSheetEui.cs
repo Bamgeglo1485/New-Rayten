@@ -118,8 +118,7 @@ public sealed class CharacterSheetEui : BaseEui
 
         var basicskills = new List<(skillType Skill, SkillLevel Level, int Experience)>
         {
-            (skillType.RangeWeapon, SkillLevel.None, 0),
-            (skillType.MeleeWeapon, SkillLevel.None, 0),
+            (skillType.Weapon, SkillLevel.None, 0),
             (skillType.Medicine, SkillLevel.None, 0),
             (skillType.Engineering, SkillLevel.None, 0)
         };
@@ -138,8 +137,7 @@ public sealed class CharacterSheetEui : BaseEui
         {
             basicskills = new List<(skillType Skill, SkillLevel Level, int Experience)>
             {
-                (skillType.RangeWeapon, skillComponent.RangeWeaponLevel, skillComponent.RangeWeaponExp),
-                (skillType.MeleeWeapon, skillComponent.MeleeWeaponLevel, skillComponent.MeleeWeaponExp),
+                (skillType.Weapon, skillComponent.WeaponLevel, skillComponent.WeaponExp),
                 (skillType.Medicine, skillComponent.MedicineLevel, skillComponent.MedicineExp),
                 (skillType.Engineering, skillComponent.EngineeringLevel, skillComponent.EngineeringExp)
             };

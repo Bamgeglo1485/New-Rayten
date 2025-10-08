@@ -73,8 +73,7 @@ public sealed class RoleSkillsSystem : EntitySystem
         //итоговые навыки
         Dictionary<skillType, SkillLevel> generalbasicskills = new()
         {
-            { skillType.RangeWeapon, SkillLevel.None },
-            { skillType.MeleeWeapon, SkillLevel.None },
+            { skillType.Weapon, SkillLevel.None },
             { skillType.Medicine, SkillLevel.None },
             { skillType.Engineering, SkillLevel.None }
         };

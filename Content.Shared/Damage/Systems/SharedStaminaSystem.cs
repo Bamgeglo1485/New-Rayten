@@ -398,10 +398,8 @@ public abstract partial class SharedStaminaSystem : EntitySystem
         //vanilla-station-start
         RaiseLocalEvent(uid, new StaminaCritEvent(), true);
         var StunTime = component.StunTime;
-        if(TryComp<SkillComponent>(uid, out var skill) && skill.MeleeWeaponLevel == SkillLevel.Expert && _random.Prob(0.35f))
-        {
+        if (TryComp<SkillComponent>(uid, out var skill) && skill.WeaponLevel == SkillLevel.Expert && _random.Prob(0.35f))
             StunTime = TimeSpan.FromSeconds(0.25f);
-        }
         //vanilla-station-end
         if (StunSystem.TryUpdateParalyzeDuration(uid, StunTime))
             StunSystem.TrySeeingStars(uid);

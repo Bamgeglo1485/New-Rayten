@@ -123,9 +123,9 @@ public sealed class SkillAmnesiaSystem : EntitySystem
         var skillLevels = new List<(skillType skill, bool amnesiable, Action DecreaseLvL)>
         {
             //Основные навыки
-            (skillType.RangeWeapon, inspectamensiableskill(skill, skillType.RangeWeapon), () => skill.RangeWeaponLevel = 0),
-            (skillType.MeleeWeapon, inspectamensiableskill(skill, skillType.MeleeWeapon), () => skill.MeleeWeaponLevel = 0),
+            (skillType.Weapon, inspectamensiableskill(skill, skillType.Weapon), () => skill.WeaponLevel = 0),
             (skillType.Medicine, inspectamensiableskill(skill, skillType.Medicine), () => skill.MedicineLevel = 0),
+            (skillType.Engineering, inspectamensiableskill(skill, skillType.Engineering), () => skill.EngineeringLevel = 0),
             //Лёгкие навыки
             (skillType.Piloting, inspectamensiableskill(skill, skillType.Piloting), () => skill.Piloting = false),
             (skillType.MusInstruments, inspectamensiableskill(skill, skillType.MusInstruments), () => skill.MusInstruments = false),
@@ -160,8 +160,7 @@ public sealed class SkillAmnesiaSystem : EntitySystem
         skill.SkillPoints = 0;
 
         if (ignoredSkill != skillType.Piloting) skill.PilotingExp = 0;
-        if (ignoredSkill != skillType.RangeWeapon) skill.RangeWeaponExp = 0;
-        if (ignoredSkill != skillType.MeleeWeapon) skill.MeleeWeaponExp = 0;
+        if (ignoredSkill != skillType.Weapon) skill.WeaponExp = 0;
         if (ignoredSkill != skillType.Medicine) skill.MedicineExp = 0;
         if (ignoredSkill != skillType.Research) skill.ResearchExp = 0;
         if (ignoredSkill != skillType.Botany) skill.BotanyExp = 0;
