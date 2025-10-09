@@ -4,65 +4,103 @@
     Weapon: 2
   easySkills:
   - MusInstruments
+  - Botany
   - Bureaucracy
 
 - type: roleSkills
   id: JobBotanist
+  basicSkills:
+    Medicine: 2
   easySkills:
-  - Botany
   - MusInstruments
+  - Botany
   - Bureaucracy
 
 - type: roleSkills
   id: JobChaplain
+  basicSkills:
+    Medicine: 1
+    Weapon: 1
   easySkills:
   - MusInstruments
+  - Botany
   - Bureaucracy
 
 - type: roleSkills
   id: JobChef
+  basicSkills:
+    Medicine: 1
+    Weapon: 1
   easySkills:
   - MusInstruments
+  - Botany
   - Bureaucracy
 
 - type: roleSkills
   id: JobClown
+  basicSkills:
+    Medicine: 1
+    Engineering: 1
   easySkills:
   - MusInstruments
+  - Botany
   - Bureaucracy
 
 - type: roleSkills
   id: JobMime
+  basicSkills:
+    Medicine: 1
+    Engineering: 1
   easySkills:
   - MusInstruments
+  - Botany
   - Bureaucracy
 
 - type: roleSkills
   id: JobJanitor
+  basicSkills:
+    Medicine: 1
+    Weapon: 1
   easySkills:
   - MusInstruments
+  - Botany
   - Bureaucracy
 
 - type: roleSkills
   id: JobLawyer
+  basicSkills:
+    Medicine: 1
+    Engineering: 1
   easySkills:
+  - Piloting
   - MusInstruments
   - Bureaucracy
 
 - type: roleSkills
   id: JobLibrarian
+  basicSkills:
+    Medicine: 1
+    Engineering: 1
   easySkills:
   - MusInstruments
+  - Botany
   - Bureaucracy
 
 - type: roleSkills
   id: JobMusician
+  basicSkills:
+    Weapon: 2
   easySkills:
   - MusInstruments
+  - Botany
   - Bureaucracy
 
 - type: roleSkills
   id: JobServiceWorker
+  basicSkills:
+    Medicine: 1
+    Engineering: 1
   easySkills:
   - MusInstruments
+  - Botany
   - Bureaucracy

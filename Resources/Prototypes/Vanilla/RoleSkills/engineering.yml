@@ -17,7 +17,7 @@
 - type: roleSkills
   id: JobAtmosphericTechnician
   basicSkills:
-    Engineering: 2
+    Engineering: 3
   easySkills:
   - Atmosphere
   - Bureaucracy

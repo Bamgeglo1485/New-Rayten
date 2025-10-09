@@ -1,7 +1,11 @@
 - type: roleSkills
   id: JobReporter
+  basicSkills:
+    Medicine: 1
+    Engineering: 1
   easySkills:
   - MusInstruments
+  - Botany
   - Bureaucracy
 
 - type: roleSkills
@@ -10,6 +14,7 @@
     Medicine: 2
   easySkills:
   - MusInstruments
+  - Botany
   - Bureaucracy
 
 - type: roleSkills
@@ -26,4 +31,5 @@
     Medicine: 2
   easySkills:
   - MusInstruments
+  - Botany
   - Bureaucracy

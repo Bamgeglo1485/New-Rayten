@@ -11,12 +11,13 @@
   basicSkills:
     Medicine: 3
   easySkills:
+  - Botany
   - Bureaucracy
 
 - type: roleSkills
   id: JobChemist
   basicSkills:
-    Medicine: 2
+    Medicine: 3
   easySkills:
   - Botany
   - Bureaucracy
@@ -24,8 +25,9 @@
 - type: roleSkills
   id: JobParamedic
   basicSkills:
-    Medicine: 2
+    Medicine: 3
   easySkills:
+  - Botany
   - Bureaucracy
 
 - type: roleSkills

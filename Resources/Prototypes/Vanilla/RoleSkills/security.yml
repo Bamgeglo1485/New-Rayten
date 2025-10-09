@@ -2,34 +2,40 @@
   id: JobDetective
   basicSkills:
     Weapon: 2
+    Medicine: 1
+    Engineering: 1
   easySkills:
   - Bureaucracy
 
 - type: roleSkills
   id: JobHeadOfSecurity
   basicSkills:
-    Weapon: 2
+    Weapon: 3
   easySkills:
   - Bureaucracy
+  - Piloting
 
 - type: roleSkills
   id: JobSecurityCadet
   basicSkills:
-    Weapon: 2
+    Weapon: 3
   easySkills:
   - Bureaucracy
+  - Piloting
 
 - type: roleSkills
   id: JobSecurityOfficer
   basicSkills:
-    Weapon: 2
+    Weapon: 3
   easySkills:
   - Bureaucracy
+  - Piloting
 
 - type: roleSkills
   id: JobWarden
   basicSkills:
-    Weapon: 2
+    Weapon: 3
   easySkills:
   - Bureaucracy
+  - Piloting
 

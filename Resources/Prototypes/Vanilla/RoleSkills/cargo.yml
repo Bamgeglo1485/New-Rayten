@@ -1,17 +1,29 @@
 - type: roleSkills
   id: JobCargoTechnician
+  basicSkills:
+    Medicine: 1
+    Engineering: 1
   easySkills:
   - Bureaucracy
   - Piloting
+  - Botany
 
 - type: roleSkills
   id: JobQuartermaster
+  basicSkills:
+    Medicine: 1
+    Engineering: 1
   easySkills:
   - Bureaucracy
   - Piloting
+  - Botany
 
 - type: roleSkills
   id: JobSalvageSpecialist
+  basicSkills:
+    Weapon: 1
+    Engineering: 1
+    Medicine: 1
   easySkills:
   - Bureaucracy
   - Piloting
