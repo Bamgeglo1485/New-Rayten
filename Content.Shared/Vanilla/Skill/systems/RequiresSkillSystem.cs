@@ -9,6 +9,7 @@ using Robust.Shared.Network;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Player;
 using Robust.Shared.Timing;
+using Robust.Shared.Audio;
 
 namespace Content.Shared.Vanilla.Skill;
 
@@ -34,6 +35,7 @@ public sealed class RequiresSkillSystem : EntitySystem
             return;
         args.CanScan = false;
     }
+
     private void OnActivate(EntityUid uid, RequiresSkillComponent component, ref ActivatableUIOpenAttemptEvent args)
     {
         if (args.Cancelled)
@@ -54,10 +56,10 @@ public sealed class RequiresSkillSystem : EntitySystem
         if (args.Handled)
             return;
 
-        if(!EntityManager.TryGetComponent<RequiresSkillComponent>(uid, out var Reqcomponent))
+        if (!EntityManager.TryGetComponent<RequiresSkillComponent>(uid, out var Reqcomponent))
             return;
 
-        if (HasRequiredSkills(args.User, Reqcomponent, popup: _timing.IsFirstTimePredicted ))
+        if (HasRequiredSkills(args.User, Reqcomponent, popup: _timing.IsFirstTimePredicted))
             return;
 
         args.Handled = true;
@@ -82,7 +84,7 @@ public sealed class RequiresSkillSystem : EntitySystem
         if (uid != args.SlotEntity || args.Cancelled || args.User == null)
             return;
 
-        var hasSkills = HasRequiredSkills(args.User.Value, component, popup: _timing.IsFirstTimePredicted );
+        var hasSkills = HasRequiredSkills(args.User.Value, component, popup: _timing.IsFirstTimePredicted);
 
         var hasCraftSkills = !component.NeedCraftableSkills || HasRequiredSkillsForCraft(args.User.Value, component);
 
@@ -102,7 +104,7 @@ public sealed class RequiresSkillSystem : EntitySystem
             if (popup)
             {
                 _popup.PopupCursor(Loc.GetString("Skill-issue-message-medicine-unskilled", ("lvl", (int)component.RequiresMedicineLevel)));
-                if (_net.IsClient) _audio.PlayGlobal("/Audio/Vanilla/SkillSystem/meep-merp.ogg", Filter.Local(), false);
+                if (_net.IsClient) _audio.PlayGlobal(new SoundPathSpecifier("/Audio/Vanilla/SkillSystem/meep-merp.ogg"), Filter.Local(), false);
             }
             return false;
         }
@@ -112,7 +114,7 @@ public sealed class RequiresSkillSystem : EntitySystem
             if (popup)
             {
                 _popup.PopupCursor(Loc.GetString("Skill-issue-message-engineering-unskilled", ("lvl", (int)component.RequiresEngineeringLevel)));
-                if (_net.IsClient) _audio.PlayGlobal("/Audio/Vanilla/SkillSystem/meep-merp.ogg", Filter.Local(), false);
+                if (_net.IsClient) _audio.PlayGlobal(new SoundPathSpecifier("/Audio/Vanilla/SkillSystem/meep-merp.ogg"), Filter.Local(), false);
             }
             return false;
         }
@@ -122,7 +124,7 @@ public sealed class RequiresSkillSystem : EntitySystem
             if (popup)
             {
                 _popup.PopupCursor(Loc.GetString("Skill-issue-easyskill-message-piloting-unskilled"));
-                if (_net.IsClient) _audio.PlayGlobal("/Audio/Vanilla/SkillSystem/meep-merp.ogg", Filter.Local(), false);
+                if (_net.IsClient) _audio.PlayGlobal(new SoundPathSpecifier("/Audio/Vanilla/SkillSystem/meep-merp.ogg"), Filter.Local(), false);
             }
             return false;
         }
@@ -130,7 +132,10 @@ public sealed class RequiresSkillSystem : EntitySystem
         if (!HasEasySkill(user, component.RequiresMusInstruments, skillComponent => skillComponent.MusInstruments))
         {
             if (popup)
+            {
                 _popup.PopupCursor(Loc.GetString("Skill-issue-easyskill-message-musinstruments-unskilled"));
+                if (_net.IsClient) _audio.PlayGlobal(new SoundPathSpecifier("/Audio/Vanilla/SkillSystem/meep-merp.ogg"), Filter.Local(), false);
+            }
             return false;
         }
         // Проверка уровня ботаники
@@ -139,17 +144,7 @@ public sealed class RequiresSkillSystem : EntitySystem
             if (popup)
             {
                 _popup.PopupCursor(Loc.GetString("Skill-issue-easyskill-message-botany-unskilled"));
-                if (_net.IsClient) _audio.PlayGlobal("/Audio/Vanilla/SkillSystem/meep-merp.ogg", Filter.Local(), false);
-            }
-            return false;
-        }
-        // Проверка уровня Атмосферы
-        if (!HasEasySkill(user, component.RequiresAtmosphere, skillComponent => skillComponent.Atmosphere))
-        {
-            if (popup)
-            {
-                _popup.PopupCursor(Loc.GetString("Skill-issue-easyskill-message-atmosphere-unskilled"));
-                if (_net.IsClient) _audio.PlayGlobal("/Audio/Vanilla/SkillSystem/meep-merp.ogg", Filter.Local(), false);
+                if (_net.IsClient) _audio.PlayGlobal(new SoundPathSpecifier("/Audio/Vanilla/SkillSystem/meep-merp.ogg"), Filter.Local(), false);
             }
             return false;
         }
@@ -159,7 +154,7 @@ public sealed class RequiresSkillSystem : EntitySystem
             if (popup)
             {
                 _popup.PopupCursor(Loc.GetString("Skill-issue-easyskill-message-research-unskilled"));
-                if (_net.IsClient) _audio.PlayGlobal("/Audio/Vanilla/SkillSystem/meep-merp.ogg", Filter.Local(), false);
+                if (_net.IsClient) _audio.PlayGlobal(new SoundPathSpecifier("/Audio/Vanilla/SkillSystem/meep-merp.ogg"), Filter.Local(), false);
             }
             return false;
         }
@@ -172,16 +167,6 @@ public sealed class RequiresSkillSystem : EntitySystem
             if (popup)
             {
                 _popup.PopupCursor(Loc.GetString("Skill-issue-message-engineering-unskilled", ("lvl", (int)component.RequiresEngineeringLevel)));
-                if (_net.IsClient) _audio.PlayGlobal("/Audio/Vanilla/SkillSystem/meep-merp.ogg", Filter.Local(), false);
-            }
-
-            return false;
-        }
-        // Проверка уровня атмосферы
-        if (!HasEasySkill(user, component.RequiresAtmosphere, skillComponent => skillComponent.Atmosphere)){
-            if (popup)
-            {
-                _popup.PopupCursor(Loc.GetString("Skill-issue-easyskill-message-atmosphere-unskilled"));
                 if (_net.IsClient) _audio.PlayGlobal("/Audio/Vanilla/SkillSystem/meep-merp.ogg", Filter.Local(), false);
             }
             return false;

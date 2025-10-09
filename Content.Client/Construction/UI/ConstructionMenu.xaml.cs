@@ -42,7 +42,7 @@ namespace Content.Client.Construction.UI
         event EventHandler ClearAllGhosts;
 
         void ClearRecipeInfo();
-        void SetRecipeInfo(string name, string description, EntityPrototype? targetPrototype, bool isItem, bool isFavorite, SkillLevel Engineering, bool Atmosphere, bool craftable);
+        void SetRecipeInfo(string name, string description, EntityPrototype? targetPrototype, bool isItem, bool isFavorite, SkillLevel Engineering, bool craftable);
         void ResetPlacement();
 
         #region Window Control
@@ -165,24 +165,18 @@ namespace Content.Client.Construction.UI
             EntityPrototype? targetPrototype,
             bool isItem,
             bool isFavorite,
-            SkillLevel Engineering,
-            bool Atmosphere,
+            SkillLevel engineering,
             bool craftable)
         {
             BuildButton.Disabled = !craftable;
+
             if (!craftable)
                 BuildButton.ToolTip = "Навык недостаточен";
-
             //Rayten-start
-            ReqEngineering.Visible = (int)Engineering > 0;
-            ReqAtmosphere.Visible = Atmosphere;
-
-            var Engineeringmessage = new FormattedMessage();
-            var Atmospheremessage = new FormattedMessage();
-            Engineeringmessage.AddMarkupOrThrow(Loc.GetString("construction-menu-skill-engineering", ("lvl", (int)Engineering)));
-            Atmospheremessage.AddMarkupOrThrow(Loc.GetString("construction-menu-skill-atmosphere"));
-            ReqEngineering.SetMessage(Engineeringmessage);
-            ReqAtmosphere.SetMessage(Atmospheremessage);
+            ReqEngineering.Visible = (int)engineering > 0;
+            var engineeringmessage = new FormattedMessage();
+            engineeringmessage.AddMarkupOrThrow(Loc.GetString("construction-menu-skill-engineering", ("lvl", (int)engineering)));
+            ReqEngineering.SetMessage(engineeringmessage);
             //Rayten-end
 
             BuildButton.Text = Loc.GetString(isItem ? "construction-menu-place-ghost" : "construction-menu-craft");

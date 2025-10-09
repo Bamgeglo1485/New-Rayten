@@ -367,18 +367,17 @@ namespace Content.Client.Construction.UI
                 return;
 
             _constructionView.ClearRecipeInfo();
+            if (prototype is null)
+                return;
+
             //Rayten-start
             bool craftable = true;
             var playerEntity = _playerManager.LocalPlayer?.ControlledEntity;
-            if (prototype != null && playerEntity != null && _entManager.TryGetComponent<SkillComponent>(playerEntity, out var skillComp))
-            {
-                craftable = (skillComp.EngineeringLevel >= prototype.RequiresEngineeringLevel)
-                            &&  ( prototype.RequiresAtmosphere == false || ( prototype.RequiresAtmosphere == true &&  prototype.RequiresAtmosphere == skillComp.Atmosphere) );
-            }
+            if (playerEntity != null && _entManager.TryGetComponent<SkillComponent>(playerEntity, out var skillComp))
+                craftable = (skillComp.EngineeringLevel >= prototype.RequiresEngineeringLevel);
             //Rayten-end
 
-            if (prototype is null)
-                return;
+
 
             if (!_constructionSystem.TryGetRecipePrototype(prototype.ID, out var targetProtoId))
                 return;
@@ -391,7 +390,7 @@ namespace Content.Client.Construction.UI
                 prototype.Description!,
                 proto,
                 prototype.Type != ConstructionType.Item,
-                !_favoritedRecipes.Contains(prototype), prototype.RequiresEngineeringLevel, prototype.RequiresAtmosphere, craftable);
+                !_favoritedRecipes.Contains(prototype), prototype.RequiresEngineeringLevel, craftable);
 
             var stepList = _constructionView.RecipeStepList;
             GenerateStepList(prototype, stepList);

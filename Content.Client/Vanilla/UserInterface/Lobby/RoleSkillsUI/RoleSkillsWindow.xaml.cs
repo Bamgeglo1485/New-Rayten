@@ -76,7 +76,6 @@ public sealed partial class RoleSkillsWindow : FancyWindow
             (skillType.Botany, false, 0),
             (skillType.MusInstruments, false, 0),
             (skillType.Bureaucracy, false, 0),
-            (skillType.Atmosphere, false, 0),
             (skillType.Research, false, 0)
         };
 

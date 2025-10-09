@@ -129,7 +129,6 @@ public sealed class CharacterSheetEui : BaseEui
             (skillType.Botany, false, 0),
             (skillType.MusInstruments, false, 0),
             (skillType.Bureaucracy, false, 0),
-            (skillType.Atmosphere, false, 0),
             (skillType.Research, false, 0)
         };
 
@@ -147,7 +146,6 @@ public sealed class CharacterSheetEui : BaseEui
                 (skillType.Botany, skillComponent.Botany, skillComponent.BotanyExp),
                 (skillType.MusInstruments, skillComponent.MusInstruments, skillComponent.MusInstrumentsExp),
                 (skillType.Bureaucracy, skillComponent.Bureaucracy, skillComponent.BureaucracyExp),
-                (skillType.Atmosphere, skillComponent.Atmosphere, skillComponent.AtmosphereExp),
                 (skillType.Research, skillComponent.Research, skillComponent.ResearchExp)
             };
             skillpoints = skillComponent.SkillPoints;

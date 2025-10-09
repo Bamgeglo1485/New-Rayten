@@ -131,7 +131,6 @@ public sealed class SkillAmnesiaSystem : EntitySystem
             (skillType.MusInstruments, inspectamensiableskill(skill, skillType.MusInstruments), () => skill.MusInstruments = false),
             (skillType.Botany, inspectamensiableskill(skill, skillType.Botany), () => skill.Botany = false),
             (skillType.Bureaucracy, inspectamensiableskill(skill, skillType.Bureaucracy), () => skill.Bureaucracy = false),
-            (skillType.Atmosphere, inspectamensiableskill(skill, skillType.Atmosphere), () => skill.Atmosphere = false),
             (skillType.Research, inspectamensiableskill(skill, skillType.Research), () => skill.Research = false)
         };
 
@@ -166,6 +165,5 @@ public sealed class SkillAmnesiaSystem : EntitySystem
         if (ignoredSkill != skillType.Botany) skill.BotanyExp = 0;
         if (ignoredSkill != skillType.MusInstruments) skill.MusInstrumentsExp = 0;
         if (ignoredSkill != skillType.Bureaucracy) skill.BureaucracyExp = 0;
-        if (ignoredSkill != skillType.Atmosphere) skill.AtmosphereExp = 0;
     }
 }

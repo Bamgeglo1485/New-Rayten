@@ -17,7 +17,6 @@ using Content.Shared.StatusEffectNew;
 using Content.Shared.Stunnable;
 using Content.Shared.Throwing;
 using Content.Shared.Weapons.Melee.Events;
-using Content.Shared.Vanilla.Skill;
 using Robust.Shared.Random;
 using JetBrains.Annotations;
 using Robust.Shared.Audio;
@@ -395,17 +394,11 @@ public abstract partial class SharedStaminaSystem : EntitySystem
 
         component.Critical = true;
         component.StaminaDamage = component.CritThreshold;
-        //vanilla-station-start
-        RaiseLocalEvent(uid, new StaminaCritEvent(), true);
-        var StunTime = component.StunTime;
-        if (TryComp<SkillComponent>(uid, out var skill) && skill.WeaponLevel == SkillLevel.Expert && _random.Prob(0.35f))
-            StunTime = TimeSpan.FromSeconds(0.25f);
-        //vanilla-station-end
-        if (StunSystem.TryUpdateParalyzeDuration(uid, StunTime))
+        if (StunSystem.TryUpdateParalyzeDuration(uid, component.StunTime))
             StunSystem.TrySeeingStars(uid);
 
         // Give them buffer before being able to be re-stunned
-        component.NextUpdate = Timing.CurTime + StunTime + StamCritBufferTime;
+        component.NextUpdate = Timing.CurTime + component.StunTime + StamCritBufferTime;
         EnsureComp<ActiveStaminaComponent>(uid);
         Dirty(uid, component);
         _adminLogger.Add(LogType.Stamina, LogImpact.Medium, $"{ToPrettyString(uid):user} entered stamina crit");

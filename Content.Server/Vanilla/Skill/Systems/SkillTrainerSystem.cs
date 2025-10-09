@@ -25,7 +25,7 @@ public class SkillTrainerSystem : EntitySystem
     private void UseSkillPoint(UseSkillPointEvent msg, EntitySessionEventArgs args)
     {
         // Проверяем, что у пользователя есть прикрепленное существо, и что навык задан
-        if (!args.SenderSession.AttachedEntity.HasValue || msg.skill == null)
+        if (!args.SenderSession.AttachedEntity.HasValue)
             return;
 
         var entity = args.SenderSession.AttachedEntity.Value;
@@ -48,10 +48,9 @@ public class SkillTrainerSystem : EntitySystem
 
         // Уменьшаем очки навыков
         skillComp.SkillPoints--;
-        skillComp.Dirty();
-
         // Добавляем опыт
         AddExperience(skillComp, msg.skill, _EXPERIENCEFROMSKILLPOINT, multiplyed: false);
+        Dirty(entity, skillComp);
     }
     public bool AddExperience(SkillComponent skillComp, skillType skillType, int experienceAmount, bool multiplyed = true)
     {
@@ -112,16 +111,12 @@ public class SkillTrainerSystem : EntitySystem
             case skillType.Bureaucracy:
                 skillComp.Bureaucracy = true;
                 break;
-            case skillType.Atmosphere:
-                skillComp.Atmosphere = true;
-                break;
             case skillType.Research:
                 skillComp.Research = true;
                 break;
             default:
                 break;
         }
-        skillComp.Dirty();
     }
 
     public void SetSkillLevel(SkillComponent skillComp, skillType skill, SkillLevel level)
@@ -140,7 +135,6 @@ public class SkillTrainerSystem : EntitySystem
             default:
                 break;
         }
-        skillComp.Dirty();
     }
 
     private void SetSkillExp(SkillComponent skillComp, skillType skill, int exp)
@@ -173,12 +167,8 @@ public class SkillTrainerSystem : EntitySystem
             case skillType.Bureaucracy:
                 skillComp.BureaucracyExp = exp;
                 break;
-            case skillType.Atmosphere:
-                skillComp.AtmosphereExp = exp;
-                break;
             default:
                 break;
         }
-        skillComp.Dirty();
     }
 }

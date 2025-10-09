@@ -29,9 +29,6 @@ namespace Content.Shared.Vanilla.Skill
         //Ботаника
         [DataField("RequiresBotany"), AutoNetworkedField]
         public bool RequiresBotany { get; set; } = false;
-        //Атмосфера
-        [DataField("RequiresAtmosphere"), AutoNetworkedField]
-        public bool RequiresAtmosphere { get; set; } = false;
         //исследования
         [DataField("RequiresResearch"), AutoNetworkedField]
         public bool RequiresResearch { get; set; } = false;

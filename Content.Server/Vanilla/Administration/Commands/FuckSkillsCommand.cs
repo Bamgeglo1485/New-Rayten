@@ -25,23 +25,13 @@ public sealed class FuckSkillsCommand : IConsoleCommand
     {
         // Получаем все сущности под управлением игроков
         var query = _entityManager.EntityQueryEnumerator<ActorComponent>();
-        while (query.MoveNext(out var uid, out var actor))
+        while (query.MoveNext(out var uid, out _))
         {
             if (!_entityManager.TryGetComponent(uid, out SkillComponent? skillComp))
                 skillComp = _entityManager.AddComponent<SkillComponent>(uid);
 
-            // Присваиваем максимальные уровни всем навыкам
-            skillComp.Piloting = true;
-            skillComp.MusInstruments = true;
-            skillComp.Botany = true;
-            skillComp.Bureaucracy = true;
-            skillComp.Atmosphere = true;
-            skillComp.Research = true;
-            skillComp.WeaponLevel = SkillLevel.Expert;
-            skillComp.MedicineLevel = SkillLevel.Expert;
-            skillComp.EngineeringLevel = SkillLevel.Expert;
-
-            _entityManager.Dirty(skillComp);
+            skillComp.FuckSkills();
+            _entityManager.Dirty(uid, skillComp);
         }
 
 

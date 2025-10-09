@@ -351,12 +351,6 @@ namespace Content.Server.Construction
                 _popup.PopupEntity(Loc.GetString("Skill-issue-message-engineering-unskilled", ("lvl", constructionPrototype.RequiresEngineeringLevel)), user, user);
                 return false;
             }
-            //Атмосфера
-            if (!_requiresSkillSystem.HasEasySkill(user, constructionPrototype.RequiresAtmosphere, skillComponent => skillComponent.Atmosphere))
-            {
-                _popup.PopupEntity(Loc.GetString("Skill-issue-message-atmosphere-unskilled", ("lvl", constructionPrototype.RequiresAtmosphere)), user, user);
-                return false;
-            }
             //vanilla-station-end
             var startNode = constructionGraph.Nodes[constructionPrototype.StartNode];
             var targetNode = constructionGraph.Nodes[constructionPrototype.TargetNode];
@@ -449,16 +443,9 @@ namespace Content.Server.Construction
                 return;
             }
             //vanilla-station-start
-            //Приборостроение
             if (!_requiresSkillSystem.HasSkillLevel(user, constructionPrototype.RequiresEngineeringLevel, skillComponent => skillComponent.EngineeringLevel))
             {
                 _popup.PopupEntity(Loc.GetString("Skill-issue-message-engineering-unskilled", ("lvl", constructionPrototype.RequiresEngineeringLevel)), user, user);
-                return;
-            }
-            //Атмосфера
-            if (!_requiresSkillSystem.HasEasySkill(user, constructionPrototype.RequiresAtmosphere, skillComponent => skillComponent.Atmosphere))
-            {
-                _popup.PopupEntity(Loc.GetString("Skill-issue-message-atmosphere-unskilled", ("lvl", constructionPrototype.RequiresAtmosphere)), user, user);
                 return;
             }
             //vanilla-station-end
