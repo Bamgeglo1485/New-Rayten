@@ -12,6 +12,7 @@
     Medicine: 3
     Engineering: 1
   easySkills:
+  - Botany
   - Bureaucracy
 
 - type: roleSkills
