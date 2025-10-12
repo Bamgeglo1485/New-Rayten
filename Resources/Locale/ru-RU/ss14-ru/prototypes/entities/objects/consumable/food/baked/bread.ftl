@@ -76,4 +76,3 @@ ent-FoodBreadNutriBatard = нутри-батард
     .desc = Приятного аппетита!
 ent-FoodBreadCottonNutriBatard = хлопковый нутри-батард
     .desc = Приятного аппетита!
-

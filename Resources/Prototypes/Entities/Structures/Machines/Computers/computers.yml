@@ -567,7 +567,7 @@
     color: "#b53ca1"
   - type: GuideHelp
     guides:
-    - Xenoarchaeology
+    - AnalysisConsole
   - type: RequiresSkill
     RequiresResearch: true
 
