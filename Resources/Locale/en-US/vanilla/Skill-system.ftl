@@ -1,18 +1,15 @@
 Skill-issue-message-medicine-unskilled = Требуется { $lvl } ур. медицины
 Skill-issue-message-weapon-unskilled = Требуется { $lvl } ур. боя
 Skill-issue-message-engineering-unskilled = Требуется { $lvl } ур. инженерии
-
 Skill-issue-easyskill-message-piloting-unskilled = Требуется навык пилотирования.
 Skill-issue-easyskill-message-botany-unskilled = Требуется навык ботаники.
 Skill-issue-easyskill-message-musinstruments-unskilled = Требуется навык музыкальных инструментов.
 Skill-issue-easyskill-message-bureaucracy-unskilled = Требуется навык бюрократии.
 Skill-issue-easyskill-message-research-unskilled = Требуется навык исследований.
-
 shared-solution-container-component-on-examine-main-text-skill-issue = { "" }
-construction-menu-skill-engineering =  [color=#ff6600]Требуется { $lvl } ур. инженерии[/color]
-construction-menu-skill-atmosphere =  [color=#4ebed7]Требуется знание атмосферы[/color]
-
-skill-system-UI-SkillNameLabel =  [color=#EFBF04]{ $skillname ->
+construction-menu-skill-engineering = [color=#ff6600]Требуется { $lvl } ур. инженерии[/color]
+construction-menu-skill-atmosphere = [color=#4ebed7]Требуется знание атмосферы[/color]
+skill-system-UI-SkillNameLabel = [color=#EFBF04]{ $skillname ->
         [Weapon] Бой
         [Medicine] Медицина
         [Engineering] Инженерия
@@ -29,29 +26,25 @@ skill-system-UI-ExpLabel-maxlvl = Макс.
 skill-system-UI-Easy-SkillInfoLabel = Опыт: { $exp }/600
 skill-system-UI-Easy-SkillInfoLabel-Have = Изучен
 skill-system-UI-Easy-SkillInfoLabel-NotHave = Не изучен
-skill-system-UI-Easy-AmnesiaLabel =  [color=red]Амнезия: { $exptorestore }[/color]
+skill-system-UI-Easy-AmnesiaLabel = [color=red]Амнезия: { $exptorestore }[/color]
 skill-system-UI-Tooltip-Weapon =
     0 ур:
     - 100% Шанс выронить дробовик, снайперскую винтовку, револьвер из руки при выстреле
     - +60° к разбросу стрельбы
     - Урон: 50%
-    - Шансы толкнуть: 10%-25%
     - Длительность заковывания: 3.5с. - 5с.
     1 ур:
     - 50% Шанс выронить дробовик или снайперскую винтовку, револьвер при выстреле
     - +10° к разбросу стрельбы
     - Урон: 70%
-    - Шансы толкнуть: 15%-30%
     - Длительность заковывания: 3с. - 4.5с.
     2 ур:
     - Дробовик или снайперская винтовка не выпадает из руки при выстреле
     - Штрафы к разбросу отсутствуют
     - Урон: 100%
-    - Шансы толкнуть: 20%-35%
     - Длительность заковывания: 2.5с. - 4с.
     3 ур:
     - 30% шанс попасть в голову, что нанесёт двойной урон по выносливости.
-    - Шансы толкнуть: 25%-40%
     - Длительность заковывания: 2с. - 3.5с.
 skill-system-UI-Tooltip-Medicine =
     0 ур:
