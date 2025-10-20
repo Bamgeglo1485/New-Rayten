@@ -5,6 +5,7 @@ using Content.Server.NPC.HTN.PrimitiveTasks;
 using Content.Server.NPC.HTN.PrimitiveTasks.Operators;
 using Content.Server.Radio.EntitySystems;
 using Content.Shared.Dataset;
+using Content.Shared.Chat;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 

@@ -22,6 +22,7 @@ using Content.Shared.Medical;
 using Content.Server.Chemistry.Containers.EntitySystems;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Server.Chat.Systems;
+using Content.Shared.Chat;
 using Robust.Shared.Timing;
 using Robust.Shared.Prototypes;
 using Robust.Server.GameObjects;

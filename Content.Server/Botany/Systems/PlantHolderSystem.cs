@@ -26,8 +26,10 @@ using Robust.Shared.Timing;
 using Content.Server.Vanilla.Skill;
 using Content.Shared.Vanilla.Skill;
 using Content.Shared.Administration.Logs;
+using Content.Shared.Chemistry.Reaction;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Database;
+using Content.Shared.EntityEffects;
 using Content.Shared.Kitchen.Components;
 using Content.Shared.Labels.Components;
 
@@ -51,6 +53,7 @@ public sealed class PlantHolderSystem : EntitySystem
     [Dependency] private readonly RequiresSkillSystem _requiresSkillSystem = default!;
     [Dependency] private readonly ItemSlotsSystem _itemSlots = default!;
     [Dependency] private readonly ISharedAdminLogManager _adminLogger = default!;
+    [Dependency] private readonly SharedEntityEffectsSystem _entityEffects = default!;
 
     public const float HydroponicsSpeedMultiplier = 1f;
     public const float HydroponicsConsumptionMultiplier = 2f;
@@ -899,7 +902,7 @@ public sealed class PlantHolderSystem : EntitySystem
             foreach (var entry in _solutionContainerSystem.RemoveEachReagent(component.SoilSolution.Value, amt))
             {
                 var reagentProto = _prototype.Index<ReagentPrototype>(entry.Reagent.Prototype);
-                reagentProto.ReactionPlant(uid, entry, solution, EntityManager, _random, _adminLogger);
+                _entityEffects.ApplyEffects(uid, reagentProto.PlantMetabolisms.ToArray());
             }
         }
 

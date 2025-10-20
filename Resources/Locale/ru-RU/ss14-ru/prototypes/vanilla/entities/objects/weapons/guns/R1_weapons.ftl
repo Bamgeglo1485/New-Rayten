@@ -13,3 +13,5 @@ ent-WeaponCoreEjectShotgun = дробовик ядрострел
     .desc = Дробовик с ядерным реактором внутри, который стреляет раскалённым железом, либо самим ядром.
 ent-WeaponNailgun = гвоздемёт
     .desc = Это пулемёт. Он стреляет гвоздями. Оригинально
+ent-RailPiercer = { ent-BasicHitscan }
+    .desc = { ent-BasicHitscan.desc }

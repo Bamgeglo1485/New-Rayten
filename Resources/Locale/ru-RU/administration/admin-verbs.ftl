@@ -45,13 +45,11 @@ admin-verbs-pause-map = Поставить карту на паузу
 admin-verbs-snap-joints = Разорвать соединения
 admin-verbs-make-minigun = Создать миниган
 admin-verbs-set-bullet-amount = Задать количество пуль
-
 # Переключатели
 admin-verbs-bolt = Заблокировать дверь
 admin-verbs-unbolt = Разблокировать дверь
 admin-verbs-emergency-access-on = Включить аварийный доступ
 admin-verbs-emergency-access-off = Выключить аварийный доступ
-
 # Диалоги
 admin-verbs-dialog-adjust-stack-amount = Количество (макс. { $max })
 admin-verbs-dialog-rename-title = Переименование

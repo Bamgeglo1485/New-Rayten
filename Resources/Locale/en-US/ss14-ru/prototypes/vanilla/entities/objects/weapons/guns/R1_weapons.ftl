@@ -13,3 +13,5 @@ ent-WeaponCoreEjectShotgun = core eject shotgun
     .desc = A shotgun with a reactor inside that shoots hot pieces of iron.
 ent-WeaponNailgun = nailgun
     .desc = A railgun that fires iron mined from blood.
+ent-RailPiercer = { ent-BasicHitscan }
+    .desc = { ent-BasicHitscan.desc }

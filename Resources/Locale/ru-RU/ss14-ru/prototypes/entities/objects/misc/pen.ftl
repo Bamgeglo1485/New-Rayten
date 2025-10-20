@@ -1,6 +1,6 @@
 ent-Pen = ручка
     .desc = Ручка с чёрными чернилами.
-ent-PenEmbeddable = { ent-Pen }
+ent-BasePenFancy = { ent-Pen }
     .desc = { ent-Pen.desc }
 ent-LuxuryPen = роскошная ручка
     .desc = Дорогая и модная ручка, которой вы достойны обладать только в том случае, если вы умеете работать с огромным количеством бумаг.

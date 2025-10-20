@@ -16,10 +16,6 @@ public sealed partial class DominatorComponent : Component
     [DataField]
     public DominatorState CurrentState = DominatorState.Lethal;
 
-    [DataField(required: true)]
-    [AutoNetworkedField]
-    public List<BatteryWeaponFireMode> FireModes = new();
-
     [DataField]
     public float ScanRange = 14.0f;
 

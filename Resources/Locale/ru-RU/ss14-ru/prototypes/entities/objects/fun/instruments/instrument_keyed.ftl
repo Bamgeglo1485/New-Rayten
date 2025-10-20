@@ -4,6 +4,7 @@ ent-SynthesizerInstrument = синтезатор
     .desc = { ent-BaseKeyedInstrument.desc }
 ent-SuperSynthesizerInstrument = супер-синтезатор
     .desc = Терроризирую гетто MIDI-ками из Touhou с 2020 года.
+    .suffix = Admin
 ent-SuperSynthesizerNoLimitInstrument = { ent-SuperSynthesizerInstrument }
     .suffix = Безлимитный
     .desc = { ent-SuperSynthesizerInstrument.desc }

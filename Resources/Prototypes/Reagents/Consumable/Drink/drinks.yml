@@ -450,37 +450,33 @@
       effects:
       - !type:SatiateThirst
         factor: 4
-  # RAYTEN STARTS
+  # # RAYTEN STARTS
       - !type:HealthChange
         conditions:
-        - !type:OrganType
-          type: Skrell
-        - !type:TotalDamage
-          max: 25
+        - !type:MetabolizerTypeCondition
+          type: [ Skrell ]
+        - !type:TotalDamageCondition
+          max: 45
         damage:
           groups:
-            Brute: -0.7
-            Burn: -0.7
+            Brute: -1.5
+            Burn: -1.5
           types:
-            Poison: -0.5
-      - !type:ChemCleanBloodstream
-        conditions:
-        - !type:OrganType
-          type: Skrell
-        cleanseRate: 1
-    # RAYTEN ENDS
+            Poison: -1.5
+  #   # RAYTEN ENDS
     Gas:
       effects:
       - !type:HealthChange
-        scaleByQuantity: true
+        scaling: true
         ignoreResistances: true
         conditions:
-        - !type:OrganType
-          type: Slime
-          shouldHave: true
+        - !type:MetabolizerTypeCondition
+          type: [ Slime ]
         damage:
           types:
             Heat: 3
+
+
 - type: reagent
   id: Ice
   name: reagent-name-ice

@@ -129,6 +129,7 @@ guide-entry-salad-recipes = Салаты
 guide-entry-medicinal-recipes = Лечебные
 guide-entry-other-recipes = Прочее
 guide-entry-secret-recipes = Секретные
+guide-entry-lawsets = Кремниевые законы
 guide-entry-antagonists = Антагонисты
 guide-entry-nuclear-operatives = Ядерные оперативники
 guide-entry-traitors = Предатели

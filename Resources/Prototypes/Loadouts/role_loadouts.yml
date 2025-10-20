@@ -13,6 +13,7 @@
   - Survival
   - VanillaLegends # Vanilla-Loadouts
   - Trinkets
+  - CaptainJobTrinkets
   - GroupSpeciesBreathTool
 
 - type: roleLoadout
@@ -29,6 +30,7 @@
   - Survival
   - VanillaLegends # Vanilla-Loadouts
   - Trinkets
+  - HoPJobTrinkets
   - GroupSpeciesBreathTool
 
 # Silicons
@@ -59,6 +61,7 @@
   - Survival
   - VanillaLegends # Vanilla-Loadouts
   - Trinkets
+  - PassengerJobTrinkets
   - GroupSpeciesBreathTool
 
 - type: roleLoadout
@@ -70,11 +73,11 @@
   - BartenderJumpsuit
   - CommonBackpack
   - BartenderOuterClothing
-  - BartenderGoldenShaker
   - Glasses
   - Survival
   - VanillaLegends # Vanilla-Loadouts
   - Trinkets
+  - BartenderJobTrinkets
   - GroupSpeciesBreathTool
 
 - type: roleLoadout
@@ -88,6 +91,7 @@
   - Survival
   - VanillaLegends # Vanilla-Loadouts
   - Trinkets
+  - ServiceWorkerJobTrinkets
   - GroupSpeciesBreathTool
 
 - type: roleLoadout
@@ -104,6 +108,7 @@
   - Survival
   - VanillaLegends # Vanilla-Loadouts
   - Trinkets
+  - ChefJobTrinkets
   - GroupSpeciesBreathTool
 
 - type: roleLoadout
@@ -117,6 +122,7 @@
   - Survival
   - VanillaLegends # Vanilla-Loadouts
   - Trinkets
+  - LibrarianJobTrinkets
   - GroupSpeciesBreathTool
 
 - type: roleLoadout
@@ -131,6 +137,7 @@
   - Survival
   - VanillaLegends # Vanilla-Loadouts
   - Trinkets
+  - LawyerJobTrinkets
   - GroupSpeciesBreathTool
 
 - type: roleLoadout
@@ -149,6 +156,7 @@
   - Survival
   - VanillaLegends # Vanilla-Loadouts
   - Trinkets
+  - ChaplainJobTrinkets
   - GroupSpeciesBreathTool
 
 - type: roleLoadout
@@ -165,6 +173,7 @@
   - Survival
   - VanillaLegends # Vanilla-Loadouts
   - Trinkets
+  - JanitorJobTrinkets
   - JanitorPlunger
   - GroupSpeciesBreathTool
 
@@ -181,6 +190,7 @@
   - Survival
   - VanillaLegends # Vanilla-Loadouts
   - Trinkets
+  - BotanistJobTrinkets
   - GroupSpeciesBreathTool
 
 - type: roleLoadout
@@ -198,6 +208,7 @@
   - SurvivalClown
   - VanillaLegends # Vanilla-Loadouts
   - Trinkets
+  - ClownJobTrinkets
 
 - type: roleLoadout
   id: JobMime
@@ -215,6 +226,7 @@
   - SurvivalMime
   - VanillaLegends # Vanilla-Loadouts
   - Trinkets
+  - MimeJobTrinkets
 
 - type: roleLoadout
   id: JobMusician
@@ -229,6 +241,7 @@
   - Survival
   - VanillaLegends # Vanilla-Loadouts
   - Trinkets
+  - MusicianJobTrinkets
   - Instruments
   - GroupSpeciesBreathTool
 
@@ -248,6 +261,7 @@
   - Survival
   - VanillaLegends # Vanilla-Loadouts
   - Trinkets
+  - QuartermasterJobTrinkets
   - GroupSpeciesBreathTool
 
 - type: roleLoadout
@@ -265,6 +279,7 @@
   - Survival
   - VanillaLegends # Vanilla-Loadouts
   - Trinkets
+  - CargoTechnicianJobTrinkets
   - GroupSpeciesBreathTool
 
 - type: roleLoadout
@@ -279,6 +294,7 @@
   - Survival
   - VanillaLegends # Vanilla-Loadouts
   - Trinkets
+  - SalvageSpecialistJobTrinkets
   - GroupSpeciesBreathTool
 
 # Engineering
@@ -296,6 +312,7 @@
   - SurvivalExtended
   - VanillaLegends # Vanilla-Loadouts
   - Trinkets
+  - ChiefEngineerJobTrinkets
   - GroupSpeciesBreathTool
 
 - type: roleLoadout
@@ -308,6 +325,7 @@
   - SurvivalExtended
   - VanillaLegends # Vanilla-Loadouts
   - Trinkets
+  - TechnicalAssistantJobTrinkets
   - GroupSpeciesBreathTool
 
 - type: roleLoadout
@@ -324,6 +342,7 @@
   - SurvivalExtended
   - VanillaLegends # Vanilla-Loadouts
   - Trinkets
+  - StationEngineerJobTrinkets
   - GroupSpeciesBreathTool
 
 - type: roleLoadout
@@ -338,6 +357,7 @@
   - SurvivalExtended
   - VanillaLegends # Vanilla-Loadouts
   - Trinkets
+  - AtmosphericTechnicianJobTrinkets
   - GroupSpeciesBreathTool
 
 # Science
@@ -357,6 +377,7 @@
   - Survival
   - VanillaLegends # Vanilla-Loadouts
   - Trinkets
+  - ResearchDirectorJobTrinkets
   - GroupSpeciesBreathTool
 
 - type: roleLoadout
@@ -376,6 +397,7 @@
   - Survival
   - VanillaLegends # Vanilla-Loadouts
   - Trinkets
+  - ScientistJobTrinkets
   - GroupSpeciesBreathTool
 
 - type: roleLoadout
@@ -389,6 +411,7 @@
   - Survival
   - VanillaLegends # Vanilla-Loadouts
   - Trinkets
+  - ResearchAssistantJobTrinkets
   - GroupSpeciesBreathTool
 
 # Security
@@ -407,6 +430,7 @@
   - VanillaLegends # Vanilla-Loadouts
   - HOSGuns # Rayten-Loadouts
   - Trinkets
+  - HeadofSecurityJobTrinkets
   - SecurityStar
   - GroupSpeciesBreathToolSecurity
 
@@ -424,6 +448,7 @@
   - VanillaLegends # Vanilla-Loadouts
   - WardenGuns # Rayten-Loadouts
   - Trinkets
+  - WardenJobTrinkets
   - SecurityStar
   - GroupSpeciesBreathToolSecurity
 
@@ -442,6 +467,7 @@
   - VanillaLegends # Vanilla-Loadouts
   - SecGuns # Rayten-Loadouts
   - Trinkets
+  - SecurityJobTrinkets
   - SecurityStar
   - GroupSpeciesBreathToolSecurity
 
@@ -459,6 +485,7 @@
   - SurvivalSecurity
   - VanillaLegends # Vanilla-Loadouts
   - Trinkets
+  - DetectiveJobTrinkets
   - SecurityStar
   - GroupSpeciesBreathToolSecurity
 
@@ -472,6 +499,7 @@
   - VanillaLegends # Vanilla-Loadouts
   - SecGuns # Rayten-Loadouts
   - Trinkets
+  - SecurityCadetJobTrinkets
   - GroupSpeciesBreathToolSecurity
 
 # Medical
@@ -492,6 +520,7 @@
   - SurvivalMedical
   - VanillaLegends # Vanilla-Loadouts
   - Trinkets
+  - ChiefMedicalOfficerJobTrinkets
   - GroupSpeciesBreathToolMedical
 
 - type: roleLoadout
@@ -511,6 +540,7 @@
   - SurvivalMedical
   - VanillaLegends # Vanilla-Loadouts
   - Trinkets
+  - MedicalDoctorJobTrinkets
   - GroupSpeciesBreathToolMedical
 
 - type: roleLoadout
@@ -524,6 +554,7 @@
   - SurvivalMedical
   - VanillaLegends # Vanilla-Loadouts
   - Trinkets
+  - MedicalInternJobTrinkets
   - GroupSpeciesBreathToolMedical
 
 - type: roleLoadout
@@ -540,6 +571,7 @@
   - SurvivalMedical
   - VanillaLegends # Vanilla-Loadouts
   - Trinkets
+  - ChemistJobTrinkets
   - GroupSpeciesBreathToolMedical
 
 - type: roleLoadout
@@ -558,6 +590,7 @@
   - SurvivalMedical
   - VanillaLegends # Vanilla-Loadouts
   - Trinkets
+  - ParamedicJobTrinkets
   - GroupSpeciesBreathToolMedical
 
 # Wildcards
@@ -571,6 +604,7 @@
   - Survival
   - VanillaLegends # Vanilla-Loadouts
   - Trinkets
+  - ZookeeperJobTrinkets
   - GroupSpeciesBreathTool
 
 - type: roleLoadout
@@ -584,6 +618,7 @@
   - Survival
   - VanillaLegends # Vanilla-Loadouts
   - Trinkets
+  - ReporterJobTrinkets
   - GroupSpeciesBreathTool
 
 - type: roleLoadout
@@ -597,6 +632,7 @@
   - Survival
   - VanillaLegends # Vanilla-Loadouts
   - Trinkets
+  - PsychologistJobTrinkets
   - GroupSpeciesBreathTool
 
 - type: roleLoadout
@@ -611,6 +647,7 @@
   - Survival
   - VanillaLegends # Vanilla-Loadouts
   - Trinkets
+  - BoxerJobTrinkets
   - GroupSpeciesBreathTool
 
 # These loadouts are used for non-crew spawns, like off-station antags and event mobs

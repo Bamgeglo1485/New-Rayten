@@ -1,4 +1,3 @@
-using Content.Server.Temperature.Components;
 using Content.Server.Atmos.EntitySystems;
 using Content.Server.Temperature.Systems;
 using Content.Server.Light.Components;
@@ -8,6 +7,7 @@ using Content.Shared.Atmos.Piping.Unary.Components;
 using Content.Shared.Item.ItemToggle.Components;
 using Content.Shared.Clothing.Components;
 using Content.Shared.Vanilla.Warmer;
+using Content.Shared.Temperature.Components;
 using Content.Shared.Inventory;
 using Content.Shared.Atmos;
 using Content.Shared.Item;

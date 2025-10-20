@@ -1,3 +1,5 @@
+ent-BaseSiliconLawboard = { ent-BaseElectronics }
+    .desc = Электронная плата, содержащая набор законов.
 ent-NTDefaultCircuitBoard = плата законов (NT Default)
     .desc = Электронная плата, содержащая набор законов NT Default.
 ent-AsimovCircuitBoard = плата законов (Крюсимов)

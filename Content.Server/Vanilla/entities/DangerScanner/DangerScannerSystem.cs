@@ -3,6 +3,7 @@ using Content.Shared.Vanilla.Entities.DangerScanner;
 using Content.Shared.Interaction;
 using Content.Shared.DoAfter;
 using Content.Shared.Vanilla.Dominator;
+using Content.Shared.Chat;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Timing;
 

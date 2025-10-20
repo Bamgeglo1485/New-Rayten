@@ -12,7 +12,7 @@
       effects:
       - !type:AdjustReagent
         conditions:
-        - !type:ReagentThreshold
+        - !type:ReagentCondition
           reagent: Sugar
           min: 1
         reagent: Sugar

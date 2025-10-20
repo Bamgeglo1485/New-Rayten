@@ -1,4 +1,5 @@
 using Content.Server.Chat.Systems;
+using Content.Shared.Chat;
 using Content.Server.Ghost.Roles;
 using Content.Server.Ghost.Roles.Components;
 using Content.Server.Ghost;

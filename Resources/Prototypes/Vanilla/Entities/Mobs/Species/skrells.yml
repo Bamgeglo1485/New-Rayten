@@ -38,13 +38,13 @@
     - reagents: [ SpaceCleaner ]
       methods: [ Touch ]
       effects:
-      - !type:WashCreamPieReaction
+      - !type:WashCreamPie
     - reagents: [ Water, Holywater ]
       methods: [ Touch ]
       effects:
-      - !type:WashCreamPieReaction
+      - !type:WashCreamPie
       - !type:HealthChange
-        scaleByQuantity: true
+        scaling: true
         damage:
           groups:
             Burn: -0.5

@@ -36,7 +36,7 @@
             Brute: -0.5
             Burn: -0.5
       # Helps you stop bleeding to an extent.
-      - !type:ModifyBleedAmount
+      - !type:ModifyBleed
         amount: -0.25
       - !type:SatiateHunger #Numbers are balanced with this in mind + it helps limit how much healing you can get from food
   # Lets plants benefit too
@@ -69,16 +69,17 @@
   # RAYTEN STARTS
       - !type:HealthChange
         conditions:
-        - !type:OrganType
-          type: Skrell
+        - !type:MetabolizerTypeCondition
+          type: [ Skrell ]
         damage:
           types:
             Poison: 0.4
-      - !type:ChemVomit
+      - !type:Vomit
         conditions:
-        - !type:OrganType
-          type: Skrell
-        - !type:ReagentThreshold
+        - !type:MetabolizerTypeCondition
+          type: [ Skrell ]
+        - !type:ReagentCondition
+          reagent: Protein
           min: 2
         probability: 0.8
     # RAYTEN ENDS
@@ -99,7 +100,7 @@
       effects:
       - !type:SatiateHunger
         conditions:
-        - !type:ReagentThreshold #Only satiates when eaten with nutriment
+        - !type:ReagentCondition #Only satiates when eaten with nutriment
           reagent: Nutriment
           min: 0.1
         factor: 1

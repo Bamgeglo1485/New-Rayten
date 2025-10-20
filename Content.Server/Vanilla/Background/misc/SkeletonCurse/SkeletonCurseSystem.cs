@@ -2,7 +2,7 @@ using Content.Server.Polymorph.Systems;
 using Content.Server.Speech.Components;
 using Content.Server.Chat.Managers;
 using Content.Server.Destructible;
-using Content.Server.Destructible.Thresholds.Triggers;
+using Content.Shared.Destructible.Thresholds.Triggers;
 using Content.Shared.CombatMode.Pacification;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Events;

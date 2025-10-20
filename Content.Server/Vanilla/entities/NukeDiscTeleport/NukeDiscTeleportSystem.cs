@@ -4,6 +4,7 @@ using Content.Server.Respawn;
 using Content.Server.Shuttles.Components;
 using Content.Shared.Station.Components;
 using Content.Shared.Nuke;
+using Content.Shared.Chat;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
 using Robust.Shared.Timing;
@@ -20,17 +21,13 @@ public sealed class NukeDiskTeleportSystem : EntitySystem
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly SpecialRespawnSystem _specialRespawn = default!;
     [Dependency] protected readonly SharedTransformSystem TransformSystem = default!;
-    public override void Initialize()
-    {
-        base.Initialize();
-    }
     public override void Update(float frameTime)
     {
         var curTime = _gameTiming.CurTime;
         var query = EntityQueryEnumerator<NukeDiskComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out var nuke, out var transform))
         {
-            if(nuke.WillTpAt != null && curTime < nuke.WillTpAt)
+            if (nuke.WillTpAt != null && curTime < nuke.WillTpAt)
                 continue;
 
             if (IsOnStationGrid(transform.GridUid) || IsOnEvacShuttle(transform.GridUid))
@@ -39,7 +36,7 @@ public sealed class NukeDiskTeleportSystem : EntitySystem
                 continue;
             }
 
-            if(nuke.WillTpAt == null)
+            if (nuke.WillTpAt == null)
             {
                 nuke.WillTpAt = curTime + TimeSpan.FromSeconds(5);
                 _audio.PlayPvs("/Audio/Machines/Nuke/angry_beep.ogg", uid);
@@ -54,7 +51,7 @@ public sealed class NukeDiskTeleportSystem : EntitySystem
 
     private bool IsOnStationGrid(EntityUid? gridUid)
     {
-        if(gridUid==null)
+        if (gridUid == null)
             return false;
 
         var query = EntityQueryEnumerator<StationDataComponent>();
@@ -68,7 +65,7 @@ public sealed class NukeDiskTeleportSystem : EntitySystem
 
     private bool IsOnEvacShuttle(EntityUid? gridUid)
     {
-        if(gridUid==null)
+        if (gridUid == null)
             return false;
         foreach (var evacComp in EntityQuery<StationEmergencyShuttleComponent>())
         {
@@ -103,7 +100,8 @@ public sealed class NukeDiskTeleportSystem : EntitySystem
                 _audio.PlayPvs("/Audio/Magic/blink.ogg", uid);
                 return;
             }
-            else{
+            else
+            {
                 _chat.TrySendInGameICMessage(uid, Loc.GetString("nukediscteleport-failurepathfinding"),
                     InGameICChatType.Speak, true);
             }

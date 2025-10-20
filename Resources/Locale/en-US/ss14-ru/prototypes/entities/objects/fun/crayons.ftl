@@ -1,3 +1,5 @@
+ent-CrayonInedible = crayon
+    .desc = A colourful crayon. Looks tasty. Mmmm...
 ent-Crayon = crayon
     .desc = A colourful crayon. Looks tasty. Mmmm...
 ent-CrayonWhite = white crayon
@@ -8,6 +10,8 @@ ent-CrayonRainbow = rainbow crayon
     .desc = { ent-Crayon.desc }
 ent-CrayonInfinite = infinite crayon
     .desc = { ent-CrayonRainbow.desc }
+ent-CrayonBorg = electric crayon
+    .desc = Supposedly the most delicious crayon type in all the universes; unfortunately, you cannot eat.
 ent-CrayonBlack = black crayon
     .desc = { ent-Crayon.desc }
 ent-CrayonRed = red crayon

@@ -156,6 +156,7 @@
   components:
     - type: RequiresSkill
       RequiresEngineeringLevel: 2
+    - type: InteractionOutline
     - type: Transform
       anchored: true
       noRot: true

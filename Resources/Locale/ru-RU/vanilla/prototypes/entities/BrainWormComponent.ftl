@@ -13,4 +13,6 @@ force-say-text = Заставьте носителя сказать какую-�
 force-say-placeholder = Что-то...
 force-say-send-button = Сказать
 health-analyzer-window-entity-brainwormed-text = [color=red]В мозгу пациента обнаружен мозговой червь![/color]
-reagent-effect-guidebook-brainworm-damage = Наносит { $amount } ед. Яды мозговому червю.
+entity-effect-guidebook-brainworm-damage-detailed = Наносит { $changes } мозговому червю
+entity-effect-guidebook-brainworm-damage-none = Не наносит урон мозговому червю
+

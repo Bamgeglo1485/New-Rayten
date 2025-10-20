@@ -724,7 +724,7 @@
 
 - type: entity
   name: C.H.I.M.P. handcannon
-  parent: [BaseWeaponBatterySmall, SecondScienceContraband]
+  parent: [BaseWeaponBatterySmall, FirstScienceContraband]
   id: WeaponPistolCHIMP
   description: Just because it's a little C.H.I.M.P. doesn't mean it can't punch like an A.P.E.
   components:
@@ -843,12 +843,13 @@
     proto: BulletDisablerSpreadDominator
     fireCost: 45
   - type: Dominator
+  - type: BatteryWeaponFireModes
     fireModes:
     - proto: BulletDisablerSpreadDominator
       fireCost: 45
     - proto: BulletDisablerSpreadDominator
       fireCost: 45
-    - proto: BulletLaserSpreadDominator
+    - proto: AssaultDominatorLethalShot
       fireCost: 60
   - type: Item
     size: Large
@@ -884,6 +885,7 @@
   - type: Tag
     tags:
     - HighRiskItem
+    - Sidearm
   # - type: StealTarget
   #   stealGroup: WeaponEnergyMagnum
   - type: Gun
