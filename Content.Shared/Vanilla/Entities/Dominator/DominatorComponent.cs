@@ -14,7 +14,11 @@ public sealed partial class DominatorComponent : Component
     public EntityUid? AuthorizedID = null;
 
     [DataField]
-    public DominatorState CurrentState = DominatorState.Lethal;
+    public DominatorState CurrentState = DominatorState.Disabled;
+
+    [DataField(required: true)]
+    [AutoNetworkedField]
+    public List<BatteryWeaponFireMode> FireModes = [];
 
     [DataField]
     public float ScanRange = 14.0f;

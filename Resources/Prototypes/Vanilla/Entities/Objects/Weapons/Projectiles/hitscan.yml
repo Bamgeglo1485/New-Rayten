@@ -22,8 +22,8 @@
   parent: BasicHitscan
   id: DominatorNonLethalShot
   components:
-  - type: StaminaDamageOnCollide
-    damage: 40
+  - type: HitscanStaminaDamage
+    staminaDamage: 40
   - type: HitscanBasicVisuals
     muzzleFlash:
       sprite: Objects/Weapons/Guns/Projectiles/projectiles.rsi
@@ -61,8 +61,8 @@
   parent: BasicHitscan
   id: AssaultDominatorNonLethalShot
   components:
-  - type: StaminaDamageOnCollide
-    damage: 15
+  - type: HitscanStaminaDamage
+    staminaDamage: 15
   - type: HitscanBasicVisuals
     muzzleFlash:
       sprite: Objects/Weapons/Guns/Projectiles/projectiles.rsi

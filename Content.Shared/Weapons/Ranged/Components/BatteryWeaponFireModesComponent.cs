@@ -47,6 +47,10 @@ public sealed partial class BatteryWeaponFireMode
     /// </summary>
     [DataField]
     public float FireCost = 100;
+    //RAYTEN
+    // true - Хитскан false - проджектаил
+    [DataField("isHitscan")]
+    public bool IsHitscan = false;
 
 }
 

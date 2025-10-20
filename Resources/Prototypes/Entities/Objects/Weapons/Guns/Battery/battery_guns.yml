@@ -843,13 +843,12 @@
     proto: BulletDisablerSpreadDominator
     fireCost: 45
   - type: Dominator
-  - type: BatteryWeaponFireModes
     fireModes:
     - proto: BulletDisablerSpreadDominator
       fireCost: 45
     - proto: BulletDisablerSpreadDominator
       fireCost: 45
-    - proto: AssaultDominatorLethalShot
+    - proto: BulletLaserSpreadDominator
       fireCost: 60
   - type: Item
     size: Large
