@@ -24,12 +24,13 @@
         - !type:HTNCompoundTask
           task: FollowCompound
   #7. Патрулируй
-
+    # - tasks:
+    #     - !type:HTNCompoundTask
+    #       task: PatrolCompound
   #8. Адыхай
     - tasks:
         - !type:HTNCompoundTask
           task: IdleCompound
-
 
 - type: htnCompound
   id: KillDangerMobsCompound
@@ -65,14 +66,13 @@
             jukeType: AdjacentTile
 
         # сообщаем информацию
-        - !type:HTNPrimitiveTask
-          preconditions:
-            - !type:KeyExistsPrecondition
-              key: Target
-          operator: !type:SpeakDatasetOperator
-            dataset: SecuritonTargetWarning
-            radio: true
-
+        # - !type:HTNPrimitiveTask
+        #   preconditions:
+        #     - !type:KeyExistsPrecondition
+        #       key: Target
+        #   operator: !type:SpeakDatasetOperator
+        #     dataset: SecuritonTargetWarning
+        #     radio: true
         # стреляем
         - !type:HTNPrimitiveTask
           preconditions:
@@ -87,12 +87,10 @@
               id: RangedService
               proto: NearbyDangerDangerMobTargets
               key: Target
-
         - !type:HTNPrimitiveTask
           operator: !type:SpeakDatasetOperator
             dataset: SecuritonTargetDead
             hidden: true
-
 
 - type: htnCompound
   id: SecuritronFindCuffsCompound
@@ -103,7 +101,6 @@
             proto: NearbyCuffs
             key: handcuffs
             keyCoordinates: handcuffs_targetCoordinates
-            
         - !type:HTNPrimitiveTask
           operator: !type:MoveToOperator
             pathfindInPlanning: true
@@ -111,7 +108,6 @@
             targetKey: handcuffs_targetCoordinates
             pathfindKey: TargetPathfind
             rangeKey: InteractRange
-
         - !type:HTNPrimitiveTask
           preconditions:
             - !type:TargetInRangePrecondition
@@ -119,6 +115,8 @@
               rangeKey: InteractRange
           operator: !type:InteractWithOperator
             targetKey: handcuffs
+        - !type:HTNPrimitiveTask
+          operator: !type:InsertCuffsOperator
 
 - type: htnCompound
   id: SecuritronArrestCompound

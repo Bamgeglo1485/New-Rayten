@@ -10,24 +10,17 @@ using Content.Shared.Hands.Components;
 using Content.Shared.Cuffs;
 using Content.Shared.Cuffs.Components;
 using Content.Shared.Vanilla.Dominator;
-using Robust.Shared.Containers;
 
-namespace Content.Server.Vanilla.NPC.HTN.PrimitiveTasks.Operators.Combat.Melee;
+namespace Content.Server.Vanilla.NPC.HTN.PrimitiveTasks.Operators.Securitron;
 
-/// <summary>
-/// Attacks the specified key in melee combat.
-/// </summary>
 public sealed partial class CuffOperator : HTNOperator, IHtnConditionalShutdown
 {
     [Dependency] private readonly IEntityManager _entManager = default!;
     private SharedCuffableSystem _handcuff = default!;
     private SharedHandsSystem _hands = default!;
-    private SharedContainerSystem _container = default!;
-
 
     [DataField("shutdownState")]
     public HTNPlanState ShutdownState { get; private set; } = HTNPlanState.TaskFinished;
-
 
     [DataField("targetKey", required: true)]
     public string TargetKey = default!;
@@ -41,7 +34,6 @@ public sealed partial class CuffOperator : HTNOperator, IHtnConditionalShutdown
         base.Initialize(sysManager);
         _handcuff = sysManager.GetEntitySystem<SharedCuffableSystem>();
         _hands = sysManager.GetEntitySystem<SharedHandsSystem>();
-        _container = sysManager.GetEntitySystem<SharedContainerSystem>();
     }
 
     public override void Startup(NPCBlackboard blackboard)
@@ -51,7 +43,6 @@ public sealed partial class CuffOperator : HTNOperator, IHtnConditionalShutdown
 
         var owner = blackboard.GetValue<EntityUid>(NPCBlackboard.Owner);
 
-        // Достаём компонент с контейнером
         if (!_entManager.TryGetComponent<SecurityMarkerComponent>(owner, out var security))
             return;
 
@@ -130,12 +121,7 @@ public sealed partial class CuffOperator : HTNOperator, IHtnConditionalShutdown
             return;
 
         if (_hands.GetActiveItem(owner) is { } heldEntity)
-        {
-            if (!_container.TryRemoveFromContainer(heldEntity))
-                return;
-
-            _container.Insert(heldEntity, security.HandCuffContainer);
-        }
+            _hands.TryDropIntoContainer(owner, heldEntity, security.HandCuffContainer);
 
     }
 

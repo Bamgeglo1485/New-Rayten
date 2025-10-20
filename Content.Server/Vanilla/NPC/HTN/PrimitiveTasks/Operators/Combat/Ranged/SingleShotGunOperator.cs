@@ -1,23 +1,20 @@
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using Content.Server.NPC;
 using Content.Server.NPC.HTN;
 using Content.Server.NPC.HTN.PrimitiveTasks;
 using Content.Shared.Mobs;
-using Content.Shared.Weapons.Melee;
-using Content.Shared.CombatMode;
-using Robust.Shared.GameObjects;
-using Robust.Shared.Maths;
+using Content.Shared.Weapons.Ranged.Systems;
+using Content.Shared.Weapons.Ranged.Components;
+using Robust.Shared.Map;
+using System.Numerics;
+using System.Threading;
+using System.Threading.Tasks;
 
-namespace Content.Server.Vanilla.NPC.HTN.PrimitiveTasks.Operators
+namespace Content.Server.Vanilla.NPC.HTN.PrimitiveTasks.Operators.Combat.Ranged
 {
-    public sealed partial class SingleMeleeAttackOperator : HTNOperator
+    public sealed partial class SingleShotGunOperator : HTNOperator
     {
         [Dependency] private readonly IEntityManager _entManager = default!;
-        private SharedMeleeWeaponSystem _meleeSystem = default!;
-        private SharedCombatModeSystem _combat = default!;
-
+        private SharedGunSystem _gunSystem = default!;
 
         [DataField("targetKey", required: true)]
         public string TargetKey = default!;
@@ -25,10 +22,8 @@ namespace Content.Server.Vanilla.NPC.HTN.PrimitiveTasks.Operators
         public override void Initialize(IEntitySystemManager sysManager)
         {
             base.Initialize(sysManager);
-            _meleeSystem = sysManager.GetEntitySystem<SharedMeleeWeaponSystem>();
-            _combat = _entManager.System<SharedCombatModeSystem>();
+            _gunSystem = sysManager.GetEntitySystem<SharedGunSystem>();
         }
-
 
         public override async Task<(bool Valid, Dictionary<string, object>? Effects)> Plan(
             NPCBlackboard blackboard, CancellationToken cancelToken)
@@ -44,20 +39,18 @@ namespace Content.Server.Vanilla.NPC.HTN.PrimitiveTasks.Operators
             var owner = blackboard.GetValue<EntityUid>(NPCBlackboard.Owner);
             var target = blackboard.GetValue<EntityUid>(TargetKey);
 
-            if (!_meleeSystem.TryGetWeapon(owner, out var weaponUid, out var weapon))
+            if (!_entManager.TryGetComponent<GunComponent>(owner, out var gun))
+            {
                 return;
+            }
 
-            _combat.SetInCombatMode(owner, true);
-            _meleeSystem.AttemptLightAttack(owner, weaponUid, weapon, target);
-            _combat.SetInCombatMode(owner, false);
+            _gunSystem.AttemptShoot(owner, owner, gun, new EntityCoordinates(target, Vector2.Zero), target);
         }
-
-
 
         public override HTNOperatorStatus Update(NPCBlackboard blackboard, float frameTime)
         {
-            // Задача выполнена сразу после одного удара
             return HTNOperatorStatus.Finished;
         }
+
     }
 }
