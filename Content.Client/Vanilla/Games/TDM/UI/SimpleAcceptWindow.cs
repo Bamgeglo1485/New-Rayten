@@ -7,7 +7,7 @@ using static Robust.Client.UserInterface.Controls.BoxContainer;
 
 namespace Content.Client.Vanilla.TDM.UI
 {
-    public sealed class AcceptTDMWindow : DefaultWindow
+    public sealed class SimpleAcceptWindow : DefaultWindow
     {
         public readonly Button DenyButton;
         public readonly Button AcceptButton;
@@ -15,9 +15,9 @@ namespace Content.Client.Vanilla.TDM.UI
         {
             return;
         }
-        public AcceptTDMWindow()
+        public SimpleAcceptWindow(string title, string text, string acceptButton, string denyButton)
         {
-            Title = Loc.GetString("accept-TDM-window-title");
+            Title = title;
 
             Contents.AddChild(new BoxContainer
             {
@@ -31,7 +31,7 @@ namespace Content.Client.Vanilla.TDM.UI
                         {
                             (new Label()
                             {
-                                Text = Loc.GetString("accept-TDM-window-prompt-text-part")
+                                Text = text
                             }),
                             new BoxContainer
                             {
@@ -41,7 +41,7 @@ namespace Content.Client.Vanilla.TDM.UI
                                 {
                                     (AcceptButton = new Button
                                     {
-                                        Text = Loc.GetString("accept-TDM-window-accept-button"),
+                                        Text = acceptButton,
                                     }),
 
                                     (new Control()
@@ -51,7 +51,7 @@ namespace Content.Client.Vanilla.TDM.UI
 
                                     (DenyButton = new Button
                                     {
-                                        Text = Loc.GetString("accept-TDM-window-deny-button"),
+                                        Text = denyButton,
                                     })
                                 }
                             },

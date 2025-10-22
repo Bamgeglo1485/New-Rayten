@@ -7,7 +7,7 @@ namespace Content.Client.Vanilla.TDM;
 
 public sealed class TDMSystem : EntitySystem
 {
-    private AcceptTDMWindow? _tdmWindow;
+    private SimpleAcceptWindow? _tdmWindow;
 
     [Dependency] private readonly IGameTiming _gameTiming = default!;
     public event Action<TimeSpan, int>? TDMInfoUpdated;
@@ -37,7 +37,10 @@ public sealed class TDMSystem : EntitySystem
         if (_tdmWindow != null && _tdmWindow.IsOpen)
             return;
 
-        _tdmWindow = new AcceptTDMWindow();
+        _tdmWindow = new SimpleAcceptWindow(Loc.GetString("accept-TDM-window-title"),
+                                            Loc.GetString("accept-TDM-window-prompt-text-part"),
+                                            Loc.GetString("accept-TDM-window-accept-button"),
+                                            Loc.GetString("accept-TDM-window-deny-button"));
 
         _tdmWindow.AcceptButton.OnPressed += _ =>
         {
@@ -93,7 +96,7 @@ public sealed class TDMSystem : EntitySystem
             return;
         TimeToStartTDM -= TimeSpan.FromSeconds(1);
     }
-    
+
     private void TTTCHECK()
     {
         if (!CanJoinTTT)

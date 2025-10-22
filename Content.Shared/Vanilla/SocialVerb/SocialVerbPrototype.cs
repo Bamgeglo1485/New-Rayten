@@ -13,8 +13,6 @@ public sealed class SocialVerbPrototype : IPrototype
 
     [DataField(required: true)] public string Text = string.Empty;
     [DataField] public string? Icon;
-    [DataField] public float MinRange = 0f;
-    [DataField] public float MaxRange = 16f;
     [DataField] public bool RequiresActiveItem = false;
     [DataField] public bool RequiresInteractRange = false;
 }
