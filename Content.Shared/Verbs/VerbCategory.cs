@@ -57,6 +57,9 @@ namespace Content.Shared.Verbs
             new VerbCategory("Отчёты", null);
         public static readonly VerbCategory BureaucracyRequest =
             new VerbCategory("Запросы", null);
+
+        public static readonly VerbCategory Social =
+            new("Действия", "/Textures/Interface/VerbIcons/bubbles.svg.192dpi.png");
         //Vanilla-Station-end
 
 

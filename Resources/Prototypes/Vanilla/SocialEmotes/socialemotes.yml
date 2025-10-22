@@ -1,0 +1,33 @@
+- type: socialVerb
+  id: Scream
+  text: окрикнуть
+  minRange: 3
+  maxRange: 16
+
+- type: socialVerb
+  id: Wave
+  text: помахать
+  minRange: 3
+  maxRange: 16
+
+- type: socialVerb
+  id: Shout
+  text: потрясти
+  requiresInteractRange: true
+  minRange: 0
+  maxRange: 3
+
+- type: socialVerb
+  id: OfferAHand
+  text: протянуть руку
+  requiresInteractRange: true
+  minRange: 0
+  maxRange: 3
+
+- type: socialVerb
+  id: OfferAnItem
+  text: предложить
+  requiresActiveItem: true
+  requiresInteractRange: true
+  minRange: 0
+  maxRange: 3
