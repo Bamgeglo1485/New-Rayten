@@ -64,7 +64,7 @@ public sealed class ServerSocialVerbSystem : EntitySystem
                 if (item == null)
                     return;
 
-                var activeItem = _hands.GetActiveItem(user);
+                var activeItem = _hands.GetActiveItem(target);
 
                 if (item != activeItem)
                     return;
