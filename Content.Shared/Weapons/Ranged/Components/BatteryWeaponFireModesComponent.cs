@@ -47,11 +47,18 @@ public sealed partial class BatteryWeaponFireMode
     /// </summary>
     [DataField]
     public float FireCost = 100;
-    //RAYTEN
+
+    /// <summary>
+    /// Wether or not this fire mode can be used by pacifists
+    /// </summary>
+    [DataField]
+    public bool PacifismAllowedMode = false;
+
+    //RAYTEN-start
     // true - Хитскан false - проджектаил
     [DataField("isHitscan")]
     public bool IsHitscan = false;
-
+    //rayten-end
 }
 
 [Serializable, NetSerializable]

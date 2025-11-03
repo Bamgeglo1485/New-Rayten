@@ -7,6 +7,7 @@ using Content.Shared.NPC.Systems;
 using Content.Shared.Projectiles;
 using Content.Shared.Mobs;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.GameObjects;

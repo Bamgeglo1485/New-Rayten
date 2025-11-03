@@ -12,6 +12,8 @@ using Content.Shared.Vanilla.Skill;
 using Content.Shared.Vanilla.Background;
 using Content.Shared.Mindshield.Components;
 using Content.Shared.Clothing;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Damage;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
@@ -457,11 +459,8 @@ public sealed class TDMSystem : EntitySystem
     {
         if ((args.NewMobState == MobState.Critical && args.OldMobState < args.NewMobState) || (args.NewMobState == MobState.Dead && args.OldMobState < MobState.Critical))
         {
-            if (TryComp<DamageableComponent>(uid, out var damage))
-            {
-                _damageable.TryChangeDamage(uid, component.Damage, true, false, damage);
-            }
-            else return;
+            if (!_damageable.TryChangeDamage(uid, component.Damage, true, false, null))
+                return;
         }
         else return;
 

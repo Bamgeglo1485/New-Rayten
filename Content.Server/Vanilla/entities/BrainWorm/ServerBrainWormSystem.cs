@@ -11,7 +11,7 @@ using Content.Shared.Movement.Events;
 using Content.Shared.Mindshield.Components;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Chemistry.Components.SolutionManager;
-using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Components;
 using Content.Shared.Sprite;
 using Content.Shared.Popups;
@@ -73,11 +73,13 @@ public sealed class BrainWormSystem : SharedBrainWormSystem
         //сожрали сахар
         SubscribeLocalEvent<BrainWormHostComponent, SolutionContainerChangedEvent>(OnSolutionChanged);
     }
+
     private void OnTemperatureProtection(EntityUid uid, BrainWormComponent comp, ref GetTemperatureProtectionEvent args)
     {
         if (comp.TryGetHost(out var host))
             args.Coefficient *= 0;
     }
+
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
@@ -110,8 +112,7 @@ public sealed class BrainWormSystem : SharedBrainWormSystem
                 continue;
 
             // Лечим
-            if (TryComp<DamageableComponent>(host, out var damage))
-                _damageable.TryChangeDamage(host, wormcomp.Heal, true, false, damage);
+            _damageable.TryChangeDamage(host, wormcomp.Heal, true, false, uid);
         }
     }
 

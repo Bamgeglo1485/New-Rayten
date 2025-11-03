@@ -154,12 +154,12 @@ public sealed class DepartmentGoalSystem : EntitySystem
         int randomValue = _random.Next(15000, 35000);
         ProtoId<CargoAccountPrototype> account = goal.Department switch
         {
-            department.RnD => "Science",
-            department.MED => "Medical",
-            department.CARGO => "Cargo",
-            department.ENG => "Engineering",
-            department.SEC => "Security",
-            department.SRV => "Service",
+            Department.RnD => "Science",
+            Department.MED => "Medical",
+            Department.CARGO => "Cargo",
+            Department.ENG => "Engineering",
+            Department.SEC => "Security",
+            Department.SRV => "Service",
             _ => "Cargo"
         };
 
@@ -168,7 +168,7 @@ public sealed class DepartmentGoalSystem : EntitySystem
         return true;
     }
 
-    private void DispatchAnnouncement(department dep, int randomValue)
+    private void DispatchAnnouncement(Department dep, int randomValue)
     {
         _chatSystem.DispatchGlobalAnnouncement(Loc.GetString("Department-goal-text", ("dep", dep.ToString()), ("rand", randomValue)),
                                                 Loc.GetString("Department-goal-title"));

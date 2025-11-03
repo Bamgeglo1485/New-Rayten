@@ -30,6 +30,8 @@ using Content.Shared.FixedPoint;
 using Content.Shared.Weather;
 using Content.Shared.Salvage;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Atmos;
 using Content.Shared.Audio;
 using Content.Shared.Maps;

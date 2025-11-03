@@ -3081,3 +3081,48 @@
   id: 160
   time: '2025-10-20T19:22:20.0000000+00:00'
   url: https://github.com/RaytenCorp/Rayten/pull/388
+- author: Bamgeglo1485
+  changes:
+  - message: "\u0420\u0435\u0441\u043F\u0440\u0430\u0439\u0442 \u043F\u043E\u0440\u0442\
+      \u0430\u043B\u044C\u043D\u043E\u0439 \u043F\u0443\u0448\u043A\u0438 \u0438 \u043E\
+      \u0442\u043E\u0431\u0440\u0430\u0436\u0435\u043D\u0438\u0435 \u0432 \u0440\u0443\
+      \u043A\u0435"
+    type: Tweak
+  - message: "\u0412 \u043F\u043E\u0440\u0442\u0430\u043B\u044C\u043D\u044B\u0445\
+      \ \u0431\u0438\u043E\u043C\u0430\u0445 \u0442\u0435\u043F\u0435\u0440\u044C\
+      \ \u043D\u0430\u043C\u043D\u043E\u0433\u043E \u043C\u0435\u043D\u044C\u0448\u0435\
+      \ \u0442\u0432\u0430\u0440\u0435\u0439"
+    type: Tweak
+  - message: "\u0422\u0435\u043F\u0435\u0440\u044C \u0434\u043E\u043C\u0438\u043D\u0430\
+      \u0442\u043E\u0440 \u043A\u043E\u0440\u0440\u0435\u043A\u0442\u043D\u043E \u043E\
+      \u0442\u043E\u0431\u0440\u0430\u0436\u0430\u0435\u0442\u0441\u044F \u0432 \u0440\
+      \u0443\u043A\u0435. \u0411\u0430\u0433\u0443 \u043F\u043E\u043B\u0433\u043E\u0434\
+      \u0430"
+    type: Fix
+  id: 161
+  time: '2025-11-02T13:39:54.0000000+00:00'
+  url: https://github.com/RaytenCorp/Rayten/pull/392
+- author: SuperGDPWYL
+  changes:
+  - message: Certain thief objectives can no longer be rolled by jobs which have trivial
+      access to the objective item.
+    type: Tweak
+  id: 162
+  time: '2025-10-31T09:37:48.0000000+00:00'
+  url: https://github.com/space-wizards/space-station-14/pull/40065
+- author: aada
+  changes:
+  - message: Several lathe recipes capable of duplicating materials have been made
+      more expensive.
+    type: Fix
+  id: 163
+  time: '2025-10-31T00:20:53.0000000+00:00'
+  url: https://github.com/space-wizards/space-station-14/pull/41134
+- author: NoreUhh
+  changes:
+  - message: Added two new fun reagents, Felinase and Caninase, which change how you
+      talk!
+    type: Add
+  id: 164
+  time: '2025-10-31T01:14:29.0000000+00:00'
+  url: https://github.com/space-wizards/space-station-14/pull/41136

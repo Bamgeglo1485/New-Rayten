@@ -12,7 +12,7 @@ public sealed class DepartmentGoalPrototype : IPrototype
     public string Text { get; set; } = string.Empty;
 
     [DataField("department")]
-    public department Department;
+    public Department Department;
 
     [DataField("weight")]
     public float Weight { get; set; } = 1.0f;
@@ -20,12 +20,12 @@ public sealed class DepartmentGoalPrototype : IPrototype
 
 
 [Serializable]
-public enum department
+public enum Department
 {
-    RnD = 0,   
-    MED = 1,   
-    CARGO = 2, 
+    RnD = 0,
+    MED = 1,
+    CARGO = 2,
     ENG = 3,
     SEC = 4,
-    SRV = 5 
+    SRV = 5
 }

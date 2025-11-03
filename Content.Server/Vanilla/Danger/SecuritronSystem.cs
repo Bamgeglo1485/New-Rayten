@@ -1,5 +1,7 @@
 using Content.Shared.Vanilla.Dominator;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
+using Content.Shared.Damage.Components;
 using Robust.Shared.Containers;
 using System.Linq;
 

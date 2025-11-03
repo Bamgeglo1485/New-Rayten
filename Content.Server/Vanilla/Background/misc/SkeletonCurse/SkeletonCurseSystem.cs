@@ -4,7 +4,8 @@ using Content.Server.Chat.Managers;
 using Content.Server.Destructible;
 using Content.Shared.Destructible.Thresholds.Triggers;
 using Content.Shared.CombatMode.Pacification;
-using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
+using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Events;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.FixedPoint;
@@ -94,20 +95,13 @@ public sealed class SkeletonCurseSystem : EntitySystem
         component.LifetimeDamage[origin] = component.LifetimeDamage.GetValueOrDefault(origin) + damage;
         if (component.LifetimeDamage[origin] > FixedPoint2.New(30))
         {
-            if (TryComp<DamageableComponent>(uid, out var damagecomp))
-            {
-                _damageable.TryChangeDamage(uid, component.Damage, true, false, damagecomp);
-            }
-
+            _damageable.TryChangeDamage(uid, component.Damage, true, false, origin);
             Curse(origin);
         }
     }
     private void OnStamCrit(EntityUid uid, SkeletonCurseComponent component, StaminaCritEvent args)
     {
-        if (TryComp<DamageableComponent>(uid, out var damagecomp))
-        {
-            _damageable.TryChangeDamage(uid, component.Damage, true, false, damagecomp);
-        }
+        _damageable.TryChangeDamage(uid, component.Damage, true, false, null);
     }
 
 }

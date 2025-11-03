@@ -93,7 +93,6 @@
     - 0,0,1,0
     - 0,1,0,1
     sprite: Vanilla/Objects/Weapons/Guns/Battery/Dominator.rsi
-    heldPrefix: energy
 
 - type: entity
   name: штурмовой доминатор

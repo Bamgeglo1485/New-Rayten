@@ -20,7 +20,7 @@
         reagents:
         - ReagentId: Ephedronex
           Quantity: 60
-  - type: Food
+  - type: Edible
   - type: FlavorProfile
     flavors:
       - bitter

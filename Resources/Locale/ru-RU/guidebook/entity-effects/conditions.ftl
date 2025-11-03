@@ -1,86 +1,86 @@
-reagent-effect-condition-guidebook-total-damage =
+entity-condition-guidebook-total-damage =
     { $max ->
-        [2147483648] у него как минимум { NATURALFIXED($min, 2) } общего урона
+        [2147483648] имеет не менее { NATURALFIXED($min, 2) } общего урона
        *[other]
             { $min ->
-                [0] у него не более { NATURALFIXED($max, 2) } общего урона
-               *[other] у него от { NATURALFIXED($min, 2) } до { NATURALFIXED($max, 2) } общего урона
+                [0] имеет не более { NATURALFIXED($max, 2) } общего урона
+               *[other] имеет от { NATURALFIXED($min, 2) } до { NATURALFIXED($max, 2) } общего урона
             }
     }
-reagent-effect-condition-guidebook-type-damage =
+entity-condition-guidebook-type-damage =
     { $max ->
-        [2147483648] у него как минимум { NATURALFIXED($min, 2) } { $type } урона
+        [2147483648] имеет не менее { NATURALFIXED($min, 2) } { $type } урона
        *[other]
             { $min ->
-                [0] у него не более { NATURALFIXED($max, 2) } { $type } урона
-               *[other] у него от { NATURALFIXED($min, 2) } до { NATURALFIXED($max, 2) } { $type } урона
+                [0] имеет не более { NATURALFIXED($max, 2) } { $type } урона
+               *[other] имеет от { NATURALFIXED($min, 2) } до { NATURALFIXED($max, 2) } { $type } урона
             }
     }
-reagent-effect-condition-guidebook-group-damage =
+entity-condition-guidebook-group-damage =
     { $max ->
-        [2147483648] у него как минимум { NATURALFIXED($min, 2) } { $type } урона.
+        [2147483648] имеет не менее { NATURALFIXED($min, 2) } { $type } урона
        *[other]
             { $min ->
-                [0] у него не более { NATURALFIXED($max, 2) } { $type } урона.
-               *[other] у него от { NATURALFIXED($min, 2) } до { NATURALFIXED($max, 2) } { $type } урона
+                [0] имеет не более { NATURALFIXED($max, 2) } { $type } урона
+               *[other] имеет от { NATURALFIXED($min, 2) } до { NATURALFIXED($max, 2) } { $type } урона
             }
     }
-reagent-effect-condition-guidebook-total-hunger =
+entity-condition-guidebook-total-hunger =
     { $max ->
-        [2147483648] у цели как минимум { NATURALFIXED($min, 2) } общего голода
+        [2147483648] цель имеет не менее { NATURALFIXED($min, 2) } единиц голода
        *[other]
             { $min ->
-                [0] у цели не более { NATURALFIXED($max, 2) } общего голода
-               *[other] у цели от { NATURALFIXED($min, 2) } до { NATURALFIXED($max, 2) } общего голода
+                [0] цель имеет не более { NATURALFIXED($max, 2) } единиц голода
+               *[other] цель имеет от { NATURALFIXED($min, 2) } до { NATURALFIXED($max, 2) } единиц голода
             }
     }
-reagent-effect-condition-guidebook-reagent-threshold =
+entity-condition-guidebook-reagent-threshold =
     { $max ->
-        [2147483648] присутствует как минимум { NATURALFIXED($min, 2) }u { $reagent }
+        [2147483648] содержит не менее { NATURALFIXED($min, 2) } ед. { $reagent }
        *[other]
             { $min ->
-                [0] присутствует не более { NATURALFIXED($max, 2) }u { $reagent }
-               *[other] присутствует от { NATURALFIXED($min, 2) }u до { NATURALFIXED($max, 2) }u { $reagent }
+                [0] содержит не более { NATURALFIXED($max, 2) } ед. { $reagent }
+               *[other] содержит от { NATURALFIXED($min, 2) } до { NATURALFIXED($max, 2) } ед. { $reagent }
             }
     }
-reagent-effect-condition-guidebook-mob-state-condition = моб находится в состоянии { $state }
-reagent-effect-condition-guidebook-job-condition = профессия цели — { $job }
-reagent-effect-condition-guidebook-solution-temperature =
+entity-condition-guidebook-mob-state-condition = моб находится в состоянии { $state }
+entity-condition-guidebook-job-condition = работа цели — { $job }
+entity-condition-guidebook-solution-temperature =
     температура раствора { $max ->
-        [2147483648] не менее { NATURALFIXED($min, 2) }K
+        [2147483648] не ниже { NATURALFIXED($min, 2) } K
        *[other]
             { $min ->
-                [0] не более { NATURALFIXED($max, 2) }K
-               *[other] от { NATURALFIXED($min, 2) }K до { NATURALFIXED($max, 2) }K
+                [0] не выше { NATURALFIXED($max, 2) } K
+               *[other] от { NATURALFIXED($min, 2) } K до { NATURALFIXED($max, 2) } K
             }
     }
-reagent-effect-condition-guidebook-body-temperature =
+entity-condition-guidebook-body-temperature =
     температура тела { $max ->
-        [2147483648] не менее { NATURALFIXED($min, 2) }K
+        [2147483648] не ниже { NATURALFIXED($min, 2) } K
        *[other]
             { $min ->
-                [0] не более { NATURALFIXED($max, 2) }K
-               *[other] от { NATURALFIXED($min, 2) }K до { NATURALFIXED($max, 2) }K
+                [0] не выше { NATURALFIXED($max, 2) } K
+               *[other] от { NATURALFIXED($min, 2) } K до { NATURALFIXED($max, 2) } K
             }
     }
-reagent-effect-condition-guidebook-organ-type =
-    расой цели { $shouldhave ->
+entity-condition-guidebook-organ-type =
+    метаболизирующий орган { $shouldhave ->
         [true] является
        *[false] не является
-    } { INDEFINITE($name) } { $name } органом
-reagent-effect-condition-guidebook-has-tag =
-    у цели { $invert ->
-        [true] нет
-       *[false] есть
-    } тега { $tag }
-reagent-effect-condition-guidebook-this-reagent = этот реагент
-reagent-effect-condition-guidebook-breathing =
-    цель { $isBreathing ->
+    } органом типа { INDEFINITE($name) } { $name }
+entity-condition-guidebook-has-tag =
+    цель { $invert ->
+        [true] не имеет
+       *[false] имеет
+    } тег { $tag }
+entity-condition-guidebook-this-reagent = этот реагент
+entity-condition-guidebook-breathing =
+    метаболизатор { $isBreathing ->
         [true] дышит нормально
        *[false] задыхается
     }
-reagent-effect-condition-guidebook-internals =
-    цель { $usingInternals ->
-        [true] использует внутренние органы
+entity-condition-guidebook-internals =
+    метаболизатор { $usingInternals ->
+        [true] использует внутреннюю подачу воздуха
        *[false] дышит атмосферным воздухом
     }

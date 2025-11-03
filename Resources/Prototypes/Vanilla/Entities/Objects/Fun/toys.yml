@@ -19,7 +19,7 @@
   - type: EmitSoundOnTrigger
     sound:
       path: /Audio/Items/Toys/weh.ogg
-  - type: Food
+  - type: Edible
     requiresSpecialDigestion: true
     useSound:
       path: /Audio/Items/Toys/weh.ogg

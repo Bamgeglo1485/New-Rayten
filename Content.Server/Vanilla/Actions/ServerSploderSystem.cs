@@ -10,6 +10,8 @@ using Content.Shared.Jittering;
 using Content.Shared.Throwing;
 using Content.Shared.Effects;
 using Content.Shared.Popups;
+using Content.Shared.Damage.Systems;
+using Content.Shared.Damage.Components;
 using Content.Shared.Damage;
 using Content.Shared.Item;
 using Content.Shared.Mobs;
@@ -37,7 +39,6 @@ public sealed class SploderSystem : EntitySystem
     [Dependency] private readonly SharedPointLightSystem _light = default!;
     [Dependency] private readonly SharedJitteringSystem _jitter = default!;
     [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly MetaDataSystem _metaData = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly IGameTiming _gameTiming = default!;
     [Dependency] private readonly ExplosionSystem _boom = default!;
@@ -47,7 +48,7 @@ public sealed class SploderSystem : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<SplodingComponent, ThrowDoHitEvent>(OnItemHit);
-        SubscribeLocalEvent<SplodeMarkingEvent>(OnSplodeMarkingEvent); 
+        SubscribeLocalEvent<SplodeMarkingEvent>(OnSplodeMarkingEvent);
         SubscribeLocalEvent<SelfSplodingEvent>(OnSelfSploding);
     }
 
@@ -190,7 +191,7 @@ public sealed class SploderSystem : EntitySystem
         }
 
         var splodeComp = EnsureComp<SplodingComponent>(activeItem.Value);
-        splodeComp.StartTime = _gameTiming.CurTime; 
+        splodeComp.StartTime = _gameTiming.CurTime;
         splodeComp.Timer += splodeComp.StartTime;
         splodeComp.Modifier = modifier * args.Strength;
         splodeComp.ExplosionType = args.ExplosionType;

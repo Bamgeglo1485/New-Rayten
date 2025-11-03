@@ -15,6 +15,8 @@ using Content.Shared.Vanilla.Skill;
 using Content.Shared.Vanilla.Background;
 using Content.Shared.Mindshield.Components;
 using Content.Shared.Clothing;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Damage;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
@@ -538,6 +540,7 @@ public sealed class TTTSystem : EntitySystem
         //у предателей и детективов урон не уменьшается
         if (sourcecomp.Role == TTTRole.traitor || sourcecomp.Role == TTTRole.detective)
             return;
+
         //  применяем модификатор урона на основе новой кармы
         var karmaFraction = Math.Clamp(attackerKarma / 1000f, 0f, 1f);
 
@@ -567,9 +570,6 @@ public sealed class TTTSystem : EntitySystem
             return;
 
         _specialRespawn.TryFindRandomTile(rule.Arena, _mapManager.GetMapEntityId(rule.ArenaMapId.Value), 10, out var targetCoords);
-
-        if (targetCoords == null)
-            targetCoords = Transform(rule.Arena).Coordinates;
 
         if (!_prototypeManager.TryIndex<SpeciesPrototype>(SharedHumanoidAppearanceSystem.DefaultSpecies, out var species))
             throw new ArgumentException($"Invalid species prototype was used: {SharedHumanoidAppearanceSystem.DefaultSpecies}");
@@ -607,11 +607,8 @@ public sealed class TTTSystem : EntitySystem
         //Мгновенно убиваем критованного
         if ((args.NewMobState == MobState.Critical && args.OldMobState < args.NewMobState) || (args.NewMobState == MobState.Dead && args.OldMobState < MobState.Critical))
         {
-            if (TryComp<DamageableComponent>(uid, out var damage))
-            {
-                _damageable.TryChangeDamage(uid, component.Damage, true, false, damage);
-            }
-            else return;
+            if (!_damageable.TryChangeDamage(uid, component.Damage, true, false, null))
+                return;
         }
         else return;
 

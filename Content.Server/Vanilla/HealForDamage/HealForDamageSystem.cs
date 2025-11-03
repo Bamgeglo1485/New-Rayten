@@ -1,6 +1,8 @@
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
+using Content.Shared.Damage;
 using Content.Shared.Vanilla.HealForDamage;
 using Content.Shared.Mobs.Components;
-using Content.Shared.Damage;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
 using Robust.Server.GameObjects;
@@ -12,7 +14,7 @@ public sealed class HealForDamageSystem : EntitySystem
 {
     [Dependency] private readonly DamageableSystem _damageableSystem = default!;
     [Dependency] private readonly TransformSystem _transformSystem = default!;
-    [Dependency] private readonly MobStateSystem _mobStateSystem = default!; 
+    [Dependency] private readonly MobStateSystem _mobStateSystem = default!;
 
     public override void Initialize()
     {

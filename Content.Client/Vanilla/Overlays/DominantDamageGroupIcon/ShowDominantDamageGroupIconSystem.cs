@@ -1,3 +1,4 @@
+using Content.Shared.Damage.Components;
 using Content.Client.Overlays;
 using Content.Shared.Damage;
 using Content.Shared.StatusIcon;

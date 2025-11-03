@@ -1,0 +1,12 @@
+cmd-substepatmos-desc = Прокручивает симуляцию атмосферы на один шаг (atmostick) для указанной сетки. Автоматически приостанавливает симуляцию атмосферы.
+cmd-substepatmos-help = Использование: { $command } <EntityUid>
+cmd-error-no-grid-provided-or-invalid-grid = Нужно указать сетку или стоять на сетке, чтобы выполнить шаг симуляции.
+cmd-error-couldnt-parse-entity = Указанная сущность не распознана или не существует. Попробуйте встать на сетку, для которой хотите выполнить шаг.
+cmd-error-no-gridatmosphere = У указанной сущности отсутствует компонент GridAtmosphereComponent.
+cmd-error-no-gastileoverlay = У указанной сущности отсутствует компонент GasTileOverlayComponent.
+cmd-error-no-mapgrid = У указанной сущности отсутствует компонент MapGridComponent.
+cmd-error-no-xform = У указанной сущности отсутствует компонент TransformComponent?
+cmd-error-no-valid-map = Указанная сетка находится на недопустимой карте?
+cmd-substepatmos-info-implicitly-paused-simulation = Симуляция атмосферы на { $grid } была автоматически приостановлена.
+cmd-substepatmos-info-substepped-grid = Симуляция атмосферы на { $grid } выполнена на один шаг (atmostick).
+cmd-substepatmos-completion-grid-substep = EntityUid сетки, для которой нужно выполнить шаг симуляции. Если не указано, используется сетка, на которой вы стоите.

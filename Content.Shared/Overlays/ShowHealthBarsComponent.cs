@@ -21,4 +21,7 @@ public sealed partial class ShowHealthBarsComponent : Component
     {
         "Biological"
     };
+
+    [DataField]
+    public ProtoId<HealthIconPrototype>? HealthStatusIcon = "HealthIconFine";
 }

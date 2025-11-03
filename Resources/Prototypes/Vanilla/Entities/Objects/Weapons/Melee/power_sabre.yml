@@ -78,7 +78,7 @@
     components:
     - type: MeleeThrowOnHit
       speed: 10
-      unanchorOnHit: false
+      unanchorOnHit: Unanchorable
       stunTime: 0
     - type: DisarmMalus
       malus: 0.7

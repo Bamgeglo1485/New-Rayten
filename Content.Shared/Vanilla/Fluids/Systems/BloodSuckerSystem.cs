@@ -1,4 +1,5 @@
-using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Vanilla.BloodSucker.Components;
 using Content.Shared.Chemistry.Components;
@@ -57,7 +58,7 @@ public sealed class BloodSuckerSystem : EntitySystem
 
         }
     }
-    
+
     private void UseBloodInStorage(EntityUid uid, BloodSuckerComponent bloodSucker)
     {
         if (bloodSucker.AmountOfBloodInStorage > 0)
@@ -102,7 +103,7 @@ public sealed class BloodSuckerSystem : EntitySystem
         foreach (var entity in entitiesInRange)
         {
             foreach (var solutionName in bloodSucker.Solutions)
-            {   
+            {
                 if (!_solutionContainerSystem.TryGetSolution(entity, solutionName, out var bloodSolutionEnt, out var bloodSolution))
                     continue;
 
@@ -113,7 +114,7 @@ public sealed class BloodSuckerSystem : EntitySystem
                     continue;
 
                 float UnitsToSuck = ((float)bloodReagent.Quantity < bloodSucker.UnitsPerInterval) ? (float)bloodReagent.Quantity : bloodSucker.UnitsPerInterval;
-                
+
                 UnitsToSuck = UnitsToSuck + bloodSucker.AmountOfBloodInStorage < bloodSucker.BloodStorage ? UnitsToSuck : bloodSucker.BloodStorage - bloodSucker.AmountOfBloodInStorage;
 
                 var amountToRemove = FixedPoint2.New(UnitsToSuck);
@@ -121,7 +122,7 @@ public sealed class BloodSuckerSystem : EntitySystem
                 _solutionContainerSystem.RemoveReagent(bloodSolutionEnt.Value, bloodReagent.Reagent.Prototype, amountToRemove);
 
                 bloodSucker.AmountOfBloodInStorage += UnitsToSuck;
-                
+
                 Dirty(uid, bloodSucker);
                 return;
             }

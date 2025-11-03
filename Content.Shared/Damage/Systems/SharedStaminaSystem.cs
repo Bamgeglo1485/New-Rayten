@@ -401,6 +401,10 @@ public abstract partial class SharedStaminaSystem : EntitySystem
         component.NextUpdate = Timing.CurTime + component.StunTime + StamCritBufferTime;
         EnsureComp<ActiveStaminaComponent>(uid);
         Dirty(uid, component);
+        //rayten-start
+        var ev = new StaminaCritEvent();
+        RaiseLocalEvent(uid, ev);
+        //rayten-end
         _adminLogger.Add(LogType.Stamina, LogImpact.Medium, $"{ToPrettyString(uid):user} entered stamina crit");
     }
 

@@ -26,3 +26,9 @@
     sprite: /Textures/Interface/Misc/health_icons.rsi
     state: Rotting
 
+- type: healthIcon
+  parent: HealthIcon
+  id: HealthIconFine
+  icon:
+    sprite: /Textures/Interface/Misc/health_icons.rsi
+    state: Fine

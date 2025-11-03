@@ -155,7 +155,7 @@
   - TeamDeathMatch # RAYTEN-TDM
   - DummyNonAntagChance
   - Traitor
-  - SubGamemodesRule
+  - SubGamemodesRuleNoWizard
   - BasicStationEventScheduler
   - MeteorSwarmScheduler
   - SpaceTrafficControlEventScheduler
@@ -185,7 +185,7 @@
   - TeamDeathMatch # RAYTEN-TDM
   - Nukeops
   - DummyNonAntagChance
-  - SubGamemodesRule
+  - SubGamemodesRuleNoWizard
   - BasicStationEventScheduler
   - MeteorSwarmScheduler
   - SpaceTrafficControlEventScheduler
@@ -204,7 +204,7 @@
   - TeamDeathMatch # RAYTEN-TDM
   - DummyNonAntagChance
   - Revolutionary
-  - SubGamemodesRule
+  - SubGamemodesRuleNoWizard
   - BasicStationEventScheduler
   - MeteorSwarmScheduler
   - SpaceTrafficControlEventScheduler

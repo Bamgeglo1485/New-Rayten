@@ -56,7 +56,7 @@
     redphosphorus:
       amount: 1
   effects:
-    - !type:ExplosionEffect
+    - !type:Explosion
       explosionType: Default
       maxIntensity: 100
       intensityPerUnit: 0.5

@@ -75,7 +75,7 @@
     sprite: Vanilla/Objects/Devices/old_heatlamp.rsi
   - type: PointLight
     enabled: false
-    radius: 12
+    radius: 3
     energy: 2
     color: "#FFC458"
     netsync: false
