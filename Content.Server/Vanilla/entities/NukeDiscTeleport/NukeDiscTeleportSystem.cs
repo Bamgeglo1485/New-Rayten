@@ -21,6 +21,7 @@ public sealed class NukeDiskTeleportSystem : EntitySystem
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly SpecialRespawnSystem _specialRespawn = default!;
     [Dependency] protected readonly SharedTransformSystem TransformSystem = default!;
+
     public override void Update(float frameTime)
     {
         var curTime = _gameTiming.CurTime;
@@ -87,7 +88,7 @@ public sealed class NukeDiskTeleportSystem : EntitySystem
             if (largestGrid == null)
                 continue;
 
-            if (!_entityManager.TryGetComponent<TransformComponent>(largestGrid.Value, out var stationTransform))
+            if (!HasComp<TransformComponent>(largestGrid.Value))
                 continue;
 
             // Ищем случайный безопасный тайл

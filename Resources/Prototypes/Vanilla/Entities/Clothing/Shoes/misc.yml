@@ -1,0 +1,25 @@
+- type: entity
+  parent: ClothingShoesBase
+  id: ClothingShoesSpacetimeBoots
+  name: пространственно-временные ботинки
+  description: Высокотехнологичные ботинки, позволяющие перемещаться назад во времени
+  components:
+  - type: Sprite
+    sprite: Clothing/Shoes/Boots/jumpboots.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: Clothing/Shoes/Boots/jumpboots.rsi
+  - type: SpacetimeAbility
+    jumpSound: /Audio/Effects/stealthoff.ogg
+  - type: ActionGrant
+    actions:
+    - ActionSpacetimeJump
+  - type: ItemActionGrant
+    actions:
+    - ActionSpacetimeJump
+    activeIfWorn: true
+  - type: StaticPrice
+    price: 3000
+  - type: Tag
+    tags: []
