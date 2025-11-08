@@ -52,7 +52,7 @@ public sealed class SliceRecipeEntry
         Input = proto.ID;
         if (proto.Components.TryGetComponent("SliceableFood", out var comp))
         {
-            var sliceable = (SliceableFoodComponent) comp;
+            var sliceable = (SliceableFoodComponent)comp;
             Result = sliceable.Slice ?? "";
             Count = sliceable.TotalCount;
         }

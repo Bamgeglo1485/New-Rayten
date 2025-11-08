@@ -19,9 +19,9 @@ public sealed partial class ReactionJsonGenerator
                 .Select(x => new ReactionEntry(x))
                 .ToDictionary(x => x.Id, x => x);
 
-        // // Corvax-Wiki-Start
-        // if (reactions is not null) AddMixingCategories(reactions, prototype);
-        // // Corvax-Wiki-End
+        // Corvax-Wiki-Start
+        if (reactions is not null) AddMixingCategories(reactions, prototype);
+        // Corvax-Wiki-End
 
         var serializeOptions = new JsonSerializerOptions
         {
@@ -36,4 +36,3 @@ public sealed partial class ReactionJsonGenerator
         file.Write(JsonSerializer.Serialize(reactions, serializeOptions));
     }
 }
-

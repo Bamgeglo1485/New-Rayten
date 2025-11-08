@@ -56,13 +56,13 @@ public sealed class GrindRecipeEntry
         // F) Have "Food" in its name (see Content.Server/Corvax/GuideGenerator/MealsRecipesJsonGenerator.cs)
         if (proto.Components.TryGetComponent("Extractable", out var extractableComp) && proto.Components.TryGetComponent("SolutionContainerManager", out var solutionCompRaw))
         {
-            var extractable = (ExtractableComponent) extractableComp;
-            var solutionComp = (SolutionContainerManagerComponent) solutionCompRaw;
+            var extractable = (ExtractableComponent)extractableComp;
+            var solutionComp = (SolutionContainerManagerComponent)solutionCompRaw;
             foodSolutionName = extractable.GrindableSolution;
 
             if (solutionComp.Solutions != null && foodSolutionName != null)
             {
-                foreach (ReagentQuantity reagent in solutionComp.Solutions[(string) foodSolutionName].Contents)
+                foreach (ReagentQuantity reagent in solutionComp.Solutions[(string)foodSolutionName].Contents)
                 {
                     Result[reagent.Reagent.Prototype] = reagent.Quantity.Int();
                 }

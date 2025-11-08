@@ -6,6 +6,7 @@ using System.Text.Json;
 using Content.Shared.EntityEffects.Effects;
 
 namespace Content.Server.Corvax.GuideGenerator;
+
 public sealed class HealthChangeReagentsJsonGenerator
 {
     public static void PublishJson(StreamWriter file)
@@ -89,4 +90,3 @@ public sealed class HealthChangeReagentsJsonGenerator
         file.Write(JsonSerializer.Serialize(healthChangeReagentsSorted, serializeOptions));
     }
 }
-

@@ -40,3 +40,12 @@ alert-level-epsilon = Epsilon
 alert-level-epsilon-announcement = Central Command has ordered the Epsilon security level on the station. Consider all contracts terminated.
 alert-level-epsilon-instructions = Consider all contracts terminated.
 alert-level-epsilon-announcement-disable =  wtf?
+
+alert-level-apollyon = Аполлион
+alert-level-apollyon-announcement =
+    На станции присутствует угроза объектов класса "Архонт" вне камеры содержания.
+    1. Научно-Исследовательский отдел кооперируясь с отделом Службы Безопасности обязан восстановить условия содержания или устранить объекты.
+    2. Экипаж обязан подчиняться инструкциям научных сотрудников.
+    3. Экипажу запрещено покидать свои отделы и оставаться в безопасных местах до момента снятия уровня угрозы.
+alert-level-apollyon-announcement-disable = Условия содержания объектов класса "Архонт" восстановлены, либо они были списаны.
+alert-level-apollyon-instructions = Гражданский персонал обязан оставаться в безопасных местах и категорически не контактировать с аномальными объектами. Обратитесь к научному руководителю за дополнительными инструкциями.
