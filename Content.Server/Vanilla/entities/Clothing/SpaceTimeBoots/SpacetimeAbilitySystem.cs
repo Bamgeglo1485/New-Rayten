@@ -4,7 +4,11 @@ using Content.Shared.Damage.Components;
 using Content.Shared.Actions;
 using Content.Shared.Actions.Components;
 using Content.Shared.Vanilla.Entities.SpacetimeBoots;
+using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Inventory.Events;
+using Content.Shared.Body.Components;
+using Content.Shared.Body.Systems;
+using Content.Shared.FixedPoint;
 using Robust.Shared.Map;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Physics.Components;
@@ -13,9 +17,10 @@ using Robust.Shared.Audio.Systems;
 using Robust.Shared.Timing;
 using System.Numerics;
 
+
 namespace Content.Server.Vanilla.Entities.SpacetimeBoots;
 
-public sealed class SpacetimeBootsSystem : EntitySystem
+public sealed class SpacetimeAbilitySystem : EntitySystem
 {
     [Dependency] private readonly SharedTransformSystem _trans = default!;
     [Dependency] private readonly SharedPhysicsSystem _physics = default!;
@@ -23,6 +28,9 @@ public sealed class SpacetimeBootsSystem : EntitySystem
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly DamageableSystem _damageable = default!;
+    [Dependency] private readonly SharedSolutionContainerSystem _solutionContainerSystem = default!;
+    [Dependency] private readonly SharedBloodstreamSystem _blood = default!;
+
 
     public override void Initialize()
     {
@@ -31,8 +39,6 @@ public sealed class SpacetimeBootsSystem : EntitySystem
         SubscribeLocalEvent<SpacetimeAbilityComponent, ComponentShutdown>(OnShutdown);
         SubscribeLocalEvent<SpacetimeAbilityComponent, GotEquippedEvent>(OnEquip);
         SubscribeLocalEvent<SpacetimeAbilityComponent, SpacetimeJumpEvent>(OnSpacetimeJump);
-
-
     }
 
     public override void Update(float frameTime)
@@ -45,19 +51,27 @@ public sealed class SpacetimeBootsSystem : EntitySystem
         var query = EntityQueryEnumerator<SpacetimeAbilityComponent>();
         while (query.MoveNext(out var uid, out var comp))
         {
-            if (comp.Wearer == null)
-                continue;
-
+            var target = comp.Wearer != null ? comp.Wearer.Value : uid;
+            //кровь
+            float? bloodAmount = null;
+            float? bleedAmount = null;
+            if (TryComp<BloodstreamComponent>(target, out var bloodstream) &&
+                _solutionContainerSystem.ResolveSolution(target, bloodstream.BloodSolutionName, ref bloodstream.BloodSolution, out var bloodSolution))
+            {
+                bloodAmount = bloodSolution.FillFraction;
+                bleedAmount = bloodstream.BleedAmount;
+            }
+            //урон
             DamageSpecifier damageCopy;
-            if (TryComp<DamageableComponent>(comp.Wearer.Value, out var damage))
+            if (TryComp<DamageableComponent>(target, out var damage))
                 damageCopy = new DamageSpecifier(damage.Damage);
             else
                 damageCopy = new DamageSpecifier();
-
+            //пространство
             var worldPos = _trans.GetWorldPosition(uid);
-
-            comp.History.Enqueue((worldPos, damageCopy));
-
+            //сохраняем
+            comp.History.Enqueue((worldPos, damageCopy, bloodAmount, bleedAmount, target));
+            //удаляем лишнее
             while (comp.History.Count > comp.MaxSamples)
                 comp.History.Dequeue();
         }
@@ -70,15 +84,17 @@ public sealed class SpacetimeBootsSystem : EntitySystem
             return;
 
         var uid = args.Performer;
-        var (position, damage) = entity.Comp.History.Dequeue();
+        var (position, damage, bloodAmount, bleedAmount, SavedEnt) = entity.Comp.History.Dequeue();
+
+        if (SavedEnt != uid)
+            return;
+
         args.Handled = true;
 
         //визуальные эфекты
         var mapCoords = _trans.GetMapCoordinates(uid);
         Spawn("MobParadoxTimed", mapCoords);
-
         _audio.PlayPvs(entity.Comp.JumpSound, uid);
-
         // Перемещение
         mapCoords = new MapCoordinates(position, _trans.GetMapId(uid));
         var coords = _trans.ToCoordinates(mapCoords);
@@ -92,6 +108,16 @@ public sealed class SpacetimeBootsSystem : EntitySystem
         }
         //Здоровье
         _damageable.SetDamage((uid, CompOrNull<DamageableComponent>(uid)), damage);
+        //кровь
+        if (bloodAmount == null || bleedAmount == null || !TryComp<BloodstreamComponent>(uid, out var bloodstream))
+            return;
+
+        if (_solutionContainerSystem.ResolveSolution(uid, bloodstream.BloodSolutionName, ref bloodstream.BloodSolution, out var bloodSolution))
+        {
+            _blood.TryModifyBloodLevel((uid, bloodstream), -1f*(bloodSolution.FillFraction - bloodAmount.Value));
+            _blood.TryModifyBleedAmount((uid, bloodstream), -1f*(bloodstream.BleedAmount - bleedAmount.Value));
+        }
+
     }
 
     private void OnEquip(Entity<SpacetimeAbilityComponent> entity, ref GotEquippedEvent args)

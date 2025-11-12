@@ -37,7 +37,6 @@ public sealed partial class SpacetimeAbilityComponent : Component
     [DataField]
     public LocId? JumpFailedPopup = "spacetime-jump-ability-failure";
 
-
     // Сколько секунд назад "отматываем"
     [DataField]
     public float HistoryLength = 5f;
@@ -48,7 +47,7 @@ public sealed partial class SpacetimeAbilityComponent : Component
     public float SampleRate = 0.5f;
 
     // История состояния (позиция, здоровье)
-    public readonly Queue<(Vector2 Coords, DamageSpecifier Damage)> History = new();
+    public readonly Queue<(Vector2 Coords, DamageSpecifier Damage, float? BloodAmount, float? BleedAmount, EntityUid SavedEnt)> History = new();
 
     // Таймер между сэмплами
     [DataField]

@@ -1,17 +1,27 @@
 - type: entity
-  parent: ClothingShoesBase
-  id: ClothingShoesSpacetimeBoots
-  name: пространственно-временные ботинки
+  parent: [ClothingShoesBase]
+  id: ClothingShoesAbsoluteBoots
+  name: абсолютные ботинки
   description: Высокотехнологичные ботинки, позволяющие перемещаться назад во времени
   components:
   - type: Sprite
-    sprite: Clothing/Shoes/Boots/jumpboots.rsi
-    layers:
-    - state: icon
+    sprite: Vanilla/Clothing/Shoes/Boots/absoluteboots.rsi
   - type: Clothing
-    sprite: Clothing/Shoes/Boots/jumpboots.rsi
+  - type: ClothingSpeedModifier
+    walkModifier: 1.5
+    sprintModifier: 1.5
+    standing: true
+  - type: Appearance
+  - type: StaticPrice
+    price: 500
+  - type: Tag
+    tags: []
+  - type: NoSlip
   - type: SpacetimeAbility
-    jumpSound: /Audio/Effects/stealthoff.ogg
+    jumpSound:
+      path: /Audio/Vanilla/Items/Clothing/Boots/Time_Lapse.ogg
+      params:
+        volume: -3
   - type: ActionGrant
     actions:
     - ActionSpacetimeJump
@@ -19,7 +29,3 @@
     actions:
     - ActionSpacetimeJump
     activeIfWorn: true
-  - type: StaticPrice
-    price: 3000
-  - type: Tag
-    tags: []
