@@ -21,5 +21,5 @@ public sealed partial class BlueSpaceSyncAbilityComponent : Component
 
     // Сколько секунд длится
     [DataField]
-    public TimeSpan Duration = TimeSpan.FromSeconds(2);
+    public TimeSpan Duration = TimeSpan.FromSeconds(18);
 }

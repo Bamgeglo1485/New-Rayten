@@ -26,6 +26,7 @@
     actions:
     - ActionBlueSpaceSync
   - type: ItemActionGrant
+    activeIfWorn: true
     actions:
     - ActionBlueSpaceSync
   - type: Construction

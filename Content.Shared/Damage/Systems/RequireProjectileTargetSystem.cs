@@ -45,7 +45,7 @@ public sealed class RequireProjectileTargetSystem : EntitySystem
         }
     }
 
-    private void SetActive(Entity<RequireProjectileTargetComponent> ent, bool value)
+    public void SetActive(Entity<RequireProjectileTargetComponent> ent, bool value)
     {
         if (ent.Comp.Active == value)
             return;
