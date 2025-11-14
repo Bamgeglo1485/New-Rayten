@@ -1,5 +1,5 @@
 - type: entity
-  parent: [ClothingOuterHardsuitBase, ClothingUniformBase]
+  parent: [GeigerCounterClothing, ClothingUniformBase]
   id: ClothingUniformJumpsuitAbsolute
   name: абсолютный комбинезон
   description: Продвинутый комбинезон.
@@ -7,17 +7,33 @@
   - type: Sprite
     sprite: Vanilla/Clothing/Uniforms/Jumpsuit/deathsquad.rsi
   - type: Clothing
+    slots: [innerclothing]
     sprite: Vanilla/Clothing/Uniforms/Jumpsuit/deathsquad.rsi
   - type: ToggleableClothing
+    requiredSlot:
+    - innerclothing
+    slot: head
     clothingPrototype: ClothingHeadHelmetAbsolute
+  - type: ContainerContainer
+    containers:
+      toggleable-clothing: !type:ContainerSlot {}
+  - type: FireProtection
+    reduction: 0.8
 
 - type: entity
   parent: ClothingHeadEVAHelmetBase
   id: ClothingHeadHelmetAbsolute
   name: абсолютный шлем
   description: часть абсолютного комбинезона
+  categories: [ HideSpawnMenu ]
   components:
+  - type: ClothingPressureImmunity
   - type: Sprite
     sprite: Clothing/Head/Helmets/eva.rsi
   - type: Clothing
     sprite: Clothing/Head/Helmets/eva.rsi
+  - type: TemperatureProtection
+    heatingCoefficient: 0.005
+    coolingCoefficient: 0.005
+  - type: FireProtection
+    reduction: 0.2
