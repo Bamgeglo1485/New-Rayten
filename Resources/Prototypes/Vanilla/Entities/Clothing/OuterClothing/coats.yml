@@ -8,6 +8,11 @@
     sprite: Vanilla/Clothing/OuterClothing/coats/absolutecoat.rsi
   - type: Clothing
     sprite: Vanilla/Clothing/OuterClothing/coats/absolutecoat.rsi
+    clothingVisuals:
+      outerClothing:
+      - state: equipped-OUTERCLOTHING
+      - state: equipped-OUTERCLOTHING-unlit
+        shader: unshaded
   - type: Armor
     modifiers:
       coefficients:

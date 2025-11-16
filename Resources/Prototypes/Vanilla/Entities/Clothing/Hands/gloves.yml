@@ -5,9 +5,14 @@
   description: Высокотехнологичные перчатки, способные менять местами носителя и цель, меняя значения спинов их частиц.
   components:
   - type: Sprite
-    sprite: Clothing/Hands/Gloves/captain.rsi
+    sprite: Vanilla/Clothing/Hands/Gloves/absolute_gloves.rsi
   - type: Clothing
-    sprite: Clothing/Hands/Gloves/captain.rsi
+    sprite: Vanilla/Clothing/Hands/Gloves/absolute_gloves.rsi
+    clothingVisuals:
+      gloves:
+      - state: equipped-HAND
+      - state: equipped-HAND-unlit
+        shader: unshaded
   - type: Insulated
   - type: Fiber
     fiberMaterial: fibers-durathread

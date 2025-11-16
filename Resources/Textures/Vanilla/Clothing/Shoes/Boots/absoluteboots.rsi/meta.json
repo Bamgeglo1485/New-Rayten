@@ -11,8 +11,12 @@
       "name": "icon"
     },
     {
-      "name": "equipped-FEET",
-      "directions": 4
+        "name": "equipped-FEET",
+        "directions": 4
+    },
+    {
+        "name": "equipped-FEET-unlit",
+        "directions": 4
     }
   ]
 }

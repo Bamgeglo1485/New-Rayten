@@ -17,6 +17,11 @@
     sprite: Vanilla/Clothing/Back/Backpacks/absolutepack.rsi
   - type: Clothing
     sprite: Vanilla/Clothing/Back/Backpacks/absolutepack.rsi
+    clothingVisuals:
+      back:
+      - state: equipped-BACKPACK
+      - state: equipped-BACKPACK-unlit
+        shader: unshaded
   - type: Item
     size: Ginormous
   - type: Storage

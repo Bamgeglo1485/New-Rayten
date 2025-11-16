@@ -5,10 +5,15 @@
   description: Продвинутый комбинезон.
   components:
   - type: Sprite
-    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/deathsquad.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/absolute.rsi
   - type: Clothing
     slots: [innerclothing]
-    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/deathsquad.rsi
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/absolute.rsi
+    clothingVisuals:
+      jumpsuit:
+      - state: equipped-INNERCLOTHING
+      - state: equipped-INNERCLOTHING-unlit
+        shader: unshaded
   - type: ToggleableClothing
     requiredSlot:
     - innerclothing
@@ -29,9 +34,14 @@
   components:
   - type: ClothingPressureImmunity
   - type: Sprite
-    sprite: Clothing/Head/Helmets/eva.rsi
+    sprite: Vanilla/Clothing/Head/Helmets/absolute_helmet.rsi
   - type: Clothing
-    sprite: Clothing/Head/Helmets/eva.rsi
+    sprite: Vanilla/Clothing/Head/Helmets/absolute_helmet.rsi
+    clothingVisuals:
+      head:
+      - state: equipped-HELMET
+      - state: equipped-HELMET-unlit
+        shader: unshaded
   - type: TemperatureProtection
     heatingCoefficient: 0.005
     coolingCoefficient: 0.005

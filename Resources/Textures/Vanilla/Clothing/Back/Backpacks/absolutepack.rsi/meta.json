@@ -8,10 +8,21 @@
   },
   "states": [
     {
-      "name": "icon"
+        "name": "icon"
     },
     {
-      "name": "equipped-BACKPACK"
+        "name": "equipped-BACKPACK",
+        "directions": 4
+    },
+    {
+        "name": "equipped-BACKPACK-unlit",
+        "directions": 4,
+        "delays": [
+            [ 0.2, 0.2, 0.2, 0.2 ],
+            [ 0.2, 0.2, 0.2, 0.2 ],
+            [ 0.2, 0.2, 0.2, 0.2 ],
+            [ 0.2, 0.2, 0.2, 0.2 ]
+        ]
     }
   ]
 }
