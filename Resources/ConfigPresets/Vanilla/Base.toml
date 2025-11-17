@@ -5,6 +5,7 @@ contraband_examine = true
 lobbyenabled = true
 lobbyduration = 180
 round_restart_time = 260
+secret_weight_prototype = "RaytenSecretDefault"
 
 [log]
 path = "logs"

@@ -9,6 +9,7 @@ using Content.Server.Station.Components;
 using Content.Server.Station.Systems;
 using Content.Server.StationRecords;
 using Content.Server.StationRecords.Systems;
+using Content.Server.Vanilla.LowPop;
 using Content.Shared.Access.Systems;
 using Content.Shared.Bed.Cryostorage;
 using Content.Shared.Chat;
