@@ -1,0 +1,39 @@
+<Control xmlns="https://spacestation14.io"
+         xmlns:customControls="clr-namespace:Content.Client.Administration.UI.CustomControls"
+         VerticalExpand="True"
+         HorizontalExpand="True"
+         HorizontalAlignment="Stretch"
+         MaxHeight="75"
+         MinWidth="150"
+         MaxWidth="220">
+    <BoxContainer Name="MainContainer"
+                  Orientation="Vertical"
+                  HorizontalExpand="True"
+                  VerticalExpand="True"
+                  HorizontalAlignment="Stretch">
+        <Button Name="MainButton"
+                Access="Public"
+                HorizontalExpand="True"
+                VerticalExpand="True"
+                StyleClasses="ButtonSquare"
+                Margin="0">
+            <BoxContainer Orientation="Vertical"
+                          VerticalExpand="True"
+                          Margin="0">
+                <BoxContainer Orientation="Vertical"
+                              HorizontalExpand="True"
+                              VerticalExpand="True"
+                              VerticalAlignment="Top"
+                              Margin="0">
+                    <Control MinHeight="7"></Control>
+                    <RichTextLabel Name="LawName"
+                                   HorizontalAlignment="Center"
+                                   VerticalExpand="True"
+                                   HorizontalExpand="True"
+                                   Margin="0"/>
+                    <Control MinHeight="7"></Control>
+                </BoxContainer>
+            </BoxContainer>
+        </Button>
+    </BoxContainer>
+</Control>
