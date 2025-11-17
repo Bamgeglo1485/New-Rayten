@@ -55,10 +55,7 @@ public sealed class BlueSpaceSyncSystem : EntitySystem
         while (query.MoveNext(out var uid, out var comp))
         {
             if (_timing.CurTime >= comp.EscapeTime)
-            {
-                Log.Warning($"текущее время {_timing.CurTime} больше чем {comp.EscapeTime} поэтому удаляем компонент");
                 RemCompDeferred<BlueSpaceSyncComponent>(uid);
-            }
         }
     }
 

@@ -18,27 +18,11 @@ public sealed class LowPopSystem : EntitySystem
         SubscribeLocalEvent<PlayerSpawnCompleteEvent>(OnPlayerSpawned);
         SubscribeLocalEvent<RoundStartedEvent>(OnRoundStarting);
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnCleaning);
+        SubscribeLocalEvent<CryoLeaveEvent>(OnPlayerLeave);
         //чек на количество сб
         SubscribeLocalEvent<ObjectiveSecCountRequirementComponent, RequirementCheckEvent>(OnCheck);
     }
-
-    private void OnCheck(EntityUid uid, ObjectiveSecCountRequirementComponent comp, ref RequirementCheckEvent args)
-    {
-        if (args.Cancelled)
-            return;
-
-        if (GetSecurityCount() < comp.MinSec)
-            args.Cancelled = true;
-    }
-
-    private void OnCleaning(RoundRestartCleanupEvent ev)
-    {
-        _engCount = 0;
-        _sciCount = 0;
-        _secCount = 0;
-    }
-
-    private void OnRoundStarting(RoundStartedEvent ev)
+    private void RebalanceLowPop()
     {
         //инженеры
         if (_engCount == 0)
@@ -51,33 +35,62 @@ public sealed class LowPopSystem : EntitySystem
                     var recharger = EnsureComp<BatterySelfRechargerComponent>(uid);
                     recharger.AutoRecharge = true;
                     recharger.AutoRechargeRate = battery.MaxCharge;
-                    recharger.AutoRechargePause = false;
                 }
             }
         }
+        else
+        {
+            var query = EntityQueryEnumerator<SmesComponent>();
+            while (query.MoveNext(out var uid, out _))
+            {
+                RemComp<BatterySelfRechargerComponent>(uid);
+            }
+        }
+    }
+
+
+    private void OnCheck(EntityUid uid, ObjectiveSecCountRequirementComponent comp, ref RequirementCheckEvent args)
+    {
+        if (args.Cancelled)
+            return;
+
+        if (GetSecurityCount() < comp.MinSec)
+            args.Cancelled = true;
+    }
+
+    private void OnRoundStarting(RoundStartedEvent ev)
+    {
+        RebalanceLowPop();
+    }
+
+
+    private void OnPlayerLeave(ref CryoLeaveEvent ev)
+    {
+        Log.Warning($"ливнул {ev.JobId}");
+        //инженер
+        if (ev.JobId == "StationEngineer" || ev.JobId == "AtmosphericTechnician" || ev.JobId == "ChiefEngineer" || ev.JobId == "TechnicalAssistant")
+            _engCount--;
+        //учёный
+        if (ev.JobId == "ResearchDirector" || ev.JobId == "Scientist" || ev.JobId == "ResearchAssistant")
+            _sciCount--;
+        //СБ
+        if (ev.JobId == "HeadOfSecurity" || ev.JobId == "SecurityCadet" || ev.JobId == "Detective" || ev.JobId == "SecurityOfficer" || ev.JobId == "Warden")
+            _secCount--;
+        RebalanceLowPop();
     }
 
     private void OnPlayerSpawned(PlayerSpawnCompleteEvent ev)
     {
         //инженер
         if (ev.JobId == "StationEngineer" || ev.JobId == "AtmosphericTechnician" || ev.JobId == "ChiefEngineer" || ev.JobId == "TechnicalAssistant")
-        {
             _engCount++;
-            if (_engCount == 1)
-            {
-                var query = EntityQueryEnumerator<SmesComponent>();
-                while (query.MoveNext(out var uid, out _))
-                {
-                    RemComp<BatterySelfRechargerComponent>(uid);
-                }
-            }
-        }
         //учёный
         if (ev.JobId == "ResearchDirector" || ev.JobId == "Scientist" || ev.JobId == "ResearchAssistant")
             _sciCount++;
         //СБ
-        if (ev.JobId == "HeadOfSecurity" || ev.JobId == "SecurityCadet" || ev.JobId == "SecurityOfficer" || ev.JobId == "Warden")
+        if (ev.JobId == "HeadOfSecurity" || ev.JobId == "SecurityCadet" || ev.JobId == "Detective" || ev.JobId == "SecurityOfficer" || ev.JobId == "Warden")
             _secCount++;
+        RebalanceLowPop();
     }
 
     public int GetScientistCount()
@@ -88,5 +101,12 @@ public sealed class LowPopSystem : EntitySystem
     public int GetSecurityCount()
     {
         return _secCount;
+    }
+
+    private void OnCleaning(RoundRestartCleanupEvent ev)
+    {
+        _engCount = 0;
+        _sciCount = 0;
+        _secCount = 0;
     }
 }

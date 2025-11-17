@@ -9,6 +9,7 @@ using Content.Server.Station.Components;
 using Content.Server.Station.Systems;
 using Content.Server.StationRecords;
 using Content.Server.StationRecords.Systems;
+using Content.Server.Vanilla.LowPop;
 using Content.Shared.Access.Systems;
 using Content.Shared.Bed.Cryostorage;
 using Content.Shared.Chat;
@@ -229,7 +230,13 @@ public sealed class CryostorageSystem : SharedCryostorageSystem
         {
             var key = new StationRecordKey(recordId.Value, station.Value);
             if (_stationRecords.TryGetRecord<GeneralStationRecord>(key, out var entry, stationRecords))
+            {
                 jobName = entry.JobTitle;
+                //rayten-start
+                var ev = new CryoLeaveEvent(entry.JobPrototype);
+                RaiseLocalEvent(ref ev);
+                //rayten-end
+            }
 
             _stationRecords.RemoveRecord(key, stationRecords);
         }
