@@ -24,6 +24,14 @@
       toggleable-clothing: !type:ContainerSlot {}
   - type: FireProtection
     reduction: 0.8
+  - type: Construction
+    graph: ClothingUniformJumpsuitAbsoluteGraph
+    node: end
+  - type: Tag
+    tags:
+    - ClothMade
+    - Recyclable
+    - WhitelistChameleon
 
 - type: entity
   parent: ClothingHeadEVAHelmetBase

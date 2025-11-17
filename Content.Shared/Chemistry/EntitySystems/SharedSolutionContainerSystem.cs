@@ -1060,7 +1060,7 @@ public abstract partial class SharedSolutionContainerSystem : EntitySystem
     public bool EnsureSolution(
         Entity<MetaDataComponent?> entity,
         string name,
-        [NotNullWhen(true)]out Solution? solution,
+        [NotNullWhen(true)] out Solution? solution,
         FixedPoint2 maxVol = default)
     {
         return EnsureSolution(entity, name, maxVol, null, out _, out solution);
@@ -1070,7 +1070,7 @@ public abstract partial class SharedSolutionContainerSystem : EntitySystem
         Entity<MetaDataComponent?> entity,
         string name,
         out bool existed,
-        [NotNullWhen(true)]out Solution? solution,
+        [NotNullWhen(true)] out Solution? solution,
         FixedPoint2 maxVol = default)
     {
         return EnsureSolution(entity, name, maxVol, null, out existed, out solution);
@@ -1229,7 +1229,7 @@ public abstract partial class SharedSolutionContainerSystem : EntitySystem
         var relation = new ContainedSolutionComponent() { Container = container.Owner, ContainerName = name };
         AddComp(uid, relation);
 
-        MetaDataSys.SetEntityName(uid, $"solution - {name}");
+        MetaDataSys.SetEntityName(uid, $"solution - {name}", raiseEvents: false);
         ContainerSystem.Insert(uid, container, force: true);
 
         return (uid, solution, relation);
@@ -1252,13 +1252,13 @@ public abstract partial class SharedSolutionContainerSystem : EntitySystem
         }
         else
         {
-            dissolvedSol.RemoveReagent(reagent,amtChange);
+            dissolvedSol.RemoveReagent(reagent, amtChange);
         }
         UpdateChemicals(dissolvedSolution);
     }
 
     public FixedPoint2 GetReagentQuantityFromConcentration(Entity<SolutionComponent> dissolvedSolution,
-        FixedPoint2 volume,float concentration)
+        FixedPoint2 volume, float concentration)
     {
         var dissolvedSol = dissolvedSolution.Comp.Solution;
         if (volume == 0

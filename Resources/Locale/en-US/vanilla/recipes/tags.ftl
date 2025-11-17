@@ -19,5 +19,6 @@ construction-graph-tag-gps = GPS
 construction-graph-tag-BootsSpeed = скороходы
 construction-graph-tag-DeviceDesynchronizer = десинхронизатор
 construction-graph-tag-OuterClothing = любая верхняя одежда
+construction-graph-tag-InnerClothing = любой комбинезон
 construction-graph-tag-Gloves = любые перчатки
 construction-graph-tag-QuantumSpinInverter = инвертор квантового спина

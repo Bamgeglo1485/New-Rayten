@@ -251,6 +251,10 @@ ghost-role-information-gingerbread-name = Пряничный человечек
 ghost-role-information-gingerbread-description =
     Существо чистого праздничного духа.
     Распространяйте паточную вкуснятину и хорошее настроение.
+ghost-role-information-mothership-core-name = Ядро материнского корабля
+ghost-role-information-mothership-core-desc = Вы — ядро материнского корабля ксеноборгов. Помогайте им множиться, превращая в ксеноборгов любые принесённые вам мозги.
+ghost-role-information-xenoborg-name = Ксеноборг
+ghost-role-information-xenoborg-desc = Странный киборг, созданный для самовоспроизводства и захвата станции путём превращения любых разумных существ в ксеноборгов.
 ghost-role-information-wizard-name = Волшебник
 ghost-role-information-wizard-desc = ТЫ — ВОЛШЕБНИК! Покажи станции, на что способна твоя магия.
 ghost-role-information-emotional-support-scurret-name = Эмоциональная поддержка Скеррет
