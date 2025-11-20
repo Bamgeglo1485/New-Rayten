@@ -14,11 +14,10 @@ public sealed class SecuritronSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<SecurityMarkerComponent, DamageChangedEvent>(OnDamageChange);//напавшего на секьюритрона делаем опасным челом
-        SubscribeLocalEvent<SecurityMarkerComponent, ComponentInit>(OnSecuritronInit);//напавшего на секьюритрона делаем опасным челом
+        SubscribeLocalEvent<SecuritronComponent, DamageChangedEvent>(OnDamageChange);//напавшего на секьюритрона делаем опасным челом
+        SubscribeLocalEvent<SecuritronComponent, ComponentInit>(OnSecuritronInit);//напавшего на секьюритрона делаем опасным челом
     }
-
-    private void OnSecuritronInit(EntityUid uid, SecurityMarkerComponent component, ComponentInit args)
+    private void OnSecuritronInit(EntityUid uid, SecuritronComponent component, ComponentInit args)
     {
         //инициализируем контейнер
         component.HandCuffContainer = _container.EnsureContainer<ContainerSlot>(uid, "HandCuffContainer");
@@ -29,7 +28,7 @@ public sealed class SecuritronSystem : EntitySystem
     }
 
 
-    private void OnDamageChange(EntityUid uid, SecurityMarkerComponent component, DamageChangedEvent args)
+    private void OnDamageChange(EntityUid uid, SecuritronComponent component, DamageChangedEvent args)
     {
         if (args.Origin == null)
             return;

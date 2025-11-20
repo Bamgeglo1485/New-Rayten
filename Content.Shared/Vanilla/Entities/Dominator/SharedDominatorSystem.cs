@@ -83,7 +83,7 @@ public class SharedDominatorSystem : EntitySystem
         return maxdanger switch
         {
             >= 10 => DominatorState.Lethal,
-            >= 4 => DominatorState.NonLethal,
+            >= 6 => DominatorState.NonLethal,
             _ => DominatorState.Disabled
         };
     }

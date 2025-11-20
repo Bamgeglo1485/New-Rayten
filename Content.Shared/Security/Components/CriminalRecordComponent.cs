@@ -12,4 +12,12 @@ public sealed partial class CriminalRecordComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField]
     public ProtoId<SecurityIconPrototype> StatusIcon = "SecurityIconWanted";
+
+    //rayten-start
+    [DataField, AutoNetworkedField]
+    public SecurityStatus Status;
+
+    [DataField]
+    public bool SecuritronAgro = false;
+    //rayten-end
 }

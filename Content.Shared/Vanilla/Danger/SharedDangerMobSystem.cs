@@ -10,6 +10,8 @@ using Content.Shared.CombatMode;
 using Content.Shared.Storage;
 using Content.Shared.Roles;
 using Content.Shared.Storage.Components;
+using Content.Shared.Security.Components;
+using Content.Shared.Security;
 using Robust.Shared.Prototypes;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -37,7 +39,22 @@ public class SharedDangerMobSystem : EntitySystem
         if (dangerComp.MaxDanger)
             return 10;
 
-        return deepseek ? CalculateDeepDanger(target, dangerComp) : dangerComp.Danger;
+        var danger = 0;
+
+        if (TryComp<CriminalRecordComponent>(target, out var record))
+        {
+            danger = record.Status switch
+            {
+                SecurityStatus.Wanted => 6, // в розыске
+                SecurityStatus.Detained => 6, // под арестом
+                SecurityStatus.Hostile => 10, // враг НТ
+                SecurityStatus.Eliminated => 10, // Ликвидирован
+                _ => 0
+            };
+        }
+
+        danger += deepseek ? CalculateDeepDanger(target, dangerComp) : dangerComp.Danger;
+        return Math.Clamp(danger, 0, 10);
     }
 
     //считаем глубокую опасность
@@ -81,8 +98,9 @@ public class SharedDangerMobSystem : EntitySystem
                     deepdanger += GetRecursiveItemDanger(itemUidValue, departments, jobId);
             }
         }
-        return Math.Clamp(deepdanger, 0, 10);
+        return deepdanger;
     }
+
     private int GetRecursiveItemDanger(EntityUid uid, List<ProtoId<DepartmentPrototype>> departments, string jobId)
     {
         var totalDanger = GetItemDanger(uid, departments, jobId);

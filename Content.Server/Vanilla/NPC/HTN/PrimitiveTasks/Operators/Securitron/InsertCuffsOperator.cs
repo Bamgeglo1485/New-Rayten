@@ -27,7 +27,7 @@ public sealed partial class InsertCuffsOperator : HTNOperator
         var owner = blackboard.GetValue<EntityUid>(NPCBlackboard.Owner);
 
         // Мы должны быть секьюритроном
-        if (!_entManager.TryGetComponent<SecurityMarkerComponent>(owner, out var security))
+        if (!_entManager.TryGetComponent<SecuritronComponent>(owner, out var security))
             return (false, null);
 
         // наручники уже есть
@@ -47,7 +47,7 @@ public sealed partial class InsertCuffsOperator : HTNOperator
     {
         var owner = blackboard.GetValue<EntityUid>(NPCBlackboard.Owner);
 
-        if (!_entManager.TryGetComponent<SecurityMarkerComponent>(owner, out var security))
+        if (!_entManager.TryGetComponent<SecuritronComponent>(owner, out var security))
             return HTNOperatorStatus.Failed;
 
         if (_hands.GetActiveItem(owner) is { } heldEntity)

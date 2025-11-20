@@ -43,7 +43,7 @@ public sealed partial class CuffOperator : HTNOperator, IHtnConditionalShutdown
 
         var owner = blackboard.GetValue<EntityUid>(NPCBlackboard.Owner);
 
-        if (!_entManager.TryGetComponent<SecurityMarkerComponent>(owner, out var security))
+        if (!_entManager.TryGetComponent<SecuritronComponent>(owner, out var security))
             return;
 
         if (security.HandCuffContainer.ContainedEntity is not { } cuffs)
@@ -72,7 +72,7 @@ public sealed partial class CuffOperator : HTNOperator, IHtnConditionalShutdown
             return (false, null);
 
         // Мы должны быть секьюритроном
-        if (!_entManager.TryGetComponent<SecurityMarkerComponent>(owner, out var security))
+        if (!_entManager.TryGetComponent<SecuritronComponent>(owner, out var security))
             return (false, null);
 
         // наручников нет в контейнере
@@ -117,7 +117,7 @@ public sealed partial class CuffOperator : HTNOperator, IHtnConditionalShutdown
         _started = false;
         var owner = blackboard.GetValue<EntityUid>(NPCBlackboard.Owner);
 
-        if (!_entManager.TryGetComponent<SecurityMarkerComponent>(owner, out var security))
+        if (!_entManager.TryGetComponent<SecuritronComponent>(owner, out var security))
             return;
 
         if (_hands.GetActiveItem(owner) is { } heldEntity)

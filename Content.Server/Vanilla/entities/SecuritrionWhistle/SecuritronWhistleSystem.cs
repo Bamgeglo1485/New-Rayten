@@ -45,7 +45,7 @@ public sealed class SecuritronWhistleSystem : SharedSecuritronWhistleSystem
             _htn.Replan(htn);
 
             //наручники убери
-            if (TryComp<SecurityMarkerComponent>(bot, out var security) && _hands.GetActiveItem(bot) is { } held)
+            if (TryComp<SecuritronComponent>(bot, out var security) && _hands.GetActiveItem(bot) is { } held)
             {
                 if (HasComp<HandcuffComponent>(held))
                 {
@@ -74,7 +74,7 @@ public sealed class SecuritronWhistleSystem : SharedSecuritronWhistleSystem
         }
     }
 
-    protected override void FollowMe(EntityUid target, EntityUid master, SecurityMarkerComponent comp, SecuritronMasterComponent mastercomp)
+    protected override void FollowMe(EntityUid target, EntityUid master, SecuritronComponent comp, SecuritronMasterComponent mastercomp)
     {
         if (!TryComp<HTNComponent>(target, out var htn))
             return;

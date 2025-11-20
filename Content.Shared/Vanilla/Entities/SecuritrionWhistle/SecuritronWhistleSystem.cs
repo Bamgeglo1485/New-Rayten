@@ -60,7 +60,7 @@ public abstract class SharedSecuritronWhistleSystem : EntitySystem
     private void MakeLoudWhistle(EntityUid uid, EntityUid owner, SecuritronWhistleComponent component, SecuritronMasterComponent mastercomp)
     {
         foreach (var iterator in
-            _entityLookup.GetEntitiesInRange<SecurityMarkerComponent>(_transform.GetMapCoordinates(uid), component.Distance))
+            _entityLookup.GetEntitiesInRange<SecuritronComponent>(_transform.GetMapCoordinates(uid), component.Distance))
         {
             if (iterator.Owner == owner)
                 continue;
@@ -71,5 +71,5 @@ public abstract class SharedSecuritronWhistleSystem : EntitySystem
         }
     }
     //выполнение только на сервере
-    protected abstract void FollowMe(EntityUid target, EntityUid master, SecurityMarkerComponent comp, SecuritronMasterComponent mastercomp);
+    protected abstract void FollowMe(EntityUid target, EntityUid master, SecuritronComponent comp, SecuritronMasterComponent mastercomp);
 }

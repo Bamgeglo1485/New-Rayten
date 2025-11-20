@@ -1,3 +1,4 @@
+# Просто опасные твари, 10 уровень опасности
 - type: utilityQuery
   id: NearbyDangerDangerMobTargets
   query:
@@ -18,8 +19,9 @@
     - !type:TargetInLOSOrCurrentCon
       curve: !type:BoolCurve
 
+# заказные цели
 - type: utilityQuery
-  id: NearbyUnstunnedDangerMobTargets
+  id: NearbyOrderedUnstunnedTargets
   query:
     - !type:ComponentQuery
       components:
@@ -43,7 +45,7 @@
       curve: !type:BoolCurve
 
 - type: utilityQuery
-  id: NearbyCuffableDangerMobTargets
+  id: NearbyOrderedCuffableTargets
   query:
     - !type:ComponentQuery
       components:
@@ -62,6 +64,47 @@
       curve: !type:BoolCurve
 
 - type: utilityQuery
+  id: NearbyUnstunnedWantedTargets
+  query:
+    - !type:ComponentQuery
+      components:
+        - type: CriminalRecord
+          securitronAgro: true
+  considerations:
+    - !type:TargetIsAliveCon
+      curve: !type:BoolCurve
+    - !type:TargetIsStunnedCon
+      curve: !type:InverseBoolCurve
+    - !type:TargetDistanceCon
+      curve: !type:PresetCurve
+        preset: TargetDistance
+    - !type:TargetHealthCon
+      curve: !type:PresetCurve
+        preset: TargetHealth
+    - !type:TargetAccessibleCon
+      curve: !type:BoolCurve
+    - !type:TargetInLOSOrCurrentCon
+      curve: !type:BoolCurve
+
+- type: utilityQuery
+  id: NearbyCuffableWantedTargets
+  query:
+    - !type:ComponentQuery
+      components:
+        - type: CriminalRecord
+          securitronAgro: true
+  considerations:
+    - !type:TargetIsStunnedCon
+      curve: !type:BoolCurve
+    - !type:TargetDistanceCon
+      curve: !type:PresetCurve
+        preset: TargetDistance
+    - !type:TargetAccessibleCon
+      curve: !type:BoolCurve
+    - !type:TargetInLOSOrCurrentCon
+      curve: !type:BoolCurve
+
+- type: utilityQuery
   id: NearbyCuffs
   query:
     - !type:ComponentQuery
@@ -74,4 +117,17 @@
     - !type:TargetAccessibleCon
       curve: !type:BoolCurve
     - !type:TargetInLOSOrCurrentCon
+      curve: !type:BoolCurve
+
+- type: utilityQuery
+  id: NearbyPatrolMarkers
+  query:
+    - !type:ComponentQuery
+      components:
+        - type: PatrolMarker
+  considerations:
+    - !type:TargetDistanceCon
+      curve: !type:PresetCurve
+        preset: TargetDistance
+    - !type:VisitedPatrolMarkerCon
       curve: !type:BoolCurve

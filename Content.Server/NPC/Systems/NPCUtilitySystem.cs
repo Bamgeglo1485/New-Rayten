@@ -32,7 +32,9 @@ using Content.Shared.Damage.Components;
 using Content.Shared.Temperature.Components;
 
 using Content.Server.Vanilla.Dominator;
+using Content.Server.Vanilla.Danger;
 using Content.Server.Vanilla.NPC.Queries.Considerations;
+using Robust.Shared.Timing;
 
 namespace Content.Server.NPC.Systems;
 
@@ -58,6 +60,8 @@ public sealed class NPCUtilitySystem : EntitySystem
     [Dependency] private readonly MobThresholdSystem _thresholdSystem = default!;
     [Dependency] private readonly TurretTargetSettingsSystem _turretTargetSettings = default!;
     [Dependency] private readonly DangerMobSystem _dangermob = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
+
     private EntityQuery<PuddleComponent> _puddleQuery;
     private EntityQuery<TransformComponent> _xformQuery;
 
@@ -341,6 +345,13 @@ public sealed class NPCUtilitySystem : EntitySystem
             {
                 int targetdanger = _dangermob.GetEntityDanger(targetUid);
                 return targetdanger > 8 ? 1f : 0f;
+            }
+            case VisitedPatrolMarkerCon:
+            {
+                if (!TryComp<PatrolMarkerComponent>(targetUid, out var patrolmarker))
+                    return 0f;
+
+                return patrolmarker.NewValidVisitAt < _timing.CurTime ? 1f : 0f;
             }
             //rayten-end
             case TargetIsAliveCon:
