@@ -604,13 +604,13 @@ public sealed class TTTSystem : EntitySystem
 
     private void OnMobStateChanged(EntityUid uid, TTTMarkerComponent component, MobStateChangedEvent args)
     {
-        //Мгновенно убиваем критованного
-        if ((args.NewMobState == MobState.Critical && args.OldMobState < args.NewMobState) || (args.NewMobState == MobState.Dead && args.OldMobState < MobState.Critical))
-        {
-            if (!_damageable.TryChangeDamage(uid, component.Damage, true, false, null))
-                return;
-        }
-        else return;
+        if (args.NewMobState == MobState.Alive)
+            return;
+
+        if (args.OldMobState >= MobState.Critical)
+            return;
+
+        _damageable.TryChangeDamage(uid, component.Damage, true, false, null);
 
         if (component.RuleLink == null)
             return;
