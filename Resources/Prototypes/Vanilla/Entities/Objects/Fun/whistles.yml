@@ -1,7 +1,7 @@
 - type: entity
-  parent: BaseWhistle
+  parent: BaseItem
   id: SecuritronWhistle
-  name: Робо-свисток
+  name: робо-свисток
   description: Свисток с тонко-настроенным звуком, который позволяет управлять охранботами.
   components:
   - type: Item
