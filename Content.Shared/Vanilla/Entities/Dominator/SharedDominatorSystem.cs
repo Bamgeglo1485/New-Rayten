@@ -8,7 +8,9 @@ using Content.Shared.Inventory;
 using Content.Shared.Examine;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Hands.Components;
+using Robust.Shared.Physics.Events;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Timing;
 
 namespace Content.Shared.Vanilla.Dominator;
 
@@ -21,12 +23,14 @@ public class SharedDominatorSystem : EntitySystem
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] protected readonly SharedDangerMobSystem _dangermob = default!;
     [Dependency] private readonly SharedAppearanceSystem _appearanceSystem = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
 
     public override void Initialize()
     {
         base.Initialize();
         SubscribeLocalEvent<DominatorComponent, AttemptShootEvent>(OnAttemptShoot);
         SubscribeLocalEvent<DominatorComponent, ExaminedEvent>(OnExamined);
+        SubscribeLocalEvent<DangerMobComponent, PreventCollideEvent>(PreventCollide);
     }
 
     public override void Update(float frameTime)
@@ -143,9 +147,8 @@ public class SharedDominatorSystem : EntitySystem
                 RaiseLocalEvent(uid, ref updateClientAmmoEvent);
             }
         }
-
     }
-
+    //туду переделать как в системе dangermobsystem
     private void OnAttemptShoot(EntityUid uid, DominatorComponent comp, ref AttemptShootEvent args)
     {
         var user = args.User;
@@ -156,9 +159,10 @@ public class SharedDominatorSystem : EntitySystem
             args.Cancelled = true;
             return;
         }
+
         if (!_inventory.TryGetSlotEntity(user, "id", out var heldId))
         {
-            args.Message = "Вы не авторизованы для использования доминатора.";
+            args.Message = "Авторизована другая айди карта";
             args.Cancelled = true;
             return;
         }
@@ -170,7 +174,7 @@ public class SharedDominatorSystem : EntitySystem
                 !pda.ContainedId.HasValue ||
                 pda.ContainedId.Value != comp.AuthorizedID)
             {
-                args.Message = "Вы не авторизованы для использования доминатора.";
+                args.Message = "Авторизована другая айди карта";
                 args.Cancelled = true;
                 return;
             }
@@ -195,5 +199,19 @@ public class SharedDominatorSystem : EntitySystem
         {
             args.PushMarkup(Loc.GetString("dominator-auth-examine-notauth"));
         }
+    }
+
+    private void PreventCollide(EntityUid uid, DangerMobComponent component, ref PreventCollideEvent args)
+    {
+        if (args.Cancelled)
+            return;
+
+        if (TryComp<DangerMobColliderComponent>(args.OtherEntity, out var dangerMobCollider))
+        {
+            var targetdanger = _dangermob.GetEntityDanger(uid);
+            if (targetdanger < dangerMobCollider.MinDanger)
+                args.Cancelled = true;
+        }
+
     }
 }

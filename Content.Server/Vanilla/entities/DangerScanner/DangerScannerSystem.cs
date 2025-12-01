@@ -1,9 +1,19 @@
 using Content.Server.Chat.Systems;
+using Content.Server.Radio.EntitySystems;
+using Content.Server.CriminalRecords.Systems;
+using Content.Server.Station.Systems;
+
 using Content.Shared.Vanilla.Entities.DangerScanner;
+using Content.Shared.IdentityManagement;
 using Content.Shared.Interaction;
 using Content.Shared.DoAfter;
 using Content.Shared.Vanilla.Dominator;
 using Content.Shared.Chat;
+using Content.Shared.Contraband;
+using Content.Shared.StationRecords;
+using Content.Shared.Security;
+using Content.Shared.StepTrigger.Systems;
+
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Timing;
 
@@ -16,18 +26,24 @@ public sealed class DangerScannerSystem : EntitySystem
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
     [Dependency] private readonly SharedDangerMobSystem _dangermob = default!;
+    [Dependency] private readonly SharedStationRecordsSystem _records = default!;
+    [Dependency] private readonly CriminalRecordsSystem _criminalRecords = default!;
+    [Dependency] private readonly StationSystem _station = default!;
+    [Dependency] private readonly RadioSystem _radio = default!;
 
     private const float ScanCoolDown = 10f; //в минутах
-
     private Dictionary<EntityUid, TimeSpan> _scannedEntities = new();
 
     public override void Initialize()
     {
-        SubscribeLocalEvent<PortableDangerScannerComponent, AfterInteractEvent>(OnScannerAfterInteract);
-        SubscribeLocalEvent<PortableDangerScannerComponent, ScannerDoAfterEvent>(OnDoAfter);
+        SubscribeLocalEvent<DangerScannerComponent, AfterInteractEvent>(OnScannerAfterInteract);
+        SubscribeLocalEvent<DangerScannerComponent, ScannerDoAfterEvent>(OnDoAfter);
+        SubscribeLocalEvent<DangerScannerComponent, StepTriggeredOnEvent>(OnStepTrigger);
     }
-
-    private void OnScannerAfterInteract(EntityUid uid, PortableDangerScannerComponent component, AfterInteractEvent args)
+    private void OnStepTrigger(EntityUid uid, DangerScannerComponent component, ref StepTriggeredOnEvent args)
+    {
+    }
+    private void OnScannerAfterInteract(EntityUid uid, DangerScannerComponent component, AfterInteractEvent args)
     {
         if (args.Target is not { } target)
             return;
@@ -68,7 +84,6 @@ public sealed class DangerScannerSystem : EntitySystem
                 return;
             }
         }
-        _chat.TrySendInGameICMessage(uid, Loc.GetString("dominator-scanner-start"), InGameICChatType.Speak, true);
 
         _doAfter.TryStartDoAfter(new DoAfterArgs(EntityManager, args.User, component.ScanDoAfterDuration, new ScannerDoAfterEvent(), uid, target: target, used: uid)
         {
@@ -76,20 +91,44 @@ public sealed class DangerScannerSystem : EntitySystem
         });
     }
 
-    private void OnDoAfter(EntityUid uid, PortableDangerScannerComponent component, DoAfterEvent args)
+    private void OnDoAfter(EntityUid uid, DangerScannerComponent component, DoAfterEvent args)
     {
         if (args.Cancelled || args.Handled || args.Args.Target == null)
             return;
 
+        var target = args.Args.Target.Value;
         _audio.PlayPvs(component.CompleteSound, uid);
 
-        int targetdanger = _dangermob.GetEntityDanger(args.Args.Target.Value, deepseek: true);
-
-        _chat.TrySendInGameICMessage(uid, Loc.GetString("dominator-scanner-end", ("danger", targetdanger)), InGameICChatType.Speak, true);
-
-        // Обновляем время скана (или добавляем нового)
-        _scannedEntities[args.Args.Target.Value] = _timing.CurTime;
+        if (_dangermob.TryGetDangeriousItem(target, out var item) && item.HasValue && TryComp<ContrabandComponent>(item, out var contraband))
+        {
+            _chat.TrySendInGameICMessage(uid, Loc.GetString("dominator-scanner-end-danger", ("item", Name(item.Value))), InGameICChatType.Speak, true);
+            SetWanted(uid, component, Name(target), item.Value, contraband);
+        }
+        else
+        {
+            _chat.TrySendInGameICMessage(uid, Loc.GetString("dominator-scanner-end-no-danger"), InGameICChatType.Speak, true);
+        }
+        // Обновляем время скана (или добавляем новую запись)
+        _scannedEntities[target] = _timing.CurTime;
         args.Handled = true;
     }
 
+    private void SetWanted(EntityUid scanner, DangerScannerComponent component, string target, EntityUid item, ContrabandComponent contraband)
+    {
+        if (_station.GetOwningStation(scanner) is { } station)
+        {
+            var id = _records.GetRecordByName(station, target);
+            if (id != null)
+            {
+                var key = new StationRecordKey(id.Value, station);
+                var reason = Loc.GetString("scanner-set-wanted", ("Severity", contraband.Severity), ("item", Name(item)));
+                if (_criminalRecords.TryChangeStatus(key, SecurityStatus.Wanted, reason, Name(scanner)))
+                {
+                    _radio.SendRadioMessage(scanner,
+                        Loc.GetString("scanner-radio-message", ("name", target), ("reason", reason)),
+                        component.SecurityChannel, scanner);
+                }
+            }
+        }
+    }
 }

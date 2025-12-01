@@ -34,6 +34,8 @@ using Content.Shared.Temperature.Components;
 using Content.Server.Vanilla.Dominator;
 using Content.Server.Vanilla.Danger;
 using Content.Server.Vanilla.NPC.Queries.Considerations;
+using Content.Shared.Security.Components;
+
 using Robust.Shared.Timing;
 
 namespace Content.Server.NPC.Systems;
@@ -344,7 +346,14 @@ public sealed class NPCUtilitySystem : EntitySystem
             case TargetIsDangerCon:
             {
                 int targetdanger = _dangermob.GetEntityDanger(targetUid);
-                return targetdanger > 8 ? 1f : 0f;
+                return targetdanger == 10 ? 1f : 0f;
+            }
+            case TargetIsSecuritronAgroCon:
+            {
+                if (!TryComp<CriminalRecordComponent>(targetUid, out var rec))
+                    return 0f;
+
+                return rec.SecuritronAgro ? 1f : 0f;
             }
             case VisitedPatrolMarkerCon:
             {

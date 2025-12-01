@@ -25,6 +25,20 @@ public class SharedDangerMobSystem : EntitySystem
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly SharedCombatModeSystem _combat = default!;
 
+    #region API
+    public bool TryGetDangeriousItem(EntityUid target, [NotNullWhen(true)] out EntityUid? MostDangerousItem)
+    {
+        MostDangerousItem = null;
+
+        if (!TryComp<DangerMobComponent>(target, out var dangerComp))
+            return false;
+
+        if (dangerComp.MaxDanger)
+            return false;
+
+        return CalculateDeepDanger(target, dangerComp, out MostDangerousItem) > 0;
+    }
+
     public int GetEntityDanger(EntityUid target, bool deepseek = false)
     {
         if (!TryComp<DangerMobComponent>(target, out var dangerComp))
@@ -53,22 +67,40 @@ public class SharedDangerMobSystem : EntitySystem
             };
         }
 
-        danger += deepseek ? CalculateDeepDanger(target, dangerComp) : dangerComp.Danger;
+        danger += deepseek ? CalculateDeepDanger(target, dangerComp, out var mostDangerousItem) : dangerComp.Danger;
         return Math.Clamp(danger, 0, 10);
     }
-
-    //считаем глубокую опасность
-    protected int CalculateDeepDanger(EntityUid target, DangerMobComponent dangerComp)
+    public int GetItemDanger(EntityUid item, List<ProtoId<DepartmentPrototype>> departments, string jobId)
     {
-        // --- 1. Проверка на опасных существ ---
+        if (!TryComp<ContrabandComponent>(item, out var contraband))
+            return 0;
+
+        if (!_proto.TryIndex(contraband.Severity, out var severityProto))
+            return 0;
+
+        var jobs = contraband.AllowedJobs.Select(p => _proto.Index(p).LocalizedName).ToArray();
+
+        if (departments.Intersect(contraband.AllowedDepartments).Any() || jobs.Contains(jobId) || jobId == "капитан")
+            return 0;
+
+        return severityProto.Danger;
+    }
+    #endregion
+    #region глубокая опасность
+    protected int CalculateDeepDanger(EntityUid target, DangerMobComponent dangerComp, out EntityUid? mostDangerousItem)
+    {
+        mostDangerousItem = null;
+
         if (dangerComp.MaxDanger)
             return 10;
 
         var deepdanger = 0;
+        int globalMaxDanger = 0;
+
         List<ProtoId<DepartmentPrototype>> departments = new();
         var jobId = "";
 
-        // --- 2. Проверка на карту агента ---
+        // ID card
         if (TryGetIdCard(target, out var idcard))
         {
             TryComp<AgentIDCardComponent>(idcard, out var agentCardComp);
@@ -76,7 +108,6 @@ public class SharedDangerMobSystem : EntitySystem
             if (TryComp<PdaComponent>(idcard, out var pdaComp))
                 TryComp<AgentIDCardComponent>(pdaComp.ContainedId, out agentCardComp);
 
-            // Карта агента скрывает глубокое сканирование
             if (agentCardComp?.HideDeepScan == true)
                 return dangerComp.Danger;
 
@@ -85,39 +116,90 @@ public class SharedDangerMobSystem : EntitySystem
                 jobId = idcard.Comp.LocalizedJobTitle;
         }
 
-        // --- 3. Проверка рук ---
-        foreach (var item in _hands.EnumerateHeld(target))
-            deepdanger += GetRecursiveItemDanger(item, departments, jobId);
+        // Hands
+        foreach (var held in _hands.EnumerateHeld(target))
+        {
+            deepdanger += GetRecursiveItemDanger(held, departments, jobId, out var childItem);
 
-        // --- 3. Проверка инвентарных слотов ---
+            var d = GetItemDanger(childItem, departments, jobId);
+            if (d > globalMaxDanger)
+            {
+                globalMaxDanger = d;
+                mostDangerousItem = childItem;
+            }
+        }
+
+        // Inventory slots
         if (TryComp<InventoryComponent>(target, out var inventoryComp))
         {
             foreach (var slot in inventoryComp.Slots)
             {
-                if (_inventory.TryGetSlotEntity(target, slot.Name, out var itemUid) && itemUid is { } itemUidValue)
-                    deepdanger += GetRecursiveItemDanger(itemUidValue, departments, jobId);
+                if (!_inventory.TryGetSlotEntity(target, slot.Name, out var itemUid))
+                    continue;
+
+                deepdanger += GetRecursiveItemDanger(itemUid.Value, departments, jobId, out var childItem);
+
+                var d = GetItemDanger(childItem, departments, jobId);
+                if (d > globalMaxDanger)
+                {
+                    globalMaxDanger = d;
+                    mostDangerousItem = childItem;
+                }
             }
         }
+
+        if (deepdanger == 0)
+            mostDangerousItem = null;
+
         return deepdanger;
     }
 
-    private int GetRecursiveItemDanger(EntityUid uid, List<ProtoId<DepartmentPrototype>> departments, string jobId)
+    /// Возвращает полную угрозу предмета с учётом всех предметов внутри него
+    /// item - самый опасный предмет, либо сам предмет либо предмет внутри него
+    private int GetRecursiveItemDanger(
+        EntityUid uid,
+        List<ProtoId<DepartmentPrototype>> departments,
+        string jobId,
+        out EntityUid item)
     {
-        var totalDanger = GetItemDanger(uid, departments, jobId);
+        EntityUid localMaxItem = uid;
+        int localMaxDanger = GetItemDanger(uid, departments, jobId);
+        int totalDanger = localMaxDanger;
 
-        // Проверяем, есть ли внутри что-то
         if (TryComp<StorageComponent>(uid, out var storageComp))
         {
             foreach (var contained in storageComp.Container.ContainedEntities)
-                totalDanger += GetRecursiveItemDanger(contained, departments, jobId);
+            {
+                totalDanger += GetRecursiveItemDanger(contained, departments, jobId, out var childMaxItem);
+
+                var childDanger = GetItemDanger(childMaxItem, departments, jobId);
+                if (childDanger > localMaxDanger)
+                {
+                    localMaxDanger = childDanger;
+                    localMaxItem = childMaxItem;
+                }
+            }
         }
 
-        if (TryComp<SecretStashComponent>(uid, out var stashComp) && stashComp.ItemContainer.ContainedEntity.HasValue)
-            totalDanger += GetItemDanger(stashComp.ItemContainer.ContainedEntity.Value, departments, jobId);
+        if (TryComp<SecretStashComponent>(uid, out var stashComp)
+            && stashComp.ItemContainer.ContainedEntity is {} stashedItem)
+        {
+            var curDanger = GetItemDanger(stashedItem, departments, jobId);
+            totalDanger += curDanger;
 
+            if (curDanger > localMaxDanger)
+            {
+                localMaxDanger = curDanger;
+                localMaxItem = stashedItem;
+            }
+        }
+
+        item = localMaxItem;
         return totalDanger;
     }
 
+    #endregion
+    #region внешняя опасность
     //считаем внешнюю опасность
     protected void CalculateDanger(EntityUid target, DangerMobComponent dangercomp)
     {
@@ -160,7 +242,7 @@ public class SharedDangerMobSystem : EntitySystem
 
         dangercomp.Danger = Math.Clamp(danger, 0, 10);
     }
-
+    #endregion
     private bool TryGetIdCard(EntityUid target, [NotNullWhen(true)] out Entity<IdCardComponent> idCard)
     {
         IdCardComponent? idCardComp;
@@ -197,21 +279,5 @@ public class SharedDangerMobSystem : EntitySystem
 
         idCard = default;
         return false;
-    }
-
-    private int GetItemDanger(EntityUid item, List<ProtoId<DepartmentPrototype>> departments, string jobId)
-    {
-        if (!TryComp<ContrabandComponent>(item, out var contraband))
-            return 0;
-
-        if (!_proto.TryIndex(contraband.Severity, out var severityProto))
-            return 0;
-
-        var jobs = contraband.AllowedJobs.Select(p => _proto.Index(p).LocalizedName).ToArray();
-
-        if (departments.Intersect(contraband.AllowedDepartments).Any() || jobs.Contains(jobId) || jobId == "капитан")
-            return 0;
-
-        return severityProto.Danger;
     }
 }

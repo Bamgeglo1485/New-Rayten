@@ -22,7 +22,6 @@ public sealed class SecuritronWhistleSystem : SharedSecuritronWhistleSystem
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<SecuritronMasterComponent, AfterPointedAtEvent>(OnPointedAt);
         SubscribeLocalEvent<SecuritronMasterComponent, ComponentShutdown>(OnMasterShutdown);
     }
 
@@ -38,9 +37,6 @@ public sealed class SecuritronWhistleSystem : SharedSecuritronWhistleSystem
 
             if (htn.Blackboard.ContainsKey(NPCBlackboard.FollowTarget))
                 htn.Blackboard.Remove<EntityCoordinates>(NPCBlackboard.FollowTarget);
-
-            if (htn.Blackboard.ContainsKey(NPCBlackboard.CurrentOrderedTarget))
-                htn.Blackboard.Remove<EntityUid>(NPCBlackboard.CurrentOrderedTarget);
 
             _htn.Replan(htn);
 
@@ -60,17 +56,6 @@ public sealed class SecuritronWhistleSystem : SharedSecuritronWhistleSystem
                 }
             }
 
-        }
-    }
-
-    private void OnPointedAt(EntityUid uid, SecuritronMasterComponent component, ref AfterPointedAtEvent args)
-    {
-        if (args.Pointed == uid)
-            return;
-
-        foreach (var bot in component.Securitrons)
-        {
-            _npc.SetBlackboard(bot, NPCBlackboard.CurrentOrderedTarget, args.Pointed);
         }
     }
 

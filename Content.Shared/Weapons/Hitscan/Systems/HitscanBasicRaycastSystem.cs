@@ -11,6 +11,9 @@ using Robust.Shared.Physics;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Player;
 using Robust.Shared.Utility;
+using System.Linq;
+
+using Content.Shared.Vanilla.Dominator;
 
 namespace Content.Shared.Weapons.Hitscan.Systems;
 
@@ -20,6 +23,7 @@ public sealed class HitscanBasicRaycastSystem : EntitySystem
     [Dependency] private readonly SharedContainerSystem _container = default!;
     [Dependency] private readonly ISharedAdminLogManager _log = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] protected readonly SharedDangerMobSystem _dangermob = default!;
 
     private EntityQuery<HitscanBasicVisualsComponent> _visualsQuery;
 
@@ -31,7 +35,22 @@ public sealed class HitscanBasicRaycastSystem : EntitySystem
 
         SubscribeLocalEvent<HitscanBasicRaycastComponent, HitscanTraceEvent>(OnHitscanFired);
     }
+    //rayten-start
+    private bool IsDangerFiltered(EntityUid hitscanEntity, EntityUid hitEntity)
+    {
+        if (!HasComp<DangerMobComponent>(hitEntity))
+            return false;
 
+        if (TryComp<DangerMobColliderComponent>(hitscanEntity, out var collider))
+        {
+            var targetDanger = _dangermob.GetEntityDanger(hitEntity);
+            // true => исключить хит, если опасность цели МЕНЬШЕ минимального порога у hitscan
+            return targetDanger < collider.MinDanger;
+        }
+
+        return false;
+    }
+    //rayten-end
     private void OnHitscanFired(Entity<HitscanBasicRaycastComponent> ent, ref HitscanTraceEvent args)
     {
         var shooter = args.Shooter ?? args.Gun;
@@ -40,6 +59,14 @@ public sealed class HitscanBasicRaycastSystem : EntitySystem
         var rayCastResults = _physics.IntersectRay(mapCords.MapId, ray, ent.Comp.MaxDistance, shooter, false);
 
         var target = args.Target;
+
+        //rayten-start
+        rayCastResults = rayCastResults
+            .Where(hit => !IsDangerFiltered(ent, hit.HitEntity))
+            .ToList();
+
+        //rayten-end
+
         // If you are in a container, use the raycast result
         // Otherwise:
         //  1.) Hit the first entity that you targeted.

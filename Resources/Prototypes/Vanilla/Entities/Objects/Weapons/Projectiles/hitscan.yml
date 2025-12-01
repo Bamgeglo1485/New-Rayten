@@ -2,6 +2,7 @@
   parent: BasicHitscan
   id: DominatorLethalShot
   components:
+  - type: DangerMobCollider
   - type: HitscanBasicDamage
     damage:
       types:
@@ -22,6 +23,8 @@
   parent: BasicHitscan
   id: DominatorNonLethalShot
   components:
+  - type: DangerMobCollider
+    minDanger: 6
   - type: HitscanStaminaDamage
     staminaDamage: 40
   - type: HitscanBasicVisuals
@@ -40,6 +43,7 @@
   parent: BasicHitscan
   id: AssaultDominatorLethalShot
   components:
+  - type: DangerMobCollider
   - type: HitscanBasicDamage
     damage:
       types:
@@ -61,6 +65,8 @@
   parent: BasicHitscan
   id: AssaultDominatorNonLethalShot
   components:
+  - type: DangerMobCollider
+    minDanger: 6
   - type: HitscanStaminaDamage
     staminaDamage: 15
   - type: HitscanBasicVisuals

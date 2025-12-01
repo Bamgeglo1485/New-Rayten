@@ -51,15 +51,6 @@ public abstract class SharedCriminalRecordsSystem : EntitySystem
         };
         //rayten-start
         record.Status = status;
-        record.SecuritronAgro = status switch
-        {
-            SecurityStatus.Wanted => true,
-            SecurityStatus.Detained => true,
-            SecurityStatus.Hostile => true,
-            SecurityStatus.Eliminated => true,
-            _ => false
-        };
-
         //rayten-end
         if (previousIcon != record.StatusIcon)
             Dirty(characterUid, record);

@@ -16,8 +16,11 @@ public sealed partial class CriminalRecordComponent : Component
     //rayten-start
     [DataField, AutoNetworkedField]
     public SecurityStatus Status;
-
-    [DataField]
-    public bool SecuritronAgro = false;
+    public bool SecuritronAgro => Status switch
+    {
+        SecurityStatus.Wanted => true, // в розыске
+        SecurityStatus.Detained => true, // под арестом
+        _ => false
+    };
     //rayten-end
 }

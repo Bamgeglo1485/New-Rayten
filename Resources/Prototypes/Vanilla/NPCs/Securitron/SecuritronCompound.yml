@@ -13,14 +13,10 @@
     - tasks:
         - !type:HTNCompoundTask
           task: SecuritronFindCuffsCompound
-  #4. Лови тех на кого указали
-    - tasks:
-      - !type:HTNCompoundTask
-        task: SecuritronArrestOrderedCompound
   #5. Лови тех кто в розыске
     - tasks:
       - !type:HTNCompoundTask
-        task: SecuritronArrestWantedCompound
+        task: SecuritronArrestCompound
   #6. Следуй за офицером
     - tasks:
         - !type:HTNCompoundTask
@@ -82,8 +78,8 @@
               key: Target
           operator: !type:GunOperator
             targetKey: Target
-            requireLOS: true
-            opaqueKey: true
+            # requireLOS: true
+            # opaqueKey: true
           services:
             - !type:UtilityService
               id: RangedService
@@ -162,3 +158,85 @@
         - !type:HTNPrimitiveTask
           operator: !type:VisitPatrolMarkerOperator
             key: patrolpoint
+
+# ловля тех, кто в розыске
+- type: htnCompound
+  id: SecuritronArrestCompound
+  branches:
+    - tasks:
+        - !type:HTNCompoundTask
+          task: SecuritronCuffCompound
+    - tasks:
+        - !type:HTNCompoundTask
+          task: SecuritronStunCompound
+
+- type: htnCompound
+  id: SecuritronCuffCompound
+  branches:
+    - tasks:
+        - !type:HTNPrimitiveTask
+          operator: !type:UtilityOperator
+            proto: NearbyCuffableWantedTargets
+            key: cuff_target
+            keyCoordinates: cuff_targetCoordinates
+        - !type:HTNPrimitiveTask
+          operator: !type:MoveToOperator
+            shutdownState: TaskFinished
+            pathfindInPlanning: true
+            targetKey: cuff_targetCoordinates
+            pathfindKey: TargetPathfind
+            rangeKey: MeleeRange
+          preconditions:
+            - !type:CoordinatesNotInRangePrecondition
+              targetKey: cuff_targetCoordinates
+              rangeKey: MeleeRange
+        - !type:HTNPrimitiveTask
+          operator: !type:CuffOperator
+            targetKey: cuff_target
+            cuffKey: Handcuff
+          preconditions:
+            - !type:KeyExistsPrecondition
+              key: cuff_target
+            - !type:TargetInRangePrecondition
+              targetKey: cuff_target
+              rangeKey: MeleeRange
+          services:
+            - !type:UtilityService
+              id: CuffService
+              proto: NearbyCuffableWantedTargets
+              key: cuff_target
+
+- type: htnCompound
+  id: SecuritronStunCompound
+  branches:
+    - tasks:
+        - !type:HTNPrimitiveTask
+          operator: !type:UtilityOperator
+            proto: NearbyUnstunnedWantedTargets
+            key: melee_target
+            keyCoordinates: melee_targetCoordinates
+        - !type:HTNPrimitiveTask
+          operator: !type:MoveToOperator
+            shutdownState: PlanFinished
+            pathfindInPlanning: true
+            removeKeyOnFinish: false
+            targetKey: melee_targetCoordinates
+            pathfindKey: TargetPathfind
+            rangeKey: MeleeRange
+        - !type:HTNPrimitiveTask
+          operator: !type:JukeOperator
+            jukeType: Away
+        - !type:HTNPrimitiveTask
+          operator: !type:MeleeOperator
+            targetKey: melee_target
+          preconditions:
+            - !type:KeyExistsPrecondition
+              key: melee_target
+            - !type:TargetInRangePrecondition
+              targetKey: melee_target
+              rangeKey: MeleeRange
+          services:
+            - !type:UtilityService
+              id: MeleeService
+              proto: NearbyUnstunnedWantedTargets
+              key: melee_target
