@@ -7,7 +7,7 @@
   components:
   - type: StealTarget
     stealGroup: OfficerHandgun
-  - type: PortableDangerScanner
+  - type: DangerScanner
   - type: SiliconLawProvider
     laws: SibylSystemLaw
   - type: SiliconLawBound
