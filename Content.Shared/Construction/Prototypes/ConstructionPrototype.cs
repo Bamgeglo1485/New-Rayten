@@ -27,9 +27,6 @@ public sealed partial class ConstructionPrototype : IPrototype
     //инженерия
     [DataField("RequiresEngineeringLevel")]
     public SkillLevel RequiresEngineeringLevel = 0;
-    //атмосфера
-    [DataField("RequiresAtmosphere")]
-    public bool RequiresAtmosphere = false;
     //Rayten-end
     /// <summary>
     ///     "Useful" description displayed in the construction GUI.

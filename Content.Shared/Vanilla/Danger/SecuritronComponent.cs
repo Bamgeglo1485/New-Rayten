@@ -6,5 +6,4 @@ public sealed partial class SecuritronComponent : Component
 {
     [ViewVariables]
     public ContainerSlot HandCuffContainer = default!;
-
 }

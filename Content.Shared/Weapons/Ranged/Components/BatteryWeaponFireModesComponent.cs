@@ -53,12 +53,6 @@ public sealed partial class BatteryWeaponFireMode
     /// </summary>
     [DataField]
     public bool PacifismAllowedMode = false;
-
-    //RAYTEN-start
-    // true - Хитскан false - проджектаил
-    [DataField("isHitscan")]
-    public bool IsHitscan = false;
-    //rayten-end
 }
 
 [Serializable, NetSerializable]

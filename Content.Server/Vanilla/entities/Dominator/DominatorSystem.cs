@@ -35,6 +35,7 @@ public sealed class DominatorSystem : SharedDominatorSystem
 
     public override void Initialize()
     {
+        base.Initialize();
         SubscribeLocalEvent<DominatorComponent, InteractUsingEvent>(OnInteractUsing);
         SubscribeLocalEvent<DominatorComponent, GetVerbsEvent<Verb>>(OnGetVerbs);
     }
@@ -74,7 +75,7 @@ public sealed class DominatorSystem : SharedDominatorSystem
         }
     }
 
-    public override void UpdateWeaponMode(EntityUid uid, DominatorComponent dom, DominatorState newMode)
+    protected override void UpdateWeaponMode(EntityUid uid, DominatorComponent dom, DominatorState newMode)
     {
         base.UpdateWeaponMode(uid, dom, newMode);
 

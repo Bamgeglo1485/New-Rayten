@@ -14,7 +14,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared.Vanilla.Dominator;
 
-public class SharedDominatorSystem : EntitySystem
+public abstract class SharedDominatorSystem : EntitySystem
 {
     [Dependency] protected readonly InventorySystem _inventory = default!;
     [Dependency] private readonly ExamineSystemShared _examine = default!;
@@ -23,7 +23,7 @@ public class SharedDominatorSystem : EntitySystem
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] protected readonly SharedDangerMobSystem _dangermob = default!;
     [Dependency] private readonly SharedAppearanceSystem _appearanceSystem = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly SharedGunSystem _gun = default!;
 
     public override void Initialize()
     {
@@ -92,60 +92,27 @@ public class SharedDominatorSystem : EntitySystem
         };
     }
 
-    public virtual void UpdateWeaponMode(EntityUid uid, DominatorComponent component, DominatorState newMode)
+    protected virtual void UpdateWeaponMode(EntityUid uid, DominatorComponent component, DominatorState newMode)
     {
         component.CurrentState = newMode;
 
         var fireMode = component.FireModes[(int)newMode];
-        if (fireMode.IsHitscan)
+        Dirty(uid, component);
+
+        if (_proto.TryIndex<EntityPrototype>(fireMode.Prototype, out var prototype))
         {
-            if (_proto.TryIndex<EntityPrototype>(fireMode.Prototype, out var prototype))
-            {
-                if (TryComp<AppearanceComponent>(uid, out var appearance))
-                    _appearanceSystem.SetData(uid, BatteryWeaponFireModeVisuals.State, prototype.ID, appearance);
-            }
-            if (TryComp(uid, out HitscanBatteryAmmoProviderComponent? hitscanBatteryAmmoProviderComponent))
-            {
-                var oldFireCost = hitscanBatteryAmmoProviderComponent.FireCost;
-                hitscanBatteryAmmoProviderComponent.HitscanEntityProto = fireMode.Prototype;
-                hitscanBatteryAmmoProviderComponent.FireCost = fireMode.FireCost;
-
-                float fireCostDiff = (float)fireMode.FireCost / (float)oldFireCost;
-                hitscanBatteryAmmoProviderComponent.Shots = (int)Math.Round(hitscanBatteryAmmoProviderComponent.Shots / fireCostDiff);
-                hitscanBatteryAmmoProviderComponent.Capacity = (int)Math.Round(hitscanBatteryAmmoProviderComponent.Capacity / fireCostDiff);
-
-                Dirty(uid, hitscanBatteryAmmoProviderComponent);
-
-                var updateClientAmmoEvent = new UpdateClientAmmoEvent();
-                RaiseLocalEvent(uid, ref updateClientAmmoEvent);
-            }
+            if (TryComp<AppearanceComponent>(uid, out var appearance))
+                _appearanceSystem.SetData(uid, BatteryWeaponFireModeVisuals.State, prototype.ID, appearance);
         }
-        else
+
+        if (TryComp(uid, out BatteryAmmoProviderComponent? batteryAmmoProviderComponent))
         {
-            if (_proto.TryIndex<EntityPrototype>(fireMode.Prototype, out var prototype))
-            {
-                if (TryComp<AppearanceComponent>(uid, out var appearance))
-                {
-                    _appearanceSystem.SetData(uid, BatteryWeaponFireModeVisuals.State, prototype.ID, appearance);
-                }
-            }
+            batteryAmmoProviderComponent.Prototype = fireMode.Prototype;
+            batteryAmmoProviderComponent.FireCost = fireMode.FireCost;
 
-            if (TryComp(uid, out ProjectileBatteryAmmoProviderComponent? projectileBatteryAmmoProviderComponent))
-            {
-                // TODO: Have this get the info directly from the batteryComponent when power is moved to shared.
-                var OldFireCost = projectileBatteryAmmoProviderComponent.FireCost;
-                projectileBatteryAmmoProviderComponent.Prototype = fireMode.Prototype;
-                projectileBatteryAmmoProviderComponent.FireCost = fireMode.FireCost;
+            Dirty(uid, batteryAmmoProviderComponent);
 
-                float FireCostDiff = (float)fireMode.FireCost / (float)OldFireCost;
-                projectileBatteryAmmoProviderComponent.Shots = (int)Math.Round(projectileBatteryAmmoProviderComponent.Shots / FireCostDiff);
-                projectileBatteryAmmoProviderComponent.Capacity = (int)Math.Round(projectileBatteryAmmoProviderComponent.Capacity / FireCostDiff);
-
-                Dirty(uid, projectileBatteryAmmoProviderComponent);
-
-                var updateClientAmmoEvent = new UpdateClientAmmoEvent();
-                RaiseLocalEvent(uid, ref updateClientAmmoEvent);
-            }
+            _gun.UpdateShots((uid, batteryAmmoProviderComponent));
         }
     }
     //туду переделать как в системе dangermobsystem
