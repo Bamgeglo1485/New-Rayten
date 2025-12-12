@@ -13,18 +13,24 @@ public sealed class ShowCriminalLevelIconsSystem : EquipmentHudSystem<ShowCrimin
 
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
     [Dependency] private readonly SharedDangerMobSystem _dangermob = default!;
-
-    public void AddCriminalLevelIcons(EntityUid uid, ref GetStatusIconsEvent args)
+    public override void Initialize()
+    {
+        base.Initialize();
+        SubscribeLocalEvent<StatusIconComponent, GetStatusIconsEvent>(OnGetStatusIconsEvent);
+    }
+    private void OnGetStatusIconsEvent(EntityUid uid, StatusIconComponent _, ref GetStatusIconsEvent ev)
     {
         if (!IsActive)
             return;
 
         var DangerLevel = _dangermob.GetEntityDanger(uid);
+        if (DangerLevel <= 0)
+            return;
 
         var iconId = $"CriminalLevelIcon{DangerLevel}";
 
         if (_prototypeManager.TryIndex<CriminalLevelIconPrototype>(iconId, out var icon))
-            args.StatusIcons.Add(icon);
+            ev.StatusIcons.Add(icon);
         else
             Logger.Error($"[CriminalLevelIcon] Invalid danger icon ID: {iconId}");
     }
