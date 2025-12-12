@@ -53,11 +53,11 @@ public class SharedDangerMobSystem : EntitySystem
         if (dangerComp.MaxDanger)
             return 10;
 
-        var danger = 0;
+        var minDanger = 0;
 
         if (TryComp<CriminalRecordComponent>(target, out var record))
         {
-            danger = record.Status switch
+            minDanger = record.Status switch
             {
                 SecurityStatus.Wanted => 6, // в розыске
                 SecurityStatus.Detained => 6, // под арестом
@@ -67,7 +67,11 @@ public class SharedDangerMobSystem : EntitySystem
             };
         }
 
-        danger += deepseek ? CalculateDeepDanger(target, dangerComp, out var mostDangerousItem) : dangerComp.Danger;
+        var danger = deepseek ? CalculateDeepDanger(target, dangerComp, out var mostDangerousItem) : dangerComp.Danger;
+
+        if (minDanger > danger)
+            danger = minDanger;
+
         return Math.Clamp(danger, 0, 10);
     }
     public int GetItemDanger(EntityUid item, List<ProtoId<DepartmentPrototype>> departments, string jobId)
@@ -182,7 +186,7 @@ public class SharedDangerMobSystem : EntitySystem
         }
 
         if (TryComp<SecretStashComponent>(uid, out var stashComp)
-            && stashComp.ItemContainer.ContainedEntity is {} stashedItem)
+            && stashComp.ItemContainer.ContainedEntity is { } stashedItem)
         {
             var curDanger = GetItemDanger(stashedItem, departments, jobId);
             totalDanger += curDanger;

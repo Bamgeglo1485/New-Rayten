@@ -8,7 +8,7 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Client.Vanilla.Overlays;
 
-public sealed class ShowCriminalLevelIconsSystem : EquipmentHudSystem<ShowCriminalLevelIconsComponent>
+public sealed class ShowDangerLevelIconsSystem : EquipmentHudSystem<ShowCriminalLevelIconsComponent>
 {
 
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
