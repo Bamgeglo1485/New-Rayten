@@ -84,7 +84,9 @@ public class SharedDangerMobSystem : EntitySystem
 
         var jobs = contraband.AllowedJobs.Select(p => _proto.Index(p).LocalizedName).ToArray();
 
-        if (departments.Intersect(contraband.AllowedDepartments).Any() || jobs.Contains(jobId) || jobId == "капитан")
+        if (departments.Intersect(contraband.AllowedDepartments).Any()
+            || jobs.Contains(jobId)
+            || ((contraband.AllowedDepartments.Count > 0 || contraband.AllowedJobs.Count > 0) && jobId == "капитан"))
             return 0;
 
         return severityProto.Danger;

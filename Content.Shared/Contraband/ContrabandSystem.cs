@@ -103,7 +103,10 @@ public sealed class ContrabandSystem : EntitySystem
         var carryingMessage = Loc.GetString("contraband-examine-text-avoid-carrying-around");
         var iconTexture = "/Textures/Interface/VerbIcons/lock-red.svg.192dpi.png";
         if (departments.Intersect(component.AllowedDepartments).Any()
-            || jobs.Contains(jobId) || jobId == "капитан")
+            || jobs.Contains(jobId)
+            //rayten
+            //капитан может носить любые предметы любых отделов, за исключением предметов которые запрещены всем
+            || ((component.AllowedDepartments.Count > 0 || component.AllowedJobs.Count > 0) && jobId == "капитан"))
         {
             carryingMessage = Loc.GetString("contraband-examine-text-in-the-clear");
             iconTexture = "/Textures/Interface/VerbIcons/unlock-green.svg.192dpi.png";
