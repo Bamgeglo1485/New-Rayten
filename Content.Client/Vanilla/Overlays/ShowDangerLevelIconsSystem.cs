@@ -16,9 +16,9 @@ public sealed class ShowDangerLevelIconsSystem : EquipmentHudSystem<ShowCriminal
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<StatusIconComponent, GetStatusIconsEvent>(OnGetStatusIconsEvent);
+        SubscribeLocalEvent<DangerMobComponent, GetStatusIconsEvent>(OnGetStatusIconsEvent);
     }
-    private void OnGetStatusIconsEvent(EntityUid uid, StatusIconComponent _, ref GetStatusIconsEvent ev)
+    private void OnGetStatusIconsEvent(EntityUid uid, DangerMobComponent _, ref GetStatusIconsEvent ev)
     {
         if (!IsActive)
             return;
