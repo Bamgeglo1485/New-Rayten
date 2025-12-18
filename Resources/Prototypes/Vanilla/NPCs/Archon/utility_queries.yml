@@ -17,22 +17,3 @@
       curve: !type:BoolCurve
     - !type:TargetInLOSOrCurrentCon
       curve: !type:BoolCurve
-
-# Перебираем всех кто находится в списке посмотревших и определяем среди них самого вкусного
-- type: utilityQuery
-  id: NearbyObserversTargets
-  query:
-    - !type:NearbyObserversQuery
-  considerations:
-    - !type:TargetIsAliveCon
-      curve: !type:BoolCurve
-    - !type:TargetDistanceCon
-      curve: !type:PresetCurve
-        preset: TargetDistance
-    - !type:TargetHealthCon
-      curve: !type:PresetCurve
-        preset: TargetHealth
-    - !type:TargetAccessibleCon
-      curve: !type:BoolCurve
-    - !type:TargetInLOSOrCurrentCon
-      curve: !type:BoolCurve

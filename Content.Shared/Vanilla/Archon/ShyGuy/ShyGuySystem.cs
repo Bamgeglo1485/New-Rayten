@@ -13,6 +13,7 @@ using Content.Shared.Audio;
 using Content.Shared.Jittering;
 using Content.Shared.CombatMode.Pacification;
 using Content.Shared.Popups;
+using Content.Shared.Humanoid;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Timing;
 using System.Linq;
@@ -49,7 +50,7 @@ public sealed class ShyGuySystem : EntitySystem
         if (args.DamageDelta == null || args.DamageDelta.GetTotal() <= 0)
             return;
 
-        if (!IsReachable(uid, args.Origin.Value, component))
+        if (!IsReachable(uid, args.Origin.Value, component, onlyHumans: false))
             return;
 
         SetPreparing(uid, component, args.Origin.Value);
@@ -193,7 +194,7 @@ public sealed class ShyGuySystem : EntitySystem
         return Resolve(uid, ref component, false) && component.State == ShyGuyState.Rage;
     }
 
-    protected bool IsReachable(EntityUid uid, EntityUid user, ShyGuyComponent comp)
+    protected bool IsReachable(EntityUid uid, EntityUid user, ShyGuyComponent comp, bool onlyHumans = true)
     {
         if (user == uid)
             return false;
@@ -211,6 +212,9 @@ public sealed class ShyGuySystem : EntitySystem
             return false;
 
         if (!TryComp<StaminaComponent>(uid, out var stamina) || stamina.Critical)
+            return false;
+
+        if (onlyHumans && !HasComp<HumanoidAppearanceComponent>(user))
             return false;
 
         if (!_examine.InRangeUnOccluded(user, uid, 16f))
