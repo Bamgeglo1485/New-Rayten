@@ -1,0 +1,49 @@
+- type: entity
+  name: скромник
+  id: ShyGuyArchon096
+  parent: BaseEuclid
+  description: Ты посмотрел. Пора молиться, хотя... Молитвы тебе не помогут.
+  components:
+    - type: Sprite
+      drawdepth: Mobs
+      sprite: Vanilla/Mobs/Archons/ShyGuy.rsi
+      layers:
+      - map: ["enum.DamageStateVisualLayers.Base", "movement"]
+        state: sitting
+    - type: SpriteMovement
+      movementLayers:
+        movement:
+          state: walking
+      noMovementLayers:
+        movement:
+          state: sitting
+    - type: ShyGuy
+    - type: Tag
+      tags:
+        - DoorBumpOpener
+        - CannotSuicide
+        - ShyGuy
+    - type: Pacified
+      disallowAllCombat: true
+    - type: Prying
+      pryPowered: true
+      force: true
+      speedModifier: 100
+      enabled: false
+    - type: AmbientSound
+      volume: 0
+      range: 15
+      sound:
+        path: /Audio/Vanilla/Ambience/096cry.ogg
+    - type: HTN
+      rootTask:
+        task: 096Compound
+      blackboard:
+        NavClimb: !type:Bool
+          true
+        NavInteract: !type:Bool
+          true
+        NavPry: !type:Bool
+          true
+        NavSmash: !type:Bool
+          true

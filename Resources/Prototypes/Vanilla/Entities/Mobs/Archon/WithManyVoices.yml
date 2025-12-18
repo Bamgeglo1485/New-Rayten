@@ -1,6 +1,6 @@
 - type: entity
   name: многоголосый
-  id: MobWithManyVoicesArchon
+  id: MobWithManyVoicesArchon939
   parent: [ SimpleSpaceMobBase, MobCombat ]
   description: Это собака или ящерица?
   components:
@@ -30,13 +30,18 @@
     - type: MobThresholds
       thresholds:
         0: Alive
-        400: Dead
+        500: Dead
+    - type: SlowOnDamage
+      speedModifierThresholds:
+        300: 0.7
+        400: 0.4
+        450: 0.2
     - type: MovementSpeedModifier
       baseWalkSpeed: 2
       baseSprintSpeed: 4.5
     - type: Stamina
       critThreshold: 200
-      stunTime: 60
+      stunTime: 30
     - type: DamageStateVisuals
       states:
         Alive:
@@ -73,12 +78,6 @@
       learnChance: 1
     - type: HealForDamage
     - type: BlindPredator
-    #- type: Archon
-      #awakeChance: 0
-      #comeback: false
-    #- type: ArchonData
-      #class: Keter
-      #sentient: true
     - type: Hunger
       thresholds:
         Overfed: 250
@@ -95,9 +94,8 @@
         path: /Audio/Items/crowbar.ogg
     - type: JumpAbility
       action: ActionGravityJump939
-    - type: ActionGrant
-      actions:
-      - ActionEcholocation
+    - type: NPCUseActionIfPossible
+      actionId: ActionEcholocation
     - type: Destructible
       thresholds:
       - trigger:
@@ -118,12 +116,3 @@
           true
         NavSmash: !type:Bool
           true
-
-#- type: entity
-#  id: MobWithManyVoicesArchonUnstasis
-#  suffix: Без стазиса
-#  parent: MobWithManyVoicesArchon
-#  components:
-#    - type: Archon
-#      state: Basic
-#      announcement: false

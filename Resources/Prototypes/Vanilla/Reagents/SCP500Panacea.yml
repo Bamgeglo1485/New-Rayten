@@ -1,0 +1,147 @@
+- type: reagent
+  id: PanaceaGood1
+  name: reagent-name-panacea
+  group: Biological
+  desc: reagent-desc-panacea
+  physicalDesc: reagent-physical-desc-shiny
+  flavor: metallic
+  color: "#a31830"
+  recognizable: true
+  metabolisms:
+    Drink:
+      effects:
+      - !type:SatiateHunger
+      - !type:SatiateThirst
+        factor: 2
+      - !type:ModifyBloodLevel
+        amount: 200
+      - !type:EvenHealthChange
+        damage:
+          Burn: -200
+          Brute: -200
+          Toxin: -200
+          Genetic: -200
+          Airloss: -200
+          Metaphysical: -200
+      - !type:HealthChange
+        damage:
+          types:
+            Bloodloss: -200
+      - !type:ModifyBleed
+        amount: -1.5
+      - !type:CleanBloodstream
+        cleanseRate: 300
+
+- type: reagent
+  id: PanaceaGood2
+  name: reagent-name-panacea
+  group: Biological
+  desc: reagent-desc-panacea
+  physicalDesc: reagent-physical-desc-shiny
+  flavor: metallic
+  color: "#a31830"
+  recognizable: true
+  metabolisms:
+    Narcotic:
+      effects:
+      - !type:MovementSpeedModifier
+        walkSpeedModifier: 2
+        sprintSpeedModifier: 2
+      - !type:ModifyStatusEffect
+        effectProto: StatusEffectStunned
+        time: 5
+        type: Remove
+      - !type:ModifyKnockdown
+        time: 5
+        type: Remove
+    Medicine:
+      effects:
+      - !type:ResetNarcolepsy
+
+- type: reagent
+  id: PanaceaBad
+  name: reagent-name-panacea
+  group: Biological
+  desc: reagent-desc-panacea
+  physicalDesc: reagent-physical-desc-shiny
+  flavor: metallic
+  color: "#a31830"
+  recognizable: true
+  metabolisms:
+    Drink:
+      effects:
+      - !type:HealthChange
+        damage:
+          groups:
+            Burn: 50
+            Brute: 50
+            Toxin: 50
+            Genetic: 25
+            Airloss: 50
+      - !type:ModifyBleed
+        amount: 50
+
+- type: reagent
+  id: PanaceaNeutral1
+  name: reagent-name-panacea
+  group: Biological
+  desc: reagent-desc-panacea
+  physicalDesc: reagent-physical-desc-shiny
+  flavor: metallic
+  color: "#a31830"
+  recognizable: true
+  metabolisms:
+    Drink:
+      effects:
+      - !type:SatiateHunger
+        factor: -5
+      - !type:SatiateThirst
+        factor: -5
+      - !type:ModifyBloodLevel
+        amount: -50
+      - !type:EvenHealthChange
+        damage:
+          Burn: -2000
+          Brute: -2000
+          Toxin: -2000
+          Genetic: -2000
+          Airloss: -2000
+          Metaphysical: -2000
+      - !type:ModifyBleed
+        amount: 20
+
+- type: reagent
+  id: PanaceaNeutral2
+  name: reagent-name-panacea
+  group: Biological
+  desc: reagent-desc-panacea
+  physicalDesc: reagent-physical-desc-shiny
+  flavor: metallic
+  color: "#a31830"
+  recognizable: true
+  metabolisms:
+    Narcotic:
+      effects:
+      - !type:MovementSpeedModifier
+        walkSpeedModifier: 2.5
+        sprintSpeedModifier: 2.5
+      - !type:ModifyStatusEffect
+        effectProto: StatusEffectStunned
+        time: 5
+        type: Remove
+      - !type:ModifyKnockdown
+        time: 5
+        type: Remove
+    Medicine:
+      effects:
+      - !type:ResetNarcolepsy
+    Drink:
+      effects:
+      - !type:SatiateHunger
+        factor: 5
+      - !type:SatiateThirst
+        factor: 5
+      - !type:ModifyBloodLevel
+        amount: -5
+      - !type:ModifyBleed
+        amount: 2

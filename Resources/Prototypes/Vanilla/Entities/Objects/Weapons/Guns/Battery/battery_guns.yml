@@ -142,3 +142,49 @@
   - type: PredictedBattery
     maxCharge: 1500
     startingCharge: 1500
+
+- type: entity
+  name: H.I.D
+  parent: [BaseWeaponBattery, SecurityScienceCommandContraband]
+  id: WeaponHid
+  description: Хид, или же винтовка с высокой интенсивностью заряда, созданная для дестабилизации архонтов на короткий срок.
+  components:
+  - type: Sprite
+    sprite: Vanilla/Objects/Weapons/Guns/Battery/hid.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-unshaded-3
+      map: ["enum.GunVisualLayers.MagUnshaded"]
+      shader: unshaded
+  - type: MagazineVisuals
+    magState: mag
+    steps: 3
+    zeroVisible: false
+  - type: Appearance
+  - type: GunIgnoreSkill
+  - type: Gun
+    selectedMode: FullAuto
+    fireRate: 1
+    availableModes:
+      - FullAuto
+    soundGunshot:
+      path: /Audio/Vanilla/Weapons/Guns/Gunshots/microhid.ogg
+  - type: PredictedBattery
+    maxCharge: 30000
+    startingCharge: 0
+  - type: BatteryAmmoProvider
+    proto: ProjectileHID
+    fireCost: 30000
+  - type: MultiHandedItem
+  - type: Item
+    sprite: Vanilla/Objects/Weapons/Guns/Battery/hid.rsi
+    size: Ginormous
+    shape:
+    - 0,0,3,1
+  - type: HeldSpeedModifier
+    walkModifier: 0.4
+    sprintModifier: 0.4
+  - type: Clothing
+    slots:
+    - 1 #только в руках можно носить

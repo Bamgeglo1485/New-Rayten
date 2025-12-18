@@ -55,4 +55,9 @@
 - type: Tag
   id: WithManyVoices
 - type: Tag
+  id: ShyGuy
+- type: Tag
   id: SyndicateRapier
+- type: Tag
+  id: Paraxit
+

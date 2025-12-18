@@ -1,0 +1,180 @@
+- type: entity
+  name: спавнер случайно панацеи
+  id: RandomArchon500PanaceaSpawner
+  parent: MarkerBase
+  components:
+    - type: Sprite
+      layers:
+        - state: red
+        - sprite: Vanilla/Objects/Specific/Archon/SCP500.rsi
+          state: red
+    - type: RandomSpawner
+      rarePrototypes:
+        - Archon500Panacea3
+      rareChance: 0.4
+      prototypes:
+        - Archon500Panacea1
+        - Archon500Panacea2
+        - Archon500Panacea4
+        - Archon500Panacea5
+
+- type: entity
+  name: таблетница
+  description: Довольно странная таблетница.
+  parent: PillCanister
+  id: Archon500Panacea1
+  suffix: Хорошая, Медикамент
+  components:
+  - type: Sprite
+    sprite: Vanilla/Objects/Specific/Archon/SCP500.rsi
+    layers:
+    - state: red
+      map: ["random"]
+  - type: RandomSprite
+    available:
+      - random:
+          red: ""
+          blue: ""
+          gray: ""
+          green: ""
+  - type: Label
+    currentLabel: П@н@ц3R
+  - type: StorageFill
+    contents:
+    - id: Pill500PanaceaGood1
+      amount: 5
+
+- type: entity
+  parent: Archon500Panacea1
+  id: Archon500Panacea2
+  suffix: Хорошая, Стимулятор
+  components:
+  - type: StorageFill
+    contents:
+    - id: Pill500PanaceaGood2
+      amount: 5
+
+- type: entity
+  parent: Archon500Panacea1
+  id: Archon500Panacea3
+  suffix: Плохая
+  components:
+  - type: StorageFill
+    contents:
+    - id: Pill500PanaceaBad
+      amount: 5
+
+- type: entity
+  parent: Archon500Panacea1
+  id: Archon500Panacea4
+  suffix: Нейтральная, Медикамент
+  components:
+  - type: StorageFill
+    contents:
+    - id: Pill500PanaceaNeutral1
+      amount: 5
+
+- type: entity
+  parent: Archon500Panacea1
+  id: Archon500Panacea5
+  suffix: Нейтральная, Стимулятор
+  components:
+  - type: StorageFill
+    contents:
+    - id: Pill500PanaceaNeutral2
+      amount: 5
+
+- type: entity
+  name: красная таблетка
+  parent: Pill
+  id: Pill500PanaceaGood1
+  description: Пахнет химозней некуда...
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Pill
+    pillType: 3
+  - type: Sprite
+    state: pill4
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 1
+        reagents:
+        - ReagentId: PanaceaGood1
+          Quantity: 1
+
+- type: entity
+  name: красная таблетка
+  parent: Pill
+  id: Pill500PanaceaGood2
+  description: Пахнет химозней некуда...
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Pill
+    pillType: 3
+  - type: Sprite
+    state: pill4
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 10
+        reagents:
+        - ReagentId: PanaceaGood2
+          Quantity: 10
+
+- type: entity
+  name: красная таблетка
+  parent: Pill
+  id: Pill500PanaceaBad
+  description: Пахнет химозней некуда...
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Pill
+    pillType: 3
+  - type: Sprite
+    state: pill4
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 10
+        reagents:
+        - ReagentId: PanaceaBad
+          Quantity: 10
+
+- type: entity
+  name: красная таблетка
+  parent: Pill
+  id: Pill500PanaceaNeutral1
+  description: Пахнет химозней некуда...
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Pill
+    pillType: 3
+  - type: Sprite
+    state: pill4
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 1
+        reagents:
+        - ReagentId: PanaceaNeutral1
+          Quantity: 1
+
+- type: entity
+  name: красная таблетка
+  parent: Pill
+  id: Pill500PanaceaNeutral2
+  description: Пахнет химозней некуда...
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Pill
+    pillType: 3
+  - type: Sprite
+    state: pill4
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 10
+        reagents:
+        - ReagentId: PanaceaNeutral2
+          Quantity: 10

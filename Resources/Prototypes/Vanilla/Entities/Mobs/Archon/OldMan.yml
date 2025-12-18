@@ -1,0 +1,216 @@
+- type: entity
+  parent: [ BaseSimpleMob, MobCombat ]
+  id: MobArchonOldMan106
+  name: ???
+  description: Довольно страшный старик. Он полностью покрыт разлагающейся жидкостью, а от самого него исходит ужасный запах гнили.
+  suffix: Не спавнить, неиграбельный
+  components:
+  - type: Sprite
+    sprite: Vanilla/Mobs/Archons/OldMan.rsi
+    layers:
+    - state: base
+    - state: eyes
+      shader: unshaded
+  - type: OldMan
+  - type: SolutionContainerManager
+  - type: Muted
+  - type: Insulated
+  - type: CombatMode
+  - type: MeleeWeapon
+    angle: 0
+    animation: WeaponArcBite
+    damage:
+      types:
+        Cellular: 10
+  - type: Climbing
+  - type: StaminaDamageOnHit
+    damage: 100
+    sound: /Audio/Vanilla/Effects/Archon/106punch.ogg
+  - type: AmbientSound
+    volume: 0
+    range: 15
+    sound:
+      path: /Audio/Vanilla/Effects/Archon/106breathing.ogg
+  - type: HTN
+    rootTask:
+      task: MeleeCombatCompound
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.25
+        density: 1
+        restitution: 0
+        friction: 0.4
+        mask:
+        - SmallMobMask
+        layer:
+        - SmallMobLayer
+  - type: NpcFactionMember
+    factions:
+    - SimpleHostile
+  - type: MovementSpeedModifier
+    baseSprintSpeed: 3
+  - type: TriggerOnSpawn
+    keyOut: encounter
+  - type: SpawnOnTrigger
+    proto: Lusha
+    keysIn:
+      - encounter
+  - type: MobThresholds
+    thresholds:
+       0: Alive
+       6000: Dead
+  - type: TimedSpawner
+    prototypes:
+      - DecalSpawnerBurns
+    chance: 1
+    intervalSeconds: 0.5
+    minimumEntitiesSpawned: 1
+    maximumEntitiesSpawned: 2
+  - type: NPCUseActionIfPossible
+    actionId: Action106Jump
+    targetKey: Target
+
+- type: entity
+  id: OldManSpawn
+  name: ???
+  description: Ээ... что это вылазит?..
+  components:
+  - type: Sprite
+    sprite: Vanilla/Mobs/Archons/OldMan.rsi
+    state: encounter
+  - type: TriggerOnSpawn
+    keyOut: encounter
+  - type: EmitSoundOnTrigger
+    sound: /Audio/Vanilla/Effects/Archon/106encounter.ogg
+    keysIn:
+      - encounter
+  - type: RepeatingTrigger
+    delay: 3.2
+    keyOut: spawn106
+  - type: DeleteOnTrigger
+    keysIn:
+      - spawn106
+  - type: SpawnOnTrigger
+    proto: Lusha
+    keysIn:
+      - spawn106
+
+- type: entity
+  id: OldManDespawn
+  name: ???
+  description: Повезло. На этот раз...
+  components:
+  - type: Sprite
+    sprite: Vanilla/Mobs/Archons/OldMan.rsi
+    state: exit
+  - type: TriggerOnSpawn
+    keyOut: encounter
+  - type: RepeatingTrigger
+    delay: 2.8
+    keyOut: spawn106
+  - type: DeleteOnTrigger
+    keysIn:
+      - spawn106
+  - type: SpawnOnTrigger
+    proto: Lusha
+    keysIn:
+      - spawn106
+
+- type: entity
+  id: Lusha
+  parent: BaseStructure
+  name: чёрная лужа
+  description: Лучше не наступать на неё.
+  components:
+  - type: Sprite
+    sprite: Vanilla/Mobs/Archons/OldMan.rsi
+    state: lusha
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.3
+        density: 190
+        layer:
+        - None
+  - type: ConditionalSpawner
+    prototypes:
+    - PuddleVentCrud
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 10
+      behaviors:
+        - !type:DoActsBehavior
+          acts: [ "Destruction" ]
+
+- type: entity
+  id: PuddleVentCrud
+  parent: PuddleTemporary
+  suffix: Вентиляционная Грязь
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      puddle:
+        maxVol: 1000
+        reagents:
+        - ReagentId: VentCrud
+          Quantity: 70
+
+- type: entity
+  name: ???
+  parent: [ BaseSimpleMob, MobCombat ]
+  id: OldManJump
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Projectiles/magic.rsi
+    layers:
+    - state: magicm_cyan
+      shader: unshaded
+      color: Black
+  - type: MovementSpeedModifier
+    baseSprintSpeed: 3
+    baseWalkSpeed: 3
+  - type: RepeatingTrigger
+    delay: 0.1
+  - type: SpawnOnTrigger
+    proto: OldManJumpTrack
+  - type: HTN
+    rootTask:
+      task: MeleeCombatCompound
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.25
+        density: 1
+        hard: false
+        mask:
+        - SmallMobMask
+        layer:
+        - SmallMobLayer
+  - type: NpcFactionMember
+    factions:
+    - SimpleHostile
+
+- type: entity
+  categories: [ HideSpawnMenu ]
+  id: OldManJumpTrack
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Projectiles/magic.rsi
+    layers:
+    - state: magicm_cyan
+      shader: unshaded
+      color: Black
+  - type: TimedDespawn
+    lifetime: .5
+  - type: TriggerOnSpawn
+  - type: SpawnOnTrigger
+    proto: DecalSpawnerBurns
