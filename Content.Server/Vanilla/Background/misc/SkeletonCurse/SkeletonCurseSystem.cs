@@ -6,7 +6,7 @@ using Content.Shared.Destructible.Thresholds.Triggers;
 using Content.Shared.CombatMode.Pacification;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Components;
-using Content.Shared.Damage.Events;
+using Content.Shared.Vanilla.Damage.Events;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.FixedPoint;
 using Content.Shared.Chat;
