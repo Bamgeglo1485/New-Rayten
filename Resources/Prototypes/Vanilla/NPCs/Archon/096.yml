@@ -6,6 +6,8 @@
         - !type:HTNCompoundTask
           task: 096ChaseCompound
         - !type:HTNCompoundTask
+          task: 096EscapeCompound
+        - !type:HTNCompoundTask
           task: 096IdleCompound
 
 - type: htnCompound
@@ -26,10 +28,10 @@
             pathfindKey: TargetPathfind
             rangeKey: MeleeRange
         - !type:HTNCompoundTask
-          task: Before096MeleeCompound
+          task: 096MeleeCompound
 
 - type: htnCompound
-  id: Before096MeleeCompound
+  id: 096EscapeCompound
   branches:
     - preconditions:
         - !type:BuckledPrecondition
