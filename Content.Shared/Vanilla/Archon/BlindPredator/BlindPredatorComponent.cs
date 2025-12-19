@@ -1,10 +1,9 @@
+using Content.Shared.Actions;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 using Robust.Shared.GameStates;
 using Robust.Shared.Audio;
 
-using Content.Shared.Actions;
-
-namespace Content.Shared.Vanilla.Eye.BlindPredator;
+namespace Content.Shared.Vanilla.Archon.BlindPredator;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true)]
 public sealed partial class BlindPredatorComponent : Component
@@ -19,7 +18,7 @@ public sealed partial class BlindPredatorComponent : Component
     /// на таком расстоянии мы увидем чувака если он будет стоять
     /// </summary>
     [DataField("visibleDistanceStand"), AutoNetworkedField]
-    public float VisibleDistanceStand = 1.5f;
+    public float VisibleDistanceStand = 0.5f;
     /// <summary>
     /// на таком расстоянии мы увидем чувака если он будет идти на шифте
     /// </summary>
