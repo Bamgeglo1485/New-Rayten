@@ -17,7 +17,7 @@ public sealed class BlindPredatorSystem : SharedBlindPredatorSystem
     }
     private void OnAttempt(EntityUid uid, BlindPredatorComponent comp, ResearchAttemptEvent args)
     {
-        if (HasComp<SleepingComponent>(uid))
+        if (!HasComp<SleepingComponent>(uid))
             args.Cancel();
     }
 

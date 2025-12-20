@@ -55,7 +55,7 @@
           Burn: -10
           Genetic: -0.5
     - type: Stamina
-      critThreshold: 10000
+      baseCritThreshold: 10000
       stunTime: 120
       decay: 300
     - type: MovementSpeedModifier

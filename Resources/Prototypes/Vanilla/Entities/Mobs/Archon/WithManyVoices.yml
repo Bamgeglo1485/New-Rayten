@@ -19,6 +19,15 @@
         300: 0.7
         400: 0.4
         450: 0.2
+    - type: PassiveDamage
+      damageCap: 500
+      allowedStates:
+      - Alive
+      damage:
+        groups:
+          Brute: -3
+          Burn: -3
+          Genetic: -0.25
     - type: TemperatureSpeed
       thresholds:
         301: 0.7

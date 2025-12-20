@@ -309,16 +309,6 @@
     allowedJobs: [ Bartender ]
 
 - type: entity
-  id: SecurityBartenderZookeeperContraband
-  parent: BaseRestrictedContraband
-  abstract: true
-  components:
-  - type: Contraband
-    severity: SecondLevelRestricted
-    allowedDepartments: [ Security ]
-    allowedJobs: [ Bartender, Zookeeper ]
-
-- type: entity
   id: FirstSecurityBartenderMusicianContraband
   parent: BaseRestrictedContraband
   abstract: true

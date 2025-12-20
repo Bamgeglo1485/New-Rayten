@@ -52,7 +52,7 @@
     - Hair
     - Snout
   - type: Stamina
-    critThreshold: 120
+    baseCritThreshold: 120
   - type: Temperature
     heatDamageThreshold: 320
     coldDamageThreshold: 220 # ПРОКЛЯТЬЕ
