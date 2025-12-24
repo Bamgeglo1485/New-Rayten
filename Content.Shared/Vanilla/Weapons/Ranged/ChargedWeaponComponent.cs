@@ -21,7 +21,7 @@ public sealed partial class ChargedWeaponComponent : Component
     public float EnergyPerShoot = 1500f;
 
     [DataField, AutoNetworkedField]
-    public float StaminaDamagePerShoot = 605f;
+    public float StaminaDamagePerShoot = 600f;
 
     [DataField]
     public SoundSpecifier DownSound = new SoundPathSpecifier("/Audio/Vanilla/Weapons/Guns/Gunshots/SpinDown.ogg")
