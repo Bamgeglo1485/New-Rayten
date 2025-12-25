@@ -162,6 +162,7 @@
     steps: 3
     zeroVisible: false
   - type: Appearance
+  - type: BatteryAmmoProvider
   - type: ChargedWeapon
   - type: ExaminableBattery
   - type: PredictedBattery

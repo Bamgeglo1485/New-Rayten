@@ -15,6 +15,7 @@ using Content.Shared.CombatMode.Pacification;
 using Content.Shared.Popups;
 using Content.Shared.Humanoid;
 using Content.Shared.Vanilla.Archon.BlindPredator;
+using Content.Shared.Weapons.Hitscan.Events;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Timing;
 using System.Linq;
@@ -39,6 +40,9 @@ public sealed class ShyGuySystem : EntitySystem
         SubscribeLocalEvent<ShyGuyComponent, StaminaCritEvent>(OnStamCrit);
         SubscribeLocalEvent<ShyGuyComponent, MobStateChangedEvent>(OnMobStateChanged);
         SubscribeLocalEvent<ShyGuyComponent, DamageChangedEvent>(OnDamageChanged);
+        SubscribeLocalEvent<ShyGuyComponent, HitscanDamageDealtEvent>(OnHitscanDamageChanged);
+
+
         SubscribeLocalEvent<ShyGuyComponent, RefreshMovementSpeedModifiersEvent>(OnRefreshMoveSpeed);
         SubscribeLocalEvent<ShyGuyComponent, OutlineHoverEvent>(OnLook);
         SubscribeLocalEvent<ShyGuyComponent, ResearchAttemptEvent>(OnResearchAttempt);
@@ -53,6 +57,16 @@ public sealed class ShyGuySystem : EntitySystem
             Dirty(ent, mark);
         }
 
+    }
+    private void OnHitscanDamageChanged(EntityUid uid, ShyGuyComponent component, HitscanDamageDealtEvent args)
+    {
+        if (args.DamageDealt.GetTotal() <= 0)
+            return;
+
+        if (!IsReachable(uid, args.Target, component, onlyHumans: false))
+            return;
+
+        SetPreparing(uid, component, args.Target);
     }
 
     private void OnDamageChanged(EntityUid uid, ShyGuyComponent component, DamageChangedEvent args)
@@ -135,11 +149,14 @@ public sealed class ShyGuySystem : EntitySystem
 
     public void SetPreparing(EntityUid uid, ShyGuyComponent comp, EntityUid initiator)
     {
-        if (comp.State != ShyGuyState.Calm)
-            return;
-
         var mark = EnsureComp<PredatorVisibleMarkComponent>(initiator);
         mark.Predators[uid] = true;
+
+        if (comp.State != ShyGuyState.Calm)
+        {
+            comp.TargetChaseEnd += comp.OneTargetChaseTime;
+            return;
+        }
 
         comp.RageStartAt = _timing.CurTime + comp.PreparingTime;
         comp.TargetChaseEnd = comp.RageStartAt + comp.OneTargetChaseTime;
