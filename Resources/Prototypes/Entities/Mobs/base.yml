@@ -36,7 +36,10 @@
   - type: ContentEye
   - type: CameraRecoil
   - type: MindContainer
-  - type: VoiceEmitter # Rayten-TTS
+ # Rayten-start
+  - type: PredatorVisibleMark
+  - type: VoiceEmitter
+ # Rayten-end
   - type: PointLight
     radius: 20
     energy: 10

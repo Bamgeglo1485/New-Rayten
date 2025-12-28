@@ -1,4 +1,5 @@
 using Content.Server.Research.Systems;
+using Content.Server.NPC.Systems;
 using Content.Shared.Vanilla.Archon.Research;
 using Content.Shared.Power.EntitySystems;
 using Content.Shared.Interaction;
@@ -7,6 +8,7 @@ using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Robust.Shared.Utility;
 using Robust.Shared.Timing;
+using Robust.Shared.Player;
 
 namespace Content.Server.Vanilla.Archon.Research;
 
@@ -17,16 +19,25 @@ public sealed partial class ArchonBeaconSystem : EntitySystem
     [Dependency] private readonly SharedPowerReceiverSystem _power = default!;
     [Dependency] private readonly ResearchSystem _research = default!;
     [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
+    [Dependency] private readonly NPCSystem _npc = default!;
 
     private TimeSpan NextUpdate;
 
     public override void Initialize()
     {
+        SubscribeLocalEvent<ArchonComponent, PlayerDetachedEvent>(OnPlayerDetached);
         SubscribeLocalEvent<ArchonComponent, ResearchAttemptEvent>(OnAttempt);
         SubscribeLocalEvent<ArchonComponent, ComponentRemove>(OnRemove);
         SubscribeLocalEvent<ArchonBeaconComponent, ExaminedEvent>(OnExamine);
+
         base.Initialize();
     }
+
+    public void OnPlayerDetached(EntityUid uid, ArchonComponent component, PlayerDetachedEvent args)
+    {
+        _npc.WakeNPC(uid);
+    }
+
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
@@ -56,6 +67,7 @@ public sealed partial class ArchonBeaconSystem : EntitySystem
             _appearance.SetData(uid, ArchonBeaconVisuals.Link, beaconComp.LinkedArchon != null);
         }
     }
+
     /// <summary>
     /// Проверки
     /// 1. Жив ли архонт
@@ -115,6 +127,7 @@ public sealed partial class ArchonBeaconSystem : EntitySystem
         }
         return false;
     }
+
     /// <summary>
     /// Проверяем текущее соединения и разрываем его в случае нарушений условий содержания
     /// </summary>

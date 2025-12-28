@@ -1,27 +1,5 @@
 - type: utilityQuery
-  id: NearbyPredatorVisibles
-  query:
-    - !type:ComponentQuery
-      components:
-      - type: PredatorVisibleMark
-  considerations:
-    - !type:TargetIsVisibleByPredatorCon
-      curve: !type:BoolCurve
-    - !type:TargetIsAliveCon
-      curve: !type:BoolCurve
-    - !type:TargetDistanceCon
-      curve: !type:PresetCurve
-        preset: TargetDistance
-    - !type:TargetHealthCon
-      curve: !type:PresetCurve
-        preset: TargetHealth
-    - !type:TargetAccessibleCon
-      curve: !type:BoolCurve
-    - !type:TargetInLOSOrCurrentCon
-      curve: !type:BoolCurve
-
-- type: utilityQuery
-  id: Nearby096Targets
+  id: NearbyPredatorTargets
   query:
     - !type:ComponentQuery
       components:

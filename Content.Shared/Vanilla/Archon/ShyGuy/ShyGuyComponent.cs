@@ -19,7 +19,7 @@ public sealed partial class ShyGuyComponent : Component
     /// когда он успокоится
     /// </summary>
     [DataField, AutoNetworkedField, AutoPausedField]
-    public TimeSpan TargetChaseEnd = TimeSpan.Zero;
+    public TimeSpan RageEndAt = TimeSpan.Zero;
     /// <summary>
     /// когда входим в рейдж
     /// </summary>
@@ -31,12 +31,12 @@ public sealed partial class ShyGuyComponent : Component
     /// Длительность подготовки
     /// </summary>
     [DataField]
-    public TimeSpan PreparingTime = TimeSpan.FromSeconds(5);
+    public TimeSpan PreparingTime = TimeSpan.FromSeconds(8);
     /// <summary>
-    /// Время за которую скромник перестанет преследование одной цели
+    /// длительность рейджа
     /// </summary>
     [DataField]
-    public TimeSpan OneTargetChaseTime = TimeSpan.FromSeconds(60);
+    public TimeSpan RageTime = TimeSpan.FromSeconds(30);
 
     /// <summary>
     /// обновление состояний
@@ -51,13 +51,10 @@ public sealed partial class ShyGuyComponent : Component
     public float SprintModifier = 5f;
 
     [DataField]
-    public SoundSpecifier? PreparingSound = new SoundPathSpecifier("/Audio/Vanilla/Effects/Archon/096raging.ogg");
-
-    [DataField]
     public SoundSpecifier? StingerSound = new SoundPathSpecifier("/Audio/Vanilla/Effects/Archon/096trigger.ogg");
 
     [DataField]
-    public SoundSpecifier? ChaseSound = new SoundPathSpecifier("/Audio/Vanilla/Effects/Archon/096chase.ogg");    //ачо это нигде не используется
+    public SoundSpecifier? ChaseSound = new SoundPathSpecifier("/Audio/Vanilla/Effects/Archon/096chase.ogg");
 
     [DataField]
     public SoundSpecifier? RageAmbient = new SoundPathSpecifier("/Audio/Vanilla/Effects/Archon/096raging.ogg");

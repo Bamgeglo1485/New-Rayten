@@ -1,38 +1,5 @@
 - type: entity
   parent: BaseAction
-  id: ActionEcholocation
-  name: Эхолокация
-  description: Произнести услышанное ранее слово, на секунду узнав местоположение людей в одном помещении.
-  components:
-  - type: Action
-    useDelay: 40
-    sound:
-      collection: Alarm939
-    itemIconStyle: BigAction
-    icon:
-      sprite: Vanilla/Actions/Archon.rsi
-      state: echo
-  - type: InstantAction
-    event: !type:DisableBlindlessEvent {}
-
-- type: entity
-  parent: BaseAction
-  id: ActionGravityJump939
-  name: Рывок
-  description: Прыгнуть на большую дистанцию, отлично для засады.
-  components:
-  - type: Action
-    useDelay: 30
-    sound:
-      collection: Scream939
-    icon:
-      sprite: Interface/Actions/jump.rsi
-      state: icon
-  - type: InstantAction
-    event: !type:GravityJumpEvent {}
-
-- type: entity
-  parent: BaseAction
   id: Action173Scrug
   name: Сломать шею
   description: переместись за спину и свернуть шею в момент, когда никто не видит

@@ -1,8 +1,8 @@
 - type: entity
   name: скромник
   id: ShyGuyArchon096
-  parent: BaseEuclid
-  description: Ты посмотрел. Пора молиться, хотя... Молитвы тебе не помогут.
+  parent: BaseMobArchon
+  description: Гуманоидное существо ростом приблизительно 2,38 метра. Руки непропорционально велики по отношению к телу объекта, длина каждой равна примерно 1,5 м. Кожа в основном лишена пигментации, признаки волос на теле отсутствуют.
   components:
     - type: Sprite
       drawdepth: Mobs
@@ -35,6 +35,7 @@
             True:  { visible: false }
             False: { visible: true }
     - type: ShyGuy
+    - type: BlindPredator
     - type: Tag
       tags:
         - DoorBumpOpener
@@ -42,11 +43,6 @@
         - ShyGuy
     - type: Pacified
       disallowAllCombat: true
-    - type: Prying
-      pryPowered: true
-      force: true
-      speedModifier: 100
-      enabled: false
     - type: AmbientSound
       volume: 0
       range: 15
@@ -61,14 +57,10 @@
         MaximumIdleTime: !type:Single
           50
         AggroVisionRadius: !type:Single
-          90
+          140
         VisionRadius: !type:Single
-          90
+          140
         NavClimb: !type:Bool
-          true
-        NavInteract: !type:Bool
-          true
-        NavPry: !type:Bool
           true
         NavSmash: !type:Bool
           true
