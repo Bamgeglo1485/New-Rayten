@@ -3380,3 +3380,12 @@
   id: 178
   time: '2025-12-28T14:15:21.0000000+00:00'
   url: https://github.com/RaytenCorp/Rayten/pull/415
+- author: thefuckmybrain
+  changes:
+  - message: "\u0414\u043E\u0431\u0430\u0432\u043B\u0435\u043D \u043D\u043E\u0432\u044B\
+      \u0439 \u0430\u0440\u0445\u043E\u043D\u0442 \u0421\u0442\u0430\u0440\u0438\u043A\
+      \ (\u043A\u043B\u0430\u0441: \xAB\u041A\u0435\u0442\u0435\u0440\xBB)"
+    type: Add
+  id: 179
+  time: '2025-12-30T14:58:15.0000000+00:00'
+  url: https://github.com/RaytenCorp/Rayten/pull/416
