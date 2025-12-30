@@ -1,4 +1,6 @@
 using Content.Shared.Vanilla.Archon.OldMan;
+using Robust.Shared.Prototypes;
+using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 using Robust.Shared.Audio;
 using Robust.Shared.Utility;
 
@@ -21,17 +23,21 @@ public sealed partial class OldManComponent : Component
     /// Длительность входа в портал
     /// </summary>
     [DataField]
-    public TimeSpan TeleportInDuration = TimeSpan.FromSeconds(1.1f);
+    public TimeSpan TeleportInDuration = TimeSpan.FromSeconds(2.45f);
     /// <summary>
     /// Длительность выхода из портала
     /// </summary>
     [DataField]
-    public TimeSpan TeleportOutDuration = TimeSpan.FromSeconds(1.1f);
+    public TimeSpan TeleportOutDuration = TimeSpan.FromSeconds(2.6f);
     /// <summary>
     /// путь к карманному измерению
     /// </summary>
     [DataField]
     public ResPath DimensionMap = new ResPath("/Maps/Vanilla/Misc/PocketDimension.yml");
+    [DataField("actionTeleport", customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
+    public string ActionId = "Action106Teleport";
+    [ViewVariables]
+    public EntityUid? ActionEnt;
     #endregion
     /// <summary>
     /// Грид карманного измерения, на него возвращается старик
@@ -49,7 +55,6 @@ public sealed partial class OldManComponent : Component
     /// </summary>
     [ViewVariables(VVAccess.ReadOnly)]
     public EntityUid StationGridUid = default;
-
     [ViewVariables(VVAccess.ReadOnly)]
     public bool InDimention = false;
     /// <summary>

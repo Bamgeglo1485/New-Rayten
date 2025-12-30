@@ -8,7 +8,6 @@ using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Robust.Shared.Utility;
 using Robust.Shared.Timing;
-using Robust.Shared.Player;
 
 namespace Content.Server.Vanilla.Archon.Research;
 
@@ -25,17 +24,11 @@ public sealed partial class ArchonBeaconSystem : EntitySystem
 
     public override void Initialize()
     {
-        SubscribeLocalEvent<ArchonComponent, PlayerDetachedEvent>(OnPlayerDetached);
         SubscribeLocalEvent<ArchonComponent, ResearchAttemptEvent>(OnAttempt);
         SubscribeLocalEvent<ArchonComponent, ComponentRemove>(OnRemove);
         SubscribeLocalEvent<ArchonBeaconComponent, ExaminedEvent>(OnExamine);
 
         base.Initialize();
-    }
-
-    public void OnPlayerDetached(EntityUid uid, ArchonComponent component, PlayerDetachedEvent args)
-    {
-        _npc.WakeNPC(uid);
     }
 
     public override void Update(float frameTime)

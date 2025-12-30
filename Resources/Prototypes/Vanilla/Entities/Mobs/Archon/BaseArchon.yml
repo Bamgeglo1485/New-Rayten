@@ -7,7 +7,7 @@
     - type: NightVision
     - type: PointLight
       radius: 9
-      energy: 1.5
+      energy: 3.5
       color: "#013220"
       enabled: false
       netsync: false
@@ -57,11 +57,13 @@
       damageCap: 1000
       allowedStates:
       - Alive
+      - Critical
       damage:
         groups:
           Brute: -10
           Burn: -10
           Genetic: -0.5
+          Airloss: -0.5
     - type: Stamina
       baseCritThreshold: 5000
       stunTime: 60

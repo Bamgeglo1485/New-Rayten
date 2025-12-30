@@ -19,7 +19,7 @@
     startAudio:
       path: /Audio/Vanilla/Announcements/scp-intercom.ogg
     maxOccurrences: 1
-    weight: 5
+
 
 - type: entity
   parent: BaseArchonGameRule
@@ -27,6 +27,7 @@
   components:
   - type: StationEvent
     startAnnouncement: station-event-archon-incoming-keter
+    weight: 1
 
 - type: entity
   parent: BaseArchonGameRule
@@ -34,6 +35,7 @@
   components:
   - type: StationEvent
     startAnnouncement: station-event-archon-incoming-euclid
+    weight: 2
 
 - type: entity
   parent: BaseArchonGameRule
@@ -41,10 +43,7 @@
   components:
   - type: StationEvent
     startAnnouncement: station-event-archon-incoming-safe
-
-
-
-
+    weight: 4
 
 - type: entityTable
   id: ArchonEventsTable
@@ -76,8 +75,6 @@
   - type: RandomSpawnRule
     prototype: MobArchonOldMan106
   - type: StationEvent
-    earliestStart: 50 #слишком крут для раундстарта
-    weight: 1
 
 - type: entity
   parent: EuclidArchonGameRule

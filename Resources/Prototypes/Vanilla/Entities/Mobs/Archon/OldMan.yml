@@ -5,21 +5,23 @@
   description: выглядит как пожилой гуманоид на поздней стадии разложения.
   components:
   - type: Sprite
+    drawdepth: Mobs
     sprite: Vanilla/Mobs/Archons/OldMan.rsi
     layers:
-    - map: ["base"]
+    - map: ["enum.DamageStateVisualLayers.Base"]
       state: base
-    - map: ["eyes"]
+    - map: ["enum.DamageStateVisualLayers.BaseUnshaded"]
       state: eyes
       shader: unshaded
+  - type: Appearance
   - type: GenericVisualizer
     visuals:
-      enum.OldManVisuals.teleport:
-        base:
+      enum.DamageVisualizerKeys.DamageUpdateGroups:
+        enum.DamageStateVisualLayers.Base:
           NoTP: { state: base }
           Out: { state: teleport-out }
           In: { state: teleport-in }
-        eyes:
+        enum.DamageStateVisualLayers.BaseUnshaded:
           NoTP:  { visible: true }
           Out: { visible: false }
           In: { visible: false }
@@ -37,35 +39,37 @@
   - type: OldMan
   - type: MeleeWeapon
     angle: 0
+    attackRate: 0.4
     animation: WeaponArcBite
     damage:
       types:
         Cellular: 10
+        Blunt: 20
   - type: StaminaDamageOnHit
     damage: 200
     sound: /Audio/Vanilla/Effects/Archon/106/106laugh1.ogg
   - type: HTN
     rootTask:
       task: MeleeCombatCompound
-  # - type: Fixtures
-  #   fixtures:
-  #     fix1:
-  #       shape:
-  #         !type:PhysShapeCircle
-  #         radius: 0.25
-  #       density: 1
-  #       restitution: 0
-  #       friction: 0.4
-  #       mask:
-  #       - SmallMobMask
-  #       layer:
-  #       - SmallMobLayer
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.25
+        density: 1
+        restitution: 0
+        friction: 0.4
+        mask:
+        - SmallMobMask
+        layer:
+        - SmallMobLayer
   - type: NpcFactionMember
     factions:
     - SimpleHostile
   - type: MovementSpeedModifier
-    baseWalkSpeed: 2
-    baseSprintSpeed: 3
+    baseWalkSpeed: 1.5
+    baseSprintSpeed: 2.5
   - type: TimedSpawner
     prototypes:
       - DecalSpawnerBurns
@@ -76,9 +80,38 @@
   - type: NPCUseActionIfPossible
     actionId: Action106Jump
     targetKey: Target
-  - type: ActionGrant
-    actions:
-    - Action106Teleport
+  - type: Tag
+    tags:
+      - CannotSuicide
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      500: Critical
+      600: Dead
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 700
+      behaviors:
+      - !type:GibBehavior
+        recursive: false
+  - type: SlowOnDamage
+    speedModifierThresholds:
+      200: 0.7
+      300: 0.5
+      400: 0.3
+  - type: PassiveDamage
+    damageCap: 700
+    allowedStates:
+    - Alive
+    - Critical
+    damage:
+      groups:
+        Brute: -3
+        Burn: -3
+        Genetic: -0.25
+        Airloss: -0.5
 
 - type: entity
   name: Кто-то под полом
@@ -93,8 +126,8 @@
       color: Black
   - type: Pacified
   - type: MovementSpeedModifier
-    baseSprintSpeed: 3
-    baseWalkSpeed: 3
+    baseSprintSpeed: 4
+    baseWalkSpeed: 4
   - type: RepeatingTrigger
     delay: 0.1
   - type: SpawnOnTrigger

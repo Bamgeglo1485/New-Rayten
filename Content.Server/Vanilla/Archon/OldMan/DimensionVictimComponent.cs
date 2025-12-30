@@ -10,6 +10,11 @@ namespace Content.Server.Vanilla.Archon.OldMan;
 public sealed partial class DimensionVictimComponent : Component
 {
     /// <summary>
+    /// порталы заспавненные на эту жертву
+    /// </summary>
+    [ViewVariables(VVAccess.ReadOnly)]
+    public HashSet<EntityUid> Portals = [];
+    /// <summary>
     /// Грид карманного измерения
     /// </summary>
     [ViewVariables(VVAccess.ReadOnly)]
@@ -25,6 +30,7 @@ public sealed partial class DimensionVictimComponent : Component
 
     [DataField]
     public string FakeTeleportPrototype = "PocketDimensionExitTeleportFake";
+
     /// <summary>
     /// такое количество телепортов заспавнится на одну жертву
     /// </summary>
