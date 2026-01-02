@@ -31,8 +31,8 @@ public sealed partial class EncryptionKeySystem : EntitySystem
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly SharedHandsSystem _hands = default!;
     [Dependency] private readonly SharedWiresSystem _wires = default!;
-    [Dependency] private readonly RequiresSkillSystem _requiresSkillSystem = default!;
-    
+    [Dependency] private readonly SharedSkillSystem _skill = default!;
+
     public override void Initialize()
     {
         base.Initialize();
@@ -127,10 +127,11 @@ public sealed partial class EncryptionKeySystem : EntitySystem
             return;
         }
         //Vanilla-Station-START
-        if (EntityManager.TryGetComponent<RequiresSkillComponent>(uid, out var RequiresSkillComponent))
+        if (TryComp<RequiresSkillComponent>(uid, out var requiresSkillComponent))
         {
-            if(!_requiresSkillSystem.HasRequiredSkillsForCraft(args.User, RequiresSkillComponent, true))
-            return;
+            var lvl = requiresSkillComponent.BasicSkills.GetValueOrDefault(SkillType.Engineering, SkillLevel.None);
+            if (!_skill.HasRequiredSkill(args.User, SkillType.Engineering, lvl))
+                return;
         }
         //Vanilla-Sttion-END
         if (_container.Insert(args.Used, component.KeyContainer))
@@ -163,10 +164,11 @@ public sealed partial class EncryptionKeySystem : EntitySystem
             return;
         }
         //Vanilla-Station-START
-        if (EntityManager.TryGetComponent<RequiresSkillComponent>(uid, out var RequiresSkillComponent))
+        if (TryComp<RequiresSkillComponent>(uid, out var requiresSkillComponent))
         {
-            if(!_requiresSkillSystem.HasRequiredSkillsForCraft(args.User, RequiresSkillComponent, true))
-            return;
+            var lvl = requiresSkillComponent.BasicSkills.GetValueOrDefault(SkillType.Engineering, SkillLevel.None);
+            if (!_skill.HasRequiredSkill(args.User, SkillType.Engineering, lvl))
+                return;
         }
         //Vanilla-Sttion-END
         _tool.UseTool(args.Used, args.User, uid, 1f, component.KeysExtractionMethod, new EncryptionRemovalFinishedEvent(), toolComponent: tool);
@@ -208,7 +210,7 @@ public sealed partial class EncryptionKeySystem : EntitySystem
         if (!args.IsInDetailsRange)
             return;
 
-        if(component.Channels.Count > 0)
+        if (component.Channels.Count > 0)
         {
             args.PushMarkup(Loc.GetString("examine-encryption-channels-prefix"));
             AddChannelsExamine(component.Channels, component.DefaultChannel, args, _protoManager, "examine-encryption-channel");

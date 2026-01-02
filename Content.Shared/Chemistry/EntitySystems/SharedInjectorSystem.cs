@@ -36,7 +36,7 @@ public abstract class SharedInjectorSystem : EntitySystem
     [Dependency] private readonly SharedForensicsSystem _forensics = default!;
     [Dependency] protected readonly SharedSolutionContainerSystem SolutionContainer = default!;
     [Dependency] private readonly InventorySystem _invSystem = default!;
-    [Dependency] private readonly RequiresSkillSystem _requiresskill = default!;
+    [Dependency] private readonly SharedSkillSystem _skill = default!;
     public override void Initialize()
     {
         SubscribeLocalEvent<InjectorComponent, GetVerbsEvent<AlternativeVerb>>(AddSetTransferVerbs);
@@ -161,10 +161,7 @@ public abstract class SharedInjectorSystem : EntitySystem
         //vanilla-station-skill-issue-start
         if (TryComp<RequiresSkillComponent>(injector, out var reqskillComponent))
         {
-            if(!TryComp<SkillComponent>(user, out var skill))
-                skill = EnsureComp<SkillComponent>(user);
-
-            if(!_requiresskill.HasSkillLevel(user, reqskillComponent.RequiresMedicineLevel, skillComponent => skillComponent.MedicineLevel))
+            if (!_skill.HasRequiredSkill(user, reqskillComponent))
                 return;
         }
         //vanilla-station-skill-issue-end

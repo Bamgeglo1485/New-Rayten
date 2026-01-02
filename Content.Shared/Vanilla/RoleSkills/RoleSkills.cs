@@ -25,9 +25,9 @@ public sealed partial class RoleSkills : IEquatable<RoleSkills>
 
     //Навыки, выбранные игроком
     [DataField]
-    public Dictionary<skillType, SkillLevel> AddedBasicSkills = new();
+    public Dictionary<SkillType, SkillLevel> AddedBasicSkills = [];
     [DataField]
-    public HashSet<skillType> AddedEasySkills = new();
+    public HashSet<SkillType> AddedEasySkills = [];
 
     [DataField]
     public bool IsValid = false;
@@ -41,8 +41,8 @@ public sealed partial class RoleSkills : IEquatable<RoleSkills>
     {
         return new RoleSkills(Role)
         {
-            AddedBasicSkills = new Dictionary<skillType, SkillLevel>(AddedBasicSkills),
-            AddedEasySkills = new HashSet<skillType>(AddedEasySkills),
+            AddedBasicSkills = new Dictionary<SkillType, SkillLevel>(AddedBasicSkills),
+            AddedEasySkills = [.. AddedEasySkills],
             IsValid = IsValid,
         };
     }
@@ -53,20 +53,20 @@ public sealed partial class RoleSkills : IEquatable<RoleSkills>
         var protoManager = collection.Resolve<IPrototypeManager>();
         var skillpoints = SharedRoleSkillsSystem.skillpoints;
 
-        List<(skillType Skill, SkillLevel Level, int Experience)> generalbasicskills = new List<(skillType Skill, SkillLevel Level, int Experience)>
+        List<(SkillType Skill, SkillLevel Level, int Experience)> generalbasicskills = new List<(SkillType Skill, SkillLevel Level, int Experience)>
         {
-            (skillType.Weapon, SkillLevel.None, 0),
-            (skillType.Medicine, SkillLevel.None, 0),
-            (skillType.Engineering, SkillLevel.None, 0)
+            (SkillType.Weapon, SkillLevel.None, 0),
+            (SkillType.Medicine, SkillLevel.None, 0),
+            (SkillType.Engineering, SkillLevel.None, 0)
         };
 
-        List<(skillType Skill, bool have, int Experience)> generaleasyskills = new List<(skillType Skill, bool have, int Experience)>
+        List<(SkillType Skill, bool have, int Experience)> generaleasyskills = new List<(SkillType Skill, bool have, int Experience)>
         {
-            (skillType.Piloting, false, 0),
-            (skillType.Botany, false, 0),
-            (skillType.MusInstruments, false, 0),
-            (skillType.Bureaucracy, false, 0),
-            (skillType.Research, false, 0)
+            (SkillType.Piloting, false, 0),
+            (SkillType.Botany, false, 0),
+            (SkillType.MusInstruments, false, 0),
+            (SkillType.Bureaucracy, false, 0),
+            (SkillType.Research, false, 0)
         };
 
         // 1. Проверка, что прототип навыксета существует
@@ -77,7 +77,7 @@ public sealed partial class RoleSkills : IEquatable<RoleSkills>
         }
 
         // 2. Проверка на навыки
-        void ApplyBasicSkills(Dictionary<skillType, SkillLevel>? Skills)
+        void ApplyBasicSkills(Dictionary<SkillType, SkillLevel>? Skills)
         {
             if (Skills == null)
                 return;
@@ -108,7 +108,7 @@ public sealed partial class RoleSkills : IEquatable<RoleSkills>
                 generalbasicskills[index] = (skill, newLevel, 0);
             }
         }
-        void ApplyEasySkills(HashSet<skillType>? Skills)
+        void ApplyEasySkills(HashSet<SkillType>? Skills)
         {
             if (Skills == null)
                 return;

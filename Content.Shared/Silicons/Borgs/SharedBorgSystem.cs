@@ -25,7 +25,7 @@ using Content.Shared.Throwing;
 using Content.Shared.UserInterface;
 using Content.Shared.Wires;
 using Content.Shared.Whitelist;
-using Content.Shared.Vanilla.Skill;//vanilla-skill
+using Content.Shared.Vanilla.Skill;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Configuration;
 using Robust.Shared.Containers;
@@ -64,7 +64,7 @@ public abstract partial class SharedBorgSystem : EntitySystem
     [Dependency] private readonly SharedHandheldLightSystem _handheldLight = default!;
     [Dependency] private readonly SharedAccessSystem _access = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly RequiresSkillSystem _requiresSkillSystem = default!;
+    [Dependency] private readonly SharedSkillSystem _skill = default!;
     /// <inheritdoc/>
     public override void Initialize()
     {
@@ -246,9 +246,10 @@ public abstract partial class SharedBorgSystem : EntitySystem
                 return;
             }
             //Vanilla-Station-START
-            if (EntityManager.TryGetComponent<RequiresSkillComponent>(chassis.Owner, out var RequiresSkillComponent))
+            if (TryComp<RequiresSkillComponent>(chassis.Owner, out var requiresSkillComponent))
             {
-                if (!_requiresSkillSystem.HasRequiredSkillsForCraft(args.User, RequiresSkillComponent, false))
+                var lvl = requiresSkillComponent.BasicSkills.GetValueOrDefault(SkillType.Engineering, SkillLevel.None);
+                if (!_skill.HasRequiredSkill(args.User, SkillType.Engineering, lvl))
                     return;
             }
             //Vanilla-Sttion-END

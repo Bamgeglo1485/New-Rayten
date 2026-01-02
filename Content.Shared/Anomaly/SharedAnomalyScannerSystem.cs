@@ -18,7 +18,7 @@ public abstract class SharedAnomalyScannerSystem : EntitySystem
     [Dependency] protected readonly SharedAppearanceSystem Appearance = default!;
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
     [Dependency] protected readonly SharedUserInterfaceSystem UI = default!;
-    [Dependency] private readonly RequiresSkillSystem _requiresSkillSystem = default!;
+    [Dependency] private readonly SharedSkillSystem _skill = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -58,7 +58,7 @@ public abstract class SharedAnomalyScannerSystem : EntitySystem
             return;
 
         //rayten-start
-        if (TryComp<RequiresSkillComponent>(uid, out var reqskillcomp) && !_requiresSkillSystem.HasRequiredSkills(args.User, reqskillcomp))
+        if (TryComp<RequiresSkillComponent>(uid, out var reqskillcomp) && !_skill.HasRequiredSkill(args.User, reqskillcomp))
             return;
         //rayten-end
 

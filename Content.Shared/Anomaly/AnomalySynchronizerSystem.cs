@@ -21,7 +21,7 @@ public sealed partial class AnomalySynchronizerSystem : EntitySystem
     [Dependency] private readonly EntityLookupSystem _entityLookup = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly SharedAnomalySystem _anomaly = default!;
-    [Dependency] private readonly RequiresSkillSystem _requiresSkillSystem = default!;
+    [Dependency] private readonly SharedSkillSystem _skill = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly SharedDeviceLinkSystem _deviceLink = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
@@ -155,7 +155,7 @@ public sealed partial class AnomalySynchronizerSystem : EntitySystem
     {
         //vanilla-station-skill-issue-start
         if (TryComp<RequiresSkillComponent>(ent, out var reqskillcomp))
-            if (!_requiresSkillSystem.HasRequiredSkills(args.User, reqskillcomp))
+            if (!_skill.HasRequiredSkill(args.User, reqskillcomp))
             {
                 args.Handled = true;
                 return;

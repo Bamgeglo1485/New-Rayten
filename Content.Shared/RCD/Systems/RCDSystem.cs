@@ -22,7 +22,7 @@ using Robust.Shared.Physics.Dynamics;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 using System.Linq;
-using Content.Shared.Vanilla.Skill; //vanilla-skill
+using Content.Shared.Vanilla.Skill;
 
 namespace Content.Shared.RCD.Systems;
 
@@ -44,7 +44,7 @@ public sealed class RCDSystem : EntitySystem
     [Dependency] private readonly SharedMapSystem _mapSystem = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly TagSystem _tags = default!;
-    [Dependency] private readonly RequiresSkillSystem _requiresSkillSystem = default!;
+    [Dependency] private readonly SharedSkillSystem _skill = default!;
 
     private readonly int _instantConstructionDelay = 0;
     private readonly EntProtoId _instantConstructionFx = "EffectRCDConstruct0";
@@ -154,9 +154,10 @@ public sealed class RCDSystem : EntitySystem
             return;
 
         //Vanilla-Station-START
-        if (EntityManager.TryGetComponent<RequiresSkillComponent>(uid, out var RequiresSkillComponent))
+        if (TryComp<RequiresSkillComponent>(uid, out var requiresSkillComponent))
         {
-            if(!_requiresSkillSystem.HasRequiredSkillsForCraft(args.User, RequiresSkillComponent, popup: true))
+            var lvl = requiresSkillComponent.BasicSkills.GetValueOrDefault(SkillType.Engineering, SkillLevel.None);
+            if (!_skill.HasRequiredSkill(args.User, SkillType.Engineering, lvl))
                 return;
         }
         //Vanilla-Sttion-END
@@ -455,7 +456,7 @@ public sealed class RCDSystem : EntitySystem
                 foreach (var fixture in fixtures.Fixtures.Values)
                 {
                     // Continue if no collision is possible
-                    if (!fixture.Hard || fixture.CollisionLayer <= 0 || (fixture.CollisionLayer & (int) prototype.CollisionMask) == 0)
+                    if (!fixture.Hard || fixture.CollisionLayer <= 0 || (fixture.CollisionLayer & (int)prototype.CollisionMask) == 0)
                         continue;
 
                     // Continue if our custom collision bounds are not intersected

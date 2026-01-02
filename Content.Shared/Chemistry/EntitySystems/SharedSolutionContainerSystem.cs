@@ -73,6 +73,8 @@ public abstract partial class SharedSolutionContainerSystem : EntitySystem
     [Dependency] protected readonly SharedContainerSystem ContainerSystem = default!;
     [Dependency] protected readonly MetaDataSystem MetaDataSys = default!;
     [Dependency] protected readonly INetManager NetManager = default!;
+    [Dependency] protected readonly SharedSkillSystem _skill = default!;
+
 
     public override void Initialize()
     {
@@ -857,8 +859,7 @@ public abstract partial class SharedSolutionContainerSystem : EntitySystem
                 .ToHexNoAlpha(); //TODO: If the chem has a dark color, the examine text becomes black on a black background, which is unreadable.
 
             //vanilla-station-start
-            if (TryComp<SkillComponent>(args.Examiner, out var skillComponent) &&
-                skillComponent.MedicineLevel >= SkillLevel.Advanced)
+            if (_skill.HasRequiredSkill(args.Examiner, SkillType.Medicine, SkillLevel.Advanced, false))
             {
                 args.PushMarkup(Loc.GetString(entity.Comp.LocPhysicalQuality,
                                             ("color", colorHex),
@@ -884,8 +885,8 @@ public abstract partial class SharedSolutionContainerSystem : EntitySystem
                 if (!proto.Recognizable)
                 {
                     //vanilla-station
-                    //Человек с 3 медициной распознаёт абсолютно всё и ему всё равно
-                    if (skillComponent == null || skillComponent.MedicineLevel != SkillLevel.Expert)
+                    //Человек с 3 медициной распознаёт абсолютно всё
+                    if (!_skill.HasRequiredSkill(args.Examiner, SkillType.Medicine, SkillLevel.Expert, false))
                         continue;
                 }
 

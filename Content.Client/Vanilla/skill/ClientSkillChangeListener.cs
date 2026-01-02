@@ -13,28 +13,32 @@ public sealed class ClientSkillChangeListener : EntitySystem
 {
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
     [Dependency] private readonly AppearanceSystem _appearance = default!;
+    [Dependency] private readonly SkillInvisibleSystem _invis = default!;
+
 
     public override void Initialize()
     {
         base.Initialize();
         SubscribeLocalEvent<SkillComponent, SkillLevelChangedEvent>(OnSkillLevelChanged);
         SubscribeLocalEvent<SkillComponent, LocalPlayerAttachedEvent>(OnPlayerAttached);
-        SubscribeLocalEvent<SkillComponent, MapInitEvent>(OnMapInit);
+        SubscribeLocalEvent<SkillComponent, ComponentStartup>(OnStartup);
     }
 
-    private void OnMapInit(EntityUid uid, SkillComponent component, MapInitEvent args)
+    private void OnStartup(EntityUid uid, SkillComponent component, ComponentStartup args)
     {
         if (uid == _player.LocalEntity)
         {
-            UpdateAllChem(component);
+            UpdateAllChem();
+            UpdateAllInvisibleArchons();
         }
+
     }
 
     private void OnPlayerAttached(EntityUid uid, SkillComponent component, LocalPlayerAttachedEvent args)
     {
-        UpdateAllChem(component);
+        UpdateAllChem();
+        UpdateAllInvisibleArchons();
     }
 
     private void OnSkillLevelChanged(EntityUid uid, SkillComponent component, SkillLevelChangedEvent args)
@@ -49,18 +53,25 @@ public sealed class ClientSkillChangeListener : EntitySystem
         switch (args.Skill)
         {
             case skillType.Medicine:
-                UpdateAllChem(component);
+                UpdateAllChem();
+                break;
+            case skillType.Research:
+                UpdateAllInvisibleArchons();
                 break;
         }
     }
 
-    private void UpdateAllChem(SkillComponent skillComp)
+    private void UpdateAllChem()
     {
         var query = EntityQueryEnumerator<SolutionContainerVisualsComponent, AppearanceComponent>();
         while (query.MoveNext(out var uid, out var component, out var appearance))
-        {
             _appearance.QueueUpdate(uid, appearance);
-        }
+    }
+    private void UpdateAllInvisibleArchons()
+    {
+        var query = EntityQueryEnumerator<SkillInvisibleComponent>();
+        while (query.MoveNext(out var ent, out var comp))
+            _invis.UpdateVisibility(ent, comp);
     }
 }
 

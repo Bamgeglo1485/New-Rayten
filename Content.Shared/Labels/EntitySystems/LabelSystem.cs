@@ -14,7 +14,7 @@ public sealed partial class LabelSystem : EntitySystem
     [Dependency] private readonly NameModifierSystem _nameModifier = default!;
     [Dependency] private readonly ItemSlotsSystem _itemSlots = default!;
     [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly RequiresSkillSystem _requiresSkillSystem = default!;
+    [Dependency] private readonly SharedSkillSystem _skill = default!;
     public const string ContainerName = "paper_label";
 
     public override void Initialize()
@@ -71,7 +71,8 @@ public sealed partial class LabelSystem : EntitySystem
         //Rayten-Start
         if (TryComp<RequiresSkillComponent>(ent, out var component))
         {
-            if(!_requiresSkillSystem.HasSkillLevel(args.Examiner, component.RequiresMedicineLevel, skillComponent => skillComponent.MedicineLevel))
+            var lvl = component.BasicSkills.GetValueOrDefault(SkillType.Medicine, SkillLevel.None);
+            if (!_skill.HasRequiredSkill(args.Examiner, SkillType.Medicine, lvl, false))
                 return;
         }
         //Rayten-END
@@ -101,7 +102,7 @@ public sealed partial class LabelSystem : EntitySystem
 
     private void OnExamined(Entity<PaperLabelComponent> ent, ref ExaminedEvent args)
     {
-        if (ent.Comp.LabelSlot.Item is not {Valid: true} item)
+        if (ent.Comp.LabelSlot.Item is not { Valid: true } item)
             return;
 
         using (args.PushGroup(nameof(PaperLabelComponent)))

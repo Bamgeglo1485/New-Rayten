@@ -14,7 +14,7 @@ public sealed class BotanySwabSystem : EntitySystem
     [Dependency] private readonly SharedDoAfterSystem _doAfterSystem = default!;
     [Dependency] private readonly PopupSystem _popupSystem = default!;
     [Dependency] private readonly MutationSystem _mutationSystem = default!;
-    [Dependency] private readonly RequiresSkillSystem _requiresSkillSystem = default!;
+    [Dependency] private readonly SharedSkillSystem _skill = default!;
 
     public override void Initialize()
     {
@@ -48,10 +48,10 @@ public sealed class BotanySwabSystem : EntitySystem
             return;
 
         //Rayten-start
-        if (EntityManager.TryGetComponent<RequiresSkillComponent>(args.Target, out var RequiresSkillComponent))
+        if (TryComp<RequiresSkillComponent>(args.Target, out var requiresSkillComponent))
         {
-            if(!_requiresSkillSystem.HasRequiredSkills(args.User, RequiresSkillComponent))
-            return;
+            if (!_skill.HasRequiredSkills(args.User, requiresSkillComponent))
+                return;
         }
         //Rayten-end
         _doAfterSystem.TryStartDoAfter(new DoAfterArgs(EntityManager, args.User, swab.SwabDelay, new BotanySwabDoAfterEvent(), uid, target: args.Target, used: uid)

@@ -22,7 +22,7 @@ public abstract class SharedSolutionContainerMixerSystem : EntitySystem
     [Dependency] private readonly SharedContainerSystem _container = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly SharedSolutionContainerSystem _solution = default!;
-    [Dependency] private readonly RequiresSkillSystem _requiresSkillSystem = default!;
+    [Dependency] private readonly SharedSkillSystem _skill = default!;
     /// <inheritdoc/>
     public override void Initialize()
     {
@@ -65,13 +65,8 @@ public abstract class SharedSolutionContainerMixerSystem : EntitySystem
         //vanilla-station-skill-issue-start
         if (user != null)
             if (TryComp<RequiresSkillComponent>(user.Value, out var requiresSkillComponent))
-                if (!_requiresSkillSystem.HasRequiredSkills(user.Value, requiresSkillComponent))
-                {
-                    _popup.PopupEntity(
-                        Loc.GetString("Skill-issue-message-chemistry-unskilled", ("lvl", requiresSkillComponent.RequiresMedicineLevel)),
-                        user.Value, user.Value);
+                if (!_skill.HasRequiredSkill(user.Value, requiresSkillComponent))
                     return;
-                }
         //vanilla-station-skill-issue-end
         if (!_container.TryGetContainer(uid, comp.ContainerId, out var container) || container.Count == 0)
         {

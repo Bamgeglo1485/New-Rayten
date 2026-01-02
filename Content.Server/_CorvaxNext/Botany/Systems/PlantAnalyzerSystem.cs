@@ -22,7 +22,7 @@ public sealed class PlantAnalyzerSystem : EntitySystem
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly SharedDoAfterSystem _doAfterSystem = default!;
     [Dependency] private readonly UserInterfaceSystem _uiSystem = default!;
-    [Dependency] private readonly RequiresSkillSystem _requiresSkillSystem = default!;
+    [Dependency] private readonly SharedSkillSystem _skill = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -40,10 +40,10 @@ public sealed class PlantAnalyzerSystem : EntitySystem
             return;
 
         //Rayten-start
-        if (EntityManager.TryGetComponent<RequiresSkillComponent>(ent, out var requiresSkillComponent))
+        if (TryComp<RequiresSkillComponent>(ent, out var requiresSkillComponent))
         {
-            if(!_requiresSkillSystem.HasRequiredSkills(args.User, requiresSkillComponent, true))
-            return;
+            if (!_skill.HasRequiredSkills(args.User, requiresSkillComponent))
+                return;
         }
         //Rayten-end
 

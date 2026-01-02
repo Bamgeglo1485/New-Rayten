@@ -29,7 +29,6 @@ using Content.Shared.Stunnable;
 using Content.Shared.Timing;
 using Content.Shared.Verbs;
 using Content.Shared.Weapons.Melee.Events;
-using Content.Shared.Vanilla.Skill;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
 using Robust.Shared.Network;
@@ -524,13 +523,6 @@ namespace Content.Shared.Cuffs
             }
 
             var cuffTime = handcuffComponent.CuffTime;
-
-            //vanilla-station-start
-            int cufferskilllevel = TryComp<SkillComponent>(user, out var cufferskill) ? (int)cufferskill.WeaponLevel : 2;
-            int cuffedskilllevel = TryComp<SkillComponent>(target, out var cuffedskill) ? (int)cuffedskill.WeaponLevel : 2;
-            float skillDifference = (float)(cufferskilllevel - cuffedskilllevel);
-            cuffTime -= skillDifference * 0.45f;
-            //vanilla-stat-end
 
             if (HasComp<StunnedComponent>(target))
                 cuffTime = MathF.Max(0.1f, cuffTime - handcuffComponent.StunBonus);

@@ -32,6 +32,8 @@ public sealed class HealingSystem : EntitySystem
     [Dependency] private readonly MobThresholdSystem _mobThresholdSystem = default!;
     [Dependency] private readonly SharedPopupSystem _popupSystem = default!;
     [Dependency] private readonly SharedSolutionContainerSystem _solutionContainerSystem = default!;
+    [Dependency] private readonly SharedSkillSystem _skill = default!;
+
 
     public override void Initialize()
     {
@@ -213,11 +215,10 @@ public sealed class HealingSystem : EntitySystem
             ? healing.Comp.Delay
             : healing.Comp.Delay * GetScaledHealingPenalty(target, healing.Comp.SelfHealPenaltyMultiplier);
         //vanilla-station-skill-issue-start
-        if (EntityManager.TryGetComponent<SkillComponent>(user, out var Skill))
+        if (_skill.TryGetSkill(user, SkillType.Medicine, out _, out var medicinelevel))
         {
             float skillmodifier = 1f;
-
-            switch (Skill.MedicineLevel)
+            switch (medicinelevel)
             {
                 case SkillLevel.None:
                     skillmodifier = 2f;
@@ -230,12 +231,11 @@ public sealed class HealingSystem : EntitySystem
                     skillmodifier = 1f;
                     break;
             }
-
             delay *= skillmodifier;
         }
         else
         {
-            delay *= 2; // если компонента навыка нет, умножаем на 2
+            delay *= 2;
         }
         //vanilla-station-skill-issue-end
 

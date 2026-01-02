@@ -16,17 +16,9 @@ public sealed class BlindPredatorSystem : SharedBlindPredatorSystem
         SubscribeLocalEvent<PredatorVisibleMarkComponent, AfterAutoHandleStateEvent>(OnHandleState);
         SubscribeLocalEvent<PredatorVisibleMarkComponent, ComponentShutdown>(OnVictimShutdown);
         SubscribeLocalEvent<BlindPredatorComponent, LocalPlayerAttachedEvent>(OnPlayerAttached);
-        SubscribeLocalEvent<BlindPredatorComponent, LocalPlayerDetachedEvent>(OnPlayerDetached);
     }
 
     private void OnPlayerAttached(EntityUid uid, BlindPredatorComponent component, LocalPlayerAttachedEvent args)
-    {
-        var query = EntityQueryEnumerator<PredatorVisibleMarkComponent>();
-        while (query.MoveNext(out var ent, out var mark))
-            UpdateVisibility(ent, mark);
-    }
-
-    private void OnPlayerDetached(EntityUid uid, BlindPredatorComponent component, LocalPlayerDetachedEvent args)
     {
         var query = EntityQueryEnumerator<PredatorVisibleMarkComponent>();
         while (query.MoveNext(out var ent, out var mark))
