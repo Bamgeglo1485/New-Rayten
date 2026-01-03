@@ -19,7 +19,6 @@ using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Content.Shared.Vanilla.Skill;//vanilla-skill
-using Content.Server.Vanilla.Skill;//vanilla-skill
 using Robust.Shared.Audio.Systems;
 
 namespace Content.Server.Wires;
@@ -34,7 +33,7 @@ public sealed class WiresSystem : SharedWiresSystem
     [Dependency] private readonly UserInterfaceSystem _uiSystem = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly ConstructionSystem _construction = default!;
-    [Dependency] private readonly RequiresSkillSystem _requiresSkillSystem = default!;
+    [Dependency] private readonly SharedSkillSystem _skill = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
 
     private static readonly ProtoId<ToolQualityPrototype> CuttingQuality = "Cutting";
@@ -192,10 +191,10 @@ public sealed class WiresSystem : SharedWiresSystem
             return null;
 
         List<WireColor> colors =
-            new((WireColor[]) Enum.GetValues(typeof(WireColor)));
+            new((WireColor[])Enum.GetValues(typeof(WireColor)));
 
         List<WireLetter> letters =
-            new((WireLetter[]) Enum.GetValues(typeof(WireLetter)));
+            new((WireLetter[])Enum.GetValues(typeof(WireLetter)));
 
 
         var wireSet = new List<Wire>();
@@ -453,22 +452,13 @@ public sealed class WiresSystem : SharedWiresSystem
         {
             TryComp(args.User, out ActorComponent? actor);
             //Rayten-Start
-
-            if(!_requiresSkillSystem.HasSkillLevel(args.User, SkillLevel.Basic, skillComponent => skillComponent.EngineeringLevel))
-            {
-                if (actor!=null)
-                {
-                    _audio.PlayGlobal("/Audio/Vanilla/SkillSystem/meep-merp.ogg", actor.PlayerSession);
-                    _popupSystem.PopupEntity(Loc.GetString("Skill-issue-message-engineering-unskilled", ("lvl", (int)SkillLevel.Basic)), args.User, args.User);
-                }
-                
-                return;            
-            }
-
+            //туду разный уровень
+            if (!_skill.HasRequiredSkill(args.User, SkillType.Engineering, SkillLevel.Basic))
+                return;
             //Rayten-END
 
 
-            if (actor!=null)
+            if (actor != null)
             {
                 _uiSystem.OpenUi(uid, WiresUiKey.Key, actor.PlayerSession);
                 args.Handled = true;
@@ -521,7 +511,7 @@ public sealed class WiresSystem : SharedWiresSystem
             for (var i = 0; i < 4; i++)
             {
                 // Cyrillic Letters
-                data[i] = (char) _random.Next(0x0410, 0x0430);
+                data[i] = (char)_random.Next(0x0410, 0x0430);
             }
         }
         else
@@ -529,14 +519,14 @@ public sealed class WiresSystem : SharedWiresSystem
             for (var i = 0; i < 4; i++)
             {
                 // Letters
-                data[i] = (char) _random.Next(0x41, 0x5B);
+                data[i] = (char)_random.Next(0x41, 0x5B);
             }
         }
 
         for (var i = 5; i < 9; i++)
         {
             // Digits
-            data[i] = (char) _random.Next(0x30, 0x3A);
+            data[i] = (char)_random.Next(0x30, 0x3A);
         }
 
         wires.SerialNumber = new string(data);
@@ -564,7 +554,7 @@ public sealed class WiresSystem : SharedWiresSystem
         var statuses = new List<(int position, object key, object value)>();
         foreach (var (key, value) in wires.Statuses)
         {
-            var valueCast = ((int position, StatusLightData? value)) value;
+            var valueCast = ((int position, StatusLightData? value))value;
             statuses.Add((valueCast.position, key, valueCast.value!));
         }
 
@@ -601,7 +591,7 @@ public sealed class WiresSystem : SharedWiresSystem
     ///     Tries to get all the wires on this entity by the wire action type.
     /// </summary>
     /// <returns>Enumerator of all wires in this entity according to the given type.</returns>
-    public IEnumerable<Wire> TryGetWires<T>(EntityUid uid, WiresComponent? wires = null) where T: IWireAction
+    public IEnumerable<Wire> TryGetWires<T>(EntityUid uid, WiresComponent? wires = null) where T : IWireAction
     {
         if (!Resolve(uid, ref wires))
             yield break;
@@ -814,7 +804,7 @@ public sealed class WiresSystem : SharedWiresSystem
             return false;
         }
 
-        data = (T) result;
+        data = (T)result;
 
         return true;
     }

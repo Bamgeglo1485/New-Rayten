@@ -3,8 +3,7 @@ using Content.Server.Atmos.Components;
 using Content.Server.NodeContainer;
 using Content.Server.NodeContainer.Nodes;
 using Content.Server.Popups;
-using Content.Server.Vanilla.Skill; //vanilla-station
-using Content.Shared.Vanilla.Skill; //vanilla-station
+using Content.Shared.Vanilla.Skill;
 using Content.Shared.Atmos;
 using Content.Shared.Atmos.Components;
 using Content.Shared.Interaction;
@@ -14,6 +13,7 @@ using JetBrains.Annotations;
 using Robust.Server.GameObjects;
 using static Content.Shared.Atmos.Components.GasAnalyzerComponent;
 namespace Content.Server.Atmos.EntitySystems;
+
 [UsedImplicitly]
 public sealed class GasAnalyzerSystem : EntitySystem
 {
@@ -22,7 +22,7 @@ public sealed class GasAnalyzerSystem : EntitySystem
     [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
     [Dependency] private readonly UserInterfaceSystem _userInterface = default!;
     [Dependency] private readonly SharedInteractionSystem _interactionSystem = default!;
-    [Dependency] private readonly RequiresSkillSystem _requiresSkillSystem = default!; //vanilla-station
+    [Dependency] private readonly SharedSkillSystem _skill = default!;
 
     /// <summary>
     /// Minimum moles of a gas to be sent to the client.
@@ -59,8 +59,8 @@ public sealed class GasAnalyzerSystem : EntitySystem
     private void OnAfterInteract(Entity<GasAnalyzerComponent> entity, ref AfterInteractEvent args)
     {
         //vanilla-station-start
-        if (EntityManager.TryGetComponent<RequiresSkillComponent>(entity, out var RequiresSkillComp) && RequiresSkillComp != null)
-            if(!_requiresSkillSystem.HasRequiredSkills(args.User, RequiresSkillComp, false))
+        if (EntityManager.TryGetComponent<RequiresSkillComponent>(entity, out var requiresSkillComp))
+            if (!_skill.HasRequiredSkill(args.User, requiresSkillComp))
                 return;
         //vanilla-station-end
         var target = args.Target;

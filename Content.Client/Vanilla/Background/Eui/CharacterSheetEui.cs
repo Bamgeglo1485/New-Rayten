@@ -23,8 +23,8 @@ public sealed class CharacterSheetEui : BaseEui
     [Dependency] private readonly IUserInterfaceManager UIManager = default!;
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
 
-    private Dictionary<skillType, SkillControl> _skillControls = new Dictionary<skillType, SkillControl>();
-    private Dictionary<skillType, EasyskillsControl> _easyskillsControl = new Dictionary<skillType, EasyskillsControl>();
+    private Dictionary<SkillType, SkillControl> _skillControls = [];
+    private Dictionary<SkillType, EasyskillsControl> _easyskillsControl = [];
 
     private CharacterWindow? _window;
 
@@ -112,55 +112,45 @@ public sealed class CharacterSheetEui : BaseEui
     {
         if (_window == null)
             return;
+
         int skillpoints = 0;
         _window.BasicSkillContainer.Children.Clear();
         _window.EasySkillContainer.Children.Clear();
 
-        var basicskills = new List<(skillType Skill, SkillLevel Level, int Experience)>
-        {
-            (skillType.Weapon, SkillLevel.None, 0),
-            (skillType.Medicine, SkillLevel.None, 0),
-            (skillType.Engineering, SkillLevel.None, 0)
-        };
+        var basicSkills = new List<(SkillType Skill, SkillLevel Level, int Exp)>();
+        var easySkills = new List<(SkillType Skill, bool Have, int Exp)>();
 
-        var easyskills = new List<(skillType Skill, bool have, int Experience)>
-        {
-            (skillType.Piloting, false, 0),
-            (skillType.Botany, false, 0),
-            (skillType.MusInstruments, false, 0),
-            (skillType.Bureaucracy, false, 0),
-            (skillType.Research, false, 0)
-        };
-
-        if (_entManager.TryGetComponent<SkillComponent>(user, out var skillComponent))
-        {
-            basicskills = new List<(skillType Skill, SkillLevel Level, int Experience)>
-            {
-                (skillType.Weapon, skillComponent.WeaponLevel, skillComponent.WeaponExp),
-                (skillType.Medicine, skillComponent.MedicineLevel, skillComponent.MedicineExp),
-                (skillType.Engineering, skillComponent.EngineeringLevel, skillComponent.EngineeringExp)
-            };
-            easyskills = new List<(skillType Skill, bool have, int Experience)>
-            {
-                (skillType.Piloting, skillComponent.Piloting, skillComponent.PilotingExp),
-                (skillType.Botany, skillComponent.Botany, skillComponent.BotanyExp),
-                (skillType.MusInstruments, skillComponent.MusInstruments, skillComponent.MusInstrumentsExp),
-                (skillType.Bureaucracy, skillComponent.Bureaucracy, skillComponent.BureaucracyExp),
-                (skillType.Research, skillComponent.Research, skillComponent.ResearchExp)
-            };
-            skillpoints = skillComponent.SkillPoints;
-        }
-        else
-        {
+        if (!_entManager.TryGetComponent<SkillComponent>(user, out var skillComponent))
             _window.Skillpointslabel.Visible = false;
+
+        foreach (var skill in Enum.GetValues<SkillType>())
+        {
+            switch (skill.GetKind())
+            {
+                case SkillKind.Basic:
+                    basicSkills.Add((
+                        skill,
+                        skillComponent?.BasicSkills.GetValueOrDefault(skill, SkillLevel.None) ?? SkillLevel.None,
+                        skillComponent?.SkillExps.GetValueOrDefault(skill, 0) ?? 0
+                    ));
+                    break;
+
+                case SkillKind.Easy:
+                    easySkills.Add((
+                        skill,
+                        skillComponent?.EasySkills.Contains(skill) ?? false,
+                        skillComponent?.SkillExps.GetValueOrDefault(skill, 0) ?? 0
+                    ));
+                    break;
+            }
         }
 
-        gobasicskills(skillpoints, basicskills);
-        goeasyskills(skillpoints, easyskills);
+        BuildBasicSkills(skillpoints, basicSkills);
+        BuildEasySkills(skillpoints, easySkills);
         if (_entManager.TryGetComponent<SkillAmnesiaComponent>(user, out var SkillAmnesiaComp))
             UpdateSkillAmnesia(SkillAmnesiaComp);
     }
-    private void goeasyskills(int skillpoints, List<(skillType Skill, bool have, int Experience)> easyskills)
+    private void BuildEasySkills(int skillpoints, List<(SkillType Skill, bool have, int Experience)> easyskills)
     {
         if (_window == null)
             return;
@@ -175,7 +165,7 @@ public sealed class CharacterSheetEui : BaseEui
         }
     }
 
-    private void gobasicskills(int skillpoints, List<(skillType Skill, SkillLevel Level, int Experience)> basicskills)
+    private void BuildBasicSkills(int skillpoints, List<(SkillType Skill, SkillLevel Level, int Experience)> basicskills)
     {
         if (_window == null)
             return;
@@ -205,19 +195,18 @@ public sealed class CharacterSheetEui : BaseEui
         if (_window == null)
             return;
 
-        if (_skillControls.ContainsKey(SkillAmnesiaComp.skilltype))
+        if (_skillControls.ContainsKey(SkillAmnesiaComp.Skilltype))
         {
-            var skillControl = _skillControls[SkillAmnesiaComp.skilltype];
-            skillControl.updateamnesia(SkillAmnesiaComp.skilltype, SkillAmnesiaComp.exptorestore);
+            var skillControl = _skillControls[SkillAmnesiaComp.Skilltype];
+            skillControl.updateamnesia(SkillAmnesiaComp.Skilltype, SkillAmnesiaComp.Exptorestore);
             return;
         }
 
-        if (_easyskillsControl.ContainsKey(SkillAmnesiaComp.skilltype))
+        if (_easyskillsControl.ContainsKey(SkillAmnesiaComp.Skilltype))
         {
-            var easyskillsControl = _easyskillsControl[SkillAmnesiaComp.skilltype];
-            easyskillsControl.updateamnesia(SkillAmnesiaComp.skilltype, SkillAmnesiaComp.exptorestore);
+            var easyskillsControl = _easyskillsControl[SkillAmnesiaComp.Skilltype];
+            easyskillsControl.updateamnesia(SkillAmnesiaComp.Skilltype, SkillAmnesiaComp.Exptorestore);
         }
     }
-
 
 }

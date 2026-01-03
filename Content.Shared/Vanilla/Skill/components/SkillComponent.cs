@@ -3,7 +3,7 @@ using Robust.Shared.Serialization;
 using Robust.Shared.Audio;
 namespace Content.Shared.Vanilla.Skill;
 
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true)]
 public sealed partial class SkillComponent : Component
 {
     /// <summary>
@@ -14,6 +14,10 @@ public sealed partial class SkillComponent : Component
 
     [DataField, AutoNetworkedField]
     public SoundSpecifier UnSkillSound = new SoundPathSpecifier("/Audio/Vanilla/SkillSystem/meep-merp.ogg");
+    [DataField, AutoNetworkedField]
+    public SoundSpecifier HeadShotSound = new SoundPathSpecifier("/Audio/Vanilla/SkillSystem/headshot.ogg");
+    [DataField, AutoNetworkedField]
+    public SoundSpecifier LvlUpSound = new SoundPathSpecifier("/Audio/Vanilla/SkillSystem/levelup.ogg");
 
     /// <summary>
     /// основные навыки, которыми обладает сущность
@@ -56,8 +60,31 @@ public enum SkillType : byte
 [Serializable, NetSerializable]
 public enum SkillLevel
 {
-    None = 1,
-    Basic = 2,
-    Advanced = 3,
-    Expert = 4
+    None = 0,
+    Basic = 1,
+    Advanced = 2,
+    Expert = 3
+}
+/// <summary>
+/// Тип навыка
+/// </summary>
+[Serializable, NetSerializable]
+public enum SkillKind : byte
+{
+    Basic,//базовый
+    Easy //легкий
+}
+public static class SkillTypeExtensions
+{
+    private static readonly HashSet<SkillType> EasySkills =
+    [
+        SkillType.Piloting,
+        SkillType.Botany,
+        SkillType.MusInstruments,
+        SkillType.Bureaucracy,
+        SkillType.Research
+    ];
+
+    public static SkillKind GetKind(this SkillType skill)
+        => EasySkills.Contains(skill) ? SkillKind.Easy : SkillKind.Basic;
 }

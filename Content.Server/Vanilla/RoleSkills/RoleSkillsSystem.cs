@@ -18,9 +18,7 @@ namespace Content.Server.Vanilla.RoleSkillsSystem;
 
 public sealed class RoleSkillsSystem : EntitySystem
 {
-    [Dependency] private readonly SkillTrainerSystem _skillTrainer = default!;
     [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly AdminFrozenSystem _freeze = default!;
 
     public override void Initialize()
     {
@@ -71,15 +69,15 @@ public sealed class RoleSkillsSystem : EntitySystem
             return;
 
         //итоговые навыки
-        Dictionary<skillType, SkillLevel> generalbasicskills = new()
+        Dictionary<SkillType, SkillLevel> generalbasicskills = new()
         {
-            { skillType.Weapon, SkillLevel.None },
-            { skillType.Medicine, SkillLevel.None },
-            { skillType.Engineering, SkillLevel.None }
+            { SkillType.Weapon, SkillLevel.None },
+            { SkillType.Medicine, SkillLevel.None },
+            { SkillType.Engineering, SkillLevel.None }
         };
-        HashSet<skillType> generaleasyskills = new();
+        HashSet<SkillType> generaleasyskills = [];
 
-        //обнуляем навык и предысторию
+        //обнуляем навык
         RemComp<SkillComponent>(uid);
         var skillComp = EnsureComp<SkillComponent>(uid);
 
@@ -94,10 +92,10 @@ public sealed class RoleSkillsSystem : EntitySystem
         layDownEasy(roleSkills.AddedEasySkills);
 
         //Передаём навыки и особенности в сущность
-        ApplySkills(uid, skillComp, generalbasicskills);
-        ApplyEasySkills(uid, skillComp, generaleasyskills);
+        skillComp.BasicSkills = generalbasicskills;
+        skillComp.EasySkills = generaleasyskills;
 
-        void layDownBacic(Dictionary<skillType, SkillLevel>? backgroundSkills)
+        void layDownBacic(Dictionary<SkillType, SkillLevel>? backgroundSkills)
         {
             if (backgroundSkills == null)
                 return;
@@ -115,7 +113,7 @@ public sealed class RoleSkillsSystem : EntitySystem
                 generalbasicskills[skill] = newLevel;
             }
         }
-        void layDownEasy(HashSet<skillType>? backgroundSkills)
+        void layDownEasy(HashSet<SkillType>? backgroundSkills)
         {
             if (backgroundSkills == null)
                 return;
@@ -124,21 +122,6 @@ public sealed class RoleSkillsSystem : EntitySystem
             {
                 generaleasyskills.Add(skill);
             }
-        }
-    }
-
-    private void ApplySkills(EntityUid uid, SkillComponent skillComp, Dictionary<skillType, SkillLevel> Skills)
-    {
-        foreach (var (skillType, level) in Skills)
-        {
-            _skillTrainer.SetSkillLevel(skillComp, skillType, level);
-        }
-    }
-    private void ApplyEasySkills(EntityUid uid, SkillComponent skillComp, HashSet<skillType> EasySkills)
-    {
-        foreach (var skillType in EasySkills)
-        {
-            _skillTrainer.SetEasySkill(skillComp, skillType);
         }
     }
 }

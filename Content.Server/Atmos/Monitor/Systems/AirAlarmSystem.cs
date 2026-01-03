@@ -4,8 +4,7 @@ using Content.Server.DeviceLinking.Systems;
 using Content.Server.DeviceNetwork.Systems;
 using Content.Server.Popups;
 using Content.Server.Power.EntitySystems;
-using Content.Server.Vanilla.Skill; //vanilla-station
-using Content.Shared.Vanilla.Skill; //vanilla-station
+using Content.Shared.Vanilla.Skill;
 using Content.Shared.Access.Components;
 using Content.Shared.Access.Systems;
 using Content.Shared.Administration.Logs;
@@ -38,7 +37,7 @@ namespace Content.Server.Atmos.Monitor.Systems;
 // response data in its data key.
 public sealed class AirAlarmSystem : EntitySystem
 {
-    [Dependency] private readonly RequiresSkillSystem _requiresSkillSystem = default!; //vanilla-station
+    [Dependency] private readonly SharedSkillSystem _skill = default!; //vanilla-station
     [Dependency] private readonly AccessReaderSystem _access = default!;
     [Dependency] private readonly ISharedAdminLogManager _adminLogger = default!;
     [Dependency] private readonly AtmosAlarmableSystem _atmosAlarmable = default!;
@@ -266,8 +265,8 @@ public sealed class AirAlarmSystem : EntitySystem
             return;
         }
         //vanilla-station-start
-        if (TryComp<RequiresSkillComponent>(uid, out var RequiresSkillComp))
-            if(!_requiresSkillSystem.HasRequiredSkills(args.User, RequiresSkillComp))
+        if (TryComp<RequiresSkillComponent>(uid, out var requiresSkillComp))
+            if (!_skill.HasRequiredSkill(args.User, requiresSkillComp))
                 return;
         //vanilla-station-end
 
@@ -358,7 +357,7 @@ public sealed class AirAlarmSystem : EntitySystem
     {
         if (!AccessCheck(uid, args.Actor, component))
         {
-           UpdateUI(uid, component);
+            UpdateUI(uid, component);
             return;
         }
 

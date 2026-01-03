@@ -42,7 +42,7 @@ public sealed class PlantAnalyzerSystem : EntitySystem
         //Rayten-start
         if (TryComp<RequiresSkillComponent>(ent, out var requiresSkillComponent))
         {
-            if (!_skill.HasRequiredSkills(args.User, requiresSkillComponent))
+            if (!_skill.HasRequiredSkill(args.User, requiresSkillComponent))
                 return;
         }
         //Rayten-end

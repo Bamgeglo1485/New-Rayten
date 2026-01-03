@@ -19,6 +19,8 @@ public sealed class SolutionContainerVisualsSystem : VisualizerSystem<SolutionCo
     [Dependency] private readonly IPrototypeManager _prototype = default!;
     [Dependency] private readonly ItemSystem _itemSystem = default!;
     [Dependency] private readonly IPlayerManager _player = default!;
+    [Dependency] private readonly SharedSkillSystem _skill = default!;
+
     public override void Initialize()
     {
         base.Initialize();
@@ -158,13 +160,10 @@ public sealed class SolutionContainerVisualsSystem : VisualizerSystem<SolutionCo
         if (TryComp<FakeChemComponent>(uid, out var fakeChem))
         {
             var playerEntity = _player.LocalPlayer?.ControlledEntity;
-            if (playerEntity != null && TryComp<SkillComponent>(playerEntity, out var skillComp))
+            if (playerEntity != null)
             {
-                // Применяем фейковый цвет, если у игрока низкий уровень химии
-                if (skillComp.MedicineLevel == SkillLevel.None || skillComp.MedicineLevel == SkillLevel.Basic)
-                {
+                if (!_skill.HasRequiredSkill(playerEntity.Value, SkillType.Medicine, SkillLevel.Advanced))
                     color = fakeChem.FakeColor;
-                }
             }
         }
     }

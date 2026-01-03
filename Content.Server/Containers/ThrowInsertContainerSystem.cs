@@ -16,6 +16,8 @@ public sealed class ThrowInsertContainerSystem : EntitySystem
     [Dependency] private readonly SharedContainerSystem _containerSystem = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private readonly SharedSkillSystem _skill = default!;
+
 
     public override void Initialize()
     {
@@ -37,14 +39,16 @@ public sealed class ThrowInsertContainerSystem : EntitySystem
         if (beforeThrowArgs.Cancelled)
             return;
         //Rayten-start
-        //Если у кидающей сущности есть экспертный уровень стрельбы - бросаем кубики
-        if (!( args.Component.Thrower != null && TryComp<SkillComponent>(args.Component.Thrower.Value, out var skill) && skill.WeaponLevel == SkillLevel.Expert))
+        if (args.Component.Thrower != null)
         {
-            if (!_random.Prob(ent.Comp.Probability))
+            if (!_skill.HasRequiredSkill(args.Component.Thrower.Value, SkillType.Weapon, SkillLevel.Expert))
             {
-                _audio.PlayPvs(ent.Comp.MissSound, ent);
-                _popup.PopupEntity(Loc.GetString(ent.Comp.MissLocString), ent);
-                return;
+                if (!_random.Prob(ent.Comp.Probability))
+                {
+                    _audio.PlayPvs(ent.Comp.MissSound, ent);
+                    _popup.PopupEntity(Loc.GetString(ent.Comp.MissLocString), ent);
+                    return;
+                }
             }
         }
         //Rayten-end

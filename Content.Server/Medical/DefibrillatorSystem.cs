@@ -48,6 +48,7 @@ public sealed class DefibrillatorSystem : EntitySystem
     [Dependency] private readonly SharedMindSystem _mind = default!;
     [Dependency] private readonly UseDelaySystem _useDelay = default!;
     [Dependency] private readonly SharedInteractionSystem _interactionSystem = default!;
+    [Dependency] private readonly SharedSkillSystem _skill = default!;
 
     /// <inheritdoc/>
     public override void Initialize()
@@ -141,32 +142,26 @@ public sealed class DefibrillatorSystem : EntitySystem
             return false;
         //vanilla-station-skill-issue-start
         TimeSpan delay = component.DoAfterDuration;
-        if (EntityManager.TryGetComponent<SkillComponent>(user, out var Skill))
-        {
-            double skillmodifier = 1.0;
+        _skill.TryGetSkill(user, SkillType.Medicine, out _, out var medicinelvl);
+        double skillmodifier = 1.0;
 
-            switch (Skill.MedicineLevel)
-            {
-                case SkillLevel.None:
-                    skillmodifier = 2.0;
-                    break;
-                case SkillLevel.Basic:
-                    skillmodifier = 1.5;
-                    break;
-                case SkillLevel.Advanced:
-                case SkillLevel.Expert:
-                    skillmodifier = 1.0;
-                    break;
-            }
-
-            // Преобразуем длительность в секунды или миллисекунды
-            double seconds = delay.TotalSeconds * skillmodifier;
-            delay = TimeSpan.FromSeconds(seconds);
-        }
-        else
+        switch (medicinelvl)
         {
-            delay = TimeSpan.FromSeconds(delay.TotalSeconds * 2); // если компонента навыка нет, умножаем на 2
+            case SkillLevel.None:
+                skillmodifier = 2.0;
+                break;
+            case SkillLevel.Basic:
+                skillmodifier = 1.5;
+                break;
+            case SkillLevel.Advanced:
+            case SkillLevel.Expert:
+                skillmodifier = 1.0;
+                break;
         }
+
+        // Преобразуем длительность в секунды или миллисекунды
+        double seconds = delay.TotalSeconds * skillmodifier;
+        delay = TimeSpan.FromSeconds(seconds);
         //vanilla-station-skill-issue-end
 
         _audio.PlayPvs(component.ChargeSound, uid);

@@ -1,30 +1,62 @@
 using Content.Shared.Weapons.Melee;
+using Content.Shared.Weapons.Ranged.Systems;
+using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Melee.Events;
+using Content.Shared.Weapons.Ranged.Events;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Chemistry;
 using Content.Shared.UserInterface;
 using Content.Shared.Interaction;
 using Content.Shared.Containers.ItemSlots;
-
+using Content.Shared.Mobs;
+using Content.Shared.Mobs.Components;
+using Content.Shared.Hands;
+using Content.Shared.Hands.EntitySystems;
+using Content.Shared.Popups;
+using Robust.Shared.Audio.Systems;
+using Robust.Shared.GameStates;
+using Robust.Shared.Random;
+using Robust.Shared.Timing;
 namespace Content.Shared.Vanilla.Skill;
 
-public sealed partial class SharedSkillSystem : EntitySystem
+public abstract partial class SharedSkillSystem : EntitySystem
 {
-    const int _EXPERIENCEFROMSKILLPOINT = 600;
-    const int _EXPERIENCETONEWLVL = 600;
+    [Dependency] protected readonly SharedAudioSystem Audio = default!;
+    [Dependency] protected readonly IRobustRandom _Random = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly SharedGunSystem _gun = default!;
+    [Dependency] private readonly SharedHandsSystem _hands = default!;
+    [Dependency] private readonly SharedPopupSystem _popup = default!;
+
+
+    const int EXPERIENCEFROMSKILLPOINT = 600;
+    const int EXPERIENCETONEWLVL = 600;
+
     public override void Initialize()
     {
         base.Initialize();
         SubscribeAllEvent<UseSkillPointEvent>(UseSkillPoint);
+        SubscribeLocalEvent<SkillComponent, ComponentRemove>(OnComponentRemoved);
 
         SubscribeLocalEvent<MeleeWeaponComponent, GetMeleeDamageEvent>(OnMeleeDamage);
         SubscribeLocalEvent<SkillComponent, SolutionScanEvent>(OnChemScan, after: [typeof(SolutionScannerSystem)]);
+        SubscribeLocalEvent<SkillInvisibleComponent, GotEquippedHandEvent>(OnEquippedHand);
 
         SubscribeLocalEvent<RequiresSkillComponent, ActivatableUIOpenAttemptEvent>(OnActivate);//Открытие интерфейса
         SubscribeLocalEvent<RequiresSkillComponent, ItemSlotInsertAttemptEvent>(OnItemSlotInsertAttempt); //попытка вставить что-то
         SubscribeLocalEvent<RequiresSkillComponent, ItemSlotEjectAttemptEvent>(OnItemSlotEjectAttempt); //попытка вытащить что-то
-        SubscribeLocalEvent<RequiresSkillToActivateInWorldComponent, ActivateInWorldEvent>(OnSkillCheckToActivateInWorld);
+        SubscribeLocalEvent<RequiresSkillToActivateInWorldComponent, ActivateInWorldEvent>(OnSkillCheckToActivateInWorld);//потом удалить когда-нибудь
+        //амнезия
+        SubscribeLocalEvent<SkillComponent, MobStateChangedEvent>(OnMobStateChanged);
+        SubscribeLocalEvent<SkillAmnesiaComponent, MapInitEvent>(OnAmnesiaInit);
+        //оружие
+        SubscribeLocalEvent<GunComponent, GotEquippedHandEvent>(OnHandPickUp);
+        SubscribeLocalEvent<UnskilledWeaponComponent, GunRefreshModifiersEvent>(OnGunRefreshModifiers);
     }
-
+    private void OnComponentRemoved(EntityUid uid, SkillComponent component, ref ComponentRemove args)
+    {
+        UpdateAllSystems(uid, component);
+    }
     private void UseSkillPoint(UseSkillPointEvent msg, EntitySessionEventArgs args)
     {
         if (!args.SenderSession.AttachedEntity.HasValue)
@@ -35,7 +67,7 @@ public sealed partial class SharedSkillSystem : EntitySystem
         if (!TryComp<SkillComponent>(entity, out var skillComp) || skillComp.SkillPoints < 1)
             return;
 
-        if (AddExperience((entity, skillComp), msg.skill, _EXPERIENCEFROMSKILLPOINT))
+        if (AddExperience((entity, skillComp), msg.skill, EXPERIENCEFROMSKILLPOINT))
         {
             skillComp.SkillPoints--;
             Dirty(entity, skillComp);
@@ -47,81 +79,115 @@ public sealed partial class SharedSkillSystem : EntitySystem
         if (experienceAmount <= 0)
             return false;
 
-        // Получаем накопленный опыт
-        var exp = ent.Comp.SkillExps.GetValueOrDefault(skillType);
-        exp += experienceAmount;
+        var comp = ent.Comp;
 
-        if (IsEasySkill(skillType))
+        var exp = comp.SkillExps.GetValueOrDefault(skillType) + experienceAmount;
+        var threshold = EXPERIENCETONEWLVL;
+
+        switch (skillType.GetKind())
         {
-            // Навык уже изучен
-            if (ent.Comp.EasySkills.Contains(skillType))
-                return false;
+            case SkillKind.Easy:
+                {
+                    // Уже изучен
+                    if (comp.EasySkills.Contains(skillType))
+                        return false;
 
-            if (exp >= _EXPERIENCETONEWLVL)
-            {
-                ent.Comp.SkillExps[skillType] = exp - _EXPERIENCETONEWLVL;
-                ent.Comp.EasySkills.Add(skillType);
-            }
-            else
-            {
-                ent.Comp.SkillExps[skillType] = exp;
-            }
+                    if (exp >= threshold)
+                    {
+                        comp.EasySkills.Add(skillType);
+                        comp.SkillExps[skillType] = exp - threshold;
+                        Audio.PlayLocal(comp.LvlUpSound, ent.Owner, ent.Owner);
+                    }
+                    else
+                    {
+                        comp.SkillExps[skillType] = exp;
+                    }
+
+                    break;
+                }
+
+            case SkillKind.Basic:
+                {
+                    var level = comp.BasicSkills.GetValueOrDefault(skillType, SkillLevel.None);
+
+                    // Максимальный уровень
+                    if (level == SkillLevel.Expert)
+                        return false;
+
+                    if (exp >= threshold)
+                    {
+                        comp.BasicSkills[skillType] = level + 1;
+                        comp.SkillExps[skillType] = exp - threshold;
+                        Audio.PlayLocal(comp.LvlUpSound, ent.Owner, ent.Owner);
+                    }
+                    else
+                    {
+                        comp.SkillExps[skillType] = exp;
+                    }
+
+                    break;
+                }
         }
-        else
-        {
-            var lvl = ent.Comp.BasicSkills.GetValueOrDefault(skillType, SkillLevel.None);
-            // Навык уже изучен
-            if (lvl == SkillLevel.Expert)
-                return false;
-
-            if (exp >= _EXPERIENCETONEWLVL)
-            {
-                ent.Comp.SkillExps[skillType] = exp - _EXPERIENCETONEWLVL;
-                ent.Comp.BasicSkills[skillType] = lvl + 1;
-            }
-            else
-            {
-                ent.Comp.SkillExps[skillType] = exp;
-            }
-        }
-
         Dirty(ent);
+        UpdateAllSystems(ent.Owner, ent.Comp);
         return true;
+    }
+
+    public virtual void UpdateAllSystems(EntityUid uid, SkillComponent component)
+    {
+        UpdateGun(uid, component);
     }
 
     #region help
-    public bool TryGetSkill(EntityUid uid, SkillType skill, out bool hasEasySkill, out SkillLevel level, SkillComponent? component = null)
+    public void FuckSkills(EntityUid uid, SkillComponent? component = null)
     {
+        if (!Resolve(uid, ref component, false))
+            return;
+
+        foreach (var skillType in Enum.GetValues<SkillType>())
+        {
+            switch (skillType.GetKind())
+            {
+                case SkillKind.Basic:
+                    component.BasicSkills[skillType] = SkillLevel.Expert;
+                    break;
+
+                case SkillKind.Easy:
+                    component.EasySkills.Add(skillType);
+                    break;
+            }
+        }
+        Dirty(uid, component);
+        UpdateAllSystems(uid, component);
+    }
+    public bool TryGetSkill(
+        EntityUid uid,
+        SkillType skill,
+        out bool hasEasySkill,
+        out SkillLevel level,
+        SkillComponent? component = null)
+    {
+        Log.Info($"попытка получить навык {skill} у {uid}");
         hasEasySkill = false;
         level = SkillLevel.None;
 
-        if (!Resolve(uid, ref component))
+        if (!Resolve(uid, ref component, false))
             return false;
 
-        if (IsEasySkill(skill))
+        switch (skill.GetKind())
         {
-            hasEasySkill = component.EasySkills.Contains(skill);
-            return true;
+            case SkillKind.Easy:
+                hasEasySkill = component.EasySkills.Contains(skill);
+                Log.Info($"наличие: {hasEasySkill}:");
+                return true;
+
+            case SkillKind.Basic:
+                level = component.BasicSkills.GetValueOrDefault(skill, SkillLevel.None);
+                Log.Info($"уровень: {level}:");
+                return true;
         }
 
-        level = component.BasicSkills.GetValueOrDefault(skill, SkillLevel.None);
-        return true;
-    }
-    /// <summary>
-    /// Возвращает true, если изученный навык является лёгким
-    /// Возвращает false, если изученный навык НЕ является лёгким
-    /// </summary>
-    public static bool IsEasySkill(SkillType skill)
-    {
-        return skill switch
-        {
-            SkillType.Piloting => true,
-            SkillType.MusInstruments => true,
-            SkillType.Botany => true,
-            SkillType.Bureaucracy => true,
-            SkillType.Research => true,
-            _ => false
-        };
+        return false;
     }
     #endregion
 }

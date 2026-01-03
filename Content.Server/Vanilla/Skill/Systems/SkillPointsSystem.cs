@@ -6,7 +6,6 @@ namespace Content.Server.Vanilla.Skill
 {
     public sealed class SkillPointsSetterSystem : EntitySystem
     {
-
         public override void Initialize()
         {
             base.Initialize();

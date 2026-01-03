@@ -50,7 +50,7 @@ public sealed class PlantHolderSystem : EntitySystem
     [Dependency] private readonly TagSystem _tagSystem = default!;
     [Dependency] private readonly RandomHelperSystem _randomHelper = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly RequiresSkillSystem _requiresSkillSystem = default!;
+    [Dependency] private readonly SharedSkillSystem _skill = default!;
     [Dependency] private readonly ItemSlotsSystem _itemSlots = default!;
     [Dependency] private readonly ISharedAdminLogManager _adminLogger = default!;
     [Dependency] private readonly SharedEntityEffectsSystem _entityEffects = default!;
@@ -274,9 +274,9 @@ public sealed class PlantHolderSystem : EntitySystem
             args.Handled = true;
 
             //Rayten-start
-            if (EntityManager.TryGetComponent<RequiresSkillComponent>(uid, out var RequiresSkillComponent))
+            if (TryComp<RequiresSkillComponent>(uid, out var requiresSkillComponent))
             {
-                if(!_requiresSkillSystem.HasRequiredSkills(args.User, RequiresSkillComponent))
+                if (!_skill.HasRequiredSkill(args.User, requiresSkillComponent))
                     return;
             }
             //Rayten-end

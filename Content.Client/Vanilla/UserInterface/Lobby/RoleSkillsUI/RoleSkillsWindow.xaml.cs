@@ -22,6 +22,9 @@ namespace Content.Client.Vanilla.UserInterface.Lobby.RoleSkillsUI;
 [GenerateTypedNameReferences]
 public sealed partial class RoleSkillsWindow : FancyWindow
 {
+    [Dependency] private readonly IEntitySystemManager _sysMan = default!;
+    private SharedSkillSystem? _skill;
+
     public event Action<RoleSkills>? OnSavePressed;
     private RoleSkills CurrentRoleSkills;
     private RoleSkillsPrototype _proto;
@@ -37,26 +40,28 @@ public sealed partial class RoleSkillsWindow : FancyWindow
         Profile = profile;
         _proto = proto;
         CurrentRoleSkills = roleSkills.Clone();
+        _skill ??= _sysMan.GetEntitySystem<SharedSkillSystem>();
 
-        RefreshInformation(collection);
-        ButtonSave.OnPressed += _ => OnSave(collection);
-        ButtonReset.OnPressed += _ => OnReset(collection);
-
+        RefreshInformation();
+        ButtonSave.OnPressed += _ => OnSave();
+        ButtonReset.OnPressed += _ => OnReset();
     }
-    private void OnSave(IDependencyCollection collection)
+
+    private void OnSave()
     {
         firstjoin = true;
         OnSavePressed?.Invoke(CurrentRoleSkills);
-        RefreshInformation(collection);
+        RefreshInformation();
     }
-    private void OnReset(IDependencyCollection collection)
+
+    private void OnReset()
     {
         CurrentRoleSkills.AddedBasicSkills = new();
         CurrentRoleSkills.AddedEasySkills = new();
-        RefreshInformation(collection);
+        RefreshInformation();
     }
 
-    private void RefreshInformation(IDependencyCollection collection)
+    private void RefreshInformation()
     {
         BasicSkillContainer.Children.Clear();
         EasySkillContainer.Children.Clear();
@@ -64,33 +69,34 @@ public sealed partial class RoleSkillsWindow : FancyWindow
         int skillpoints = SharedRoleSkillsSystem.skillpoints;
 
         //навыки
-        List<(skillType Skill, SkillLevel Level, int Experience)> generalbasicskills = new List<(skillType Skill, SkillLevel Level, int Experience)>
+        List<(SkillType Skill, SkillLevel Level, int Experience)> basicSkills = [];
+        List<(SkillType Skill, bool have, int Experience)> easySkills = [];
+        foreach (var skill in Enum.GetValues<SkillType>())
         {
-            (skillType.Weapon, SkillLevel.None, 0),
-            (skillType.Medicine, SkillLevel.None, 0),
-            (skillType.Engineering, SkillLevel.None, 0)
-        };
-        List<(skillType Skill, bool have, int Experience)> generaleasyskills = new List<(skillType Skill, bool have, int Experience)>
-        {
-            (skillType.Piloting, false, 0),
-            (skillType.Botany, false, 0),
-            (skillType.MusInstruments, false, 0),
-            (skillType.Bureaucracy, false, 0),
-            (skillType.Research, false, 0)
-        };
+            switch (skill.GetKind())
+            {
+                case SkillKind.Basic:
+                    basicSkills.Add((skill, SkillLevel.None, 0));
+                    break;
 
-        void ApplyBasicSkills(Dictionary<skillType, SkillLevel>? Skills)
+                case SkillKind.Easy:
+                    easySkills.Add((skill, false, 0));
+                    break;
+            }
+        }
+
+        void ApplyBasicSkills(Dictionary<SkillType, SkillLevel>? Skills)
         {
             if (Skills == null)
                 return;
 
             foreach (var (skill, level) in Skills)
             {
-                int index = generalbasicskills.FindIndex(s => s.Skill == skill);
+                int index = basicSkills.FindIndex(s => s.Skill == skill);
                 if (index == -1)
                     continue;
 
-                var current = generalbasicskills[index];
+                var current = basicSkills[index];
                 int currentLevel = (int)current.Level;
                 int addedLevel = (int)level;
                 int total = currentLevel + addedLevel;
@@ -109,22 +115,22 @@ public sealed partial class RoleSkillsWindow : FancyWindow
                 int delta = finalLevel - currentLevel;
                 skillpoints -= delta;
 
-                generalbasicskills[index] = (skill, newLevel, 0);
+                basicSkills[index] = (skill, newLevel, 0);
             }
         }
 
-        void ApplyEasySkills(HashSet<skillType>? Skills)
+        void ApplyEasySkills(HashSet<SkillType>? Skills)
         {
             if (Skills == null)
                 return;
 
             foreach (var skill in Skills)
             {
-                int index = generaleasyskills.FindIndex(s => s.Skill == skill);
+                int index = easySkills.FindIndex(s => s.Skill == skill);
                 if (index == -1)
                     continue;
 
-                var current = generaleasyskills[index];
+                var current = easySkills[index];
                 if (current.have)
                 {
                     skillpoints += 1;
@@ -132,7 +138,7 @@ public sealed partial class RoleSkillsWindow : FancyWindow
                 else
                 {
                     skillpoints -= 1;
-                    generaleasyskills[index] = (skill, true, 0);
+                    easySkills[index] = (skill, true, 0);
                 }
             }
         }
@@ -144,27 +150,27 @@ public sealed partial class RoleSkillsWindow : FancyWindow
         ApplyBasicSkills(_proto.BasicSkills);
 
         //Основные навыки
-        foreach (var (skillName, level, experience) in generalbasicskills)
+        foreach (var (skillName, level, experience) in basicSkills)
         {
             bool canBeModified = skillpoints > 0;
             var skillControl = new SkillControl(skillName, level, experience, canBeModified);
-            skillControl.OnPressed += () => AddSkill(skillName, collection);
+            skillControl.OnPressed += () => AddSkill(skillName);
 
             BasicSkillContainer.Children.Add(skillControl);
         }
         //Лёгкие навыки
-        foreach (var (skillName, have, experience) in generaleasyskills)
+        foreach (var (skillName, have, experience) in easySkills)
         {
-            var easyskillsControl = new EasyskillsControl(skillName, have, experience, skillpoints > 0 );
-            easyskillsControl.OnPressed += () => AddSkill(skillName, collection);
+            var easyskillsControl = new EasyskillsControl(skillName, have, experience, skillpoints > 0);
+            easyskillsControl.OnPressed += () => AddSkill(skillName);
 
             EasySkillContainer.Children.Add(easyskillsControl);
         }
         //Скиллпоинты
-        if (skillpoints>0)
+        if (skillpoints > 0)
         {
             var skillpointMessage = new FormattedMessage();
-            skillpointMessage.AddMarkupOrThrow(Loc.GetString("rolebackground-ui-SkillPoints", ("count", skillpoints) ));
+            skillpointMessage.AddMarkupOrThrow(Loc.GetString("rolebackground-ui-SkillPoints", ("count", skillpoints)));
             Skillpoints.SetMessage(skillpointMessage);
             Skillpoints.Visible = true;
         }
@@ -173,29 +179,30 @@ public sealed partial class RoleSkillsWindow : FancyWindow
         firstjoin = false;
     }
 
-    private void AddSkill(skillType skillName, IDependencyCollection collection)
+    private void AddSkill(SkillType skillName)
     {
-        if (SkillComponent.IsEasySkill(skillName))
+        switch (skillName.GetKind())
         {
-            if (!CurrentRoleSkills.AddedEasySkills.Contains(skillName))
-            {
-                CurrentRoleSkills.AddedEasySkills.Add(skillName);
-                RefreshInformation(collection);
-            }
-            return;
-        }
+            case SkillKind.Basic:
+                if (CurrentRoleSkills.AddedBasicSkills.TryGetValue(skillName, out var currentLevel))
+                {
+                    if ((int)currentLevel < (int)SkillLevel.Expert)
+                        CurrentRoleSkills.AddedBasicSkills[skillName] = currentLevel + 1;
+                }
+                else
+                {
+                    CurrentRoleSkills.AddedBasicSkills[skillName] = SkillLevel.Basic;
+                }
+                break;
 
-        if (CurrentRoleSkills.AddedBasicSkills.TryGetValue(skillName, out var currentLevel))
-        {
-            if ((int)currentLevel < (int)SkillLevel.Expert)
-                CurrentRoleSkills.AddedBasicSkills[skillName] = currentLevel + 1;
+            case SkillKind.Easy:
+                if (!CurrentRoleSkills.AddedEasySkills.Contains(skillName))
+                {
+                    CurrentRoleSkills.AddedEasySkills.Add(skillName);
+                }
+                break;
         }
-        else
-        {
-            CurrentRoleSkills.AddedBasicSkills[skillName] = SkillLevel.Basic;
-        }
-
-        RefreshInformation(collection);
+        RefreshInformation();
     }
 
     protected override DragMode GetDragModeFor(Vector2 relativeMousePos)

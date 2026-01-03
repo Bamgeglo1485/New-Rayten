@@ -17,7 +17,7 @@ public sealed partial class ImplanterSystem : SharedImplanterSystem
     [Dependency] private readonly PopupSystem _popup = default!;
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
     [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly RequiresSkillSystem _requiresSkillSystem = default!;
+    [Dependency] private readonly SharedSkillSystem _skill = default!;
 
     public override void Initialize()
     {
@@ -40,10 +40,10 @@ public sealed partial class ImplanterSystem : SharedImplanterSystem
         if (!CheckTarget(target, component.Whitelist, component.Blacklist))
             return;
         //Vanilla-Station-START
-        if (EntityManager.TryGetComponent<RequiresSkillComponent>(uid, out var RequiresSkillComponent))
+        if (TryComp<RequiresSkillComponent>(uid, out var requiresSkillComponent))
         {
-            if(!_requiresSkillSystem.HasRequiredSkills(args.User, RequiresSkillComponent))
-            return;
+            if (!_skill.HasRequiredSkill(args.User, requiresSkillComponent))
+                return;
         }
         //Vanilla-Sttion-END
         //TODO: Rework when surgery is in for implant cases
@@ -85,23 +85,23 @@ public sealed partial class ImplanterSystem : SharedImplanterSystem
     /// <param name="user">The entity using the implanter</param>
     /// <param name="target">The entity being implanted</param>
     /// <param name="implanter">The implanter being used</param>
-public void TryImplant(ImplanterComponent component, EntityUid user, EntityUid target, EntityUid implanter)
-{
-    var args = new DoAfterArgs(EntityManager, user, component.ImplantTime, new ImplantEvent(), implanter, target: target, used: implanter)
+    public void TryImplant(ImplanterComponent component, EntityUid user, EntityUid target, EntityUid implanter)
     {
-        BreakOnDamage = true,
-        BreakOnMove = true,
-        NeedHand = true,
-    };
+        var args = new DoAfterArgs(EntityManager, user, component.ImplantTime, new ImplantEvent(), implanter, target: target, used: implanter)
+        {
+            BreakOnDamage = true,
+            BreakOnMove = true,
+            NeedHand = true,
+        };
 
-    if (!_doAfter.TryStartDoAfter(args))
-        return;
+        if (!_doAfter.TryStartDoAfter(args))
+            return;
 
-    _popup.PopupEntity(Loc.GetString("injector-component-injecting-user"), target, user);
+        _popup.PopupEntity(Loc.GetString("injector-component-injecting-user"), target, user);
 
-    var userName = Identity.Entity(user, EntityManager);
-    _popup.PopupEntity(Loc.GetString("implanter-component-implanting-target", ("user", userName)), user, target, PopupType.LargeCaution);
-}
+        var userName = Identity.Entity(user, EntityManager);
+        _popup.PopupEntity(Loc.GetString("implanter-component-implanting-target", ("user", userName)), user, target, PopupType.LargeCaution);
+    }
 
 
     /// <summary>

@@ -1,7 +1,6 @@
 using Content.Server.Administration.Logs;
 using Content.Server.Popups;
 using Content.Server.Singularity.Events;
-using Content.Server.Vanilla.Skill; //vanilla-station
 using Content.Shared.Vanilla.Skill; //vanilla-station
 using Content.Shared.Construction.Components;
 using Content.Shared.Database;
@@ -26,7 +25,7 @@ public sealed class ContainmentFieldGeneratorSystem : EntitySystem
     [Dependency] private readonly SharedPointLightSystem _light = default!;
     [Dependency] private readonly SharedTransformSystem _transformSystem = default!;
     [Dependency] private readonly TagSystem _tags = default!;
-    [Dependency] private readonly RequiresSkillSystem _requiresSkillSystem = default!; //vanilla-station
+    [Dependency] private readonly SharedSkillSystem _skill = default!;
 
     public override void Initialize()
     {
@@ -100,8 +99,8 @@ public sealed class ContainmentFieldGeneratorSystem : EntitySystem
         if (TryComp(generator, out TransformComponent? transformComp) && transformComp.Anchored)
         {
             //vanilla-station-start
-            if (EntityManager.TryGetComponent<RequiresSkillComponent>(generator, out var RequiresSkillComp) && RequiresSkillComp != null)
-                if(!_requiresSkillSystem.HasRequiredSkills(args.User, RequiresSkillComp, true))
+            if (TryComp<RequiresSkillComponent>(generator, out var requiresSkillComp))
+                if (!_skill.HasRequiredSkill(args.User, requiresSkillComp))
                     return;
             //vanilla-station-end
             if (!generator.Comp.Enabled)
@@ -206,7 +205,7 @@ public sealed class ContainmentFieldGeneratorSystem : EntitySystem
         if (component.PowerBuffer >= component.PowerMinimum)
         {
             var directions = Enum.GetValues<Direction>().Length;
-            for (int i = 0; i < directions-1; i+=2)
+            for (int i = 0; i < directions - 1; i += 2)
             {
                 var dir = (Direction)i;
 
@@ -400,7 +399,7 @@ public sealed class ContainmentFieldGeneratorSystem : EntitySystem
     {
         _visualizer.SetData(generator, ContainmentFieldGeneratorVisuals.FieldLight, generator.Comp.Connections.Count switch
         {
-            >1 => FieldLevelVisuals.MultipleFields,
+            > 1 => FieldLevelVisuals.MultipleFields,
             1 => FieldLevelVisuals.OneField,
             _ => generator.Comp.Enabled ? FieldLevelVisuals.On : FieldLevelVisuals.NoLevel
         });

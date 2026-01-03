@@ -32,7 +32,7 @@ namespace Content.Server.Construction
         [Dependency] private readonly EntityLookupSystem _lookupSystem = default!;
         [Dependency] private readonly SharedTransformSystem _transformSystem = default!;
         [Dependency] private readonly EntityWhitelistSystem _whitelistSystem = default!;
-        [Dependency] private readonly RequiresSkillSystem _requiresSkillSystem = default!;
+        [Dependency] private readonly SharedSkillSystem _skill = default!;
         // --- WARNING! LEGACY CODE AHEAD! ---
         // This entire file contains the legacy code for initial construction.
         // This is bound to be replaced by a better alternative (probably using dummy entities)
@@ -67,7 +67,7 @@ namespace Content.Server.Construction
             {
                 while (containerSlotEnumerator.MoveNext(out var containerSlot))
                 {
-                    if(!containerSlot.ContainedEntity.HasValue)
+                    if (!containerSlot.ContainedEntity.HasValue)
                         continue;
 
                     if (TryComp(containerSlot.ContainedEntity.Value, out StorageComponent? storage))
@@ -318,7 +318,7 @@ namespace Content.Server.Construction
 
         private async void HandleStartItemConstruction(TryStartItemConstructionMessage ev, EntitySessionEventArgs args)
         {
-            if (args.SenderSession.AttachedEntity is {Valid: true} user)
+            if (args.SenderSession.AttachedEntity is { Valid: true } user)
                 await TryStartItemConstruction(ev.PrototypeName, user);
         }
 
@@ -345,12 +345,8 @@ namespace Content.Server.Construction
                 return false;
             }
             //vanilla-station-start
-            //Инженерия
-            if (!_requiresSkillSystem.HasSkillLevel(user, constructionPrototype.RequiresEngineeringLevel, skillComponent => skillComponent.EngineeringLevel))
-            {
-                _popup.PopupEntity(Loc.GetString("Skill-issue-message-engineering-unskilled", ("lvl", constructionPrototype.RequiresEngineeringLevel)), user, user);
+            if (!_skill.HasRequiredSkill(user, SkillType.Engineering, constructionPrototype.RequiresEngineeringLevel))
                 return false;
-            }
             //vanilla-station-end
             var startNode = constructionGraph.Nodes[constructionPrototype.StartNode];
             var targetNode = constructionGraph.Nodes[constructionPrototype.TargetNode];
@@ -425,7 +421,7 @@ namespace Content.Server.Construction
                 return;
             }
 
-            if (args.SenderSession.AttachedEntity is not {Valid: true} user)
+            if (args.SenderSession.AttachedEntity is not { Valid: true } user)
             {
                 Log.Error($"Client sent {nameof(TryStartStructureConstructionMessage)} with no attached entity!");
                 return;
@@ -443,11 +439,8 @@ namespace Content.Server.Construction
                 return;
             }
             //vanilla-station-start
-            if (!_requiresSkillSystem.HasSkillLevel(user, constructionPrototype.RequiresEngineeringLevel, skillComponent => skillComponent.EngineeringLevel))
-            {
-                _popup.PopupEntity(Loc.GetString("Skill-issue-message-engineering-unskilled", ("lvl", constructionPrototype.RequiresEngineeringLevel)), user, user);
+            if (!_skill.HasRequiredSkill(user, SkillType.Engineering, constructionPrototype.RequiresEngineeringLevel))
                 return;
-            }
             //vanilla-station-end
             var startNode = constructionGraph.Nodes[constructionPrototype.StartNode];
             var targetNode = constructionGraph.Nodes[constructionPrototype.TargetNode];
@@ -464,7 +457,7 @@ namespace Content.Server.Construction
             }
             else
             {
-                var newSet = new HashSet<int> {ev.Ack};
+                var newSet = new HashSet<int> { ev.Ack };
                 _beingBuilt[args.SenderSession] = newSet;
             }
 
@@ -505,12 +498,12 @@ namespace Content.Server.Construction
 
             var edge = startNode.GetEdge(pathFind[0].Name);
 
-            if(edge == null)
+            if (edge == null)
                 throw new InvalidDataException($"Can't find edge from starting node to the next node in pathfinding! Recipe: {ev.PrototypeName}");
 
             var valid = false;
 
-            if (_handsSystem.GetActiveItem((user, hands)) is not {Valid: true} holding)
+            if (_handsSystem.GetActiveItem((user, hands)) is not { Valid: true } holding)
             {
                 Cleanup();
                 return;
@@ -546,7 +539,7 @@ namespace Content.Server.Construction
                     edge,
                     targetNode,
                     GetCoordinates(ev.Location),
-                    constructionPrototype.CanRotate ? ev.Angle : Angle.Zero) is not {Valid: true} structure)
+                    constructionPrototype.CanRotate ? ev.Angle : Angle.Zero) is not { Valid: true } structure)
             {
                 Cleanup();
                 return;

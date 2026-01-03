@@ -16,6 +16,8 @@ namespace Content.Client.Vanilla.Bureaucracy
     {
         [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
         [Dependency] private readonly HandsSystem _handSystem = default!;
+        [Dependency] private readonly SharedSkillSystem _skill = default!;
+
         public override void Initialize()
         {
             base.Initialize();
@@ -31,7 +33,7 @@ namespace Content.Client.Vanilla.Bureaucracy
             if (args.Hands == null || args.Using == null || !args.CanAccess || !args.CanInteract)
                 return;
 
-            if(paper.StampedBy.Count > 0)
+            if (paper.StampedBy.Count > 0)
                 return;
 
             if (!PlayerHasPen(args.User))
@@ -63,7 +65,7 @@ namespace Content.Client.Vanilla.Bureaucracy
             }
             args.ExtraCategories.Add(VerbCategory.Bureaucracy);
 
-            if(_prototypeManager.TryIndex<BureaucracyDocumentPrototype>("BaseBuro", out var BaseBuro))
+            if (_prototypeManager.TryIndex<BureaucracyDocumentPrototype>("BaseBuro", out var BaseBuro))
             {
                 var baseVerb = new Verb
                 {
@@ -122,12 +124,8 @@ namespace Content.Client.Vanilla.Bureaucracy
         }
         private bool PlayerHasSkill(EntityUid user)
         {
-            if (!TryComp<SkillComponent>(user, out var skillcomp))
-                return false;
 
-            return skillcomp.Bureaucracy;
+            return _skill.HasRequiredSkill(user, SkillType.Bureaucracy, WithBeep: false);
         }
-
-
     }
 }

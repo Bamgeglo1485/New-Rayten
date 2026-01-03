@@ -17,7 +17,7 @@ public sealed partial class SkillControl : Control
     private int _lvl = 0;
     private Color _colorlvl = Color.FromHex("#8F969B");
 
-    public SkillControl(skillType SkillName, SkillLevel Level, int Experience, bool haveskillpoint)
+    public SkillControl(SkillType SkillName, SkillLevel Level, int Experience, bool haveskillpoint)
     {
         RobustXamlLoader.Load(this);
         ExpLabel.Visible = false;
@@ -55,7 +55,7 @@ public sealed partial class SkillControl : Control
         skillnamemessage.AddMarkupOrThrow(Loc.GetString("skill-system-UI-SkillNameLabel", ("skillname", SkillName.ToString())));
 
         var Lvlmessage = new FormattedMessage();
-        Lvlmessage.AddMarkupOrThrow(Loc.GetString( "skill-system-UI-Lvllabel", ("lvl", _lvl), ("color", _colorlvl), ("amnesia", "") ) );
+        Lvlmessage.AddMarkupOrThrow(Loc.GetString("skill-system-UI-Lvllabel", ("lvl", _lvl), ("color", _colorlvl), ("amnesia", "")));
 
         SkillNameLabel.SetMessage(skillnamemessage);
         LvlLabel.SetMessage(Lvlmessage);
@@ -65,16 +65,16 @@ public sealed partial class SkillControl : Control
         MainButton.ToolTip = Loc.GetString($"skill-system-UI-Tooltip-{SkillName.ToString()}");
 
     }
-    public void updateamnesia(skillType skill, int exptorestore)
+    public void updateamnesia(SkillType skill, int exptorestore)
     {
         ExpLabel.Visible = true;
         var Lvlmessage = new FormattedMessage();
         var Expmessage = new FormattedMessage();
-        Lvlmessage.AddMarkupOrThrow(Loc.GetString( "skill-system-UI-Lvllabel", ("lvl", _lvl), ("color", _colorlvl), ("amnesia", "(амнезия)") ) );
+        Lvlmessage.AddMarkupOrThrow(Loc.GetString("skill-system-UI-Lvllabel", ("lvl", _lvl), ("color", _colorlvl), ("amnesia", "(амнезия)")));
         LvlLabel.SetMessage(Lvlmessage);
 
         string restoreexp = $", ({exptorestore})";
-        Expmessage.AddMarkupOrThrow(Loc.GetString( "skill-system-UI-ExpLabel", ("exp", _exp), ("amnesia", restoreexp) ));
+        Expmessage.AddMarkupOrThrow(Loc.GetString("skill-system-UI-ExpLabel", ("exp", _exp), ("amnesia", restoreexp)));
         ExpLabel.SetMessage(Expmessage);
 
     }

@@ -1,18 +1,11 @@
-using Content.Shared.Popups;
 using Content.Shared.UserInterface;
 using Content.Shared.Interaction;
 using Content.Shared.Containers.ItemSlots;
-using Robust.Shared.Audio.Systems;
-using Robust.Shared.Timing;
 
 namespace Content.Shared.Vanilla.Skill;
 
-public sealed partial class SharedSkillSystem : EntitySystem
+public abstract partial class SharedSkillSystem : EntitySystem
 {
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-
     private void OnActivate(EntityUid uid, RequiresSkillComponent component, ref ActivatableUIOpenAttemptEvent args)
     {
         if (args.Cancelled)
@@ -67,51 +60,47 @@ public sealed partial class SharedSkillSystem : EntitySystem
         bool WithBeep = true,
         SkillComponent? component = null)
     {
-        if (!Resolve(uid, ref component))
+        if (!Resolve(uid, ref component, false))
             return false;
 
-        // BASIC skill
-        if (requiredLvl.HasValue)
+        if (!TryGetSkill(uid, skill, out var hasEasy, out var level, component))
+            return false;
+
+        switch (skill.GetKind())
         {
-            if (IsEasySkill(skill))
-            {
-                Log.Error($"Передан {skill}, который является лёгким навыком!");
-                return false;
-            }
+            case SkillKind.Easy:
+                if (hasEasy)
+                    return true;
+                break;
 
-            var lvl = component.BasicSkills.GetValueOrDefault(skill, SkillLevel.None);
-            if (lvl >= requiredLvl.Value)
-                return true;
+            case SkillKind.Basic:
+                if (requiredLvl is null)
+                {
+                    Log.Error($"Для основного навыка {skill} не указан requiredLvl");
+                    return false;
+                }
 
-            if (WithBeep)
-            {
-                _popup.PopupCursor(Loc.GetString("Skill-issue-message-basicskill-unskilled", ("skill", skill), ("lvl", (int)requiredLvl.Value)));
-                _audio.PlayLocal(component.UnSkillSound, uid, uid);
-            }
-            return false;
+                if (level >= requiredLvl.Value)
+                    return true;
+                break;
         }
-
-        // EASY skill
-        if (!IsEasySkill(skill))
-        {
-            Log.Error($"Передан {skill}, который не является лёгким навыком!");
-            return false;
-        }
-
-        if (component.EasySkills.Contains(skill))
-            return true;
 
         if (WithBeep)
         {
-            _popup.PopupCursor(Loc.GetString("Skill-issue-message-easyskill-unskilled", ("skill", skill)));
-            _audio.PlayLocal(component.UnSkillSound, uid, uid);
+            _popup.PopupCursor(Loc.GetString(
+                "Skill-issue-message-unskilled",
+                ("skill", skill.ToString())));
+
+            Audio.PlayLocal(component.UnSkillSound, uid, uid);
         }
+
         return false;
     }
 
+
     public bool HasRequiredSkill(EntityUid uid, RequiresSkillComponent reqcomp, bool WithBeep = true, SkillComponent? component = null)
     {
-        if (!Resolve(uid, ref component))
+        if (!Resolve(uid, ref component, false))
             return false;
 
         // Проверка basic-навыков

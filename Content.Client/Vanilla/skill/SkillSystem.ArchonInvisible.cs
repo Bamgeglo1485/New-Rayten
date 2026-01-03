@@ -4,18 +4,8 @@ using Robust.Client.GameObjects;
 
 namespace Content.Client.Vanilla.Skill;
 
-public sealed class SkillInvisibleSystem : SharedSkillInvisibleSystem
+public sealed partial class SkillSystem : SharedSkillSystem
 {
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
-    [Dependency] private readonly RequiresSkillSystem _reqskill = default!;
-
-    public override void Initialize()
-    {
-        base.Initialize();
-        SubscribeLocalEvent<SkillInvisibleComponent, AfterAutoHandleStateEvent>(OnHandleState);
-        SubscribeLocalEvent<SkillInvisibleComponent, ComponentShutdown>(OnShutdown);
-        SubscribeLocalEvent<SkillInvisibleComponent, ComponentStartup>(OnStartup);
-    }
 
     private void OnHandleState(EntityUid uid, SkillInvisibleComponent comp, ref AfterAutoHandleStateEvent args)
     {
@@ -35,6 +25,13 @@ public sealed class SkillInvisibleSystem : SharedSkillInvisibleSystem
         sprite.Visible = true;
     }
 
+    private void UpdateAllInvisibleArchons()
+    {
+        var query = EntityQueryEnumerator<SkillInvisibleComponent>();
+        while (query.MoveNext(out var ent, out var comp))
+            UpdateVisibility(ent, comp);
+    }
+
     public void UpdateVisibility(EntityUid uid, SkillInvisibleComponent? comp = null)
     {
         if (!Resolve(uid, ref comp))
@@ -43,7 +40,7 @@ public sealed class SkillInvisibleSystem : SharedSkillInvisibleSystem
         if (!TryComp<SpriteComponent>(uid, out var sprite))
             return;
 
-        var locEnt = _playerManager.LocalSession?.AttachedEntity;
+        var locEnt = _player.LocalSession?.AttachedEntity;
         if (locEnt == null)
             return;
 
@@ -52,13 +49,6 @@ public sealed class SkillInvisibleSystem : SharedSkillInvisibleSystem
             sprite.Visible = true;
             return;
         }
-
-        if (!TryComp<SkillComponent>(locEnt.Value, out var skill))
-        {
-            sprite.Visible = false;
-            return;
-        }
-
-        sprite.Visible = skill.Research;
+        sprite.Visible = HasRequiredSkill(locEnt.Value, SkillType.Research, WithBeep: false);
     }
 }

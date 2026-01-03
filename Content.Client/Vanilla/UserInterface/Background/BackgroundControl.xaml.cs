@@ -16,7 +16,7 @@ public sealed partial class BackgroundControl : Control
     private bool _notallowed;
     public Action? OnPressed;
     [Dependency] private readonly IPrototypeManager _prototype = default!;
-    public BackgroundControl(string name, string description, List<string>? SpecialDesc, Dictionary<skillType, SkillLevel> skills, HashSet<skillType> EasySkills, int skillpoints, bool notallowed, bool sponsorOnly)
+    public BackgroundControl(string name, string description, List<string>? SpecialDesc, Dictionary<SkillType, SkillLevel> skills, HashSet<SkillType> EasySkills, int skillpoints, bool notallowed, bool sponsorOnly)
     {
         IoCManager.InjectDependencies(this);
         RobustXamlLoader.Load(this);

@@ -30,6 +30,8 @@ namespace Content.Client.Construction.UI
         [Dependency] private readonly IUserInterfaceManager _uiManager = default!;
         [Dependency] private readonly IPlayerManager _playerManager = default!;
         [Dependency] private readonly IClientPreferencesManager _preferencesManager = default!;
+        private readonly SharedSkillSystem _skill;
+
         private readonly SpriteSystem _spriteSystem;
 
         private readonly IConstructionMenuView _constructionView;
@@ -90,7 +92,7 @@ namespace Content.Client.Construction.UI
             _constructionView = new ConstructionMenu();
             _whitelistSystem = _entManager.System<EntityWhitelistSystem>();
             _spriteSystem = _entManager.System<SpriteSystem>();
-
+            _skill = _entManager.System<SharedSkillSystem>();
             // This is required so that if we load after the system is initialized, we can bind to it immediately
             if (_systemManager.TryGetEntitySystem<ConstructionSystem>(out var constructionSystem))
                 SystemBindingChanged(constructionSystem);
@@ -368,12 +370,10 @@ namespace Content.Client.Construction.UI
 
             //Rayten-start
             bool craftable = true;
-            var playerEntity = _playerManager.LocalPlayer?.ControlledEntity;
-            if (playerEntity != null && _entManager.TryGetComponent<SkillComponent>(playerEntity, out var skillComp))
-                craftable = (skillComp.EngineeringLevel >= prototype.RequiresEngineeringLevel);
+            var playerEntity = _playerManager.LocalSession?.AttachedEntity;
+            if (playerEntity != null)
+                craftable = _skill.HasRequiredSkill(playerEntity.Value, SkillType.Engineering, prototype.RequiresEngineeringLevel);
             //Rayten-end
-
-
 
             if (!_constructionSystem.TryGetRecipePrototype(prototype.ID, out var targetProtoId))
                 return;
@@ -440,10 +440,10 @@ namespace Content.Client.Construction.UI
                 }
 
                 _placementManager.BeginPlacing(new PlacementInformation
-                    {
-                        IsTile = false,
-                        PlacementOption = _selected.PlacementMode
-                    },
+                {
+                    IsTile = false,
+                    PlacementOption = _selected.PlacementMode
+                },
                     new ConstructionPlacementHijack(_constructionSystem, _selected));
 
                 UpdateGhostPlacement();
@@ -468,10 +468,10 @@ namespace Content.Client.Construction.UI
             var constructSystem = _systemManager.GetEntitySystem<ConstructionSystem>();
 
             _placementManager.BeginPlacing(new PlacementInformation()
-                {
-                    IsTile = false,
-                    PlacementOption = _selected.PlacementMode,
-                },
+            {
+                IsTile = false,
+                PlacementOption = _selected.PlacementMode,
+            },
                 new ConstructionPlacementHijack(constructSystem, _selected));
 
             _constructionView.BuildButtonPressed = true;

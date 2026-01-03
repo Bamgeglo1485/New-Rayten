@@ -19,6 +19,8 @@ namespace Content.Client.Paper.UI
     [GenerateTypedNameReferences]
     public sealed partial class PaperWindow : BaseWindow
     {
+        private SharedSkillSystem? _skill;
+
         [Dependency] private readonly IInputManager _inputManager = default!;
         [Dependency] private readonly IResourceCache _resCache = default!;
         [Dependency] private readonly IPlayerManager _player = default!;
@@ -61,6 +63,7 @@ namespace Content.Client.Paper.UI
         {
             IoCManager.InjectDependencies(this);
             RobustXamlLoader.Load(this);
+            _skill ??= _entityManager.System<SharedSkillSystem>();
 
             // We can't configure the RichTextLabel contents from xaml, so do it here:
             BlankPaperIndicator.SetMessage(Loc.GetString("paper-ui-blank-page-message"), null, DefaultTextColor);
@@ -108,7 +111,7 @@ namespace Content.Client.Paper.UI
 
             // Initialize the background:
             PaperBackground.ModulateSelfOverride = visuals.BackgroundModulate;
-            var backgroundImage = visuals.BackgroundImagePath != null? _resCache.GetResource<TextureResource>(visuals.BackgroundImagePath) : null;
+            var backgroundImage = visuals.BackgroundImagePath != null ? _resCache.GetResource<TextureResource>(visuals.BackgroundImagePath) : null;
             if (backgroundImage != null)
             {
                 var backgroundImageMode = visuals.BackgroundImageTile ? StyleBoxTexture.StretchMode.Tile : StyleBoxTexture.StretchMode.Stretch;
@@ -143,7 +146,7 @@ namespace Content.Client.Paper.UI
                     visuals.HeaderMargin.Right, visuals.HeaderMargin.Bottom);
 
             // Then the footer
-            if (visuals.FooterImagePath is {} path)
+            if (visuals.FooterImagePath is { } path)
             {
                 FooterImage.TexturePath = path.ToString();
                 FooterImage.MinSize = FooterImage.TextureNormal?.Size ?? Vector2.Zero;
@@ -253,21 +256,13 @@ namespace Content.Client.Paper.UI
             EditButtons.Visible = isEditing;
 
             // Rayten-Start
-            string TEXT;
-            if(state.FakeText == null)
-                TEXT = state.Text;
-            else
-                TEXT = state.FakeText;
-
-            if (_player.LocalSession?.AttachedEntity is { } entity &&
-                _entityManager.TryGetComponent<SkillComponent>(entity, out var skillComp) &&
-                skillComp.Bureaucracy)
+            var TEXT = state.FakeText ?? state.Text;
+            var entity = _player.LocalSession?.AttachedEntity;
+            if (entity != null && _skill != null && _skill.HasRequiredSkill(entity.Value, SkillType.Bureaucracy, WithBeep: false))
             {
                 TEXT = state.Text;
             }
             // Rayten-End
-
-
 
             var msg = new FormattedMessage();
             msg.AddMarkupPermissive(TEXT);
@@ -297,9 +292,9 @@ namespace Content.Client.Paper.UI
 
             StampDisplay.RemoveAllChildren();
             StampDisplay.RemoveStamps();
-            foreach(var stamper in state.StampedBy)
+            foreach (var stamper in state.StampedBy)
             {
-                StampDisplay.AddStamp(new StampWidget{ StampInfo = stamper });
+                StampDisplay.AddStamp(new StampWidget { StampInfo = stamper });
             }
         }
 
@@ -332,7 +327,7 @@ namespace Content.Client.Paper.UI
                 mode |= DragMode.Right;
             }
 
-            if((mode & _allowedResizeModes) == DragMode.None)
+            if ((mode & _allowedResizeModes) == DragMode.None)
             {
                 return DragMode.Move;
             }

@@ -49,6 +49,8 @@ namespace Content.Server.Vanilla.Games.TTT;
 
 public sealed class TTTSystem : EntitySystem
 {
+
+    [Dependency] private readonly SharedSkillSystem _skill = default!;
     private static readonly string[] GUNS = new[]
     {
         "Musket", "WeaponPistolFlintlock", "WeaponLaserSvalinn", "WeaponDominator", "WeaponEnergyShotgun", "WeaponAssaultDominator", "MakeshiftShield",
@@ -134,7 +136,7 @@ public sealed class TTTSystem : EntitySystem
             KARMA[session] = 1000;
         }
 
-        else if (KARMA[session]<=0)
+        else if (KARMA[session] <= 0)
         {
             return;
         }
@@ -301,7 +303,7 @@ public sealed class TTTSystem : EntitySystem
                         if (!KARMA.TryGetValue(player, out var karma))
                             continue;
 
-                        if ( traitorsCount > 0 )
+                        if (traitorsCount > 0)
                         {
                             _implant.AddImplant(playerent, "TraitorShopImplant");
                             marker.Role = TTTRole.traitor;
@@ -318,11 +320,11 @@ public sealed class TTTSystem : EntitySystem
                                 false,
                                 player.Channel
                             );
-                            Dirty(playerent,marker);
+                            Dirty(playerent, marker);
                             continue;
                         }
 
-                        if ( deccount > 0 && karma > 700)
+                        if (deccount > 0 && karma > 700)
                         {
                             _implant.AddImplant(playerent, "DetectiveShopImplant");
                             marker.Role = TTTRole.detective;
@@ -339,7 +341,7 @@ public sealed class TTTSystem : EntitySystem
                                 false,
                                 player.Channel
                             );
-                            Dirty(playerent,marker);
+                            Dirty(playerent, marker);
                             continue;
                         }
 
@@ -356,7 +358,7 @@ public sealed class TTTSystem : EntitySystem
                             false,
                             player.Channel
                         );
-                        Dirty(playerent,marker);
+                        Dirty(playerent, marker);
                     }
                     rule.CurrentStatus = TTTStatus.RoundInProgress;
                     return;
@@ -585,13 +587,13 @@ public sealed class TTTSystem : EntitySystem
         marker.RuleLink = ruleEnt;
         marker.Session = session;
         marker.Name = session.Name;
-        Dirty(mobUid,marker);
+        Dirty(mobUid, marker);
 
         //Все видят детектива
         AddComp<ShowTTTDetectiveIconsComponent>(mobUid);
         //Добавляем навыки
         var skill = EnsureComp<SkillComponent>(mobUid);
-        skill.FuckSkills();
+        _skill.FuckSkills(mobUid, skill);
         //одеваем
         List<ProtoId<StartingGearPrototype>> gear = new()
         {

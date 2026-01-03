@@ -213,9 +213,8 @@ public sealed partial class ZombieSystem
             melee.Damage = zombiecomp.DamageOnBite;
 
             //Rayten-start
-            if (!TryComp<SkillComponent>(target, out var skill))
-                skill = EnsureComp<SkillComponent>(target);
-            skill.WeaponLevel = SkillLevel.Expert;
+            var skill = EnsureComp<SkillComponent>(target);
+            skill.BasicSkills[SkillType.Weapon] = SkillLevel.Expert;
 
             if (!TryComp<DangerMobComponent>(target, out var mobdanger))
                 mobdanger = EnsureComp<DangerMobComponent>(target);

@@ -16,6 +16,7 @@ public sealed class FuckSkillsCommand : IConsoleCommand
 {
     [Dependency] private readonly IAdminLogManager _adminLogger = default!;
     [Dependency] private readonly EntityManager _entityManager = default!;
+    private SharedSkillSystem? _skill;
 
     public string Command => "fuckskills";
     public string Description => "выдать всем полные навыки";
@@ -23,17 +24,10 @@ public sealed class FuckSkillsCommand : IConsoleCommand
 
     public void Execute(IConsoleShell shell, string argStr, string[] args)
     {
-        // Получаем все сущности под управлением игроков
-        var query = _entityManager.EntityQueryEnumerator<ActorComponent>();
-        while (query.MoveNext(out var uid, out _))
-        {
-            if (!_entityManager.TryGetComponent(uid, out SkillComponent? skillComp))
-                skillComp = _entityManager.AddComponent<SkillComponent>(uid);
-
-            skillComp.FuckSkills();
-            _entityManager.Dirty(uid, skillComp);
-        }
-
+        _skill = _entityManager.System<SharedSkillSystem>();
+        var query = _entityManager.EntityQueryEnumerator<ActorComponent, SkillComponent>();
+        while (query.MoveNext(out var uid, out _, out var skillcomp))
+            _skill.FuckSkills(uid, skillcomp);
 
         _adminLogger.Add(
             LogType.AdminMessage,

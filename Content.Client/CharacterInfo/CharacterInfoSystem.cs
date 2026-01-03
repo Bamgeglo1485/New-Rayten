@@ -31,9 +31,9 @@ public sealed class CharacterInfoSystem : EntitySystem
 
         RaiseNetworkEvent(new RequestCharacterInfoEvent(GetNetEntity(entity.Value)));
     }
-    public void SendSkillExperienceEvent(skillType skill)
+    public void SendSkillExperienceEvent(SkillType skill)
     {
-        RaiseNetworkEvent(new UseSkillPointEvent(skill));
+        RaisePredictiveEvent(new UseSkillPointEvent(skill));
     }
 
     private void OnCharacterInfoEvent(CharacterInfoEvent msg, EntitySessionEventArgs args)

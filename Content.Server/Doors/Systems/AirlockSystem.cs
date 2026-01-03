@@ -7,15 +7,12 @@ using Content.Shared.Interaction;
 using Content.Shared.Power;
 using Content.Shared.Wires;
 using Robust.Shared.Player;
-using Content.Shared.Vanilla.Skill;//vanilla-skill
-using Content.Server.Vanilla.Skill;//vanilla-skill
 
 namespace Content.Server.Doors.Systems;
 
 public sealed class AirlockSystem : SharedAirlockSystem
 {
     [Dependency] private readonly WiresSystem _wiresSystem = default!;
-    [Dependency] private readonly RequiresSkillSystem _requiresSkillSystem = default!;
 
     public override void Initialize()
     {
@@ -68,7 +65,7 @@ public sealed class AirlockSystem : SharedAirlockSystem
         //     if (TryComp<WiresPanelSecurityComponent>(uid, out var wiresPanelSecurity) &&
         //         !wiresPanelSecurity.WiresAccessible)
         //         return;
-                
+
         //     //Rayten-Start
         //     if (EntityManager.TryGetComponent<RequiresSkillComponent>(uid, out var requiresSkillComponent))
         //     {

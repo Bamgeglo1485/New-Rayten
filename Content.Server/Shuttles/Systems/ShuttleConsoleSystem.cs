@@ -30,7 +30,7 @@ namespace Content.Server.Shuttles.Systems;
 
 public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
 {
-    [Dependency] private readonly RequiresSkillSystem _requiresSkillSystem = default!;
+    [Dependency] private readonly SharedSkillSystem _skill = default!;
     [Dependency] private readonly SharedMapSystem _mapSystem = default!;
     [Dependency] private readonly ActionBlockerSystem _blocker = default!;
     [Dependency] private readonly AlertsSystem _alertsSystem = default!;
@@ -194,7 +194,8 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
                 return false;
         }
         //vanilla-station-skills-start
-        if (!TryComp<RequiresSkillComponent>(uid, out var requiresSkillComp) || !_requiresSkillSystem.HasRequiredSkills(user, requiresSkillComp, false))
+        if (TryComp<RequiresSkillComponent>(uid, out var requiresSkillComp)
+        && !_skill.HasRequiredSkill(user, requiresSkillComp, WithBeep: false))
             return false;
         //vanilla-station-skills-end
         AddPilot(uid, user, component);

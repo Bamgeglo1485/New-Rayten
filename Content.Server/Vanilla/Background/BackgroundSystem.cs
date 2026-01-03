@@ -17,7 +17,7 @@ namespace Content.Server.Vanilla.Background;
 
 public sealed class BackGroundSystem : EntitySystem
 {
-    [Dependency] private readonly SkillTrainerSystem _skillTrainer = default!;
+    [Dependency] private readonly SharedSkillSystem _skill = default!;
     [Dependency] private readonly IPrototypeManager _prototype = default!;
     [Dependency] private readonly AdminFrozenSystem _freeze = default!;
 
@@ -57,40 +57,21 @@ public sealed class BackGroundSystem : EntitySystem
             RemComp<SkillComponent>(uid);
             var skillComp = EnsureComp<SkillComponent>(uid);
 
-            ApplySkills(uid, skillComp, bgProto.Skills);
-            ApplyEasySkills(uid, skillComp, bgProto.EasySkills);
-            ApplySkillPoints(uid, skillComp, bgProto.SkillPoints);
+            skillComp.BasicSkills = bgProto.Skills;
+            skillComp.EasySkills = bgProto.EasySkills;
+            skillComp.SkillPoints = bgProto.SkillPoints;
             ApplySpecials(uid, bgProto.Specials);
 
             var backgroundcomp = EnsureComp<BackgroundComponent>(uid);
             backgroundcomp.GeneralBackground = msg.Background;
             Dirty(uid, backgroundcomp);
+            Dirty(uid, skillComp);
         }
         else
         {
             Log.Error($"Не удалось найти предысторию с ID {msg.Background}");
         }
     }
-    private void ApplySkillPoints(EntityUid uid, SkillComponent skillComp, int SkillPoints)
-    {
-        skillComp.SkillPoints += SkillPoints;
-    }
-
-    private void ApplySkills(EntityUid uid, SkillComponent skillComp, Dictionary<skillType, SkillLevel> Skills)
-    {
-        foreach (var (skillType, level) in Skills)
-        {
-            _skillTrainer.SetSkillLevel(skillComp, skillType, level);
-        }
-    }
-    private void ApplyEasySkills(EntityUid uid, SkillComponent skillComp, HashSet<skillType> EasySkills)
-    {
-        foreach (var skillType in EasySkills)
-        {
-            _skillTrainer.SetEasySkill(skillComp, skillType);
-        }
-    }
-
     private void ApplySpecials(EntityUid uid, List<BackgroundSpecial> Specials)
     {
         foreach (var Special in Specials)

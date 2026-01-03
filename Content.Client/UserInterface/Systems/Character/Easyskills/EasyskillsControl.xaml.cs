@@ -15,7 +15,7 @@ public sealed partial class EasyskillsControl : Control
     private int _exp = 0;
     public Action? OnPressed;
 
-    public EasyskillsControl(skillType SkillName, bool have, int exp, bool haveskillpoint)
+    public EasyskillsControl(SkillType SkillName, bool have, int exp, bool haveskillpoint)
     {
         RobustXamlLoader.Load(this);
         var resCache = IoCManager.Resolve<IResourceCache>();
@@ -26,7 +26,7 @@ public sealed partial class EasyskillsControl : Control
 
         skillnamemessage.AddMarkupOrThrow(Loc.GetString("skill-system-UI-SkillNameLabel", ("skillname", SkillName.ToString())));
 
-        if(have)
+        if (have)
         {
             iconlvl = resCache.GetResource<TextureResource>("/Textures/Vanilla/Interface/SkillLvlIcons/EasySkillYes.png");
             skillinfomessage.AddMarkupOrThrow(Loc.GetString("skill-system-UI-Easy-SkillInfoLabel-Have"));
@@ -42,22 +42,22 @@ public sealed partial class EasyskillsControl : Control
 
         MainButton.Disabled = !haveskillpoint || have;
         MainButton.OnPressed += _ => OnPressed?.Invoke();
-        AmnesiaLabel.Visible= false;
+        AmnesiaLabel.Visible = false;
         MainButton.ToolTip = Loc.GetString($"skill-system-UI-Tooltip-{SkillName.ToString()}");
     }
 
-    public void updateamnesia(skillType skill, int exptorestore)
+    public void updateamnesia(SkillType skill, int exptorestore)
     {
         var resCache = IoCManager.Resolve<IResourceCache>();
         var Amnesiamessage = new FormattedMessage();
 
 
-        Amnesiamessage.AddMarkupOrThrow(Loc.GetString("skill-system-UI-Easy-AmnesiaLabel", ("exptorestore", exptorestore) ));
+        Amnesiamessage.AddMarkupOrThrow(Loc.GetString("skill-system-UI-Easy-AmnesiaLabel", ("exptorestore", exptorestore)));
         var iconlvl = resCache.GetResource<TextureResource>("/Textures/Vanilla/Interface/SkillLvlIcons/EasySkillAmnesia.png");
 
 
         AmnesiaLabel.SetMessage(Amnesiamessage);
         SkillTexture.Texture = iconlvl;
-        AmnesiaLabel.Visible= true;
+        AmnesiaLabel.Visible = true;
     }
 }

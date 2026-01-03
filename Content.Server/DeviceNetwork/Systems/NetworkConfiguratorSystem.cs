@@ -39,7 +39,7 @@ public sealed class NetworkConfiguratorSystem : SharedNetworkConfiguratorSystem
     [Dependency] private readonly SharedAppearanceSystem _appearanceSystem = default!;
     [Dependency] private readonly IGameTiming _gameTiming = default!;
     [Dependency] private readonly IAdminLogManager _adminLogger = default!;
-    [Dependency] private readonly RequiresSkillSystem _requiresSkillSystem = default!; //vanilla-station
+    [Dependency] private readonly SharedSkillSystem _skill = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -341,8 +341,8 @@ public sealed class NetworkConfiguratorSystem : SharedNetworkConfiguratorSystem
 
         DetermineMode(uid, configurator, target, user);
         //vanilla-station-start
-        if (EntityManager.TryGetComponent<RequiresSkillComponent>(uid, out var RequiresSkillComp) && RequiresSkillComp != null)
-            if(!_requiresSkillSystem.HasRequiredSkills(user, RequiresSkillComp, true))
+        if (TryComp<RequiresSkillComponent>(uid, out var RequiresSkillComp))
+            if (!_skill.HasRequiredSkill(user, RequiresSkillComp))
                 return;
         //vanilla-station-end
         if (configurator.LinkModeActive)

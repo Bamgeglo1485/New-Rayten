@@ -3,7 +3,7 @@ using Content.Shared.Weapons.Melee.Events;
 using Content.Shared.FixedPoint;
 namespace Content.Shared.Vanilla.Skill;
 
-public sealed partial class SharedSkillSystem : EntitySystem
+public abstract partial class SharedSkillSystem : EntitySystem
 {
     private void OnMeleeDamage(Entity<MeleeWeaponComponent> entity, ref GetMeleeDamageEvent args)
     {
