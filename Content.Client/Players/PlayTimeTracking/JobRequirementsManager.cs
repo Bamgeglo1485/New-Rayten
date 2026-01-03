@@ -12,7 +12,6 @@ using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
-using Content.Shared.Vanilla.RoleSkills;
 
 namespace Content.Client.Players.PlayTimeTracking;
 
@@ -152,16 +151,6 @@ public sealed class JobRequirementsManager : ISharedPlaytimeManager
         var reqs = _entManager.System<SharedRoleSystem>().GetRoleRequirements(job);
         if (!CheckRoleRequirements(reqs, profile, out reason))
             return false;
-        //Rayten-Start
-        if (!_prototypes.TryIndex<RoleSkillsPrototype>(SharedRoleSkillsSystem.GetJobPrototype(job.ID), out var roleSkillsProto))
-            return true;
-
-        if (profile == null || !profile.RoleSkills.TryGetValue(SharedRoleSkillsSystem.GetJobPrototype(job.ID), out var roleSkills) || !roleSkills.IsValid)
-        {
-            reason = FormattedMessage.FromUnformatted("Не выбраны навыки");
-            return false;
-        }
-        //Rayten-end
         return true;
     }
 

@@ -859,7 +859,7 @@ public abstract partial class SharedSolutionContainerSystem : EntitySystem
                 .ToHexNoAlpha(); //TODO: If the chem has a dark color, the examine text becomes black on a black background, which is unreadable.
 
             //vanilla-station-start
-            if (_skill.HasRequiredSkill(args.Examiner, SkillType.Medicine, SkillLevel.Advanced, false))
+            if (_skill.HasRequiredSkill(args.Examiner, SkillType.Medicine, SkillLevel.Advanced, WithBeep: false))
             {
                 args.PushMarkup(Loc.GetString(entity.Comp.LocPhysicalQuality,
                                             ("color", colorHex),
@@ -886,7 +886,7 @@ public abstract partial class SharedSolutionContainerSystem : EntitySystem
                 {
                     //vanilla-station
                     //Человек с 3 медициной распознаёт абсолютно всё
-                    if (!_skill.HasRequiredSkill(args.Examiner, SkillType.Medicine, SkillLevel.Expert, false))
+                    if (!_skill.HasRequiredSkill(args.Examiner, SkillType.Medicine, SkillLevel.Expert, WithBeep: false))
                         continue;
                 }
 

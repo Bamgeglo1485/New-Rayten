@@ -23,50 +23,26 @@ public sealed class RoleSkillsSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<IsRoleAllowedEvent>(OnIsRoleAllowed);
     }
-    private void OnIsRoleAllowed(ref IsRoleAllowedEvent ev)
+
+    public void ApplyRoleSkills(EntityUid uid, RoleSkills? roleSkills, string? protoId)
     {
-        var prefManager = IoCManager.Resolve<IServerPreferencesManager>();
-        var prefs = prefManager.GetPreferences(ev.Player.UserId);
-
-        var profile = prefs.SelectedCharacter as HumanoidCharacterProfile;
-        if (profile == null)
-            return;
-
-        // Если в ивенте нет конкретных профессий, ничего не проверяем
-        if (ev.Jobs == null || ev.Jobs.Count == 0)
-            return;
-
-        foreach (var jobId in ev.Jobs)
+        var skillComp = EnsureComp<SkillComponent>(uid);
+        //навыки не выбраны, задаем дефолтные
+        if (roleSkills == null || !roleSkills.IsValid)
         {
-            if (!_prototype.TryIndex<JobPrototype>(jobId, out var jobProto))
-                continue;
+            //у должности нет айди
+            if (protoId == null)
+                return;
 
-            var jobProtoId = SharedRoleSkillsSystem.GetJobPrototype(jobProto.ID);
-
+            var jobProtoId = SharedRoleSkillsSystem.GetJobPrototype(protoId);
             if (!_prototype.TryIndex<RoleSkillsPrototype>(jobProtoId, out var roleSkillsProto))
-                continue;
-
-            if (!profile.RoleSkills.TryGetValue(jobProtoId, out var roleSkills))
-            {
-                ev.Cancelled = true;
                 return;
-            }
-
-            if (!roleSkills.IsValid)
-            {
-                ev.Cancelled = true;
-                return;
-            }
-        }
-    }
-
-
-    public void ApplyRoleSkills(EntityUid uid, RoleSkills? roleSkills)
-    {
-        if (roleSkills == null)
+            skillComp.BasicSkills = roleSkillsProto.DefaultBasicSkills;
+            skillComp.EasySkills = roleSkillsProto.DefaultEasySkills;
             return;
+        }
+
 
         //итоговые навыки
         Dictionary<SkillType, SkillLevel> generalbasicskills = new()
@@ -76,11 +52,6 @@ public sealed class RoleSkillsSystem : EntitySystem
             { SkillType.Engineering, SkillLevel.None }
         };
         HashSet<SkillType> generaleasyskills = [];
-
-        //обнуляем навык
-        RemComp<SkillComponent>(uid);
-        var skillComp = EnsureComp<SkillComponent>(uid);
-
         //Складываем навыки и особенности с предысторий
         if (_prototype.TryIndex(roleSkills.Role, out var roleskills))
         {

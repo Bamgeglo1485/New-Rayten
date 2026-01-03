@@ -75,6 +75,7 @@ public abstract partial class SharedSkillSystem : EntitySystem
 
         Dirty(uid, component);
         Dirty(uid, skill);
+        UpdateAllSystems(uid, skill);
     }
 
     private void OnMobStateChanged(EntityUid uid, SkillComponent component, MobStateChangedEvent ev)

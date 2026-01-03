@@ -29,8 +29,8 @@ public sealed partial class SkillSystem : SharedSkillSystem
             return;
 
         RaiseLocalEvent(new UpdateSkillUiEvent());
-        UpdateAllSystems(uid, component);
     }
+
     public override void UpdateAllSystems(EntityUid uid, SkillComponent component)
     {
         UpdateAllChem();

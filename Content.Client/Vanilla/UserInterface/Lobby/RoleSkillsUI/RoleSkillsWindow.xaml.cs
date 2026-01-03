@@ -66,9 +66,8 @@ public sealed partial class RoleSkillsWindow : FancyWindow
         BasicSkillContainer.Children.Clear();
         EasySkillContainer.Children.Clear();
         Skillpoints.Visible = false;
-        int skillpoints = SharedRoleSkillsSystem.skillpoints;
-
         //навыки
+        int skillpoints = _proto.SkillPoints;
         List<(SkillType Skill, SkillLevel Level, int Experience)> basicSkills = [];
         List<(SkillType Skill, bool have, int Experience)> easySkills = [];
         foreach (var skill in Enum.GetValues<SkillType>())
@@ -142,7 +141,6 @@ public sealed partial class RoleSkillsWindow : FancyWindow
                 }
             }
         }
-
         // Собираем в кучу обязательные навыки роли и выбор игрока
         ApplyBasicSkills(CurrentRoleSkills.AddedBasicSkills);
         ApplyEasySkills(CurrentRoleSkills.AddedEasySkills);

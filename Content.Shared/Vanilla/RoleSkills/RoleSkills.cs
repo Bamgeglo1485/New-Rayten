@@ -51,31 +51,28 @@ public sealed partial class RoleSkills : IEquatable<RoleSkills>
     public void EnsureValid(HumanoidCharacterProfile profile, ICommonSession session, IDependencyCollection collection)
     {
         var protoManager = collection.Resolve<IPrototypeManager>();
-        var skillpoints = SharedRoleSkillsSystem.skillpoints;
-
-        List<(SkillType Skill, SkillLevel Level, int Experience)> generalbasicskills = new List<(SkillType Skill, SkillLevel Level, int Experience)>
+        List<(SkillType Skill, SkillLevel Level, int Experience)> basicSkills = [];
+        List<(SkillType Skill, bool have, int Experience)> easySkills = [];
+        foreach (var skill in Enum.GetValues<SkillType>())
         {
-            (SkillType.Weapon, SkillLevel.None, 0),
-            (SkillType.Medicine, SkillLevel.None, 0),
-            (SkillType.Engineering, SkillLevel.None, 0)
-        };
+            switch (skill.GetKind())
+            {
+                case SkillKind.Basic:
+                    basicSkills.Add((skill, SkillLevel.None, 0));
+                    break;
 
-        List<(SkillType Skill, bool have, int Experience)> generaleasyskills = new List<(SkillType Skill, bool have, int Experience)>
-        {
-            (SkillType.Piloting, false, 0),
-            (SkillType.Botany, false, 0),
-            (SkillType.MusInstruments, false, 0),
-            (SkillType.Bureaucracy, false, 0),
-            (SkillType.Research, false, 0)
-        };
-
+                case SkillKind.Easy:
+                    easySkills.Add((skill, false, 0));
+                    break;
+            }
+        }
         // 1. Проверка, что прототип навыксета существует
         if (!protoManager.TryIndex(Role, out RoleSkillsPrototype? roleProto))
         {
             SetDefault(profile);
             return;
         }
-
+        var skillpoints = roleProto.SkillPoints;
         // 2. Проверка на навыки
         void ApplyBasicSkills(Dictionary<SkillType, SkillLevel>? Skills)
         {
@@ -84,11 +81,11 @@ public sealed partial class RoleSkills : IEquatable<RoleSkills>
 
             foreach (var (skill, level) in Skills)
             {
-                int index = generalbasicskills.FindIndex(s => s.Skill == skill);
+                int index = basicSkills.FindIndex(s => s.Skill == skill);
                 if (index == -1)
                     continue;
 
-                var current = generalbasicskills[index];
+                var current = basicSkills[index];
                 int currentLevel = (int)current.Level;
                 int addedLevel = (int)level;
                 int total = currentLevel + addedLevel;
@@ -105,7 +102,7 @@ public sealed partial class RoleSkills : IEquatable<RoleSkills>
                 int delta = finalLevel - currentLevel;
                 skillpoints -= delta;
 
-                generalbasicskills[index] = (skill, newLevel, 0);
+                basicSkills[index] = (skill, newLevel, 0);
             }
         }
         void ApplyEasySkills(HashSet<SkillType>? Skills)
@@ -115,11 +112,11 @@ public sealed partial class RoleSkills : IEquatable<RoleSkills>
 
             foreach (var skill in Skills)
             {
-                int index = generaleasyskills.FindIndex(s => s.Skill == skill);
+                int index = easySkills.FindIndex(s => s.Skill == skill);
                 if (index == -1)
                     continue;
 
-                var current = generaleasyskills[index];
+                var current = easySkills[index];
                 if (current.have)
                 {
                     skillpoints += 1;
@@ -127,7 +124,7 @@ public sealed partial class RoleSkills : IEquatable<RoleSkills>
                 else
                 {
                     skillpoints -= 1;
-                    generaleasyskills[index] = (skill, true, 0);
+                    easySkills[index] = (skill, true, 0);
                 }
             }
         }

@@ -162,7 +162,7 @@ public sealed class SolutionContainerVisualsSystem : VisualizerSystem<SolutionCo
             var playerEntity = _player.LocalPlayer?.ControlledEntity;
             if (playerEntity != null)
             {
-                if (!_skill.HasRequiredSkill(playerEntity.Value, SkillType.Medicine, SkillLevel.Advanced))
+                if (!_skill.HasRequiredSkill(playerEntity.Value, SkillType.Medicine, SkillLevel.Advanced, WithBeep: false))
                     color = fakeChem.FakeColor;
             }
         }

@@ -72,7 +72,7 @@ public sealed partial class LabelSystem : EntitySystem
         if (TryComp<RequiresSkillComponent>(ent, out var component))
         {
             var lvl = component.BasicSkills.GetValueOrDefault(SkillType.Medicine, SkillLevel.None);
-            if (!_skill.HasRequiredSkill(args.Examiner, SkillType.Medicine, lvl, false))
+            if (!_skill.HasRequiredSkill(args.Examiner, SkillType.Medicine, lvl, WithBeep: false))
                 return;
         }
         //Rayten-END

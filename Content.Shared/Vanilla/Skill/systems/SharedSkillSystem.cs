@@ -167,7 +167,6 @@ public abstract partial class SharedSkillSystem : EntitySystem
         out SkillLevel level,
         SkillComponent? component = null)
     {
-        Log.Info($"попытка получить навык {skill} у {uid}");
         hasEasySkill = false;
         level = SkillLevel.None;
 
@@ -178,12 +177,10 @@ public abstract partial class SharedSkillSystem : EntitySystem
         {
             case SkillKind.Easy:
                 hasEasySkill = component.EasySkills.Contains(skill);
-                Log.Info($"наличие: {hasEasySkill}:");
                 return true;
 
             case SkillKind.Basic:
                 level = component.BasicSkills.GetValueOrDefault(skill, SkillLevel.None);
-                Log.Info($"уровень: {level}:");
                 return true;
         }
 

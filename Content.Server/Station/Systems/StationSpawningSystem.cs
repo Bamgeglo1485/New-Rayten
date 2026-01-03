@@ -168,7 +168,7 @@ public sealed class StationSpawningSystem : SharedStationSpawningSystem
         //Rayten-start
         RoleSkills? roleSkills = null;
         profile?.RoleSkills.TryGetValue(SharedRoleSkillsSystem.GetJobPrototype(prototype?.ID), out roleSkills);
-        _rolesys.ApplyRoleSkills(entity.Value, roleSkills);
+        _rolesys.ApplyRoleSkills(entity.Value, roleSkills, prototype?.ID);
         //Rayten-end
         return entity.Value;
     }
