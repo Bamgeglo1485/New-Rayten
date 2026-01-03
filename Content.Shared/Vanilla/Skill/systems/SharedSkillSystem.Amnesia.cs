@@ -110,7 +110,6 @@ public abstract partial class SharedSkillSystem : EntitySystem
         }
         amnesia.Exptorestore -= ExpPerSecond;
         AddExperience((user, skill), amnesia.Skilltype, ExpPerSecond);
-        Dirty(user, amnesia);
     }
 
 
