@@ -12,7 +12,7 @@ Skill-issue-message-unskilled = Требуется навык { $skill ->
 shared-solution-container-component-on-examine-main-text-skill-issue = { "" }
 construction-menu-skill-engineering = [color=#ff6600]Требуется { $lvl } ур. инженерии[/color]
 skill-system-UI-SkillNameLabel = [color=#EFBF04]{ $skillname ->
-        [Weapon] Бой
+        [Weapon] Оружие
         [Medicine] Медицина
         [Engineering] Инженерия
         [Piloting] Пилотирование

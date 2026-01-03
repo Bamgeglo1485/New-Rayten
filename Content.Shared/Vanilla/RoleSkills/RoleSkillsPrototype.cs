@@ -15,4 +15,7 @@ public sealed partial class RoleSkillsPrototype : IPrototype
 
     [DataField]
     public HashSet<SkillType> EasySkills = [];
+
+    [DataField]
+    public int SkillPoints = 8;
 }
