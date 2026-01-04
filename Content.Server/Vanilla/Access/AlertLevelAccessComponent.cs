@@ -1,23 +1,13 @@
 using Content.Shared.Access;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared.Vanilla.Access.AlertLevelAccess;
+namespace Content.Server.Vanilla.Access.AlertLevelAccess;
 
 [RegisterComponent]
 public sealed partial class AlertLevelAccessComponent : Component
 {
     [DataField]
     public string ResetOnLevel = "green";
-
-    [DataField]
-    public float ScanRange = 14.0f;
-    [DataField]
-    public float CheckDelay = 0.5f;
-    public float Timer;
-
-    [DataField]
-    public bool AddedByCode = false;
-
 
     [DataField]
     public HashSet<ProtoId<AccessLevelPrototype>> Blue = new();
@@ -85,6 +75,6 @@ public sealed partial class AlertLevelAccessComponent : Component
         "Chapel",
         "Lawyer"
     };
-    [DataField]
-    public HashSet<ProtoId<AccessLevelPrototype>> AddedAccess = new();
+    [ViewVariables]
+    public HashSet<ProtoId<AccessLevelPrototype>> AddedAccess = [];
 }
