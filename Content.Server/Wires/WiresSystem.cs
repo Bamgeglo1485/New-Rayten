@@ -18,7 +18,7 @@ using Robust.Server.GameObjects;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
-using Content.Shared.Vanilla.Skill;//vanilla-skill
+using Content.Shared.Vanilla.Skill;
 using Robust.Shared.Audio.Systems;
 
 namespace Content.Server.Wires;
@@ -452,11 +452,9 @@ public sealed class WiresSystem : SharedWiresSystem
         {
             TryComp(args.User, out ActorComponent? actor);
             //Rayten-Start
-            //туду разный уровень
-            if (!_skill.HasRequiredSkill(args.User, SkillType.Engineering, SkillLevel.Basic))
+            if (!_skill.HasRequiredSkill(args.User, SkillType.Engineering, component.RequiresSkillLevel))
                 return;
             //Rayten-END
-
 
             if (actor != null)
             {

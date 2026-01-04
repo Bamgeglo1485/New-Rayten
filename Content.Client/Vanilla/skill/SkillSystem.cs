@@ -36,6 +36,7 @@ public sealed partial class SkillSystem : SharedSkillSystem
         UpdateAllChem();
         UpdateAllInvisibleArchons();
         UpdateGun(uid, component);
+        RaiseLocalEvent(new UpdateSkillUiEvent());
     }
 
     private void OnStartup(EntityUid uid, SkillComponent component, ComponentStartup args)
