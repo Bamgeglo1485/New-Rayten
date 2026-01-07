@@ -59,6 +59,10 @@ internal sealed partial class ChatManager : IChatManager
     [Dependency] private readonly ISharedPlayerManager _player = default!;
     [Dependency] private readonly DiscordChatLink _discordLink = default!;
     [Dependency] private readonly SharedSponsorManager _sponsorsManager = default!;
+    [Dependency] private readonly ILogManager _logManager = default!;
+
+    private ISawmill _sawmill = default!;
+
     /// <summary>
     /// The maximum length a player-sent message can be sent
     /// </summary>
@@ -76,6 +80,8 @@ internal sealed partial class ChatManager : IChatManager
 
         _configurationManager.OnValueChanged(CCVars.OocEnabled, OnOocEnabledChanged, true);
         _configurationManager.OnValueChanged(CCVars.AdminOocEnabled, OnAdminOocEnabledChanged, true);
+
+        _sawmill = _logManager.GetSawmill("SERVER");
 
         RegisterRateLimits();
     }
@@ -124,7 +130,7 @@ internal sealed partial class ChatManager : IChatManager
     {
         var wrappedMessage = Loc.GetString("chat-manager-server-wrap-message", ("message", FormattedMessage.EscapeText(message)));
         ChatMessageToAll(ChatChannel.Server, message, wrappedMessage, EntityUid.Invalid, hideChat: false, recordReplay: true, colorOverride: colorOverride);
-        Logger.InfoS("SERVER", message);
+        _sawmill.Info(message);
 
         _adminLogger.Add(LogType.Chat, LogImpact.Low, $"Server announcement: {message}");
     }

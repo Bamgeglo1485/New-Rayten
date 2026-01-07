@@ -2,7 +2,7 @@ using Robust.Shared.GameStates;
 
 namespace Content.Shared.Vanilla.Skill;
 
-[RegisterComponent, AutoGenerateComponentState]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class UnskilledWeaponComponent : Component
 {
     [DataField("MinAnglePenalty"), AutoNetworkedField]

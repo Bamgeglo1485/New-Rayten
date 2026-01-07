@@ -31,8 +31,10 @@ namespace Content.Client.Construction.UI
         [Dependency] private readonly IPlayerManager _playerManager = default!;
         [Dependency] private readonly IClientPreferencesManager _preferencesManager = default!;
         private readonly SharedSkillSystem _skill;
+        [Dependency] private readonly ILogManager _logManager = default!;
 
         private readonly SpriteSystem _spriteSystem;
+        private readonly ISawmill _sawmill;
 
         private readonly IConstructionMenuView _constructionView;
         private readonly EntityWhitelistSystem _whitelistSystem;
@@ -93,6 +95,8 @@ namespace Content.Client.Construction.UI
             _whitelistSystem = _entManager.System<EntityWhitelistSystem>();
             _spriteSystem = _entManager.System<SpriteSystem>();
             _skill = _entManager.System<SharedSkillSystem>();
+            _sawmill = _logManager.GetSawmill("construction.ui");
+
             // This is required so that if we load after the system is initialized, we can bind to it immediately
             if (_systemManager.TryGetEntitySystem<ConstructionSystem>(out var constructionSystem))
                 SystemBindingChanged(constructionSystem);
@@ -286,7 +290,7 @@ namespace Content.Client.Construction.UI
 
                 if (!_constructionSystem!.TryGetRecipePrototype(recipe.ID, out var targetProtoId))
                 {
-                    Logger.Error("Cannot find the target prototype in the recipe cache with the id \"{0}\" of {1}.",
+                    _sawmill.Error("Cannot find the target prototype in the recipe cache with the id \"{0}\" of {1}.",
                         recipe.ID,
                         nameof(ConstructionPrototype));
                     continue;

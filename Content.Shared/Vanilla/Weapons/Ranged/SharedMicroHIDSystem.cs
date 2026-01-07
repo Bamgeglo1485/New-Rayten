@@ -12,7 +12,7 @@ namespace Content.Shared.Vanilla.Weapons.Ranged;
 public abstract class SharedMicroHIDSystem : EntitySystem
 {
     [Dependency] protected readonly IGameTiming Timing = default!;
-    [Dependency] protected readonly PredictedBatterySystem Battery = default!;
+    [Dependency] protected readonly SharedBatterySystem Battery = default!;
     [Dependency] private readonly SharedHandsSystem _hands = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly SharedStaminaSystem _stamina = default!;
@@ -72,7 +72,7 @@ public abstract class SharedMicroHIDSystem : EntitySystem
 
     private void OnShoot(WeaponChargeShootRequestEvent msg, EntitySessionEventArgs args)
     {
-        if (args.SenderSession.AttachedEntity is not {} user)
+        if (args.SenderSession.AttachedEntity is not { } user)
             return;
 
         if (!TryGetChargedWeapon(user, out var weaponUid, out var chargedcomp) || weaponUid != GetEntity(msg.Weapon))
@@ -81,7 +81,7 @@ public abstract class SharedMicroHIDSystem : EntitySystem
         //1. наступило ли время
         if (!chargedcomp.IsShooting || Timing.CurTime < chargedcomp.NextShootAt)
             return;
-        chargedcomp.NextShootAt = Timing.CurTime + TimeSpan.FromSeconds(1f/chargedcomp.FireRate);
+        chargedcomp.NextShootAt = Timing.CurTime + TimeSpan.FromSeconds(1f / chargedcomp.FireRate);
 
         if (Battery.TryUseCharge(weaponUid, chargedcomp.EnergyPerShoot))
         {
@@ -104,7 +104,7 @@ public abstract class SharedMicroHIDSystem : EntitySystem
 
     private void OnChargeStateChange(WeaponChargeEvent msg, EntitySessionEventArgs args)
     {
-        if (args.SenderSession.AttachedEntity is not {} user)
+        if (args.SenderSession.AttachedEntity is not { } user)
             return;
 
         if (!TryGetChargedWeapon(user, out var weaponUid, out var chargedcomp)

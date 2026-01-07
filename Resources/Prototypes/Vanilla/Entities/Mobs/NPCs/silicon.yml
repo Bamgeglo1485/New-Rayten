@@ -87,10 +87,10 @@
   - type: BatteryAmmoProvider
     proto: DominatorLethalShot
     fireCost: 125
-  - type: PredictedBattery
+  - type: Battery
     maxCharge: 2000
     startingCharge: 2000
-  - type: PredictedBatterySelfRecharger
+  - type: BatterySelfRecharger
     autoRechargeRate: 5
   - type: Construction
     graph: MobSecuritronGraph

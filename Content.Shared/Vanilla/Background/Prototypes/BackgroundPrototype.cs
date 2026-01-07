@@ -6,10 +6,10 @@ using Content.Shared.Vanilla.Skill;
 namespace Content.Shared.Vanilla.Background;
 
 [Serializable, Prototype("Background")]
-public sealed class BackgroundPrototype : IPrototype
+public sealed partial class BackgroundPrototype : IPrototype
 {
     [IdDataField]
-    public string ID { get; } = default!;
+    public string ID { get; private set; } = default!;
 
     [DataField("name")]
     public string Name { get; set; } = "Неизвестная предыстория";

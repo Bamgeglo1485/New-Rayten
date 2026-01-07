@@ -33,7 +33,6 @@ public sealed class LowPopSystem : EntitySystem
                 if (TryComp<BatteryComponent>(uid, out var battery))
                 {
                     var recharger = EnsureComp<BatterySelfRechargerComponent>(uid);
-                    recharger.AutoRecharge = true;
                     recharger.AutoRechargeRate = battery.MaxCharge;
                 }
             }

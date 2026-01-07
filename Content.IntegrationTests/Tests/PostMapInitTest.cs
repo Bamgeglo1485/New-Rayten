@@ -97,7 +97,6 @@ namespace Content.IntegrationTests.Tests
             "Dev",
             "TestTeg",
             "Fland",
-            "Packed",
             "Cluster",
             "Bagel",
             "CentComm",

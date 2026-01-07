@@ -2,7 +2,6 @@ using Content.Server.Fax;
 using Content.Server.GameTicking.Events;
 using Content.Server.Station.Components;
 using Content.Server.Station.Systems;
-using Content.Server.Corvax.StationGoal;
 using Content.Server.Cargo.Components;
 using Content.Server.Cargo.Systems;
 using Content.Server.Chat.Systems;
@@ -52,8 +51,8 @@ public sealed class DepartmentGoalSystem : EntitySystem
         goalsByDepartment = goalsByDepartment.OrderBy(_ => _random.Next()).ToList();
 
         // Перебираем все станции с компонентом StationGoalComponent
-        var query = EntityQueryEnumerator<StationDataComponent, StationGoalComponent>();
-        while (query.MoveNext(out var stationUid, out _, out _))
+        var query = EntityQueryEnumerator<StationDataComponent>();
+        while (query.MoveNext(out var stationUid, out _))
         {
             // Локальный список для хранения выбранных целей для текущей станции
             var departmentGoals = new List<DepartmentGoalPrototype>();
@@ -173,6 +172,6 @@ public sealed class DepartmentGoalSystem : EntitySystem
         _chatSystem.DispatchGlobalAnnouncement(Loc.GetString("Department-goal-text", ("dep", dep.ToString()), ("rand", randomValue)),
                                                 Loc.GetString("Department-goal-title"));
     }
-#endregion
+    #endregion
 
 }

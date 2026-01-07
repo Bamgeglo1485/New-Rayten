@@ -1,4 +1,5 @@
 using Content.Server.Body.Components;
+using Content.Server.Temperature.Components;
 using Content.Shared.Vanilla.Archon.Research;
 using Content.Shared.Vanilla.Archon.WithManyVoices;
 using Content.Shared.Bed.Sleep;
@@ -24,9 +25,9 @@ public sealed class WithManyVoicesSystem : SharedWithManyVoicesSystem
 
     private void OnTempChange(EntityUid uid, WithManyVoicesComponent comp, OnTemperatureChangeEvent args)
     {
-        float idealTemp;
+        float? idealTemp;
 
-        if (!TryComp<TemperatureComponent>(uid, out var temperature))
+        if (!TryComp<ContainerTemperatureComponent>(uid, out var temperature))
             return;
 
         if (TryComp<ThermalRegulatorComponent>(uid, out var regulator) &&
