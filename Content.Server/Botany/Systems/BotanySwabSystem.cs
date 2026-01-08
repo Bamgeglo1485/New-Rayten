@@ -50,7 +50,7 @@ public sealed class BotanySwabSystem : EntitySystem
         //Rayten-start
         if (TryComp<RequiresSkillComponent>(args.Target, out var requiresSkillComponent))
         {
-            if (!_skill.HasRequiredSkill(args.User, requiresSkillComponent))
+            if (!_skill.HasRequiredSkill(args.User, requiresSkillComponent, WithBeep: true, ServerOnly: true))
                 return;
         }
         //Rayten-end

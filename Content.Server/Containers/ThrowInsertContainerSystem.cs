@@ -41,7 +41,7 @@ public sealed class ThrowInsertContainerSystem : EntitySystem
         //Rayten-start
         if (args.Component.Thrower != null)
         {
-            if (!_skill.HasRequiredSkill(args.Component.Thrower.Value, SkillType.Weapon, SkillLevel.Expert))
+            if (!_skill.HasRequiredSkill(args.Component.Thrower.Value, SkillType.Weapon, SkillLevel.Expert, WithBeep: false))
             {
                 if (!_random.Prob(ent.Comp.Probability))
                 {

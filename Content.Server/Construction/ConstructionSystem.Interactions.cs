@@ -289,7 +289,8 @@ namespace Content.Server.Construction
 
                         if (TryComp<RequiresSkillComponent>(uid, out var requiresSkillComponent) && user != null)
                         {
-                            if (!_skill.HasRequiredSkill(user.Value, requiresSkillComponent))
+                            var lvl = requiresSkillComponent.BasicSkills.GetValueOrDefault(SkillType.Engineering, SkillLevel.None);
+                            if (!_skill.HasRequiredSkill(user.Value, SkillType.Engineering, lvl, WithBeep: true, ServerOnly: true))
                                 return HandleResult.False;
                         }
 
@@ -373,7 +374,8 @@ namespace Content.Server.Construction
 
                         if (TryComp<RequiresSkillComponent>(uid, out var requiresSkillComponent) && user != null)
                         {
-                            if (!_skill.HasRequiredSkill(user.Value, requiresSkillComponent))
+                            var lvl = requiresSkillComponent.BasicSkills.GetValueOrDefault(SkillType.Engineering, SkillLevel.None);
+                            if (!_skill.HasRequiredSkill(user.Value, SkillType.Engineering, lvl, WithBeep: true, ServerOnly: true))
                                 return HandleResult.False;
                         }
 

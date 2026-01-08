@@ -1,7 +1,7 @@
 using Content.Server.Administration.Logs;
 using Content.Server.Popups;
 using Content.Server.Singularity.Events;
-using Content.Shared.Vanilla.Skill; //vanilla-station
+using Content.Shared.Vanilla.Skill;
 using Content.Shared.Construction.Components;
 using Content.Shared.Database;
 using Content.Shared.Examine;
@@ -100,7 +100,7 @@ public sealed class ContainmentFieldGeneratorSystem : EntitySystem
         {
             //vanilla-station-start
             if (TryComp<RequiresSkillComponent>(generator, out var requiresSkillComp))
-                if (!_skill.HasRequiredSkill(args.User, requiresSkillComp))
+                if (!_skill.HasRequiredSkill(args.User, requiresSkillComp, WithBeep: true, ServerOnly: true))
                     return;
             //vanilla-station-end
             if (!generator.Comp.Enabled)

@@ -66,14 +66,6 @@ public sealed class AirlockSystem : SharedAirlockSystem
         //         !wiresPanelSecurity.WiresAccessible)
         //         return;
 
-        //     //Rayten-Start
-        //     if (EntityManager.TryGetComponent<RequiresSkillComponent>(uid, out var requiresSkillComponent))
-        //     {
-        //         if(!_requiresSkillSystem.HasRequiredSkills(args.User, requiresSkillComponent, false))
-        //             return;
-        //     }
-        //     //Rayten-END
-
         //     _wiresSystem.OpenUserInterface(uid, actor.PlayerSession);
         //     args.Handled = true;
         //     return;

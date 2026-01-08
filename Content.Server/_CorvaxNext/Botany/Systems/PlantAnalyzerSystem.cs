@@ -10,7 +10,6 @@ using Robust.Shared.Prototypes;
 using System.Linq;
 using System.Text;
 using Content.Shared.Atmos;
-using Content.Server.Vanilla.Skill;
 using Content.Shared.Vanilla.Skill;
 
 namespace Content.Server.Botany.Systems; // This is how it supposed to be
@@ -42,7 +41,7 @@ public sealed class PlantAnalyzerSystem : EntitySystem
         //Rayten-start
         if (TryComp<RequiresSkillComponent>(ent, out var requiresSkillComponent))
         {
-            if (!_skill.HasRequiredSkill(args.User, requiresSkillComponent))
+            if (!_skill.HasRequiredSkill(args.User, requiresSkillComponent, WithBeep: true, ServerOnly: true))
                 return;
         }
         //Rayten-end

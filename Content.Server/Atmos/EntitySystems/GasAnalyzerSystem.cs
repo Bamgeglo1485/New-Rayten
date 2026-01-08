@@ -60,7 +60,7 @@ public sealed class GasAnalyzerSystem : EntitySystem
     {
         //vanilla-station-start
         if (EntityManager.TryGetComponent<RequiresSkillComponent>(entity, out var requiresSkillComp))
-            if (!_skill.HasRequiredSkill(args.User, requiresSkillComp))
+            if (!_skill.HasRequiredSkill(args.User, requiresSkillComp, WithBeep: true, ServerOnly: true))
                 return;
         //vanilla-station-end
         var target = args.Target;

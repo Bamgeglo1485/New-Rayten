@@ -20,6 +20,7 @@ using Content.Shared.Verbs;
 using Content.Shared.Weapons.Melee.Events;
 using Content.Shared.Inventory;
 using Content.Shared.Clothing.Components;
+using Content.Shared.Vanilla.Skill;
 using JetBrains.Annotations;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Prototypes;
@@ -45,6 +46,7 @@ public sealed partial class InjectorSystem : EntitySystem
     [Dependency] private readonly StandingStateSystem _standingState = default!;
     [Dependency] private readonly UseDelaySystem _useDelay = default!;
     [Dependency] private readonly InventorySystem _invSystem = default!;
+    [Dependency] private readonly SharedSkillSystem _skill = default!;
     public override void Initialize()
     {
         SubscribeLocalEvent<InjectorComponent, UseInHandEvent>(OnInjectorUse);
@@ -496,6 +498,8 @@ public sealed partial class InjectorSystem : EntitySystem
             _popup.PopupPredicted(userMessage, otherMessage, target, user);
             return true;
         }
+        if (!_skill.HasRequiredSkill(user, SkillType.Medicine, SkillLevel.Advanced))
+            return true;
         //rayten-end
         // Get transfer amount. It may be smaller than _transferAmount if not enough room
         var plannedTransferAmount = FixedPoint2.Min(injector.Comp.CurrentTransferAmount ?? injectorSolution.Volume, injectorSolution.Volume);
@@ -596,6 +600,8 @@ public sealed partial class InjectorSystem : EntitySystem
             _popup.PopupPredicted(userMessage, otherMessage, target, user);
             return true;
         }
+        if (!_skill.HasRequiredSkill(user, SkillType.Medicine, SkillLevel.Advanced))
+            return true;
         //rayten-end
         // We have some snowflaked behavior for streams.
         if (target.Comp != null)

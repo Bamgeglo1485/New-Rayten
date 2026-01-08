@@ -452,7 +452,7 @@ public sealed class WiresSystem : SharedWiresSystem
         {
             TryComp(args.User, out ActorComponent? actor);
             //Rayten-Start
-            if (!_skill.HasRequiredSkill(args.User, SkillType.Engineering, component.RequiresSkillLevel))
+            if (!_skill.HasRequiredSkill(args.User, SkillType.Engineering, component.RequiresSkillLevel, WithBeep: true, ServerOnly: true))
                 return;
             //Rayten-END
 

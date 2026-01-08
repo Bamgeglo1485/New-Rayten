@@ -266,7 +266,7 @@ public sealed class AirAlarmSystem : EntitySystem
         }
         //vanilla-station-start
         if (TryComp<RequiresSkillComponent>(uid, out var requiresSkillComp))
-            if (!_skill.HasRequiredSkill(args.User, requiresSkillComp))
+            if (!_skill.HasRequiredSkill(args.User, requiresSkillComp, WithBeep: true, ServerOnly: true))
                 return;
         //vanilla-station-end
 

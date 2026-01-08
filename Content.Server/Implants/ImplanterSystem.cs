@@ -7,8 +7,7 @@ using Content.Shared.Implants.Components;
 using Content.Shared.Interaction;
 using Content.Shared.Popups;
 using Robust.Shared.Containers;
-using Content.Shared.Vanilla.Skill;//vanilla-skill
-using Content.Server.Vanilla.Skill;//vanilla-skill
+using Content.Shared.Vanilla.Skill;
 
 namespace Content.Server.Implants;
 
@@ -42,7 +41,7 @@ public sealed partial class ImplanterSystem : SharedImplanterSystem
         //Vanilla-Station-START
         if (TryComp<RequiresSkillComponent>(uid, out var requiresSkillComponent))
         {
-            if (!_skill.HasRequiredSkill(args.User, requiresSkillComponent))
+            if (!_skill.HasRequiredSkill(args.User, requiresSkillComponent, WithBeep: true, ServerOnly: true))
                 return;
         }
         //Vanilla-Sttion-END

@@ -53,12 +53,8 @@ public abstract partial class SharedSkillSystem : EntitySystem
         args.Cancelled = true;
     }
 
-    public bool HasRequiredSkill(
-        EntityUid uid,
-        SkillType skill,
-        SkillLevel? requiredLvl = null,
-        bool WithBeep = true,
-        SkillComponent? component = null)
+
+    public bool HasRequiredSkill(EntityUid uid, SkillType skill, SkillLevel? requiredLvl = null, bool WithBeep = true, SkillComponent? component = null, bool ServerOnly = false)
     {
         if (!Resolve(uid, ref component, false))
             return false;
@@ -84,21 +80,25 @@ public abstract partial class SharedSkillSystem : EntitySystem
                     return true;
                 break;
         }
-
+        if (ServerOnly)
+        {
+            if (WithBeep)
+            {
+                _popup.PopupEntity(Loc.GetString("Skill-issue-message-unskilled", ("skill", skill.ToString())), uid, uid);
+                Audio.PlayGlobal(component.UnSkillSound, uid);
+            }
+            return false;
+        }
         if (WithBeep)
         {
-            _popup.PopupCursor(Loc.GetString(
-                "Skill-issue-message-unskilled",
-                ("skill", skill.ToString())));
-
+            _popup.PopupCursor(Loc.GetString("Skill-issue-message-unskilled", ("skill", skill.ToString())));
             Audio.PlayLocal(component.UnSkillSound, uid, uid);
         }
+        //else
 
         return false;
     }
-
-
-    public bool HasRequiredSkill(EntityUid uid, RequiresSkillComponent reqcomp, bool WithBeep = true, SkillComponent? component = null)
+    public bool HasRequiredSkill(EntityUid uid, RequiresSkillComponent reqcomp, bool WithBeep = true, SkillComponent? component = null, bool ServerOnly = false)
     {
         if (!Resolve(uid, ref component, false))
             return false;
@@ -106,14 +106,14 @@ public abstract partial class SharedSkillSystem : EntitySystem
         // Проверка basic-навыков
         foreach (var (skill, requiredLevel) in reqcomp.BasicSkills)
         {
-            if (!HasRequiredSkill(uid, skill, requiredLevel, WithBeep, component))
+            if (!HasRequiredSkill(uid, skill, requiredLevel, WithBeep, component, ServerOnly))
                 return false;
         }
 
         // Проверка easy-навыков
         foreach (var skill in reqcomp.EasySkills)
         {
-            if (!HasRequiredSkill(uid, skill, null, WithBeep, component))
+            if (!HasRequiredSkill(uid, skill, null, WithBeep, component, ServerOnly))
                 return false;
         }
 

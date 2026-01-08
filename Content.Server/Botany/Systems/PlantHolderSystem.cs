@@ -23,7 +23,6 @@ using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
-using Content.Server.Vanilla.Skill;
 using Content.Shared.Vanilla.Skill;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Chemistry.Reaction;
@@ -276,7 +275,7 @@ public sealed class PlantHolderSystem : EntitySystem
             //Rayten-start
             if (TryComp<RequiresSkillComponent>(uid, out var requiresSkillComponent))
             {
-                if (!_skill.HasRequiredSkill(args.User, requiresSkillComponent))
+                if (!_skill.HasRequiredSkill(args.User, requiresSkillComponent, WithBeep: true, ServerOnly: true))
                     return;
             }
             //Rayten-end

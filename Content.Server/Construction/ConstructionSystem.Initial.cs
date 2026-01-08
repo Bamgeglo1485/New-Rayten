@@ -20,7 +20,6 @@ using Robust.Shared.Map;
 using Robust.Shared.Player;
 using Robust.Shared.Timing;
 using Content.Shared.Vanilla.Skill;
-using Content.Server.Vanilla.Skill;
 namespace Content.Server.Construction
 {
     public sealed partial class ConstructionSystem
@@ -439,7 +438,7 @@ namespace Content.Server.Construction
                 return;
             }
             //vanilla-station-start
-            if (!_skill.HasRequiredSkill(user, SkillType.Engineering, constructionPrototype.RequiresEngineeringLevel))
+            if (!_skill.HasRequiredSkill(user, SkillType.Engineering, constructionPrototype.RequiresEngineeringLevel, WithBeep: true, ServerOnly: true))
                 return;
             //vanilla-station-end
             var startNode = constructionGraph.Nodes[constructionPrototype.StartNode];

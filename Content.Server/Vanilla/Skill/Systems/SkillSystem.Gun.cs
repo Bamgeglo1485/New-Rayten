@@ -53,7 +53,7 @@ public sealed partial class SkillSystem : SharedSkillSystem
         if (!TryComp<SkillComponent>(headshoter, out var skillcomp))
             return;
 
-        if (!HasRequiredSkill(headshoter, SkillType.Weapon, SkillLevel.Expert, false, skillcomp))
+        if (!HasRequiredSkill(headshoter, SkillType.Weapon, SkillLevel.Expert, WithBeep: false, skillcomp))
             return;
 
         if (!_Random.Prob(HEADSHOTCHANCE))

@@ -342,7 +342,7 @@ public sealed class NetworkConfiguratorSystem : SharedNetworkConfiguratorSystem
         DetermineMode(uid, configurator, target, user);
         //vanilla-station-start
         if (TryComp<RequiresSkillComponent>(uid, out var RequiresSkillComp))
-            if (!_skill.HasRequiredSkill(user, RequiresSkillComp))
+            if (!_skill.HasRequiredSkill(user, RequiresSkillComp, WithBeep: true, ServerOnly: true))
                 return;
         //vanilla-station-end
         if (configurator.LinkModeActive)

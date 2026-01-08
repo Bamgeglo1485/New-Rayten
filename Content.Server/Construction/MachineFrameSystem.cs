@@ -6,6 +6,7 @@ using Content.Shared.Interaction;
 using Content.Shared.Stacks;
 using Content.Shared.Tag;
 using Content.Shared.Popups;
+using Content.Shared.Vanilla.Skill;
 using Robust.Shared.Containers;
 using Robust.Shared.Prototypes;
 
@@ -18,7 +19,7 @@ public sealed class MachineFrameSystem : EntitySystem
     [Dependency] private readonly StackSystem _stack = default!;
     [Dependency] private readonly ConstructionSystem _construction = default!;
     [Dependency] private readonly SharedPopupSystem _popupSystem = default!;
-
+    [Dependency] private readonly SharedSkillSystem _skill = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -50,7 +51,10 @@ public sealed class MachineFrameSystem : EntitySystem
     {
         if (args.Handled)
             return;
-
+        //vanilla-station-start
+        if (!_skill.HasRequiredSkill(args.User, SkillType.Engineering, SkillLevel.Advanced, WithBeep: true, ServerOnly: true))
+            return;
+        //vanilla-station-end
         if (!component.HasBoard)
         {
             if (TryInsertBoard(uid, args.Used, component))
