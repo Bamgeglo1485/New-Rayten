@@ -21832,7 +21832,6 @@ entities:
             1514: -59,-43
             1515: -59,-43
             1516: -58,-42
-            1517: -58,-41
             1518: -58,-41
             1519: -58,-43
             1664: -57,-26
@@ -32740,7 +32739,6 @@ entities:
             1514: -21,36
             1515: -21,37
             1516: -21,38
-            1517: -22,37
             1518: -22,36
             1519: -23,36
             1520: -23,38
@@ -44890,13 +44888,6 @@ entities:
     - type: Transform
       pos: -16.528536,-73.33123
       parent: 2
-  - uid: 1517
-    components:
-    - type: Transform
-      parent: 1516
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
 - proto: BigBox
   entities:
   - uid: 1526
