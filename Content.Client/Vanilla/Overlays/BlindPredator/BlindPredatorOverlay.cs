@@ -1,6 +1,5 @@
 
-using Content.Shared.Mobs.Components;
-using Content.Shared.Mobs;
+using Content.Shared.Vanilla.Archon.BlindPredator;
 using Robust.Client.GameObjects;
 using Robust.Shared.Enums;
 using Robust.Client.Graphics;
@@ -9,15 +8,13 @@ using Robust.Shared.Map;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 
-namespace Content.Client.Vanilla.Overlays.ThermalVision;
+namespace Content.Client.Vanilla.Overlays.BlindPredator;
 
-public sealed class ThermalVisionOverlay : Overlay
+public sealed class BlindPredatorOverlay : Overlay
 {
     [Dependency] protected readonly IEntityManager Entity = default!;
     [Dependency] protected readonly IPlayerManager PlayerManager = default!;
 
-    /// <summary> Defines radius in which you can see entities in containers </summary>
-    protected float ShowCloseRadius;
     protected float ShowRadius;
 
     private readonly EntityLookupSystem _entityLookup;
@@ -25,7 +22,7 @@ public sealed class ThermalVisionOverlay : Overlay
 
     public override OverlaySpace Space => OverlaySpace.WorldSpace;
 
-    public ThermalVisionOverlay(float showRadius)
+    public BlindPredatorOverlay(float showRadius)
     {
         IoCManager.InjectDependencies(this);
         _entityLookup = Entity.System<EntityLookupSystem>();
@@ -37,21 +34,21 @@ public sealed class ThermalVisionOverlay : Overlay
     {
         if (PlayerManager.LocalEntity == null)
             return;
-
-        if (!Entity.TryGetComponent<TransformComponent>(PlayerManager.LocalEntity, out var playerTransform))
+        var user = PlayerManager.LocalEntity.Value;
+        if (!Entity.TryGetComponent<TransformComponent>(user, out var playerTransform))
             return;
 
         var handle = args.WorldHandle;
         var eye = args.Viewport.Eye;
         var eyeRot = eye?.Rotation ?? default;
 
-        var entities = _entityLookup.GetEntitiesInRange<MobStateComponent>(playerTransform.Coordinates, ShowRadius);
-        foreach (var (uid, stateComp) in entities)
+        var entities = _entityLookup.GetEntitiesInRange<PredatorVisibleMarkComponent>(playerTransform.Coordinates, ShowRadius);
+        foreach (var (uid, comp) in entities)
         {
             if (CantBeRendered(uid, out var sprite, out var xform))
                 continue;
 
-            if (CantBeSeen((uid, stateComp)))
+            if (!CanBeSeen(user, comp))
                 continue;
 
             Render((uid, sprite, xform), eye?.Position.MapId, handle, eyeRot);
@@ -69,25 +66,17 @@ public sealed class ThermalVisionOverlay : Overlay
         var rotation = _transformSystem.GetWorldRotation(xform);
 
         var oldColor = sprite.Color;
-        sprite.Color = Color.Orange;
+        sprite.Color = Color.Red;
         sprite.Render(handle, eyeRot, rotation, position: position);
         sprite.Color = oldColor;
     }
-    /// <summary>
-    ///  Если сущность мертва или какая-та паранольмальная (не может умереть, не может быть живой) - то true
-    /// </summary>
-    private bool CantBeSeen(Entity<MobStateComponent> target)
+
+    private bool CanBeSeen(EntityUid user, PredatorVisibleMarkComponent comp)
     {
-        var states = target.Comp.AllowedStates;
-
-        if (target.Comp.CurrentState == MobState.Dead)
-            return true;
-
-        if (states.Contains(MobState.Dead) &&
-            states.Contains(MobState.Alive))
+        if (!comp.Predators.TryGetValue(user, out var val))
             return false;
 
-        return true;
+        return val;
     }
 
     private bool CantBeRendered(EntityUid target, [NotNullWhen(false)] out SpriteComponent? sprite,

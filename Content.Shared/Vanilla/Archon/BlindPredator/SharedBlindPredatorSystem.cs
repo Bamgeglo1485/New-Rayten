@@ -1,8 +1,12 @@
 using Content.Shared.Damage.Systems;
+using Content.Shared.Mobs.Systems;
+using Content.Shared.Mobs;
+using System.Linq;
 namespace Content.Shared.Vanilla.Archon.BlindPredator;
 
 public abstract class SharedBlindPredatorSystem : EntitySystem
 {
+    [Dependency] protected readonly MobStateSystem MobStateSys = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -11,6 +15,16 @@ public abstract class SharedBlindPredatorSystem : EntitySystem
         SubscribeLocalEvent<BlindPredatorComponent, DamageChangedEvent>(OnDamageChanged);
         SubscribeLocalEvent<PredatorVisibleMarkComponent, ComponentStartup>(OnVictimStartup);
         SubscribeLocalEvent<PredatorVisibleMarkComponent, BeforeDamageChangedEvent>(OnBeforeDamageChanged);
+        SubscribeLocalEvent<PredatorVisibleMarkComponent, MobStateChangedEvent>(OnMobStateChanged);
+    }
+
+    private void OnMobStateChanged(EntityUid uid, PredatorVisibleMarkComponent component, MobStateChangedEvent ev)
+    {
+        if (ev.NewMobState == MobState.Alive)
+            return;
+
+        foreach (var predator in component.Predators.Keys.ToArray())
+            SetVisibility(predator, uid, false, component);
     }
 
     private void OnDamageChanged(EntityUid uid, BlindPredatorComponent component, DamageChangedEvent args)
@@ -62,6 +76,9 @@ public abstract class SharedBlindPredatorSystem : EntitySystem
     {
         if (!Resolve(victim, ref comp))
             return;
+
+        if (MobStateSys.IsIncapacitated(victim))
+            visible = false;
 
         if (comp.Predators.TryGetValue(predator, out var val) && val == visible)
             return;

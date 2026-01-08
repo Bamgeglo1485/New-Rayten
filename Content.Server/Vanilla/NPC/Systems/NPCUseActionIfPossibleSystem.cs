@@ -1,6 +1,7 @@
 using Content.Server.Vanilla.NPC.Components;
 using Content.Server.NPC.HTN;
 using Content.Shared.Actions;
+using Content.Shared.NPC;
 using Robust.Shared.Timing;
 
 namespace Content.Server.Vanilla.NPC.Systems;
@@ -15,7 +16,6 @@ public sealed class NPCUseActionIfPossibleSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
-
         SubscribeLocalEvent<NPCUseActionIfPossibleComponent, MapInitEvent>(OnMapInit);
     }
 
@@ -29,7 +29,7 @@ public sealed class NPCUseActionIfPossibleSystem : EntitySystem
         if (!Resolve(user, ref user.Comp, false))
             return false;
 
-        if (_actions.GetAction(user.Comp.ActionEnt) is not {} action)
+        if (_actions.GetAction(user.Comp.ActionEnt) is not { } action)
             return false;
 
         if (!_actions.ValidAction(action))
@@ -64,11 +64,10 @@ public sealed class NPCUseActionIfPossibleSystem : EntitySystem
 
         _nextUpdate = curTime + TimeSpan.FromSeconds(1);
 
-        var query = EntityQueryEnumerator<NPCUseActionIfPossibleComponent>();
+        var query = EntityQueryEnumerator<NPCUseActionIfPossibleComponent, ActiveNPCComponent>();
 
-        while (query.MoveNext(out var uid, out var comp))
+        while (query.MoveNext(out var uid, out var comp, out _))
         {
-
             if (comp.TargetKey != null && !HaveTarget(uid, comp))
                 return;
 

@@ -4,5 +4,8 @@ namespace Content.Client.Vanilla.Archon.BlindPredator;
 
 public sealed class WithManyVoicesSystem : SharedWithManyVoicesSystem
 {
+    protected override void Replan(EntityUid uid)
+    {
 
+    }
 }

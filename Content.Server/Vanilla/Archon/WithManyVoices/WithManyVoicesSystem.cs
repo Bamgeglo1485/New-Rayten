@@ -1,5 +1,6 @@
 using Content.Server.Body.Components;
 using Content.Server.Temperature.Components;
+using Content.Server.NPC.HTN;
 using Content.Shared.Vanilla.Archon.Research;
 using Content.Shared.Vanilla.Archon.WithManyVoices;
 using Content.Shared.Bed.Sleep;
@@ -11,6 +12,7 @@ namespace Content.Server.Vanilla.Archon.BlindPredator;
 
 public sealed class WithManyVoicesSystem : SharedWithManyVoicesSystem
 {
+    [Dependency] private readonly HTNSystem _htn = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -51,5 +53,11 @@ public sealed class WithManyVoicesSystem : SharedWithManyVoicesSystem
         {
             RemComp<SleepingComponent>(uid);
         }
+    }
+
+    protected override void Replan(EntityUid uid)
+    {
+        if (TryComp<HTNComponent>(uid, out var htn))
+            _htn.Replan(htn);
     }
 }
