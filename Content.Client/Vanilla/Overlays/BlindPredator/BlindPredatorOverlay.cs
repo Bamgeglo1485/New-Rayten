@@ -45,6 +45,9 @@ public sealed class BlindPredatorOverlay : Overlay
         var entities = _entityLookup.GetEntitiesInRange<PredatorVisibleMarkComponent>(playerTransform.Coordinates, ShowRadius);
         foreach (var (uid, comp) in entities)
         {
+            if (uid == user)
+                continue;
+
             if (CantBeRendered(uid, out var sprite, out var xform))
                 continue;
 

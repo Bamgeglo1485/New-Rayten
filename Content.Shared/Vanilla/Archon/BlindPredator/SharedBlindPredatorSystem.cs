@@ -24,7 +24,7 @@ public abstract class SharedBlindPredatorSystem : EntitySystem
             return;
 
         foreach (var predator in component.Predators.Keys.ToArray())
-            SetVisibility(predator, uid, false, component);
+            SetVisibility(predator, uid, false);
     }
 
     private void OnDamageChanged(EntityUid uid, BlindPredatorComponent component, DamageChangedEvent args)

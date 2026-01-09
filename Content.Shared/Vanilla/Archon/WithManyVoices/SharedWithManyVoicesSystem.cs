@@ -21,8 +21,8 @@ public abstract class SharedWithManyVoicesSystem : EntitySystem
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
-        var query = EntityQueryEnumerator<WithManyVoicesComponent, TransformComponent>();
-        while (query.MoveNext(out var uid, out var comp, out var uidTrans))
+        var query = EntityQueryEnumerator<WithManyVoicesComponent>();
+        while (query.MoveNext(out var uid, out var comp))
         {
             if (comp.SeeResetAt == null)
                 continue;
