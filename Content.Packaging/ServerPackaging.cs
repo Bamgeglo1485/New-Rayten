@@ -1,4 +1,3 @@
-
 using System.Diagnostics;
 using System.IO.Compression;
 using Robust.Packaging;
@@ -21,6 +20,12 @@ public static class ServerPackaging
         new PlatformReg("osx-arm64", "MacOS", true),
         // Non-default platforms (i.e. for Watchdog Git)
         new PlatformReg("freebsd-x64", "FreeBSD", false),
+    };
+
+    private static IReadOnlySet<string> ServerContentIgnoresResources { get; } = new HashSet<string>
+    {
+        "ServerInfo",
+        "Changelog",
     };
 
     private static List<string> PlatformRids => Platforms
@@ -182,7 +187,11 @@ public static class ServerPackaging
             contentAssemblies,
             cancel: cancel);
 
-        await RobustServerPackaging.WriteServerResources(contentDir, inputPassResources, cancel);
+        await RobustServerPackaging.WriteServerResources(
+            contentDir,
+            inputPassResources,
+            ServerContentIgnoresResources.Concat(SharedPackaging.AdditionalIgnoredResources).ToHashSet(),
+            cancel);
 
         if (hybridAcz)
         {
