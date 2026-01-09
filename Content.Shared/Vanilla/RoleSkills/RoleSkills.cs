@@ -1,17 +1,10 @@
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using Content.Shared.Humanoid.Prototypes;
-using Content.Corvax.Interfaces.Shared;
-using Content.Shared.Random;
-using Content.Shared.Vanilla.Sponsor;
-using Robust.Shared.Collections;
-using Robust.Shared.Network;
+using Content.Shared.Preferences;
+using Content.Shared.Vanilla.Skill;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
-using Robust.Shared.Utility;
-using Content.Shared.Preferences;
-using Content.Shared.Vanilla.Skill;
+using System.Linq;
 
 namespace Content.Shared.Vanilla.RoleSkills;
 
