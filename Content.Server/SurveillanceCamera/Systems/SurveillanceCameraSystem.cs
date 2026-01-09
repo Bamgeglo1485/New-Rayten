@@ -6,10 +6,8 @@ using Content.Shared.DeviceNetwork.Events;
 using Content.Shared.Power;
 using Content.Shared.SurveillanceCamera;
 using Content.Shared.SurveillanceCamera.Components;
-using Content.Shared.Vanilla.Archon.ShyGuy;
 using Content.Shared.Examine;
 using Content.Shared.Mobs.Components;
-using Robust.Shared.Audio.Systems;
 using Robust.Server.GameObjects;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
@@ -25,10 +23,6 @@ public sealed class SurveillanceCameraSystem : SharedSurveillanceCameraSystem
     [Dependency] private readonly UserInterfaceSystem _userInterface = default!;
     [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
     [Dependency] private readonly IAdminLogManager _adminLogger = default!;
-    [Dependency] private readonly ShyGuySystem _shy = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly ExamineSystemShared _examine = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
 
     // Pings a surveillance camera subnet. All cameras will always respond
     // with a data message if they are on the same subnet.
@@ -88,7 +82,7 @@ public sealed class SurveillanceCameraSystem : SharedSurveillanceCameraSystem
             {
                 { DeviceNetworkConstants.Command, string.Empty },
                 { CameraAddressData, deviceNet.Address },
-                { CameraNameData, component.CameraId },
+                { CameraNameData, component.UseEntityNameAsCameraId ? MetaData(uid).EntityName : component.CameraId },
                 { CameraSubnetData, string.Empty }
             };
 
@@ -222,7 +216,8 @@ public sealed class SurveillanceCameraSystem : SharedSurveillanceCameraSystem
             }
         }
 
-        var state = new SurveillanceCameraSetupBoundUiState(camera.CameraId, deviceNet.ReceiveFrequency ?? 0,
+        var name = camera.UseEntityNameAsCameraId ? MetaData(uid).EntityName : camera.CameraId;
+        var state = new SurveillanceCameraSetupBoundUiState(name, deviceNet.ReceiveFrequency ?? 0,
             camera.AvailableNetworks, camera.NameSet, camera.NetworkSet);
         _userInterface.SetUiState(uid, SurveillanceCameraSetupUiKey.Camera, state);
     }
@@ -296,20 +291,6 @@ public sealed class SurveillanceCameraSystem : SharedSurveillanceCameraSystem
         }
 
         UpdateVisuals(camera, component);
-        //Rayten-ShyGuy-start
-        var shyGuys = _lookup.GetEntitiesInRange<ShyGuyComponent>(Transform(camera).Coordinates, 8f);
-        foreach (var ent in shyGuys)
-        {
-            if (!HasComp<MobStateComponent>(player))
-                return;
-            if (!_examine.InRangeUnOccluded(camera, ent, 8f))
-                return;
-
-            _shy.SetPreparing(ent.Owner, ent.Comp, player);
-
-            _audio.PlayGlobal(ent.Comp.StingerSound, actor.PlayerSession);
-        }
-        //Rayten-ShyGuy-End
     }
 
     public void AddActiveViewers(EntityUid camera, HashSet<EntityUid> players, EntityUid? monitor = null, SurveillanceCameraComponent? component = null)

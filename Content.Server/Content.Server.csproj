@@ -20,7 +20,6 @@
     <ProjectReference Include="..\Content.Server.Database\Content.Server.Database.csproj" />
     <ProjectReference Include="..\Content.Shared.Database\Content.Shared.Database.csproj" />
     <ProjectReference Include="..\Content.Shared\Content.Shared.csproj" />
-    <ProjectReference Include="..\Corvax\Content.Corvax.Interfaces.Server\Content.Corvax.Interfaces.Server.csproj" />
   </ItemGroup>
   <Import Project="..\RobustToolbox\MSBuild\Robust.Properties.targets" />
 

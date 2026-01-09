@@ -55,7 +55,6 @@ public static class ServerPackaging
         "zh-Hant"
     };
 
-    private static readonly bool UseSecrets = File.Exists(Path.Combine("Secrets", "CorvaxSecrets.sln")); // Corvax-Secrets
     public static async Task PackageServer(bool skipBuild, bool hybridAcz, IPackageLogger logger, string configuration, List<string>? platforms = null)
     {
         if (platforms == null)
@@ -104,28 +103,6 @@ public static class ServerPackaging
                     "/m"
                 }
             });
-            // Corvax-Secrets-Start
-            if (UseSecrets)
-            {
-                logger.Info($"Secrets found. Building secret project for {platform}...");
-                await ProcessHelpers.RunCheck(new ProcessStartInfo
-                {
-                    FileName = "dotnet",
-                    ArgumentList =
-                    {
-                        "build",
-                        Path.Combine("Secrets","Content.Corvax.Server", "Content.Corvax.Server.csproj"),
-                        "-c", "Release",
-                        "--nologo",
-                        "/v:m",
-                        $"/p:TargetOs={platform.TargetOs}",
-                        "/t:Rebuild",
-                        "/p:FullRelease=true",
-                        "/m"
-                    }
-                });
-            }
-            // Corvax-Secrets-End
 
             await PublishClientServer(platform.Rid, platform.TargetOs, configuration);
         }
@@ -190,24 +167,6 @@ public static class ServerPackaging
         var deps = DepsHandler.Load(Path.Combine(sourcePath, "Content.Server.deps.json"));
 
         var contentAssemblies = GetContentAssemblyNamesToCopy(deps).ToList();
-        // Corvax-Secrets-start
-        //rayten-start
-        void AddIfMissing(string name)
-        {
-            if (!contentAssemblies.Contains(name))
-                contentAssemblies.Add(name);
-        }
-        //rayten-end
-        AddIfMissing("Content.Corvax.Interfaces.Shared");
-        AddIfMissing("Content.Corvax.Interfaces.Server");
-
-        if (UseSecrets)
-        {
-            AddIfMissing("Content.Corvax.Shared");
-            AddIfMissing("Content.Corvax.Server");
-        }
-
-        // Corvax-Secrets-End
         await RobustSharedPackaging.DoResourceCopy(
             Path.Combine("RobustToolbox", "bin", "Server",
             platform.Rid,

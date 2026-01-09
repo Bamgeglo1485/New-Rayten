@@ -157,4 +157,3 @@ tiles-ironsand-concrete-slab = плита из железного песка и 
 tiles-ironsand-concrete-smooth = гладкий пол из железного песка и бетона
 tiles-ironsand-packed = утрамбованный железный песок
 tiles-ironsand-paved = мощёный железный песок
-
