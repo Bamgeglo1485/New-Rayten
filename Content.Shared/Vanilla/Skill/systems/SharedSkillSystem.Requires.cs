@@ -87,17 +87,21 @@ public abstract partial class SharedSkillSystem : EntitySystem
                 _popup.PopupEntity(Loc.GetString("Skill-issue-message-unskilled", ("skill", skill.ToString())), uid, uid);
                 Audio.PlayGlobal(component.UnSkillSound, uid);
             }
-            return false;
         }
-        if (WithBeep)
+        else
         {
-            _popup.PopupCursor(Loc.GetString("Skill-issue-message-unskilled", ("skill", skill.ToString())));
-            Audio.PlayLocal(component.UnSkillSound, uid, uid);
+            if (WithBeep)
+            {
+                _popup.PopupCursor(Loc.GetString("Skill-issue-message-unskilled", ("skill", skill.ToString())));
+                Audio.PlayLocal(component.UnSkillSound, uid, uid);
+            }
         }
+
         //else
 
         return false;
     }
+
     public bool HasRequiredSkill(EntityUid uid, RequiresSkillComponent reqcomp, bool WithBeep = true, SkillComponent? component = null, bool ServerOnly = false)
     {
         if (!Resolve(uid, ref component, false))

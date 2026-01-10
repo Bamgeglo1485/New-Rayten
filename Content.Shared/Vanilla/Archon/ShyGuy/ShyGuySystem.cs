@@ -127,7 +127,9 @@ public sealed class ShyGuySystem : EntitySystem
 
     public void SetPreparing(EntityUid uid, ShyGuyComponent comp, EntityUid initiator)
     {
-        _blindpredator.SetVisibility(initiator, uid, true);
+        if (TryComp<PredatorVisibleMarkComponent>(initiator, out var mark))
+            _blindpredator.SetVisibility(initiator, uid, true, mark);
+
         _popup.PopupClient("Беги", uid, initiator, PopupType.LargeCaution);
         _audio.PlayLocal(comp.StingerSound, initiator, initiator);
         if (comp.State != ShyGuyState.Calm)

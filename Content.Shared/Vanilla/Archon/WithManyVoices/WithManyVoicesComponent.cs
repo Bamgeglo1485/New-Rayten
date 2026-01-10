@@ -4,13 +4,13 @@ using Robust.Shared.Audio;
 
 namespace Content.Shared.Vanilla.Archon.WithManyVoices;
 
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true)]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class WithManyVoicesComponent : Component
 {
     /// <summary>
-    /// Делаем чек не каждый тик
+    /// Момент времени сброса видимости
     /// </summary>
-    [ViewVariables]
+    [ViewVariables, AutoNetworkedField]
     public TimeSpan? SeeResetAt = null;
     /// <summary>
     /// Сколько времени видит многоголосый

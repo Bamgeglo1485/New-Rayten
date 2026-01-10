@@ -498,8 +498,11 @@ public sealed partial class InjectorSystem : EntitySystem
             _popup.PopupPredicted(userMessage, otherMessage, target, user);
             return true;
         }
-        if (!_skill.HasRequiredSkill(user, SkillType.Medicine, SkillLevel.Advanced))
-            return true;
+        if (TryComp<RequiresSkillComponent>(injector.Owner, out var requiresSkillComponent))
+        {
+            if (!_skill.HasRequiredSkill(user, requiresSkillComponent))
+                return true;
+        }
         //rayten-end
         // Get transfer amount. It may be smaller than _transferAmount if not enough room
         var plannedTransferAmount = FixedPoint2.Min(injector.Comp.CurrentTransferAmount ?? injectorSolution.Volume, injectorSolution.Volume);
@@ -600,8 +603,11 @@ public sealed partial class InjectorSystem : EntitySystem
             _popup.PopupPredicted(userMessage, otherMessage, target, user);
             return true;
         }
-        if (!_skill.HasRequiredSkill(user, SkillType.Medicine, SkillLevel.Advanced))
-            return true;
+        if (TryComp<RequiresSkillComponent>(injector.Owner, out var requiresSkillComponent))
+        {
+            if (!_skill.HasRequiredSkill(user, requiresSkillComponent))
+                return true;
+        }
         //rayten-end
         // We have some snowflaked behavior for streams.
         if (target.Comp != null)

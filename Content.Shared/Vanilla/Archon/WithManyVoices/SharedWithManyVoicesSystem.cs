@@ -31,11 +31,13 @@ public abstract class SharedWithManyVoicesSystem : EntitySystem
                 continue;
 
             comp.SeeResetAt = null;
+            Dirty(uid, comp);
 
             var victimQuery = EntityQueryEnumerator<PredatorVisibleMarkComponent>();
             while (victimQuery.MoveNext(out var ent, out var mark))
+            {
                 _predator.SetVisibility(ent, uid, false, mark);
-
+            }
             Replan(uid);
         }
     }

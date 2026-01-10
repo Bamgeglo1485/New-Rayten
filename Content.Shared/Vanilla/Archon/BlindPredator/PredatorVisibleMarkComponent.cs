@@ -9,5 +9,5 @@ public sealed partial class PredatorVisibleMarkComponent : Component
     /// Словарь предаторов которые нас видят или не видят
     /// </summary>
     [DataField, AutoNetworkedField]
-    public Dictionary<EntityUid, bool> Predators = new();
+    public Dictionary<EntityUid, bool> Predators = [];
 }

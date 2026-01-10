@@ -10,41 +10,19 @@ public abstract class SharedBlindPredatorSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<BlindPredatorComponent, ComponentRemove>(OnComponentRemove);
         SubscribeLocalEvent<BlindPredatorComponent, ComponentStartup>(OnComponentStartup);
+        SubscribeLocalEvent<BlindPredatorComponent, ComponentRemove>(OnComponentRemove);
         SubscribeLocalEvent<BlindPredatorComponent, DamageChangedEvent>(OnDamageChanged);
         SubscribeLocalEvent<PredatorVisibleMarkComponent, ComponentStartup>(OnVictimStartup);
         SubscribeLocalEvent<PredatorVisibleMarkComponent, BeforeDamageChangedEvent>(OnBeforeDamageChanged);
         SubscribeLocalEvent<PredatorVisibleMarkComponent, MobStateChangedEvent>(OnMobStateChanged);
     }
 
-    private void OnMobStateChanged(EntityUid uid, PredatorVisibleMarkComponent component, MobStateChangedEvent ev)
+    private void OnComponentStartup(EntityUid uid, BlindPredatorComponent component, ref ComponentStartup args)
     {
-        if (ev.NewMobState == MobState.Alive)
-            return;
-
-        foreach (var predator in component.Predators.Keys.ToArray())
-            SetVisibility(predator, uid, false);
-    }
-
-    private void OnDamageChanged(EntityUid uid, BlindPredatorComponent component, DamageChangedEvent args)
-    {
-        if (args.Origin == null)
-            return;
-
-        if (!TryComp<PredatorVisibleMarkComponent>(args.Origin.Value, out var mark))
-            return;
-
-        SetVisibility(args.Origin.Value, uid, true, mark);
-    }
-
-    private void OnBeforeDamageChanged(EntityUid uid, PredatorVisibleMarkComponent component, ref BeforeDamageChangedEvent args)
-    {
-        if (args.Origin == null)
-            return;
-
-        if (component.Predators.TryGetValue(args.Origin.Value, out var val) && !val)
-            args.Cancelled = true;
+        var query = EntityQueryEnumerator<PredatorVisibleMarkComponent>();
+        while (query.MoveNext(out var ent, out var mark))
+            SetVisibility(ent, uid, false, mark);
     }
 
     private void OnComponentRemove(EntityUid uid, BlindPredatorComponent component, ComponentRemove args)
@@ -57,6 +35,37 @@ public abstract class SharedBlindPredatorSystem : EntitySystem
         }
     }
 
+    private void OnDamageChanged(EntityUid uid, BlindPredatorComponent component, DamageChangedEvent args)
+    {
+        if (args.Origin == null)
+            return;
+        if (!TryComp<PredatorVisibleMarkComponent>(args.Origin.Value, out var mark))
+            return;
+
+        SetVisibility(args.Origin.Value, uid, true, mark);
+    }
+
+    private void OnMobStateChanged(EntityUid uid, PredatorVisibleMarkComponent component, MobStateChangedEvent ev)
+    {
+        if (ev.NewMobState == MobState.Alive)
+            return;
+
+        foreach (var predator in component.Predators.Keys.ToArray())
+            SetVisibility(uid, predator, false, component);
+    }
+
+    private void OnBeforeDamageChanged(EntityUid uid, PredatorVisibleMarkComponent component, ref BeforeDamageChangedEvent args)
+    {
+        if (args.Origin == null)
+            return;
+
+        if (args.Origin == uid)
+            return;
+
+        if (component.Predators.TryGetValue(args.Origin.Value, out var val) && !val)
+            args.Cancelled = true;
+    }
+
     private void OnVictimStartup(EntityUid uid, PredatorVisibleMarkComponent mark, ref ComponentStartup args)
     {
         var query = EntityQueryEnumerator<BlindPredatorComponent>();
@@ -64,17 +73,12 @@ public abstract class SharedBlindPredatorSystem : EntitySystem
             SetVisibility(uid, ent, false, mark);
     }
 
-
-    private void OnComponentStartup(EntityUid uid, BlindPredatorComponent component, ref ComponentStartup args)
+    public virtual void SetVisibility(EntityUid victim, EntityUid predator, bool visible, PredatorVisibleMarkComponent comp)
     {
-        var query = EntityQueryEnumerator<PredatorVisibleMarkComponent>();
-        while (query.MoveNext(out var ent, out var mark))
-            SetVisibility(ent, uid, false, mark);
-    }
+        if (victim == predator)
+            return;
 
-    public virtual void SetVisibility(EntityUid victim, EntityUid predator, bool visible, PredatorVisibleMarkComponent? comp = null)
-    {
-        if (!Resolve(victim, ref comp))
+        if (!Exists(victim) || Deleted(victim))
             return;
 
         if (MobStateSys.IsIncapacitated(victim))
