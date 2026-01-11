@@ -603,15 +603,17 @@ public sealed partial class InjectorSystem : EntitySystem
             _popup.PopupPredicted(userMessage, otherMessage, target, user);
             return true;
         }
-        if (TryComp<RequiresSkillComponent>(injector.Owner, out var requiresSkillComponent))
-        {
-            if (!_skill.HasRequiredSkill(user, requiresSkillComponent))
-                return true;
-        }
         //rayten-end
         // We have some snowflaked behavior for streams.
         if (target.Comp != null)
         {
+            //rayten-start
+            if (TryComp<RequiresSkillComponent>(injector.Owner, out var requiresSkillComponent))
+            {
+                if (!_skill.HasRequiredSkill(user, requiresSkillComponent))
+                    return true;
+            }
+            //rayten-end
             DrawFromBlood(injector, user, (target.Owner, target.Comp), injector.Comp.Solution.Value, realTransferAmount);
             return true;
         }
