@@ -788,5 +788,5 @@ SpacemenFigureSpawner: SpacemenFigurineSpawner90
 HandheldHealthAnalyzerUnpowered: HandheldHealthAnalyzer
 HandheldHealthAnalyzerEmpty: HandheldHealthAnalyzer
 # рейтен потом убрать
-ArsenalDoor: DoorElectronicsArmory
+ArsenalDoor: HighSecArmoryLocked
 ArsenalAuthorizator: null
