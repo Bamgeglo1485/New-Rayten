@@ -1,7 +1,7 @@
 - type: entity
   id: ArsenalAuthorizator
-  name: жопа
-  description: попа
+  name: авторизатор арсенала
+  description: если вы это видите, то сделайте вид что это не видите
   placement:
     mode: SnapgridCenter
     snap:

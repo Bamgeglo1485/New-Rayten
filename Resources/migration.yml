@@ -787,3 +787,6 @@ SpacemenFigureSpawner: SpacemenFigurineSpawner90
 # 2026-01-07
 HandheldHealthAnalyzerUnpowered: HandheldHealthAnalyzer
 HandheldHealthAnalyzerEmpty: HandheldHealthAnalyzer
+# рейтен потом убрать
+ArsenalDoor: DoorElectronicsArmory
+ArsenalAuthorizator: null
