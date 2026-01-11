@@ -1,0 +1,139 @@
+<ui:ArsenalAuthorizatorWindow xmlns="https://spacestation14.io"
+                              xmlns:ui="clr-namespace:Content.Client.Vanilla.Entities.ArsenalAuthorizator"
+                              xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
+                              xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
+                              xmlns:access="clr-namespace:Content.Client.Access.UI"
+                              SetWidth="550"
+                              Resizable="False"
+                              MouseFilter="Stop">
+
+    <PanelContainer Name="Background"
+                    StyleClasses="PdaBackgroundRect"
+                    ModulateSelfOverride="#4a5466"/>
+    <PanelContainer Name="Border"
+                    StyleClasses="PdaBorderRect"/>
+
+    <BoxContainer Orientation="Vertical"
+                  HorizontalExpand="True">
+
+        <!--Header-->
+        <BoxContainer SetHeight="26"
+                      Margin="4 2 8 0"
+                      Orientation="Horizontal"
+                      HorizontalAlignment="Right">
+            <TextureButton Name="CloseButton"
+                           StyleClasses="windowCloseButton"
+                           Modulate="#646464"
+                           VerticalAlignment="Center"
+                           Margin="0 4 4 0"/>
+        </BoxContainer>
+
+        <!--Content-->
+        <Control Margin="18 0"
+                 RectClipContent="True"
+                 VerticalExpand="true"
+                 HorizontalExpand="True">
+            <PanelContainer Name="ContentBorder"
+                            StyleClasses="PdaBackground"/>
+            <Control Name="ContentsContainer"
+                     Margin="3 3"
+                     Modulate="#FFFFFF">
+
+                <!-- Screen Background -->
+                <PanelContainer Name="ContentBackground"
+                                StyleClasses="PdaContentBackground"/>
+
+                <!-- Screen foreground -->
+                <BoxContainer Orientation="Vertical">
+
+                    <Label Text="{Loc 'arsenal-authorizator-window-title'}"
+                           StyleClasses="ConsoleHeading"
+                           HorizontalAlignment="Center"
+                           Margin="0 5 0 0"/>
+
+                    <!-- причины -->
+                    <PanelContainer Margin="10 5 10 5">
+                        <PanelContainer.PanelOverride>
+                            <gfx:StyleBoxFlat BorderColor="#FFFFFF"
+                                              BorderThickness="2"/>
+                        </PanelContainer.PanelOverride>
+
+                        <BoxContainer Orientation="Vertical"
+                                      MinHeight="235"
+                                      Margin="5 5 5 5">
+                            <Label Name="ReasonStatusHeader"
+                                   Text="{Loc 'arsenal-authorizator-reasons-label'}"
+                                   StyleClasses="ConsoleSubHeading"
+                                   HorizontalAlignment="Center"/>
+
+                            <PanelContainer StyleClasses="LowDivider"
+                                            HorizontalExpand="True"
+                                            Margin="-5 5 -5 5"
+                                            SetHeight="2">
+                                <PanelContainer.PanelOverride>
+                                    <gfx:StyleBoxFlat BackgroundColor="#FFFFFF"/>
+                                </PanelContainer.PanelOverride>
+                            </PanelContainer>
+
+                            <BoxContainer Orientation="Vertical"
+                                          VerticalExpand="True"
+                                          HorizontalExpand="True">
+                                <Label Name="NoReasonsText"
+                                       Text="{Loc 'arsenal-authorizator-no-reasons'}"
+                                       StyleClasses="ConsoleText"
+                                       HorizontalAlignment="Center"
+                                       ReservesSpace="False"/>
+
+                                <ScrollContainer VerticalExpand="True"
+                                                 HorizontalExpand="True">
+                                    <BoxContainer Name="ReasonsContainer"
+                                                  Orientation="Vertical"
+                                                  Visible="False"
+                                                  SeparationOverride="3"
+                                                  ReservesSpace="False">
+                                        <!-- Populated with C# code -->
+                                    </BoxContainer>
+                                </ScrollContainer>
+                            </BoxContainer>
+                        </BoxContainer>
+                    </PanelContainer>
+
+                    <!-- Armament controls -->
+                    <PanelContainer Margin="10 0 10 5">
+                        <PanelContainer.PanelOverride>
+                            <gfx:StyleBoxFlat BorderColor="#FFFFFF"
+                                              BorderThickness="2"/>
+                        </PanelContainer.PanelOverride>
+
+                        <BoxContainer Orientation="Horizontal"
+                                      Margin="10 10 10 10">
+                            <controls:MonotoneButton Name="OpenButton"
+                                                     Text="{Loc 'arsenal-authorizator-open-button'}"
+                                                     StyleClasses="OpenBoth"
+                                                     Pressed="False"
+                                                     ToggleMode="True"
+                                                     HorizontalExpand="True"/>
+                        </BoxContainer>
+                    </PanelContainer>
+                </BoxContainer>
+            </Control>
+        </Control>
+
+        <!--Footer-->
+        <BoxContainer Orientation="Horizontal"
+                      SetHeight="28">
+            <Label Text="⚠"
+                   Margin="0 0 4 4"
+                   HorizontalExpand="True"
+                   HorizontalAlignment="Right"/>
+            <Label Name="Footer"
+                   Text="{Loc 'arsenal-authorizator-window-footer'}"
+                   HorizontalAlignment="Center"
+                   Margin="0 0 0 4"/>
+            <Label Text="⚠"
+                   Margin="4 0 0 4"
+                   HorizontalExpand="True"
+                   HorizontalAlignment="Left"/>
+        </BoxContainer>
+    </BoxContainer>
+</ui:ArsenalAuthorizatorWindow>

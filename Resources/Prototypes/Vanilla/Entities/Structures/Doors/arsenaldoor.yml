@@ -1,0 +1,51 @@
+- type: entity
+  id: ArsenalDoor
+  parent: [BaseDeltaPressureGlassQuarter, BaseStructure]
+  name: дверь арсенала
+  description: ы
+  placement:
+    mode: SnapgridCenter
+    snap:
+    - Window
+  components:
+  - type: ArsenalDoor
+  - type: AccessReader
+    breakOnAccessBreaker: false
+    access: [["Security"]]
+  - type: WallMount
+    arc: 360 # interact despite grilles
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: Structures/Windows/directional.rsi
+    state: window
+  - type: Icon
+    sprite: Structures/Windows/directional.rsi
+    state: window
+  - type: InteractionPopup
+    interactSuccessString: comp-window-knock
+    messagePerceivedByOthers: comp-window-knock
+    interactSuccessSound:
+      path: /Audio/Effects/glass_knock.ogg
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,0.5,-0.28125"
+        density: 100
+        hard: true
+        mask:
+        - Impassable
+        layer:
+        - Impassable
+  - type: PointLight
+    enabled: true
+    radius: 3
+    color: red
+  - type: Airtight
+    noAirWhenFullyAirBlocked: false
+    airBlockedDirection:
+    - South
+  - type: Appearance
+  # - type: RCDDeconstructable
+  #   deconstructable: false

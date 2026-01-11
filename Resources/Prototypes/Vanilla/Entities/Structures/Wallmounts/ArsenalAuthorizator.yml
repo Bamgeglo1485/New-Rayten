@@ -1,0 +1,67 @@
+- type: entity
+  id: ArsenalAuthorizator
+  name: жопа
+  description: попа
+  placement:
+    mode: SnapgridCenter
+    snap:
+    - Wallmount
+  components:
+  - type: Appearance
+  - type: Sprite
+    noRot: false
+    drawdepth: SmallObjects
+    sprite: Structures/Wallmounts/turret_controls.rsi
+    layers:
+    - state: base
+    - state: safe
+      map: ["enum.PowerDeviceVisualLayers.Powered"]
+      shader: unshaded
+  - type: GenericVisualizer
+    visuals:
+      enum.PowerDeviceVisuals.Powered:
+        enum.PowerDeviceVisualLayers.Powered:
+          True: { visible: true }
+          False: { visible: false }
+      # enum.TurretControllerVisuals.ControlPanel:
+      #   enum.PowerDeviceVisualLayers.Powered:
+      #     -1: { state: safe }
+      #     0: { state: stun }
+      #     1: { state: lethal }
+  - type: ArsenalAuthorizator
+  - type: StationAiWhitelist
+  - type: ActivatableUI
+    key: enum.ArsenalAuthorizatorUiKey.Key
+  - type: ActivatableUIRequiresPower
+  - type: UserInterface
+    interfaces:
+      enum.ArsenalAuthorizatorUiKey.Key:
+        type: ArsenalAuthorizatorBoundUserInterface
+  - type: ApcPowerReceiver
+  - type: ExtensionCableReceiver
+  - type: Electrified
+    enabled: false
+    usesApcPower: True
+  - type: Transform
+    anchored: true
+  - type: WallMount
+  - type: Clickable
+  - type: InteractionOutline
+  - type: AccessReader
+    access: [["Security"]]
+  - type: Damageable
+    damageContainer: StructuralInorganic
+    damageModifierSet: StructuralMetallic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 200
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalGlassBreak
+          params:
+            volume: -4
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]

@@ -31,7 +31,7 @@
 - type: AlertLevelReason
   id: red3
   code: red
-  text: На станции присутствует тяжело-вооружённый преступник!
+  text: Тяжело-вооружённый преступник
 
 - type: AlertLevelReason
   id: red4
