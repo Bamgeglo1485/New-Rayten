@@ -35,22 +35,21 @@ public sealed class ArsenalAuthorizatorSystem : SharedArsenalAuthorizatorSystem
 
         string alert = _alertLevelSystem.GetLevel(stationUid.Value);
 
-        component.IsOpen = alert != "green";
+        component.State = GetState(alert);
+
         SetDoors(component, stationUid.Value);
     }
 
     private void OnAlertChanged(AlertLevelChangedEvent args)
     {
-        if (args.AlertLevel != "green")
-            return;
-
         var query = EntityQueryEnumerator<ArsenalAuthorizatorComponent>();
         while (query.MoveNext(out var uid, out var comp))
         {
             if (args.Station != StationSys.GetOwningStation(uid))
                 continue;
 
-            comp.IsOpen = false;
+            comp.State = GetState(args.AlertLevel);
+            Appearance.SetData(uid, ArsenalAuthorizatorVisuals.State, (int)comp.State);
             Dirty(uid, comp);
             SetDoors(comp, args.Station);
 
@@ -59,6 +58,16 @@ public sealed class ArsenalAuthorizatorSystem : SharedArsenalAuthorizatorSystem
         }
     }
 
+    private ArsenalAuthorizatorState GetState(string str)
+    {
+        return str switch
+        {
+            "red" => ArsenalAuthorizatorState.Red,
+            "delta" => ArsenalAuthorizatorState.Gamma,
+            "gamma" => ArsenalAuthorizatorState.Gamma,
+            _ => ArsenalAuthorizatorState.Green
+        };
+    }
 
     protected override void ChangeAlertLevel(EntityUid uid, EntityUid stationUid, string reasonId)
     {

@@ -6,10 +6,13 @@ namespace Content.Shared.Vanilla.Entities.ArsenalAuthorizator;
 public sealed partial class ArsenalAuthorizatorComponent : Component
 {
     /// <summary>
-    /// открыто?
+    /// текущее состояние
     /// </summary>
     [DataField, AutoNetworkedField]
-    public bool IsOpen = false;
+    public ArsenalAuthorizatorState State = ArsenalAuthorizatorState.Green;
+
+    [DataField]
+    public string NukeDiscAlertReason = "gamma1";
 }
 
 
@@ -32,17 +35,18 @@ public sealed class ArsenalAuthorizatorBoundInterfaceState : BoundUserInterfaceS
     {
     }
 }
-
+[Serializable, NetSerializable]
 public enum ArsenalAuthorizatorState : byte
 {
-    Open = 0,
-    Close = 1,
+    Green = 1,  //зелёный код, оружейка закрыта для всех
+    Red = 2,    //красный код открыто для сб
+    Gamma = 3,  //гамма код, открыто для всех
 }
 
 [Serializable, NetSerializable]
 public enum ArsenalAuthorizatorVisuals : byte
 {
-    ControlPanel,
+    State,
 }
 
 [Serializable, NetSerializable]

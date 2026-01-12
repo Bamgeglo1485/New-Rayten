@@ -4,21 +4,6 @@
   text: Угрзы отсутствуют.
 
 - type: AlertLevelReason
-  id: blue1
-  code: blue
-  text: Взлом защищённой точки.
-
-- type: AlertLevelReason
-  id: blue2
-  code: blue
-  text: Кража особо-ценного предмета.
-
-- type: AlertLevelReason
-  id: blue3
-  code: blue
-  text: Найдено вражеское снаряжение.
-
-- type: AlertLevelReason
   id: red1
   code: red
   text: Подрыв отсека станции/установлена бомба.
@@ -52,6 +37,21 @@
   id: red7
   code: red
   text: Нападение космического дракона.
+
+- type: AlertLevelReason
+  id: red8
+  code: red
+  text: Взлом защищённой точки.
+
+- type: AlertLevelReason
+  id: red9
+  code: red
+  text: Кража особо-ценного предмета.
+
+- type: AlertLevelReason
+  id: gamma1
+  code: gamma
+  text: Разблокировка арсенала
 
 - type: AlertLevelReason
   id: yellow1

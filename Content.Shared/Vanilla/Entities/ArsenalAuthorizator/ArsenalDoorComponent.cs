@@ -1,6 +1,7 @@
 
 using Content.Shared.Access;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Audio;
 
 namespace Content.Shared.Vanilla.Entities.ArsenalAuthorizator;
 
@@ -12,4 +13,6 @@ public sealed partial class ArsenalDoorComponent : Component
     /// </summary>
     [DataField]
     public ProtoId<AccessLevelPrototype> BlockAccess = "Security";
+    [DataField]
+    public SoundSpecifier AccessDeniedSound = new SoundPathSpecifier("/Audio/Vanilla/Objects/forcefiled-touch.ogg");
 }

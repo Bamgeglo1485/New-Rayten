@@ -1,7 +1,7 @@
 - type: entity
   id: ArsenalAuthorizator
   name: авторизатор арсенала
-  description: если вы это видите, то сделайте вид что это не видите
+  description: Устройство контроля доступа в оружейную комнату. Открытие арсенала приведёт к установке красного кода.
   placement:
     mode: SnapgridCenter
     snap:
@@ -11,10 +11,10 @@
   - type: Sprite
     noRot: false
     drawdepth: SmallObjects
-    sprite: Structures/Wallmounts/turret_controls.rsi
+    sprite: Vanilla/Structures/Wallmounts/arsenal_authorizator.rsi
     layers:
     - state: base
-    - state: safe
+    - state: green
       map: ["enum.PowerDeviceVisualLayers.Powered"]
       shader: unshaded
   - type: GenericVisualizer
@@ -23,11 +23,11 @@
         enum.PowerDeviceVisualLayers.Powered:
           True: { visible: true }
           False: { visible: false }
-      # enum.TurretControllerVisuals.ControlPanel:
-      #   enum.PowerDeviceVisualLayers.Powered:
-      #     -1: { state: safe }
-      #     0: { state: stun }
-      #     1: { state: lethal }
+      enum.ArsenalAuthorizatorVisuals.State:
+        enum.PowerDeviceVisualLayers.Powered:
+          1: { state: green }
+          2: { state: red }
+          3: { state: gamma }
   - type: ArsenalAuthorizator
   - type: StationAiWhitelist
   - type: ActivatableUI
@@ -48,7 +48,8 @@
   - type: Clickable
   - type: InteractionOutline
   - type: AccessReader
-    access: [["Security"]]
+    breakOnAccessBreaker: false
+    access: [["Armory"]]
   - type: Damageable
     damageContainer: StructuralInorganic
     damageModifierSet: StructuralMetallic
@@ -65,3 +66,7 @@
             volume: -4
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
+  - type: PointLight
+    enabled: true
+    radius: 3
+    color: green

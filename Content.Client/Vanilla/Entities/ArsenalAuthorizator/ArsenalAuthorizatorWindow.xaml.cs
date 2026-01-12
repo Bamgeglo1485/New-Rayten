@@ -27,11 +27,11 @@ public sealed partial class ArsenalAuthorizatorWindow : BaseWindow
     [Dependency] private readonly IResourceCache _cache = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
     private readonly AccessReaderSystem _accessReaderSystem;
+    private readonly SharedArsenalAuthorizatorSystem _arsenal;
+
     private EntityUid? _owner;
     private string? SelectedReason = null;
-    private bool IsOpen = false;
-
-    // Button groups
+    private ArsenalAuthorizatorState State = ArsenalAuthorizatorState.Green;
     private readonly ButtonGroup _reasonButtons = new();
     public event Action<string>? OnArsenalAuthorizatorButtonPressed;
 
@@ -41,7 +41,7 @@ public sealed partial class ArsenalAuthorizatorWindow : BaseWindow
         IoCManager.InjectDependencies(this);
 
         _accessReaderSystem = _entManager.System<AccessReaderSystem>();
-
+        _arsenal = _entManager.System<SharedArsenalAuthorizatorSystem>();
         CloseButton.OnPressed += _ => Close();
 
         OpenButton.OnToggled += _ => OnOpenButtonPressed();
@@ -71,7 +71,7 @@ public sealed partial class ArsenalAuthorizatorWindow : BaseWindow
     {
 
         if (_entManager.TryGetComponent<ArsenalAuthorizatorComponent>(_owner, out var comp))
-            IsOpen = comp.IsOpen;
+            State = comp.State;
         UpdateOpenReasons();
         UpdateOpenButton();
         UpdateTheme();
@@ -81,7 +81,7 @@ public sealed partial class ArsenalAuthorizatorWindow : BaseWindow
     public void UpdateState()
     {
         if (_entManager.TryGetComponent<ArsenalAuthorizatorComponent>(_owner, out var comp))
-            IsOpen = comp.IsOpen;
+            State = comp.State;
         UpdateOpenReasons();
         UpdateOpenButton();
         UpdateTheme();
@@ -90,13 +90,13 @@ public sealed partial class ArsenalAuthorizatorWindow : BaseWindow
 
     private void UpdateTheme()
     {
-        ContentsContainer.Modulate = IsOpen ? Color.FromHex("#da2a2a") : Color.FromHex("#33e633");
+        ContentsContainer.Modulate = _arsenal.GetColor(State);
     }
 
 
     private void UpdateOpenButton()
     {
-        OpenButton.Pressed = !IsOpen;
+        OpenButton.Pressed = State != ArsenalAuthorizatorState.Green;
         var canInteract = IsLocalPlayerAllowedToInteract();
         OpenButton.Disabled = !canInteract || SelectedReason == null;
     }
@@ -150,7 +150,7 @@ public sealed partial class ArsenalAuthorizatorWindow : BaseWindow
 
     private bool IsLocalPlayerAllowedToInteract()
     {
-        if (IsOpen || _owner == null || _playerManager.LocalSession?.AttachedEntity == null)
+        if (State != ArsenalAuthorizatorState.Green || _owner == null || _playerManager.LocalSession?.AttachedEntity == null)
             return false;
 
         return _accessReaderSystem.IsAllowed(_playerManager.LocalSession.AttachedEntity.Value, _owner.Value);
