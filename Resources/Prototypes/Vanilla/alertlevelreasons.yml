@@ -56,7 +56,7 @@
 - type: AlertLevelReason
   id: yellow1
   code: yellow
-  text: Серьезные структурные или атмосферные повреждения.
+  text: Серьезные структурные повреждения.
 
 - type: AlertLevelReason
   id: yellow2
@@ -69,7 +69,7 @@
   text: Побег шаровой молнии.
 
 - type: AlertLevelReason
-  id: yellow3
+  id: yellow4
   code: yellow
   text: Утечка газа.
 
