@@ -12,13 +12,11 @@ public sealed class AlertKeyInterfaceState : BoundUserInterfaceState
 {
     public List<(string Level, bool IsSubcode, bool blocked)>? AlertLevels;
     public HashSet<string> ActiveSubLevels;
-    public string CurrentAlert;
     public float CurrentAlertDelay;
 
-    public AlertKeyInterfaceState(List<(string Level, bool IsSubcode, bool blocked)>? alertLevels, string currentAlert, HashSet<string> activeSubLevels, float currentAlertDelay)
+    public AlertKeyInterfaceState(List<(string Level, bool IsSubcode, bool blocked)>? alertLevels, HashSet<string> activeSubLevels, float currentAlertDelay)
     {
         AlertLevels = alertLevels;
-        CurrentAlert = currentAlert;
         ActiveSubLevels = activeSubLevels;
         CurrentAlertDelay = currentAlertDelay;
     }

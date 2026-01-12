@@ -56,12 +56,17 @@
 - type: AlertLevelReason
   id: yellow1
   code: yellow
-  text: На станции присутствуют серьезные структурные или атмосферные повреждения.
+  text: Серьезные структурные или атмосферные повреждения.
 
 - type: AlertLevelReason
   id: yellow2
   code: yellow
-  text: Выход сингулярности/шаровой молнии.
+  text: Побег сингулярности.
+
+- type: AlertLevelReason
+  id: yellow3
+  code: yellow
+  text: Побег шаровой молнии.
 
 - type: AlertLevelReason
   id: yellow3
@@ -71,14 +76,9 @@
 - type: AlertLevelReason
   id: violet1
   code: violet
-  text: На станции существует подтвержденная опасная вспышка вируса, которая требует введения карантинных мер.
+  text: Опасная вспышка вируса.
 
 - type: AlertLevelReason
   id: apollyon1
   code: apollyon
   text: Нарушение условий содержания Архонт объекта.
-
-- type: AlertLevelReason
-  id: apollyon2
-  code: apollyon
-  text: Появление неизученного Архонт объекта вне стазиса.

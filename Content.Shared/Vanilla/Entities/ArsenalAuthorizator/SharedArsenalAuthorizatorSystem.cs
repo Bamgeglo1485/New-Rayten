@@ -43,6 +43,9 @@ public abstract partial class SharedArsenalAuthorizatorSystem : EntitySystem
 
     private void OnNukeUse(Entity<ArsenalAuthorizatorComponent> ent, ref InteractUsingEvent args)
     {
+        Log.Info($"пенис, {ent.Comp.NukeDiscAlertReason}");
+        if (args.Handled)
+            return;
         if (!HasComp<NukeDiskComponent>(args.Used))
             return;
 
@@ -50,7 +53,8 @@ public abstract partial class SharedArsenalAuthorizatorSystem : EntitySystem
         if (stationUid == null)
             return;
 
-        ChangeAlertLevel(ent.Owner, stationUid.Value, ent.Comp.NukeDiscAlertReason);
+        ChangeAlertLevel(stationUid.Value, ent.Comp.NukeDiscAlertReason);
+        args.Handled = true;
     }
 
     private void OnOpen(Entity<ArsenalAuthorizatorComponent> ent, ref ArsenalAuthorizatorOpenMessage args)
@@ -69,7 +73,7 @@ public abstract partial class SharedArsenalAuthorizatorSystem : EntitySystem
 
         Dirty(ent);
 
-        ChangeAlertLevel(ent.Owner, stationUid.Value, args.ReasonId);
+        ChangeAlertLevel(stationUid.Value, args.ReasonId);
         SetDoors(ent.Comp, stationUid.Value);
 
         if (_ui.TryGetOpenUi(ent.Owner, ArsenalAuthorizatorUiKey.Key, out var bui))
@@ -121,8 +125,7 @@ public abstract partial class SharedArsenalAuthorizatorSystem : EntitySystem
             _ => Color.White
         };
     }
-    protected virtual void ChangeAlertLevel(EntityUid uid, EntityUid stationUid, string reasonId)
+    protected virtual void ChangeAlertLevel(EntityUid stationUid, string reasonId)
     {
-
     }
 }

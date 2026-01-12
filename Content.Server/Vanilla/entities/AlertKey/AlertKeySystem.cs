@@ -107,65 +107,61 @@ public sealed class AlertKeySystem : EntitySystem
     /// <summary>
     /// Updates the UI for a particular comms console.
     /// </summary>
-        public void UpdateAlertKeyInterface(EntityUid uid, AlertKeyComponent comp)
-        {
-            var stationUid = _stationSystem.GetOwningStation(uid);
-            List<(string Level, bool IsSubcode, bool blocked)>? levels = null;
-            string currentLevel = default!;
-            HashSet<string> ActiveSubLevels = new HashSet<string>();
-            float currentDelay = 0;
+    public void UpdateAlertKeyInterface(EntityUid uid, AlertKeyComponent comp)
+    {
+        var stationUid = _stationSystem.GetOwningStation(uid);
+        List<(string Level, bool IsSubcode, bool blocked)>? levels = null;
+        HashSet<string> ActiveSubLevels = [];
+        float currentDelay = 0;
 
-            if (stationUid != null)
+        if (stationUid != null)
+        {
+            if (TryComp(stationUid.Value, out AlertLevelComponent? alertComp) &&
+                alertComp.AlertLevels != null)
             {
-                if (TryComp(stationUid.Value, out AlertLevelComponent? alertComp) &&
-                    alertComp.AlertLevels != null)
+                if (alertComp.IsSelectable)
                 {
-                    if (alertComp.IsSelectable)
+                    levels = [];
+                    foreach (var (id, detail) in alertComp.AlertLevels.Levels)
                     {
-                        levels = new();
-                        foreach (var (id, detail) in alertComp.AlertLevels.Levels)
+                        if (detail.Selectable)
                         {
-                            if (detail.Selectable)
-                            {
-                                bool blocked = !comp.CodeAccess.Contains(id);
-                                levels.Add((id, detail.Subcode, blocked));
-                            }
+                            bool blocked = !comp.CodeAccess.Contains(id);
+                            levels.Add((id, detail.Subcode, blocked));
                         }
                     }
-
-                    currentLevel = alertComp.CurrentLevel;
-                    ActiveSubLevels = new HashSet<string>(alertComp.ActiveSubLevels.Keys);
-                    currentDelay = _alertLevelSystem.GetAlertLevelDelay(stationUid.Value, alertComp);
                 }
+                ActiveSubLevels = new HashSet<string>(alertComp.ActiveSubLevels.Keys);
+                currentDelay = _alertLevelSystem.GetAlertLevelDelay(stationUid.Value, alertComp);
             }
-
-            _uiSystem.SetUiState(uid, AlertKeyUiKey.Key, new AlertKeyInterfaceState(
-                levels,
-                currentLevel,
-                ActiveSubLevels,
-                currentDelay
-            ));
         }
 
-        /// <summary>
-        /// Update the UI of every comms console.
-        /// </summary>
-        private void OnGenericBroadcastEvent()
+        _uiSystem.SetUiState(uid, AlertKeyUiKey.Key, new AlertKeyInterfaceState(
+            levels,
+            ActiveSubLevels,
+            currentDelay
+        ));
+    }
+
+    /// <summary>
+    /// Update the UI of every comms console.
+    /// </summary>
+    private void OnGenericBroadcastEvent()
+    {
+        var query = EntityQueryEnumerator<AlertKeyComponent>();
+        while (query.MoveNext(out var uid, out var comp))
         {
-            var query = EntityQueryEnumerator<AlertKeyComponent>();
-            while (query.MoveNext(out var uid, out var comp))
-            {
-                UpdateAlertKeyInterface(uid, comp);
-            }
+            UpdateAlertKeyInterface(uid, comp);
         }
-        private bool CanUse(EntityUid user, EntityUid alertkey)
+    }
+    private bool CanUse(EntityUid user, EntityUid alertkey)
+    {
+        if (TryComp<AccessReaderComponent>(alertkey, out var accessReaderComponent) && !HasComp<EmaggedComponent>(alertkey))
         {
-            if (TryComp<AccessReaderComponent>(alertkey, out var accessReaderComponent) && !HasComp<EmaggedComponent>(alertkey))
-            {
-                return _accessReaderSystem.IsAllowed(user, alertkey, accessReaderComponent);
-            }
-            return true;
+            return _accessReaderSystem.IsAllowed(user, alertkey, accessReaderComponent);
         }
+        return true;
+    }
 }
 
 

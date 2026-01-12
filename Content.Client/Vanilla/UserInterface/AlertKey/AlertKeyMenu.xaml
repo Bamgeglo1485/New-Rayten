@@ -1,16 +1,16 @@
 <controls:FancyWindow xmlns="https://spacestation14.io"
-    xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
-    Title="{Loc 'alertkey-menu-title'}"
-    MinSize="500 350"
-    SetSize="500 350"
-    Resizable="False">
+                      xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
+                      Title="{Loc 'alertkey-menu-title'}"
+                      MinSize="500 350"
+                      SetSize="500 350"
+                      Resizable="False">
 
 
 
     <BoxContainer Orientation="Vertical"
-        HorizontalExpand="True"
-        VerticalExpand="True"
-        Margin="5 5 5 5">
+                  HorizontalExpand="True"
+                  VerticalExpand="True"
+                  Margin="5 5 5 5">
 
         <ScrollContainer Name="ReasonScroll"
                          HorizontalExpand="True"
@@ -18,35 +18,36 @@
                          MinHeight="100"
                          Access="Public">
 
-            <BoxContainer Orientation="Vertical" SeparationOverride="10" Name="ReasonContainer" HorizontalExpand="True" Access="Public" VerticalExpand="True" MaxWidth="460" Margin="10 10 10 10">
+            <BoxContainer Orientation="Vertical"
+                    SeparationOverride="10"
+                    Name="ReasonContainer"
+                    HorizontalExpand="True"
+                    Access="Public"
+                    VerticalExpand="True"
+                    MaxWidth="460"
+                    Margin="10 10 10 10">
 
             </BoxContainer>
         </ScrollContainer>
 
         <!-- Контейнер для элементов управления (прижат к нижнему краю) -->
         <BoxContainer Orientation="Vertical"
-            HorizontalExpand="True"
-            VerticalExpand="False">
-
-            <!-- Выпадающий список для выбора основных уровней угроз -->
-            <OptionButton Name="MainSelection"
-                Access="Public"
-                HorizontalExpand="True"
-                Margin="0 5 0 5"
-                StyleClasses="OpenRight"/>
+                      HorizontalExpand="True"
+                      VerticalExpand="False">
 
             <!-- Контейнер для динамически добавляемых кнопок дополнительных кодов -->
             <BoxContainer Name="SubLevelContainer"
-                HorizontalExpand="True"
-                SeparationOverride="5"
-                Orientation="Horizontal"/> <!-- Кнопки будут добавляться динамически -->
+                          HorizontalExpand="True"
+                          SeparationOverride="5"
+                          Orientation="Horizontal"/>
+            <!-- Кнопки будут добавляться динамически -->
 
             <!-- Кнопка "Применить" -->
             <Button Name="ApplyButton"
-                Access="Public"
-                Text="{Loc 'alertkey-menu-apply-button'}"
-                HorizontalExpand="True"
-                Margin="0 10 0 0"/>
+                    Access="Public"
+                    Text="{Loc 'alertkey-menu-apply-button'}"
+                    HorizontalExpand="True"
+                    Margin="0 10 0 0"/>
 
         </BoxContainer>
     </BoxContainer>

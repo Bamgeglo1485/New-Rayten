@@ -69,10 +69,10 @@ public sealed class ArsenalAuthorizatorSystem : SharedArsenalAuthorizatorSystem
         };
     }
 
-    protected override void ChangeAlertLevel(EntityUid uid, EntityUid stationUid, string reasonId)
+    protected override void ChangeAlertLevel(EntityUid stationUid, string reasonId)
     {
         if (!_proto.TryIndex<AlertLevelReasonPrototype>(reasonId, out var reasonproto))
             return;
-        _alertLevelSystem.SetLevel(stationUid, reasonproto.Code, true, true, reason: reasonproto.Text);
+        _alertLevelSystem.SetLevel(stationUid, reasonproto.Code, true, true, true, reason: reasonproto.Text);
     }
 }

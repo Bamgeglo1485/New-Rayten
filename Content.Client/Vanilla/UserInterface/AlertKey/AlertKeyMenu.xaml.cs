@@ -18,11 +18,9 @@ namespace Content.Client.Vanilla.UserInterface.AlertKey
         [Dependency] private readonly IPrototypeManager _proto = default!;
 
         public bool AlertLevelSelectable;
-        public event Action<string?, string?, string?>? OnApply;
-        public List<(string Level, bool IsSubcode, bool blocked)>? Alerts;
+        public event Action<string?, string?>? OnApply;
         private string? subcodestoadd = null;
         private string? SelectedReason = null;
-        private string? _selectedMainLevel = null;
         private readonly Dictionary<string, Color> ColorMap = new()
         {
             { "green", Color.Green },
@@ -36,75 +34,11 @@ namespace Content.Client.Vanilla.UserInterface.AlertKey
         {
             IoCManager.InjectDependencies(this);
             RobustXamlLoader.Load(this);
-
-            var allreasons = _proto.EnumeratePrototypes<AlertLevelReasonPrototype>().ToList();
-
             ApplyButton.Disabled = !AlertLevelSelectable || SelectedReason == null;
-
-            MainSelection.OnItemSelected += args =>
-            {
-                SelectedReason = null;
-                subcodestoadd = null;
-                ApplyButton.Disabled = !AlertLevelSelectable || SelectedReason == null;
-
-                ReasonContainer.Children.Clear();
-                _selectedMainLevel = MainSelection.GetItemMetadata(args.Id) as string;
-
-                UpdateMainSelection(_selectedMainLevel);
-
-                var buttonList = new List<Button>();
-
-                foreach (var reason in allreasons)
-                {
-                    if (_selectedMainLevel != reason.Code)
-                        continue;
-
-                    var reasonButton = new Button()
-                    {
-                        Text = reason.Text,
-                        StyleClasses = { "chatSelectorOptionButton" },
-                    };
-
-                    reasonButton.OnPressed += _ =>
-                    {
-                        if (SelectedReason == reason.ID)
-                        {
-                            SelectedReason = null;
-                            ApplyButton.Disabled = !AlertLevelSelectable || SelectedReason == null;
-
-                            foreach (var btn in buttonList)
-                            {
-                                btn.Modulate = Color.White;
-                                btn.Disabled = false;
-                            }
-                        }
-                        else
-                        {
-                            SelectedReason = reason.ID;
-                            ApplyButton.Disabled = !AlertLevelSelectable || SelectedReason == null;
-
-                            foreach (var btn in buttonList)
-                            {
-                                btn.Modulate = Color.White;
-                                btn.Disabled = true;
-                            }
-
-
-                            if (ColorMap.TryGetValue(_selectedMainLevel, out var color))
-                                reasonButton.Modulate = color;
-
-                            reasonButton.Disabled = false;
-                        }
-                    };
-
-                    ReasonContainer.AddChild(reasonButton);
-                    buttonList.Add(reasonButton);
-                }
-            };
 
             ApplyButton.OnPressed += _ =>
             {
-                OnApply?.Invoke(_selectedMainLevel, subcodestoadd, SelectedReason);
+                OnApply?.Invoke(subcodestoadd, SelectedReason);
             };
 
         }
@@ -113,7 +47,6 @@ namespace Content.Client.Vanilla.UserInterface.AlertKey
         private void OnSubLevelToggled(string level, bool isPressed)
         {
             SelectedReason = null;
-            _selectedMainLevel = null;
             ApplyButton.Disabled = !AlertLevelSelectable || SelectedReason == null;
             ReasonContainer.Children.Clear();
 
@@ -179,70 +112,16 @@ namespace Content.Client.Vanilla.UserInterface.AlertKey
         }
 
 
-        public void UpdateAlertLevels(List<(string Level, bool IsSubcode, bool blocked)>? alerts, string currentAlert, HashSet<string> ActiveSubLevels)
+        public void UpdateAlertLevels(List<(string Level, bool IsSubcode, bool blocked)>? alerts, HashSet<string> ActiveSubLevels)
         {
-            MainSelection.Clear();
             SubLevelContainer.RemoveAllChildren();
-            _selectedMainLevel = currentAlert;
             if (alerts == null)
-            {
-                // Если список пуст, добавляем только текущий основной код
-                AddMainLevel(currentAlert);
-            }
-            else
-            {
-                // Проходим по всем уровням
-                foreach (var (level, IsSubcode, blocked) in alerts)
-                {
-                    if (IsSubcode)
-                        CreateSubLevelButton(level, ActiveSubLevels.Contains(level), blocked);
-                    else
-                        AddMainLevel(level, currentAlert);
-                }
-            }
-        }
-        private void UpdateMainSelection(string? selectedLevel)
-        {
-            // Очищаем текущие элементы
-            MainSelection.Clear();
-
-            // Перезаполняем выпадающий список с новыми уровнями
-            if (Alerts != null)
-            {
-                foreach (var (level, isSubcode, _) in Alerts)
-                {
-                    if (!isSubcode)  // Добавляем только основные уровни
-                    {
-                        AddMainLevel(level, selectedLevel);
-                    }
-                }
-            }
-        }
-
-        // Добавляем основной уровень угроз
-        private void AddMainLevel(string level, string? selectedLevel = null)
-        {
-            if (Alerts == null)
                 return;
 
-            var alert = Alerts.FirstOrDefault(a => a.Level == level);
-            if (alert == default)
-                return;
-
-            var name = Loc.GetString($"alert-level-{level}");
-            MainSelection.AddItem(name);
-            int index = MainSelection.ItemCount - 1; // Получаем индекс последнего добавленного элемента
-
-            MainSelection.SetItemMetadata(index, level);
-
-            // Если уровень заблокирован — делаем его неактивным
-            if (alert.blocked)
+            foreach (var (level, IsSubcode, blocked) in alerts)
             {
-                MainSelection.SetItemDisabled(index, true);
-            }
-            else if (level == selectedLevel)
-            {
-                MainSelection.Select(index);
+                if (IsSubcode)
+                    CreateSubLevelButton(level, ActiveSubLevels.Contains(level), blocked);
             }
         }
 
@@ -258,7 +137,7 @@ namespace Content.Client.Vanilla.UserInterface.AlertKey
                 Name = level,
                 Disabled = (isblocked || !AlertLevelSelectable)
             };
-            if(!isblocked) button.OnPressed += _ => OnSubLevelToggled(level, button.Pressed);
+            if (!isblocked) button.OnPressed += _ => OnSubLevelToggled(level, button.Pressed);
             SubLevelContainer.AddChild(button);
         }
     }

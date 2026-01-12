@@ -23,23 +23,16 @@ namespace Content.Client.Vanilla.UserInterface.AlertKey
 
             _menu.OnApply += ApplyAlertLevels;
         }
-        private void ApplyAlertLevels(string? mainCode, string? subcodestoadd, string? reason)
+        private void ApplyAlertLevels(string? subcodestoadd, string? reason)
         {
             if (reason == null)
                 return;
-
-            if (mainCode != null)
-            {
-                SendMessage(new AlertKeyApplyMessage(mainCode, reason));
-                return;
-            }
 
             if (subcodestoadd != null)
             {
                 SendMessage(new AlertKeyApplyMessage(subcodestoadd, reason));
                 return;
             }
-
         }
 
         protected override void UpdateState(BoundUserInterfaceState state)
@@ -51,14 +44,12 @@ namespace Content.Client.Vanilla.UserInterface.AlertKey
 
             if (_menu != null)
             {
-                _menu.Alerts = alertState.AlertLevels;
                 _menu.AlertLevelSelectable = alertState.AlertLevels != null &&
                                                !float.IsNaN(alertState.CurrentAlertDelay) &&
                                                alertState.CurrentAlertDelay <= 0;
 
-                _menu.UpdateAlertLevels(alertState.AlertLevels, alertState.CurrentAlert, alertState.ActiveSubLevels);
+                _menu.UpdateAlertLevels(alertState.AlertLevels, alertState.ActiveSubLevels);
                 _menu.ApplyButton.Disabled = !_menu.AlertLevelSelectable;
-                _menu.MainSelection.Disabled = !_menu.AlertLevelSelectable;
             }
         }
     }

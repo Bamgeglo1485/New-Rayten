@@ -59,7 +59,7 @@
                         </PanelContainer.PanelOverride>
 
                         <BoxContainer Orientation="Vertical"
-                                      MinHeight="235"
+                                      MinHeight="295"
                                       Margin="5 5 5 5">
                             <Label Name="ReasonStatusHeader"
                                    Text="{Loc 'arsenal-authorizator-reasons-label'}"
