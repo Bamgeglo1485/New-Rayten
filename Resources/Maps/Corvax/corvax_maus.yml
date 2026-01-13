@@ -4,8 +4,8 @@ meta:
   engineVersion: 270.1.0
   forkId: ""
   forkVersion: ""
-  time: 01/11/2026 06:25:59
-  entityCount: 19354
+  time: 01/12/2026 10:03:32
+  entityCount: 19351
 maps:
 - 1
 grids:
@@ -11011,7 +11011,7 @@ entities:
           -3,1:
             0: 4087
           -3,2:
-            0: 12526
+            0: 16383
           -3,3:
             0: 30515
           -3,4:
@@ -11021,9 +11021,9 @@ entities:
           -2,0:
             0: 65520
           -2,1:
-            0: 24560
+            0: 20464
           -2,2:
-            0: 1245
+            0: 1501
           -2,-1:
             0: 62688
           -4,-4:
@@ -11037,7 +11037,7 @@ entities:
           -5,-2:
             0: 56575
           -4,-2:
-            0: 61152
+            0: 65248
           -4,-1:
             0: 3822
           -5,-1:
@@ -11499,13 +11499,13 @@ entities:
           -6,-17:
             0: 61166
           -8,-20:
-            0: 11263
+            0: 4095
           -8,-21:
-            0: 28775
+            0: 28791
           -9,-20:
-            0: 8157
+            0: 40925
           -8,-19:
-            0: 3003
+            0: 2457
           -9,-19:
             0: 7389
           -8,-18:
@@ -11673,7 +11673,7 @@ entities:
           -8,-23:
             0: 30582
           -8,-22:
-            0: 26464
+            0: 30577
           -8,-25:
             0: 24576
           -7,-22:
@@ -16561,7 +16561,7 @@ entities:
       pos: -43.5,-45.5
       parent: 2
     - type: Door
-      secondsUntilStateChange: -51683.164
+      secondsUntilStateChange: -51792.863
       state: Opening
     - type: DeviceLinkSource
       lastSignals:
@@ -49575,13 +49575,6 @@ entities:
     - type: Transform
       pos: -52.772964,-27.381226
       parent: 2
-- proto: ChemistryBottleOmnizine
-  entities:
-  - uid: 6316
-    components:
-    - type: Transform
-      pos: -69.34042,-32.275467
-      parent: 2
 - proto: ChemistryBottlePax
   entities:
   - uid: 6318
@@ -52123,15 +52116,6 @@ entities:
       rot: 0.8726646259971648 rad
       pos: -3.5451965,-4.308895
       parent: 18667
-- proto: ClothingShoesBootsMagAdv
-  entities:
-  - uid: 6769
-    components:
-    - type: Transform
-      parent: 6768
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
 - proto: ClothingShoesBootsMerc
   entities:
   - uid: 6771
@@ -59799,7 +59783,7 @@ entities:
       tags:
       - DrinkBottle
     - type: PressurizedSolution
-      sprayFizzinessThresholdRoll: 0.09257824
+      sprayFizzinessThresholdRoll: 0.96053225
     - type: SolutionContainerManager
       solutions: null
       containers:
@@ -88220,7 +88204,7 @@ entities:
       pos: -29.5,11.5
       parent: 2
     - type: Door
-      secondsUntilStateChange: -5381.619
+      secondsUntilStateChange: -5491.3184
       state: Opening
     - type: Forensics
       residues: []
@@ -88233,7 +88217,7 @@ entities:
       pos: -29.5,10.5
       parent: 2
     - type: Door
-      secondsUntilStateChange: -5381.8857
+      secondsUntilStateChange: -5491.585
       state: Opening
     - type: Forensics
       residues: []
@@ -88546,15 +88530,6 @@ entities:
       rot: 1.5707963267948966 rad
       pos: -6.5,-6.5
       parent: 2
-- proto: JetpackCaptainFilled
-  entities:
-  - uid: 11767
-    components:
-    - type: Transform
-      parent: 11766
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
 - proto: JetpackMini
   entities:
   - uid: 6761
@@ -88590,15 +88565,6 @@ entities:
     - type: Transform
       pos: -80.53327,-27.140291
       parent: 2
-- proto: JetpackVoidFilled
-  entities:
-  - uid: 6770
-    components:
-    - type: Transform
-      parent: 6768
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
 - proto: Jug
   entities:
   - uid: 11770
@@ -89329,32 +89295,13 @@ entities:
           showEnts: False
           occludes: True
           ent: null
-- proto: LockerCaptainFilled
+- proto: LockerCaptainFilledHardsuit
   entities:
-  - uid: 11766
+  - uid: 6769
     components:
     - type: Transform
       pos: -36.5,-14.5
       parent: 2
-    - type: EntityStorage
-      air:
-        volume: 200
-        immutable: False
-        temperature: 293.14673
-        moles:
-          Oxygen: 1.8968438
-          Nitrogen: 7.1357465
-    - type: ContainerContainer
-      containers:
-        entity_storage: !type:Container
-          showEnts: False
-          occludes: True
-          ents:
-          - 11767
-        paper_label: !type:ContainerSlot
-          showEnts: False
-          occludes: True
-          ent: null
 - proto: LockerChemistryFilled
   entities:
   - uid: 3401
@@ -89413,48 +89360,20 @@ entities:
           showEnts: False
           occludes: True
           ent: null
-- proto: LockerChiefEngineerFilled
+- proto: LockerChiefEngineerFilledHardsuit
   entities:
   - uid: 6768
     components:
     - type: Transform
       pos: -52.5,-14.5
       parent: 2
-    - type: EntityStorage
-      air:
-        volume: 200
-        immutable: False
-        temperature: 293.14673
-        moles:
-          Oxygen: 1.8978093
-          Nitrogen: 7.139378
-    - type: ContainerContainer
-      containers:
-        entity_storage: !type:Container
-          showEnts: False
-          occludes: True
-          ents:
-          - 6769
-          - 6770
-        paper_label: !type:ContainerSlot
-          showEnts: False
-          occludes: True
-          ent: null
-- proto: LockerChiefMedicalOfficerFilled
+- proto: LockerChiefMedicalOfficerFilledHardsuit
   entities:
-  - uid: 11844
+  - uid: 6770
     components:
     - type: Transform
       pos: -69.5,-28.5
       parent: 2
-    - type: EntityStorage
-      air:
-        volume: 200
-        immutable: False
-        temperature: 293.14673
-        moles:
-          Oxygen: 1.8856695
-          Nitrogen: 7.0937095
 - proto: LockerClown
   entities:
   - uid: 828
@@ -90129,6 +90048,11 @@ entities:
       parent: 2
 - proto: LootSpawnerMedicalClassy
   entities:
+  - uid: 6316
+    components:
+    - type: Transform
+      pos: -70.5,-28.5
+      parent: 2
   - uid: 11892
     components:
     - type: Transform
@@ -90138,11 +90062,6 @@ entities:
     components:
     - type: Transform
       pos: -79.5,-75.5
-      parent: 2
-  - uid: 11894
-    components:
-    - type: Transform
-      pos: -67.5,-32.5
       parent: 2
   - uid: 19105
     components:
@@ -111624,6 +111543,11 @@ entities:
       parent: 18667
 - proto: TableReinforcedGlass
   entities:
+  - uid: 7787
+    components:
+    - type: Transform
+      pos: -70.5,-28.5
+      parent: 2
   - uid: 14999
     components:
     - type: Transform

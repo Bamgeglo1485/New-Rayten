@@ -4,7 +4,7 @@ meta:
   engineVersion: 270.1.0
   forkId: ""
   forkVersion: ""
-  time: 01/11/2026 03:44:38
+  time: 01/12/2026 09:54:56
   entityCount: 11869
 maps:
 - 1
@@ -345,9 +345,9 @@ entities:
           -4,4:
             0: 61070
           -3,1:
-            0: 61695
+            0: 53503
           -3,2:
-            0: 56735
+            0: 56607
           -3,3:
             0: 64988
           -3,4:
@@ -355,7 +355,7 @@ entities:
           -2,1:
             0: 56575
           -2,2:
-            0: 65485
+            0: 65501
           -2,3:
             0: 32767
           -2,4:
@@ -363,9 +363,9 @@ entities:
           -1,1:
             0: 58623
           -1,2:
-            0: 16142
+            0: 65294
           -1,3:
-            0: 3003
+            0: 4095
           -1,4:
             0: 4095
           0,0:
@@ -726,7 +726,7 @@ entities:
           -4,8:
             2: 4051
           -3,5:
-            0: 3295
+            0: 3293
           -3,6:
             0: 45311
           -3,7:
@@ -809,7 +809,7 @@ entities:
             2: 57344
           8,5:
             0: 272
-            3: 17472
+            4: 17472
           8,6:
             2: 65345
           8,7:
@@ -850,10 +850,10 @@ entities:
             0: 53759
           11,2:
             0: 4319
-            4: 49152
+            3: 49152
           11,3:
             0: 61457
-            4: 204
+            3: 204
           11,-1:
             0: 30583
           11,4:
@@ -865,9 +865,9 @@ entities:
             0: 28791
           12,2:
             0: 119
-            4: 28672
+            3: 28672
           12,3:
-            4: 119
+            3: 119
             0: 62464
           12,-1:
             0: 29311
@@ -1301,16 +1301,16 @@ entities:
             2: 65534
           9,5:
             5: 4368
-            4: 17472
+            3: 17472
           9,6:
             2: 7936
           10,5:
-            4: 4368
+            3: 4368
             6: 17472
           10,6:
             2: 3840
           11,5:
-            4: 21840
+            3: 21840
           11,6:
             2: 3856
           12,5:
@@ -1430,11 +1430,11 @@ entities:
           moles: {}
         - volume: 2500
           temperature: 293.15
-          moles:
-            Nitrogen: 6666.982
+          moles: {}
         - volume: 2500
           temperature: 293.15
-          moles: {}
+          moles:
+            Nitrogen: 6666.982
         - volume: 2500
           temperature: 293.15
           moles:
@@ -4749,7 +4749,7 @@ entities:
       pos: 5.5,13.5
       parent: 2
     - type: Door
-      secondsUntilStateChange: -6485.8257
+      secondsUntilStateChange: -6535.6543
       state: Opening
     - type: DeviceLinkSource
       lastSignals:
@@ -5118,7 +5118,7 @@ entities:
       pos: -7.5,9.5
       parent: 2
     - type: Door
-      secondsUntilStateChange: -1137.6989
+      secondsUntilStateChange: -1187.5273
       state: Opening
     - type: DeviceLinkSource
       lastSignals:
@@ -5792,12 +5792,8 @@ entities:
   - uid: 4384
     components:
     - type: Transform
-      rot: -1.5707963267948966 rad
       pos: -13.5,17.5
       parent: 2
-    - type: AccessReader
-      accessListsOriginal:
-      - - Security
 - proto: ArsenalDoor
   entities:
   - uid: 7
