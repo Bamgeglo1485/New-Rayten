@@ -3,6 +3,7 @@ using Content.Shared.Access.Components;
 using Content.Shared.Station;
 using Content.Shared.Nuke;
 using Content.Shared.Interaction;
+using Content.Shared.Forensics.Components;
 using Robust.Shared.Physics.Events;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Audio.Systems;
@@ -21,11 +22,10 @@ public abstract partial class SharedArsenalAuthorizatorSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<ArsenalAuthorizatorComponent, ArsenalAuthorizatorOpenMessage>(OnOpen);
+        SubscribeLocalEvent<ArsenalAuthorizatorComponent, ArsenalAuthorizatorOpenMessage>(OnOpenArsenal);
         SubscribeLocalEvent<ArsenalAuthorizatorComponent, InteractUsingEvent>(OnNukeUse);
         SubscribeLocalEvent<ArsenalDoorComponent, PreventCollideEvent>(PreventCollide);
     }
-
     private void PreventCollide(EntityUid uid, ArsenalDoorComponent component, ref PreventCollideEvent args)
     {
         if (args.Cancelled)
@@ -43,9 +43,9 @@ public abstract partial class SharedArsenalAuthorizatorSystem : EntitySystem
 
     private void OnNukeUse(Entity<ArsenalAuthorizatorComponent> ent, ref InteractUsingEvent args)
     {
-        Log.Info($"пенис, {ent.Comp.NukeDiscAlertReason}");
         if (args.Handled)
             return;
+
         if (!HasComp<NukeDiskComponent>(args.Used))
             return;
 
@@ -57,20 +57,18 @@ public abstract partial class SharedArsenalAuthorizatorSystem : EntitySystem
         args.Handled = true;
     }
 
-    private void OnOpen(Entity<ArsenalAuthorizatorComponent> ent, ref ArsenalAuthorizatorOpenMessage args)
+    private void OnOpenArsenal(Entity<ArsenalAuthorizatorComponent> ent, ref ArsenalAuthorizatorOpenMessage args)
     {
         var stationUid = StationSys.GetOwningStation(ent.Owner);
         if (stationUid == null)
             return;
 
-        if (!IsUserAllowedAccess(ent, args.Actor))
+        if (!IsUserAllowedAccess(ent.Owner, args.Actor, ent.Comp))
             return;
 
         ent.Comp.State = ArsenalAuthorizatorState.Red;
         Appearance.SetData(ent.Owner, ArsenalAuthorizatorVisuals.State, (int)ent.Comp.State);
         _lights.SetColor(ent.Owner, GetColor(ent.Comp.State));
-
-
         Dirty(ent);
 
         ChangeAlertLevel(stationUid.Value, args.ReasonId);
@@ -105,16 +103,23 @@ public abstract partial class SharedArsenalAuthorizatorSystem : EntitySystem
         }
     }
 
-    public bool IsUserAllowedAccess(Entity<ArsenalAuthorizatorComponent> ent, EntityUid user)
+    public bool IsUserAllowedAccess(EntityUid uid, EntityUid user, ArsenalAuthorizatorComponent? comp = null)
     {
-        if (ent.Comp.State is ArsenalAuthorizatorState.Red or ArsenalAuthorizatorState.Gamma)
+        if (!Resolve(uid, ref comp))
             return false;
 
-        if (Access.IsAllowed(user, ent))
-            return true;
+        if (comp.State is ArsenalAuthorizatorState.Red or ArsenalAuthorizatorState.Gamma)
+            return false;
 
-        return false;
+        if (!TryComp<FingerprintComponent>(user, out var fingercomp) || fingercomp.Fingerprint == null)
+            return false;
+
+        if (!comp.AllowedFingerprints.Contains(fingercomp.Fingerprint))
+            return false;
+
+        return true;
     }
+
     public Color GetColor(ArsenalAuthorizatorState state)
     {
         return state switch

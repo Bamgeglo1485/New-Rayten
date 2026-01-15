@@ -14,7 +14,7 @@ public sealed partial class ArsenalAuthorizatorComponent : Component
     [DataField]
     public string NukeDiscAlertReason = "gamma1";
 
-    [ViewVariables]
+    [ViewVariables, AutoNetworkedField]
     public HashSet<string> AllowedFingerprints = [];
 }
 

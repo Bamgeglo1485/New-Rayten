@@ -15,7 +15,6 @@ using Robust.Client.UserInterface.XAML;
 using Robust.Shared.Prototypes;
 using System.Numerics;
 using System.Linq;
-using Content.Client.TurretController;
 
 namespace Content.Client.Vanilla.Entities.ArsenalAuthorizator;
 
@@ -26,7 +25,6 @@ public sealed partial class ArsenalAuthorizatorWindow : BaseWindow
     [Dependency] private readonly IPlayerManager _playerManager = default!;
     [Dependency] private readonly IResourceCache _cache = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
-    private readonly AccessReaderSystem _accessReaderSystem;
     private readonly SharedArsenalAuthorizatorSystem _arsenal;
 
     private EntityUid? _owner;
@@ -39,8 +37,6 @@ public sealed partial class ArsenalAuthorizatorWindow : BaseWindow
     {
         RobustXamlLoader.Load(this);
         IoCManager.InjectDependencies(this);
-
-        _accessReaderSystem = _entManager.System<AccessReaderSystem>();
         _arsenal = _entManager.System<SharedArsenalAuthorizatorSystem>();
         CloseButton.OnPressed += _ => Close();
 
@@ -150,9 +146,9 @@ public sealed partial class ArsenalAuthorizatorWindow : BaseWindow
 
     private bool IsLocalPlayerAllowedToInteract()
     {
-        if (State != ArsenalAuthorizatorState.Green || _owner == null || _playerManager.LocalSession?.AttachedEntity == null)
+        if (_owner == null || _playerManager.LocalSession?.AttachedEntity == null)
             return false;
 
-        return _accessReaderSystem.IsAllowed(_playerManager.LocalSession.AttachedEntity.Value, _owner.Value);
+        return _arsenal.IsUserAllowedAccess(_owner.Value, _playerManager.LocalSession.AttachedEntity.Value);
     }
 }
