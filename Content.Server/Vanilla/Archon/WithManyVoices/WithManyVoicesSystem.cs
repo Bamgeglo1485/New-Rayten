@@ -29,7 +29,7 @@ public sealed class WithManyVoicesSystem : SharedWithManyVoicesSystem
     {
         float? idealTemp;
 
-        if (!TryComp<ContainerTemperatureComponent>(uid, out var temperature))
+        if (!TryComp<TemperatureDamageComponent>(uid, out var temperature))
             return;
 
         if (TryComp<ThermalRegulatorComponent>(uid, out var regulator) &&

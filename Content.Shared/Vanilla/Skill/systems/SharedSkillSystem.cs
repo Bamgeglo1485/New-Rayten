@@ -17,6 +17,8 @@ using Robust.Shared.Audio.Systems;
 using Robust.Shared.GameStates;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
+using Robust.Shared.Player;
+
 namespace Content.Shared.Vanilla.Skill;
 
 public abstract partial class SharedSkillSystem : EntitySystem
@@ -96,7 +98,7 @@ public abstract partial class SharedSkillSystem : EntitySystem
                     {
                         comp.EasySkills.Add(skillType);
                         comp.SkillExps[skillType] = exp - threshold;
-                        Audio.PlayLocal(comp.LvlUpSound, ent.Owner, ent.Owner);
+                        Audio.PlayGlobal(comp.LvlUpSound, Filter.Empty().FromEntities(ent.Owner), false);
                     }
                     else
                     {
@@ -118,7 +120,7 @@ public abstract partial class SharedSkillSystem : EntitySystem
                     {
                         comp.BasicSkills[skillType] = level + 1;
                         comp.SkillExps[skillType] = exp - threshold;
-                        Audio.PlayLocal(comp.LvlUpSound, ent.Owner, ent.Owner);
+                        Audio.PlayGlobal(comp.LvlUpSound, Filter.Empty().FromEntities(ent.Owner), false);
                     }
                     else
                     {

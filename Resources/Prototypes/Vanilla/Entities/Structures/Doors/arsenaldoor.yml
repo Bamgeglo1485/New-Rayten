@@ -47,9 +47,11 @@
         density: 10000
         hard: true
         mask:
-        - Impassable
+        - MobMask
+        - InteractImpassable
         layer:
-        - Impassable
+        - MidImpassable
+        - InteractImpassable
   - type: PointLight
     enabled: true
     radius: 3

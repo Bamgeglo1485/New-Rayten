@@ -21,6 +21,7 @@ using Content.Shared.Weapons.Melee.Events;
 using Content.Shared.Inventory;
 using Content.Shared.Clothing.Components;
 using Content.Shared.Vanilla.Skill;
+using Content.Shared.Mobs.Components;
 using JetBrains.Annotations;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Prototypes;
@@ -491,17 +492,21 @@ public sealed partial class InjectorSystem : EntitySystem
             return true;
         }
         //rayten-start
-        if (HasInjectionProtection(target))
+        if (HasComp<MobStateComponent>(target))
         {
-            var userMessage = Loc.GetString("injector-component-blocked-user");
-            var otherMessage = Loc.GetString("injector-component-blocked-other", ("target", target), ("user", user));
-            _popup.PopupPredicted(userMessage, otherMessage, target, user);
-            return true;
-        }
-        if (TryComp<RequiresSkillComponent>(injector.Owner, out var requiresSkillComponent))
-        {
-            if (!_skill.HasRequiredSkill(user, requiresSkillComponent))
+            if (HasInjectionProtection(target))
+            {
+                var userMessage = Loc.GetString("injector-component-blocked-user");
+                var otherMessage = Loc.GetString("injector-component-blocked-other", ("target", target), ("user", user));
+                _popup.PopupPredicted(userMessage, otherMessage, target, user);
                 return true;
+            }
+
+            if (TryComp<RequiresSkillComponent>(injector.Owner, out var requiresSkillComponent))
+            {
+                if (!_skill.HasRequiredSkill(user, requiresSkillComponent))
+                    return true;
+            }
         }
         //rayten-end
         // Get transfer amount. It may be smaller than _transferAmount if not enough room
