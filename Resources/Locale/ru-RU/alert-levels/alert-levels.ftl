@@ -10,8 +10,7 @@ alert-level-green = Зелёный
 alert-level-green-announcement = Можно безопасно возвращаться на свои рабочие места.
 alert-level-green-instructions = Выполняйте свою работу.
 alert-level-blue = Синий
-alert-level-blue-announcement =
-    1. Ношение ID-карты в специальном слоте комбинезона обязательно.
+alert-level-blue-announcement = 1. Ношение ID-карты в специальном слоте комбинезона обязательно.
 alert-level-blue-instructions = Каждый сотрудник обязан носить свою ID-карту в своём КПК. Также членам экипажа рекомендуется проявлять бдительность и сообщать службе безопасности o любой подозрительной активности.
 alert-level-red = Красный
 alert-level-red-announcement =

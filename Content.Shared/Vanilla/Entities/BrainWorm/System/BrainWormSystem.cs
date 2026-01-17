@@ -14,6 +14,8 @@ using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
 using Content.Shared.Sprite;
 using Content.Shared.Atmos.Components;
+using Content.Shared.Body;
+using Content.Shared.Body.Components;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 using Robust.Shared.Containers;
@@ -29,9 +31,11 @@ public abstract partial class SharedBrainWormSystem : EntitySystem
     [Dependency] protected readonly SharedDoAfterSystem _doAfter = default!;
     [Dependency] protected readonly SharedPopupSystem _popup = default!;
     [Dependency] protected readonly SharedScaleVisualsSystem _scaleVisuals = default!;
+    [Dependency] private readonly BodySystem _body = default!;
     [Dependency] protected readonly IGameTiming _timing = default!;
     [Dependency] protected readonly MobStateSystem _mob = default!;
     [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
+
     private static readonly EntProtoId BrainWormShopId = "ActionBrainWormShop";
     private static readonly EntProtoId BrainWormChemicalsId = "ActionBrainWormChemicals";
     public override void Initialize()
@@ -200,19 +204,26 @@ public abstract partial class SharedBrainWormSystem : EntitySystem
 
     private void OnHostInit(EntityUid uid, BrainWormHostComponent component, ComponentInit args)
     {
-        //инициализируем контейнер
+        // Инициализируем контейнер червя
         component.BrainWormContainer = _container.EnsureContainer<ContainerSlot>(uid, "BrainWormContainer");
         component.BrainWormContainer.ShowContents = false;
         component.BrainWormContainer.OccludesLight = true;
 
-        //добавляем рутконтейнер как контейнер для разума, лочим его общение только с основным телом.
-        if (!TryComp<BodyComponent>(uid, out var body) || body.RootContainer.ContainedEntity == null)
+        // Проверяем, есть ли тело
+        if (!TryComp<BodyComponent>(uid, out var body))
             return;
 
-        component.MindCage = body.RootContainer.ContainedEntity.Value;
+        // Получаем органы с BrainComponent
+        if (!_body.TryGetOrgansWithComponent<BrainComponent>((uid, body), out var brains) || brains.Count == 0)
+            return;
+
+        component.MindCage = brains[0];
+
+        // Устанавливаем приватное общение с основным телом
         var privatetalkcomp = EnsureComp<PrivateTalkComponent>(component.MindCage);
         privatetalkcomp.receiver = uid;
     }
+
 
     private void OnHostShutdown(EntityUid uid, BrainWormHostComponent component, ComponentShutdown args)
     {
