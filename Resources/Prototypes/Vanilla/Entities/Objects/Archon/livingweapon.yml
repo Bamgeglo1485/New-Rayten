@@ -18,6 +18,7 @@
     size: Large
     shape:
     - 0,0,2,1
+  - type: GunIgnoreSkill
   - type: AmmoCounter
   - type: Gun
     fireRate: 5.5
@@ -51,6 +52,14 @@
   - type: SkillInvisible
   - type: StaticPrice
     price: 25000
+  - type: Speech
+  - type: GhostRole
+    name: ghost-role-information-livingweapon-name
+    description: ghost-role-information-livingweapon-description
+    rules: ghost-role-information-livingweapon-rules
+    mindRoles:
+    - MindRoleGhostRoleFreeAgentHarmless
+  - type: GhostTakeoverAvailable
 
 
 - type: entity
@@ -80,4 +89,4 @@
   - type: Projectile
     damage:
       types:
-        Piercing: 5
+        Piercing: 16
