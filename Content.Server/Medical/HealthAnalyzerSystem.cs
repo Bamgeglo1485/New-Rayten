@@ -234,8 +234,7 @@ public sealed class HealthAnalyzerSystem : EntitySystem
             unrevivable = true;
         //rayten-start
         var brainwormed = false;
-
-        if (TryComp<BrainWormHostComponent>(target, out var hostcomp) && !hostcomp.WormInStealth)
+        if (TryComp<BrainWormHostComponent>(entity, out var hostcomp) && !hostcomp.WormInStealth)
             brainwormed = true;
         //rayten-end
         return new HealthAnalyzerUiState(

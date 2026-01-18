@@ -105,7 +105,7 @@ public sealed partial class HealthAnalyzerControl : BoxContainer
 
         // Alerts
 
-        var showAlerts = state.Unrevivable == true || state.Bleeding == true;
+        var showAlerts = state.Unrevivable == true || state.Bleeding == true || state.Brainwormed;
 
         AlertsDivider.Visible = showAlerts;
         AlertsContainer.Visible = showAlerts;

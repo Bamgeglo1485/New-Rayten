@@ -8,6 +8,9 @@ using Content.Shared.Item;
 using Content.Shared.Storage.Components;
 using Content.Shared.Verbs;
 using Content.Shared.Whitelist;
+using Content.Shared.Popups;
+using Content.Shared.Damage.Systems;
+using Content.Shared.Vanilla.Archon.ContainerPunishment;
 using Robust.Shared.Containers;
 using Robust.Shared.Network;
 
@@ -23,7 +26,12 @@ public sealed class BinSystem : EntitySystem
     [Dependency] private readonly SharedContainerSystem _container = default!;
     [Dependency] private readonly SharedHandsSystem _hands = default!;
     [Dependency] private readonly EntityWhitelistSystem _whitelistSystem = default!;
+    //rayten-start
 
+    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private readonly DamageableSystem _damage = default!;
+
+    //rayten-end
     /// <inheritdoc/>
     public override void Initialize()
     {
@@ -94,6 +102,25 @@ public sealed class BinSystem : EntitySystem
         _admin.Add(LogType.Pickup, LogImpact.Low,
             $"{ToPrettyString(uid):player} removed {ToPrettyString(toGrab.Value)} from bin {ToPrettyString(uid)}.");
         args.Handled = true;
+        // rayten-start
+        if (TryComp<ContainerPunishmentComponent>(uid, out var punish))
+        {
+            if (!punish.Counters.TryGetValue(args.User, out var count))
+            {
+                count = 0;
+                if (punish.PopupMessage != null)
+                    _popup.PopupPredicted(Loc.GetString(punish.PopupMessage), uid, args.User);
+            }
+
+            count++;
+            punish.Counters[args.User] = count;
+
+            if (count > punish.MaxItems)
+                _damage.TryChangeDamage(args.User, punish.Damage);
+            Dirty(uid, punish);
+        }
+        // rayten-end
+
     }
 
     /// <summary>
