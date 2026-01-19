@@ -24,3 +24,10 @@ public sealed class ResearchAttemptEvent(Entity<ArchonBeaconComponent> beacon) :
 {
     public Entity<ArchonBeaconComponent> Beacon { get; } = beacon;
 }
+/// <summary>
+/// Ивент вызывается в момент разрыва связи с архонтом
+/// вызывается на архонте
+/// </summary>
+public readonly struct ResearchLinkDisconnectionEvent
+{
+}

@@ -62,6 +62,12 @@ public abstract class SharedBlindPredatorSystem : EntitySystem
         if (args.Origin == uid)
             return;
 
+        if (!TryComp<BlindPredatorComponent>(args.Origin, out var predComp))
+            return;
+
+        if (predComp.CanSeeOthers)
+            return;
+
         if (component.Predators.TryGetValue(args.Origin.Value, out var val) && !val)
             args.Cancelled = true;
     }

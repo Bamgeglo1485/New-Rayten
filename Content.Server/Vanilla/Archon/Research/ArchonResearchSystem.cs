@@ -135,6 +135,7 @@ public sealed partial class ArchonBeaconSystem : EntitySystem
                 beacon.Comp.LinkedArchon = null;
                 if (TryComp<ArchonComponent>(archon, out var archonComp))
                     archonComp.LinkedBeacon = null;
+                RaiseLocalEvent(archon, new ResearchLinkDisconnectionEvent());
             }
         }
     }

@@ -1,0 +1,108 @@
+- type: entity
+  parent: [ BaseMobArchon, SimpleMobBase ]
+  id: MobArchonPlagueDoctor049
+  name: чумной доктор
+  description: Гуманоидное существо ростом около 190 см, внешне схожее со средневековым чумным доктором.
+  components:
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: Vanilla/Mobs/Archons/PlagueDoctor.rsi
+    layers:
+    - map: ["enum.DamageStateVisualLayers.Base"]
+      state: base
+    - map: ["enum.DamageStateVisualLayers.BaseUnshaded"]
+      state: rage-unlit
+      visible: false
+      shader: unshaded
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.DamageVisualizerKeys.DamageUpdateGroups:
+        enum.DamageStateVisualLayers.Base:
+          Safe: { state: base }
+          Rage: { state: base }
+          Raging: { state: rage_animation }
+        enum.DamageStateVisualLayers.BaseUnshaded:
+          Safe: { visible: false }
+          Rage: { visible: true }
+          Raging: { visible: false }
+  - type: PlagueDoctor
+  - type: BlindPredator
+    canSeeOthers: true
+  - type: Reflect
+  - type: Prying
+    pryPowered: true
+    speedModifier: 0.45
+  - type: MeleeWeapon
+    altDisarm: true
+    attackRate: 0.4
+    animation: WeaponArcDisarm
+    soundHit: /Audio/Vanilla/Effects/Archon/049/049hit.ogg
+    damage:
+      types:
+        Blunt: 50
+        Cold: 70
+        Asphyxiation: 35
+        Structural: 5
+  - type: NpcFactionMember
+    factions:
+    - SimpleHostile
+    - Zombie
+  - type: MovementSpeedModifier
+    baseSprintSpeed: 4.2
+  - type: Damageable
+    damageModifierSet: PlagueDoctor
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      700: Dead
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 700
+  - type: SlowOnDamage
+    speedModifierThresholds:
+      300: 0.7
+      400: 0.5
+      600: 0.3
+  - type: PassiveDamage
+    damageCap: 700
+    allowedStates:
+    - Alive
+    - Critical
+    damage:
+      groups:
+        Brute: -2.5
+        Burn: -2.5
+        Toxin: -2.5
+        Genetic: -0.5
+        Airloss: -3.75
+  - type: VoiceEmitter
+    voice: PlagueDoctor
+  - type: AmbientSound
+    volume: 0
+    range: 10
+    sound:
+      path: /Audio/Vanilla/Ambience/049/SaveMeFrom.ogg
+  - type: FootstepModifier
+    footstepSoundCollection:
+      collection: Footsteps049
+      params:
+        volume: -8
+  - type: Tag
+    tags:
+    - DoorBumpOpener
+    - CannotSuicide
+    - FootstepSound
+
+
+# Веса различных исходов хирургических операций
+- type: weightedRandom
+  id: 049SurgeryResults
+  weights:
+    Zombify: 4
+    Rejuvenate: 2
+    Ignite: 1
+    Gib: 1
+    Cluwnefy: 0.1

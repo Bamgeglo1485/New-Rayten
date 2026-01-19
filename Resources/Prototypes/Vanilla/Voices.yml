@@ -74,7 +74,7 @@
   sex: Male
   voice:
     path: /Audio/Vanilla/Effects/Voices/Mettaton.ogg
-    
+
 - type: VoiceSpeech
   id: WX
   name: WX-78
@@ -133,3 +133,14 @@
   sponsorOnly: true
   voice:
     collection: Meme
+
+# неиграбельные
+- type: VoiceSpeech
+  id: PlagueDoctor
+  name: Чумной доктор
+  sex: Unsexed
+  sponsorOnly: true
+  voice:
+    collection: PlagueDoctor
+    params:
+      volume: 55

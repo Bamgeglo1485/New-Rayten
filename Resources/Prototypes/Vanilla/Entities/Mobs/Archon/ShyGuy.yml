@@ -35,6 +35,7 @@
             True:  { visible: false }
             False: { visible: true }
     - type: ShyGuy
+    - type: Muted
     - type: BlindPredator
     - type: Tag
       tags:
@@ -45,7 +46,7 @@
       disallowAllCombat: true
     - type: AmbientSound
       volume: 0
-      range: 15
+      range: 10
       sound:
         path: /Audio/Vanilla/Ambience/096cry.ogg
     - type: HTN

@@ -36,6 +36,7 @@
     mindRoles:
     - MindRoleGhostRoleSoloAntagonist
   - type: OldMan
+  - type: Muted
   - type: MeleeWeapon
     angle: 0
     attackRate: 0.4
@@ -105,6 +106,7 @@
       groups:
         Brute: -1.5
         Burn: -1.5
+        Toxin: -0.5
         Genetic: -0.25
         Airloss: -1.75
 

@@ -27,6 +27,7 @@
         groups:
           Brute: -1.25
           Burn: -1.25
+          Toxin: -0.5
           Genetic: -0.5
           Airloss: -1.75
     - type: TemperatureSpeed
@@ -71,10 +72,10 @@
       actionId: Action939Exo
     - type: Prying
       pryPowered: true
-      force: true
+      force: false
       speedModifier: 1
       useSound:
-        path: /Audio/Items/crowbar.ogg
+        path: /Audio/Machines/airlock_creaking.ogg
     - type: Destructible
       thresholds:
       - trigger:

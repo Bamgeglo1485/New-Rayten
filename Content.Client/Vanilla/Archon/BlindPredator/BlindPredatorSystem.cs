@@ -6,6 +6,7 @@ using Robust.Shared.Player;
 using Robust.Client.Graphics;
 using Robust.Client.GameObjects;
 using Robust.Client.Player;
+using Microsoft.VisualBasic;
 
 namespace Content.Client.Vanilla.Archon.BlindPredator;
 
@@ -52,6 +53,7 @@ public sealed class BlindPredatorSystem : SharedBlindPredatorSystem
             return;
 
         comp.Predators[predator] = visible;
+
         UpdateVisibility(victim, comp);
     }
 
@@ -68,6 +70,12 @@ public sealed class BlindPredatorSystem : SharedBlindPredatorSystem
             return;
 
         if (locEnt == uid)
+        {
+            sprite.Visible = true;
+            return;
+        }
+
+        if (TryComp<BlindPredatorComponent>(locEnt, out var predComp) && predComp.CanSeeOthers)
         {
             sprite.Visible = true;
             return;

@@ -806,6 +806,8 @@ public sealed partial class InjectorSystem : EntitySystem
     // rayten-start
     private bool HasInjectionProtection(EntityUid entity)
     {
+        if (HasComp<InjectionProtectionComponent>(entity))
+            return true;
         // ClothingOuterHardsuitBase
         // ClothingHeadHardsuitBase
         // ClothingOuterEVASuitBase
