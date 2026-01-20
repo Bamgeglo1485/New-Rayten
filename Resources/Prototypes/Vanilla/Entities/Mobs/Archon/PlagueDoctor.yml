@@ -92,6 +92,7 @@
   - type: VoiceEmitter
     voice: PlagueDoctor
   - type: Speech
+    allowedEmotes: ['PlagueDoctorSalute', 'PlagueDoctorSing']
   - type: Vocal
     sounds:
       Male: UnisexPlagueDoctor

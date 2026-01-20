@@ -1,10 +1,10 @@
 using Content.Server.Antag.Components;
 using Content.Shared.GameTicking.Components;
 using Content.Server.GameTicking.Rules;
-
+using Content.Server.StationEvents.Events;
 namespace Content.Server.Antag;
 
-public sealed class AntagRandomSpawnSystem : GameRuleSystem<AntagRandomSpawnComponent>
+public sealed class AntagRandomSpawnSystem : StationEventSystem<AntagRandomSpawnComponent>
 {
     [Dependency] private readonly SharedTransformSystem _transform = default!;
 
