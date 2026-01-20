@@ -12,6 +12,7 @@ using Content.Shared.Popups;
 using Content.Shared.Cluwne;
 using Content.Shared.Stunnable;
 using Content.Shared.Weapons.Melee.Events;
+using Content.Shared.Zombies;
 using Robust.Shared.Random;
 using Robust.Shared.Prototypes;
 
@@ -43,7 +44,11 @@ public sealed class PlagueDoctorgSystem : SharedPlagueDoctorgSystem
             return;
 
         foreach (var target in args.HitEntities)
-            _zombie.ZombifyEntity(target);
+        {
+            if (HasComp<ZombieImmuneComponent>(target) || HasComp<ZombieImmuneComponent>(target) || HasComp<ZombieComponent>(target))
+                continue;
+            EnsureComp<ZombifyOnDeathComponent>(target);
+        }
     }
 
     protected override void MakeSurgery(EntityUid uid, PlagueDoctorComponent comp, EntityUid target)

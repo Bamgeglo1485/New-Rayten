@@ -1,5 +1,5 @@
 - type: entity
-  parent: [ BaseMobArchon, SimpleMobBase ]
+  parent: BaseMobArchon
   id: MobArchonPlagueDoctor049
   name: чумной доктор
   description: Гуманоидное существо ростом около 190 см, внешне схожее со средневековым чумным доктором.
@@ -26,10 +26,8 @@
           Safe: { visible: false }
           Rage: { visible: true }
           Raging: { visible: false }
+  - type: GhostTakeoverAvailable
   - type: GhostRole
-    allowMovement: true
-    allowSpeech: true
-    makeSentient: true
     name: ghost-role-information-plague-doctor-name
     description: ghost-role-information-plague-doctor-description
     rules: ghost-role-information-plague-doctor-rules
@@ -37,10 +35,14 @@
     - MindRolePlagueDoctor
     raffle:
       settings: default
+  - type: Puller
+    needsHands: false
   - type: PlagueDoctor
   - type: BlindPredator
     canSeeOthers: true
   - type: Reflect
+  - type: CombatMode
+    canDisarm: true
   - type: Prying
     pryPowered: true
     speedModifier: 0.45
@@ -51,10 +53,8 @@
     soundHit: /Audio/Vanilla/Effects/Archon/049/049hit.ogg
     damage:
       types:
-        Blunt: 50
-        Cold: 70
-        Asphyxiation: 35
-        Structural: 5
+        Cold: 80
+        Structural: 15
   - type: NpcFactionMember
     factions:
     - SimpleHostile
@@ -72,6 +72,14 @@
     - trigger:
         !type:DamageTrigger
         damage: 700
+      behaviors:
+      - !type:GibBehavior
+        recursive: false
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          MaterialParaxit1:
+            min: 1
+            max: 5
   - type: SlowOnDamage
     speedModifierThresholds:
       300: 0.7
