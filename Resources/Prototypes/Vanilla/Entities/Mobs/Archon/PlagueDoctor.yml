@@ -80,6 +80,11 @@
         Airloss: -3.75
   - type: VoiceEmitter
     voice: PlagueDoctor
+  - type: Vocal
+    sounds:
+      Male: UnisexPlagueDoctor
+      Female: UnisexPlagueDoctor
+      Unsexed: UnisexPlagueDoctor
   - type: AmbientSound
     volume: 0
     range: 10
@@ -95,7 +100,7 @@
     - DoorBumpOpener
     - CannotSuicide
     - FootstepSound
-
+    - DisableEmotes
 
 # Веса различных исходов хирургических операций
 - type: weightedRandom
