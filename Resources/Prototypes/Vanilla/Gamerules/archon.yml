@@ -56,7 +56,7 @@
     - id: OldManSpawn
     - id: BlindPredatorSpawn
     #евклид
-    # - id: PlagueDoctorSpawn
+    - id: PlagueDoctorSpawn
     - id: ShyGuySpawn
     - id: SculptureSpawn
     #безопасный
@@ -81,27 +81,32 @@
   - type: RandomSpawnRule
     prototype: MobArchonOldMan106
   - type: StationEvent
+
 #евклид
-# - type: entity
-#   parent: EuclidArchonGameRule
-#   id: PlagueDoctorSpawn
-#   components:
-#   - type: RandomSpawnRule
-#     prototype: MobSculptureArchon173
-#   - type: AntagRandomSpawn
-#   - type: AntagSelection
-#     agentName: Чумной Доктор
-#     definitions:
-#     - spawnerPrototype: SpawnPointGhostPlagueDoctor
-#       min: 1
-#       max: 1
-#       pickPlayer: false
-#       briefing:
-#         text: здарова
-#         color: lightblue
-#         sound: /Audio/Misc/paradox_clone_greeting.ogg
-#       mindRoles:
-#       - MindRoleParadoxClone
+- type: entity
+  parent: EuclidArchonGameRule
+  id: PlagueDoctorSpawn
+  components:
+  - type: AntagObjectives
+    objectives:
+    - PlagueDoctorPestilenceObjective
+    - PlagueDoctorLivingObjective
+  - type: AntagRandomSpawn
+  - type: AntagSpawner
+    prototype: MobArchonPlagueDoctor049
+  - type: AntagSelection
+    agentName: plague-doctor-round-end-agent-name
+    definitions:
+    - spawnerPrototype: SpawnPointGhostPlagueDoctor
+      min: 1
+      max: 1
+      pickPlayer: false
+      briefing:
+        text: plague-doctor-role-greeting
+        color: violet
+        sound: /Audio/Vanilla/Effects/Archon/049/049raging.ogg
+      mindRoles:
+      - MindRolePlagueDoctor
 
 
 - type: entity

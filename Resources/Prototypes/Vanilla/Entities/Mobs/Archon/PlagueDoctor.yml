@@ -26,6 +26,17 @@
           Safe: { visible: false }
           Rage: { visible: true }
           Raging: { visible: false }
+  - type: GhostRole
+    allowMovement: true
+    allowSpeech: true
+    makeSentient: true
+    name: ghost-role-information-plague-doctor-name
+    description: ghost-role-information-plague-doctor-description
+    rules: ghost-role-information-plague-doctor-rules
+    mindRoles:
+    - MindRolePlagueDoctor
+    raffle:
+      settings: default
   - type: PlagueDoctor
   - type: BlindPredator
     canSeeOthers: true
@@ -80,6 +91,7 @@
         Airloss: -3.75
   - type: VoiceEmitter
     voice: PlagueDoctor
+  - type: Speech
   - type: Vocal
     sounds:
       Male: UnisexPlagueDoctor
