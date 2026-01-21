@@ -13,6 +13,7 @@ using Content.Shared.Mobs.Systems;
 using Content.Shared.Speech;
 using Content.Shared.Speech.Components;
 using Content.Shared.Whitelist;
+using Content.Shared.Popups;
 using Robust.Shared.Network;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
@@ -33,7 +34,7 @@ public sealed partial class ParrotMemorySystem : SharedParrotMemorySystem
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly MindSystem _mind = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
-
+    [Dependency] private readonly SharedPopupSystem _popup = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -175,12 +176,20 @@ public sealed partial class ParrotMemorySystem : SharedParrotMemorySystem
         if (entity.Comp.SpeechMemories.Count < entity.Comp.MaxSpeechMemory)
         {
             entity.Comp.SpeechMemories.Add(newMemory);
+            //rayten-start
+            _popup.PopupEntity("Вы скопировали новый голос!", entity.Owner, entity.Owner, PopupType.Medium);
+            Dirty(entity);
+            //rayten-end
             return;
         }
 
         // if there's no space in memory, replace something at random
         var replaceIdx = _random.Next(entity.Comp.SpeechMemories.Count);
         entity.Comp.SpeechMemories[replaceIdx] = newMemory;
+        //rayten-start
+        _popup.PopupEntity("Вы скопировали новый голос!", entity.Owner, entity.Owner, PopupType.Medium);
+        Dirty(entity);
+        //rayten-end
     }
 
     /// <summary>

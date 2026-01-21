@@ -15,10 +15,7 @@
   id: PlagueDoctorSing
   name: chat-emote-name-plague-doctor-sing
   category: Vocal
-  whitelist:
-    components:
-    - PlagueDoctor
-    - Vocal
+  available: false
   icon: Interface/Emotes/whistle.png
   chatMessages:
    - chat-emote-msg-plague-doctor-sing-1
@@ -34,10 +31,7 @@
   name: chat-emote-name-plague-salute
   category: Vocal
   icon: Interface/Emotes/salute.png
-  whitelist:
-    components:
-    - PlagueDoctor
-    - Vocal
+  available: false
   chatMessages: ["chat-emote-msg-plague-salute"]
   chatTriggers:
     - здоровается

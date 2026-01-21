@@ -19,13 +19,13 @@
     visuals:
       enum.DamageVisualizerKeys.DamageUpdateGroups:
         enum.DamageStateVisualLayers.Base:
-          Safe: { state: base }
-          Rage: { state: base }
-          Raging: { state: rage_animation }
-        enum.DamageStateVisualLayers.BaseUnshaded:
-          Safe: { visible: false }
+          Safe: { visible: true}
           Rage: { visible: true }
           Raging: { visible: false }
+        enum.DamageStateVisualLayers.BaseUnshaded:
+          Safe: { visible: false, state: rage-unlit }
+          Rage: { visible: true, state: rage-unlit }
+          Raging: { visible: true, state: rage_animation }
   - type: GhostTakeoverAvailable
   - type: GhostRole
     name: ghost-role-information-plague-doctor-name
@@ -48,19 +48,19 @@
     speedModifier: 0.45
   - type: MeleeWeapon
     altDisarm: true
-    attackRate: 0.4
+    attackRate: 0.6
     animation: WeaponArcDisarm
-    soundHit: /Audio/Vanilla/Effects/Archon/049/049hit.ogg
     damage:
       types:
-        Cold: 80
+        Blunt: 5
+        Cold: 5
         Structural: 15
   - type: NpcFactionMember
     factions:
     - SimpleHostile
     - Zombie
   - type: MovementSpeedModifier
-    baseSprintSpeed: 4.2
+    baseSprintSpeed: 4.1
   - type: Damageable
     damageModifierSet: PlagueDoctor
   - type: MobThresholds
@@ -99,6 +99,7 @@
         Airloss: -3.75
   - type: VoiceEmitter
     voice: PlagueDoctor
+  - type: Emoting
   - type: Speech
     allowedEmotes: ['PlagueDoctorSalute', 'PlagueDoctorSing']
   - type: Vocal

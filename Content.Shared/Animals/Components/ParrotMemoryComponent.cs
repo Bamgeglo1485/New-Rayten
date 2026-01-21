@@ -11,12 +11,13 @@ namespace Content.Shared.Animals.Components;
 /// </summary>
 [RegisterComponent, NetworkedComponent]
 [AutoGenerateComponentPause]
+[AutoGenerateComponentState]//rayten
 public sealed partial class ParrotMemoryComponent : Component
 {
     /// <summary>
     /// List of SpeechMemory records this entity has learned.
     /// </summary>
-    [DataField]
+    [DataField, AutoNetworkedField]
     public List<SpeechMemory> SpeechMemories = new();
 
     /// <summary>

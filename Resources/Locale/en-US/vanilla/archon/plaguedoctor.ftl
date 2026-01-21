@@ -1,7 +1,7 @@
 role-antag-plague-doctor = Чумной доктор
-role-subtype-plague-doctor = Чумной док.
-objective-issuer-plague-doctor = [color=violet]Чумной доктор[/color]
 plague-doctor-round-end-agent-name = Чумной доктор
+role-subtype-plague-doctor = SCP-049
+objective-issuer-plague-doctor = [color=violet]Спасение мира[/color]
 plague-doctor-role-greeting = Поветрие распространяется... Не допустите его распротранения, проводя операции над различными видами животных. Возможно вам придется кооперироваться с людьми.
 archon049-surgery-success = УСПЕХ!
 archon049-surgery-fail = Упс...

@@ -2,6 +2,7 @@ using Content.Shared.Damage.Systems;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Mobs;
 using System.Linq;
+
 namespace Content.Shared.Vanilla.Archon.BlindPredator;
 
 public abstract class SharedBlindPredatorSystem : EntitySystem
@@ -95,5 +96,16 @@ public abstract class SharedBlindPredatorSystem : EntitySystem
 
         comp.Predators[predator] = visible;
         Dirty(victim, comp);
+    }
+
+    public bool IsVisibleByPredator(EntityUid victim, EntityUid predator, PredatorVisibleMarkComponent? comp = null)
+    {
+        if (!Resolve(victim, ref comp, false))
+            return false;
+
+        if (!comp.Predators.TryGetValue(predator, out var val))
+            return false;
+
+        return val;
     }
 }

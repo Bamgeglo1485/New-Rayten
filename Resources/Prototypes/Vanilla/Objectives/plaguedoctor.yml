@@ -20,6 +20,8 @@
     icon:
       sprite: /Textures/Vanilla/Interface/Alerts/049_pestilence.rsi
       state: plague0
+    title: objective-carp-rifts-title
+    description: objective-carp-rifts-description
   - type: PestilenceCondition
 
 - type: entity

@@ -11,8 +11,6 @@ using Content.Shared.Gibbing;
 using Content.Shared.Popups;
 using Content.Shared.Cluwne;
 using Content.Shared.Stunnable;
-using Content.Shared.Weapons.Melee.Events;
-using Content.Shared.Zombies;
 using Robust.Shared.Random;
 using Robust.Shared.Prototypes;
 
@@ -29,27 +27,6 @@ public sealed class PlagueDoctorgSystem : SharedPlagueDoctorgSystem
     [Dependency] private readonly ChatSystem _chatSystem = default!;
     [Dependency] private readonly SharedStunSystem _stun = default!;
     [Dependency] private readonly SharedBlindPredatorSystem _blindpredator = default!;
-    public override void Initialize()
-    {
-        base.Initialize();
-        SubscribeLocalEvent<PlagueDoctorComponent, MeleeHitEvent>(OnMeleeHit);
-    }
-
-    private void OnMeleeHit(EntityUid uid, PlagueDoctorComponent comp, ref MeleeHitEvent args)
-    {
-        if (!args.IsHit)
-            return;
-
-        if (comp.State != PlagueDoctorState.Rage)
-            return;
-
-        foreach (var target in args.HitEntities)
-        {
-            if (HasComp<ZombieImmuneComponent>(target) || HasComp<ZombieImmuneComponent>(target) || HasComp<ZombieComponent>(target))
-                continue;
-            EnsureComp<ZombifyOnDeathComponent>(target);
-        }
-    }
 
     protected override void MakeSurgery(EntityUid uid, PlagueDoctorComponent comp, EntityUid target)
     {

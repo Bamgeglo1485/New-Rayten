@@ -87,6 +87,8 @@
   parent: EuclidArchonGameRule
   id: PlagueDoctorSpawn
   components:
+  - type: StationEvent
+    duration: null
   - type: AntagObjectives
     objectives:
     - PlagueDoctorPestilenceObjective

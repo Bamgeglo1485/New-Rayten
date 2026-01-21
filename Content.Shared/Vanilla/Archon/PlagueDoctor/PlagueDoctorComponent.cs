@@ -1,6 +1,7 @@
 using Content.Shared.Actions;
 using Content.Shared.Alert;
 using Content.Shared.DoAfter;
+using Content.Shared.Damage;
 using Content.Shared.Random;
 using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
@@ -53,6 +54,8 @@ public sealed partial class PlagueDoctorComponent : Component
     /// </summary>
     [DataField]
     public SoundSpecifier RageAmbient = new SoundPathSpecifier("/Audio/Vanilla/Ambience/049/049Angry.ogg");
+    [DataField]
+    public SoundSpecifier HitSound = new SoundPathSpecifier("/Audio/Vanilla/Effects/Archon/049/049hit.ogg");
     /// <summary>
     /// Аудиострим
     /// </summary>
@@ -109,6 +112,14 @@ public sealed partial class PlagueDoctorComponent : Component
     [DataField]
     public ProtoId<WeightedRandomPrototype> SurgeryResults = "049SurgeryResults";
     #endregion
+    [DataField]
+    public DamageSpecifier HitDamage = new()
+    {
+        DamageDict = new()
+        {
+            { "Cold", 228 }
+        }
+    };
 }
 
 [Serializable, NetSerializable]

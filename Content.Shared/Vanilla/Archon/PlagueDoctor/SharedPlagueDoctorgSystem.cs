@@ -3,12 +3,16 @@ using Content.Shared.Alert;
 using Content.Shared.Actions;
 using Content.Shared.Audio;
 using Content.Shared.Mobs.Systems;
+using Content.Shared.Mobs.Components;
 using Content.Shared.DoAfter;
 using Content.Shared.Popups;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Vanilla.Archon.Research;
+using Content.Shared.Vanilla.Archon.BlindPredator;
 using Content.Shared.Zombies;
+using Content.Shared.Weapons.Melee.Events;
+using Content.Shared.Humanoid;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Timing;
 using Robust.Shared.Player;
@@ -26,7 +30,8 @@ public abstract class SharedPlagueDoctorgSystem : EntitySystem
     [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly SharedAmbientSoundSystem _ambient = default!;
-
+    [Dependency] private readonly SharedBlindPredatorSystem _predator = default!;
+    [Dependency] private readonly DamageableSystem _damageable = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -37,6 +42,7 @@ public abstract class SharedPlagueDoctorgSystem : EntitySystem
         SubscribeLocalEvent<PlagueDoctorComponent, MapInitEvent>(OnMapInit);
         SubscribeLocalEvent<PlagueDoctorComponent, DamageChangedEvent>(OnDamageChange);
         SubscribeLocalEvent<PlagueDoctorComponent, BeforeDamageChangedEvent>(OnBeforeDamageChanged);
+        SubscribeLocalEvent<PlagueDoctorComponent, MeleeHitEvent>(OnMeleeHit);
     }
 
     public override void Update(float frameTime)
@@ -52,6 +58,36 @@ public abstract class SharedPlagueDoctorgSystem : EntitySystem
 
             docComp.NextUpdate = now + TimeSpan.FromSeconds(1);
             ChangePestilence(uid, docComp, docComp.PestilencePerSecond);
+        }
+    }
+
+    private void OnMeleeHit(EntityUid uid, PlagueDoctorComponent comp, ref MeleeHitEvent args)
+    {
+        if (!args.IsHit)
+            return;
+
+        //доп. демедж
+        foreach (var target in args.HitEntities)
+        {
+            if (!HasComp<MobStateComponent>(target))
+                continue;
+
+            if (HasComp<HumanoidAppearanceComponent>(target) && !_predator.IsVisibleByPredator(target, uid))
+                continue;
+
+            _audio.PlayPredicted(comp.HitSound, target, uid);
+            _damageable.TryChangeDamage(target, comp.HitDamage, origin: uid);
+        }
+
+        ///зомбифицируем если в рейдже
+        if (comp.State != PlagueDoctorState.Rage)
+            return;
+        foreach (var target in args.HitEntities)
+        {
+            if (HasComp<ZombieImmuneComponent>(target) || HasComp<ZombieImmuneComponent>(target) || HasComp<ZombieComponent>(target))
+                continue;
+
+            EnsureComp<ZombifyOnDeathComponent>(target);
         }
     }
 
@@ -93,7 +129,7 @@ public abstract class SharedPlagueDoctorgSystem : EntitySystem
             args.Cancelled = true;
     }
     /// <summary>
-    /// каждые 2.5 урона от кого-то повышают поветрие на 1 ед.
+    /// каждые 3 урона от кого-то повышают поветрие на 1 ед.
     /// </summary>
     private void OnDamageChange(EntityUid uid, PlagueDoctorComponent component, DamageChangedEvent args)
     {
@@ -108,7 +144,7 @@ public abstract class SharedPlagueDoctorgSystem : EntitySystem
         if (total <= 0 || source == uid)
             return;
 
-        ChangePestilence(uid, component, total / 2.5f);
+        ChangePestilence(uid, component, total / 3f);
     }
     #region хирургия
     private void OnSurgeryAction(EntityUid uid, PlagueDoctorComponent comp, ref Surgery049Event args)

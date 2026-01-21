@@ -47,7 +47,6 @@
     - type: MobThresholds
       thresholds:
         0: Alive
-        900: Critical
         1000: Dead
     - type: Destructible
       thresholds:

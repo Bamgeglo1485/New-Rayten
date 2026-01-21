@@ -70,17 +70,37 @@
     - type: WithManyVoices
     - type: NPCUseActionIfPossible
       actionId: Action939Exo
+    - type: Speech
+      speechVerb: LargeMob
+    - type: Vocal
+    - type: ActiveListener
+      range: 15
+    - type: ParrotListener
+      requireAll: true
+      whitelist:
+        components:
+        - MobState
+        - Vocal
+    - type: Muted
+    - type: ParrotMemory
+      learnChance: .25
     - type: Prying
       pryPowered: true
       force: false
       speedModifier: 1
-      useSound:
-        path: /Audio/Machines/airlock_creaking.ogg
     - type: Destructible
       thresholds:
       - trigger:
           !type:DamageTrigger
           damage: 600
+        behaviors:
+        - !type:GibBehavior
+          recursive: false
+        - !type:SpawnEntitiesBehavior
+          spawn:
+            MaterialParaxit1:
+              min: 1
+              max: 5
     - type: HTN
       rootTask:
         task: 939Compound
