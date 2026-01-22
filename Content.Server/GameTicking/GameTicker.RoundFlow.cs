@@ -24,7 +24,7 @@ using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Random;
 using Robust.Shared.Utility;
-
+using System.Text.RegularExpressions;
 namespace Content.Server.GameTicking
 {
     public sealed partial class GameTicker
@@ -498,7 +498,7 @@ namespace Content.Server.GameTicking
 
             try
             {
-                SendRoundEndDiscordMessage();
+                // SendRoundEndDiscordMessage();
             }
             catch (Exception e)
             {
@@ -519,7 +519,6 @@ namespace Content.Server.GameTicking
             RaiseLocalEvent(textEv);
 
             var roundEndText = $"{text}\n{textEv.Text}";
-
             //Get the timespan of the round.
             var roundDuration = RoundDuration();
 
@@ -599,6 +598,9 @@ namespace Content.Server.GameTicking
                 listOfPlayerInfoFinal,
                 sound
             );
+            //rayten-start
+            SendRoundEndDiscordMessage(textEv.Text, gamemodeTitle, roundDuration);
+            //rayten-end
             RaiseNetworkEvent(roundEndMessageEvent);
             RaiseLocalEvent(roundEndMessageEvent);
             RaiseLocalEvent(new RoundEndedEvent(RoundId, roundDuration)); // Corvax
@@ -606,38 +608,81 @@ namespace Content.Server.GameTicking
             _replayRoundPlayerInfo = listOfPlayerInfoFinal;
             _replayRoundText = roundEndText;
         }
-
-        private async void SendRoundEndDiscordMessage()
+        //rayten-start
+        private async void SendRoundEndDiscordMessage(string text, string gamemode, TimeSpan roundDuration)
         {
             try
             {
+
                 if (_webhookIdentifier == null)
                     return;
 
-                var duration = RoundDuration();
-                var content = Loc.GetString("discord-round-notifications-end",
-                    ("id", RoundId),
-                    ("hours", Math.Truncate(duration.TotalHours)),
-                    ("minutes", duration.Minutes),
-                    ("seconds", duration.Seconds));
-                var payload = new WebhookPayload { Content = content };
+                var payloadContent = Loc.GetString("round-end-summary-discord-round-id-label", ("roundId", RoundId)) + "\n"
+                            + Loc.GetString("round-end-summary-discord-gamemode-name-label", ("gamemode", gamemode)) + "\n"
+                            + Loc.GetString("round-end-summary-discord-duration-label",
+                                                                ("hours", roundDuration.Hours),
+                                                                ("minutes", roundDuration.Minutes),
+                                                                ("seconds", roundDuration.Seconds));
 
-                await _discord.CreateMessage(_webhookIdentifier.Value, payload);
 
-                if (DiscordRoundEndRole == null)
-                    return;
+                var payload = new WebhookPayload
+                {
+                    Content = payloadContent
+                };
 
-                content = Loc.GetString("discord-round-notifications-end-ping", ("roleId", DiscordRoundEndRole));
-                payload = new WebhookPayload { Content = content };
-                payload.AllowedMentions.AllowRoleMentions();
-
-                await _discord.CreateMessage(_webhookIdentifier.Value, payload);
+                if (string.IsNullOrWhiteSpace(text))
+                {
+                    await _discord.CreateMessage(_webhookIdentifier.Value, payload);
+                }
+                else
+                {
+                    await _discord.CreateMessageWithFile(
+                        _webhookIdentifier.Value,
+                        payload,
+                        $"Rayten-{RoundId}.md",
+                        SanitizeForDiscord(text)
+                    );
+                }
             }
             catch (Exception e)
             {
-                Log.Error($"Error while sending discord round end message:\n{e}");
+                Log.Error($"Discord webhook error:\n{e}");
             }
         }
+
+        private static string SanitizeForDiscord(string input)
+        {
+            if (string.IsNullOrWhiteSpace(input))
+                return string.Empty;
+
+            var text = input;
+
+            // был(а) → —
+            text = text.Replace("был(а)", "—");
+
+            // [color=...]text[/color]
+            text = Regex.Replace(
+                text,
+                @"\[color=.*?\](.*?)\[/color\]",
+                "$1",
+                RegexOptions.IgnoreCase | RegexOptions.Singleline
+            );
+
+            // Успех / Провал
+            text = text.Replace("Успех!", "✅ Успех");
+            text = text.Replace("Частичный успех!", "✅ Частичный Успех");
+            text = text.Replace("Частичный провал!", "❌ Частичный провал");
+            text = text.Replace("Провал!", "❌ Провал");
+
+            // ( 100 % ) → (100%)
+            text = Regex.Replace(text, @"\(\s*(\d+)\s*%\s*\)", "($1%)");
+            // 3+ пустых строк → 2
+            text = Regex.Replace(text, @"\n{3,}", "\n\n");
+
+            return text.Trim();
+        }
+        //rayten-end
+
 
         public void RestartRound()
         {

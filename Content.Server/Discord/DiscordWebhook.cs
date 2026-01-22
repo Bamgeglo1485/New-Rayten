@@ -3,13 +3,14 @@ using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using System.Text;
 
 namespace Content.Server.Discord;
 
 public sealed class DiscordWebhook : IPostInjectInit
 {
     private static readonly JsonSerializerOptions JsonOptions = new JsonSerializerOptions
-        { DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull };
+    { DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull };
 
     [Dependency] private readonly ILogManager _log = default!;
 
@@ -138,6 +139,33 @@ public sealed class DiscordWebhook : IPostInjectInit
                 _sawmill.Debug($"Failed webhook response X-RateLimit-Scope: {string.Join(", ", rateLimitScope)}");
         }
     }
+    //rayten-start
+    public async Task<HttpResponseMessage> CreateMessageWithFile(
+        WebhookIdentifier identifier,
+        WebhookPayload payload,
+        string fileName,
+        string fileText)
+    {
+        var url = $"{GetUrl(identifier)}?wait=true";
+        using var form = new MultipartFormDataContent();
+        var payloadJson = JsonSerializer.Serialize(payload, JsonOptions);
+        var payloadContent = new StringContent(payloadJson, Encoding.UTF8);
 
+        payloadContent.Headers.ContentType =
+            new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+
+        form.Add(payloadContent, "payload_json");
+
+        // файл
+        var fileContent = new StringContent(fileText, Encoding.UTF8);
+        form.Add(fileContent, "files[0]", fileName);
+
+        var response = await _http.PostAsync(url, form);
+        LogResponse(response, "CreateWithFile");
+
+        return response;
+    }
+
+    //rayten-end
 
 }
