@@ -1,5 +1,8 @@
 using Content.Shared.Vanilla.Damage.Events;
 using Content.Shared.Vanilla.Archon.Research;
+using Content.Shared.Vanilla.Archon.BlindPredator;
+using Content.Shared.IdentityManagement.Components;
+using Content.Shared.Inventory;
 using Content.Shared.Prying.Components;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Components;
@@ -14,7 +17,6 @@ using Content.Shared.Jittering;
 using Content.Shared.CombatMode.Pacification;
 using Content.Shared.Popups;
 using Content.Shared.Humanoid;
-using Content.Shared.Vanilla.Archon.BlindPredator;
 using Content.Shared.Weapons.Hitscan.Events;
 using Content.Shared.NPC;
 using Robust.Shared.Audio.Systems;
@@ -35,7 +37,8 @@ public sealed class ShyGuySystem : EntitySystem
     [Dependency] private readonly SharedJitteringSystem _jitter = default!;
     [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
     [Dependency] private readonly SharedBlindPredatorSystem _blindpredator = default!;
-
+    [Dependency] private readonly SharedArchonResearchSystem _archon = default!;
+    [Dependency] private readonly InventorySystem _inventory = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -44,7 +47,6 @@ public sealed class ShyGuySystem : EntitySystem
         SubscribeLocalEvent<ShyGuyComponent, DamageChangedEvent>(OnDamageChanged);
         SubscribeLocalEvent<ShyGuyComponent, RefreshMovementSpeedModifiersEvent>(OnRefreshMoveSpeed);
         SubscribeLocalEvent<ShyGuyComponent, OutlineHoverEvent>(OnLook);
-        SubscribeLocalEvent<ShyGuyComponent, ResearchAttemptEvent>(OnResearchAttempt);
         SubscribeAllEvent<ShyGuyGazeEvent>(OnGaze);
     }
     private void OnDamageChanged(EntityUid uid, ShyGuyComponent component, DamageChangedEvent args)
@@ -59,12 +61,6 @@ public sealed class ShyGuySystem : EntitySystem
             return;
 
         SetPreparing(uid, component, args.Origin.Value);
-    }
-
-    private void OnResearchAttempt(EntityUid uid, ShyGuyComponent comp, ResearchAttemptEvent args)
-    {
-        if (comp.State != ShyGuyState.Calm)
-            args.Cancel();
     }
 
     private void OnMobStateChanged(EntityUid uid, ShyGuyComponent comp, MobStateChangedEvent args)
@@ -190,6 +186,10 @@ public sealed class ShyGuySystem : EntitySystem
             _ambient.SetSound(uid, comp.RageAmbient);
             _ambient.SetAmbience(uid, true);
         }
+
+        if (TryComp<ArchonComponent>(uid, out var archon))
+            _archon.ExtractResearchPoints((uid, archon));
+
         _appearance.SetData(uid, ShyGuyVisuals.State, true);
         Dirty(uid, comp);
     }
@@ -206,9 +206,6 @@ public sealed class ShyGuySystem : EntitySystem
         //таргет не должен уже быть целью скромника
         if (TryComp<PredatorVisibleMarkComponent>(user, out var mark) && mark.Predators.TryGetValue(uid, out var alreadyLooked) && alreadyLooked)
             return false;
-        //таргет должен быть мобом
-        // if (!HasComp<MobStateComponent>(user))
-        //     return false;
         //скромник и цель должны быть живы
         if (!_mobstate.IsAlive(user) || !_mobstate.IsAlive(uid))
             return false;
@@ -216,9 +213,13 @@ public sealed class ShyGuySystem : EntitySystem
         if (TryComp<StaminaComponent>(uid, out var stamina) && stamina.Critical)
             return false;
 
-        //более строгие проверки
+        //более строгие проверки использующиеся при взгляде на скромнягу
         if (strictly)
         {
+            //Маска на лице
+            if (_inventory.TryGetSlotEntity(uid, "mask", out var mask) && HasComp<IdentityBlockerComponent>(mask))
+                return false;
+
             //только гуманоиды
             if (!HasComp<HumanoidAppearanceComponent>(user))
                 return false;
@@ -226,7 +227,6 @@ public sealed class ShyGuySystem : EntitySystem
             if (TryComp<BlindableComponent>(user, out var blind) && blind.IsBlind)
                 return false;
         }
-
 
         if (!_examine.InRangeUnOccluded(user, uid, 16f))
             return false;

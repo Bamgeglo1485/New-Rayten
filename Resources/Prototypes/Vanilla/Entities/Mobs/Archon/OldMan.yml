@@ -37,6 +37,8 @@
     - MindRoleGhostRoleSoloAntagonist
   - type: OldMan
   - type: Muted
+  - type: Archon
+    researchCoolDown: 5m
   - type: MeleeWeapon
     angle: 0
     attackRate: 0.4

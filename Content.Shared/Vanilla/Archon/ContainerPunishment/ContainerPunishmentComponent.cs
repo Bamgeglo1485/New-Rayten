@@ -12,15 +12,16 @@ public sealed partial class ContainerPunishmentComponent : Component
     [ViewVariables, AutoNetworkedField]
     public Dictionary<EntityUid, int> Counters = [];
     /// <summary>
-    /// Предупреждение, которое появляется если взять предмет из контейнера
-    /// </summary>
-    [DataField, AutoNetworkedField]
-    public LocId? PopupMessage = "archon330-warning";
-    /// <summary>
     /// количество предметов которые можно вытащить
     /// </summary>
-    [DataField, AutoNetworkedField]
+    [DataField]
     public int MaxItems = 2;
+
+    [DataField]
+    public int BaseItemsToResearch = 5;
+
+    [DataField]
+    public int ItemsToResearch = 5;
 
     /// <summary>
     /// Урон который будет нанесён
@@ -30,7 +31,7 @@ public sealed partial class ContainerPunishmentComponent : Component
     {
         DamageDict = new()
         {
-            { "Slash", 350 }
+            { "Slash", 30 }
         }
     };
 }

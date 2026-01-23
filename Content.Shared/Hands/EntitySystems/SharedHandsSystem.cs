@@ -129,14 +129,21 @@ public abstract partial class SharedHandsSystem
     /// <summary>
     /// Gets rid of all the entity's hands.
     /// </summary>
-    public void RemoveHands(Entity<HandsComponent?> ent)
+    public void RemoveHands(Entity<HandsComponent?> ent, int? count = null)
     {
         if (!Resolve(ent, ref ent.Comp, false))
             return;
-
         var handIds = new List<string>(ent.Comp.Hands.Keys);
         foreach (var handId in handIds)
         {
+            //rayten-start
+            if (count != null)
+            {
+                if (count <= 0)
+                    return;
+                count--;
+            }
+            //rayten-end
             RemoveHand(ent, handId);
         }
     }

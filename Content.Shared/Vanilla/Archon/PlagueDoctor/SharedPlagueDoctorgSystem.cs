@@ -32,6 +32,7 @@ public abstract class SharedPlagueDoctorgSystem : EntitySystem
     [Dependency] private readonly SharedAmbientSoundSystem _ambient = default!;
     [Dependency] private readonly SharedBlindPredatorSystem _predator = default!;
     [Dependency] private readonly DamageableSystem _damageable = default!;
+    [Dependency] private readonly SharedArchonResearchSystem _archon = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -196,13 +197,14 @@ public abstract class SharedPlagueDoctorgSystem : EntitySystem
         ChangePestilence(uid, comp, comp.PestilencePerSurgery);
         MakeSurgery(uid, comp, args.Args.Target.Value);
 
+        if (TryComp<ArchonComponent>(uid, out var archon))
+            _archon.ExtractResearchPoints((uid, archon));
+
         if (TryComp<MetaDataComponent>(args.Args.Target, out var meta) && meta.EntityPrototype != null)
         {
             comp.OperatedProtos.Add(meta.EntityPrototype.ID);
             Dirty(uid, comp);
         }
-
-
         args.Handled = true;
     }
     #endregion

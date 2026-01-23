@@ -11,6 +11,7 @@ using Content.Shared.Whitelist;
 using Content.Shared.Popups;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Vanilla.Archon.ContainerPunishment;
+using Content.Shared.Vanilla.Archon.Research;
 using Robust.Shared.Containers;
 using Robust.Shared.Network;
 
@@ -30,6 +31,7 @@ public sealed class BinSystem : EntitySystem
 
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly DamageableSystem _damage = default!;
+    [Dependency] private readonly SharedArchonResearchSystem _archon = default!;
 
     //rayten-end
     /// <inheritdoc/>
@@ -93,7 +95,10 @@ public sealed class BinSystem : EntitySystem
     {
         if (args.Handled)
             return;
-
+        //rayten-start
+        if (_hands.GetHandCount(args.User) == 0)
+            return;
+        //rayten-end
         EntityUid? toGrab = component.Items.LastOrDefault();
         if (!TryRemoveFromBin(uid, toGrab, component))
             return;
@@ -105,18 +110,33 @@ public sealed class BinSystem : EntitySystem
         // rayten-start
         if (TryComp<ContainerPunishmentComponent>(uid, out var punish))
         {
+            punish.ItemsToResearch--;
+            if (punish.ItemsToResearch <= 0)
+            {
+                if (TryComp<ArchonComponent>(uid, out var archon))
+                    _archon.ExtractResearchPoints((uid, archon));
+                punish.ItemsToResearch = punish.BaseItemsToResearch;
+            }
+
             if (!punish.Counters.TryGetValue(args.User, out var count))
             {
                 count = 0;
-                if (punish.PopupMessage != null)
-                    _popup.PopupPredicted(Loc.GetString(punish.PopupMessage), uid, args.User);
+                _popup.PopupClient(Loc.GetString("archon330-warning"), uid);
             }
 
             count++;
             punish.Counters[args.User] = count;
 
             if (count > punish.MaxItems)
+            {
+                _popup.PopupPredicted(Loc.GetString("archon330-hand-remove"),
+                                    Loc.GetString("archon330-hand-remove-other", ("user", args.User)),
+                                    args.User, args.User,
+                                    PopupType.LargeCaution);
+                _hands.RemoveHands(args.User, 1);
                 _damage.TryChangeDamage(args.User, punish.Damage);
+            }
+
             Dirty(uid, punish);
         }
         // rayten-end

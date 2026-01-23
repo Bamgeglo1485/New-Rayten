@@ -17,12 +17,6 @@ public sealed class WithManyVoicesSystem : SharedWithManyVoicesSystem
     {
         base.Initialize();
         SubscribeLocalEvent<WithManyVoicesComponent, OnTemperatureChangeEvent>(OnTempChange);
-        SubscribeLocalEvent<WithManyVoicesComponent, ResearchAttemptEvent>(OnAttempt);
-    }
-    private void OnAttempt(EntityUid uid, WithManyVoicesComponent comp, ResearchAttemptEvent args)
-    {
-        if (!HasComp<SleepingComponent>(uid))
-            args.Cancel();
     }
 
     private void OnTempChange(EntityUid uid, WithManyVoicesComponent comp, OnTemperatureChangeEvent args)

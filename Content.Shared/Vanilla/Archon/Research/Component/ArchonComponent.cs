@@ -5,17 +5,44 @@ namespace Content.Shared.Vanilla.Archon.Research;
 [RegisterComponent, NetworkedComponent]
 public sealed partial class ArchonComponent : Component
 {
+    #region пассивные очки
+    /// <summary>
+    /// очки будут выдаваться 1 раз в какое-то время
+    /// </summary>
+    [DataField]
+    public TimeSpan? ResearchCoolDown = null;
+    public TimeSpan NextResearchAt;
+    #endregion
+
     /// <summary>
     /// маяк к которому привязан
     /// </summary>
     [ViewVariables]
     public EntityUid? LinkedBeacon;
+
     /// <summary>
-    /// время изучения
+    /// Модификатор изучаемых очков
     /// </summary>
     [DataField]
-    public TimeSpan ResearchTime = TimeSpan.FromMinutes(7);
+    public float ResearchModifier = 1.0f;
+
+    /// <summary>
+    /// продвинутые очки за изучение
+    /// </summary>
+    public int GetAPoints()
+    {
+        return (int)(1 * ResearchModifier);
+    }
+    /// <summary>
+    /// обычные очки за изучение
+    /// </summary>
+    public int GetPoints()
+    {
+        return (int)(25000 * ResearchModifier);
+    }
+
 }
+
 /// <summary>
 /// Ивент проверки условия содержания, при cancel() отвязывает архонта от маяка/запрещает привязку
 /// вызывается на архонте

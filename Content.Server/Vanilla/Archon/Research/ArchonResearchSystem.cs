@@ -1,33 +1,37 @@
 using Content.Server.Research.Systems;
 using Content.Server.NPC.Systems;
+using Content.Server.Chat.Systems;
+using Content.Shared.Chat;
 using Content.Shared.Vanilla.Archon.Research;
 using Content.Shared.Power.EntitySystems;
 using Content.Shared.Interaction;
 using Content.Shared.Examine;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
+using Content.Shared.Mobs.Systems;
 using Robust.Shared.Utility;
 using Robust.Shared.Timing;
 
 namespace Content.Server.Vanilla.Archon.Research;
 
-public sealed partial class ArchonBeaconSystem : EntitySystem
+public sealed partial class ArchonBeaconSystem : SharedArchonResearchSystem
 {
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly SharedPowerReceiverSystem _power = default!;
     [Dependency] private readonly ResearchSystem _research = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly NPCSystem _npc = default!;
+    [Dependency] private readonly ChatSystem _chat = default!;
+    [Dependency] private readonly MobStateSystem _mob = default!;
 
     private TimeSpan NextUpdate;
 
     public override void Initialize()
     {
-        SubscribeLocalEvent<ArchonComponent, ResearchAttemptEvent>(OnAttempt);
-        SubscribeLocalEvent<ArchonComponent, ComponentRemove>(OnRemove);
         SubscribeLocalEvent<ArchonBeaconComponent, ExaminedEvent>(OnExamine);
+        SubscribeLocalEvent<ArchonComponent, ResearchAttemptEvent>(OnAttempt);
 
+        SubscribeLocalEvent<ArchonComponent, ComponentShutdown>(OnArchonShutDown);
+        SubscribeLocalEvent<ArchonBeaconComponent, ComponentShutdown>(OnBeaconShutDown);
         base.Initialize();
     }
 
@@ -39,41 +43,36 @@ public sealed partial class ArchonBeaconSystem : EntitySystem
         if (now < NextUpdate)
             return;
 
-        NextUpdate = now + TimeSpan.FromSeconds(1);
+        NextUpdate = now + TimeSpan.FromSeconds(5);
 
         var query = EntityQueryEnumerator<ArchonBeaconComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out var beaconComp, out var beaconTrans))
         {
-            //если маяк не заряжен, или не привязан к серверу, или существуют другие маяки рядом, то продлеваем изучение
-            if (!_power.IsPowered(uid) || !_research.TryGetClientServer(uid, out _, out _) || CheckAnyOtherBeacons((uid, beaconComp)))
-            {
-                if (beaconComp.LinkedArchon != null)
-                    beaconComp.ResearchTime += TimeSpan.FromSeconds(1);
-
+            if (!_power.IsPowered(uid) || !_research.TryGetClientServer(uid, out _, out _))
                 continue;
-            }
 
-            CheckLink((uid, beaconComp));
-            LinkBeaconToArchons((uid, beaconComp));
-            ExtractResearchPoints(uid, beaconComp);
+            TryLinkBeaconToArchons((uid, beaconComp));
+        }
 
-            _appearance.SetData(uid, ArchonBeaconVisuals.Link, beaconComp.LinkedArchon != null);
+        var archonQuery = EntityQueryEnumerator<ArchonComponent>();
+        while (archonQuery.MoveNext(out var uid, out var archon))
+        {
+            if (archon.ResearchCoolDown == null)
+                continue;
+
+            if (now >= archon.NextResearchAt)
+                ExtractResearchPoints((uid, archon));
         }
     }
 
     /// <summary>
     /// Проверки
     /// 1. Жив ли архонт
-    /// 3. В радиусе маяка ли он
     /// это общие для всех архонтов проверки, специальные проверки нужно прописывать в отдельных системах для отдельных архонтов
     /// </summary>
     private void OnAttempt(EntityUid uid, ArchonComponent component, ResearchAttemptEvent args)
     {
-        if (TryComp<MobStateComponent>(uid, out var mobstate) && mobstate.CurrentState != MobState.Alive)
-            args.Cancel();
-
         Transform(uid).Coordinates.TryDistance(EntityManager, Transform(args.Beacon.Owner).Coordinates, out var distance);
-
         if (distance > args.Beacon.Comp.Radius)
             args.Cancel();
     }
@@ -83,72 +82,40 @@ public sealed partial class ArchonBeaconSystem : EntitySystem
         if (!args.IsInDetailsRange || !_power.IsPowered(uid))
             return;
 
-        var now = _timing.CurTime;
+        if (component.LinkedArchons.Count == 0)
+        {
+            args.PushMarkup(Loc.GetString("archonbeacon-examine-no-links"));
+            return;
+        }
+
         using (args.PushGroup(nameof(ArchonBeaconComponent)))
         {
-            if (component.LinkedArchon is { } archon)
-            {
-                args.PushMarkup(Loc.GetString("archonbeacon-examine-header"));
-                args.PushMarkup(Loc.GetString(
-                    "archonbeacon-examine-archon",
-                    ("archon", Name(archon)),
-                    ("time", (component.ResearchTime - now).TotalSeconds)
-                ));
-            }
-            else
-                args.PushMarkup(Loc.GetString("archonbeacon-examine-no-links"));
+            args.PushMarkup(Loc.GetString("archonbeacon-examine-header"));
+            foreach (var archon in component.LinkedArchons)
+                args.PushMarkup(Loc.GetString("archonbeacon-examine-archon", ("archon", Name(archon))));
         }
     }
 
-    private void OnRemove(EntityUid uid, ArchonComponent component, ref ComponentRemove args)
+    private void OnArchonShutDown(EntityUid uid, ArchonComponent component, ref ComponentShutdown args)
     {
         if (TryComp<ArchonBeaconComponent>(component.LinkedBeacon, out var beacon))
-            beacon.LinkedArchon = null;
+            beacon.LinkedArchons.Remove(uid);
     }
 
-    /// <summary>
-    /// Проверяем другие маяки в радиусе
-    /// чтобы нельзя было настакать несколько маяков в одной комнате
-    /// </summary>
-    public bool CheckAnyOtherBeacons(Entity<ArchonBeaconComponent> beacon)
+    private void OnBeaconShutDown(EntityUid uid, ArchonBeaconComponent component, ref ComponentShutdown args)
     {
-        var beacons = _lookup.GetEntitiesInRange<ArchonBeaconComponent>(Transform(beacon.Owner).Coordinates, beacon.Comp.Radius);
-        foreach (var otherbeacon in beacons)
+        foreach (var archon in component.LinkedArchons)
         {
-            if (otherbeacon != beacon)
-                return true;
-        }
-        return false;
-    }
-
-    /// <summary>
-    /// Проверяем текущее соединения и разрываем его в случае нарушений условий содержания
-    /// </summary>
-    public void CheckLink(Entity<ArchonBeaconComponent> beacon)
-    {
-        if (beacon.Comp.LinkedArchon is { } archon)
-        {
-            var ev = new ResearchAttemptEvent(beacon);
-            RaiseLocalEvent(archon, ev);
-            if (ev.Cancelled)
-            {
-                beacon.Comp.LinkedArchon = null;
-                if (TryComp<ArchonComponent>(archon, out var archonComp))
-                    archonComp.LinkedBeacon = null;
-                RaiseLocalEvent(archon, new ResearchLinkDisconnectionEvent());
-            }
+            if (TryComp<ArchonComponent>(archon, out var archoncomp))
+                archoncomp.LinkedBeacon = null;
         }
     }
 
     /// <summary>
     /// Связываем еще не связанных с маяком архонтов вокруг маяка с маяком
     /// </summary>
-    public void LinkBeaconToArchons(Entity<ArchonBeaconComponent> beacon)
+    public void TryLinkBeaconToArchons(Entity<ArchonBeaconComponent> beacon)
     {
-        // если маяк уже занят — ничего не делаем
-        if (beacon.Comp.LinkedArchon != null)
-            return;
-
         var archons = _lookup.GetEntitiesInRange<ArchonComponent>(
             Transform(beacon.Owner).Coordinates,
             beacon.Comp.Radius);
@@ -164,34 +131,42 @@ public sealed partial class ArchonBeaconSystem : EntitySystem
             if (ev.Cancelled)
                 continue;
 
-            beacon.Comp.LinkedArchon = archon.Owner;
-            beacon.Comp.ResearchTime = _timing.CurTime + archon.Comp.ResearchTime;
+            beacon.Comp.LinkedArchons.Add(archon.Owner);
             archon.Comp.LinkedBeacon = beacon.Owner;
-            break;
+            _chat.TrySendInGameICMessage(beacon.Owner, Loc.GetString("archonbeacon-link-complete", ("archon", Name(archon.Owner))), InGameICChatType.Speak, true);
+            ExtractResearchPoints(archon);
         }
     }
 
     /// <summary>
-    /// Выдаем очки продвинутого изучения
+    /// Выдаем очки за изучение архонта
     /// </summary>
-    public void ExtractResearchPoints(EntityUid uid, ArchonBeaconComponent component)
+    public override void ExtractResearchPoints(Entity<ArchonComponent> archon)
     {
-        if (!_research.TryGetClientServer(uid, out var server, out var serverComponent))
+        if (archon.Comp.LinkedBeacon == null)
             return;
 
-        if (component.LinkedArchon is not { } entry)
+        if (TryComp<MobStateComponent>(archon.Owner, out var mobState))
+        {
+            if (_mob.IsIncapacitated(archon.Owner, mobState))
+                return;
+        }
+
+        if (!_research.TryGetClientServer(archon.Comp.LinkedBeacon.Value, out var server, out var serverComponent))
             return;
 
-        var now = _timing.CurTime;
+        var aPoints = archon.Comp.GetAPoints();
+        var points = archon.Comp.GetPoints();
+        _research.ModifyServerAdvancedPoints(server.Value, aPoints, serverComponent);
+        _research.ModifyServerPoints(server.Value, points, serverComponent);
+        _chat.TrySendInGameICMessage(
+            archon.Comp.LinkedBeacon.Value,
+            Loc.GetString("archonbeacon-extract-points",
+                    ("apoints", aPoints),
+                    ("points", points)),
+            InGameICChatType.Speak, true);
 
-        if (now < component.ResearchTime)
-            return;
-
-        if (!TryComp<ArchonComponent>(entry, out var archonComp))
-            return;
-
-        _research.ModifyServerAdvancedPoints(server.Value, 1, serverComponent);
-        component.ResearchTime = now + archonComp.ResearchTime;
+        if (archon.Comp.ResearchCoolDown != null)
+            archon.Comp.NextResearchAt = _timing.CurTime + archon.Comp.ResearchCoolDown.Value;
     }
-
 }
