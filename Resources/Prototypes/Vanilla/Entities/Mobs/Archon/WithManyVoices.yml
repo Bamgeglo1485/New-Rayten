@@ -78,8 +78,8 @@
     - type: ActiveListener
       range: 15
     - type: ParrotListener
-      requireAll: true
       whitelist:
+        requireAll: true
         components:
         - MobState
         - Vocal
