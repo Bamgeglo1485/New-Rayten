@@ -5,4 +5,5 @@ public sealed partial class DimensionEscapeTeleportComponent : Component
 {
     [DataField]
     public bool IsFake = false;
+    public bool deletezavtrathisshit = true;
 }

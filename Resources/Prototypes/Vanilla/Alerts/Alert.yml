@@ -75,6 +75,15 @@
   maxSeverity: 4
 
 - type: alert
+  id: R1Dead
+  category: Health
+  icons:
+  - sprite: /Textures/Vanilla/Interface/Alerts/R1_Health.rsi
+    state: death
+  name: alerts-dead-name
+  description: alerts-dead-desc
+
+- type: alert
   id: Pestilence
   icons:
   - sprite: /Textures/Vanilla/Interface/Alerts/049_pestilence.rsi
