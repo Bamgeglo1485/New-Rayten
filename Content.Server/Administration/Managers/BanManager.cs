@@ -21,7 +21,8 @@ using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
-
+using Content.Server.Discord;
+using Content.Shared.Vanilla.CCVars;
 namespace Content.Server.Administration.Managers;
 
 public sealed partial class BanManager : IBanManager, IPostInjectInit
@@ -38,7 +39,7 @@ public sealed partial class BanManager : IBanManager, IPostInjectInit
     [Dependency] private readonly IEntitySystemManager _systems = default!;
     [Dependency] private readonly ITaskManager _taskManager = default!;
     [Dependency] private readonly UserDbDataManager _userDbData = default!;
-
+    [Dependency] private readonly DiscordWebhook _webhook = default!;
     private ISawmill _sawmill = default!;
 
     public const string SawmillId = "admin.bans";
@@ -124,7 +125,7 @@ public sealed partial class BanManager : IBanManager, IPostInjectInit
     {
         var (banDef, expires) = await CreateBanDef(banInfo, BanType.Server, null);
 
-        await _db.AddBanAsync(banDef);
+        var banDeFWithId = await _db.AddBanAsync(banDef); //rayten-get-banid
 
         if (_cfg.GetCVar(CCVars.ServerBanResetLastReadRules))
         {
@@ -169,6 +170,12 @@ public sealed partial class BanManager : IBanManager, IPostInjectInit
         _chat.SendAdminAlert(logMessage);
 
         KickMatchingConnectedPlayers(banDef, "newly placed ban");
+        //rayten-start
+        var locString = expires == null ? "discord-ban-title-perma" : "discord-ban-title";
+        var embedTittle = Loc.GetString(locString, ("id", banDeFWithId.Id ?? -1));
+        var embedDescription = await GetDiscordDescription(banInfo, banDef);
+        SendToDiscord(embedTittle, embedDescription);
+        //rayten-end
     }
 
     private NoteSeverity GetSeverityForServerBan(CreateBanInfo banInfo, CVarDef<string> defaultCVar)
@@ -235,7 +242,7 @@ public sealed partial class BanManager : IBanManager, IPostInjectInit
 
         var (banDef, expires) = await CreateBanDef(banInfo, BanType.Role, roleDefs);
 
-        await AddRoleBan(banDef);
+        var banDeFWithId = await AddRoleBan(banDef); //rayten-get-banid
 
         var length = expires == null
             ? Loc.GetString("cmd-roleban-inf")
@@ -257,6 +264,12 @@ public sealed partial class BanManager : IBanManager, IPostInjectInit
             if (_playerManager.TryGetSessionById(userId, out var session))
                 SendRoleBans(session);
         }
+        //rayten-start
+        var locString = expires == null ? "discord-ban-roleban-title-perma" : "discord-ban-roleban-title";
+        var embedTittle = Loc.GetString(locString, ("id", banDeFWithId.Id ?? -1));
+        var embedDescription = await GetDiscordDescription(banInfo, banDef, roleDefs);
+        SendToDiscord(embedTittle, embedDescription);
+        //rayten-end
     }
 
     private async Task<(BanDef Ban, DateTimeOffset? Expires)> CreateBanDef(
@@ -344,7 +357,7 @@ public sealed partial class BanManager : IBanManager, IPostInjectInit
         throw new ArgumentException($"Unknown prototype kind for role bans: {typeof(T)}");
     }
 
-    private async Task AddRoleBan(BanDef banDef)
+    private async Task<BanDef> AddRoleBan(BanDef banDef)
     {
         banDef = await _db.AddBanAsync(banDef);
 
@@ -356,6 +369,7 @@ public sealed partial class BanManager : IBanManager, IPostInjectInit
                 cachedBans.Add(banDef);
             }
         }
+        return banDef;//rayten
     }
 
     public async Task<string> PardonRoleBan(int banId, NetUserId? unbanningAdmin, DateTimeOffset unbanTime)
@@ -488,4 +502,60 @@ public sealed partial class BanManager : IBanManager, IPostInjectInit
     {
         _sawmill = _logManager.GetSawmill(SawmillId);
     }
+    //rayten-start
+    /// <summary>
+    /// для обычного бана
+    /// </summary>
+    private async Task<string> GetDiscordDescription(CreateServerBanInfo banInfo, BanDef banDef)
+    {
+        var targetName = banInfo.Users.Count == 0 ? "секрет" : string.Join(", ", banInfo.Users.Select(u => $"{u.UserName}"));
+        var adminName = banInfo.BanningAdmin == null
+            ? Loc.GetString("system-user")
+            : (await _db.GetPlayerRecordByUserId(banInfo.BanningAdmin.Value))?.LastSeenUserName ?? Loc.GetString("system-user");
+        return Loc.GetString("discord-ban-desc",
+                ("user", targetName),
+                ("admin", adminName),
+                ("timeOfBan", banDef.BanTime),
+                ("expires", banDef.ExpirationTime?.ToString() ?? "никогда"),
+                ("reason", banInfo.Reason)
+            );
+    }
+    /// <summary>
+    /// Для бана роли
+    /// </summary>
+    private async Task<string> GetDiscordDescription(CreateRoleBanInfo banInfo, BanDef banDef, ImmutableArray<BanRoleDef> roleDefs)
+    {
+        var targetName = banInfo.Users.Count == 0 ? "секрет" : string.Join(", ", banInfo.Users.Select(u => $"{u.UserName}"));
+        var adminName = banInfo.BanningAdmin == null
+            ? Loc.GetString("system-user")
+            : (await _db.GetPlayerRecordByUserId(banInfo.BanningAdmin.Value))?.LastSeenUserName ?? Loc.GetString("system-user");
+        var expiredAt = string.IsNullOrWhiteSpace(banDef.ExpirationTime.ToString()) ? "Никогда" : banDef.ExpirationTime.ToString();
+        return Loc.GetString("discord-ban-roleban-desc",
+                ("user", targetName),
+                ("admin", adminName),
+                ("timeOfBan", banDef.BanTime),
+                ("expires", banDef.ExpirationTime?.ToString() ?? "никогда"),
+                ("reason", banInfo.Reason),
+                ("roles", string.Join(", ", roleDefs))
+            );
+    }
+    private async void SendToDiscord(string title, string description)
+    {
+        var url = _cfg.GetCVar(CCVVars.DiscordServerBansWebhook);
+        if (string.IsNullOrWhiteSpace(url))
+            return;
+        if (await _webhook.GetWebhook(url) is not { } identifier)
+            return;
+
+        var embed = new WebhookEmbed
+        {
+            Title = title,
+            Description = description,
+            Color = 15079705,
+            Footer = new() { Text = Loc.GetString("discord-ban-notifications-footer") }
+        };
+        var payload = new WebhookPayload { Embeds = [embed] };
+        await _webhook.CreateMessage(identifier.ToIdentifier(), payload);
+    }
+    //rayten-end
 }

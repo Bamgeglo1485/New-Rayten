@@ -31,7 +31,6 @@ using Content.Shared.FeedbackSystem;
 using Content.Shared.IoC;
 using Content.Shared.Kitchen;
 using Content.Shared.Players.PlayTimeTracking;
-using Content.Server.Discord.Webhooks;
 using Content.Server.Corvax.JoinQueue;
 using Content.Server.Corvax.DiscordAuth;
 using Content.Shared.Players.RateLimiting;
