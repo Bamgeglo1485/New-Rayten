@@ -35,6 +35,7 @@ public abstract partial class SharedBrainWormSystem : EntitySystem
     [Dependency] protected readonly IGameTiming _timing = default!;
     [Dependency] protected readonly MobStateSystem _mob = default!;
     [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private readonly InjectorSystem _injector = default!;
 
     private static readonly EntProtoId BrainWormShopId = "ActionBrainWormShop";
     private static readonly EntProtoId BrainWormChemicalsId = "ActionBrainWormChemicals";

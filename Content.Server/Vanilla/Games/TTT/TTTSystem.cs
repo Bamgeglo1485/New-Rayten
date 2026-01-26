@@ -24,6 +24,7 @@ using Content.Shared.IdentityManagement;
 using Content.Shared.Ghost;
 using Content.Shared.Roles;
 using Content.Shared.Implants;
+using Content.Shared.Preferences;
 using Robust.Server.GameObjects;
 using Robust.Shared.Utility;
 using Robust.Server.Player;
@@ -573,11 +574,11 @@ public sealed class TTTSystem : EntitySystem
 
         _specialRespawn.TryFindRandomTile(rule.Arena, _mapManager.GetMapEntityId(rule.ArenaMapId.Value), 10, out var targetCoords);
 
-        if (!_prototypeManager.TryIndex<SpeciesPrototype>(SharedHumanoidAppearanceSystem.DefaultSpecies, out var species))
-            throw new ArgumentException($"Invalid species prototype was used: {SharedHumanoidAppearanceSystem.DefaultSpecies}");
+        if (!_prototypeManager.TryIndex<SpeciesPrototype>(HumanoidCharacterProfile.DefaultSpecies, out var species))
+            throw new ArgumentException($"Invalid species prototype was used: {HumanoidCharacterProfile.DefaultSpecies}");
 
         var mobUid = Spawn(species.Prototype, targetCoords);
-        _metaSystem.SetEntityName(mobUid, "Подозрительный человек");
+        _metaSystem.SetEntityName(mobUid, session.Name);
 
         if (_mindSystem.TryGetMind(session.AttachedEntity!.Value, out var mindId, out var mindComp))
             _mindSystem.TransferTo(mindId, mobUid, true, mind: mindComp);

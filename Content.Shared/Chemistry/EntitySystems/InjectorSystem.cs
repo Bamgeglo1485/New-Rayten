@@ -804,7 +804,7 @@ public sealed partial class InjectorSystem : EntitySystem
     #endregion Mode Toggling
 
     // rayten-start
-    private bool HasInjectionProtection(EntityUid entity)
+    public bool HasInjectionProtection(EntityUid entity)
     {
         if (HasComp<InjectionProtectionComponent>(entity))
             return true;

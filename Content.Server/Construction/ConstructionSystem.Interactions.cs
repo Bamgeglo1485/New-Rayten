@@ -426,11 +426,13 @@ namespace Content.Server.Construction
                         if ((!temperatureChangeStep.MinTemperature.HasValue || temp >= temperatureChangeStep.MinTemperature.Value) &&
                             (!temperatureChangeStep.MaxTemperature.HasValue || temp <= temperatureChangeStep.MaxTemperature.Value))
                         {
-                            return HandleResult.True;
+                            return validation ? HandleResult.Validated : HandleResult.True;
                         }
 
                         return HandleResult.False;
                     }
+
+
 
                 case PartAssemblyConstructionGraphStep partAssemblyStep:
                     {
@@ -438,7 +440,7 @@ namespace Content.Server.Construction
                             break;
 
                         if (partAssemblyStep.Condition(uid, EntityManager))
-                            return HandleResult.True;
+                            return validation ? HandleResult.Validated : HandleResult.True;
                         return HandleResult.False;
                     }
 

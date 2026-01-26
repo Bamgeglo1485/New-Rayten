@@ -1,7 +1,7 @@
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Content.Shared.CCVar;
-using Content.Shared.Corvax.TTS;
 using Content.Shared.GameTicking;
 using Content.Shared.Humanoid;
 using Content.Shared.Humanoid.Prototypes;
@@ -14,12 +14,15 @@ using Robust.Shared.Enums;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
+using Robust.Shared.Serialization.Manager;
+using Robust.Shared.Serialization.Markdown;
 using Robust.Shared.Serialization;
 using Robust.Shared.Utility;
+using Robust.Shared;
+using YamlDotNet.RepresentationModel;
 using Content.Shared.Vanilla.VoiceSpeech;
 using Content.Shared.Vanilla.RoleSkills;
-
-using Robust.Shared.Log;
+using Content.Shared.Vanilla.Sponsor;
 namespace Content.Shared.Preferences
 {
     /// <summary>
@@ -29,7 +32,18 @@ namespace Content.Shared.Preferences
     [Serializable, NetSerializable]
     public sealed partial class HumanoidCharacterProfile : ICharacterProfile
     {
-        private static readonly Regex RestrictedNameRegex = new("[^А-Яа-яёЁ0-9' -]"); // Corvax-Localization
+        public static readonly ProtoId<SpeciesPrototype> DefaultSpecies = "Human";
+        private static readonly Regex RestrictedNameRegex = new("[^А-Яа-яёЁ0-9' -]"); // Rayten-Localization
+        // Rayten-Start
+        public const string DefaultVoice = "Papyrus";
+        public const float DefaultVoicePitch = 1.0f;
+        public static readonly Dictionary<Sex, string> DefaultSexVoice = new()
+        {
+            {Sex.Male, "Papyrus"},
+            {Sex.Female, "Toriel"},
+            {Sex.Unsexed, "Alphys"},
+        };
+        //rayten-end
         private static readonly Regex ICNameCaseRegex = new(@"^(?<word>\w)|\b(?<word>\w)(?=\w*$)");
 
         /// <summary>
@@ -68,6 +82,10 @@ namespace Content.Shared.Preferences
 
         [DataField]
         private Dictionary<string, RoleSkills> _roleSkills = new();
+        [DataField]
+        public float VoicePitch { get; set; } = DefaultVoicePitch;
+        [DataField]
+        public string Voice { get; set; } = DefaultVoice;
         //RAYTEN-END
 
         [DataField]
@@ -83,13 +101,7 @@ namespace Content.Shared.Preferences
         /// Associated <see cref="SpeciesPrototype"/> for this profile.
         /// </summary>
         [DataField]
-        public ProtoId<SpeciesPrototype> Species { get; set; } = SharedHumanoidAppearanceSystem.DefaultSpecies;
-
-        [DataField]
-        public string Voice { get; set; } = SharedHumanoidAppearanceSystem.DefaultVoice;
-
-        [DataField]
-        public float VoicePitch { get; set; } = SharedHumanoidAppearanceSystem.DefaultVoicePitch;
+        public ProtoId<SpeciesPrototype> Species { get; set; } = DefaultSpecies;
 
         [DataField]
         public int Age { get; set; } = 18;
@@ -144,7 +156,7 @@ namespace Content.Shared.Preferences
             string flavortext,
             string species,
             string voice, // Rayten-TTS
-            float voicepith,
+            float voicepith, // Rayten-TTS
             int age,
             Sex sex,
             Gender gender,
@@ -161,7 +173,6 @@ namespace Content.Shared.Preferences
             FlavorText = flavortext;
             Species = species;
             Voice = voice; // Rayten-TTS
-
             VoicePitch = voicepith; // Rayten-TTS
             Age = age;
             Sex = sex;
@@ -212,7 +223,7 @@ namespace Content.Shared.Preferences
 
         /// <summary>
         ///     Get the default humanoid character profile, using internal constant values.
-        ///     Defaults to <see cref="SharedHumanoidAppearanceSystem.DefaultSpecies"/> for the species.
+        ///     Defaults to <see cref="DefaultSpecies"/> for the species.
         /// </summary>
         /// <returns></returns>
         public HumanoidCharacterProfile()
@@ -222,16 +233,19 @@ namespace Content.Shared.Preferences
         /// <summary>
         ///     Return a default character profile, based on species.
         /// </summary>
-        /// <param name="species">The species to use in this default profile. The default species is <see cref="SharedHumanoidAppearanceSystem.DefaultSpecies"/>.</param>
+        /// <param name="species">The species to use in this default profile. The default species is <see cref="DefaultSpecies"/>.</param>
+        /// <param name="sex">Self explanatory.</param>
         /// <returns>Humanoid character profile with default settings.</returns>
-        public static HumanoidCharacterProfile DefaultWithSpecies(string? species = null)
+        public static HumanoidCharacterProfile DefaultWithSpecies(ProtoId<SpeciesPrototype>? species = null, Sex? sex = null)
         {
-            species ??= SharedHumanoidAppearanceSystem.DefaultSpecies;
+            species ??= HumanoidCharacterProfile.DefaultSpecies;
+            sex ??= Sex.Male;
 
             return new()
             {
-                Species = species,
-                Appearance = HumanoidCharacterAppearance.DefaultWithSpecies(species),
+                Species = species.Value,
+                Sex = sex.Value,
+                Appearance = HumanoidCharacterAppearance.DefaultWithSpecies(species.Value, sex.Value),
             };
         }
 
@@ -252,7 +266,7 @@ namespace Content.Shared.Preferences
 
         public static HumanoidCharacterProfile RandomWithSpecies(string? species = null)
         {
-            species ??= SharedHumanoidAppearanceSystem.DefaultSpecies;
+            species ??= HumanoidCharacterProfile.DefaultSpecies;
 
             var prototypeManager = IoCManager.Resolve<IPrototypeManager>();
             var random = IoCManager.Resolve<IRobustRandom>();
@@ -405,13 +419,14 @@ namespace Content.Shared.Preferences
 
         public HumanoidCharacterProfile WithPreferenceUnavailable(PreferenceUnavailableMode mode)
         {
-            return new(this) { PreferenceUnavailable = PreferenceUnavailableMode.StayInLobby }; // Rayten-graytidegate
+            return new(this) { PreferenceUnavailable = mode };
         }
+
         public HumanoidCharacterProfile WithAntagPreferences(IEnumerable<ProtoId<AntagPrototype>> antagPreferences)
         {
             return new(this)
             {
-                _antagPreferences = new (antagPreferences),
+                _antagPreferences = new(antagPreferences),
             };
         }
 
@@ -519,38 +534,17 @@ namespace Content.Shared.Preferences
             return Appearance.MemberwiseEquals(other.Appearance);
         }
 
-        public void EnsureValid(ICommonSession session, IDependencyCollection collection, string[] sponsorPrototypes)
+        public void EnsureValid(ICommonSession session, IDependencyCollection collection)
         {
             var configManager = collection.Resolve<IConfigurationManager>();
             var prototypeManager = collection.Resolve<IPrototypeManager>();
+            var sponsorManager = collection.Resolve<SharedSponsorManager>();
 
             if (!prototypeManager.TryIndex(Species, out var speciesPrototype) || speciesPrototype.RoundStart == false)
             {
-                Species = SharedHumanoidAppearanceSystem.DefaultSpecies;
+                Species = HumanoidCharacterProfile.DefaultSpecies;
                 speciesPrototype = prototypeManager.Index(Species);
             }
-
-            // Corvax-Sponsors-Start: Reset to human if player not sponsor
-            if (speciesPrototype.SponsorOnly && !sponsorPrototypes.Contains(Species.Id))
-            {
-                Species = SharedHumanoidAppearanceSystem.DefaultSpecies;
-                speciesPrototype = prototypeManager.Index(Species);
-            }
-            // Corvax-Sponsors-End
-
-            //Rayten-start
-            if (!prototypeManager.TryIndex<VoiceSpeechPrototype>(Voice, out var voicePrototype) || voicePrototype.RoundStart == false)
-            {
-                Voice = SharedHumanoidAppearanceSystem.DefaultVoice;
-                voicePrototype = prototypeManager.Index<VoiceSpeechPrototype>(Voice);
-            }
-            //Sponsor
-            if (voicePrototype.SponsorOnly && !sponsorPrototypes.Contains(Voice))
-            {
-                Voice = SharedHumanoidAppearanceSystem.DefaultVoice;
-                voicePrototype = prototypeManager.Index<VoiceSpeechPrototype>(Voice);
-            }
-            //Rayten-end
 
             var sex = Sex switch
             {
@@ -590,6 +584,8 @@ namespace Content.Shared.Preferences
                 name = Name;
             }
 
+            name = name.Trim();
+
             if (configManager.GetCVar(CCVars.RestrictedNames))
             {
                 name = RestrictedNameRegex.Replace(name, string.Empty);
@@ -606,8 +602,6 @@ namespace Content.Shared.Preferences
                 name = GetName(Species, gender);
             }
 
-            name = name.Trim();
-
             string flavortext;
             var maxFlavorTextLength = configManager.GetCVar(CCVars.MaxFlavorTextLength);
             if (FlavorText.Length > maxFlavorTextLength)
@@ -618,7 +612,9 @@ namespace Content.Shared.Preferences
             {
                 flavortext = FormattedMessage.RemoveMarkupOrThrow(FlavorText);
             }
-
+            //rayten-start
+            sponsorManager.TryGetServerPrototypes(session.UserId, out var sponsorPrototypes);
+            //rayten-end
             var appearance = HumanoidCharacterAppearance.EnsureValid(Appearance, Species, Sex, sponsorPrototypes);
 
             var prefsUnavailableMode = PreferenceUnavailable switch
@@ -688,16 +684,29 @@ namespace Content.Shared.Preferences
             _traitPreferences.Clear();
             _traitPreferences.UnionWith(GetValidTraits(traits, prototypeManager));
 
-            // Rayten-TTS-Start
-            prototypeManager.TryIndex<VoiceSpeechPrototype>(Voice, out var voice);
-            if (voice is null || !CanHaveVoice(voice, Sex))
-                Voice = SharedHumanoidAppearanceSystem.DefaultSexVoice[sex];
-
+            // Rayten-start
+            //Rayten-voice
+            if (!prototypeManager.TryIndex<VoiceSpeechPrototype>(Voice, out var voicePrototype) || voicePrototype.RoundStart == false)
+            {
+                Voice = HumanoidCharacterProfile.DefaultSexVoice[sex];
+                voicePrototype = prototypeManager.Index<VoiceSpeechPrototype>(Voice);
+            }
             if (VoicePitch < 0.5f)
                 VoicePitch = 0.5f;
             if (VoicePitch > 1.5f)
                 VoicePitch = 1.5f;
-            // Rayten-TTS-End
+            //Rayten-Sponsor
+            if (speciesPrototype.SponsorOnly && !sponsorPrototypes.Contains(Species.Id))
+            {
+                Species = HumanoidCharacterProfile.DefaultSpecies;
+                speciesPrototype = prototypeManager.Index(Species);
+            }
+            if (voicePrototype.SponsorOnly && !sponsorPrototypes.Contains(Voice))
+            {
+                Voice = HumanoidCharacterProfile.DefaultVoice;
+                voicePrototype = prototypeManager.Index<VoiceSpeechPrototype>(Voice);
+            }
+            // Rayten-End
 
             // Rayten-RoleSkills-start
             var roleSkillsstoRemove = new ValueList<string>();
@@ -779,19 +788,16 @@ namespace Content.Shared.Preferences
 
             return result;
         }
-
-        // Corvax-TTS-Start
-        // SHOULD BE NOT PUBLIC, BUT....
+        // Rayten-Voice-Start
         public static bool CanHaveVoice(VoiceSpeechPrototype voice, Sex sex)
         {
             return voice.RoundStart && sex == Sex.Unsexed || (voice.Sex == sex || voice.Sex == Sex.Unsexed);
         }
-        // Corvax-TTS-End
-
-        public ICharacterProfile Validated(ICommonSession session, IDependencyCollection collection, string[] sponsorPrototypes)
+        // Rayten-Voice-TTS-End
+        public ICharacterProfile Validated(ICommonSession session, IDependencyCollection collection)
         {
             var profile = new HumanoidCharacterProfile(this);
-            profile.EnsureValid(session, collection, sponsorPrototypes);
+            profile.EnsureValid(session, collection);
             return profile;
         }
 
@@ -895,6 +901,52 @@ namespace Content.Shared.Preferences
         public HumanoidCharacterProfile Clone()
         {
             return new HumanoidCharacterProfile(this);
+        }
+
+        public DataNode ToDataNode(ISerializationManager? serialization = null, IConfigurationManager? configuration = null)
+        {
+            IoCManager.Resolve(ref serialization);
+            IoCManager.Resolve(ref configuration);
+
+            var export = new HumanoidProfileExportV2()
+            {
+                ForkId = configuration.GetCVar(CVars.BuildForkId),
+                Profile = this,
+            };
+
+            var dataNode = serialization.WriteValue(export, alwaysWrite: true, notNullableOverride: true);
+            return dataNode;
+        }
+
+        public static HumanoidCharacterProfile FromStream(Stream stream, ICommonSession session, ISerializationManager? serialization = null, IConfigurationManager? configuration = null)
+        {
+            IoCManager.Resolve(ref serialization);
+            IoCManager.Resolve(ref configuration);
+
+            using var reader = new StreamReader(stream, EncodingHelpers.UTF8);
+            var yamlStream = new YamlStream();
+            yamlStream.Load(reader);
+
+            var root = yamlStream.Documents[0].RootNode;
+            HumanoidCharacterProfile profile;
+            if (root["version"].Equals(new YamlScalarNode("1")))
+            {
+                var export = serialization.Read<HumanoidProfileExportV1>(root.ToDataNode(), notNullableOverride: true);
+                profile = export.ToV2().Profile;
+            }
+            else if (root["version"].Equals(new YamlScalarNode("2")))
+            {
+                var export = serialization.Read<HumanoidProfileExportV2>(root.ToDataNode(), notNullableOverride: true);
+                profile = export.Profile;
+            }
+            else
+            {
+                throw new InvalidOperationException($"Unknown version {root["version"]}");
+            }
+
+            var collection = IoCManager.Instance;
+            profile.EnsureValid(session, collection!);
+            return profile;
         }
     }
 }

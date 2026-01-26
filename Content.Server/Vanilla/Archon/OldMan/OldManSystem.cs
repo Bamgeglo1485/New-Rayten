@@ -243,11 +243,10 @@ public sealed class OldManSystem : EntitySystem
 
             return true;
         }
-
         //2. Если должны телепортироваться на станцию - ищем самого хлипкого игрока
         EntityUid? uid = null;
         FixedPoint2 maxDamage = FixedPoint2.New(20);
-        var query = EntityQueryEnumerator<MobStateComponent, TransformComponent, DamageableComponent, HumanoidAppearanceComponent>();
+        var query = EntityQueryEnumerator<MobStateComponent, TransformComponent, DamageableComponent, HumanoidProfileComponent>();
         while (query.MoveNext(out var target, out var mob, out var trans, out var dmg, out _))
         {
             //Должен быть в сознании
@@ -453,7 +452,7 @@ public sealed class OldManSystem : EntitySystem
             return;
 
         //1. тпшимся к другому игроку
-        var query = EntityQueryEnumerator<TransformComponent, HumanoidAppearanceComponent>();
+        var query = EntityQueryEnumerator<TransformComponent, HumanoidProfileComponent>();
         while (query.MoveNext(out var target, out var trans, out _))
         {
             //Должен быть на гриде где дедушка уходил в карманное измерение последний раз

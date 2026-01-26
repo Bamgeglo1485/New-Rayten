@@ -221,7 +221,7 @@ public sealed class ShyGuySystem : EntitySystem
                 return false;
 
             //только гуманоиды
-            if (!HasComp<HumanoidAppearanceComponent>(user))
+            if (!HasComp<HumanoidProfileComponent>(user))
                 return false;
             //не слепые
             if (TryComp<BlindableComponent>(user, out var blind) && blind.IsBlind)

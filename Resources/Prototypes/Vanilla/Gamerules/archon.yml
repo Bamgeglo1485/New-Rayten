@@ -46,7 +46,7 @@
   components:
   - type: StationEvent
     startAnnouncement: station-event-archon-incoming-safe
-    weight: 4
+    weight: 6
 
 - type: entityTable
   id: ArchonEventsTable
@@ -55,10 +55,12 @@
     #кетер
     - id: OldManSpawn
     - id: BlindPredatorSpawn
+    # - id: PossessiveMaskSpawn todo
     #евклид
     - id: PlagueDoctorSpawn
     - id: ShyGuySpawn
     - id: SculptureSpawn
+    # - id: SuperBallSpawn todo
     #безопасный
     - id: PanaceaSpawn
     - id: MasterKeySpawn
@@ -66,7 +68,9 @@
     - id: InfinityFlaskSpawn
     - id: LivingWeaponSpawn
     - id: DontTakeMoreThanTwoSpawn
-#кетер
+    # - id: JadedRingSpawn todo
+    # - id: GasMaskSpawn todo
+
 - type: entity
   parent: KeterArchonGameRule
   id: BlindPredatorSpawn

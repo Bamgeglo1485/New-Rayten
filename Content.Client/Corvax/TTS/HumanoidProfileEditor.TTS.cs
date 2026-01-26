@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using Content.Client.Corvax.TTS;
 using Content.Client.Lobby;
 using Content.Shared.Corvax.Interface;
 using Content.Shared.Corvax.TTS;
@@ -118,7 +117,7 @@ public sealed partial class HumanoidProfileEditor
         var rng = IoCManager.Resolve<IRobustRandom>();
         var entMan = IoCManager.Resolve<IEntityManager>();
         var _audio = entMan.System<SharedAudioSystem>();
-        var _undsys = entMan.System<VoiceSpeechSystem>();
+        var _voiceSys = entMan.System<VoiceSpeechSystem>();
         var previewBeepText = rng.Pick(_sampleText);
 
         _previewBeepIndex = 0;
@@ -129,16 +128,15 @@ public sealed partial class HumanoidProfileEditor
             return;
 
         var Sound = protoVoice.Voice;
+        AudioParams audioparms = AudioParams.Default
+                .WithPitchScale(Profile.VoicePitch)
+                .WithVariation(0.05f)
+                .WithVolume(_voiceSys.AdjustVolume(false));
 
         void BeepStep()
         {
             if (_previewBeepIndex >= previewBeepText.Length)
                 return;
-
-            AudioParams audioparms = AudioParams.Default
-                    .WithPitchScale(Profile.VoicePitch)
-                    .WithVariation(0.05f)
-                    .WithVolume(_undsys.AdjustVolume(false));
 
             var nextChar = previewBeepText[_previewBeepIndex];
 
@@ -147,9 +145,10 @@ public sealed partial class HumanoidProfileEditor
 
             if (_previewBeepIndex < previewBeepText.Length && _previewBeepIndex <= 55)
             {
-                Timer.Spawn(TimeSpan.FromSeconds(rng.NextFloat(0.065f, 0.095f)), BeepStep);
+                Timer.Spawn(TimeSpan.FromSeconds(rng.NextFloat(0.085f, 0.135f)), BeepStep);
             }
         }
+
         Timer.Spawn(TimeSpan.FromSeconds(0.085f), BeepStep);
     }
 }

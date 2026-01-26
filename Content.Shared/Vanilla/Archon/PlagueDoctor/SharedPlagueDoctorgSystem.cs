@@ -73,7 +73,7 @@ public abstract class SharedPlagueDoctorgSystem : EntitySystem
             if (!HasComp<MobStateComponent>(target))
                 continue;
 
-            if (HasComp<HumanoidAppearanceComponent>(target) && !_predator.IsVisibleByPredator(target, uid))
+            if (HasComp<HumanoidProfileComponent>(target) && !_predator.IsVisibleByPredator(target, uid))
                 continue;
 
             _audio.PlayPredicted(comp.HitSound, target, uid);
