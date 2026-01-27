@@ -51,7 +51,7 @@ public sealed partial class LayerMarkingItem : BoxContainer, ISearchableControl
         //rayten-sponsors
         if (prototype.SponsorOnly)
         {
-            if (!_sponsorsManager.GetClientPrototypes().Contains(prototype.ID))
+            if (!_sponsorsManager.GetSponsorPrototypes().Contains(prototype.ID))
             {
                 SelectButton.Disabled = true;
                 ColorsButton.Disabled = true;

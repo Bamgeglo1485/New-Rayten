@@ -39,8 +39,10 @@ public sealed partial class HumanoidProfileEditor
         _voiceList = _prototypeManager
             .EnumeratePrototypes<VoiceSpeechPrototype>()
             .Where(o => o.RoundStart)
-            .OrderBy(o => Loc.GetString(o.Name))
+            .OrderBy(o => o.SponsorOnly) // false → true
+            .ThenBy(o => o.Name)
             .ToList();
+
 
         Pitch.OnValueChanged += args =>
         {
@@ -81,7 +83,7 @@ public sealed partial class HumanoidProfileEditor
             var voice = _voiceList[i];
             if (!HumanoidCharacterProfile.CanHaveVoice(voice, Profile.Sex))
                 continue;
-            var name = Loc.GetString(voice.Name);
+            var name = voice.Name;
             VoiceButton.AddItem(name, i);
 
             if (firstVoiceChoiceId == 1)
@@ -90,7 +92,7 @@ public sealed partial class HumanoidProfileEditor
             if (_sponsorsMgr is null)
                 continue;
 
-            if (voice.SponsorOnly && _sponsorsMgr != null && !_sponsorsMgr.GetClientPrototypes().Contains(voice.ID))
+            if (voice.SponsorOnly && _sponsorsMgr != null && !_sponsorsMgr.GetSponsorPrototypes().Contains(voice.ID))
             {
                 VoiceButton.SetItemDisabled(VoiceButton.GetIdx(i), true);
             }

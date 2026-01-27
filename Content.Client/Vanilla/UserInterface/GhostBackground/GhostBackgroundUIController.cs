@@ -78,7 +78,7 @@ public sealed class GhostBackgroundUIController : UIController,
                 bgProto.Skills,
                 bgProto.EasySkills,
                 bgProto.SkillPoints,
-                (bgProto.SponsorOnly && !sponsorman.GetClientPrototypes().Contains(bgProto.ID)),
+                bgProto.SponsorOnly && !sponsorman.GetSponsorPrototypes().Contains(bgProto.ID),
                 bgProto.SponsorOnly
             );
 

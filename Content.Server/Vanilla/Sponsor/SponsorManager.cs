@@ -42,7 +42,7 @@ public sealed class SponsorManager
 
         if (e.NewStatus == SessionStatus.Connected)
         {
-            sponsorRank SponsorRank = await GetSponsorRank(e.Session.UserId);
+            sponsorRank SponsorRank = sponsorRank.SpaceNinja;//await GetSponsorRank(e.Session.UserId);
             _sawmill.Info($"У пользователя {e.Session.UserId} вот такой ранг: {SponsorRank}");
             // Отправляем сетевое сообщение
             var msg = new SetSponsorRank
@@ -51,18 +51,7 @@ public sealed class SponsorManager
             };
             e.Session.Channel.SendMessage(msg);
 
-            _sharedSponsorManager.ServerSponsorSet(e.Session.UserId, SponsorRank, false); 
-        }
-
-        if (e.NewStatus == SessionStatus.Disconnected)
-        {
-            _sawmill.Info($"Ранг пользователя {e.Session.UserId} удалён при отключении.");
-            var msg = new SetSponsorRank
-            {
-                rank = sponsorRank.None
-            };
-            e.Session.Channel.SendMessage(msg);
-            _sharedSponsorManager.ServerSponsorSet(e.Session.UserId, sponsorRank.None, true);
+            _sharedSponsorManager.ServerSponsorSet(e.Session.UserId, SponsorRank, false);
         }
     }
 
@@ -86,10 +75,10 @@ public sealed class SponsorManager
         return rank switch
         {
             "None" => sponsorRank.None,
-            "GrayTide" =>  sponsorRank.GrayTide,
-            "Revolutionary" =>  sponsorRank.Revolutionary,
-            "Syndicate" =>  sponsorRank.Syndicate,
-            "SpaceNinja" =>  sponsorRank.SpaceNinja,
+            "GrayTide" => sponsorRank.GrayTide,
+            "Revolutionary" => sponsorRank.Revolutionary,
+            "Syndicate" => sponsorRank.Syndicate,
+            "SpaceNinja" => sponsorRank.SpaceNinja,
             _ => sponsorRank.None
         };
     }

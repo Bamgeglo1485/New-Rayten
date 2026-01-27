@@ -34,7 +34,8 @@ namespace Content.Shared.Preferences
     {
         public static readonly ProtoId<SpeciesPrototype> DefaultSpecies = "Human";
         private static readonly Regex RestrictedNameRegex = new("[^А-Яа-яёЁ0-9' -]"); // Rayten-Localization
-        // Rayten-Start
+                                                                                      // Rayten-Start
+        private ISawmill? _sawmill;//удалить
         public const string DefaultVoice = "Papyrus";
         public const float DefaultVoicePitch = 1.0f;
         public static readonly Dictionary<Sex, string> DefaultSexVoice = new()
@@ -613,7 +614,7 @@ namespace Content.Shared.Preferences
                 flavortext = FormattedMessage.RemoveMarkupOrThrow(FlavorText);
             }
             //rayten-start
-            sponsorManager.TryGetServerPrototypes(session.UserId, out var sponsorPrototypes);
+            var sponsorPrototypes = sponsorManager.GetSponsorPrototypes(session.UserId);
             //rayten-end
             var appearance = HumanoidCharacterAppearance.EnsureValid(Appearance, Species, Sex, sponsorPrototypes);
 

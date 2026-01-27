@@ -71,7 +71,7 @@ public sealed partial class HumanoidCharacterAppearance : ICharacterAppearance, 
             skinColor,
             new()
         );
-        return EnsureValid(appearance, species, sex);
+        return EnsureValid(appearance, species, sex, []);
     }
 
     private static IReadOnlyList<Color> _realisticEyeColors = new List<Color>
@@ -111,7 +111,7 @@ public sealed partial class HumanoidCharacterAppearance : ICharacterAppearance, 
         return new(color.RByte, color.GByte, color.BByte);
     }
 
-    public static HumanoidCharacterAppearance EnsureValid(HumanoidCharacterAppearance appearance, ProtoId<SpeciesPrototype> species, Sex sex, string[]? sponsorProtos = null)
+    public static HumanoidCharacterAppearance EnsureValid(HumanoidCharacterAppearance appearance, ProtoId<SpeciesPrototype> species, Sex sex, HashSet<string> sponsorProtos)
     {
         var eyeColor = ClampColor(appearance.EyeColor);
 
@@ -148,7 +148,7 @@ public sealed partial class HumanoidCharacterAppearance : ICharacterAppearance, 
                 markingManager.EnsureValidLayers(actualMarkings, organData.Value.Layers);
                 markingManager.EnsureValidLimits(actualMarkings, organData.Value.Group, organData.Value.Layers, skinColor, eyeColor);
                 //rayten-start
-                markingManager.EnsureValidSponsor(actualMarkings, sponsorProtos ?? Array.Empty<string>());
+                markingManager.EnsureValidSponsor(actualMarkings, sponsorProtos);
                 //rayten-end
 
                 validatedMarkings[organ] = actualMarkings;

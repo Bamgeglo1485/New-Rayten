@@ -11,7 +11,6 @@ public sealed class MarkingManager
 {
     [Dependency] private readonly IComponentFactory _component = default!;
     [Dependency] private readonly IPrototypeManager _prototype = default!;
-
     private FrozenDictionary<HumanoidVisualLayers, FrozenDictionary<string, MarkingPrototype>> _categorizedMarkings = default!;
     private FrozenDictionary<string, MarkingPrototype> _markings = default!;
 
@@ -344,7 +343,8 @@ public sealed class MarkingManager
         return true;
     }
     //rayten-start
-    public void EnsureValidSponsor(Dictionary<HumanoidVisualLayers, List<Marking>> markingSets, string[] sponsorProtos)
+
+    public void EnsureValidSponsor(Dictionary<HumanoidVisualLayers, List<Marking>> markingSets, HashSet<string> sponsorProtos)
     {
         foreach (var markings in markingSets.Values)
         {
@@ -352,8 +352,12 @@ public sealed class MarkingManager
             {
                 if (TryGetMarking(markings[i], out var marking))
                 {
-                    if (marking.SponsorOnly && !sponsorProtos.Contains(marking.ID))
-                        markings.RemoveAt(i);
+                    if (marking.SponsorOnly)
+                    {
+                        if (!sponsorProtos.Contains(marking.ID))
+                            markings.RemoveAt(i);
+                    }
+
                 }
             }
         }
