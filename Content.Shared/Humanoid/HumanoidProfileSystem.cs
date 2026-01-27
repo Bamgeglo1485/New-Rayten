@@ -4,7 +4,7 @@ using Content.Shared.IdentityManagement;
 using Content.Shared.Preferences;
 using Robust.Shared.GameObjects.Components.Localization;
 using Robust.Shared.Prototypes;
-
+using Content.Shared.Vanilla.VoiceSpeech;
 namespace Content.Shared.Humanoid;
 
 public sealed class HumanoidProfileSystem : EntitySystem
@@ -37,6 +37,14 @@ public sealed class HumanoidProfileSystem : EntitySystem
         {
             _grammar.SetGender((ent, grammar), profile.Gender);
         }
+        //rayten-start
+        if (TryComp<VoiceEmitterComponent>(ent.Owner, out var voice))
+        {
+            voice.VoicePrototypeId = profile.Voice;
+            voice.Pitch = profile.VoicePitch;
+            Dirty(ent.Owner, voice);
+        }
+        //rayten-end
     }
 
     private void OnExamined(Entity<HumanoidProfileComponent> ent, ref ExaminedEvent args)

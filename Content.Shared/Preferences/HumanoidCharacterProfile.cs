@@ -791,7 +791,7 @@ namespace Content.Shared.Preferences
         // Rayten-Voice-Start
         public static bool CanHaveVoice(VoiceSpeechPrototype voice, Sex sex)
         {
-            return voice.RoundStart && sex == Sex.Unsexed || (voice.Sex == sex || voice.Sex == Sex.Unsexed);
+            return voice.RoundStart && (sex == Sex.Unsexed || voice.Sex == sex || voice.Sex == Sex.Unsexed);
         }
         // Rayten-Voice-TTS-End
         public ICharacterProfile Validated(ICommonSession session, IDependencyCollection collection)

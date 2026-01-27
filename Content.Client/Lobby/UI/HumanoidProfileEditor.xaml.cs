@@ -226,13 +226,6 @@ namespace Content.Client.Lobby.UI
 
             #endregion Gender
 
-            // Rayten-TTS-Start
-            #region Voice
-
-            InitializeVoice();
-            #endregion
-            // Rayten-TTS-End
-
             RefreshSpecies();
 
             SpeciesButton.OnItemSelected += args =>
@@ -356,6 +349,11 @@ namespace Content.Client.Lobby.UI
 
             UpdateSpeciesGuidebookIcon();
             IsDirty = false;
+            // Rayten-TTS-Start
+            #region Voice
+            InitializeVoice();
+            #endregion
+            // Rayten-TTS-End
         }
 
         /// <summary>
@@ -674,7 +672,7 @@ namespace Content.Client.Lobby.UI
             UpdateEyePickers();
             UpdateSaveButton();
             UpdateMarkings();
-
+            UpdateTTSVoicesControls();//rayten
             RefreshAntags();
             RefreshJobs();
             RefreshLoadouts();

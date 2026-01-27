@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using Content.Client.Lobby;
 using Content.Shared.Corvax.Interface;
-using Content.Shared.Corvax.TTS;
 using Content.Shared.Preferences;
 using Content.Shared.Vanilla.VoiceSpeech;
 using Content.Client.Vanilla.VoiceSpeech;
@@ -35,7 +34,6 @@ public sealed partial class HumanoidProfileEditor
             "Возле эвакуационного шаттла разгерметизация! Инженеры, нам срочно нужна ваша помощь!",
             "Бармен, налей мне самого крепкого вина, которое есть в твоих запасах!"
         };
-    private int _previewBeepIndex;
     private void InitializeVoice()
     {
         _voiceList = _prototypeManager
@@ -83,7 +81,6 @@ public sealed partial class HumanoidProfileEditor
             var voice = _voiceList[i];
             if (!HumanoidCharacterProfile.CanHaveVoice(voice, Profile.Sex))
                 continue;
-
             var name = Loc.GetString(voice.Name);
             VoiceButton.AddItem(name, i);
 
@@ -114,13 +111,14 @@ public sealed partial class HumanoidProfileEditor
     {
         if (Profile is null)
             return;
+
         var rng = IoCManager.Resolve<IRobustRandom>();
         var entMan = IoCManager.Resolve<IEntityManager>();
         var _audio = entMan.System<SharedAudioSystem>();
         var _voiceSys = entMan.System<VoiceSpeechSystem>();
         var previewBeepText = rng.Pick(_sampleText);
 
-        _previewBeepIndex = 0;
+        int _previewBeepIndex = 0;
 
         var voice = Profile.Voice;
 
@@ -131,7 +129,7 @@ public sealed partial class HumanoidProfileEditor
         AudioParams audioparms = AudioParams.Default
                 .WithPitchScale(Profile.VoicePitch)
                 .WithVariation(0.05f)
-                .WithVolume(_voiceSys.AdjustVolume(false));
+                .WithVolume(_voiceSys.AdjustVolume(false, protoVoice.Basevolume));
 
         void BeepStep()
         {
@@ -140,7 +138,9 @@ public sealed partial class HumanoidProfileEditor
 
             var nextChar = previewBeepText[_previewBeepIndex];
 
-            _audio.PlayGlobal(Sound, Filter.Local(), true, audioparms);
+            if (!char.IsWhiteSpace(nextChar) && nextChar != ',' && nextChar != '.' && nextChar != '!' && nextChar != '?')
+                _audio.PlayGlobal(Sound, Filter.Local(), true, audioparms);
+
             _previewBeepIndex++;
 
             if (_previewBeepIndex < previewBeepText.Length && _previewBeepIndex <= 55)

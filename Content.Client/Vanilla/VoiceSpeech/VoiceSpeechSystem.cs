@@ -39,18 +39,21 @@ public sealed class VoiceSpeechSystem : EntitySystem
         _audio.PlayLocal(comp.Voice, uid, null);
     }
 
-    public AudioParams SetVolume(bool whisper, VoiceEmitterComponent comp)
+    public AudioParams SetVolume(bool whisper, VoiceEmitterComponent comp, float baseVolume)
     {
         return AudioParams.Default
                 .WithPitchScale(comp.Pitch)
                 .WithVariation(0.05f)
-                .WithVolume(AdjustVolume(whisper))
+                .WithVolume(AdjustVolume(whisper, baseVolume))
                 .WithMaxDistance(whisper ? SharedChatSystem.WhisperMuffledRange : SharedChatSystem.VoiceRange);
     }
 
-    public float AdjustVolume(bool isWhisper)
+    public float AdjustVolume(bool isWhisper, float baseVolume)
     {
-        float volume = -10f + SharedAudioSystem.GainToVolume(_volume);
+        if (_volume == 0)
+            baseVolume = 0;
+
+        float volume = -10f + SharedAudioSystem.GainToVolume(_volume + baseVolume);
 
         if (isWhisper)
             volume -= SharedAudioSystem.GainToVolume(5f);

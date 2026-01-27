@@ -17,6 +17,8 @@ using Robust.Shared.Audio;
 using Robust.Shared.Prototypes;
 using System.Text.RegularExpressions;
 using System.Numerics;
+using System.Text;
+
 namespace Content.Client.Chat.UI
 {
     public abstract class SpeechBubble : Control
@@ -114,19 +116,19 @@ namespace Content.Client.Chat.UI
                 _ => throw new ArgumentOutOfRangeException()
             };
             //rayten-start
-            if ( type == SpeechType.Say || type == SpeechType.Whisper )
+            if (type == SpeechType.Say || type == SpeechType.Whisper)
             {
                 var protoMan = IoCManager.Resolve<IPrototypeManager>();
                 var entMan = IoCManager.Resolve<IEntityManager>();
                 var speechsys = entMan.System<VoiceSpeechSystem>();
 
-                if (!entMan.TryGetComponent<VoiceEmitterComponent>(senderEntity, out var undemitcomp)
-                    || undemitcomp.VoicePrototypeId == null
-                    || !protoMan.TryIndex<VoiceSpeechPrototype>(undemitcomp.VoicePrototypeId, out var protoVoice))
+                if (!entMan.TryGetComponent<VoiceEmitterComponent>(senderEntity, out var voicecomp)
+                    || voicecomp.VoicePrototypeId == null
+                    || !protoMan.TryIndex<VoiceSpeechPrototype>(voicecomp.VoicePrototypeId, out var protoVoice))
                     return bubble;
 
-                undemitcomp.Voice = protoVoice.Voice;
-                undemitcomp.Voice.Params = speechsys.SetVolume(type == SpeechType.Whisper, undemitcomp);
+                voicecomp.Voice = protoVoice.Voice;
+                voicecomp.Voice.Params = speechsys.SetVolume(type == SpeechType.Whisper, voicecomp, protoVoice.Basevolume);
             }
             //rayten-end
             return bubble;
@@ -186,47 +188,58 @@ namespace Content.Client.Chat.UI
                 return;
             }
             // RAYTEN-START
-            if (_entityManager.TryGetComponent<VoiceEmitterComponent>(_senderEntity, out var comp) && comp.VoicePrototypeId != null)
+            if (_entityManager.TryGetComponent<VoiceEmitterComponent>(_senderEntity, out var comp)
+                && comp.VoicePrototypeId != null
+                && _textLabel != null
+                && _revealedLength < _fullText.Length)
             {
-                if (_textLabel != null && _revealedLength < _fullText.Length)
+                _accumulatedTime += args.DeltaSeconds;
+                var sb = new StringBuilder(_revealedLength + 16);
+                // Показываем новую букву, если пришло время
+                if (_accumulatedTime >= LetterDelay)
                 {
-                    _accumulatedTime += args.DeltaSeconds;
+                    _accumulatedTime -= LetterDelay;
+                    _deathTime += TimeSpan.FromSeconds(LetterDelay);
 
-                    // Показываем новую букву, если пришло время
-                    if (_accumulatedTime >= LetterDelay)
+                    var newChar = _fullText[_revealedLength];
+
+                    // звук только на "обычные" символы
+                    if (!" ,.!?".Contains(newChar))
                     {
-                        _accumulatedTime -= LetterDelay;
-
-                        var newChar = _fullText[_revealedLength];
-
-                        // Звук только на нормальные символы
-                        if (!char.IsWhiteSpace(newChar) && newChar != ',' && newChar != '.' && newChar != '…')
-                        {
-                            _speechSys.Beep(_senderEntity, comp);
-                        }
-
-                        // Учитываем пунктуацию — добавляем паузу
-                        if (newChar == ',' || newChar == '.' || newChar == '…' || newChar == '!' || newChar == '?')
-                        {
-                            _accumulatedTime -= PunctuationDelay; // замедляем вывод
-                        }
-
-                        _revealedLength++;
+                        _speechSys.Beep(_senderEntity, comp);
                     }
-
-                    // Форматирование видимого и скрытого текста
-                    var visible = _fullText.Substring(0, _revealedLength);
-                    var hidden = _fullText.Substring(_revealedLength);
-                    if (_wasBold)
+                    else if (!char.IsWhiteSpace(newChar))
                     {
-                        visible = $"[bold]{visible}[/bold]";
+                        // пунктуация — замедляем вывод
+                        _accumulatedTime -= PunctuationDelay;
+                        _deathTime += TimeSpan.FromSeconds(PunctuationDelay);
                     }
-
-                    var formatted = FormatSpeech(visible, _fontColor);
-                    formatted.AddMarkupOrThrow($"[color=#00000000]{hidden}[/color]");
-                    _textLabel.SetMessage(formatted);
+                    _revealedLength++;
                 }
+
+                // ---------- Формирование текста ----------
+                // visible
+                sb.Append(_fullText, 0, _revealedLength);
+
+                if (_revealedLength < _fullText.Length)
+                    sb.Append('…');
+
+                if (_wasBold)
+                {
+                    sb.Insert(0, "[bold]");
+                    sb.Append("[/bold]");
+                }
+
+                // hidden
+                var hidden = _revealedLength < _fullText.Length
+                    ? _fullText.Substring(_revealedLength)
+                    : string.Empty;
+
+                var formatted = FormatSpeech(sb.ToString(), _fontColor);
+                formatted.AddMarkupOrThrow($"[color=#00000000]{hidden}[/color]");
+                _textLabel.SetMessage(formatted);
             }
+
             // --- RAYTEN-END ---
             // Плавный фейд текста
             _fadeElapsed += args.DeltaSeconds;
@@ -334,19 +347,26 @@ namespace Content.Client.Chat.UI
 
         protected override Control BuildBubble(ChatMessage message, string speechStyleClass, Color? fontColor = null, EntityUid? senderEntity = null)
         {
+            var entMan = IoCManager.Resolve<IEntityManager>();
+            var withVoice = senderEntity != null && entMan.TryGetComponent<VoiceEmitterComponent>(senderEntity, out var comp) && comp.VoicePrototypeId != null;
             if (!ConfigManager.GetCVar(CCVars.ChatEnableFancyBubbles))
             {
-                var label = new RichTextLabel
+                _textLabel = new RichTextLabel//rayten-global-var
                 {
                     MaxWidth = SpeechMaxWidth
                 };
 
-                label.SetMessage(ExtractAndFormatSpeechSubstring(message, "BubbleContent", fontColor));
+                //rayten-start
+                if (withVoice)
+                    InitializeText(message, fontColor);
+                else
+                    _textLabel.SetMessage(ExtractAndFormatSpeechSubstring(message, "BubbleContent", fontColor));
+                //rayten-end
 
                 var unfanciedPanel = new PanelContainer
                 {
                     StyleClasses = { "speechBox", speechStyleClass },
-                    Children = { label },
+                    Children = { _textLabel },
                     ModulateSelfOverride = Color.White.WithAlpha(ConfigManager.GetCVar(CCVars.SpeechBubbleBackgroundOpacity)),
                 };
                 return unfanciedPanel;
@@ -369,12 +389,12 @@ namespace Content.Client.Chat.UI
             //We'll be honest. *Yes* this is hacky. Doing this in a cleaner way would require a bottom-up refactor of how saycode handles sending chat messages. -Myr
             bubbleHeader.SetMessage(ExtractAndFormatSpeechSubstring(message, "BubbleHeader", fontColor));
 
-            var entMan = IoCManager.Resolve<IEntityManager>();
-
-            if(senderEntity != null && entMan.TryGetComponent<VoiceEmitterComponent>(senderEntity, out var comp) && comp.VoicePrototypeId != null)
+            //rayten-start
+            if (withVoice)
                 InitializeText(message, fontColor);
             else
                 _textLabel.SetMessage(ExtractAndFormatSpeechSubstring(message, "BubbleContent", fontColor));
+            //rayten-end
 
             //As for below: Some day this could probably be converted to xaml. But that is not today. -Myr
             var mainPanel = new PanelContainer
