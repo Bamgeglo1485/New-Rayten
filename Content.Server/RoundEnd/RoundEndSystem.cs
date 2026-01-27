@@ -385,7 +385,7 @@ namespace Content.Server.RoundEnd
             {
                 if (!_shuttle.EmergencyShuttleArrived && ExpectedCountdownEnd is null)
                 {
-                    _autoCalledBefore = true; // Corvax-Announcements: Move before call RequestRoundEnd to play correct announcement sound type
+                    _autoCalledBefore = true;
                     RequestRoundEnd(checkCooldown: false, text: "round-end-system-shuttle-auto-called-announcement");
                 }
 

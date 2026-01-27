@@ -34,7 +34,7 @@
     size: Huge
 
 - type: entity
-  parent: [BriefcaseBase, ThirdSyndicateContraband]
+  parent: [BriefcaseBase, SecondSyndicateContraband]
   id: BriefcaseWeapon
   name: secure weapon case
   suffix: Gun, Empty

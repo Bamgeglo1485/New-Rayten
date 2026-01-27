@@ -51,7 +51,7 @@ public sealed class SponsorManager
             };
             e.Session.Channel.SendMessage(msg);
 
-            _sharedSponsorManager.ServerSponsorSet(e.Session.UserId, SponsorRank, false);
+            _sharedSponsorManager.ServerSponsorSet(e.Session.UserId, SponsorRank);
         }
     }
 
