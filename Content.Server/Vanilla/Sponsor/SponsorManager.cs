@@ -42,7 +42,7 @@ public sealed class SponsorManager
 
         if (e.NewStatus == SessionStatus.Connected)
         {
-            sponsorRank SponsorRank = sponsorRank.SpaceNinja;//await GetSponsorRank(e.Session.UserId);
+            sponsorRank SponsorRank = await GetSponsorRank(e.Session.UserId);
             _sawmill.Info($"У пользователя {e.Session.UserId} вот такой ранг: {SponsorRank}");
             // Отправляем сетевое сообщение
             var msg = new SetSponsorRank
