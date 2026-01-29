@@ -24,21 +24,26 @@ public sealed partial class ArchonComponent : Component
     /// Модификатор изучаемых очков
     /// </summary>
     [DataField]
-    public float ResearchModifier = 1.0f;
+    public float PointsModifier = 1.0f;
+    /// <summary>
+    /// Модификатор изучаемых очков
+    /// </summary>
+    [DataField]
+    public float APointsModifier = 1.0f;
 
     /// <summary>
     /// продвинутые очки за изучение
     /// </summary>
     public int GetAPoints()
     {
-        return (int)(1 * ResearchModifier);
+        return (int)(1 * APointsModifier);
     }
     /// <summary>
     /// обычные очки за изучение
     /// </summary>
     public int GetPoints()
     {
-        return (int)(25000 * ResearchModifier);
+        return (int)(25000 * PointsModifier);
     }
 
 }

@@ -17,7 +17,6 @@ discord-ban-roleban-desc =
     { discord-roleBan-roles }
 
     { discord-ban-reason }
-
 discord-ban-notifications-footer = Rayten
 discord-ban-intruder = **Нарушитель:** { $user }
 discord-ban-administrator = **Администратор:** { $admin }

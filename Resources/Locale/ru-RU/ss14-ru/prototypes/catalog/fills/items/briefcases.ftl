@@ -16,7 +16,5 @@ ent-BriefcaseWeaponC20Filled = защищённый кейс C-20r
     .desc = { ent-BriefcaseWeaponSmall.desc }
 ent-BriefcaseWeaponBulldogFilled = защищённый кейс Bulldog
     .desc = { ent-BriefcaseWeaponSmall.desc }
-ent-BriefcaseWeaponDMRFilled = защищённый кейс Estoc
-    .desc = { ent-BriefcaseWeapon.desc }
 ent-BriefcaseWeaponChinaLakeFilled = защищённый кейс China Lake
     .desc = { ent-BriefcaseWeapon.desc }
