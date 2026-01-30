@@ -107,6 +107,7 @@ public sealed class DominatorSystem : SharedDominatorSystem
         comp.NextSpeechTime = curtime + TimeSpan.FromSeconds(10f);
         return true;
     }
+
     private void OnInteractUsing(EntityUid uid, DominatorComponent comp, InteractUsingEvent args)
     {
         var used = args.Used;

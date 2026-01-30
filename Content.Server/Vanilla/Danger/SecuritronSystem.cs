@@ -1,7 +1,12 @@
+using Content.Server.CriminalRecords.Systems;
+using Content.Server.Radio.EntitySystems;
 using Content.Shared.Vanilla.Dominator;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Components;
+using Content.Shared.Security;
+using Content.Shared.StationRecords;
+using Content.Shared.Station;
 using Robust.Shared.Containers;
 using System.Linq;
 
@@ -10,12 +15,15 @@ namespace Content.Server.Vanilla.Dominator;
 public sealed class SecuritronSystem : EntitySystem
 {
     [Dependency] private readonly SharedContainerSystem _container = default!;
-
+    [Dependency] private readonly SharedStationRecordsSystem _records = default!;
+    [Dependency] private readonly CriminalRecordsSystem _criminalRecords = default!;
+    [Dependency] private readonly SharedStationSystem _station = default!;
+    [Dependency] private readonly RadioSystem _radio = default!;
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<SecuritronComponent, DamageChangedEvent>(OnDamageChange);//напавшего на секьюритрона делаем опасным челом
-        SubscribeLocalEvent<SecuritronComponent, ComponentInit>(OnSecuritronInit);//напавшего на секьюритрона делаем опасным челом
+        SubscribeLocalEvent<SecuritronComponent, DamageChangedEvent>(OnDamageChange);
+        SubscribeLocalEvent<SecuritronComponent, ComponentInit>(OnSecuritronInit);
     }
     private void OnSecuritronInit(EntityUid uid, SecuritronComponent component, ComponentInit args)
     {
@@ -44,8 +52,25 @@ public sealed class SecuritronSystem : EntitySystem
             return;
         }
 
-        sourcecomp.MaxDanger = true;
-        source.SpawnTimer(TimeSpan.FromSeconds(30), () => { sourcecomp.MaxDanger = false; });
+        if (_station.GetOwningStation(uid) is { } station)
+        {
+            var id = _records.GetRecordByName(station, Name(source));
+            if (id != null)
+            {
+                var key = new StationRecordKey(id.Value, station);
+                var reason = Loc.GetString("securitron-set-wanted");
+                if (_criminalRecords.TryChangeStatus(key, SecurityStatus.Wanted, reason, Name(uid)))
+                {
+                    _radio.SendRadioMessage(uid,
+                        Loc.GetString("securitron-set-wanted-radio-message", ("name", source), ("reason", reason)),
+                        component.SecurityChannel, uid);
+                }
+            }
+            else
+            {
+                sourcecomp.MaxDanger = true;
+                source.SpawnTimer(TimeSpan.FromSeconds(15), () => sourcecomp.MaxDanger = false);
+            }
+        }
     }
-
 }

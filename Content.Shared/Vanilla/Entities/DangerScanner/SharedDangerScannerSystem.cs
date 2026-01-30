@@ -128,10 +128,9 @@ public abstract class SharedDangerScannerSystem : EntitySystem
         {
             _audio.PlayPredicted(component.CompleteSound, uid, user);
             _chat.TrySendInGameICMessage(uid, Loc.GetString("dominator-scanner-end-no-danger"), InGameICChatType.Speak, true);
+            var scannedComp = EnsureComp<DangerScannedComponent>(target);
+            scannedComp.NextScanIn = _timing.CurTime + TimeSpan.FromMinutes(DangerScannedComponent.ScanCoolDown);
         }
-        var scannedComp = EnsureComp<DangerScannedComponent>(target);
-        scannedComp.NextScanIn = _timing.CurTime + TimeSpan.FromMinutes(DangerScannedComponent.ScanCoolDown);
-        // Dirty(target, scannedComp);
         args.Handled = true;
     }
 
