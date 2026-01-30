@@ -12,6 +12,19 @@
   - UplinkWearables
 
 - type: listing
+  id: UplinkClothingBackpackThermoOptic
+  name: uplink-thermo-optic-name
+  description: uplink-thermo-optic-desc
+  productEntity: ClothingBackpackThermoOptic
+  discountCategory: rareDiscounts
+  discountDownTo:
+    Telecrystal: 4
+  cost:
+    Telecrystal: 5
+  categories:
+  - UplinkWearables
+
+- type: listing
   id: UplinkSheathSyndieFilledBox
   name: uplink-syndicate-rapier-name
   description: uplink-syndicate-rapier-desc

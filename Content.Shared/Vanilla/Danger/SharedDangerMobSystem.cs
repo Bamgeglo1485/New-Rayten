@@ -1,6 +1,7 @@
+using Content.Shared.Vanilla.Entities.DangerScanner;
+using Content.Shared.Access.Components;
 using Content.Shared.PDA;
 using Content.Shared.Inventory;
-using Content.Shared.Access.Components;
 using Content.Shared.Access.Systems;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs;
@@ -109,14 +110,6 @@ public class SharedDangerMobSystem : EntitySystem
         // ID card
         if (TryGetIdCard(target, out var idcard))
         {
-            TryComp<AgentIDCardComponent>(idcard, out var agentCardComp);
-
-            if (TryComp<PdaComponent>(idcard, out var pdaComp))
-                TryComp<AgentIDCardComponent>(pdaComp.ContainedId, out agentCardComp);
-
-            if (agentCardComp?.HideDeepScan == true)
-                return dangerComp.Danger;
-
             departments = idcard.Comp.JobDepartments;
             if (idcard.Comp.LocalizedJobTitle is not null)
                 jobId = idcard.Comp.LocalizedJobTitle;
@@ -171,6 +164,11 @@ public class SharedDangerMobSystem : EntitySystem
         EntityUid localMaxItem = uid;
         int localMaxDanger = GetItemDanger(uid, departments, jobId);
         int totalDanger = localMaxDanger;
+        if (HasComp<HideContrabandComponent>(uid))
+        {
+            item = localMaxItem;
+            return totalDanger;
+        }
 
         if (TryComp<StorageComponent>(uid, out var storageComp))
         {
@@ -194,10 +192,7 @@ public class SharedDangerMobSystem : EntitySystem
             totalDanger += curDanger;
 
             if (curDanger > localMaxDanger)
-            {
-                localMaxDanger = curDanger;
                 localMaxItem = stashedItem;
-            }
         }
 
         item = localMaxItem;
@@ -252,7 +247,7 @@ public class SharedDangerMobSystem : EntitySystem
     private bool TryGetIdCard(EntityUid target, [NotNullWhen(true)] out Entity<IdCardComponent> idCard)
     {
         IdCardComponent? idCardComp;
-
+        PdaComponent? pdaComp;
         if (TryComp(target, out idCardComp))
         {
             idCard = (target, idCardComp);
@@ -267,7 +262,7 @@ public class SharedDangerMobSystem : EntitySystem
                 return true;
             }
 
-            if (TryComp<PdaComponent>(heldId, out var pdaComp) && TryComp(pdaComp.ContainedId, out idCardComp))
+            if (TryComp(heldId, out pdaComp) && TryComp(pdaComp.ContainedId, out idCardComp))
             {
                 idCard = (pdaComp.ContainedId.Value, idCardComp);
                 return true;
@@ -279,6 +274,12 @@ public class SharedDangerMobSystem : EntitySystem
             if (TryComp(item, out idCardComp))
             {
                 idCard = (item, idCardComp);
+                return true;
+            }
+
+            if (TryComp(item, out pdaComp) && TryComp(pdaComp.ContainedId, out idCardComp))
+            {
+                idCard = (pdaComp.ContainedId.Value, idCardComp);
                 return true;
             }
         }
