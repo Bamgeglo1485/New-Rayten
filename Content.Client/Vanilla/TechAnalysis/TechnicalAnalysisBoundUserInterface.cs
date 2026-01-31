@@ -26,11 +26,6 @@ public sealed class TechnicalAnalysisBoundUserInterface(EntityUid owner, Enum ui
             SendMessage(new TechnicalAnalyzerButtonPressedMessage(guess));
         };
 
-        _consoleMenu.OnExtractPressed += () =>
-        {
-            SendMessage(new TechnicalAnalyzerExtractMessage());
-        };
-
         _consoleMenu.OnServerSelectionButtonPressed += () =>
         {
             SendMessage(new ConsoleServerSelectionMessage());
@@ -45,18 +40,6 @@ public sealed class TechnicalAnalysisBoundUserInterface(EntityUid owner, Enum ui
             return;
 
         _consoleMenu?.Update(msg.History, msg.AttemptsCount);
-        _consoleMenu?.ExtractButtonUpdate(msg.ResearchPoints);
         _consoleMenu?.NoItem(msg.AttemptsCount == -1);
-    }
-
-
-    protected override void Dispose(bool disposing)
-    {
-        base.Dispose(disposing);
-
-        if (!disposing)
-            return;
-
-        _consoleMenu?.Dispose();
     }
 }

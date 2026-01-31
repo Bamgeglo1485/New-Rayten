@@ -15,7 +15,7 @@ public sealed class ContrabandAnalysisData
     public List<char> Genome = new();
     public List<List<CodonFeedBack>> History = new();
     public int AttemptsCount = 0;
-    public const int Award = 20000;
+    public const int Award = 7500;
 }
 
 [Serializable, NetSerializable]

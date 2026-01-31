@@ -1,4 +1,5 @@
 using Content.Server.CriminalRecords.Systems;
+using Content.Shared.IdentityManagement;
 using Content.Server.Radio.EntitySystems;
 using Content.Shared.Vanilla.Dominator;
 using Content.Shared.Damage;
@@ -51,18 +52,19 @@ public sealed class SecuritronSystem : EntitySystem
         {
             return;
         }
+        var targetname = Identity.Name(source, EntityManager);
 
         if (_station.GetOwningStation(uid) is { } station)
         {
-            var id = _records.GetRecordByName(station, Name(source));
+            var id = _records.GetRecordByName(station, targetname);
             if (id != null)
             {
                 var key = new StationRecordKey(id.Value, station);
                 var reason = Loc.GetString("securitron-set-wanted");
-                if (_criminalRecords.TryChangeStatus(key, SecurityStatus.Wanted, reason, Name(uid)))
+                if (_criminalRecords.TryChangeStatus(key, SecurityStatus.Wanted, reason, targetname))
                 {
                     _radio.SendRadioMessage(uid,
-                        Loc.GetString("securitron-set-wanted-radio-message", ("name", source), ("reason", reason)),
+                        Loc.GetString("securitron-set-wanted-radio-message", ("name", targetname), ("reason", reason)),
                         component.SecurityChannel, uid);
                 }
             }

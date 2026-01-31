@@ -2,7 +2,6 @@ using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Vanilla.Competitive;
 using Content.Shared.Research.Components;
 using Content.Server.Research.Systems;
-using Content.Server.Radio.EntitySystems;
 using Robust.Server.GameObjects;
 using Robust.Server.Audio;
 using Robust.Shared.Random;
@@ -13,32 +12,30 @@ namespace Content.Server.Vanilla.Competitive;
 
 public sealed class TechnicalAnalysisSystem : EntitySystem
 {
-    private static readonly char[] Alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+    private static readonly char[] Alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'K'];
     public TimeSpan NextSpawn = TimeSpan.Zero;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly UserInterfaceSystem _ui = default!;
     [Dependency] private readonly ResearchSystem _research = default!;
     [Dependency] private readonly AudioSystem _audio = default!;
     [Dependency] private readonly IGameTiming Timing = default!;
-    [Dependency] private readonly RadioSystem _radio = default!;
     public override void Initialize()
     {
         base.Initialize();
         SubscribeLocalEvent<TechnicalAnalyzerComponent, BoundUIOpenedEvent>(OnUIOpened);
+        SubscribeLocalEvent<TechnicalAnalyzerComponent, ResearchRegistrationChangedEvent>(OnRegistrationChanged);
         SubscribeLocalEvent<TechnicalAnalyzerComponent, TechnicalAnalyzerButtonPressedMessage>(OnAnalyze);
-        SubscribeLocalEvent<TechnicalAnalyzerComponent, TechnicalAnalyzerExtractMessage>(OnExtract);
     }
     public override void Update(float frameTime)
     {
         if (Timing.CurTime < NextSpawn)
             return;
 
-        NextSpawn += TimeSpan.FromMinutes(_random.Next(6, 12));
+        NextSpawn += TimeSpan.FromMinutes(5);
 
         var query = EntityQueryEnumerator<ContrabandBufferComponent>();
         while (query.MoveNext(out var uid, out var buffer))
         {
-            _radio.SendRadioMessage(uid, Loc.GetString("TechnicalAnalysis-radio-message"), "Science", uid);
             var shuffled = Alphabet.ToList();
             _random.Shuffle(shuffled);
             var genome = shuffled.Take(6).ToList();
@@ -52,101 +49,59 @@ public sealed class TechnicalAnalysisSystem : EntitySystem
             buffer.AnalyzedItems.Add(analysisData);
         }
     }
+
+    private void OnRegistrationChanged(Entity<TechnicalAnalyzerComponent> console, ref ResearchRegistrationChangedEvent args)
+    {
+        console.Comp.CurrentAnalysisData = TryComp<ContrabandBufferComponent>(args.Server, out var buffer) && buffer.AnalyzedItems.Count > 0
+                                            ? buffer.AnalyzedItems[0]
+                                            : null;
+
+        UpdateUI(console);
+    }
+
     private void OnUIOpened(Entity<TechnicalAnalyzerComponent> console, ref BoundUIOpenedEvent args)
     {
-        if (console.Comp.CurrentAnalysisData == null)
+        if (console.Comp.CurrentAnalysisData != null)
+            return;
+
+        if (TryComp<ResearchClientComponent>(console, out var rccomp)
+            && TryComp<ContrabandBufferComponent>(rccomp.Server, out var buffer)
+            && buffer.AnalyzedItems.Count > 0)
         {
-            if (!TryComp<ResearchClientComponent>(console, out var rccomp))
-                return;
-
-            if (!TryComp<ContrabandBufferComponent>(rccomp.Server, out var buffer))
-            {
-                SetDeferUI(console);
-                return;
-            }
-
-            if (buffer.AnalyzedItems.Count == 0)
-            {
-                SetDeferUI(console);
-                return;
-            }
-            // Берем первый элемент списка
             console.Comp.CurrentAnalysisData = buffer.AnalyzedItems[0];
         }
 
         UpdateUI(console);
     }
 
-    /// <summary>
-    ///  Устанавливается в ситуациях, когда нет подключённого сервера
-    /// </summary>
-    private void SetDeferUI(EntityUid uid)
+    private void SetDeferUI(Entity<TechnicalAnalyzerComponent> ent)
     {
-        if (!TryComp<TechnicalAnalyzerComponent>(uid, out var analyzerComp))
-            return;
-
-        int researchPoints = analyzerComp.ResearchPoints;
-
-        if (!TryComp<ResearchClientComponent>(uid, out var rccomp) || rccomp.Server == null)
-        {
-            researchPoints = -1;
-        }
-
-        List<List<CodonFeedBack>> emptyHistory = new();
-        _ui.SetUiState(uid, TechnicalAnalyzerUiKey.Key,
-            new TechnicalAnalyzerInterfaceState(emptyHistory, -1, researchPoints));
-        return;
+        List<List<CodonFeedBack>> emptyHistory = [];
+        _ui.SetUiState(ent.Owner, TechnicalAnalyzerUiKey.Key, new TechnicalAnalyzerInterfaceState(emptyHistory, -1));
     }
 
-    private void UpdateUI(EntityUid uid)
+    private void UpdateUI(Entity<TechnicalAnalyzerComponent> ent)
     {
-        if (!TryComp<TechnicalAnalyzerComponent>(uid, out var analyzerComp))
-            return;
-
-        var analysis = analyzerComp.CurrentAnalysisData;
+        var analysis = ent.Comp.CurrentAnalysisData;
         if (analysis == null)
         {
-            SetDeferUI(uid);
+            SetDeferUI(ent);
             return;
         }
 
         var history = analysis.History;
         var attemptsCount = analysis.AttemptsCount;
 
-        _ui.SetUiState(uid, TechnicalAnalyzerUiKey.Key,
-            new TechnicalAnalyzerInterfaceState(history, attemptsCount, analyzerComp.ResearchPoints));
-    }
-
-
-    private void OnExtract(Entity<TechnicalAnalyzerComponent> ent, ref TechnicalAnalyzerExtractMessage args)
-    {
-        if (!_research.TryGetClientServer(ent, out var server, out var serverComponent))
-            return;
-
-        if (ent.Comp.ResearchPoints <= 0)
-            return;
-
-        _research.ModifyServerPoints(server.Value, ent.Comp.ResearchPoints, serverComponent);
-        _audio.PlayPvs(ent.Comp.ExtractSound, ent);
-        ent.Comp.ResearchPoints = 0;
-        UpdateUI(ent);
+        _ui.SetUiState(ent.Owner, TechnicalAnalyzerUiKey.Key, new TechnicalAnalyzerInterfaceState(history, attemptsCount));
     }
 
     private void OnAnalyze(Entity<TechnicalAnalyzerComponent> ent, ref TechnicalAnalyzerButtonPressedMessage args)
     {
         var analyzerComp = ent.Comp;
 
-        if (!TryComp<ResearchClientComponent>(ent, out var rccomp))
-            return;
-
-        if (!TryComp<ContrabandBufferComponent>(rccomp.Server, out var buffer))
-        {
-            SetDeferUI(ent);
-            return;
-        }
-
-
-        if (analyzerComp.CurrentAnalysisData == null)
+        if (!_research.TryGetClientServer(ent, out var server, out var serverComponent)
+            || !TryComp<ContrabandBufferComponent>(server, out var buffer)
+            || analyzerComp.CurrentAnalysisData == null)
         {
             SetDeferUI(ent);
             return;
@@ -221,19 +176,24 @@ public sealed class TechnicalAnalysisSystem : EntitySystem
 
         if (win)
         {
-            _audio.PlayPvs(analyzerComp.WinSound, ent);
-            analyzerComp.ResearchPoints += ContrabandAnalysisData.Award;
+            _research.ModifyServerPoints(server.Value, ContrabandAnalysisData.Award, serverComponent);
             buffer.AnalyzedItems.Remove(analyzerComp.CurrentAnalysisData);
             analyzerComp.CurrentAnalysisData = null;
+            _audio.PlayPvs(analyzerComp.WinSound, ent);
         }
         else
         {
             analyzerComp.CurrentAnalysisData.AttemptsCount--;
+            if (analyzerComp.CurrentAnalysisData.AttemptsCount <= 0)
+            {
+                _audio.PlayPvs(analyzerComp.LoseSound, ent);
+                analyzerComp.CurrentAnalysisData = null;
+            }
         }
 
         if (analyzerComp.CurrentAnalysisData == null)
         {
-            if (buffer.AnalyzedItems.Count != 0)
+            if (buffer.AnalyzedItems.Count > 0)
                 analyzerComp.CurrentAnalysisData = buffer.AnalyzedItems[0];
         }
         UpdateUI(ent);

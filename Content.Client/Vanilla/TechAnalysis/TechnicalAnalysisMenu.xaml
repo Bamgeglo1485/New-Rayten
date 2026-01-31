@@ -1,45 +1,132 @@
-<controls:FancyWindow xmlns="https://spacestation14.io"
-                      xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
-                      xmlns:customControls="clr-namespace:Content.Client.Administration.UI.CustomControls"
-                      xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
-                      xmlns:ui="clr-namespace:Content.Client.Vanilla.TechAnalysis"
-                      Title="Анализатор конкурентных технологий А.К.Т. 1.0."
-                      MinSize="700 350"
-                      SetSize="980 550">
-       <BoxContainer Orientation="Horizontal" HorizontalExpand="True" VerticalExpand="True" Access="Public">
-              <BoxContainer Margin="10 10 10 10" MaxWidth="240" SetWidth="240" Orientation="Vertical" HorizontalExpand="False" VerticalExpand="True">
-                     <BoxContainer Name="InformationContainer" Orientation="Vertical" VerticalExpand="True" >
-                            <RichTextLabel Name="AttemptsLeftLabel" VerticalAlignment="Top" HorizontalAlignment="Left"/>
-                            <customControls:HSeparator StyleClasses="HighDivider" Margin="0 15 0 10"/>
-                            <RichTextLabel Name="ServerConnectionStatus" VerticalAlignment="Top" HorizontalAlignment="Left"/>
-                            <RichTextLabel Name="PointsLabel" VerticalAlignment="Top" HorizontalAlignment="Left"/>
-                            <customControls:HSeparator StyleClasses="HighDivider" Margin="0 15 0 10"/>
-                     </BoxContainer>
-                            <Button Name="ExtractButton" Text="Извлечь очки" Access="Public" Disabled="True"/>
-                            <Button Name="ServerButton" Text="Cервер" Access="Public"/>
+<ui:TechnicalAnalysisMenu xmlns="https://spacestation14.io"
+                          xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
+                          xmlns:customControls="clr-namespace:Content.Client.Administration.UI.CustomControls"
+                          xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
+                          xmlns:ui="clr-namespace:Content.Client.Vanilla.TechAnalysis"
+                          MouseFilter="Stop"
+                          SetWidth="480">
+       <PanelContainer Name="Background"
+                       StyleClasses="PdaBackgroundRect"
+                       ModulateSelfOverride="#610066"/>
+       <PanelContainer Name="Border"
+                       StyleClasses="PdaBorderRect"/>
+       <BoxContainer Orientation="Vertical"
+                     HorizontalExpand="True">
+              <!--Header-->
+              <BoxContainer SetHeight="26"
+                            Margin="4 2 8 0"
+                            Orientation="Horizontal"
+                            HorizontalAlignment="Right">
+                     <TextureButton Name="CloseButton"
+                                    StyleClasses="windowCloseButton"
+                                    Modulate="#646464"
+                                    VerticalAlignment="Center"
+                                    Margin="0 4 4 0"/>
               </BoxContainer>
-              <customControls:VSeparator StyleClasses="LowDivider" />
-              <BoxContainer Name="NoItemPanel" HorizontalExpand="True" VerticalExpand="True" Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center">
-                     <RichTextLabel Text="Предметы для изучения отсутствуют" HorizontalExpand="True" VerticalExpand="True" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-              </BoxContainer>
-              <BoxContainer Name="RightPanel" HorizontalExpand="True" VerticalExpand="True" Orientation="Vertical">
-                     <BoxContainer Margin="10 10 10 10" Orientation="Vertical" Name="HistoryContainer" HorizontalExpand="True" VerticalExpand="True" HorizontalAlignment="Center">
 
-                     </BoxContainer>
-                     <GridContainer Name="GenomeGrid"
-                                   Access="Public"
-                                   HorizontalAlignment="Center"
-                                   Columns="4"
-                                   Rows="1"
-                                   Margin="0 0 0 8" />
+              <Control Margin="18 0"
+                       RectClipContent="True"
+                       VerticalExpand="true"
+                       HorizontalExpand="True">
+                     <PanelContainer Name="ContentBorder"
+                                     StyleClasses="PdaBackground"/>
+                     <Control Name="ContentsContainer"
+                              Margin="3 3"
+                              Modulate="#FFFFFF">
+                            <PanelContainer Name="ContentBackground"
+                                            StyleClasses="PdaContentBackground">
+                                   <PanelContainer.PanelOverride>
+                                          <gfx:StyleBoxFlat BackgroundColor="#f200ff"
+                                                            BorderColor="#f200ff"/>
+                                   </PanelContainer.PanelOverride>
+                            </PanelContainer>
+                            <BoxContainer Orientation="Vertical">
+                                   <!--Заголовок-->
+                                   <Label Text="А.К.Т. 2.0"
+                                          Modulate="#f200ff"
+                                          StyleClasses="ConsoleHeading"
+                                          HorizontalAlignment="Center"
+                                          Margin="0 5 0 0"/>
 
-                     <BoxContainer Orientation="Horizontal"
-                                   HorizontalAlignment="Center"
-                                   Margin="0 0 0 8"
-                                   SeparationOverride="6">
-                            <Button Name="SubmitButton" Text="Анализ" Access="Public"/>
-                            <Button Name="ResetButton" Text="Сбросить" Access="Public"/>
-                     </BoxContainer>
-              </BoxContainer>
+                                   <PanelContainer Margin="10 5 10 5">
+                                          <PanelContainer.PanelOverride>
+                                                 <gfx:StyleBoxFlat BorderColor="#f200ff"
+                                                                   BorderThickness="2"/>
+                                          </PanelContainer.PanelOverride>
+                                          <BoxContainer Orientation="Vertical"
+                                                        MinHeight="480">
+                                                 <Label Name="AttemptsLeftLabel"
+                                                        Modulate="#f200ff"
+                                                        StyleClasses="ConsoleSubHeading"
+                                                        Margin="0 5"
+                                                        HorizontalAlignment="Center"/>
+
+                                                 <PanelContainer StyleClasses="LowDivider"
+                                                                 HorizontalExpand="True"
+                                                                 SetHeight="2">
+                                                        <PanelContainer.PanelOverride>
+                                                               <gfx:StyleBoxFlat BackgroundColor="#f200ff"/>
+                                                        </PanelContainer.PanelOverride>
+                                                 </PanelContainer>
+                                                 <!--История-->
+                                                 <Label Name="NoItemLabel"
+                                                        StyleClasses="ConsoleSubHeading"
+                                                        VerticalExpand="True"
+                                                        HorizontalAlignment="Center"
+                                                        Text="Данные для анализа отсутствуют"/>
+                                                 <BoxContainer Name="HistoryContainer"
+                                                               Margin="10"
+                                                               Orientation="Vertical"
+                                                               HorizontalExpand="True"
+                                                               VerticalExpand="True"
+                                                               HorizontalAlignment="Center"/>
+                                                 <PanelContainer StyleClasses="LowDivider"
+                                                                 HorizontalExpand="True"
+                                                                 SetHeight="2">
+                                                        <PanelContainer.PanelOverride>
+                                                               <gfx:StyleBoxFlat BackgroundColor="#f200ff"/>
+                                                        </PanelContainer.PanelOverride>
+                                                 </PanelContainer>
+                                                 <GridContainer Name="GenomeGrid"
+                                                                Margin="10"
+                                                                Access="Public"
+                                                                HorizontalAlignment="Center"
+                                                                Columns="4"
+                                                                Rows="1"/>
+                                                 <PanelContainer StyleClasses="LowDivider"
+                                                                 HorizontalExpand="True"
+                                                                 SetHeight="2">
+                                                        <PanelContainer.PanelOverride>
+                                                               <gfx:StyleBoxFlat BackgroundColor="#f200ff"/>
+                                                        </PanelContainer.PanelOverride>
+                                                 </PanelContainer>
+                                                 <BoxContainer Orientation="Horizontal"
+                                                               HorizontalExpand="True"
+                                                               Margin="10">
+                                                        <controls:MonotoneButton Name="SubmitButton"
+                                                                                 StyleClasses="OpenRight"
+                                                                                 Text="Анализ"
+                                                                                 HorizontalExpand="True"
+                                                                                 Access="Public"/>
+                                                        <controls:MonotoneButton Name="ResetButton"
+                                                                                 Text="Сбросить"
+                                                                                 HorizontalExpand="True"
+                                                                                 StyleClasses="OpenBoth"
+                                                                                 Access="Public"/>
+                                                        <controls:MonotoneButton Name="ServerButton"
+                                                                                 Text="Сервер"
+                                                                                 HorizontalExpand="True"
+                                                                                 StyleClasses="OpenLeft"
+                                                                                 Access="Public"/>
+
+                                                 </BoxContainer>
+                                          </BoxContainer>
+                                   </PanelContainer>
+                            </BoxContainer>
+                     </Control>
+              </Control>
+              <!--Footer-->
+              <BoxContainer Orientation="Horizontal"
+                            SetHeight="28"/>
        </BoxContainer>
-</controls:FancyWindow>
+</ui:TechnicalAnalysisMenu>
