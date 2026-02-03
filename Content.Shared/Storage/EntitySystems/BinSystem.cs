@@ -121,7 +121,7 @@ public sealed class BinSystem : EntitySystem
             if (!punish.Counters.TryGetValue(args.User, out var count))
             {
                 count = 0;
-                _popup.PopupClient(Loc.GetString("archon330-warning"), uid);
+                _popup.PopupClient(Loc.GetString("archon330-warning"), uid, args.User, PopupType.LargeCaution);
             }
 
             count++;
