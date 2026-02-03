@@ -60,7 +60,7 @@
     - id: PlagueDoctorSpawn
     - id: ShyGuySpawn
     - id: SculptureSpawn
-    # - id: SuperBallSpawn todo
+    - id: SuperBallSpawn
     #безопасный
     - id: PanaceaSpawn
     - id: MasterKeySpawn
@@ -114,7 +114,6 @@
       mindRoles:
       - MindRolePlagueDoctor
 
-
 - type: entity
   parent: EuclidArchonGameRule
   id: SculptureSpawn
@@ -128,6 +127,13 @@
   components:
   - type: RandomSpawnRule
     prototype: ShyGuyArchon096
+
+- type: entity
+  parent: EuclidArchonGameRule
+  id: SuperBallSpawn
+  components:
+  - type: RandomSpawnRule
+    prototype: Archon018SuperBall
 #безопасный
 - type: entity
   parent: SafeArchonGameRule

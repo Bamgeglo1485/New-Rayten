@@ -94,10 +94,9 @@ public sealed class SharedSponsorManager
     #region Список всех доступных прототипов
     private void buildmap()
     {
-        HashSet<string> current = [];
-
         foreach (sponsorRank rank in Enum.GetValues(typeof(sponsorRank)))
         {
+            HashSet<string> current = [];
             switch (rank)
             {
                 case sponsorRank.GrayTide:
