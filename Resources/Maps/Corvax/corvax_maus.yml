@@ -1,11 +1,11 @@
 meta:
   format: 7
   category: Map
-  engineVersion: 270.1.0
+  engineVersion: 272.0.0
   forkId: ""
   forkVersion: ""
-  time: 01/22/2026 20:42:49
-  entityCount: 19479
+  time: 02/04/2026 21:26:35
+  entityCount: 19483
 maps:
 - 1
 grids:
@@ -16578,7 +16578,7 @@ entities:
       pos: -43.5,-45.5
       parent: 2
     - type: Door
-      secondsUntilStateChange: -56204.14
+      secondsUntilStateChange: -56319.61
       state: Opening
     - type: DeviceLinkSource
       lastSignals:
@@ -18937,6 +18937,46 @@ entities:
     - type: Transform
       pos: -62.189316,-14.532088
       parent: 2
+- proto: ArchonContaimentSign
+  entities:
+  - uid: 12502
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: -21.5,-74.5
+      parent: 2
+    - type: Fixtures
+      fixtures: {}
+- proto: ArchonDClassSign
+  entities:
+  - uid: 14987
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: -28.5,-76.5
+      parent: 2
+    - type: Fixtures
+      fixtures: {}
+- proto: ArchonSign
+  entities:
+  - uid: 14978
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: -35.5,-74.5
+      parent: 2
+    - type: Fixtures
+      fixtures: {}
+- proto: ArchonTestingSign
+  entities:
+  - uid: 13360
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: -32.5,-79.5
+      parent: 2
+    - type: Fixtures
+      fixtures: {}
 - proto: ArrivalsShuttleTimer
   entities:
   - uid: 569
@@ -60059,7 +60099,7 @@ entities:
       tags:
       - DrinkBottle
     - type: PressurizedSolution
-      sprayFizzinessThresholdRoll: 0.544651
+      sprayFizzinessThresholdRoll: 0.3884945
     - type: SolutionContainerManager
       solutions: null
       containers:
@@ -88763,7 +88803,7 @@ entities:
       pos: -29.5,11.5
       parent: 2
     - type: Door
-      secondsUntilStateChange: -9902.598
+      secondsUntilStateChange: -10018.065
       state: Opening
     - type: Forensics
       residues: []
@@ -88776,7 +88816,7 @@ entities:
       pos: -29.5,10.5
       parent: 2
     - type: Door
-      secondsUntilStateChange: -9902.864
+      secondsUntilStateChange: -10018.332
       state: Opening
     - type: Forensics
       residues: []

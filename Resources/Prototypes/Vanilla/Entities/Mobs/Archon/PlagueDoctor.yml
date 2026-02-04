@@ -28,6 +28,8 @@
           Raging: { visible: true, state: rage_animation }
   - type: Archon
     pointsModifier: 0.5
+  - type: DangerMob
+    maxDanger: false
   - type: GhostTakeoverAvailable
   - type: GhostRole
     name: ghost-role-information-plague-doctor-name
@@ -48,8 +50,8 @@
   - type: Prying
     pryPowered: true
     speedModifier: 0.45
+  - type: ComplexInteraction
   - type: MeleeWeapon
-    altDisarm: true
     attackRate: 0.6
     animation: WeaponArcDisarm
     damage:

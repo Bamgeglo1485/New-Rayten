@@ -26,7 +26,7 @@ public sealed class PlagueDoctorgSystem : SharedPlagueDoctorgSystem
     [Dependency] private readonly FlammableSystem _flammableSystem = default!;
     [Dependency] private readonly ChatSystem _chatSystem = default!;
     [Dependency] private readonly SharedStunSystem _stun = default!;
-    [Dependency] private readonly SharedBlindPredatorSystem _blindpredator = default!;
+
 
     protected override void MakeSurgery(EntityUid uid, PlagueDoctorComponent comp, EntityUid target)
     {
@@ -71,15 +71,14 @@ public sealed class PlagueDoctorgSystem : SharedPlagueDoctorgSystem
             _stun.TryKnockdown((target, crawl), TimeSpan.FromSeconds(6));
         }
 
+        var victimQuery = EntityQueryEnumerator<PredatorVisibleMarkComponent>();
+        while (victimQuery.MoveNext(out var victim, out var mark))
+            blindPredator.SetVisibility(victim, uid, true, mark);
     }
 
     protected override void MakeRage(EntityUid uid, PlagueDoctorComponent comp)
     {
         base.MakeRage(uid, comp);
-        var query = EntityQueryEnumerator<PredatorVisibleMarkComponent>();
-        while (query.MoveNext(out var victim, out var mark))
-            _blindpredator.SetVisibility(victim, uid, true, mark);
-
         _chatSystem.DispatchGlobalAnnouncement(
             Loc.GetString("archon049-global-announcement"),
             Name(uid),

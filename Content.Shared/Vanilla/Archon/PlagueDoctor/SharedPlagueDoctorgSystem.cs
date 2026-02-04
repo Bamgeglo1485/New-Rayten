@@ -8,6 +8,7 @@ using Content.Shared.DoAfter;
 using Content.Shared.Popups;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
+using Content.Shared.Vanilla.Dominator;
 using Content.Shared.Vanilla.Archon.Research;
 using Content.Shared.Vanilla.Archon.BlindPredator;
 using Content.Shared.Zombies;
@@ -22,6 +23,7 @@ namespace Content.Shared.Vanilla.Archon.PlagueDoctor;
 public abstract class SharedPlagueDoctorgSystem : EntitySystem
 {
     [Dependency] protected readonly SharedPopupSystem Popup = default!;
+    [Dependency] protected readonly SharedBlindPredatorSystem blindPredator = default!;
     [Dependency] private readonly AlertsSystem _alerts = default!;
     [Dependency] private readonly MobStateSystem _mob = default!;
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
@@ -30,7 +32,6 @@ public abstract class SharedPlagueDoctorgSystem : EntitySystem
     [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly SharedAmbientSoundSystem _ambient = default!;
-    [Dependency] private readonly SharedBlindPredatorSystem _predator = default!;
     [Dependency] private readonly DamageableSystem _damageable = default!;
     [Dependency] private readonly SharedArchonResearchSystem _archon = default!;
     public override void Initialize()
@@ -44,6 +45,7 @@ public abstract class SharedPlagueDoctorgSystem : EntitySystem
         SubscribeLocalEvent<PlagueDoctorComponent, DamageChangedEvent>(OnDamageChange);
         SubscribeLocalEvent<PlagueDoctorComponent, BeforeDamageChangedEvent>(OnBeforeDamageChanged);
         SubscribeLocalEvent<PlagueDoctorComponent, MeleeHitEvent>(OnMeleeHit);
+        SubscribeLocalEvent<PlagueDoctorComponent, MarkVictim049Event>(OnMakeVictimAction);
     }
 
     public override void Update(float frameTime)
@@ -62,6 +64,23 @@ public abstract class SharedPlagueDoctorgSystem : EntitySystem
         }
     }
 
+    private void OnMakeVictimAction(EntityUid uid, PlagueDoctorComponent comp, ref MarkVictim049Event args)
+    {
+        if (args.Handled)
+            return;
+        var target = args.Target;
+
+        if (blindPredator.IsVisibleByPredator(target, uid))
+            return;
+
+        if (TryComp<PredatorVisibleMarkComponent>(target, out var mark))
+        {
+            blindPredator.SetVisibility(target, uid, true, mark);
+            ChangePestilence(uid, comp, 20);
+            args.Handled = true;
+        }
+    }
+
     private void OnMeleeHit(EntityUid uid, PlagueDoctorComponent comp, ref MeleeHitEvent args)
     {
         if (!args.IsHit)
@@ -73,22 +92,17 @@ public abstract class SharedPlagueDoctorgSystem : EntitySystem
             if (!HasComp<MobStateComponent>(target))
                 continue;
 
-            if (HasComp<HumanoidProfileComponent>(target) && !_predator.IsVisibleByPredator(target, uid))
+            if (comp.State == PlagueDoctorState.Rage)
+            {
+                if (!HasComp<ZombieImmuneComponent>(target) && !HasComp<ZombieComponent>(target))
+                    EnsureComp<ZombifyOnDeathComponent>(target);
+            }
+
+            if (HasComp<HumanoidProfileComponent>(target) && !blindPredator.IsVisibleByPredator(target, uid))
                 continue;
 
             _audio.PlayPredicted(comp.HitSound, target, uid);
             _damageable.TryChangeDamage(target, comp.HitDamage, origin: uid);
-        }
-
-        ///зомбифицируем если в рейдже
-        if (comp.State != PlagueDoctorState.Rage)
-            return;
-        foreach (var target in args.HitEntities)
-        {
-            if (HasComp<ZombieImmuneComponent>(target) || HasComp<ZombieImmuneComponent>(target) || HasComp<ZombieComponent>(target))
-                continue;
-
-            EnsureComp<ZombifyOnDeathComponent>(target);
         }
     }
 
@@ -113,6 +127,7 @@ public abstract class SharedPlagueDoctorgSystem : EntitySystem
     private void OnMapInit(EntityUid uid, PlagueDoctorComponent comp, ref MapInitEvent args)
     {
         comp.ActionEnt = _actions.AddAction(uid, comp.ActionId);
+        comp.MarkActionEnt = _actions.AddAction(uid, comp.MarkActionId);
         var fillPercentage = Math.Clamp(comp.CurrentPestilence / comp.MaxPestilence, 0f, 1f);
         var severity = (short)MathF.Round(fillPercentage * 5);
         _alerts.ShowAlert(uid, comp.PestilenceAlert, severity);
@@ -250,6 +265,7 @@ public abstract class SharedPlagueDoctorgSystem : EntitySystem
         _audio.PlayPredicted(comp.RagingSound, uid, uid);
         _alerts.ClearAlert(uid, comp.PestilenceAlert);
         _actions.RemoveAction(uid, comp.ActionEnt);
+        _actions.RemoveAction(uid, comp.MarkActionEnt);
     }
 
     protected virtual void MakeRage(EntityUid uid, PlagueDoctorComponent comp)
@@ -258,7 +274,12 @@ public abstract class SharedPlagueDoctorgSystem : EntitySystem
         _ambient.SetSound(uid, comp.RageAmbient);
         _appearance.SetData(uid, DamageVisualizerKeys.DamageUpdateGroups, PlagueDoctorState.Rage);
         comp.State = PlagueDoctorState.Rage;
+
+        if (TryComp<DangerMobComponent>(uid, out var danger))
+            danger.MaxDanger = true;
+
         Dirty(uid, comp);
     }
+
     protected abstract void MakeSurgery(EntityUid uid, PlagueDoctorComponent comp, EntityUid target);
 }

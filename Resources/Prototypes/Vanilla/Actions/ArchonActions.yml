@@ -101,7 +101,6 @@
     icon:
       sprite: Vanilla/Actions/Archon.rsi
       state: surgery
-    priority: -98
   - type: TargetAction
     interactOnMiss: false
     range: 2
@@ -112,3 +111,27 @@
       - Bloodstream
     canTargetSelf: false
     event: !type:Surgery049Event
+
+- type: entity
+  parent: BaseAction
+  id: Action049MarkVictim
+  name: Отметить жертву
+  description: Кто-то вам сильно мешает? Отметьте его меткой для убийства! Увеличивает уровень поветрия на 20 ед.
+  components:
+  - type: Action
+    itemIconStyle: BigAction
+    useDelay: 180
+    icon:
+      sprite: Vanilla/Actions/Archon.rsi
+      state: neck_snap
+  - type: TargetAction
+    interactOnMiss: false
+    range: 18
+  - type: EntityTargetAction
+    whitelist:
+      components:
+      - MobState
+      - Bloodstream
+      - PredatorVisibleMark
+    canTargetSelf: false
+    event: !type:MarkVictim049Event

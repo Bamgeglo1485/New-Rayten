@@ -1,11 +1,11 @@
 meta:
   format: 7
   category: Map
-  engineVersion: 270.1.0
+  engineVersion: 272.0.0
   forkId: ""
   forkVersion: ""
-  time: 01/23/2026 10:55:20
-  entityCount: 12692
+  time: 02/04/2026 21:32:47
+  entityCount: 12696
 maps:
 - 12281
 grids:
@@ -6510,7 +6510,7 @@ entities:
       pos: 6.5,8.5
       parent: 1
     - type: Door
-      secondsUntilStateChange: -4289.781
+      secondsUntilStateChange: -4459.0137
       state: Opening
     - type: DeviceLinkSource
       lastSignals:
@@ -7903,6 +7903,40 @@ entities:
     - type: Transform
       pos: 11.639883,-20.394583
       parent: 1
+- proto: ArchonContaimentSign
+  entities:
+  - uid: 10496
+    components:
+    - type: Transform
+      pos: -26.5,-12.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+- proto: ArchonSign
+  entities:
+  - uid: 12684
+    components:
+    - type: Transform
+      pos: -23.5,-18.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+  - uid: 12696
+    components:
+    - type: Transform
+      pos: -25.5,-8.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+- proto: ArchonTestingSign
+  entities:
+  - uid: 8914
+    components:
+    - type: Transform
+      pos: -25.5,-14.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
 - proto: ArsenalAuthorizator
   entities:
   - uid: 3218
@@ -35453,7 +35487,7 @@ entities:
       pos: 27.5,25.5
       parent: 1
     - type: Door
-      secondsUntilStateChange: -8234.484
+      secondsUntilStateChange: -8403.717
       state: Closing
     - type: Firelock
       emergencyCloseCooldown: 2562.9641057
