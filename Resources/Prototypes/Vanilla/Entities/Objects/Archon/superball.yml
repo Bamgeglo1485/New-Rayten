@@ -25,9 +25,9 @@
     modifier: 0
   - type: Explosive
     explosionType: DemolitionCharge
-    totalIntensity: 40
+    totalIntensity: 30
     intensitySlope: 5
-    maxIntensity: 30
+    maxIntensity: 15
     canCreateVacuum: false
   - type: ExplodeOnTrigger
     keysIn:
@@ -39,7 +39,7 @@
     thresholds:
     - trigger:
         !type:DamageTrigger
-        damage: 25
+        damage: 75
       behaviors:
       - !type:TriggerBehavior
         keyOut: explode

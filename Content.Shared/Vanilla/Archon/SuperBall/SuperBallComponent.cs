@@ -5,7 +5,7 @@ namespace Content.Shared.Vanilla.Archon.SuperBall;
 public sealed partial class SuperBallComponent : Component
 {
     [DataField] public float DamageMinSpeed = 20f;
-    [DataField] public float MaxSpeed = 30f;
+    [DataField] public float MaxSpeed = 35f;
 
     [DataField]
     public SoundSpecifier LowSpeedSounds { get; private set; } = new SoundCollectionSpecifier("SuperBallLow");
