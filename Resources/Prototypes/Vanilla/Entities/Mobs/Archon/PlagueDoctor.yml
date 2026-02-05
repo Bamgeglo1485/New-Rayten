@@ -39,8 +39,6 @@
     - MindRolePlagueDoctor
     raffle:
       settings: default
-  - type: Puller
-    needsHands: false
   - type: PlagueDoctor
   - type: BlindPredator
     canSeeOthers: true
@@ -50,7 +48,6 @@
   - type: Prying
     pryPowered: true
     speedModifier: 0.45
-  - type: ComplexInteraction
   - type: MeleeWeapon
     attackRate: 0.6
     animation: WeaponArcDisarm
