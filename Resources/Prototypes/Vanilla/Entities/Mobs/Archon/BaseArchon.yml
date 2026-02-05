@@ -42,6 +42,7 @@
     - SimpleHostile
   - type: CombatMode
   - type: MeleeWeapon
+    altDisarm: false
     angle: 45
     attackRate: 2
     animation: WeaponArcBite

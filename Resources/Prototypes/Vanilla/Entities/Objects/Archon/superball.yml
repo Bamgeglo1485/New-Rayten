@@ -1,12 +1,12 @@
 - type: entity
   id: Archon018SuperBall
-  parent: BaseItem
+  parent: [BaseItem, ThirdContraband]
   name: мячик
   description: Его диаметр — шесть сантиметров, цвет красный.
   components:
   - type: SuperBall
   - type: Sprite
-    sprite: Objects/Fun/Balls/basketball.rsi
+    sprite: Vanilla/Objects/Fun/Balls/superball.rsi
     state: icon
   - type: Fixtures
     fixtures:
@@ -20,7 +20,7 @@
         friction: 0
   - type: Item
     size: Normal
-    sprite: Objects/Fun/Balls/basketball.rsi
+    sprite: Objects/Fun/Balls/superball.rsi
   - type: TileFrictionModifier
     modifier: 0
   - type: Explosive

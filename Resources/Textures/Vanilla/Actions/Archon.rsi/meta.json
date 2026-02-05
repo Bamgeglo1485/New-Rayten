@@ -18,6 +18,9 @@
         },
         {
             "name": "surgery"
+        },
+        {
+            "name": "makevictim"
         }
     ]
 }
