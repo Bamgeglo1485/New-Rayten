@@ -13,13 +13,14 @@ using Robust.Shared.Enums;
 using Robust.Shared.Player;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
-
+using Content.Server.Corvax.JoinQueue;
 namespace Content.Server.GameTicking
 {
     [UsedImplicitly]
     public sealed partial class GameTicker
     {
         [Dependency] private readonly IPlayerManager _playerManager = default!;
+        [Dependency] private readonly JoinQueueManager _queueManager = default!; // Corvax-Queue
 
         private void InitializePlayer()
         {
@@ -57,7 +58,7 @@ namespace Content.Server.GameTicking
                         // Make the player actually join the game.
                         // timer time must be > tick length
                         // Corvax-Queue-Start
-                        if (!IoCManager.Instance!.TryResolveType<IServerJoinQueueManager>(out _))
+                        if (!_queueManager.IsEnabled)
                             Timer.Spawn(0, () => _playerManager.JoinGame(args.Session));
                         // Corvax-Queue-End
 

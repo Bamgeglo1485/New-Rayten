@@ -32,7 +32,7 @@ public sealed class JoinQueueManager
         "Timings of players in queue",
         new HistogramConfiguration()
         {
-            LabelNames = new[] {"type"},
+            LabelNames = new[] { "type" },
             Buckets = Histogram.ExponentialBuckets(1, 2, 14),
         });
 
@@ -46,9 +46,8 @@ public sealed class JoinQueueManager
     ///     Queue of active player sessions
     /// </summary>
     private readonly List<ICommonSession> _queue = new(); // Real Queue class can't delete disconnected users
-
     private bool _isEnabled = false;
-
+    public bool IsEnabled => _isEnabled;
     public int PlayerInQueueCount => _queue.Count;
     public int ActualPlayersCount => _playerManager.PlayerCount - PlayerInQueueCount; // Now it's only real value with actual players count that in game
 

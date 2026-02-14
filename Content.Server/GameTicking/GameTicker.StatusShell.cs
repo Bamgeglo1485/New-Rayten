@@ -1,13 +1,9 @@
-using Content.Server.Corvax.Interface;
 using System.Linq;
 using System.Text.Json.Nodes;
-using Content.Shared.Corvax.Interface;
 using Content.Shared.CCVar;
 using Content.Shared.GameTicking;
 using Robust.Server.ServerStatus;
 using Robust.Shared.Configuration;
-using Content.Server.Corvax.JoinQueue;
-
 namespace Content.Server.GameTicking
 {
     public sealed partial class GameTicker
@@ -27,7 +23,6 @@ namespace Content.Server.GameTicking
         ///     For access to CVars in status responses.
         /// </summary>
         [Dependency] private readonly IConfigurationManager _cfg = default!;
-        [Dependency] private readonly JoinQueueManager _queueManager = default!; // Corvax-Queue
         /// <summary>
         ///     For access to the round ID in status responses.
         /// </summary>
@@ -46,8 +41,8 @@ namespace Content.Server.GameTicking
             lock (_statusShellLock)
             {
                 // Corvax-Queue-Start
-                var players = IoCManager.Instance?.TryResolveType<IServerJoinQueueManager>(out var joinQueueManager) ?? false
-                    ? joinQueueManager.ActualPlayersCount
+                var players = _queueManager.IsEnabled
+                    ? _queueManager.ActualPlayersCount
                     : _playerManager.PlayerCount;
 
                 players = _cfg.GetCVar(CCVars.AdminsCountInReportedPlayerCount)
