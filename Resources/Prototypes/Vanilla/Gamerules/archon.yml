@@ -68,6 +68,7 @@
     - id: InfinityFlaskSpawn
     - id: LivingWeaponSpawn
     - id: DontTakeMoreThanTwoSpawn
+    - id: MastersFeatherSpawn
     # - id: JadedRingSpawn todo
     # - id: GasMaskSpawn todo
 
@@ -176,3 +177,10 @@
   components:
   - type: RandomSpawnRule
     prototype: Archon330DontTakeMoreThanTwo
+
+- type: entity
+  parent: SafeArchonGameRule
+  id: MastersFeatherSpawn
+  components:
+  - type: RandomSpawnRule
+    prototype: Archon067MastersFeather

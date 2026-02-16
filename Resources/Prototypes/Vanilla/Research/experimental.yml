@@ -15,3 +15,15 @@
   recipeUnlocks:
   - TimeStopper
   - LocalAtmosGenerator
+
+- type: technology
+  id: AdvancedRedSpace
+  name: research-technology-advanced-red-space
+  icon:
+    sprite: Objects/Specific/Research/anomalyscanner.rsi
+    state: icon
+  discipline: Experimental
+  tier: 2
+  cost: 10000
+  recipeUnlocks:
+  - ArchonLocator

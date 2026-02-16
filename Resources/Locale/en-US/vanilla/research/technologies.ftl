@@ -6,3 +6,4 @@ research-technology-absolute = Абсолютные технологии
 research-technology-space-manipulation = Манипулирование пространством
 research-technology-defibrillator-implant = Реактивная постмортальная реанимация
 research-technology-nanorobots-implant = Автономная витальная матрица
+research-technology-advanced-red-space = Продвинутое изучение редспейса

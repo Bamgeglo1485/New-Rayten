@@ -6,7 +6,7 @@ namespace Content.Shared.Vanilla.Archon.InvisibleHat;
 ///     при надевании дает невидимость, мут и пацифизм
 ///     при снятии снимает
 /// </summary>
-[RegisterComponent, NetworkedComponent]
+[RegisterComponent]
 public sealed partial class InvisibleHatComponent : Component
 {
 }

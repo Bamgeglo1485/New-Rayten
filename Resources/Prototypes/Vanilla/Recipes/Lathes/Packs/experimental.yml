@@ -3,3 +3,8 @@
   recipes:
   - TimeStopper
   - LocalAtmosGenerator
+
+- type: latheRecipePack
+  id: AdvancedRedSpace
+  recipes:
+  - ArchonLocator
