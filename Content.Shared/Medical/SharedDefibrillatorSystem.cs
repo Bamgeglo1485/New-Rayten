@@ -140,8 +140,6 @@ public abstract class SharedDefibrillatorSystem : EntitySystem
                 skillmodifier = 2.0;
                 break;
             case SkillLevel.Basic:
-                skillmodifier = 1.5;
-                break;
             case SkillLevel.Advanced:
             case SkillLevel.Expert:
                 skillmodifier = 1.0;
