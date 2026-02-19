@@ -98,7 +98,7 @@ public abstract partial class SharedSkillSystem : EntitySystem
                     {
                         comp.EasySkills.Add(skillType);
                         comp.SkillExps[skillType] = exp - threshold;
-                        Audio.PlayPredicted(comp.LvlUpSound, ent, ent);
+                        Audio.PlayGlobal(comp.LvlUpSound, ent);
                     }
                     else
                     {
@@ -120,7 +120,7 @@ public abstract partial class SharedSkillSystem : EntitySystem
                     {
                         comp.BasicSkills[skillType] = level + 1;
                         comp.SkillExps[skillType] = exp - threshold;
-                        Audio.PlayPredicted(comp.LvlUpSound, ent, ent);
+                        Audio.PlayGlobal(comp.LvlUpSound, ent);
                     }
                     else
                     {

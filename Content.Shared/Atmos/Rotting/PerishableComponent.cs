@@ -8,7 +8,7 @@ namespace Content.Shared.Atmos.Rotting;
 /// It may be expanded to food at some point, but it's just for mobs right now.
 /// </summary>
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState(fieldDeltas: true), AutoGenerateComponentPause]
-[Access(typeof(SharedRottingSystem))]
+// [Access(typeof(SharedRottingSystem))]
 public sealed partial class PerishableComponent : Component
 {
     /// <summary>

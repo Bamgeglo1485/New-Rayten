@@ -1,16 +1,15 @@
 using Content.Shared.FixedPoint;
 using Content.Shared.Damage;
 using Content.Shared.Random;
+using Robust.Shared.GameStates;
 using Robust.Shared.Audio;
 using Robust.Shared.Prototypes;
-namespace Content.Server.Vanilla.Archon.OldMan;
 
-[RegisterComponent]
+namespace Content.Shared.Vanilla.Archon.OldMan;
+
+[RegisterComponent, NetworkedComponent]
 public sealed partial class DimensionVictimComponent : Component
 {
-    [DataField]
-    public ProtoId<WeightedRandomPrototype> DeadResults = "DimnsionVictimResults";
-
     /// <summary>
     /// порталы заспавненные на эту жертву
     /// </summary>
@@ -32,7 +31,8 @@ public sealed partial class DimensionVictimComponent : Component
 
     [DataField]
     public string FakeTeleportPrototype = "PocketDimensionExitTeleportFake";
-
+    [DataField]
+    public ProtoId<WeightedRandomPrototype> DeadResults = "DimnsionVictimResults";
     /// <summary>
     /// такое количество телепортов заспавнится на одну жертву
     /// </summary>
@@ -42,22 +42,24 @@ public sealed partial class DimensionVictimComponent : Component
     /// такое количество фейковых телепортов заспавнится на одну жертву
     /// </summary>
     [DataField]
-    public int FakeTeleportsAmount = 6;
+    public int FakeTeleportsAmount = 5;
 
     [DataField]
-    public SoundSpecifier DimensionEscapeSound = new SoundPathSpecifier("/Audio/Vanilla/Effects/Archon/106/106laugh1.ogg");
+    public SoundSpecifier DimensionEscapeSound = new SoundPathSpecifier("/Audio/Vanilla/Effects/Archon/106/106ExitPD.ogg");
 
     [DataField]
-    public SoundSpecifier DamageSound = new SoundPathSpecifier("/Audio/Vanilla/Effects/Archon/106/106decay.ogg");
+    public SoundSpecifier DimensionEnterSound = new SoundPathSpecifier("/Audio/Vanilla/Effects/Archon/106/106EnterPD.ogg");
 
     [DataField]
-    public SoundSpecifier DimensionAmbient = new SoundPathSpecifier("/Audio/Vanilla/Ambience/106/106dimension.ogg");
+    public SoundSpecifier DamageSound = new SoundCollectionSpecifier("106corrosion");
+
+    [DataField]
+    public SoundSpecifier DimensionAmbient = new SoundPathSpecifier("/Audio/Vanilla/Ambience/106/106dimension.ogg", AudioParams.Default.WithLoop(true));
     [ViewVariables]
     public EntityUid? Stream = null;
 
-
     [DataField, ViewVariables(VVAccess.ReadOnly)]
-    public TimeSpan DamageInterval = TimeSpan.FromSeconds(60);
+    public TimeSpan DamageInterval = TimeSpan.FromSeconds(10);
 
     [DataField, ViewVariables(VVAccess.ReadOnly)]
     public TimeSpan NextDamage;
@@ -68,9 +70,12 @@ public sealed partial class DimensionVictimComponent : Component
     {
         DamageDict = new Dictionary<string, FixedPoint2>
         {
-            ["Cellular"] = 5,
-            ["Caustic"] = 15,
-            ["Blunt"] = 20
+            ["Caustic"] = 5,
+            ["Cellular"] = 0.1
         }
     };
+}
+[RegisterComponent, NetworkedComponent]
+public sealed partial class OldManFoodComponent : Component
+{
 }

@@ -28,6 +28,7 @@
   - type: NoSlip
   - type: PreventInserting
   - type: Insulated
+  - type: Snoring
   - type: SleepEmitSound
   - type: FlashImmunity
     showInExamine: false

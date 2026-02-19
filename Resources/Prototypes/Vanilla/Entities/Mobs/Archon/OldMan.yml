@@ -43,12 +43,18 @@
     angle: 0
     attackRate: 0.4
     animation: WeaponArcBite
+    soundHit: /Audio/Vanilla/Effects/Archon/106/106meleeattack.ogg
     damage:
       types:
         Structural: 10
   - type: StaminaDamageOnHit
     damage: 200
-    sound: /Audio/Vanilla/Effects/Archon/106/106laugh1.ogg
+  - type: SleepEmitSound
+    snore: /Audio/Vanilla/Ambience/106/106breathing.ogg
+  - type: AmbientSound
+    volume: -12
+    range: 25
+    sound: /Audio/Vanilla/Ambience/106/106Bump-In-The-Night.ogg
   - type: HTN
     rootTask:
       task: MeleeCombatCompound
@@ -70,7 +76,7 @@
     - SimpleHostile
   - type: MovementSpeedModifier
     baseWalkSpeed: 1.5
-    baseSprintSpeed: 3
+    baseSprintSpeed: 2.5
   - type: TimedSpawner
     prototypes:
       - DecalSpawnerBurns
@@ -78,8 +84,14 @@
     intervalSeconds: 5
     minimumEntitiesSpawned: 1
     maximumEntitiesSpawned: 2
+  - type: FootstepModifier
+    footstepSoundCollection:
+      collection: Footsteps106
+      params:
+        volume: 5
   - type: Tag
     tags:
+      - FootstepSound
       - CannotSuicide
   - type: MobThresholds
     thresholds:
@@ -100,9 +112,7 @@
             max: 5
   - type: SlowOnDamage
     speedModifierThresholds:
-      350: 0.7
-      500: 0.5
-      600: 0.3
+      500: 0.7
   - type: PassiveDamage
     damageCap: 700
     allowedStates:
@@ -116,6 +126,7 @@
         Genetic: -0.25
         Airloss: -1.75
 
+
 - type: polymorph
   id: OldManJaunt
   configuration:
@@ -126,8 +137,7 @@
     revertOnDeath: true
     revertOnCrit: true
     allowRepeatedMorphs: false
-    exitPolymorphSound: /Audio/Vanilla/Effects/Archon/106/106decay.ogg
-    duration: 40
+    duration: 30
 
 
 - type: entity

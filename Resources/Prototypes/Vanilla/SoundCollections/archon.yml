@@ -1,4 +1,18 @@
 - type: soundCollection
+  id: 106corrosion
+  files:
+  - /Audio/Vanilla/Effects/Archon/106/106Corrosion1.ogg
+  - /Audio/Vanilla/Effects/Archon/106/106Corrosion2.ogg
+  - /Audio/Vanilla/Effects/Archon/106/106Corrosion3.ogg
+
+- type: soundCollection
+  id: 106teleport
+  files:
+  - /Audio/Vanilla/Effects/Archon/106/106Decay1.ogg
+  - /Audio/Vanilla/Effects/Archon/106/106Decay2.ogg
+  - /Audio/Vanilla/Effects/Archon/106/106Decay3.ogg
+
+- type: soundCollection
   id: Scream939
   files:
   - /Audio/Vanilla/Effects/Actions/939_Scream1.ogg
