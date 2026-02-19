@@ -9,10 +9,6 @@ namespace Content.Server.Vanilla.Archon.OldMan;
 [RegisterComponent, AutoGenerateComponentPause]
 public sealed partial class OldManComponent : Component
 {
-    [ViewVariables(VVAccess.ReadOnly)]
-    public bool IsActivePhase = false;
-    [ViewVariables(VVAccess.ReadWrite)]
-    public TimeSpan PhaseSwitchAt = TimeSpan.Zero;
     #region звуки и анимации
     /// <summary>
     /// звук ухода и появления в карманное измерение
@@ -50,13 +46,11 @@ public sealed partial class OldManComponent : Component
     [ViewVariables(VVAccess.ReadOnly)]
     public EntityUid DimensionUid = default;
     /// <summary>
-    /// Грид, с которого старик ушел в карманное измерение, только на этот грид старик может переместиться
-    /// Если грид будет уничтожен, старик не сможет вернуться на станцию.
-    /// </summary>
+    /// Грид станции
     [ViewVariables(VVAccess.ReadOnly)]
     public EntityUid StationGridUid = default;
-    [ViewVariables(VVAccess.ReadOnly)]
-    public bool InDimention = false;
+
+
     /// <summary>
     /// дедушка телепортируется?
     /// </summary>
@@ -69,4 +63,9 @@ public sealed partial class OldManComponent : Component
     /// момент времени когда анимация выхода из портала закончится
     /// </summary>
     public TimeSpan TeleportationOutEndAt = TimeSpan.Zero;
+}
+[RegisterComponent]
+public sealed partial class OldManPolymorphComponent : Component
+{
+
 }

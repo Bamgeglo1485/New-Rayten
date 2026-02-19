@@ -58,22 +58,6 @@
     event: !type:OldManTeleportEvent
 
 - type: entity
-  parent: BaseActionPolymorph
-  id: Action106Jump
-  name: Разлагающий прыжок
-  description: Перемещает вас под пол станции для свободного передвижения.
-  components:
-  - type: Magic
-  - type: Action
-    useDelay: 20
-    icon:
-      sprite: Objects/Magic/magicactions.rsi
-      state: jaunt
-  - type: InstantAction
-    event: !type:PolymorphActionEvent
-      protoId: 106Jump
-
-- type: entity
   parent: BaseAction
   id: Action939Exo
   name: Эхолокация

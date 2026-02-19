@@ -88,9 +88,7 @@
         Genetic: -0.5
         Airloss: -0.5
   - type: Stamina
-    baseCritThreshold: 5000
-    stunTime: 60
-    decay: 150
+    stunTime: 2
   - type: MovementSpeedModifier
     baseWalkSpeed: 1.5
     baseSprintSpeed: 1.5

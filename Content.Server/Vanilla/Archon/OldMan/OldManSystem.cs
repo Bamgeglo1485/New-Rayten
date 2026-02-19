@@ -1,5 +1,7 @@
 using Content.Server.Ghost.Roles;
 using Content.Server.Ghost.Roles.Components;
+using Content.Server.Polymorph.Systems;
+using Content.Shared.Polymorph;
 using Content.Shared.Vanilla.Archon.Research;
 using Content.Shared.Vanilla.Archon.OldMan;
 using Content.Shared.Vanilla.Damage.Events;
@@ -11,6 +13,7 @@ using Content.Shared.Overlays;
 using Content.Shared.Administration;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
+using Content.Shared.Mobs.Systems;
 using Content.Shared.Movement.Systems;
 using Content.Shared.Humanoid;
 using Content.Shared.FixedPoint;
@@ -21,6 +24,9 @@ using Content.Shared.Jittering;
 using Content.Shared.Damage.Events;
 using Content.Shared.Actions;
 using Content.Shared.Bed.Sleep;
+using Content.Shared.Random;
+using Content.Shared.Random.Helpers;
+using Content.Shared.Station;
 using Robust.Shared.Physics.Events;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Map;
@@ -28,6 +34,7 @@ using Robust.Shared.Timing;
 using Robust.Shared.EntitySerialization.Systems;
 using Robust.Shared.Random;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.Prototypes;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks.Dataflow;
 using System.Linq;
@@ -44,14 +51,15 @@ public sealed class OldManSystem : EntitySystem
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly SharedTransformSystem _trans = default!;
-    [Dependency] private readonly ToggleableGhostRoleSystem _ghost = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly SharedJitteringSystem _jitter = default!;
     [Dependency] private readonly DamageableSystem _damageableSystem = default!;
     [Dependency] private readonly SharedActionsSystem _actions = default!;
-
-
-    private const float UpdateRate = 0.1f;
+    [Dependency] private readonly SharedStationSystem _station = default!;
+    [Dependency] private readonly PolymorphSystem _polymorph = default!;
+    [Dependency] private readonly IPrototypeManager _proto = default!;
+    [Dependency] private readonly MobStateSystem _mobState = default!;
+    private const float UpdateRate = 0.25f;
     private float _updateDif;
     public override void Initialize()
     {
@@ -59,17 +67,13 @@ public sealed class OldManSystem : EntitySystem
         SubscribeLocalEvent<OldManComponent, ResearchAttemptEvent>(OnResearchAttempt);
         SubscribeLocalEvent<OldManComponent, ComponentShutdown>(OnComponentShutdown);
         SubscribeLocalEvent<OldManComponent, MapInitEvent>(OnMapInit);
+        SubscribeLocalEvent<OldManPolymorphComponent, PolymorphedEvent>(OnPolyMorph);
         SubscribeLocalEvent<OldManComponent, OldManTeleportEvent>(OnTeleportEvent);
         SubscribeLocalEvent<OldManComponent, MeleeHitEvent>(OnMeleeHit);
-        SubscribeLocalEvent<OldManComponent, StaminaCritEvent>(OnStamCrit);
         SubscribeLocalEvent<OldManComponent, MobStateChangedEvent>(OnMobStateChanged);
-        SubscribeLocalEvent<OldManComponent, BeforeDamageChangedEvent>(OnBeforeDamageChanged);
-        SubscribeLocalEvent<OldManComponent, BeforeStaminaDamageEvent>(OnBeforeStaminaDamage);
-
         SubscribeLocalEvent<DimensionVictimComponent, RefreshMovementSpeedModifiersEvent>(OnRefreshMoveSpeed);
         SubscribeLocalEvent<DimensionVictimComponent, MapInitEvent>(OnVictimInit);
         SubscribeLocalEvent<DimensionVictimComponent, MobStateChangedEvent>(OnVictimStateChanged);
-
         SubscribeLocalEvent<DimensionEscapeTeleportComponent, StartCollideEvent>(OnCollide);
     }
 
@@ -85,56 +89,26 @@ public sealed class OldManSystem : EntitySystem
         var now = _timing.CurTime;
         var query = EntityQueryEnumerator<OldManComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out var comp, out var trans))
-        {
             ProcessTeleport(uid, comp, trans, now);
-            if (now > comp.PhaseSwitchAt)
-                SwitchPhase(uid, comp);
-        }
 
         var victimQuery = EntityQueryEnumerator<DimensionVictimComponent>();
         while (victimQuery.MoveNext(out var uid, out var comp))
             DamageVictim(uid, comp, now);
     }
+
     #region старик
     private void OnResearchAttempt(EntityUid uid, OldManComponent comp, ResearchAttemptEvent args)
     {
-        if (comp.IsActivePhase)
+        if (!HasComp<SleepingComponent>(uid))
             args.Cancel();
     }
-    private void OnBeforeDamageChanged(EntityUid uid, OldManComponent component, ref BeforeDamageChangedEvent args)
-    {
-        if (args.Origin != null && HasComp<DimensionVictimComponent>(args.Origin.Value))
-            args.Cancelled = true;
-    }
-    private void OnBeforeStaminaDamage(EntityUid uid, OldManComponent component, ref BeforeStaminaDamageEvent args)
-    {
-        args.Cancelled = true;
-    }
-    private void OnStamCrit(EntityUid uid, OldManComponent comp, StaminaCritEvent args)
-    {
-        if (comp.IsActivePhase)
-            SwitchPhase(uid, comp);
 
-        ReturnAllVictims((uid, comp));
-    }
     private void OnMobStateChanged(EntityUid uid, OldManComponent comp, MobStateChangedEvent args)
     {
         if (args.OldMobState > args.NewMobState)
             return;
-
+        //возвращаем всех на станцию
         ReturnAllVictims((uid, comp));
-
-        if (args.NewMobState == MobState.Critical)
-        {
-            if (comp.InDimention)
-                return;
-            var action = _actions.GetAction(comp.ActionEnt);
-            if (action != null && _actions.ValidAction(action.Value))
-                _actions.PerformAction(uid, action.Value, predicted: false);
-        }
-
-        if (comp.IsActivePhase)
-            SwitchPhase(uid, comp);
 
         //отмена тп при смерти
         if (args.NewMobState == MobState.Dead)
@@ -144,59 +118,12 @@ public sealed class OldManSystem : EntitySystem
             RemComp<AdminFrozenComponent>(uid);
         }
     }
+
     private void OnComponentShutdown(EntityUid uid, OldManComponent comp, ref ComponentShutdown args)
     {
         ReturnAllVictims((uid, comp));
         if (!Deleted(comp.DimensionUid))
             QueueDel(comp.DimensionUid);
-    }
-
-    /// <summary>
-    /// При смене с активной фазы на пассивную дед выкидывается в гост, следующая активная фаза через 25-45 минут
-    /// При смене с пассивной фазы на активную можно поиграть за деда, активная фаза длится три минуты после взятия роли
-    /// <summary>
-    private void SwitchPhase(EntityUid uid, OldManComponent comp)
-    {
-        if (comp.IsActivePhase)
-        {
-            _ghost.Wipe(uid);
-            var nextTime = _random.NextFloat(35, 45f);
-            var sleep = EnsureComp<SleepingComponent>(uid);
-            sleep.WakeThreshold = FixedPoint2.New(5);
-            comp.PhaseSwitchAt = _timing.CurTime + TimeSpan.FromMinutes(nextTime);
-            sleep.CooldownEnd = _timing.CurTime + TimeSpan.FromMinutes(nextTime);
-        }
-        else
-        {
-            comp.PhaseSwitchAt = _timing.CurTime + TimeSpan.FromMinutes(5);
-            if (!TryComp<ToggleableGhostRoleComponent>(uid, out var toggle))
-                return;
-            RemComp<SleepingComponent>(uid);
-
-            var ghostRole = EnsureComp<GhostRoleComponent>(uid);
-            EnsureComp<GhostTakeoverAvailableComponent>(uid);
-
-            ghostRole.RoleName = Loc.GetString(toggle.RoleName);
-            ghostRole.RoleDescription = Loc.GetString(toggle.RoleDescription);
-            ghostRole.RoleRules = Loc.GetString(toggle.RoleRules);
-            ghostRole.JobProto = toggle.JobProto;
-            ghostRole.MindRoles = toggle.MindRoles;
-        }
-
-        comp.IsActivePhase = !comp.IsActivePhase;
-    }
-
-    private void TeleportOldMan(EntityUid uid, OldManComponent comp)
-    {
-        if (Transform(uid).GridUid == null)
-            return;
-
-        EnsureComp<AdminFrozenComponent>(uid);
-        _appearance.SetData(uid, DamageVisualizerKeys.DamageUpdateGroups, TeleportState.In);
-        _audio.PlayPvs(comp.TeleportSound, uid);
-        comp.TPState = TeleportState.In;
-        comp.TeleportationInEndAt = _timing.CurTime + comp.TeleportInDuration;
-        comp.TeleportationOutEndAt = comp.TeleportationInEndAt + comp.TeleportOutDuration;
     }
 
     private void ProcessTeleport(EntityUid uid, OldManComponent comp, TransformComponent trans, TimeSpan now)
@@ -205,24 +132,8 @@ public sealed class OldManSystem : EntitySystem
         if (comp.TPState == TeleportState.In && now >= comp.TeleportationInEndAt)
         {
             comp.TPState = TeleportState.Out;
-
-            if (trans.GridUid == null || !TryGetTpCoords(comp, out var coords))
-            {
-                comp.TPState = TeleportState.NoTP;
-                _appearance.SetData(uid, DamageVisualizerKeys.DamageUpdateGroups, comp.TPState);
-                RemComp<AdminFrozenComponent>(uid);
-                return;
-            }
-            //запоминаем грид с которого мы телепортировались
-            if (!comp.InDimention)
-                comp.StationGridUid = trans.GridUid.Value;
-            else
-                comp.DimensionGridUid = trans.GridUid.Value;
-
-            _trans.SetCoordinates(uid, coords.Value);
-            comp.InDimention = !comp.InDimention;
             _appearance.SetData(uid, DamageVisualizerKeys.DamageUpdateGroups, comp.TPState);
-            _audio.PlayPvs(comp.TeleportSound, uid);
+            _polymorph.PolymorphEntity(uid, "OldManJaunt");//туду компонент
         }
         //вышли из телепорта
         if (comp.TPState == TeleportState.Out && now >= comp.TeleportationOutEndAt)
@@ -232,50 +143,19 @@ public sealed class OldManSystem : EntitySystem
             RemComp<AdminFrozenComponent>(uid);
         }
     }
-    private bool TryGetTpCoords(OldManComponent comp, [NotNullWhen(true)] out EntityCoordinates? coords)
+
+    private void OnPolyMorph(Entity<OldManPolymorphComponent> uid, ref PolymorphedEvent args)
     {
-        coords = null;
-        //1. Если должны вернуться домой - идем туда
-        if (!comp.InDimention)
-        {
-            if (!TryGetRandomExistingTile(comp.DimensionGridUid, out coords))
-                coords = Transform(comp.DimensionUid).Coordinates;
+        if (!args.IsRevert)
+            return;
 
-            return true;
-        }
-        //2. Если должны телепортироваться на станцию - ищем самого хлипкого игрока
-        EntityUid? uid = null;
-        FixedPoint2 maxDamage = FixedPoint2.New(20);
-        var query = EntityQueryEnumerator<MobStateComponent, TransformComponent, DamageableComponent, HumanoidProfileComponent>();
-        while (query.MoveNext(out var target, out var mob, out var trans, out var dmg, out _))
-        {
-            //Должен быть в сознании
-            if (mob.CurrentState != MobState.Alive)
-                continue;
+        if (!TryComp<OldManComponent>(args.NewEntity, out var comp))
+            return;
 
-            //Должен быть на гриде где мы телепортировались
-            if (trans.GridUid != comp.StationGridUid)
-                continue;
-
-            if (dmg.TotalDamage > maxDamage)
-            {
-                uid = target;
-                maxDamage = dmg.TotalDamage;
-            }
-        }
-
-        if (uid != null)
-        {
-            coords = Transform(uid.Value).Coordinates;
-            return true;
-        }
-
-        //3. Если все фуллхп - Просто тпшимся на грид с которого уходили
-        if (TryGetRandomExistingTile(comp.StationGridUid, out coords))
-            return true;
-
-        //невозможно попасть никуда
-        return false;
+        comp.TPState = TeleportState.Out;
+        comp.TeleportationOutEndAt = _timing.CurTime + comp.TeleportOutDuration;
+        _appearance.SetData(args.NewEntity, DamageVisualizerKeys.DamageUpdateGroups, comp.TPState);
+        EnsureComp<AdminFrozenComponent>(args.NewEntity);
     }
 
     public bool TryGetRandomExistingTile(EntityUid gridUid, [NotNullWhen(true)] out EntityCoordinates? coords)
@@ -331,20 +211,70 @@ public sealed class OldManSystem : EntitySystem
         if (comp.TPState != TeleportState.NoTP)
             return;
 
-        TeleportOldMan(uid, comp);
+        if (Transform(uid).GridUid == null)
+            return;
+
+        EnsureComp<AdminFrozenComponent>(uid);
+        _appearance.SetData(uid, DamageVisualizerKeys.DamageUpdateGroups, TeleportState.In);
+        _audio.PlayPvs(comp.TeleportSound, uid);
+        comp.TPState = TeleportState.In;
+        comp.TeleportationInEndAt = _timing.CurTime + comp.TeleportInDuration;
         args.Handled = true;
     }
 
     private void OnMapInit(EntityUid uid, OldManComponent comp, ref MapInitEvent args)
     {
-        if (!_mapLoader.TryLoadMap(comp.DimensionMap, out var dimension, out _))
+        // ---- Станция ----
+        if (_station.GetOwningStation(uid) is not { } station)
+        {
+            Log.Error($"не удалось найти станцию у старика {uid}");
+            QueueDel(uid);
             return;
+        }
+
+        if (_station.GetLargestGrid(station) is not { } largestStationGrid)
+        {
+            Log.Error($"не удалось найти грид станции у старика {uid}");
+            QueueDel(uid);
+            return;
+        }
+
+        comp.StationGridUid = largestStationGrid;
+
+        // ---- Загрузка измерения ----
+
+        if (!_mapLoader.TryLoadMap(comp.DimensionMap, out var dimension, out var grids))
+        {
+            Log.Error($"не удалось загрузить карту при создании старика {uid}");
+            QueueDel(uid);
+            return;
+        }
+
+        comp.DimensionUid = dimension.Value.Owner;
+
+        EntityUid? largestGrid = null;
+        Box2 largestBounds = new Box2();
+
+        foreach (var grid in grids)
+        {
+            if (grid.Comp.LocalAABB.Size.LengthSquared() < largestBounds.Size.LengthSquared())
+                continue;
+
+            largestBounds = grid.Comp.LocalAABB;
+            largestGrid = grid.Owner;
+        }
+
+        if (largestGrid == null)
+        {
+            Log.Error($"не удалось найти грид при создании старика {uid}");
+            QueueDel(uid);
+            return;
+        }
 
         _mapSystem.InitializeMap(dimension.Value.Comp.MapId);
-        comp.DimensionUid = dimension.Value.Owner;
-        comp.PhaseSwitchAt = _timing.CurTime;
+
+        comp.DimensionGridUid = largestGrid.Value;
         comp.ActionEnt = _actions.AddAction(uid, comp.ActionId);
-        TeleportOldMan(uid, comp);
     }
 
 
@@ -364,23 +294,32 @@ public sealed class OldManSystem : EntitySystem
 
     private void OnVictimStateChanged(EntityUid uid, DimensionVictimComponent component, MobStateChangedEvent args)
     {
-        if (args.NewMobState == MobState.Critical)
+        if (args.NewMobState != MobState.Critical)
+            return;
+
+        var deadResult = _proto.Index<WeightedRandomPrototype>(component.DeadResults).Pick(_random);
+        switch (deadResult)
         {
-            if (_random.Prob(0.8f))
-            {
-                _damageableSystem.TryChangeDamage(uid, component.FinalDamage);
-                return;
-            }
+            case "Kill":
+                _mobState.ChangeMobState(uid, MobState.Dead, origin: component.OldMan);
+                ReturnVictimOnStation(uid, component);
+                break;
+            case "Revive":
+                _popup.PopupEntity("П О Д Н И М А Й С Я", uid, PopupType.SmallCaution);//туду в фтл
+                if (TryComp<DamageableComponent>(uid, out var damagComp))
+                    _damageableSystem.SetAllDamage((uid, damagComp), 0);
+                break;
+            case "Eat":
+                //persih сгнить
+                //деда в слип
+                var sleep = EnsureComp<SleepingComponent>(component.OldMan.Owner);
+                sleep.WakeThreshold = FixedPoint2.New(3);
+                sleep.CooldownEnd = _timing.CurTime + TimeSpan.FromMinutes(120);
+                _mobState.ChangeMobState(uid, MobState.Dead, origin: component.OldMan);
+                ReturnVictimOnStation(uid, component);
+                break;
 
-            if (TryGetRandomExistingTile(component.DimensionGridUid, out var coords))
-                _trans.SetCoordinates(uid, coords.Value);
-
-            _popup.PopupEntity("П О Д Н И М А Й С Я", uid, PopupType.SmallCaution);//туду в фтл
-            if (TryComp<DamageableComponent>(uid, out var damagComp))
-                _damageableSystem.SetAllDamage((uid, damagComp), 0);
         }
-        if (args.NewMobState == MobState.Dead)
-            ReturnVictimOnStation(uid, component);
     }
 
     private void OnRefreshMoveSpeed(EntityUid uid, DimensionVictimComponent component, RefreshMovementSpeedModifiersEvent args)
@@ -398,9 +337,10 @@ public sealed class OldManSystem : EntitySystem
             RemComp<DimensionVictimComponent>(uid);
             return;
         }
+
         comp.DimensionGridUid = grid.Value;
         _jitter.AddJitter(uid, 2, 2);
-        _audio.PlayGlobal(comp.DimensionAmbient, uid);
+        comp.Stream = _audio.PlayGlobal(comp.DimensionAmbient, uid)?.Entity;
 
         for (int i = 0; i < comp.TeleportsAmount; i++)
         {
@@ -414,7 +354,7 @@ public sealed class OldManSystem : EntitySystem
                 comp.Portals.Add(Spawn(comp.FakeTeleportPrototype, coords.Value));
         }
     }
-
+    //в шаред
     private void OnCollide(EntityUid uid, DimensionEscapeTeleportComponent comp, ref StartCollideEvent args)
     {
         if (!TryComp<DimensionVictimComponent>(args.OtherEntity, out var victim))
@@ -440,6 +380,7 @@ public sealed class OldManSystem : EntitySystem
             RemComp<NoirOverlayComponent>(uid);
             RemCompDeferred<JitteringComponent>(uid);
             _audio.PlayPvs(comp.DimensionEscapeSound, uid);
+            comp.Stream = _audio.Stop(comp.Stream);
             foreach (var portal in comp.Portals)
             {
                 if (Exists(portal) && !Deleted(portal))

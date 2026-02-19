@@ -1,14 +1,16 @@
 using Content.Shared.FixedPoint;
 using Content.Shared.Damage;
-
+using Content.Shared.Random;
 using Robust.Shared.Audio;
-using System.Reflection.Metadata;
-
+using Robust.Shared.Prototypes;
 namespace Content.Server.Vanilla.Archon.OldMan;
 
 [RegisterComponent]
 public sealed partial class DimensionVictimComponent : Component
 {
+    [DataField]
+    public ProtoId<WeightedRandomPrototype> DeadResults = "DimnsionVictimResults";
+
     /// <summary>
     /// порталы заспавненные на эту жертву
     /// </summary>
@@ -50,10 +52,12 @@ public sealed partial class DimensionVictimComponent : Component
 
     [DataField]
     public SoundSpecifier DimensionAmbient = new SoundPathSpecifier("/Audio/Vanilla/Ambience/106/106dimension.ogg");
+    [ViewVariables]
+    public EntityUid? Stream = null;
 
 
     [DataField, ViewVariables(VVAccess.ReadOnly)]
-    public TimeSpan DamageInterval = TimeSpan.FromSeconds(40);
+    public TimeSpan DamageInterval = TimeSpan.FromSeconds(60);
 
     [DataField, ViewVariables(VVAccess.ReadOnly)]
     public TimeSpan NextDamage;
@@ -65,18 +69,8 @@ public sealed partial class DimensionVictimComponent : Component
         DamageDict = new Dictionary<string, FixedPoint2>
         {
             ["Cellular"] = 5,
-            ["Caustic"] = 5
-        }
-    };
-
-    [DataField]
-    [ViewVariables(VVAccess.ReadWrite)]
-    public DamageSpecifier FinalDamage = new()
-    {
-        DamageDict = new Dictionary<string, FixedPoint2>
-        {
-            ["Cellular"] = 30,
-            ["Caustic"] = 80
+            ["Caustic"] = 15,
+            ["Blunt"] = 20
         }
     };
 }

@@ -70,17 +70,14 @@
     - SimpleHostile
   - type: MovementSpeedModifier
     baseWalkSpeed: 1.5
-    baseSprintSpeed: 2.5
+    baseSprintSpeed: 3
   - type: TimedSpawner
     prototypes:
       - DecalSpawnerBurns
     chance: 1
-    intervalSeconds: 0.5
+    intervalSeconds: 5
     minimumEntitiesSpawned: 1
     maximumEntitiesSpawned: 2
-  - type: NPCUseActionIfPossible
-    actionId: Action106Jump
-    targetKey: Target
   - type: Tag
     tags:
       - CannotSuicide
@@ -119,10 +116,28 @@
         Genetic: -0.25
         Airloss: -1.75
 
+- type: polymorph
+  id: OldManJaunt
+  configuration:
+    entity: OldManJaunt
+    transferName: true
+    inventory: None
+    forced: false
+    revertOnDeath: true
+    revertOnCrit: true
+    allowRepeatedMorphs: false
+    exitPolymorphSound: /Audio/Vanilla/Effects/Archon/106/106decay.ogg
+    duration: 40
+
+
 - type: entity
-  name: Кто-то под полом
-  parent: [ BaseSimpleMob, MobCombat ]
-  id: OldManJump
+  name: нечто под полом
+  parent:
+  - Incorporeal
+  - BaseMob
+  id: OldManJaunt
+  suffix: Старик
+  categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
     sprite: Objects/Weapons/Guns/Projectiles/magic.rsi
@@ -130,32 +145,21 @@
     - state: magicm_cyan
       shader: unshaded
       color: Black
-  - type: Pacified
+    overrideContainerOcclusion: true
+    drawdepth: Ghosts
   - type: MovementSpeedModifier
-    baseSprintSpeed: 4
-    baseWalkSpeed: 4
+    baseSprintSpeed: 9
+    baseWalkSpeed: 3
+  - type: Eye
+    drawFov: false
+  - type: ContentEye
+    maxZoom: 1.44,1.44
+  - type: OldManPolymorph
   - type: RepeatingTrigger
     delay: 0.1
   - type: SpawnOnTrigger
     proto: OldManJumpTrack
-  - type: HTN
-    rootTask:
-      task: MeleeCombatCompound
-  - type: Fixtures
-    fixtures:
-      fix1:
-        shape:
-          !type:PhysShapeCircle
-          radius: 0.25
-        density: 1
-        hard: false
-        mask:
-        - SmallMobMask
-        layer:
-        - SmallMobLayer
-  - type: NpcFactionMember
-    factions:
-    - SimpleHostile
+  - type: Actions
 
 - type: entity
   categories: [ HideSpawnMenu ]
@@ -169,6 +173,11 @@
       color: Black
   - type: TimedDespawn
     lifetime: .5
-  - type: TriggerOnSpawn
-  - type: SpawnOnTrigger
-    proto: DecalSpawnerBurns
+
+# Веса различных исходов при смерти жертвы
+- type: weightedRandom
+  id: DimnsionVictimResults
+  weights:
+    Kill: 4 # убить
+    Revive: 2 # второй шанс
+    Eat: 1 # схавать
