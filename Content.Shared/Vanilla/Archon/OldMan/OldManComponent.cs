@@ -7,9 +7,11 @@ using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototy
 using Robust.Shared.Audio;
 using Robust.Shared.Utility;
 using Robust.Shared.Map;
+using Robust.Shared.GameStates;
+
 namespace Content.Shared.Vanilla.Archon.OldMan;
 
-[RegisterComponent]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class OldManComponent : Component
 {
     [ViewVariables]
@@ -26,10 +28,12 @@ public sealed partial class OldManComponent : Component
     /// <summary>
     /// Координаты ухода в карманное измерение, на них старик телепортируется при невалидной точке выхода (космос, другой грид)
     /// </summary>
+    [AutoNetworkedField]
     public EntityCoordinates? FallBackCoords = null;
     /// <summary>
     /// Грид ухода в карманное измерение, телепортация разрешена только в пределах одного грида
     /// </summary>
+    [AutoNetworkedField]
     public EntityUid PreviousGrid = default;
     /// <summary>
     /// Длительность входа в портал
@@ -59,26 +63,32 @@ public sealed partial class OldManComponent : Component
     /// <summary>
     /// Грид карманного измерения, на него возвращается старик
     /// </summary>
+    [AutoNetworkedField]
     public EntityUid DimensionGridUid = default;
     /// <summary>
     /// карта карманного измерения
     /// </summary>
+    [AutoNetworkedField]
     public EntityUid DimensionUid = default;
     /// <summary>
     /// Грид станции
     /// </summary>
+    [AutoNetworkedField]
     public EntityUid StationGridUid = default;
     /// <summary>
     /// дедушка телепортируется?
     /// </summary>
+    [AutoNetworkedField]
     public TeleportState TPState = TeleportState.NoTP;
     /// <summary>
     /// момент времени когда анимация захода в портал закончится
     /// </summary>
+    [AutoNetworkedField]
     public TimeSpan TeleportationInEndAt = TimeSpan.Zero;
     /// <summary>
     /// момент времени когда анимация выхода из портала закончится
     /// </summary>
+    [AutoNetworkedField]
     public TimeSpan TeleportationOutEndAt = TimeSpan.Zero;
 }
 [RegisterComponent]

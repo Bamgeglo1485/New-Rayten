@@ -62,8 +62,6 @@
     - Zombie
   - type: MovementSpeedModifier
     baseSprintSpeed: 4.1
-  - type: Damageable
-    damageModifierSet: PlagueDoctor
   - type: MobThresholds
     thresholds:
       0: Alive
@@ -109,7 +107,7 @@
       Female: UnisexPlagueDoctor
       Unsexed: UnisexPlagueDoctor
   - type: AmbientSound
-    volume: 0
+    volume: 5
     range: 10
     sound:
       path: /Audio/Vanilla/Ambience/049/SaveMeFrom.ogg

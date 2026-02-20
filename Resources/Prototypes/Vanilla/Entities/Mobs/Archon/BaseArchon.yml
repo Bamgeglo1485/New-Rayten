@@ -34,6 +34,7 @@
     showInExamine: false
   - type: Bloodstream
     bloodRefreshAmount: 7
+    bleedReductionAmount: 1
   - type: DangerMob
   - type: Archon
   - type: InputMover
@@ -76,6 +77,8 @@
       400: 0.7
       600: 0.5
       900: 0.3
+  - type: Damageable
+    damageModifierSet: StrongArchon
   - type: PassiveDamage
     damageCap: 1000
     allowedStates:
@@ -89,7 +92,7 @@
         Genetic: -0.5
         Airloss: -0.5
   - type: Stamina
-    stunTime: 2
+    stunTime: 1.25
   - type: MovementSpeedModifier
     baseWalkSpeed: 1.5
     baseSprintSpeed: 1.5

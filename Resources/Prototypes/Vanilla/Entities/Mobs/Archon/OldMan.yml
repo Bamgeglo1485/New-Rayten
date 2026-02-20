@@ -36,21 +36,25 @@
     mindRoles:
     - MindRoleGhostRoleSoloAntagonist
   - type: OldMan
+  - type: Bloodstream
+    bloodReferenceSolution:
+      reagents:
+      - ReagentId: Corrosion
+        Quantity: 300
   - type: Muted
   - type: Archon
     researchCoolDown: 5m
   - type: MeleeWeapon
-    angle: 0
     attackRate: 0.4
-    animation: WeaponArcBite
     soundHit: /Audio/Vanilla/Effects/Archon/106/106meleeattack.ogg
     damage:
       types:
-        Structural: 10
+        Structural: 25
+        Blunt: 20
   - type: StaminaDamageOnHit
     damage: 200
   - type: SleepEmitSound
-    snore: /Audio/Vanilla/Ambience/106/106breathing.ogg
+    snore: /Audio/Vanilla/Effects/Archon/106/106breathing.ogg
   - type: AmbientSound
     volume: -12
     range: 25
@@ -64,7 +68,7 @@
         shape:
           !type:PhysShapeCircle
           radius: 0.25
-        density: 1
+        density: 600
         restitution: 0
         friction: 0.4
         mask:
@@ -80,7 +84,7 @@
   - type: TimedSpawner
     prototypes:
       - DecalSpawnerBurns
-    chance: 1
+    chance: .25
     intervalSeconds: 5
     minimumEntitiesSpawned: 1
     maximumEntitiesSpawned: 2
@@ -188,6 +192,6 @@
 - type: weightedRandom
   id: DimnsionVictimResults
   weights:
-    Kill: 4 # убить
-    Revive: 2 # второй шанс
-    Eat: 1 # схавать
+    Kill: 1 # убить
+    Revive: 1 # второй шанс
+    Eat: 10 # схавать
