@@ -1,0 +1,121 @@
+using Content.Shared.Atmos.Rotting;
+using Content.Shared.Bed.Sleep;
+using Content.Shared.Vanilla.Archon.OldMan;
+using Content.Shared.Jittering;
+using Content.Shared.Mobs;
+using Content.Shared.Mobs.Systems;
+using Content.Shared.Damage.Systems;
+using Content.Shared.Damage.Components;
+using Content.Shared.Popups;
+using Content.Shared.Random;
+using Content.Shared.Random.Helpers;
+using Content.Shared.Humanoid;
+using Content.Shared.Overlays;
+using Content.Shared.FixedPoint;
+using Robust.Shared.Map;
+using Robust.Shared.Random;
+namespace Content.Server.Vanilla.Archon.OldMan;
+
+public sealed partial class OldManSystem : SharedOldManSystem
+{
+    [Dependency] private readonly SharedJitteringSystem _jitter = default!;
+    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private readonly DamageableSystem _damageable = default!;
+    [Dependency] private readonly MobStateSystem _mobstateSystem = default!;
+    [Dependency] private readonly IRobustRandom _random = default!;
+    private void OnVictimStateChanged(EntityUid uid, DimensionVictimComponent component, MobStateChangedEvent args)
+    {
+        if (args.OldMobState != MobState.Alive)
+            return;
+
+        var deadResult = proto.Index<WeightedRandomPrototype>(component.DeadResults).Pick(_random);
+        switch (deadResult)
+        {
+            case "Kill":
+                _mobstateSystem.ChangeMobState(uid, MobState.Dead, origin: component.OldMan);
+                ReturnVictimOnStation(uid, component);
+                break;
+            case "Revive":
+                _popup.PopupEntity("П О Д Н И М А Й С Я", uid, PopupType.LargeCaution);//туду в фтл
+                if (TryComp<DamageableComponent>(uid, out var damagComp))
+                    _damageable.SetAllDamage((uid, damagComp), 0);
+                _mobstateSystem.ChangeMobState(uid, MobState.Alive, origin: component.OldMan);
+                break;
+            case "Eat":
+                var sleep = EnsureComp<SleepingComponent>(component.OldMan);
+                sleep.WakeThreshold = FixedPoint2.New(3);
+                sleep.CooldownEnd = timing.CurTime + TimeSpan.FromMinutes(120);
+                _mobstateSystem.ChangeMobState(uid, MobState.Dead, origin: component.OldMan);
+                RevertPolymorph(component.OldMan);
+                ReturnVictimOnStation(uid, component);
+                if (TryComp<PerishableComponent>(uid, out var perish))
+                    perish.RotAccumulator = perish.RotAfter;
+                break;
+        }
+    }
+
+    private void DamageVictim(EntityUid uid, DimensionVictimComponent comp, TimeSpan now)
+    {
+        if (now < comp.NextDamage)
+            return;
+
+        comp.NextDamage = now + comp.DamageInterval;
+        audio.PlayPvs(comp.DamageSound, uid);
+        _damageable.TryChangeDamage(uid, comp.Damage);
+    }
+    private void OnVictimInit(EntityUid uid, DimensionVictimComponent comp, ref MapInitEvent args)
+    {
+        if (!_mobstateSystem.IsAlive(uid))
+        {
+            ReturnVictimOnStation(uid, comp);
+            return;
+        }
+
+        movementSpeed.RefreshMovementSpeedModifiers(uid);
+        comp.NextDamage = timing.CurTime + comp.DamageInterval;
+        EnsureComp<NoirOverlayComponent>(uid);
+        audio.PlayPvs(comp.DimensionEnterSound, uid);
+        comp.Stream = audio.PlayGlobal(comp.DimensionAmbient, uid)?.Entity;
+        _jitter.AddJitter(uid, 2, 2);
+
+
+    }
+
+    public override void ReturnAllVictims(EntityUid oldMan)
+    {
+        var victimQuery = EntityQueryEnumerator<DimensionVictimComponent>();
+        while (victimQuery.MoveNext(out var uid, out var comp))
+        {
+            if (comp.OldMan == oldMan) ReturnVictimOnCoords(uid, comp, Transform(oldMan).Coordinates.Offset(_random.NextVector2(1f)));
+        }
+    }
+
+    public override void ReturnVictimOnStation(EntityUid uid, DimensionVictimComponent comp)
+    {
+        var grid = comp.StationGridUid;
+        if (!Exists(grid) || Deleted(grid))
+            return;
+
+        //1. тпшимся к другому игроку
+        var query = EntityQueryEnumerator<TransformComponent, HumanoidProfileComponent>();
+        while (query.MoveNext(out var target, out var trans, out _))
+        {
+            //Должен быть на гриде где дедушка уходил в карманное измерение последний раз
+            if (trans.GridUid != grid)
+                continue;
+
+            ReturnVictimOnCoords(uid, comp, Transform(target).Coordinates);
+            return;
+        }
+        var rand = SharedRandomExtensions.PredictedRandom(timing, GetNetEntity(grid));
+        //2. Если не получилось, то просто тпшимся на грид с которого уходили
+        if (TryGetRandomExistingTile(grid, out var coords))
+            ReturnVictimOnCoords(uid, comp, coords.Value);
+    }
+    private void ReturnVictimOnCoords(EntityUid uid, DimensionVictimComponent comp, EntityCoordinates targetCoords)
+    {
+        trans.SetCoordinates(uid, targetCoords);
+        RemComp<DimensionVictimComponent>(uid);
+        audio.PlayPvs(comp.DimensionEscapeSound, uid);
+    }
+}

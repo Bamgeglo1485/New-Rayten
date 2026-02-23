@@ -1,4 +1,6 @@
 using Content.Shared.Vanilla.Archon.OldMan;
+using Robust.Shared.GameStates;
+using Robust.Shared.Prototypes;
 using Robust.Client.Animations;
 using Robust.Client.Graphics;
 using Robust.Client.GameObjects;
@@ -7,23 +9,123 @@ namespace Content.Client.Vanilla.Archon.OldMan;
 
 public sealed class OldManSystem : SharedOldManSystem
 {
-    [Dependency] private readonly AnimationPlayerSystem _player = default!;
+    private static readonly ProtoId<ShaderPrototype> StencilEqualDrawShader = "StencilEqualDraw";
+    [Dependency] private readonly AnimationPlayerSystem _animationPlayer = default!;
+    [Dependency] private readonly SpriteSystem _sprite = default!;
+    [Dependency] private readonly IOverlayManager _overlayMan = default!;
+    [Dependency] private readonly IPrototypeManager _protoMan = default!;
+    private PuddleMaskOverlay _overlay = default!;
+    private ShaderInstance _shader = default!;
+
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<OldManFoodComponent, MapInitEvent>(sperma);
+        SubscribeAllEvent<FallAnimationEvent>(OnFallAnimation);
+        SubscribeLocalEvent<PDFallAnimationComponent, AnimationCompletedEvent>(OnFallAnimationComplete);
+
+        SubscribeLocalEvent<PDAnimationComponent, AnimationCompletedEvent>(OnAnimationComplete);
+        SubscribeLocalEvent<PDAnimationComponent, BeforePostShaderRenderEvent>(OnShaderRender);
+        SubscribeLocalEvent<PDAnimationComponent, AfterAutoHandleStateEvent>(OnHandleState);
+        SubscribeLocalEvent<PDAnimationComponent, ComponentShutdown>(OnPDShutdown);
+        _overlay = new();
+        _overlayMan.AddOverlay(_overlay);
+        _shader = _protoMan.Index(StencilEqualDrawShader).InstanceUnique();
     }
-    private void sperma(EntityUid uid, OldManFoodComponent comp, ref MapInitEvent args)
+    public override void Shutdown()
     {
-        if (timing.IsFirstTimePredicted)
-            Fall(uid);
+        base.Shutdown();
+        _overlayMan.RemoveOverlay<PuddleMaskOverlay>();
+    }
+    #region анимация входа/выхода в портал
+    private void OnShaderRender(EntityUid uid, PDAnimationComponent component, BeforePostShaderRenderEvent args)
+    {
+        if (!TryComp(uid, out SpriteComponent? sprite))
+            return;
+
+        _sprite.SetOffset(uid, component.InsertOffset);
     }
 
+    private void OnHandleState(EntityUid uid, PDAnimationComponent comp, AfterAutoHandleStateEvent args)
+    {
+        TryStartAnimation(uid, comp);
+    }
+    private void OnPDShutdown(EntityUid uid, PDAnimationComponent comp, ComponentShutdown args)
+    {
+        TryStopAnimation(uid);
+    }
+    protected override void TryStopAnimation(EntityUid uid)
+    {
+        if (_animationPlayer.HasRunningAnimation(uid, "insert-pd-animation"))
+            _animationPlayer.Stop(uid, "insert-pd-animation");
+    }
 
+    protected override void TryStartAnimation(EntityUid uid, PDAnimationComponent comp)
+    {
+        TryStopAnimation(uid);
+        if (!TryComp<SpriteComponent>(uid, out var sprite))
+            return;
+        comp.PuddleEntity = Spawn("PDEnterPortal", Transform(uid).Coordinates);
+        sprite.PostShader = _shader;
+        sprite.RaiseShaderEvent = true;
 
+        // Запускаем анимацию, которая двигает спрайт вниз
+        var animation = CreatePDAnimation(comp.TeleportDuration, comp.IsOut);
+        _animationPlayer.Play(uid, animation, "insert-pd-animation");
+    }
+    private Animation CreatePDAnimation(float duration, bool isOut)
+    {
+        duration += 0.35f;
+        var start = isOut ? new Vector2(0f, -1f) : Vector2.Zero;
+        var end = isOut ? Vector2.Zero : new Vector2(0f, -1f);
+
+        return new Animation
+        {
+            Length = TimeSpan.FromSeconds(duration),
+            AnimationTracks =
+        {
+            new AnimationTrackComponentProperty
+            {
+                ComponentType = typeof(PDAnimationComponent),
+                Property = nameof(PDAnimationComponent.InsertOffset),
+                KeyFrames =
+                {
+                    new(start, 0f),
+                    new(start, 1f),
+                    new(end, 1.5f),
+                    new(end, 0.35f),
+                }
+            }
+        }
+        };
+    }
+    private void OnAnimationComplete(EntityUid uid, PDAnimationComponent comp, ref AnimationCompletedEvent args)
+    {
+        if (args.Key != "insert-pd-animation")
+            return;
+
+        if (!TryComp<SpriteComponent>(uid, out var sprite))
+            return;
+
+        sprite.Offset = Vector2.Zero;
+        sprite.RaiseShaderEvent = false;
+        sprite.PostShader = null;
+        sprite.Visible = true;
+        if (!Deleted(comp.PuddleEntity))
+            Del(comp.PuddleEntity);
+    }
+    #endregion
+    #region анимция падения
+    private void OnFallAnimation(FallAnimationEvent ev)
+    {
+        var uid = GetEntity(ev.Target);
+        TryStopAnimation(uid);
+        if (!_animationPlayer.HasRunningAnimation(uid, "fall-animation"))
+            _animationPlayer.Play(uid, FallAnimation, "fall-animation");
+        EnsureComp<PDFallAnimationComponent>(uid);
+    }
     private static readonly Animation FallAnimation = new()
     {
-        Length = TimeSpan.FromSeconds(1.15f),
+        Length = TimeSpan.FromSeconds(1.7f),
         AnimationTracks =
         {
             // 🕳 Падение
@@ -33,57 +135,31 @@ public sealed class OldManSystem : SharedOldManSystem
                 Property = nameof(SpriteComponent.Offset),
                 KeyFrames =
                 {
-                    new(new Vector2(0f, 22f), 0f),     // внутри потолка
-                    new(new Vector2(0f, 20f), 0.2f),   // завис, будто реальность рвётся
-                    new(new Vector2(0f, -3f), 0.65f),  // резкий прорыв вниз
-                    new(new Vector2(0f, 1.2f), 0.9f),  // лёгкий отскок
-                    new(Vector2.Zero, 1.15f),          // стабилизация
-                }
-            },
-            // 🧱 Масса (squash & stretch)
-            new AnimationTrackComponentProperty
-            {
-                ComponentType = typeof(SpriteComponent),
-                Property = nameof(SpriteComponent.Scale),
-                KeyFrames =
-                {
-                    new(new Vector2(1f, 0.45f), 0f),    // сплющен в потолке
-                    new(new Vector2(1f, 1.35f), 0.65f), // растянут от удара
-                    new(new Vector2(1f, 0.95f), 0.9f),
-                    new(new Vector2(1f, 1f), 1.15f),
-                }
-            },
-            // 🌑 Проявление из тьмы
-            new AnimationTrackComponentProperty
-            {
-                ComponentType = typeof(SpriteComponent),
-                Property = nameof(SpriteComponent.Color),
-                KeyFrames =
-                {
-                    new(new Color(0f, 0f, 0f, 0f), 0f),          // невидим
-                    new(new Color(0.1f, 0.1f, 0.1f, 0.8f), 0.4f),
-                    new(new Color(1f, 1f, 1f, 1f), 0.8f),        // полностью проявился
-                }
-            },
-            // 🌀 Лёгкая нестабильность
-            new AnimationTrackComponentProperty
-            {
-                ComponentType = typeof(SpriteComponent),
-                Property = nameof(SpriteComponent.Rotation),
-                KeyFrames =
-                {
-                    new(Angle.FromDegrees(-6), 0f),
-                    new(Angle.FromDegrees(4), 0.6f),
-                    new(Angle.Zero, 1.15f),
+                    new(new Vector2(0f, 22f), 0f),      // старт
+                    new(new Vector2(0f, 20f), 0.2f),    // зависание
+                    new(new Vector2(0f, -1.2f), 0.8f),  // падение
+                    new(new Vector2(0f, 1.2f), 0.3f),   // отскок
+                    new(Vector2.Zero, 0.4f),            // стабилизация
                 }
             }
         }
     };
-
-    protected override void Fall(EntityUid uid)
+    private void OnFallAnimationComplete(EntityUid uid, PDFallAnimationComponent comp, ref AnimationCompletedEvent args)
     {
-        Log.Info("делаем анимцию");
-        _player.Play(uid, FallAnimation, "fall-animation");
+        if (args.Key != "fall-animation")
+            return;
+
+        if (!TryComp<SpriteComponent>(uid, out var sprite))
+            return;
+        sprite.Scale = new Vector2(1f, 1f);
+        sprite.Offset = Vector2.Zero;
+        sprite.Visible = true;
+        RemComp<PDFallAnimationComponent>(uid);
     }
+    #endregion
 }
 
+[RegisterComponent]
+public sealed partial class PDFallAnimationComponent : Component
+{
+}

@@ -27,6 +27,8 @@ public sealed partial class DimensionVictimComponent : Component
     [DataField]
     public SoundSpecifier DamageSound = new SoundCollectionSpecifier("106corrosion");
     [DataField]
+    public SoundSpecifier BodyFallSound = new SoundCollectionSpecifier("BodyFall");
+    [DataField]
     public SoundSpecifier DimensionAmbient = new SoundPathSpecifier("/Audio/Vanilla/Ambience/106/106dimension.ogg", AudioParams.Default.WithLoop(true));
     [DataField]
     public TimeSpan DamageInterval = TimeSpan.FromSeconds(10);
@@ -41,26 +43,18 @@ public sealed partial class DimensionVictimComponent : Component
             ["Cellular"] = 0.1
         }
     };
-    /// <summary>
-    /// порталы заспавненные на эту жертву
-    /// </summary>
-    [ViewVariables(VVAccess.ReadOnly)]
     public HashSet<EntityUid> Portals = [];
-    /// <summary>
-    /// дедус
-    /// </summary>
-    [ViewVariables(VVAccess.ReadOnly)]
     public EntityUid OldMan = default;
-    /// <summary>
-    /// Грид станции
-    /// </summary>
-    [ViewVariables(VVAccess.ReadOnly)]
     public EntityUid StationGridUid = default;
-    [ViewVariables]
+    public EntityUid DimensionGridUid = default;
     public EntityUid? Stream = null;
 }
 
 [RegisterComponent, NetworkedComponent]
 public sealed partial class OldManFoodComponent : Component
+{
+}
+[RegisterComponent]
+public sealed partial class PDlushaComponent : Component
 {
 }

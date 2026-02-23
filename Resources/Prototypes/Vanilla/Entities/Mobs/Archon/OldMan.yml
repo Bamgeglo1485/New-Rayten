@@ -13,18 +13,6 @@
     - map: ["enum.DamageStateVisualLayers.BaseUnshaded"]
       state: eyes
       shader: unshaded
-  - type: Appearance
-  - type: GenericVisualizer
-    visuals:
-      enum.DamageVisualizerKeys.DamageUpdateGroups:
-        enum.DamageStateVisualLayers.Base:
-          NoTP: { state: base }
-          Out: { state: teleport-out }
-          In: { state: teleport-in }
-        enum.DamageStateVisualLayers.BaseUnshaded:
-          NoTP:  { visible: true }
-          Out: { visible: false }
-          In: { visible: false }
   - type: ToggleableGhostRole
     examineTextMindPresent: ghost-role-taken-oldman-name
     examineTextMindSearching: ghost-role-await-take-oldman-name
@@ -181,6 +169,8 @@
   components:
   - type: Sprite
     sprite: Objects/Weapons/Guns/Projectiles/magic.rsi
+    overrideContainerOcclusion: true
+    drawdepth: Ghosts
     layers:
     - state: magicm_cyan
       shader: unshaded
@@ -188,10 +178,26 @@
   - type: TimedDespawn
     lifetime: .5
 
-# Веса различных исходов при смерти жертвы
+- type: entity
+  categories: [ HideSpawnMenu ]
+  id: PDEnterPortal
+  components:
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: Vanilla/Mobs/Archons/OldMan.rsi
+    loop: false
+    offset: 0, -0.1
+    layers:
+    - state: lusha
+      shader: unshaded
+  - type: PDlusha
+  - type: TimedDespawn
+    lifetime: 5
+
+
 - type: weightedRandom
   id: DimnsionVictimResults
   weights:
-    Kill: 1 # убить
-    Revive: 1 # второй шанс
-    Eat: 10 # схавать
+    Kill: 6
+    Revive: 2
+    Eat: 2
