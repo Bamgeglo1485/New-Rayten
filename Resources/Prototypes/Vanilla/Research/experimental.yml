@@ -20,8 +20,8 @@
   id: AdvancedRedSpace
   name: research-technology-advanced-red-space
   icon:
-    sprite: Objects/Specific/Research/anomalyscanner.rsi
-    state: icon
+    sprite: Vanilla/Objects/Specific/Research/archonlocator.rsi
+    state: fullicon
   discipline: Experimental
   tier: 2
   cost: 10000

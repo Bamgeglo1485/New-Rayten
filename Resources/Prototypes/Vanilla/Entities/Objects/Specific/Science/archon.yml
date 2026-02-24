@@ -5,6 +5,14 @@
   parent: AnomalyLocatorUnpowered
   suffix: Всегда заряжен
   components:
+  - type: Sprite
+    sprite: Vanilla/Objects/Specific/Research/archonlocator.rsi
+    layers:
+      - state: icon
+      - state: screen
+        shader: unshaded
+        visible: false
+        map: ["enum.ToggleableVisuals.Layer"]
   - type: ProximityDetector
     range: 20
     components:
