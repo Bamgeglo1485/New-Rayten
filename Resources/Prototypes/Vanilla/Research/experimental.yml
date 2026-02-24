@@ -27,3 +27,17 @@
   cost: 10000
   recipeUnlocks:
   - ArchonLocator
+
+- type: technology
+  id: FemurBreaker
+  name: research-technology-femur-breaker
+  icon:
+    sprite: Vanilla/Mobs/Archons/OldMan.rsi
+    state: base
+  discipline: Experimental
+  tier: 2
+  cost: 7500
+  technologyPrerequisites:
+  - AdvancedRedSpace
+  recipeUnlocks:
+  - FemurBreakerBedMachineCircuitboard

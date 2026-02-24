@@ -274,6 +274,9 @@
     - CameraBoards
     - MechBoards
     - ShuttleBoards
+    # rayten-start
+    - FemurBreaker
+    # rayten-end
   - type: EmagLatheRecipes
     emagDynamicPacks:
     - SecurityBoards

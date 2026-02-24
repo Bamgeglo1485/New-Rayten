@@ -7,3 +7,4 @@ research-technology-space-manipulation = Манипулирование прос
 research-technology-defibrillator-implant = Реактивная постмортальная реанимация
 research-technology-nanorobots-implant = Автономная витальная матрица
 research-technology-advanced-red-space = Продвинутое изучение редспейса
+research-technology-femur-breaker = Устройство экстренного сдерживания

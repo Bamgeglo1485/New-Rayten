@@ -120,7 +120,7 @@
     position: Down
     rotation: -90
   - type: Machine
-    board: StasisBedMachineCircuitboard
+    board: FemurBreakerBedMachineCircuitboard
   - type: Physics
     bodyType: Static
   - type: Fixtures
