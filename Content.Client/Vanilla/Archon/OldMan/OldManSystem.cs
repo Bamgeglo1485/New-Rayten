@@ -1,5 +1,4 @@
 using Content.Shared.Vanilla.Archon.OldMan;
-using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 using Robust.Client.Animations;
 using Robust.Client.Graphics;
@@ -20,8 +19,8 @@ public sealed class OldManSystem : SharedOldManSystem
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeAllEvent<FallAnimationEvent>(OnFallAnimation);
-        SubscribeLocalEvent<PDFallAnimationComponent, AnimationCompletedEvent>(OnFallAnimationComplete);
+        SubscribeNetworkEvent<FallAnimationEvent>(OnFallAnimation);
+        SubscribeLocalEvent<AnimationCompletedEvent>(OnFallAnimationComplete);
 
         SubscribeLocalEvent<PDAnimationComponent, AnimationCompletedEvent>(OnAnimationComplete);
         SubscribeLocalEvent<PDAnimationComponent, BeforePostShaderRenderEvent>(OnShaderRender);
@@ -105,11 +104,10 @@ public sealed class OldManSystem : SharedOldManSystem
 
         if (!TryComp<SpriteComponent>(uid, out var sprite))
             return;
-
-        sprite.Offset = Vector2.Zero;
+        _sprite.SetOffset(uid, Vector2.Zero);
+        _sprite.SetVisible(uid, true);
         sprite.RaiseShaderEvent = false;
         sprite.PostShader = null;
-        sprite.Visible = true;
         if (!Deleted(comp.PuddleEntity))
             Del(comp.PuddleEntity);
     }
@@ -121,7 +119,6 @@ public sealed class OldManSystem : SharedOldManSystem
         TryStopAnimation(uid);
         if (!_animationPlayer.HasRunningAnimation(uid, "fall-animation"))
             _animationPlayer.Play(uid, FallAnimation, "fall-animation");
-        EnsureComp<PDFallAnimationComponent>(uid);
     }
     private static readonly Animation FallAnimation = new()
     {
@@ -135,31 +132,20 @@ public sealed class OldManSystem : SharedOldManSystem
                 Property = nameof(SpriteComponent.Offset),
                 KeyFrames =
                 {
-                    new(new Vector2(0f, 22f), 0f),      // старт
-                    new(new Vector2(0f, 20f), 0.2f),    // зависание
-                    new(new Vector2(0f, -1.2f), 0.8f),  // падение
-                    new(new Vector2(0f, 1.2f), 0.3f),   // отскок
-                    new(Vector2.Zero, 0.4f),            // стабилизация
+                    new(new Vector2(0f, 5f), 0f),      // старт
+                    new(new Vector2(0f, -0.3f), 0.8f),  // падение
+                    new(new Vector2(0f, 0.3f), 0.3f),   // отскок
+                    new(Vector2.Zero, 0.3f),   // стабилизация
                 }
             }
         }
     };
-    private void OnFallAnimationComplete(EntityUid uid, PDFallAnimationComponent comp, ref AnimationCompletedEvent args)
+    private void OnFallAnimationComplete(AnimationCompletedEvent ev)
     {
-        if (args.Key != "fall-animation")
+        if (ev.Key != "fall-animation")
             return;
-
-        if (!TryComp<SpriteComponent>(uid, out var sprite))
-            return;
-        sprite.Scale = new Vector2(1f, 1f);
-        sprite.Offset = Vector2.Zero;
-        sprite.Visible = true;
-        RemComp<PDFallAnimationComponent>(uid);
+        _sprite.SetOffset(ev.Uid, Vector2.Zero);
+        _sprite.SetVisible(ev.Uid, true);
     }
     #endregion
-}
-
-[RegisterComponent]
-public sealed partial class PDFallAnimationComponent : Component
-{
 }

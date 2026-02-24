@@ -129,6 +129,8 @@
     revertOnDeath: true
     revertOnCrit: true
     allowRepeatedMorphs: false
+    polymorphPopup: null
+    exitPolymorphPopup: null
     duration: 30
 
 

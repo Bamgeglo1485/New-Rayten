@@ -1,21 +1,7 @@
-using Content.Shared.Audio;
-using Content.Shared.Administration;
-using Content.Shared.Atmos.Rotting;
-using Content.Shared.Bed.Sleep;
 using Content.Shared.Movement.Systems;
-using Content.Shared.Weapons.Melee.Events;
-using Content.Shared.Popups;
-using Content.Shared.Polymorph;
 using Content.Shared.Mobs;
-using Content.Shared.Mobs.Components;
 using Content.Shared.Maps;
-using Content.Shared.Damage;
-using Content.Shared.Damage.Components;
 using Content.Shared.Physics;
-using Content.Shared.Humanoid;
-using Content.Shared.FixedPoint;
-using Content.Shared.Random;
-using Content.Shared.Random.Helpers;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Map;
 using Robust.Shared.Audio.Systems;
@@ -23,26 +9,30 @@ using Robust.Shared.Physics.Events;
 using Robust.Shared.Timing;
 using Robust.Shared.Random;
 using Robust.Shared.Prototypes;
+using Content.Shared.Movement.Events;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Reflection.Metadata;
-using System.Runtime.InteropServices.Marshalling;
+using Content.Shared.Damage.Systems;
+using Content.Shared.CombatMode.Pacification;
+using Content.Shared.ActionBlocker;
+using Content.Shared.Actions;
 
 namespace Content.Shared.Vanilla.Archon.OldMan;
 
 public abstract partial class SharedOldManSystem : EntitySystem
 {
-    [Dependency] protected readonly SharedAppearanceSystem appearance = default!;
-    [Dependency] protected readonly SharedAudioSystem audio = default!;
-    [Dependency] protected readonly IGameTiming timing = default!;
-    [Dependency] protected readonly SharedTransformSystem trans = default!;
-    [Dependency] protected readonly MovementSpeedModifierSystem movementSpeed = default!;
-    [Dependency] protected readonly SharedMapSystem mapSystem = default!;
-    [Dependency] protected readonly IPrototypeManager proto = default!;
+    [Dependency] protected readonly SharedActionsSystem Actions = default!;
+    [Dependency] protected readonly SharedAudioSystem Audio = default!;
+    [Dependency] protected readonly IGameTiming Timing = default!;
+    [Dependency] protected readonly SharedTransformSystem Trans = default!;
+    [Dependency] protected readonly MovementSpeedModifierSystem MovementSpeed = default!;
+    [Dependency] protected readonly SharedMapSystem MapSystem = default!;
+    [Dependency] protected readonly IPrototypeManager Proto = default!;
     [Dependency] private readonly TurfSystem _turf = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private readonly ActionBlockerSystem _blocker = default!;
     protected const float UpdateRate = 0.1f;
-    protected float _updateDif;
+    protected float UpdateDif;
     public override void Initialize()
     {
         base.Initialize();
@@ -50,8 +40,25 @@ public abstract partial class SharedOldManSystem : EntitySystem
         SubscribeLocalEvent<DimensionVictimComponent, ComponentShutdown>(OnVictimShutDown);
         SubscribeLocalEvent<DimensionEscapeTeleportComponent, StartCollideEvent>(OnCollide);
         SubscribeLocalEvent<OldManComponent, MobStateChangedEvent>(OnMobStateChanged);
+        SubscribeLocalEvent<OldManComponent, UpdateCanMoveEvent>(OnUpdateCanMove);
+        SubscribeLocalEvent<OldManComponent, DamageChangedEvent>(OnDamageChanged);
+
     }
     #region старик
+    private void OnUpdateCanMove(EntityUid uid, OldManComponent comp, ref UpdateCanMoveEvent args)
+    {
+        if (comp.Eats)
+            args.Cancel();
+    }
+    private void OnDamageChanged(EntityUid uid, OldManComponent comp, ref DamageChangedEvent args)
+    {
+        if (comp.Eats)
+            comp.Eats = false;
+        Dirty(uid, comp);
+        RemComp<PacifiedComponent>(uid);
+        _blocker.UpdateCanMove(uid);
+        Actions.SetEnabled(comp.ActionEnt, true);
+    }
     /// <summary>
     /// при полиморфе запоминаем полиморф чтобы потом ревертнуть его
     /// </summary>
@@ -69,7 +76,7 @@ public abstract partial class SharedOldManSystem : EntitySystem
     public virtual void ReturnAllVictims(EntityUid oldMan)
     {
     }
-    protected virtual void RevertPolymorph(EntityUid oldMan)
+    public virtual void RevertPolymorph(EntityUid oldMan)
     {
     }
     #endregion
@@ -83,7 +90,7 @@ public abstract partial class SharedOldManSystem : EntitySystem
 
         if (!TryComp<MapGridComponent>(gridUid, out var grid))
             return false;
-        var tiles = mapSystem.GetAllTiles(gridUid, grid).ToList();
+        var tiles = MapSystem.GetAllTiles(gridUid, grid).ToList();
         _random.Shuffle(tiles);
         foreach (var tile in tiles)
         {
@@ -96,5 +103,4 @@ public abstract partial class SharedOldManSystem : EntitySystem
         return false;
     }
     #endregion
-
 }

@@ -7,13 +7,13 @@ using Content.Shared.Mobs.Systems;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Components;
 using Content.Shared.Popups;
-using Content.Shared.Random;
 using Content.Shared.Random.Helpers;
 using Content.Shared.Humanoid;
 using Content.Shared.Overlays;
 using Content.Shared.FixedPoint;
 using Robust.Shared.Map;
 using Robust.Shared.Random;
+
 namespace Content.Server.Vanilla.Archon.OldMan;
 
 public sealed partial class OldManSystem : SharedOldManSystem
@@ -23,12 +23,35 @@ public sealed partial class OldManSystem : SharedOldManSystem
     [Dependency] private readonly DamageableSystem _damageable = default!;
     [Dependency] private readonly MobStateSystem _mobstateSystem = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
+    public void EatVictim(EntityUid target, EntityUid oldMan, bool returnVictim = true)
+    {
+        if (!TryComp<OldManComponent>(oldMan, out var comp))
+            return;
+
+        TeleportAnimation(target, false);
+        var victim = EnsureComp<DimensionVictimComponent>(target);
+        victim.OldMan = oldMan;
+        victim.StationGridUid = comp.StationGridUid;
+        victim.DimensionGridUid = comp.DimensionGridUid;
+        victim.ReturnableVictim = returnVictim;
+
+        for (var i = 0; i < victim.TeleportsAmount; i++)
+        {
+            if (TryGetRandomExistingTile(comp.DimensionGridUid, out var coords))
+                victim.Portals.Add(Spawn(victim.TeleportPrototype, coords.Value));
+        }
+        for (var i = 0; i < victim.FakeTeleportsAmount; i++)
+        {
+            if (TryGetRandomExistingTile(comp.DimensionGridUid, out var coords))
+                victim.Portals.Add(Spawn(victim.FakeTeleportPrototype, coords.Value));
+        }
+    }
     private void OnVictimStateChanged(EntityUid uid, DimensionVictimComponent component, MobStateChangedEvent args)
     {
         if (args.OldMobState != MobState.Alive)
             return;
 
-        var deadResult = proto.Index<WeightedRandomPrototype>(component.DeadResults).Pick(_random);
+        var deadResult = Proto.Index(component.DeadResults).Pick(_random);
         switch (deadResult)
         {
             case "Kill":
@@ -44,7 +67,7 @@ public sealed partial class OldManSystem : SharedOldManSystem
             case "Eat":
                 var sleep = EnsureComp<SleepingComponent>(component.OldMan);
                 sleep.WakeThreshold = FixedPoint2.New(3);
-                sleep.CooldownEnd = timing.CurTime + TimeSpan.FromMinutes(120);
+                sleep.CooldownEnd = Timing.CurTime + TimeSpan.FromMinutes(120);
                 _mobstateSystem.ChangeMobState(uid, MobState.Dead, origin: component.OldMan);
                 RevertPolymorph(component.OldMan);
                 ReturnVictimOnStation(uid, component);
@@ -58,9 +81,13 @@ public sealed partial class OldManSystem : SharedOldManSystem
     {
         if (now < comp.NextDamage)
             return;
-
+        if (Transform(uid).GridUid != comp.DimensionGridUid)
+        {
+            RemComp<DimensionVictimComponent>(uid);
+            return;
+        }
         comp.NextDamage = now + comp.DamageInterval;
-        audio.PlayPvs(comp.DamageSound, uid);
+        Audio.PlayPvs(comp.DamageSound, uid);
         _damageable.TryChangeDamage(uid, comp.Damage);
     }
     private void OnVictimInit(EntityUid uid, DimensionVictimComponent comp, ref MapInitEvent args)
@@ -70,15 +97,12 @@ public sealed partial class OldManSystem : SharedOldManSystem
             ReturnVictimOnStation(uid, comp);
             return;
         }
-
-        movementSpeed.RefreshMovementSpeedModifiers(uid);
-        comp.NextDamage = timing.CurTime + comp.DamageInterval;
+        MovementSpeed.RefreshMovementSpeedModifiers(uid);
+        comp.NextDamage = Timing.CurTime + comp.DamageInterval;
         EnsureComp<NoirOverlayComponent>(uid);
-        audio.PlayPvs(comp.DimensionEnterSound, uid);
-        comp.Stream = audio.PlayGlobal(comp.DimensionAmbient, uid)?.Entity;
+        Audio.PlayPvs(comp.DimensionEnterSound, uid);
+        comp.Stream = Audio.PlayGlobal(comp.DimensionAmbient, uid)?.Entity;
         _jitter.AddJitter(uid, 2, 2);
-
-
     }
 
     public override void ReturnAllVictims(EntityUid oldMan)
@@ -86,7 +110,7 @@ public sealed partial class OldManSystem : SharedOldManSystem
         var victimQuery = EntityQueryEnumerator<DimensionVictimComponent>();
         while (victimQuery.MoveNext(out var uid, out var comp))
         {
-            if (comp.OldMan == oldMan) ReturnVictimOnCoords(uid, comp, Transform(oldMan).Coordinates.Offset(_random.NextVector2(1f)));
+            if (comp.OldMan == oldMan) ReturnVictimOnStation(uid, comp);
         }
     }
 
@@ -97,25 +121,37 @@ public sealed partial class OldManSystem : SharedOldManSystem
             return;
 
         //1. тпшимся к другому игроку
+        EntityUid? chosen = null;
+        var count = 0;
+
         var query = EntityQueryEnumerator<TransformComponent, HumanoidProfileComponent>();
         while (query.MoveNext(out var target, out var trans, out _))
         {
-            //Должен быть на гриде где дедушка уходил в карманное измерение последний раз
             if (trans.GridUid != grid)
                 continue;
+            if (!_mobstateSystem.IsAlive(target))
+                continue;
 
-            ReturnVictimOnCoords(uid, comp, Transform(target).Coordinates);
+            count++;
+            if (_random.Prob(1f / count))
+                chosen = target;
+        }
+        if (chosen != null)
+        {
+            ReturnVictimOnCoords(uid, comp, Transform(chosen.Value).Coordinates);
             return;
         }
-        var rand = SharedRandomExtensions.PredictedRandom(timing, GetNetEntity(grid));
         //2. Если не получилось, то просто тпшимся на грид с которого уходили
         if (TryGetRandomExistingTile(grid, out var coords))
             ReturnVictimOnCoords(uid, comp, coords.Value);
     }
     private void ReturnVictimOnCoords(EntityUid uid, DimensionVictimComponent comp, EntityCoordinates targetCoords)
     {
-        trans.SetCoordinates(uid, targetCoords);
+        if (!comp.ReturnableVictim)
+            return;
+        Trans.SetCoordinates(uid, targetCoords);
         RemComp<DimensionVictimComponent>(uid);
-        audio.PlayPvs(comp.DimensionEscapeSound, uid);
+        Audio.PlayPvs(comp.DimensionEscapeSound, uid);
+        RaiseNetworkEvent(new FallAnimationEvent(GetNetEntity(uid)));
     }
 }

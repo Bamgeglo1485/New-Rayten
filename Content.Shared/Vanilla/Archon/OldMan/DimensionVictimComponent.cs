@@ -48,12 +48,9 @@ public sealed partial class DimensionVictimComponent : Component
     public EntityUid StationGridUid = default;
     public EntityUid DimensionGridUid = default;
     public EntityUid? Stream = null;
+    public bool ReturnableVictim = true;
 }
 
-[RegisterComponent, NetworkedComponent]
-public sealed partial class OldManFoodComponent : Component
-{
-}
 [RegisterComponent]
 public sealed partial class PDlushaComponent : Component
 {

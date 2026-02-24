@@ -1,7 +1,6 @@
 using Content.Shared.Vanilla.Archon.OldMan;
 using Robust.Shared.Prototypes;
 using Robust.Client.Graphics;
-using Robust.Client.GameObjects;
 using Robust.Shared.Enums;
 using System.Numerics;
 namespace Content.Client.Vanilla.Archon.OldMan;
@@ -39,11 +38,6 @@ public sealed class PuddleMaskOverlay : Overlay
         worldHandle.UseShader(null);
 
         worldHandle.UseShader(_proto.Index(StencilEqualDrawShader).Instance());
-
-        var eye = args.Viewport.Eye;
-        var eyeRot = eye?.Rotation ?? default;
-
-        var map = eye?.Position.MapId;
         worldHandle.UseShader(null);
         worldHandle.SetTransform(Matrix3x2.Identity);
     }

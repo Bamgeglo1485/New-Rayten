@@ -1,8 +1,6 @@
-using Content.Shared.Vanilla.Archon.OldMan;
 using Content.Shared.Actions;
 using Content.Shared.GridPreloader.Prototypes;
 using Robust.Shared.Prototypes;
-using Robust.Shared.Serialization;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 using Robust.Shared.Audio;
 using Robust.Shared.Utility;
@@ -11,12 +9,11 @@ using Robust.Shared.GameStates;
 
 namespace Content.Shared.Vanilla.Archon.OldMan;
 
-[RegisterComponent]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class OldManComponent : Component
 {
-    [ViewVariables]
-    public EntityUid? PolyMorphEntity;
-
+    [AutoNetworkedField]
+    public bool Eats = false;
     #region звуки и анимации
     /// <summary>
     /// звук ухода и появления в карманное измерение
@@ -64,7 +61,8 @@ public sealed partial class OldManComponent : Component
 [RegisterComponent]
 public sealed partial class OldManPolymorphComponent : Component
 {
-
+    public EntityUid OldMan = default;
+    public EntityUid StationGridUid = default;
 }
 public sealed partial class OldManTeleportEvent : InstantActionEvent { }
 

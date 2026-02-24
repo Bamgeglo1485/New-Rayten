@@ -50,16 +50,13 @@ namespace Content.Shared.Verbs
             subCategory.ShowInHead = false;
         }
         public static readonly VerbCategory Bureaucracy =
-            new VerbCategory("Бюрократия", "/Textures/Vanilla/Interface/VerbIcons/pen.svg.192dpi.png");
+            new VerbCategory("verb-categories-Bureaucracy", "/Textures/Vanilla/Interface/VerbIcons/pen.svg.192dpi.png");
         public static readonly VerbCategory BureaucracyOrder =
-            new VerbCategory("Приказы", null);
+            new VerbCategory("verb-categories-Bureaucracy-Order", null);
         public static readonly VerbCategory BureaucracyReports =
-            new VerbCategory("Отчёты", null);
+            new VerbCategory("verb-categories-Bureaucracy-Reports", null);
         public static readonly VerbCategory BureaucracyRequest =
-            new VerbCategory("Запросы", null);
-
-        public static readonly VerbCategory Social =
-            new("Действия", "/Textures/Interface/VerbIcons/bubbles.svg.192dpi.png");
+            new VerbCategory("verb-categories-Bureaucracy-Request", null);
         //Vanilla-Station-end
 
 

@@ -1,42 +1,23 @@
 using Content.Server.Polymorph.Systems;
 using Content.Server.Polymorph.Components;
 using Content.Server.GridPreloader;
-using Content.Shared.Atmos.Rotting;
 using Content.Shared.Vanilla.Archon.Research;
 using Content.Shared.Vanilla.Archon.OldMan;
-using Content.Shared.Damage.Systems;
-using Content.Shared.Mobs.Systems;
-using Content.Shared.Vanilla.Damage.Events;
-using Content.Shared.Damage.Events;
-using Content.Shared.Damage.Components;
-using Content.Shared.Damage;
 using Content.Shared.Polymorph;
 using Content.Shared.Weapons.Melee.Events;
-using Content.Shared.Administration;
 using Content.Shared.Mobs;
-using Content.Shared.Random;
-using Content.Shared.Random.Helpers;
 using Content.Shared.Mobs.Components;
-using Content.Shared.Humanoid;
-using Content.Shared.FixedPoint;
-using Content.Shared.Physics;
-using Content.Shared.Popups;
-using Content.Shared.Actions;
 using Content.Shared.Bed.Sleep;
-using Content.Shared.Station;
 using Content.Shared.Audio;
-using Robust.Shared.Map.Components;
-using Robust.Shared.Map;
 using Robust.Shared.EntitySerialization.Systems;
-using Robust.Shared.Prototypes;
-using Robust.Shared.Random;
+using Content.Shared.Station;
 
 namespace Content.Server.Vanilla.Archon.OldMan;
 
 public sealed partial class OldManSystem : SharedOldManSystem
 {
     [Dependency] private readonly MapLoaderSystem _mapLoader = default!;
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
+
     [Dependency] private readonly SharedStationSystem _station = default!;
     [Dependency] private readonly PolymorphSystem _polymorph = default!;
     [Dependency] private readonly GridPreloaderSystem _preload = default!;
@@ -48,13 +29,15 @@ public sealed partial class OldManSystem : SharedOldManSystem
         SubscribeLocalEvent<OldManComponent, ComponentShutdown>(OnComponentShutdown);
         SubscribeLocalEvent<OldManComponent, MapInitEvent>(OnMapInit);
         SubscribeLocalEvent<OldManComponent, SleepStateChangedEvent>(OnSLeep);
-        SubscribeLocalEvent<DimensionVictimComponent, MobStateChangedEvent>(OnVictimStateChanged);
-        SubscribeLocalEvent<DimensionVictimComponent, MapInitEvent>(OnVictimInit);
-        SubscribeLocalEvent<OldManPolymorphComponent, PolymorphedEvent>(OnPolyMorphRevert);
         SubscribeLocalEvent<OldManComponent, OldManTeleportEvent>(OnTeleportEvent);
         SubscribeLocalEvent<OldManComponent, PolymorphedEvent>(OnPolyMorph);
         SubscribeLocalEvent<OldManComponent, MeleeHitEvent>(OnMeleeHit);
+        SubscribeLocalEvent<OldManPolymorphComponent, PolymorphedEvent>(OnPolyMorphRevert);
+        SubscribeLocalEvent<DimensionVictimComponent, MobStateChangedEvent>(OnVictimStateChanged);
+        SubscribeLocalEvent<DimensionVictimComponent, MapInitEvent>(OnVictimInit);
     }
+
+
     private void OnMeleeHit(EntityUid uid, OldManComponent comp, ref MeleeHitEvent args)
     {
         if (!args.IsHit)
@@ -70,34 +53,19 @@ public sealed partial class OldManSystem : SharedOldManSystem
 
             if (HasComp<PDAnimationComponent>(target))
                 continue;
-
-            TeleportAnimation(target, false);
-            var victim = EnsureComp<DimensionVictimComponent>(target);
-            victim.OldMan = uid;
-            victim.StationGridUid = comp.StationGridUid;
-            victim.DimensionGridUid = comp.DimensionGridUid;
-            for (int i = 0; i < victim.TeleportsAmount; i++)
-            {
-                if (TryGetRandomExistingTile(comp.DimensionGridUid, out var coords))
-                    victim.Portals.Add(Spawn(victim.TeleportPrototype, coords.Value));
-            }
-            for (int i = 0; i < victim.FakeTeleportsAmount; i++)
-            {
-                if (TryGetRandomExistingTile(comp.DimensionGridUid, out var coords))
-                    victim.Portals.Add(Spawn(victim.FakeTeleportPrototype, coords.Value));
-            }
-
+            EatVictim(target, uid);
         }
     }
+
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
 
-        _updateDif += frameTime;
-        if (_updateDif < UpdateRate)
+        UpdateDif += frameTime;
+        if (UpdateDif < UpdateRate)
             return;
-        _updateDif -= UpdateRate;
-        var now = timing.CurTime;
+        UpdateDif -= UpdateRate;
+        var now = Timing.CurTime;
 
         var query = EntityQueryEnumerator<DimensionVictimComponent>();
         while (query.MoveNext(out var uid, out var comp))
@@ -108,14 +76,14 @@ public sealed partial class OldManSystem : SharedOldManSystem
     }
 
     #region старик
-    protected void OnTeleportEvent(EntityUid uid, OldManComponent comp, OldManTeleportEvent args)
+    private void OnTeleportEvent(EntityUid uid, OldManComponent comp, OldManTeleportEvent args)
     {
         if (args.Handled)
             return;
 
         if (Transform(uid).GridUid == null)
             return;
-        audio.PlayPvs(comp.TeleportSound, uid);
+        Audio.PlayPvs(comp.TeleportSound, uid);
         TeleportAnimation(uid, false);
         args.Handled = true;
     }
@@ -128,10 +96,9 @@ public sealed partial class OldManSystem : SharedOldManSystem
             return;
         var oldmanTrans = Transform(uid);
         if ((oldmanTrans.GridUid == null || oldmanTrans.GridUid != comp.PreviousGrid) && comp.FallBackCoords != null)
-            trans.SetCoordinates(uid, comp.FallBackCoords.Value);
+            Trans.SetCoordinates(uid, comp.FallBackCoords.Value);
         TeleportAnimation(uid, true);
-        audio.PlayPvs(comp.TeleportSound, uid);
-        comp.PolyMorphEntity = null;
+        Audio.PlayPvs(comp.TeleportSound, uid);
     }
 
     private void OnSLeep(EntityUid uid, OldManComponent comp, ref SleepStateChangedEvent args)
@@ -145,6 +112,7 @@ public sealed partial class OldManSystem : SharedOldManSystem
         if (!HasComp<SleepingComponent>(uid))
             args.Cancel();
     }
+
 
     private void OnMapInit(EntityUid uid, OldManComponent comp, ref MapInitEvent args)
     {
@@ -169,8 +137,8 @@ public sealed partial class OldManSystem : SharedOldManSystem
         if (_preload.TryGetPreloadedGrid(comp.PreLoadGridProto, out var gridUid))
         {
             comp.DimensionGridUid = gridUid.Value;
-            comp.DimensionUid = mapSystem.CreateMap(out _, runMapInit: false);
-            trans.SetParent(comp.DimensionGridUid, comp.DimensionUid);
+            comp.DimensionUid = MapSystem.CreateMap(out _, runMapInit: false);
+            Trans.SetParent(comp.DimensionGridUid, comp.DimensionUid);
         }
         else
         {
@@ -206,10 +174,10 @@ public sealed partial class OldManSystem : SharedOldManSystem
             comp.DimensionGridUid = largestGrid.Value;
         }
 
-        mapSystem.InitializeMap(comp.DimensionUid);
+        MapSystem.InitializeMap(comp.DimensionUid);
 
-        comp.ActionEnt = _actions.AddAction(uid, comp.ActionId);
-        audio.PlayPvs(comp.MapInitSound, uid);
+        comp.ActionEnt = Actions.AddAction(uid, comp.ActionId);
+        Audio.PlayPvs(comp.MapInitSound, uid);
         TeleportAnimation(uid, true);
     }
     private void OnComponentShutdown(EntityUid uid, OldManComponent comp, ref ComponentShutdown args)
@@ -219,17 +187,21 @@ public sealed partial class OldManSystem : SharedOldManSystem
     }
     private void OnPolyMorph(EntityUid uid, OldManComponent comp, ref PolymorphedEvent args)
     {
-        comp.PolyMorphEntity = args.NewEntity;
+        if (TryComp<OldManPolymorphComponent>(args.NewEntity, out var polyComp))
+        {
+            polyComp.OldMan = uid;
+            polyComp.StationGridUid = comp.StationGridUid;
+        }
+
     }
-    protected override void RevertPolymorph(EntityUid uid)
+    public override void RevertPolymorph(EntityUid uid)
     {
-        if (!TryComp<OldManComponent>(uid, out var comp))
-            return;
-        if (comp.PolyMorphEntity == null)
-            return;
-        if (!TryComp<PolymorphedEntityComponent>(comp.PolyMorphEntity, out var polyComp))
-            return;
-        _polymorph.Revert((comp.PolyMorphEntity.Value, polyComp));
+        var query = EntityQueryEnumerator<OldManPolymorphComponent>();
+        while (query.MoveNext(out var polyUid, out var polyComp))
+        {
+            if (uid == polyComp.OldMan)
+                _polymorph.Revert(polyUid);
+        }
     }
 
     #endregion

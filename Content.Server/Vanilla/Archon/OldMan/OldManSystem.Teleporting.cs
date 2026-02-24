@@ -1,8 +1,6 @@
 using Content.Shared.Vanilla.Archon.OldMan;
 using Content.Shared.Administration;
-using Content.Shared.Random;
-using Content.Shared.Random.Helpers;
-using Robust.Shared.Random;
+
 namespace Content.Server.Vanilla.Archon.OldMan;
 
 public sealed partial class OldManSystem : SharedOldManSystem
@@ -27,11 +25,9 @@ public sealed partial class OldManSystem : SharedOldManSystem
         }
         else if (TryComp<DimensionVictimComponent>(uid, out var victimComp))
         {
-            var rand = SharedRandomExtensions.PredictedRandom(timing, GetNetEntity(uid));
             if (!TryGetRandomExistingTile(victimComp.DimensionGridUid, out var coords))
                 coords = Transform(victimComp.DimensionGridUid).Coordinates;
-
-            trans.SetCoordinates(uid, coords.Value);
+            Trans.SetCoordinates(uid, coords.Value);
             RaiseNetworkEvent(new FallAnimationEvent(GetNetEntity(uid)));
         }
         RemComp<AdminFrozenComponent>(uid);
