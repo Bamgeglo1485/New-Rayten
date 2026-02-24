@@ -21,6 +21,7 @@ using Robust.Shared.Utility;
 using Robust.Shared.Timing;
 using Robust.Shared.Random;
 using Content.Shared.Mobs;
+using Content.Server.Vanilla.Objectives.Systems;
 
 
 
@@ -41,7 +42,7 @@ public sealed partial class FemurBreakerSystem : EntitySystem
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly ActionBlockerSystem _blocker = default!;
     [Dependency] private readonly SharedActionsSystem _actions = default!;
-
+    [Dependency] private readonly OldManEatConditionSystem _eatConditionSystem = default!;
 
     private const float UpdateRate = 0.25f;
     private float _updateDif;
@@ -209,6 +210,7 @@ public sealed partial class FemurBreakerSystem : EntitySystem
             RemComp<PacifiedComponent>(oldManUid);
             _blocker.UpdateCanMove(oldManUid);
             _actions.SetEnabled(comp.ActionEnt, true);
+            _eatConditionSystem.SetCompleted(oldManUid, true);
         }
         RemComp<PacifiedComponent>(food.Owner);
         RemComp<OldManFoodComponent>(food.Owner);

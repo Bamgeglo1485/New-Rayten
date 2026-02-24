@@ -1,3 +1,4 @@
+using Content.Server.Vanilla.Objectives.Systems;
 using Content.Shared.Atmos.Rotting;
 using Content.Shared.Bed.Sleep;
 using Content.Shared.Vanilla.Archon.OldMan;
@@ -23,6 +24,8 @@ public sealed partial class OldManSystem : SharedOldManSystem
     [Dependency] private readonly DamageableSystem _damageable = default!;
     [Dependency] private readonly MobStateSystem _mobstateSystem = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private readonly OldManEatConditionSystem _eatConditionSystem = default!;
+
     public void EatVictim(EntityUid target, EntityUid oldMan, bool returnVictim = true)
     {
         if (!TryComp<OldManComponent>(oldMan, out var comp))
@@ -71,6 +74,7 @@ public sealed partial class OldManSystem : SharedOldManSystem
                 _mobstateSystem.ChangeMobState(uid, MobState.Dead, origin: component.OldMan);
                 RevertPolymorph(component.OldMan);
                 ReturnVictimOnStation(uid, component);
+                _eatConditionSystem.SetCompleted(uid, true);
                 if (TryComp<PerishableComponent>(uid, out var perish))
                     perish.RotAccumulator = perish.RotAfter;
                 break;

@@ -22,6 +22,7 @@ public sealed partial class OldManSystem : SharedOldManSystem
     [Dependency] private readonly PolymorphSystem _polymorph = default!;
     [Dependency] private readonly GridPreloaderSystem _preload = default!;
     [Dependency] private readonly SharedAmbientSoundSystem _ambient = default!;
+
     public override void Initialize()
     {
         base.Initialize();

@@ -13,16 +13,6 @@
     - map: ["enum.DamageStateVisualLayers.BaseUnshaded"]
       state: eyes
       shader: unshaded
-  - type: ToggleableGhostRole
-    examineTextMindPresent: ghost-role-taken-oldman-name
-    examineTextMindSearching: ghost-role-await-take-oldman-name
-    examineTextNoMind: ghost-role-no-mind-oldman-name
-    beginSearchingText: ghost-role-start-search-oldman-name
-    roleName: ghost-role-information-oldman-name
-    roleDescription: ghost-role-information-oldman-description
-    roleRules: ghost-role-information-oldman-rules
-    mindRoles:
-    - MindRoleGhostRoleSoloAntagonist
   - type: OldMan
   - type: Bloodstream
     bloodReferenceSolution:
