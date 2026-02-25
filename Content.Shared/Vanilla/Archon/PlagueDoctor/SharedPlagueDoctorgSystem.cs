@@ -178,7 +178,7 @@ public abstract class SharedPlagueDoctorgSystem : EntitySystem
 
         // нельзя оперировать одних и тех же
         var proto = MetaData(target).EntityPrototype;
-        if (proto != null && comp.OperatedProtos.Contains(proto))
+        if (proto != null && comp.OperatedProtos.Contains(proto.ToString()))
         {
             Popup.PopupClient(Loc.GetString("archon049-surgery-target-was-surgery"), target, uid, PopupType.Medium);
             return;
@@ -218,7 +218,7 @@ public abstract class SharedPlagueDoctorgSystem : EntitySystem
         var proto = MetaData(args.Args.Target.Value).EntityPrototype;
         if (proto != null)
         {
-            comp.OperatedProtos.Add(proto);
+            comp.OperatedProtos.Add(proto.ToString());
             Dirty(uid, comp);
         }
         args.Handled = true;

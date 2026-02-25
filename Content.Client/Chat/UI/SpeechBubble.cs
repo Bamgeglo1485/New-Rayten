@@ -76,8 +76,8 @@ namespace Content.Client.Chat.UI
         private bool _wasBold = false;
         private IEntityManager _entMan = default!;
         private VoiceSpeechSystem _speechSys = default!;
-        [GeneratedRegex(@"\[/?[a-zA-Z0-9#=]+\]")]
-        private static partial Regex BbTagRegex();
+        private static readonly Regex BbTagRegex =
+            new(@"\[/?[a-zA-Z0-9#=]+\]", RegexOptions.Compiled);
         protected void InitializeText(ChatMessage message, Color? fontColor = null)
         {
             _fullText = SharedChatSystem.GetStringInsideTag(message, "BubbleContent");
@@ -86,7 +86,7 @@ namespace Content.Client.Chat.UI
             _wasBold = _fullText.Contains("[bold]", StringComparison.Ordinal);
 
             // Удаляем ВСЕ BB-теги одним проходом
-            _fullText = BbTagRegex().Replace(_fullText, string.Empty);
+            _fullText = BbTagRegex.Replace(_fullText, string.Empty);
 
             _fontColor = fontColor;
             _revealedLength = 0;
