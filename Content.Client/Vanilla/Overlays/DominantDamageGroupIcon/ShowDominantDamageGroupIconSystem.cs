@@ -4,7 +4,6 @@ using Content.Shared.Damage;
 using Content.Shared.StatusIcon;
 using Content.Shared.StatusIcon.Components;
 using Content.Shared.FixedPoint;
-using Content.Shared.Overlays;
 using Content.Shared.Inventory.Events;
 using Content.Shared.Vanilla.Overlays;
 using Content.Shared.Vanilla.Entities.BrainWorm;
@@ -16,6 +15,8 @@ namespace Content.Client.Vanilla.Overlays;
 public sealed class ShowDominantDamageGroupIconSystem : EquipmentHudSystem<ShowDominantDamageGroupIconComponent>
 {
     [Dependency] private readonly IPrototypeManager _prototype = default!;
+    private const string DamageIconBleedingId = "DamageIconBleeding";
+    private const string BrainWormIconId = "BrainWorm";
 
     [ViewVariables]
     private readonly HashSet<string> _damageContainers = new();
@@ -53,7 +54,7 @@ public sealed class ShowDominantDamageGroupIconSystem : EquipmentHudSystem<ShowD
 
         if (TryComp<BrainWormHostComponent>(uid, out var hostcomp) && hostcomp.MindUnderControl)
         {
-            if (_prototype.TryIndex<DamageIconPrototype>("BrainWorm", out var foundIcon))
+            if (_prototype.TryIndex<DamageIconPrototype>(BrainWormIconId, out var foundIcon))
             {
                 icon = foundIcon;
                 return true;
@@ -80,16 +81,14 @@ public sealed class ShowDominantDamageGroupIconSystem : EquipmentHudSystem<ShowD
             if (_prototype.TryIndex<DamageIconPrototype>(groupId, out var icon))
                 icons.Add(icon);
         }
-
         if (damageable.Bleeding)
         {
-            if (_prototype.TryIndex<DamageIconPrototype>("DamageIconBleeding", out var bleedIcon))
+            if (_prototype.TryIndex<DamageIconPrototype>(DamageIconBleedingId, out var bleedIcon))
                 icons.Add(bleedIcon);
         }
-
         return icons;
     }
-
+    //rayten-start
     public void AddDominantDamageIcons(Entity<DamageableComponent> entity, ref GetStatusIconsEvent args)
     {
         if (!IsActive)
@@ -104,4 +103,6 @@ public sealed class ShowDominantDamageGroupIconSystem : EquipmentHudSystem<ShowD
 
         args.StatusIcons.AddRange(icons);
     }
+    //Rayten-end
+
 }

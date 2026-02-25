@@ -45,7 +45,7 @@ public abstract partial class SharedBrainWormSystem : EntitySystem
 
         if (component.Currentstage == BrainWormLifeStage.Elder)
         {
-            _popup.PopupClient(Loc.GetString("brainworm-popup-cant-eject-elder"), uid, uid, PopupType.Medium);
+            Popup.PopupClient(Loc.GetString("brainworm-popup-cant-eject-elder"), uid, uid, PopupType.Medium);
             return;
         }
 
@@ -56,7 +56,7 @@ public abstract partial class SharedBrainWormSystem : EntitySystem
             Hidden = true
         };
 
-        if (!_doAfter.TryStartDoAfter(doAfterEventArgs, out component.EjectDoAfter))
+        if (!DoAfter.TryStartDoAfter(doAfterEventArgs, out component.EjectDoAfter))
             return;
 
         args.Handled = true;
@@ -76,18 +76,18 @@ public abstract partial class SharedBrainWormSystem : EntitySystem
         //Если в мозге уже есть другой червь
         if (HasComp<BrainWormHostComponent>(target))
         {
-            _popup.PopupClient(Loc.GetString("brainworm-popup-host-already-wormed"), worm, worm, PopupType.Medium);
+            Popup.PopupClient(Loc.GetString("brainworm-popup-host-already-wormed"), worm, worm, PopupType.Medium);
             return;
         }
 
         if (!HasComp<HumanoidProfileComponent>(target))
         {
-            _popup.PopupClient(Loc.GetString("brainworm-popup-host-not-humanoid"), worm, worm, PopupType.Medium);
+            Popup.PopupClient(Loc.GetString("brainworm-popup-host-not-humanoid"), worm, worm, PopupType.Medium);
             return;
         }
         if (_injector.HasInjectionProtection(target))
         {
-            _popup.PopupClient(Loc.GetString("injector-component-inject-target-protected"), target, worm);
+            Popup.PopupClient(Loc.GetString("injector-component-inject-target-protected"), target, worm);
             return;
         }
         var doAfterEventArgs = new DoAfterArgs(EntityManager, worm, wormcomp.InsertDoAfterTime, new InsertBrainDoAfterEvent(), eventTarget: worm, target: target)
@@ -97,7 +97,7 @@ public abstract partial class SharedBrainWormSystem : EntitySystem
             Hidden = true
         };
 
-        if (!_doAfter.TryStartDoAfter(doAfterEventArgs))
+        if (!DoAfter.TryStartDoAfter(doAfterEventArgs))
             return;
 
         ev.Handled = true;
@@ -113,17 +113,17 @@ public abstract partial class SharedBrainWormSystem : EntitySystem
 
         if (HasComp<MindShieldComponent>(host))
         {
-            _popup.PopupClient(Loc.GetString("brainworm-popup-host-mindshield"), uid, uid, PopupType.Medium);
+            Popup.PopupClient(Loc.GetString("brainworm-popup-host-mindshield"), uid, uid, PopupType.Medium);
             return;
         }
 
-        if (!_mob.IsAlive(host))
+        if (!Mob.IsAlive(host))
         {
-            _popup.PopupClient(Loc.GetString("brainworm-popup-host-not-alive"), uid, uid, PopupType.Medium);
+            Popup.PopupClient(Loc.GetString("brainworm-popup-host-not-alive"), uid, uid, PopupType.Medium);
             return;
         }
 
-        _popup.PopupClient(Loc.GetString("brainworm-host-mind-control", ("user", Identity.Entity(uid, EntityManager))), host, host, PopupType.Medium);
+        Popup.PopupClient(Loc.GetString("brainworm-host-mind-control", ("user", Identity.Entity(uid, EntityManager))), host, host, PopupType.Medium);
         var controltime = component.FastMindControl ? component.MindControlDoAfterTime * 0.25f : component.MindControlDoAfterTime;
 
         var doAfterEventArgs = new DoAfterArgs(EntityManager, uid, controltime, new MindControlDoAfterEvent(), eventTarget: uid, target: host)
@@ -133,7 +133,7 @@ public abstract partial class SharedBrainWormSystem : EntitySystem
             Hidden = true
         };
 
-        if (!_doAfter.TryStartDoAfter(doAfterEventArgs, out component.MindControlDoAfter))
+        if (!DoAfter.TryStartDoAfter(doAfterEventArgs, out component.MindControlDoAfter))
             return;
 
         args.Handled = true;

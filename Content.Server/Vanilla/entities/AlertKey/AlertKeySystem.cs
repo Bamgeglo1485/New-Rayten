@@ -21,6 +21,7 @@ public sealed class AlertKeySystem : EntitySystem
     [Dependency] private readonly PopupSystem _popupSystem = default!;
     [Dependency] private readonly StationSystem _stationSystem = default!;
     [Dependency] private readonly UserInterfaceSystem _uiSystem = default!;
+    private const string StationAlertsPrototypeId = "stationAlerts";
     public override void Initialize()
     {
         // All events that refresh the BUI
@@ -58,38 +59,37 @@ public sealed class AlertKeySystem : EntitySystem
         if (!TryComp<AlertLevelComponent>(stationUid.Value, out var alertComp))
             return;
 
-        string reason = "Неизвестна";
+        var reason = "Неизвестна";
 
         if (_prototypeManager.TryIndex<AlertLevelReasonPrototype>(message.Reason, out var reasonproto))
         {
             reason = reasonproto.Text;
         }
 
-        if (_prototypeManager.TryIndex<AlertLevelPrototype>("stationAlerts", out var proto))
-        {
-            if (proto.Levels.TryGetValue(message.Level, out var detail))
-            {
-                if (detail.Subcode)
-                {
-                    // Это сабкод
-                    if (alertComp.ActiveSubLevels.ContainsKey(message.Level))
-                    {
-                        _alertLevelSystem.RemSubLevel(stationUid.Value, message.Level, null, alertComp);
-                    }
-                    else
-                    {
-                        _alertLevelSystem.SetSubLevel(stationUid.Value, message.Level, true, true, reason: reason);
-                    }
-                }
-                else
-                {
-                    // Это основной код
-                    if (message.Level == alertComp.CurrentLevel)
-                        return;
+        if (!_prototypeManager.TryIndex<AlertLevelPrototype>(StationAlertsPrototypeId, out var proto))
+            return;
 
-                    _alertLevelSystem.SetLevel(stationUid.Value, message.Level, true, true, reason: reason);
-                }
+        if (!proto.Levels.TryGetValue(message.Level, out var detail))
+            return;
+        if (detail.Subcode)
+        {
+            // Это сабкод
+            if (alertComp.ActiveSubLevels.ContainsKey(message.Level))
+            {
+                _alertLevelSystem.RemSubLevel(stationUid.Value, message.Level, null, alertComp);
             }
+            else
+            {
+                _alertLevelSystem.SetSubLevel(stationUid.Value, message.Level, true, true, reason: reason);
+            }
+        }
+        else
+        {
+            // Это основной код
+            if (message.Level == alertComp.CurrentLevel)
+                return;
+
+            _alertLevelSystem.SetLevel(stationUid.Value, message.Level, true, true, reason: reason);
         }
     }
 
@@ -111,7 +111,7 @@ public sealed class AlertKeySystem : EntitySystem
     {
         var stationUid = _stationSystem.GetOwningStation(uid);
         List<(string Level, bool IsSubcode, bool blocked)>? levels = null;
-        HashSet<string> ActiveSubLevels = [];
+        HashSet<string> activeSubLevels = [];
         float currentDelay = 0;
 
         if (stationUid != null)
@@ -131,14 +131,14 @@ public sealed class AlertKeySystem : EntitySystem
                         }
                     }
                 }
-                ActiveSubLevels = new HashSet<string>(alertComp.ActiveSubLevels.Keys);
+                activeSubLevels = new HashSet<string>(alertComp.ActiveSubLevels.Keys);
                 currentDelay = _alertLevelSystem.GetAlertLevelDelay(stationUid.Value, alertComp);
             }
         }
 
         _uiSystem.SetUiState(uid, AlertKeyUiKey.Key, new AlertKeyInterfaceState(
             levels,
-            ActiveSubLevels,
+            activeSubLevels,
             currentDelay
         ));
     }

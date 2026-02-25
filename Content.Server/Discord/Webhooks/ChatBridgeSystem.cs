@@ -1,8 +1,6 @@
 using Content.Server.Discord;
 using Content.Server.Administration.Managers;
-using Content.Shared.Administration.Notes;
 using Content.Server.Administration;
-using Content.Server.Chat.Systems;
 using Content.Shared.Chat;
 using Content.Shared.Database;
 using Content.Shared.Vanilla.Anticheat;
@@ -15,7 +13,6 @@ using Robust.Shared.Configuration;
 using System.Net;
 using System.Net.Sockets;
 
-
 using System.Text.RegularExpressions;
 
 public sealed class DiscordChatRelaySystem : EntitySystem
@@ -25,17 +22,18 @@ public sealed class DiscordChatRelaySystem : EntitySystem
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly IConfigurationManager _cfg = default!;
     [Dependency] private readonly IAdminManager _adminManager = default!;
-
     [Dependency] private readonly IBanManager _bans = default!;
     [Dependency] private readonly IPlayerLocator _locator = default!;
-    [Dependency] private readonly ILogManager _logManager = default!;
     private const int Ipv4_CIDR = 32;
     private const int Ipv6_CIDR = 128;
     private string _webhookUrl = "";
     private string _anticheatwebhookUrl = "";
 
-    private TimeSpan? NextTime;
-    private  WebhookPayload? payload;
+    private static readonly Regex SanitizerRegex =
+        new(@"[<>@#*\\|`]", RegexOptions.Compiled);
+
+    private TimeSpan? _nextTime;
+    private WebhookPayload? _payload;
     public override void Initialize()
     {
         base.Initialize();
@@ -134,16 +132,20 @@ public sealed class DiscordChatRelaySystem : EntitySystem
         var targetHWid = located.LastHWId;
         var targetName = session.Name;
 
-        _bans.CreateServerBan(
-            target: targetUid,
-            targetUsername: targetName,
-            banningAdmin: null,
-            addressRange: addressRange,
-            hwid: targetHWid,
-            minutes: minutes,
-            severity: severity,
-            reason: $"{reason}"
-        );
+        var info = new CreateServerBanInfo(reason);
+        info.AddUser(targetUid, targetName);
+
+        if (addressRange != null)
+            info.AddAddressRange(addressRange.Value);
+
+        if (targetHWid != null)
+            info.AddHWId(targetHWid);
+
+        if (minutes > 0)
+            info.WithMinutes(minutes.Value);
+        info.WithSeverity(severity);
+
+        _bans.CreateServerBan(info);
     }
 
     private async void OnEntitySpoke(EntitySpokeEvent ev)
@@ -156,15 +158,15 @@ public sealed class DiscordChatRelaySystem : EntitySystem
         if (!HasComp<ActorComponent>(ev.Source))
             return;
 
-        if (NextTime == null || _timing.CurTime >= NextTime)
+        if (_nextTime == null || _timing.CurTime >= _nextTime)
         {
-            if (payload != null)
+            if (_payload != null)
             {
                 try
                 {
                     var (id, token) = ParseWebhookUrl(_webhookUrl);
-                    await _discordWebhook.CreateMessage(new WebhookIdentifier(id, token), payload.Value);
-                    NextTime = _timing.CurTime + TimeSpan.FromSeconds(_random.NextFloat(120, 300));
+                    await _discordWebhook.CreateMessage(new WebhookIdentifier(id, token), _payload.Value);
+                    _nextTime = _timing.CurTime + TimeSpan.FromSeconds(_random.NextFloat(120, 300));
                 }
                 catch (Exception ex)
                 {
@@ -172,12 +174,12 @@ public sealed class DiscordChatRelaySystem : EntitySystem
                 }
             }
 
-            string sanitizedMessage = Regex.Replace(ev.Message, @"[<>@#\*\\\|`]", "");
+            var sanitizedMessage = SanitizerRegex.Replace(ev.Message, "");
 
             if (string.IsNullOrEmpty(sanitizedMessage) || sanitizedMessage.Length > 200)
                 return;
 
-            payload = new WebhookPayload
+            _payload = new WebhookPayload
             {
                 Content = sanitizedMessage,
             };

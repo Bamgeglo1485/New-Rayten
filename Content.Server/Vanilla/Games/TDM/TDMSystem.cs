@@ -5,19 +5,12 @@ using Content.Server.Spawners.Components;
 using Content.Server.Chat.Managers;
 using Content.Shared.Chat;
 using Content.Shared.Administration;
-using Content.Shared.GameTicking;
 using Content.Shared.CombatMode.Pacification;
-using Content.Shared.Vanilla.CCVars;
-using Content.Shared.Vanilla.Skill;
 using Content.Shared.Vanilla.Background;
-using Content.Shared.Mindshield.Components;
-using Content.Shared.Clothing;
-using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Damage;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
-using Content.Shared.IdentityManagement;
 using Content.Shared.Vanilla.TDM;
 using Content.Shared.Ghost;
 using Robust.Server.GameObjects;
@@ -26,13 +19,10 @@ using Robust.Server.Player;
 using Robust.Shared.Enums;
 using Robust.Shared.EntitySerialization.Systems;
 using Robust.Shared.EntitySerialization;
-using Robust.Shared.Map.Components;
 using Robust.Shared.Audio.Systems;
-using Robust.Shared.Audio;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Map;
 using Robust.Shared.Timing;
-using Robust.Shared.Configuration;
 using Timer = Robust.Shared.Timing.Timer;
 using Robust.Shared.Player;
 using Robust.Shared.Random;
@@ -42,18 +32,11 @@ namespace Content.Server.Vanilla.TDM;
 
 public sealed class TDMSystem : EntitySystem
 {
-    public sealed class PlayerStats
+    public sealed class PlayerStats(string name, int kills, float damage)
     {
-        public string Name { get; set; }
-        public int Kills { get; set; }
-        public float Damage { get; set; }
-
-        public PlayerStats(string name, int kills, float damage)
-        {
-            Name = name;
-            Kills = kills;
-            Damage = damage;
-        }
+        public string Name { get; set; } = name;
+        public int Kills { get; set; } = kills;
+        public float Damage { get; set; } = damage;
     }
 
     [Dependency] private readonly MapSystem _mapSystem = default!;
@@ -62,7 +45,7 @@ public sealed class TDMSystem : EntitySystem
     [Dependency] private readonly IGameTiming _gameTiming = default!;
     [Dependency] private readonly MindSystem _mindSystem = default!;
     [Dependency] private readonly StationSpawningSystem _spawning = default!;
-    [Dependency] protected readonly SharedAudioSystem _audio = default!;
+    [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly IChatManager _chatManager = default!;
@@ -70,7 +53,7 @@ public sealed class TDMSystem : EntitySystem
     [Dependency] private readonly SharedGhostSystem _ghosts = default!;
     [Dependency] private readonly IPlayerManager _playerManager = default!;
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    EntityUid? Currentrule = null;
+    private EntityUid? _currentrule = null;
 
     public override void Initialize()
     {
@@ -103,9 +86,9 @@ public sealed class TDMSystem : EntitySystem
             EnsureComp<PacifiedComponent>(entityId);
         }
 
-        if (TryComp<TDMRuleComponent>(Currentrule, out var rule))
+        if (TryComp<TDMRuleComponent>(_currentrule, out var rule))
         {
-            GameOver(Currentrule.Value, rule);
+            GameOver(_currentrule.Value, rule);
             rule.LastRound = true;
         }
     }
@@ -114,10 +97,10 @@ public sealed class TDMSystem : EntitySystem
     {
         var session = args.SenderSession;
 
-        if (session == null || Currentrule == null)
+        if (session == null || _currentrule == null)
             return;
 
-        if (!TryComp<TDMRuleComponent>(Currentrule, out var rule))
+        if (!TryComp<TDMRuleComponent>(_currentrule, out var rule))
             return;
 
         if (rule.CurrentStatus != TDMStatus.awaitstart)
@@ -132,12 +115,12 @@ public sealed class TDMSystem : EntitySystem
         var info = new TDMInformation(rule.Playercount, rule.TimeForPlayersJoin, rule.CurrentStatus == TDMStatus.awaitstart);
         RaiseNetworkEvent(info, Filter.Broadcast());
 
-        if (session.AttachedEntity != null)
-            _ghosts.SetCanReturnToBody(session.AttachedEntity.Value, false);
+        if (session.AttachedEntity != null && TryComp<GhostComponent>(session.AttachedEntity, out var ghost))
+            _ghosts.SetCanReturnToBody((session.AttachedEntity.Value, ghost), false);
     }
     private void OnPlayerStatusChanged(object? sender, SessionStatusEventArgs e)
     {
-        if (e.NewStatus != SessionStatus.Disconnected || Currentrule == null || !TryComp<TDMRuleComponent>(Currentrule, out var rule))
+        if (e.NewStatus != SessionStatus.Disconnected || _currentrule == null || !TryComp<TDMRuleComponent>(_currentrule, out var rule))
         {
             return;
         }
@@ -155,9 +138,9 @@ public sealed class TDMSystem : EntitySystem
 
     private void OnInfoRequest(TDMInfoRequest msg, EntitySessionEventArgs args)
     {
-        if (Currentrule != null)
+        if (_currentrule != null)
         {
-            if (!TryComp<TDMRuleComponent>(Currentrule, out var rule))
+            if (!TryComp<TDMRuleComponent>(_currentrule, out var rule))
                 return;
 
             var response = new TDMInformation(rule.Playercount, rule.TimeForPlayersJoin, rule.CurrentStatus == TDMStatus.awaitstart);
@@ -227,7 +210,7 @@ public sealed class TDMSystem : EntitySystem
 
                 rule.Arena = arena.Value;
 
-                bool odd = (rule.Playercount % 2 == 1) ? true : false;
+                var odd = rule.Playercount % 2 == 1;
 
                 //проходим по всем игрокам и закидываем их на арену
                 foreach (var player in rule.Players)
@@ -265,7 +248,7 @@ public sealed class TDMSystem : EntitySystem
                 {
                     //запускаем обратный отсчёт
                     var filter = Filter.Empty().AddPlayers(rule.Players);
-                    _audio.PlayGlobal("/Audio/Vanilla/Effects/TDM/counting.ogg", filter, true);
+                    _audio.PlayGlobal(rule.CountDownSound, filter, true);
                     rule.CurrentStatus = TDMStatus.unfreeze;
                 }
             }
@@ -367,8 +350,8 @@ public sealed class TDMSystem : EntitySystem
                     ((int)stat.Damage).ToString().PadRight(10) + "\n";
         }
 
-        Color draw = Color.Green;
-        Color wincolor = winner ? Color.Red : Color.DodgerBlue;
+        var draw = Color.Green;
+        var wincolor = winner ? Color.Red : Color.DodgerBlue;
 
         var message = Loc.GetString("tdm-gameover",
             ("winner", (blueguys == redguys) ? "other" : winner),
@@ -436,7 +419,7 @@ public sealed class TDMSystem : EntitySystem
         marker.RuleLink = ruleEnt;
         //Добавляем предыстории
         var background = EnsureComp<AwaitBackgroundComponent>(mobUid);
-        background.BackgroundGroup = (marker.Team) ? "RedGuyBackgroundGroup" : "BlueGuyBackgroundGroup";
+        background.BackgroundGroup = marker.Team ? "RedGuyBackgroundGroup" : "BlueGuyBackgroundGroup";
 
         //Замораживаем
         RemComp<AdminFrozenComponent>(mobUid);
@@ -482,37 +465,28 @@ public sealed class TDMSystem : EntitySystem
             if (origin != uid)
                 sourcecomp.TotalKills++;
 
-            TryComp<MetaDataComponent>(origin, out var originmeta);
-            TryComp<MetaDataComponent>(sourcecomp.Summoner, out var summonmeta);
-            TryComp<MetaDataComponent>(uid, out var entmeta);
-
-            string sourcename = summonmeta?.EntityName ?? originmeta?.EntityName ?? "неизвестно";
-            string victimname = entmeta?.EntityName ?? "неизвестно";
-
+            var sourcename = sourcecomp.Summoner is { } summoner
+                ? MetaData(summoner).EntityName
+                : "Неизвестный";
+            var victimname = MetaData(uid).EntityName;
 
             if (!rulecomp.Firstblooded)
             {
                 rulecomp.Firstblooded = true;
 
                 var filter = Filter.Empty().AddPlayers(rulecomp.Players);
-                _audio.PlayGlobal("/Audio/Vanilla/Effects/TDM/Firstblood.ogg", filter, true);
+                _audio.PlayGlobal(rulecomp.FirstBloodSound, filter, true);
                 DispatchMonospaceAnnouncement(filter, Loc.GetString("tdm-firstblood", ("player", sourcename), ("victim", victimname)), color);
             }
             else
             {
                 var kills = sourcecomp.TotalKills;
-                var killSounds = new Dictionary<int, string>
-                {
-                    { 2, "/Audio/Vanilla/Effects/TDM/Doublekill.ogg" },
-                    { 3, "/Audio/Vanilla/Effects/TDM/TripleKill.ogg" },
-                    { 4, "/Audio/Vanilla/Effects/TDM/UltraKill.ogg" },
-                    { 5, "/Audio/Vanilla/Effects/TDM/Rampage.ogg" },
-                };
-
                 var filter = Filter.Empty().AddPlayers(rulecomp.Players);
 
-                if (killSounds.ContainsKey(kills))
-                    _audio.PlayGlobal(killSounds[kills], filter, true);
+                var sound = rulecomp.KillSounds.GetValueOrDefault(kills)
+                            ?? rulecomp.KillSounds[5];
+
+                _audio.PlayGlobal(sound, filter, true);
                 DispatchMonospaceAnnouncement(Filter.Empty().AddPlayers(rulecomp.Players), Loc.GetString("tdm-killstreak", ("streak", kills), ("player", sourcename), ("victim", victimname)), color);
             }
         }
@@ -546,7 +520,6 @@ public sealed class TDMSystem : EntitySystem
         // Пытаемся загрузить грид на карту
         if (!_mapLoader.TryLoadGrid(rule.ArenaMapId.Value, new ResPath(rule.TDMProto.ArenaPath), out var grid, opts))
         {
-            Logger.Warning($"Не удалось загрузить арену по пути {rule.TDMProto.ArenaPath} на карту {rule.ArenaMapId.Value}");
             return null;
         }
 
@@ -581,7 +554,7 @@ public sealed class TDMSystem : EntitySystem
     }
     private void OnMarkerInit(EntityUid uid, TDMMarkerComponent marker, MapInitEvent args)
     {
-        marker.RuleLink = Currentrule;
+        marker.RuleLink = _currentrule;
         var transform = Transform(uid);
         var entitiesInRange = _lookup.GetEntitiesInRange(transform.Coordinates, 2f);
         foreach (var entity in entitiesInRange)
@@ -595,15 +568,15 @@ public sealed class TDMSystem : EntitySystem
     }
     private void OnRuleInit(EntityUid uid, TDMRuleComponent rule, MapInitEvent args)
     {
-        Currentrule = uid;
+        _currentrule = uid;
         var msg = new TDMInformation(rule.Playercount, rule.TimeForPlayersJoin, rule.CurrentStatus == TDMStatus.awaitstart);
         RaiseNetworkEvent(msg, Filter.Broadcast());
     }
     private void OnRuleShutDown(EntityUid uid, TDMRuleComponent component, ComponentShutdown args)
     {
         GameOver(uid, component, true);
-        if (Currentrule == uid)
-            Currentrule = null;
+        if (_currentrule == uid)
+            _currentrule = null;
     }
     public void DispatchMonospaceAnnouncement(Filter filter, string rawMessage, Color color)
     {

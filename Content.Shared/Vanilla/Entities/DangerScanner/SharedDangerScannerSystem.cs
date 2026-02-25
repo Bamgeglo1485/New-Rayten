@@ -1,12 +1,10 @@
 using Content.Shared.Power.EntitySystems;
-using Content.Shared.IdentityManagement;
 using Content.Shared.Interaction;
 using Content.Shared.DoAfter;
 using Content.Shared.Vanilla.Dominator;
 using Content.Shared.Chat;
 using Content.Shared.Contraband;
 using Content.Shared.StepTrigger.Systems;
-using Content.Shared.Chat;
 
 using Robust.Shared.Prototypes;
 using Robust.Shared.Audio.Systems;
@@ -17,7 +15,7 @@ namespace Content.Shared.Vanilla.Entities.DangerScanner;
 public abstract class SharedDangerScannerSystem : EntitySystem
 {
     [Dependency] private readonly SharedChatSystem _chat = default!;
-    [Dependency] protected readonly IGameTiming _timing = default!;
+    [Dependency] protected readonly IGameTiming Timing = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
     [Dependency] private readonly SharedDangerMobSystem _dangermob = default!;
@@ -77,7 +75,7 @@ public abstract class SharedDangerScannerSystem : EntitySystem
         if (!args.CanReach)
             return;
 
-        var curTime = _timing.CurTime;
+        var curTime = Timing.CurTime;
         //Если еще не сканировали, или если прошел кулдаун - сканируем
         if (!TryComp<DangerScannedComponent>(target, out var scannedComp) || curTime > scannedComp.NextScanIn)
         {
@@ -129,7 +127,7 @@ public abstract class SharedDangerScannerSystem : EntitySystem
             _audio.PlayPredicted(component.CompleteSound, uid, user);
             _chat.TrySendInGameICMessage(uid, Loc.GetString("dominator-scanner-end-no-danger"), InGameICChatType.Speak, true);
             var scannedComp = EnsureComp<DangerScannedComponent>(target);
-            scannedComp.NextScanIn = _timing.CurTime + TimeSpan.FromMinutes(DangerScannedComponent.ScanCoolDown);
+            scannedComp.NextScanIn = Timing.CurTime + TimeSpan.FromMinutes(DangerScannedComponent.ScanCoolDown);
         }
         args.Handled = true;
     }

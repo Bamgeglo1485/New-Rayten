@@ -40,8 +40,6 @@ public sealed class CharacterUIController : UIController, IOnStateEntered<Gamepl
     [UISystemDependency] private readonly CharacterInfoSystem _characterInfo = default!;
     [UISystemDependency] private readonly SpriteSystem _sprite = default!;
 
-    private ISawmill _sawmill = default!;
-
     private Dictionary<SkillType, SkillControl> _skillControls = [];
     private Dictionary<SkillType, EasyskillsControl> _easyskillsControl = [];
 
@@ -92,14 +90,14 @@ public sealed class CharacterUIController : UIController, IOnStateEntered<Gamepl
     public void OnSystemLoaded(CharacterInfoSystem system)
     {
         system.OnCharacterUpdate += CharacterUpdated;
-        system.onskillupdateUI += UpdateSkill;
+        system.OnskillupdateUI += UpdateSkill;
         _player.LocalPlayerDetached += CharacterDetached;
     }
 
     public void OnSystemUnloaded(CharacterInfoSystem system)
     {
         system.OnCharacterUpdate -= CharacterUpdated;
-        system.onskillupdateUI -= UpdateSkill;
+        system.OnskillupdateUI -= UpdateSkill;
         _player.LocalPlayerDetached -= CharacterDetached;
     }
 
@@ -310,17 +308,17 @@ public sealed class CharacterUIController : UIController, IOnStateEntered<Gamepl
             return;
         _window.BackgroundContainer.Children.Clear();
 
-        if (EntityManager.TryGetComponent<BackgroundComponent>(user, out var BackgroundComp))
+        if (EntityManager.TryGetComponent<BackgroundComponent>(user, out var backgroundComp))
         {
-            if (BackgroundComp.GeneralBackground == null)
+            if (backgroundComp.GeneralBackground == null)
             {
-                if (_prototypeManager.TryIndex(BackgroundComp.BabyBackground, out var bgProtoBaby))
+                if (_prototypeManager.TryIndex(backgroundComp.BabyBackground, out var bgProtoBaby))
                 {
                     var backgroundControl = new BackgroundControl(bgProtoBaby.Name, bgProtoBaby.Description, bgProtoBaby.SponsorOnly);
                     _window.BackgroundContainer.Children.Add(backgroundControl);
                     _window.TabBackground.Disabled = false;
                 }
-                if (_prototypeManager.TryIndex(BackgroundComp.AdultBackground, out var bgProtoAdult))
+                if (_prototypeManager.TryIndex(backgroundComp.AdultBackground, out var bgProtoAdult))
                 {
                     var backgroundControl = new BackgroundControl(bgProtoAdult.Name, bgProtoAdult.Description, bgProtoAdult.SponsorOnly);
                     _window.BackgroundContainer.Children.Add(backgroundControl);
@@ -329,7 +327,7 @@ public sealed class CharacterUIController : UIController, IOnStateEntered<Gamepl
             }
             else
             {
-                if (_prototypeManager.TryIndex(BackgroundComp.GeneralBackground, out var bgProtoGeneral))
+                if (_prototypeManager.TryIndex(backgroundComp.GeneralBackground, out var bgProtoGeneral))
                 {
                     var backgroundControl = new BackgroundControl(bgProtoGeneral.Name, bgProtoGeneral.Description, bgProtoGeneral.SponsorOnly);
                     _window.BackgroundContainer.Children.Add(backgroundControl);
@@ -384,8 +382,8 @@ public sealed class CharacterUIController : UIController, IOnStateEntered<Gamepl
 
         BuildBasicSkills(skillpoints, basicSkills);
         BuildEasySkills(skillpoints, easySkills);
-        if (EntityManager.TryGetComponent<SkillAmnesiaComponent>(user, out var SkillAmnesiaComp))
-            UpdateSkillAmnesia(SkillAmnesiaComp);
+        if (EntityManager.TryGetComponent<SkillAmnesiaComponent>(user, out var skillAmnesiaComp))
+            UpdateSkillAmnesia(skillAmnesiaComp);
     }
 
     private void BuildEasySkills(int skillpoints, List<(SkillType Skill, bool have, int Experience)> easyskills)
@@ -432,22 +430,22 @@ public sealed class CharacterUIController : UIController, IOnStateEntered<Gamepl
         }
     }
 
-    private void UpdateSkillAmnesia(SkillAmnesiaComponent SkillAmnesiaComp)
+    private void UpdateSkillAmnesia(SkillAmnesiaComponent skillAmnesiaComp)
     {
         if (_window == null)
             return;
 
-        if (_skillControls.ContainsKey(SkillAmnesiaComp.Skilltype))
+        if (_skillControls.ContainsKey(skillAmnesiaComp.Skilltype))
         {
-            var skillControl = _skillControls[SkillAmnesiaComp.Skilltype];
-            skillControl.updateamnesia(SkillAmnesiaComp.Skilltype, SkillAmnesiaComp.Exptorestore);
+            var skillControl = _skillControls[skillAmnesiaComp.Skilltype];
+            skillControl.updateamnesia(skillAmnesiaComp.Skilltype, skillAmnesiaComp.Exptorestore);
             return;
         }
 
-        if (_easyskillsControl.ContainsKey(SkillAmnesiaComp.Skilltype))
+        if (_easyskillsControl.ContainsKey(skillAmnesiaComp.Skilltype))
         {
-            var easyskillsControl = _easyskillsControl[SkillAmnesiaComp.Skilltype];
-            easyskillsControl.updateamnesia(SkillAmnesiaComp.Skilltype, SkillAmnesiaComp.Exptorestore);
+            var easyskillsControl = _easyskillsControl[skillAmnesiaComp.Skilltype];
+            easyskillsControl.updateamnesia(skillAmnesiaComp.Skilltype, skillAmnesiaComp.Exptorestore);
         }
     }
 

@@ -1,11 +1,6 @@
-using Content.Shared.FixedPoint;
-using Content.Shared.Roles;
-using Content.Shared.Storage;
 using Robust.Shared.Player;
-using Robust.Shared.Prototypes;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
-using Robust.Shared.GameStates;
 using Robust.Shared.Map;
+using Robust.Shared.Audio;
 
 namespace Content.Shared.Vanilla.TDM;
 
@@ -23,7 +18,17 @@ public sealed partial class TDMRuleComponent : Component
 
     [DataField]
     public TimeSpan TimeForPlayersJoin = TimeSpan.FromMinutes(1f);
-
+    [DataField]
+    public SoundSpecifier CountDownSound = new SoundPathSpecifier("/Audio/Vanilla/Effects/TDM/counting.ogg");
+    [DataField]
+    public SoundSpecifier FirstBloodSound = new SoundPathSpecifier("/Audio/Vanilla/Effects/TDM/Firstblood.ogg");
+    public Dictionary<int, SoundPathSpecifier> KillSounds = new()
+    {
+        { 2, new SoundPathSpecifier("/Audio/Vanilla/Effects/TDM/Doublekill.ogg") },
+        { 3, new SoundPathSpecifier("/Audio/Vanilla/Effects/TDM/TripleKill.ogg")  },
+        { 4, new SoundPathSpecifier("/Audio/Vanilla/Effects/TDM/UltraKill.ogg")  },
+        { 5, new SoundPathSpecifier("/Audio/Vanilla/Effects/TDM/Rampage.ogg")  },
+    };
     /// <summary>
     /// игроки, которые будут учавствовать в пвп
     /// </summary>

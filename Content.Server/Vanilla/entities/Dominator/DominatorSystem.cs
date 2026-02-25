@@ -4,20 +4,13 @@ using Content.Server.Ghost.Roles;
 using Content.Server.Ghost.Roles.Components;
 using Content.Server.Ghost;
 using Content.Shared.Vanilla.Dominator;
-using Content.Shared.Weapons.Ranged.Systems;
 using Content.Shared.Access.Components;
 using Content.Shared.Access.Systems;
-using Content.Shared.Inventory;
-using Content.Shared.PDA;
 using Content.Shared.Mind;
 using Content.Shared.Verbs;
 using Content.Shared.Interaction;
-using Robust.Shared.Audio.Systems;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
-using Robust.Shared.Utility;
-using Robust.Shared.Containers;
-using Robust.Shared.Random;
 using Robust.Shared.Prototypes;
 
 namespace Content.Server.Vanilla.Dominator;
@@ -111,7 +104,6 @@ public sealed class DominatorSystem : SharedDominatorSystem
     private void OnInteractUsing(EntityUid uid, DominatorComponent comp, InteractUsingEvent args)
     {
         var used = args.Used;
-        var user = args.User;
 
         if (!TryComp<IdCardComponent>(used, out var idCard))
             return;

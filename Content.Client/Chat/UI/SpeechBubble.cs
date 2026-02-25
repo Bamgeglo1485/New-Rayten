@@ -1,27 +1,22 @@
 using System.Numerics;
-using Content.Client.Chat.Managers;
 using Content.Client.Vanilla.VoiceSpeech;
 using Content.Shared.CCVar;
 using Content.Shared.Chat;
 using Content.Shared.Speech;
 using Content.Shared.Vanilla.VoiceSpeech;
-using Content.Shared.Audio;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Configuration;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
-using Robust.Shared.Audio.Systems;
-using Robust.Shared.Audio;
 using Robust.Shared.Prototypes;
 using System.Text.RegularExpressions;
-using System.Numerics;
 using System.Text;
 
 namespace Content.Client.Chat.UI
 {
-    public abstract class SpeechBubble : Control
+    public abstract partial class SpeechBubble : Control
     {
         [Dependency] private readonly IGameTiming _timing = default!;
         [Dependency] private readonly IEyeManager _eyeManager = default!;
@@ -70,7 +65,7 @@ namespace Content.Client.Chat.UI
 
         public Vector2 ContentSize { get; private set; }
         //Rayten-start
-        protected RichTextLabel? _textLabel;
+        protected RichTextLabel? TextLabel;
         private string _fullText = "";
         private int _revealedLength;
         private const float LetterDelay = 0.045f;
@@ -81,25 +76,25 @@ namespace Content.Client.Chat.UI
         private bool _wasBold = false;
         private IEntityManager _entMan = default!;
         private VoiceSpeechSystem _speechSys = default!;
-        protected virtual void InitializeText(ChatMessage message, Color? fontColor = null)
+        [GeneratedRegex(@"\[/?[a-zA-Z0-9#=]+\]")]
+        private static partial Regex BbTagRegex();
+        protected void InitializeText(ChatMessage message, Color? fontColor = null)
         {
             _fullText = SharedChatSystem.GetStringInsideTag(message, "BubbleContent");
-            if (_fullText.Contains("[bold]") && _fullText.Contains("[/bold]"))
-            {
-                _wasBold = true;
-            }
-            _fullText = _fullText.Replace("[bold]", "").Replace("[/bold]", "");
-            _fullText = Regex.Replace(_fullText, @"\[color=#(?:[0-9a-fA-F]{6}|[0-9a-fA-F]{8})\]", "");
-            _fullText = _fullText.Replace("[/color]", "");
+
+            // Проверяем bold ДО очистки
+            _wasBold = _fullText.Contains("[bold]", StringComparison.Ordinal);
+
+            // Удаляем ВСЕ BB-теги одним проходом
+            _fullText = BbTagRegex().Replace(_fullText, string.Empty);
 
             _fontColor = fontColor;
             _revealedLength = 0;
             _accumulatedTime = 0;
 
-            if (_textLabel != null)
-            {
-                _textLabel.SetMessage(FormatSpeech(_fullText, Color.FromHex("#00000000")));
-            }
+            TextLabel?.SetMessage(
+                FormatSpeech(_fullText, Color.FromHex("#00000000"))
+            );
         }
         //Rayten-end
         // man down
@@ -190,7 +185,7 @@ namespace Content.Client.Chat.UI
             // RAYTEN-START
             if (_entityManager.TryGetComponent<VoiceEmitterComponent>(_senderEntity, out var comp)
                 && comp.VoicePrototypeId != null
-                && _textLabel != null
+                && TextLabel != null
                 && _revealedLength < _fullText.Length)
             {
                 _accumulatedTime += args.DeltaSeconds;
@@ -237,7 +232,7 @@ namespace Content.Client.Chat.UI
 
                 var formatted = FormatSpeech(sb.ToString(), _fontColor);
                 formatted.AddMarkupOrThrow($"[color=#00000000]{hidden}[/color]");
-                _textLabel.SetMessage(formatted);
+                TextLabel.SetMessage(formatted);
             }
 
             // --- RAYTEN-END ---
@@ -308,6 +303,7 @@ namespace Content.Client.Chat.UI
             return FormatSpeech(SharedChatSystem.GetStringInsideTag(message, tag), fontColor);
         }
 
+
     }
 
     public sealed class TextSpeechBubble : SpeechBubble
@@ -351,7 +347,7 @@ namespace Content.Client.Chat.UI
             var withVoice = senderEntity != null && entMan.TryGetComponent<VoiceEmitterComponent>(senderEntity, out var comp) && comp.VoicePrototypeId != null;
             if (!ConfigManager.GetCVar(CCVars.ChatEnableFancyBubbles))
             {
-                _textLabel = new RichTextLabel//rayten-global-var
+                TextLabel = new RichTextLabel//rayten-global-var
                 {
                     MaxWidth = SpeechMaxWidth
                 };
@@ -360,13 +356,13 @@ namespace Content.Client.Chat.UI
                 if (withVoice)
                     InitializeText(message, fontColor);
                 else
-                    _textLabel.SetMessage(ExtractAndFormatSpeechSubstring(message, "BubbleContent", fontColor));
+                    TextLabel.SetMessage(ExtractAndFormatSpeechSubstring(message, "BubbleContent", fontColor));
                 //rayten-end
 
                 var unfanciedPanel = new PanelContainer
                 {
                     StyleClasses = { "speechBox", speechStyleClass },
-                    Children = { _textLabel },
+                    Children = { TextLabel },
                     ModulateSelfOverride = Color.White.WithAlpha(ConfigManager.GetCVar(CCVars.SpeechBubbleBackgroundOpacity)),
                 };
                 return unfanciedPanel;
@@ -378,7 +374,7 @@ namespace Content.Client.Chat.UI
                 Margin = new Thickness(1, 1, 1, 1),
             };
 
-            _textLabel = new RichTextLabel
+            TextLabel = new RichTextLabel
             {
                 ModulateSelfOverride = Color.White.WithAlpha(ConfigManager.GetCVar(CCVars.SpeechBubbleTextOpacity)),
                 MaxWidth = SpeechMaxWidth,
@@ -393,14 +389,14 @@ namespace Content.Client.Chat.UI
             if (withVoice)
                 InitializeText(message, fontColor);
             else
-                _textLabel.SetMessage(ExtractAndFormatSpeechSubstring(message, "BubbleContent", fontColor));
+                TextLabel.SetMessage(ExtractAndFormatSpeechSubstring(message, "BubbleContent", fontColor));
             //rayten-end
 
             //As for below: Some day this could probably be converted to xaml. But that is not today. -Myr
             var mainPanel = new PanelContainer
             {
                 StyleClasses = { "speechBox", speechStyleClass },
-                Children = { _textLabel },
+                Children = { TextLabel },
                 ModulateSelfOverride = Color.White.WithAlpha(ConfigManager.GetCVar(CCVars.SpeechBubbleBackgroundOpacity)),
                 HorizontalAlignment = HAlignment.Center,
                 VerticalAlignment = VAlignment.Bottom,

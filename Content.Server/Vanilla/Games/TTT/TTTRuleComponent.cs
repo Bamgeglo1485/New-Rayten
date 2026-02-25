@@ -8,11 +8,25 @@ using Robust.Shared.GameStates;
 using Robust.Shared.Map;
 using Content.Shared.Vanilla.Games.TTT;
 using Content.Shared.Vanilla.TDM;
+using Robust.Shared.Audio;
 namespace Content.Server.Vanilla.Games.TTT;
 
 [RegisterComponent]
 public sealed partial class TTTRuleComponent : Component
 {
+    [DataField]
+    public SoundSpecifier WinSound = new SoundPathSpecifier("/Audio/Vanilla/Effects/TTT/winsound.ogg");
+    [DataField]
+    public SoundSpecifier LoseSound = new SoundPathSpecifier("/Audio/Vanilla/Effects/TTT/losesound.ogg");
+    [DataField]
+    public SoundSpecifier TraitorBrief = new SoundPathSpecifier("/Audio/Ambience/Antag/traitor_start.ogg");
+    [DataField]
+    public SoundSpecifier InoBrief = new SoundPathSpecifier("/Audio/Ambience/Antag/traitor_start.ogg");
+    [DataField]
+    public SoundSpecifier DecBrief = new SoundPathSpecifier("/Audio/Vanilla/Effects/TTT/decbrief.ogg");
+
+
+
     [DataField]
     public TimeSpan NextUpdate;
 
@@ -51,8 +65,7 @@ public sealed partial class TTTRuleComponent : Component
 
     [DataField]
     public TDMMapPrototype? TDMProto = null;
-    
-    public int anoncments = 0;
+    public int Anoncments = 0;
 }
 
 public enum TTTStatus : byte

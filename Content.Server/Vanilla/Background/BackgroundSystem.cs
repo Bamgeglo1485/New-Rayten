@@ -1,23 +1,13 @@
-using Content.Server.Roles;
-using Content.Server.Ghost.Roles;
-using Content.Server.Administration.Systems;
 using Content.Shared.Administration;
-using Content.Server.Vanilla.Skill;
-using Content.Server.GameTicking.Events;
-using Content.Server.Preferences.Managers;
 using Content.Shared.Vanilla.Background;
 using Content.Shared.Vanilla.TDM;
 using Content.Shared.Vanilla.Skill;
-using Content.Shared.Roles;
-using Content.Shared.Preferences;
 using Robust.Shared.Prototypes;
-using Robust.Shared.Serialization;
 
 namespace Content.Server.Vanilla.Background;
 
 public sealed class BackGroundSystem : EntitySystem
 {
-    [Dependency] private readonly SharedSkillSystem _skill = default!;
     [Dependency] private readonly IPrototypeManager _prototype = default!;
     [Dependency] private readonly AdminFrozenSystem _freeze = default!;
 
@@ -72,11 +62,9 @@ public sealed class BackGroundSystem : EntitySystem
             Log.Error($"Не удалось найти предысторию с ID {msg.Background}");
         }
     }
-    private void ApplySpecials(EntityUid uid, List<BackgroundSpecial> Specials)
+    private void ApplySpecials(EntityUid uid, List<BackgroundSpecial> specials)
     {
-        foreach (var Special in Specials)
-        {
-            Special.apply(uid);
-        }
+        foreach (var special in specials)
+            special.Apply(uid);
     }
 }

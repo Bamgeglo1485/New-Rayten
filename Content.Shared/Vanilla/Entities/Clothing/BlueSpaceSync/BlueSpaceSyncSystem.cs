@@ -1,12 +1,8 @@
-using Content.Shared.Vanilla.Entities.BlueSpaceSync;
 using Content.Shared.Actions;
 using Content.Shared.Actions.Components;
-using Content.Shared.Actions;
 using Content.Shared.Stealth.Components;
 using Content.Shared.Movement.Systems;
 using Content.Shared.Stealth;
-using Content.Shared.Weapons.Ranged.Components;
-using Content.Shared.Movement.Systems;
 using Content.Shared.Projectiles;
 using Robust.Shared.Physics.Events;
 using Robust.Shared.Audio.Systems;

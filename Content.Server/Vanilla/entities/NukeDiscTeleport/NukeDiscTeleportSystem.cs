@@ -6,22 +6,21 @@ using Content.Shared.Station.Components;
 using Content.Shared.Nuke;
 using Content.Shared.Chat;
 using Robust.Shared.Audio.Systems;
-using Robust.Shared.Map;
 using Robust.Shared.Timing;
-using Robust.Shared.GameObjects;
+using Robust.Shared.Audio;
 
 namespace Content.Server.Vanilla.Nuke;
 
 public sealed class NukeDiskTeleportSystem : EntitySystem
 {
-    [Dependency] private readonly IEntityManager _entityManager = default!;
     [Dependency] private readonly IGameTiming _gameTiming = default!;
     [Dependency] private readonly ChatSystem _chat = default!;
     [Dependency] private readonly StationSystem _stationSystem = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly SpecialRespawnSystem _specialRespawn = default!;
-    [Dependency] protected readonly SharedTransformSystem TransformSystem = default!;
-
+    [Dependency] private readonly SharedTransformSystem _transformSystem = default!;
+    private static readonly SoundSpecifier BlinkSound = new SoundPathSpecifier("/Audio/Magic/blink.ogg");
+    private static readonly SoundSpecifier WarningSound = new SoundPathSpecifier("/Audio/Machines/Nuke/angry_beep.ogg");
     public override void Update(float frameTime)
     {
         var curTime = _gameTiming.CurTime;
@@ -40,7 +39,7 @@ public sealed class NukeDiskTeleportSystem : EntitySystem
             if (nuke.WillTpAt == null)
             {
                 nuke.WillTpAt = curTime + TimeSpan.FromSeconds(5);
-                _audio.PlayPvs("/Audio/Machines/Nuke/angry_beep.ogg", uid);
+                _audio.PlayPvs(WarningSound, uid);
                 _chat.TrySendInGameICMessage(uid, Loc.GetString("nukediscteleport-warning"),
                     InGameICChatType.Speak, true);
                 continue;
@@ -78,9 +77,6 @@ public sealed class NukeDiskTeleportSystem : EntitySystem
 
     private void TeleportNukeDisk(EntityUid uid)
     {
-        if (!_entityManager.TryGetComponent<TransformComponent>(uid, out var transform))
-            return;
-
         var query = EntityQueryEnumerator<StationDataComponent>();
         while (query.MoveNext(out var stationUid, out _))
         {
@@ -88,17 +84,14 @@ public sealed class NukeDiskTeleportSystem : EntitySystem
             if (largestGrid == null)
                 continue;
 
-            if (!HasComp<TransformComponent>(largestGrid.Value))
-                continue;
-
             // Ищем случайный безопасный тайл
             if (_specialRespawn.TryFindRandomTile(largestGrid.Value, stationUid, 10, out var targetCoords))
             {
-                _audio.PlayPvs("/Audio/Magic/blink.ogg", transform.Coordinates);
-                TransformSystem.SetCoordinates(uid, targetCoords);
+                _audio.PlayPvs(BlinkSound, Transform(uid).Coordinates);
+                _transformSystem.SetCoordinates(uid, targetCoords);
                 _chat.TrySendInGameICMessage(uid, Loc.GetString("nukediscteleport-teleported"),
                     InGameICChatType.Speak, true);
-                _audio.PlayPvs("/Audio/Magic/blink.ogg", uid);
+                _audio.PlayPvs(BlinkSound, uid);
                 return;
             }
             else
@@ -108,6 +101,5 @@ public sealed class NukeDiskTeleportSystem : EntitySystem
             }
         }
     }
-
 
 }

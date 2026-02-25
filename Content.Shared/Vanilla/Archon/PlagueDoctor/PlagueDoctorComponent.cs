@@ -92,7 +92,7 @@ public sealed partial class PlagueDoctorComponent : Component
     /// хэшсет прототипов которые мы оперировали, нельзя проводить операции над одними и теми же
     /// </summary>
     [ViewVariables, AutoNetworkedField]
-    public HashSet<string> OperatedProtos = [];
+    public HashSet<EntityPrototype> OperatedProtos = [];
     //акшен
     [DataField(customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
     public string ActionId = "Action049Surgery";

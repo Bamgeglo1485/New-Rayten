@@ -609,6 +609,14 @@ namespace Content.Server.GameTicking
             _replayRoundText = roundEndText;
         }
         //rayten-start
+        private static readonly Regex RegexColorTag =
+            new(@"\[color=.*?\](.*?)\[/color\]", RegexOptions.IgnoreCase | RegexOptions.Singleline | RegexOptions.Compiled);
+
+        private static readonly Regex RegexPercentSpacing =
+            new(@"\(\s*(\d+)\s*%\s*\)", RegexOptions.Compiled);
+
+        private static readonly Regex RegexExtraNewlines =
+            new(@"\n{3,}", RegexOptions.Compiled);
         private async void SendRoundEndDiscordMessage(string text, string gamemode, TimeSpan roundDuration)
         {
             try
@@ -661,12 +669,7 @@ namespace Content.Server.GameTicking
             text = text.Replace("был(а)", "—");
 
             // [color=...]text[/color]
-            text = Regex.Replace(
-                text,
-                @"\[color=.*?\](.*?)\[/color\]",
-                "$1",
-                RegexOptions.IgnoreCase | RegexOptions.Singleline
-            );
+            text = RegexColorTag.Replace(text, "$1");
 
             // Успех / Провал
             text = text.Replace("Успех!", "✅ Успех");
@@ -675,9 +678,9 @@ namespace Content.Server.GameTicking
             text = text.Replace("Провал!", "❌ Провал");
 
             // ( 100 % ) → (100%)
-            text = Regex.Replace(text, @"\(\s*(\d+)\s*%\s*\)", "($1%)");
+            text = RegexPercentSpacing.Replace(text, "($1%)");
             // 3+ пустых строк → 2
-            text = Regex.Replace(text, @"\n{3,}", "\n\n");
+            text = RegexExtraNewlines.Replace(text, "\n\n");
 
             return text.Trim();
         }

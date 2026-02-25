@@ -19,7 +19,7 @@ using System.Linq;
 
 namespace Content.Shared.Vanilla.Dominator;
 
-public class SharedDangerMobSystem : EntitySystem
+public abstract class SharedDangerMobSystem : EntitySystem
 {
     [Dependency] private readonly InventorySystem _inventory = default!;
     [Dependency] private readonly SharedHandsSystem _hands = default!;
@@ -27,9 +27,9 @@ public class SharedDangerMobSystem : EntitySystem
     [Dependency] private readonly SharedCombatModeSystem _combat = default!;
 
     #region API
-    public bool TryGetDangeriousItem(EntityUid target, [NotNullWhen(true)] out EntityUid? MostDangerousItem)
+    public bool TryGetDangeriousItem(EntityUid target, [NotNullWhen(true)] out EntityUid? mostDangerousItem)
     {
-        MostDangerousItem = null;
+        mostDangerousItem = null;
 
         if (!TryComp<DangerMobComponent>(target, out var dangerComp))
             return false;
@@ -37,7 +37,7 @@ public class SharedDangerMobSystem : EntitySystem
         if (dangerComp.MaxDanger)
             return false;
 
-        return CalculateDeepDanger(target, dangerComp, out MostDangerousItem) > 0;
+        return CalculateDeepDanger(target, dangerComp, out mostDangerousItem) > 0;
     }
 
     public int GetEntityDanger(EntityUid target, bool deepseek = false)

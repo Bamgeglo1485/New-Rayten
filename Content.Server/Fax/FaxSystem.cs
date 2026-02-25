@@ -330,7 +330,6 @@ public sealed class FaxSystem : EntitySystem
                         return;
 
                     args.Data.TryGetValue(FaxConstants.FaxSenderUidData, out EntityUid senderUid);
-                    bool isFarFax = false;
                     var recieverMap = Transform(uid).MapID;
                     var senderMap = Transform(senderUid).MapID;
 

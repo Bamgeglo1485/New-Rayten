@@ -1,18 +1,18 @@
-using Content.Server.Power.Components;
-using Content.Server.Wires;
+// using Content.Server.Power.Components; rayten
+// using Content.Server.Wires; rayten
 using Content.Shared.DeviceLinking.Events;
 using Content.Shared.Doors.Components;
 using Content.Shared.Doors.Systems;
 using Content.Shared.Interaction;
 using Content.Shared.Power;
-using Content.Shared.Wires;
-using Robust.Shared.Player;
+// using Content.Shared.Wires; rayten
+// using Robust.Shared.Player; rayten
 
 namespace Content.Server.Doors.Systems;
 
 public sealed class AirlockSystem : SharedAirlockSystem
 {
-    [Dependency] private readonly WiresSystem _wiresSystem = default!;
+    // [Dependency] private readonly WiresSystem _wiresSystem = default!; rayten
 
     public override void Initialize()
     {

@@ -17,6 +17,7 @@ namespace Content.Client.Vanilla.Bureaucracy
         [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
         [Dependency] private readonly HandsSystem _handSystem = default!;
         [Dependency] private readonly SharedSkillSystem _skill = default!;
+        private const string BaseCategory = "BaseBuro";
 
         public override void Initialize()
         {
@@ -65,18 +66,18 @@ namespace Content.Client.Vanilla.Bureaucracy
             }
             args.ExtraCategories.Add(VerbCategory.Bureaucracy);
 
-            if (_prototypeManager.TryIndex<BureaucracyDocumentPrototype>("BaseBuro", out var BaseBuro))
+            if (_prototypeManager.TryIndex<BureaucracyDocumentPrototype>(BaseCategory, out var baseBuro))
             {
                 var baseVerb = new Verb
                 {
-                    Text = Loc.GetString(BaseBuro.label),
-                    Category = BaseBuro.GetCategory(),
-                    Priority = BaseBuro.Priority,
+                    Text = Loc.GetString(baseBuro.Label),
+                    Category = baseBuro.GetCategory(),
+                    Priority = baseBuro.Priority,
                     Icon = null,
                     ClientExclusive = true,
                     Act = () =>
                     {
-                        HandleWriteAction(args.Target, BaseBuro.ID);
+                        HandleWriteAction(args.Target, baseBuro.ID);
                     }
                 };
                 args.Verbs.Add(baseVerb);
@@ -88,7 +89,7 @@ namespace Content.Client.Vanilla.Bureaucracy
             {
                 var documentSubVerb = new Verb
                 {
-                    Text = Loc.GetString(document.label),
+                    Text = Loc.GetString(document.Label),
                     Category = document.GetCategory(),
                     Priority = document.Priority,
                     Icon = null,
@@ -105,9 +106,9 @@ namespace Content.Client.Vanilla.Bureaucracy
         }
 
         // Обработка действия "Записать" на бумаге
-        private void HandleWriteAction(EntityUid target, string ID)
+        private void HandleWriteAction(EntityUid target, string iD)
         {
-            RaiseNetworkEvent(new RequestWriteOnDockEvent(GetNetEntity(target), ID));
+            RaiseNetworkEvent(new RequestWriteOnDockEvent(GetNetEntity(target), iD));
         }
 
         // Проверка наличия ручки у игрока

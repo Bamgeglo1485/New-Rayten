@@ -199,7 +199,7 @@ public sealed class ShyGuySystem : EntitySystem
         return Resolve(uid, ref component, false) && component.State == ShyGuyState.Rage;
     }
 
-    protected bool IsReachable(EntityUid uid, EntityUid user, ShyGuyComponent comp, bool strictly = true)
+    private bool IsReachable(EntityUid uid, EntityUid user, ShyGuyComponent comp, bool strictly = true)
     {
         if (user == uid)
             return false;

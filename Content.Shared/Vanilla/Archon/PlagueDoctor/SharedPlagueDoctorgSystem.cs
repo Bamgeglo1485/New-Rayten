@@ -23,7 +23,7 @@ namespace Content.Shared.Vanilla.Archon.PlagueDoctor;
 public abstract class SharedPlagueDoctorgSystem : EntitySystem
 {
     [Dependency] protected readonly SharedPopupSystem Popup = default!;
-    [Dependency] protected readonly SharedBlindPredatorSystem blindPredator = default!;
+    [Dependency] protected readonly SharedBlindPredatorSystem BlindPredator = default!;
     [Dependency] private readonly AlertsSystem _alerts = default!;
     [Dependency] private readonly MobStateSystem _mob = default!;
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
@@ -70,12 +70,12 @@ public abstract class SharedPlagueDoctorgSystem : EntitySystem
             return;
         var target = args.Target;
 
-        if (blindPredator.IsVisibleByPredator(target, uid))
+        if (BlindPredator.IsVisibleByPredator(target, uid))
             return;
 
         if (TryComp<PredatorVisibleMarkComponent>(target, out var mark))
         {
-            blindPredator.SetVisibility(target, uid, true, mark);
+            BlindPredator.SetVisibility(target, uid, true, mark);
             ChangePestilence(uid, comp, 20);
             args.Handled = true;
         }
@@ -98,7 +98,7 @@ public abstract class SharedPlagueDoctorgSystem : EntitySystem
                     EnsureComp<ZombifyOnDeathComponent>(target);
             }
 
-            if (HasComp<HumanoidProfileComponent>(target) && !blindPredator.IsVisibleByPredator(target, uid))
+            if (HasComp<HumanoidProfileComponent>(target) && !BlindPredator.IsVisibleByPredator(target, uid))
                 continue;
 
             _audio.PlayPredicted(comp.HitSound, target, uid);
@@ -177,7 +177,8 @@ public abstract class SharedPlagueDoctorgSystem : EntitySystem
         }
 
         // нельзя оперировать одних и тех же
-        if (TryComp<MetaDataComponent>(target, out var meta) && meta.EntityPrototype != null && comp.OperatedProtos.Contains(meta.EntityPrototype.ID))
+        var proto = MetaData(target).EntityPrototype;
+        if (proto != null && comp.OperatedProtos.Contains(proto))
         {
             Popup.PopupClient(Loc.GetString("archon049-surgery-target-was-surgery"), target, uid, PopupType.Medium);
             return;
@@ -214,10 +215,10 @@ public abstract class SharedPlagueDoctorgSystem : EntitySystem
 
         if (TryComp<ArchonComponent>(uid, out var archon))
             _archon.ExtractResearchPoints((uid, archon));
-
-        if (TryComp<MetaDataComponent>(args.Args.Target, out var meta) && meta.EntityPrototype != null)
+        var proto = MetaData(args.Args.Target.Value).EntityPrototype;
+        if (proto != null)
         {
-            comp.OperatedProtos.Add(meta.EntityPrototype.ID);
+            comp.OperatedProtos.Add(proto);
             Dirty(uid, comp);
         }
         args.Handled = true;

@@ -34,8 +34,7 @@ namespace Content.Shared.Preferences
     {
         public static readonly ProtoId<SpeciesPrototype> DefaultSpecies = "Human";
         private static readonly Regex RestrictedNameRegex = new("[^А-Яа-яёЁ0-9' -]"); // Rayten-Localization
-                                                                                      // Rayten-Start
-        private ISawmill? _sawmill;//удалить
+        // Rayten-Start
         public const string DefaultVoice = "Papyrus";
         public const float DefaultVoicePitch = 1.0f;
         public static readonly Dictionary<Sex, string> DefaultSexVoice = new()

@@ -1,7 +1,6 @@
 using Content.Server.GameTicking;
 using Content.Server.Station.Systems;
 using Content.Server.Spawners.Components;
-using Content.Server.Ghost.Roles.Components;
 using Content.Server.Administration.Logs;
 using Content.Server.Chat.Systems;
 using Content.Server.Vanilla.Jammer;
@@ -10,22 +9,14 @@ using Content.Server.Popups;
 using Content.Shared.Access.Systems;
 using Content.Shared.Access.Components;
 using Content.Shared.Communications;
-using Content.Shared.GameTicking;
-using Content.Shared.Ghost.Roles.Components;
-using Content.Shared.Storage;
 using Content.Shared.Database;
 using Robust.Server.Player;
 using Robust.Server.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
-using Robust.Shared.Serialization.Manager;
-using Robust.Shared.EntitySerialization;
 using Robust.Shared.EntitySerialization.Systems;
-using Robust.Shared.Map.Components;
 using Robust.Shared.Utility;
-using System.Linq;
-using System.Numerics;
 namespace Content.Server.Vanilla.EventTeam;
 
 public sealed class EventTeamSystem : EntitySystem
@@ -38,13 +29,12 @@ public sealed class EventTeamSystem : EntitySystem
     [Dependency] private readonly GameTicker _gameTicker = default!;
     [Dependency] private readonly MapLoaderSystem _map = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly IComponentFactory _componentFactory = default!;
-    [Dependency] private readonly ISerializationManager _serialization = default!;
     [Dependency] private readonly ChatSystem _chatSystem = default!;
     [Dependency] private readonly JammerSystem _jammer = default!;
     [Dependency] private readonly IAdminLogManager _adminLogger = default!;
     [Dependency] private readonly MetaDataSystem _metaData = default!;
     [Dependency] private readonly StationSystem _stationSystem = default!;
+
     public override void Initialize()
     {
         base.Initialize();
@@ -180,45 +170,33 @@ public sealed class EventTeamSystem : EntitySystem
             return;
         }
 
-        station.Value.SpawnTimer(TimeSpan.FromMinutes(10f), () => call("ERT", ertcomp.Entity));
+        Call("ERT", ertcomp.Entity);
 
         ertcomp.ERTCalled = true;
 
-        var sender = Loc.GetString("chat-manager-sender-announcement");
-        _chatSystem.DispatchGlobalAnnouncement(
-            Loc.GetString("comms-console-ert-call"),
-            sender
-        );
+        // var sender = Loc.GetString("chat-manager-sender-announcement");
+        // _chatSystem.DispatchGlobalAnnouncement(
+        //     Loc.GetString("comms-console-ert-call"),
+        //     sender
+        // );
         _adminLogger.Add(LogType.Action, LogImpact.Extreme, $"{ToPrettyString(user):player} has called ERT");
     }
 
-    public bool call(ProtoId<EventTeamPrototype> protoId, EntityUid? shipyard, bool igonrejammer = false)
+    public bool Call(ProtoId<EventTeamPrototype> protoId, EntityUid? shipyard, bool igonrejammer = false)
     {
         if (!_prototypes.TryIndex(protoId, out var prototype))
-        {
-            Logger.Error($"Ошибка в протипе");
             return false;
-        }
 
         if (_gameTicker.RunLevel != GameRunLevel.InRound)
-        {
-            Logger.Warning($"Мы в лобби?");
             return false;
-        }
 
         var (isjammeractive, timetobreak) = _jammer.CheckJammer();
 
         if (!igonrejammer && isjammeractive)
-        {
-            Logger.Info($"Установлена глушилка, блокирующая спавн ");
             return false;
-        }
 
         if (shipyard == null)
-        {
-            Logger.Error($"Верфи ДСО не существует");
             return false;
-        }
 
         SpawnEventRoles(prototype, shipyard.Value);
 
@@ -239,7 +217,7 @@ public sealed class EventTeamSystem : EntitySystem
     private void SpawnEventRoles(EventTeamPrototype proto, EntityUid shipyard)
     {
         var query = EntityQueryEnumerator<SpawnPointComponent, MetaDataComponent, TransformComponent>();
-        var Regularmarkers = new List<EntityCoordinates>();
+        var regularmarkers = new List<EntityCoordinates>();
         while (query.MoveNext(out _, out var meta, out var trans))
         {
             if (trans.GridUid != shipyard)
@@ -247,15 +225,15 @@ public sealed class EventTeamSystem : EntitySystem
 
             if (meta.EntityPrototype!.ID == "MarkerEventRegularRole")
             {
-                Regularmarkers.Add(trans.Coordinates);
+                regularmarkers.Add(trans.Coordinates);
             }
 
         }
-        if (Regularmarkers.Count == 0)
-            Regularmarkers.Add(Transform(shipyard).Coordinates);
+        if (regularmarkers.Count == 0)
+            regularmarkers.Add(Transform(shipyard).Coordinates);
 
         SpawnSpecialUnits(proto, shipyard);
-        SpawnRegularUnits(proto, Regularmarkers);
+        SpawnRegularUnits(proto, regularmarkers);
     }
 
     private void SpawnSpecialUnits(EventTeamPrototype proto, EntityUid shuttle)
@@ -295,15 +273,15 @@ public sealed class EventTeamSystem : EntitySystem
         if (string.IsNullOrEmpty(proto.RegularUnit))
             return;
 
-        int playerCount = _playerManager.PlayerCount;
+        var playerCount = _playerManager.PlayerCount;
 
         //сколько юнитов должно быть заспавнено исходя из формулы? Минимум 1 челик.
-        int RegularUnitsCount = 1;
+        var regularUnitsCount = 1;
 
-        if(playerCount>proto.MaxRegularUnitAmount && proto.MaxRegularUnitAmount>0)
-            RegularUnitsCount = playerCount/proto.SpawnPerPlayers;
+        if (playerCount > proto.MaxRegularUnitAmount && proto.MaxRegularUnitAmount > 0)
+            regularUnitsCount = playerCount / proto.SpawnPerPlayers;
 
-        int counter = Math.Min(RegularUnitsCount, proto.MaxRegularUnitAmount);
+        var counter = Math.Min(regularUnitsCount, proto.MaxRegularUnitAmount);
 
         while (counter > 0)
         {

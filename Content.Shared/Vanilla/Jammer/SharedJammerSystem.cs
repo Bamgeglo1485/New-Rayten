@@ -1,23 +1,19 @@
 using Content.Shared.Vanilla.Background;
 using Content.Shared.UserInterface;
 using Content.Shared.Popups;
-using Robust.Shared.Network;
-using Robust.Shared.Serialization;
 using Robust.Shared.Timing;
 
 namespace Content.Shared.Vanilla.Jammer;
 
-public class SharedJammerSystem : EntitySystem
+public abstract class SharedJammerSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] protected readonly IGameTiming Timing = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
 
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<OverrideJammerTimeEvent>(Onoverride);
-        SubscribeLocalEvent<SetJammerOnSpawnComponent, MapInitEvent>(SetJammerOnSpawn);
-        SubscribeLocalEvent<RequiresNoJammerComponent, ActivatableUIOpenAttemptEvent>(OnActivate);//Открытие интерфейса
+        SubscribeLocalEvent<RequiresNoJammerComponent, ActivatableUIOpenAttemptEvent>(OnActivate);
     }
 
     private void OnActivate(EntityUid uid, RequiresNoJammerComponent component, ref ActivatableUIOpenAttemptEvent args)
@@ -25,7 +21,7 @@ public class SharedJammerSystem : EntitySystem
         if (args.Cancelled)
             return;
 
-        var (isjammeractive, timetobreak) = CheckJammer();
+        var (isjammeractive, _) = CheckJammer();
 
         if (!isjammeractive)
             return;
@@ -33,29 +29,6 @@ public class SharedJammerSystem : EntitySystem
         _popup.PopupCursor("Блюспейс-система заблокирована. Попробуйте позже.");
         args.Cancel();
     }
-
-
-    private void SetJammerOnSpawn(EntityUid uid, SetJammerOnSpawnComponent component, MapInitEvent args)
-    {
-        SetJammer(component.Duration);
-    }
-
-    public void SetJammer(TimeSpan duration, EntityUid? station = null)
-    {
-        var newendtime = _timing.CurTime + duration;
-        var query = EntityQueryEnumerator<StationJammerComponent>();
-        while (query.MoveNext(out var stationUid, out var jammer))
-        {
-            if (station != null && station != stationUid)
-                continue;
-
-            if (jammer.JammerEndTime == null || newendtime > jammer.JammerEndTime)
-                jammer.JammerEndTime = newendtime;
-
-            Dirty(stationUid, jammer);
-        }
-    }
-
     public void RemoveJammer(EntityUid? station = null)
     {
         var query = EntityQueryEnumerator<StationJammerComponent>();
@@ -71,7 +44,7 @@ public class SharedJammerSystem : EntitySystem
 
     public (bool isActive, TimeSpan timetobreak) CheckJammer(EntityUid? station = null)
     {
-        var curtime = _timing.CurTime;
+        var curtime = Timing.CurTime;
         var query = EntityQueryEnumerator<StationJammerComponent>();
         while (query.MoveNext(out var stationUid, out var jammer))
         {
@@ -85,16 +58,9 @@ public class SharedJammerSystem : EntitySystem
                 else
                     return (true, jammer.JammerEndTime.Value - curtime);
             }
-
         }
         return (false, TimeSpan.Zero);
     }
-
-    private void Onoverride(OverrideJammerTimeEvent ev)
-    {
-        SetJammer(TimeSpan.FromMinutes(ev.Minutes));
-    }
-
 }
 
 [DataDefinition]

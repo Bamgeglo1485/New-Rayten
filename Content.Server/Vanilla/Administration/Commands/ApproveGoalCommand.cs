@@ -2,9 +2,7 @@ using Content.Server.Administration;
 using Content.Server.Administration.Logs;
 using Content.Server.Vanilla.DepartmentGoal;
 using Content.Shared.Administration;
-using Content.Shared.Cargo.Prototypes;
 using Robust.Shared.Console;
-using Robust.Shared.IoC;
 using Robust.Shared.Prototypes;
 using System.Linq;
 
@@ -13,9 +11,7 @@ namespace Content.Server.Vanilla.Administration.Commands;
 [AdminCommand(AdminFlags.Admin)]
 public sealed class ApproveGoalCommand : IConsoleCommand
 {
-    [Dependency] private readonly IAdminLogManager _adminLogger = default!;
     [Dependency] private readonly IEntitySystemManager _entitySystemManager = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
 
     public string Command => "approveGoal";
     public string Description => "Принять цель как выполненную и выдать награду";
@@ -66,7 +62,7 @@ public sealed class ApproveGoalCommand : IConsoleCommand
         if (departmentGoalSystem._depGoals.TryGetValue(stationUid, out var goalsList))
         {
             goalsList.Remove(foundGoal);
-            
+
             // Если у станции больше нет целей, можно удалить её из словаря
             if (goalsList.Count == 0)
             {
@@ -79,7 +75,7 @@ public sealed class ApproveGoalCommand : IConsoleCommand
         if (args.Length == 1)
         {
             var departmentGoalSystem = _entitySystemManager.GetEntitySystem<DepartmentGoalSystem>();
-            
+
             var goalIds = departmentGoalSystem._depGoals
                 .SelectMany(kv => kv.Value)  // Выбираем все списки целей
                 .Select(g => g.ID)           // Берём ID каждой цели

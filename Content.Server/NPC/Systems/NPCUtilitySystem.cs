@@ -36,7 +36,6 @@ using Content.Shared.Temperature.Components;
 
 using Content.Server.Vanilla.Dominator;
 using Content.Server.Vanilla.Danger;
-using Content.Server.Vanilla.NPC.Queries.Considerations;
 using Content.Shared.Security.Components;
 
 using Robust.Shared.Timing;

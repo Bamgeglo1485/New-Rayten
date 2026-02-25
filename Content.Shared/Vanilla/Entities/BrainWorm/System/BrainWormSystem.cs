@@ -4,9 +4,6 @@ using Content.Shared.Actions.Components;
 using Content.Shared.Vanilla.Voices;
 using Content.Shared.DoAfter;
 using Content.Shared.Chemistry.EntitySystems;
-using Content.Shared.Chemistry.Components;
-using Content.Shared.Chemistry.Reaction;
-using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Body.Components;
 using Content.Shared.Movement.Events;
 using Content.Shared.Mobs;
@@ -15,25 +12,22 @@ using Content.Shared.Popups;
 using Content.Shared.Sprite;
 using Content.Shared.Atmos.Components;
 using Content.Shared.Body;
-using Content.Shared.Body.Components;
 using Robust.Shared.Timing;
-using Robust.Shared.Utility;
 using Robust.Shared.Containers;
 using Robust.Shared.Prototypes;
-using System.Numerics;
 
 namespace Content.Shared.Vanilla.Entities.BrainWorm;
 
 public abstract partial class SharedBrainWormSystem : EntitySystem
 {
     [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] protected readonly SharedActionsSystem _action = default!;
-    [Dependency] protected readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] protected readonly SharedPopupSystem _popup = default!;
-    [Dependency] protected readonly SharedScaleVisualsSystem _scaleVisuals = default!;
+    [Dependency] protected readonly SharedActionsSystem Action = default!;
+    [Dependency] protected readonly SharedDoAfterSystem DoAfter = default!;
+    [Dependency] protected readonly SharedPopupSystem Popup = default!;
+    [Dependency] protected readonly SharedScaleVisualsSystem ScaleVisuals = default!;
     [Dependency] private readonly BodySystem _body = default!;
-    [Dependency] protected readonly IGameTiming _timing = default!;
-    [Dependency] protected readonly MobStateSystem _mob = default!;
+    [Dependency] protected readonly IGameTiming Timing = default!;
+    [Dependency] protected readonly MobStateSystem Mob = default!;
     [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
     [Dependency] private readonly InjectorSystem _injector = default!;
 
@@ -152,12 +146,12 @@ public abstract partial class SharedBrainWormSystem : EntitySystem
 
         // Меняем акшенсы
         var actions = new Entity<ActionsComponent?>(uid, comp);
-        _action.RemoveAction(actions, component.ActionEjectBrainEntity);
-        _action.RemoveAction(actions, component.ActionWormShopEntity);
-        _action.RemoveAction(actions, component.ActionWormChemicalsEntity);
-        _action.RemoveAction(actions, component.ActionMindControlEntity);
+        Action.RemoveAction(actions, component.ActionEjectBrainEntity);
+        Action.RemoveAction(actions, component.ActionWormShopEntity);
+        Action.RemoveAction(actions, component.ActionWormChemicalsEntity);
+        Action.RemoveAction(actions, component.ActionMindControlEntity);
 
-        _action.AddAction(uid, ref component.ActionInsertBrainEntity, component.ActionInsertBrain, component: comp);
+        Action.AddAction(uid, ref component.ActionInsertBrainEntity, component.ActionInsertBrain, component: comp);
 
         // Удаляем приватное общение
         RemComp<PrivateTalkComponent>(uid);
@@ -187,11 +181,11 @@ public abstract partial class SharedBrainWormSystem : EntitySystem
         {
             var actions = new Entity<ActionsComponent?>(worm, comp);
 
-            _action.AddAction(worm, ref wormcomp.ActionEjectBrainEntity, wormcomp.ActionEjectBrain, component: comp);
-            _action.AddAction(worm, ref wormcomp.ActionWormShopEntity, BrainWormShopId, component: comp);
-            _action.AddAction(worm, ref wormcomp.ActionWormChemicalsEntity, BrainWormChemicalsId, component: comp);
-            _action.AddAction(worm, ref wormcomp.ActionMindControlEntity, wormcomp.ActionMindControl, component: comp);
-            _action.RemoveAction(actions, wormcomp.ActionInsertBrainEntity);
+            Action.AddAction(worm, ref wormcomp.ActionEjectBrainEntity, wormcomp.ActionEjectBrain, component: comp);
+            Action.AddAction(worm, ref wormcomp.ActionWormShopEntity, BrainWormShopId, component: comp);
+            Action.AddAction(worm, ref wormcomp.ActionWormChemicalsEntity, BrainWormChemicalsId, component: comp);
+            Action.AddAction(worm, ref wormcomp.ActionMindControlEntity, wormcomp.ActionMindControl, component: comp);
+            Action.RemoveAction(actions, wormcomp.ActionInsertBrainEntity);
         }
         args.Handled = true;
     }
@@ -232,19 +226,19 @@ public abstract partial class SharedBrainWormSystem : EntitySystem
             return;
 
         var actions = new Entity<ActionsComponent?>(uid, comp);
-        _action.RemoveAction(actions, component.ActionBrainWormReproduceEntity);
+        Action.RemoveAction(actions, component.ActionBrainWormReproduceEntity);
 
         RemComp<PrivateTalkComponent>(component.MindCage);
     }
 
     private void OnMapInit(EntityUid uid, BrainWormComponent component, MapInitEvent args)
     {
-        component.NextChemicalsTime = _timing.CurTime;
-        var scale = _scaleVisuals.GetSpriteScale(uid) * 0.5f;
-        _scaleVisuals.SetSpriteScale(uid, scale);
+        component.NextChemicalsTime = Timing.CurTime;
+        var scale = ScaleVisuals.GetSpriteScale(uid) * 0.5f;
+        ScaleVisuals.SetSpriteScale(uid, scale);
         if (!TryComp(uid, out ActionsComponent? comp))
             return;
-        _action.AddAction(uid, ref component.ActionInsertBrainEntity, component.ActionInsertBrain, component: comp);
+        Action.AddAction(uid, ref component.ActionInsertBrainEntity, component.ActionInsertBrain, component: comp);
     }
 
     private void OnShutdown(EntityUid uid, BrainWormComponent component, ComponentShutdown args)
@@ -256,14 +250,14 @@ public abstract partial class SharedBrainWormSystem : EntitySystem
         if (!TryComp(uid, out ActionsComponent? comp))
             return;
         var actions = new Entity<ActionsComponent?>(uid, comp);
-        _action.RemoveAction(actions, component.ActionInsertBrainEntity);
+        Action.RemoveAction(actions, component.ActionInsertBrainEntity);
     }
 
     //Корректно завершает все дуафтеры
     protected void CancelDoAfter(BrainWormComponent wormComp)
     {
-        _doAfter.Cancel(wormComp.EjectDoAfter);
-        _doAfter.Cancel(wormComp.MindControlDoAfter);
+        DoAfter.Cancel(wormComp.EjectDoAfter);
+        DoAfter.Cancel(wormComp.MindControlDoAfter);
         wormComp.EjectDoAfter = null;
         wormComp.MindControlDoAfter = null;
     }
@@ -281,7 +275,7 @@ public abstract partial class SharedBrainWormSystem : EntitySystem
             Hidden = true
         };
 
-        if (!_doAfter.TryStartDoAfter(doAfterEventArgs, out hostcomp.ReControlDoAfter))
+        if (!DoAfter.TryStartDoAfter(doAfterEventArgs, out hostcomp.ReControlDoAfter))
             return;
 
         component.IsEscaping = true;

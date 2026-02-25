@@ -13,12 +13,9 @@ namespace Content.Client.Vanilla.Overlays.ThermalVision;
 
 public sealed class ThermalVisionOverlay : Overlay
 {
-    [Dependency] protected readonly IEntityManager Entity = default!;
-    [Dependency] protected readonly IPlayerManager PlayerManager = default!;
-
-    /// <summary> Defines radius in which you can see entities in containers </summary>
-    protected float ShowCloseRadius;
-    protected float ShowRadius;
+    [Dependency] private readonly IEntityManager _entity = default!;
+    [Dependency] private readonly IPlayerManager _playerManager = default!;
+    private readonly float _showRadius;
 
     private readonly EntityLookupSystem _entityLookup;
     private readonly TransformSystem _transformSystem;
@@ -28,24 +25,24 @@ public sealed class ThermalVisionOverlay : Overlay
     public ThermalVisionOverlay(float showRadius)
     {
         IoCManager.InjectDependencies(this);
-        _entityLookup = Entity.System<EntityLookupSystem>();
-        _transformSystem = Entity.System<TransformSystem>();
-        ShowRadius = showRadius;
+        _entityLookup = _entity.System<EntityLookupSystem>();
+        _transformSystem = _entity.System<TransformSystem>();
+        _showRadius = showRadius;
     }
 
     protected override void Draw(in OverlayDrawArgs args)
     {
-        if (PlayerManager.LocalEntity == null)
+        if (_playerManager.LocalEntity == null)
             return;
 
-        if (!Entity.TryGetComponent<TransformComponent>(PlayerManager.LocalEntity, out var playerTransform))
+        if (!_entity.TryGetComponent<TransformComponent>(_playerManager.LocalEntity, out var playerTransform))
             return;
 
         var handle = args.WorldHandle;
         var eye = args.Viewport.Eye;
         var eyeRot = eye?.Rotation ?? default;
 
-        var entities = _entityLookup.GetEntitiesInRange<MobStateComponent>(playerTransform.Coordinates, ShowRadius);
+        var entities = _entityLookup.GetEntitiesInRange<MobStateComponent>(playerTransform.Coordinates, _showRadius);
         foreach (var (uid, stateComp) in entities)
         {
             if (CantBeRendered(uid, out var sprite, out var xform))
@@ -96,9 +93,9 @@ public sealed class ThermalVisionOverlay : Overlay
         sprite = null;
         xform = null;
 
-        if (!Entity.TryGetComponent<SpriteComponent>(target, out sprite))
+        if (!_entity.TryGetComponent<SpriteComponent>(target, out sprite))
             return true;
-        if (!Entity.TryGetComponent<TransformComponent>(target, out xform))
+        if (!_entity.TryGetComponent<TransformComponent>(target, out xform))
             return true;
 
         return false;

@@ -8,9 +8,8 @@ namespace Content.Shared.Vanilla.Sponsor;
 public sealed class SharedSponsorManager
 {
     [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly ILogManager _log = default!;
     private readonly Dictionary<NetUserId, sponsorRank> _ranks = [];
-    private sponsorRank _Clientrank = sponsorRank.None;
+    private sponsorRank _clientrank = sponsorRank.None;
     private readonly Dictionary<sponsorRank, HashSet<string>> _rankToPrototypes = [];
     public void Initialize()
     {
@@ -24,13 +23,13 @@ public sealed class SharedSponsorManager
     #region АПИШКИ
     public HashSet<string> GetSponsorPrototypes()
     {
-        return GetPrototypesForRank(_Clientrank);
+        return GetPrototypesForRank(_clientrank);
     }
 
     public HashSet<string> GetSponsorPrototypes(NetUserId userId)
     {
         if (_net.IsClient)
-            return GetPrototypesForRank(_Clientrank);
+            return GetPrototypesForRank(_clientrank);
 
         return _ranks.TryGetValue(userId, out var rank) ? GetPrototypesForRank(rank) : [];
     }
@@ -83,7 +82,7 @@ public sealed class SharedSponsorManager
 
     private void OnClientSponsorSet(SetSponsorRank message)
     {
-        _Clientrank = message.rank;
+        _clientrank = message.rank;
         Logger.Info($"Получен спонсорский ранг {message.rank}");
     }
     private HashSet<string> GetPrototypesForRank(sponsorRank rank)

@@ -34,7 +34,6 @@ public sealed class WiresSystem : SharedWiresSystem
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly ConstructionSystem _construction = default!;
     [Dependency] private readonly SharedSkillSystem _skill = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
 
     private static readonly ProtoId<ToolQualityPrototype> CuttingQuality = "Cutting";
     private static readonly ProtoId<ToolQualityPrototype> PulsingQuality = "Pulsing";

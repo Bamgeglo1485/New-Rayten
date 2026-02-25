@@ -73,7 +73,7 @@ public sealed class PlagueDoctorgSystem : SharedPlagueDoctorgSystem
 
         var victimQuery = EntityQueryEnumerator<PredatorVisibleMarkComponent>();
         while (victimQuery.MoveNext(out var victim, out var mark))
-            blindPredator.SetVisibility(victim, uid, true, mark);
+            BlindPredator.SetVisibility(victim, uid, true, mark);
     }
 
     protected override void MakeRage(EntityUid uid, PlagueDoctorComponent comp)

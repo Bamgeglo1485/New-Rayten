@@ -1,20 +1,9 @@
-
-using Content.Shared.Audio;
 using Content.Shared.Chat;
 using Content.Shared.Corvax.CCCVars;
 using Content.Shared.Vanilla.VoiceSpeech;
-using Robust.Shared.Random;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Configuration;
-using Robust.Shared.Map;
-using Robust.Shared.Timing;
-using Robust.Shared.Prototypes;
-using Robust.Client.Player;
-using Robust.Client.GameObjects;
-using Content.Client.Examine;
-using Robust.Client.Graphics;
-using System.Linq;
 
 namespace Content.Client.Vanilla.VoiceSpeech;
 
@@ -22,8 +11,7 @@ public sealed class VoiceSpeechSystem : EntitySystem
 {
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    public float _volume = 0.0f;
+    public float Volume = 0.0f;
 
     public override void Initialize()
     {
@@ -50,10 +38,10 @@ public sealed class VoiceSpeechSystem : EntitySystem
 
     public float AdjustVolume(bool isWhisper, float baseVolume)
     {
-        if (_volume == 0)
+        if (Volume == 0)
             baseVolume = 0;
 
-        float volume = -10f + SharedAudioSystem.GainToVolume(_volume + baseVolume);
+        var volume = -10f + SharedAudioSystem.GainToVolume(Volume + baseVolume);
 
         if (isWhisper)
             volume -= SharedAudioSystem.GainToVolume(5f);
@@ -69,6 +57,6 @@ public sealed class VoiceSpeechSystem : EntitySystem
 
     private void OnTtsVolumeChanged(float volume)
     {
-        _volume = volume;
+        Volume = volume;
     }
 }

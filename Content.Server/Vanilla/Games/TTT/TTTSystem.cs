@@ -1,26 +1,13 @@
-using Content.Server.GameTicking;
 using Content.Server.Mind;
-using Content.Server.Station.Systems;
-using Content.Server.Spawners.Components;
 using Content.Server.Chat.Managers;
 using Content.Server.Respawn;
 using Content.Shared.Chat;
-using Content.Shared.Administration;
-using Content.Shared.Humanoid;
 using Content.Shared.Humanoid.Prototypes;
-using Content.Shared.GameTicking;
-using Content.Shared.CombatMode.Pacification;
-using Content.Shared.Vanilla.CCVars;
 using Content.Shared.Vanilla.Skill;
-using Content.Shared.Vanilla.Background;
-using Content.Shared.Mindshield.Components;
 using Content.Shared.Clothing;
-using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Damage;
 using Content.Shared.Mobs;
-using Content.Shared.Mobs.Systems;
-using Content.Shared.IdentityManagement;
 using Content.Shared.Ghost;
 using Content.Shared.Roles;
 using Content.Shared.Implants;
@@ -31,13 +18,9 @@ using Robust.Server.Player;
 using Robust.Shared.Enums;
 using Robust.Shared.EntitySerialization.Systems;
 using Robust.Shared.EntitySerialization;
-using Robust.Shared.Map.Components;
 using Robust.Shared.Audio.Systems;
-using Robust.Shared.Audio;
 using Robust.Shared.Prototypes;
-using Robust.Shared.Map;
 using Robust.Shared.Timing;
-using Robust.Shared.Configuration;
 using Timer = Robust.Shared.Timing.Timer;
 using Robust.Shared.Player;
 using Robust.Shared.Random;
@@ -60,7 +43,7 @@ public sealed class TTTSystem : EntitySystem
         "WeaponRevolverDeckard","WeaponRevolverInspector","WeaponRevolverMateba","WeaponRevolverPython","WeaponRevolverPirate","WeaponRifleLecter","WeaponRifleEstoc","WeaponRifleFoam","WeaponShotgunDoubleBarreled",
         "WeaponShotgunKammerer","WeaponShotgunSawn","WeaponShotgunHandmade","WeaponShotgunBlunderbuss","WeaponShotgunImprovised","WeaponSubMachineGunC20r","WeaponSubMachineGunDrozd","WeaponSubMachineGunWt550","WeaponImprovisedPneumaticCannon"
     };
-    private Dictionary<ICommonSession, int> KARMA = new();
+    private readonly Dictionary<ICommonSession, int> _kARMA = new();
 
     private sealed class PlayerStats
     {
@@ -79,23 +62,21 @@ public sealed class TTTSystem : EntitySystem
     }
 
     [Dependency] private readonly MapSystem _mapSystem = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
     [Dependency] private readonly MapLoaderSystem _mapLoader = default!;
     [Dependency] private readonly IGameTiming _gameTiming = default!;
     [Dependency] private readonly MindSystem _mindSystem = default!;
-    [Dependency] protected readonly SharedAudioSystem _audio = default!;
+    [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly IChatManager _chatManager = default!;
     [Dependency] private readonly DamageableSystem _damageable = default!;
     [Dependency] private readonly SharedGhostSystem _ghosts = default!;
     [Dependency] private readonly IPlayerManager _playerManager = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly SpecialRespawnSystem _specialRespawn = default!;
     [Dependency] private readonly LoadoutSystem _loadout = default!;
     [Dependency] private readonly SharedSubdermalImplantSystem _implant = default!;
     [Dependency] private readonly MetaDataSystem _metaSystem = default!;
-    EntityUid? Currentrule = null;
+    private EntityUid? _currentrule = null;
 
     public override void Initialize()
     {
@@ -123,21 +104,21 @@ public sealed class TTTSystem : EntitySystem
     {
         var session = args.SenderSession;
 
-        if (session == null || Currentrule == null)
+        if (session == null || _currentrule == null)
             return;
 
-        if (!TryComp<TTTRuleComponent>(Currentrule, out var rule))
+        if (!TryComp<TTTRuleComponent>(_currentrule, out var rule))
             return;
 
         if (rule.CurrentStatus != TTTStatus.awaitstart)
             return;
 
-        if (!KARMA.ContainsKey(session))
+        if (!_kARMA.ContainsKey(session))
         {
-            KARMA[session] = 1000;
+            _kARMA[session] = 1000;
         }
 
-        else if (KARMA[session] <= 0)
+        else if (_kARMA[session] <= 0)
         {
             return;
         }
@@ -151,13 +132,13 @@ public sealed class TTTSystem : EntitySystem
         //Сообщаем о том что добавился новый игрок
         var info = new TTTInformation(rule.Playercount, rule.TimeForPlayersJoin, rule.CurrentStatus == TTTStatus.awaitstart);
         RaiseNetworkEvent(info, Filter.Broadcast());
-        if (session.AttachedEntity != null)
-            _ghosts.SetCanReturnToBody(session.AttachedEntity.Value, false);
+        if (session.AttachedEntity != null && TryComp<GhostComponent>(session.AttachedEntity, out var ghost))
+            _ghosts.SetCanReturnToBody((session.AttachedEntity.Value, ghost), false);
     }
 
     private void OnPlayerStatusChanged(object? sender, SessionStatusEventArgs e)
     {
-        if (e.NewStatus != SessionStatus.Disconnected || Currentrule == null || !TryComp<TTTRuleComponent>(Currentrule, out var rule))
+        if (e.NewStatus != SessionStatus.Disconnected || _currentrule == null || !TryComp<TTTRuleComponent>(_currentrule, out var rule))
         {
             return;
         }
@@ -175,9 +156,9 @@ public sealed class TTTSystem : EntitySystem
 
     private void OnInfoRequest(TTTInfoRequest msg, EntitySessionEventArgs args)
     {
-        if (Currentrule != null)
+        if (_currentrule != null)
         {
-            if (!TryComp<TTTRuleComponent>(Currentrule, out var rule))
+            if (!TryComp<TTTRuleComponent>(_currentrule, out var rule))
                 return;
 
             var response = new TTTInformation(rule.Playercount, rule.TimeForPlayersJoin, rule.CurrentStatus == TTTStatus.awaitstart);
@@ -281,9 +262,6 @@ public sealed class TTTSystem : EntitySystem
                     int deccount = GetDecCount(rule.Playercount);
                     var shuffledPlayers = rule.Players.ToList();
                     _random.Shuffle(shuffledPlayers);
-
-                    int skippedtraitors = 0;
-
                     foreach (var player in shuffledPlayers)
                     {
                         var filter = Filter.Empty().AddPlayer(player);
@@ -301,7 +279,7 @@ public sealed class TTTSystem : EntitySystem
                         if (marker.Role != TTTRole.await)
                             continue;
 
-                        if (!KARMA.TryGetValue(player, out var karma))
+                        if (!_kARMA.TryGetValue(player, out var karma))
                             continue;
 
                         if (traitorsCount > 0)
@@ -312,7 +290,7 @@ public sealed class TTTSystem : EntitySystem
                             AddComp<TTTTRAITORComponent>(playerent);
                             rule.PlayerCharacters[playerent] = marker.Role;
                             traitorsCount--;
-                            _audio.PlayGlobal("/Audio/Ambience/Antag/traitor_start.ogg", filter, true);
+                            _audio.PlayGlobal(rule.TraitorBrief, filter, true);
                             _chatManager.ChatMessageToOne(
                                 ChatChannel.Server,
                                 message,
@@ -331,7 +309,7 @@ public sealed class TTTSystem : EntitySystem
                             marker.Role = TTTRole.detective;
                             rule.PlayerCharacters[playerent] = marker.Role;
                             deccount--;
-                            _audio.PlayGlobal("/Audio/Vanilla/Effects/TTT/decbrief.ogg", filter, true);
+                            _audio.PlayGlobal(rule.DecBrief, filter, true);
                             message = Loc.GetString("ttt-detective-brief", ("color", Color.DodgerBlue));
                             wrappedMessage = Loc.GetString("chat-manager-server-wrap-message", ("message", message));
                             _chatManager.ChatMessageToOne(
@@ -348,7 +326,7 @@ public sealed class TTTSystem : EntitySystem
 
                         marker.Role = TTTRole.inocent;
                         rule.PlayerCharacters[player.AttachedEntity.Value] = marker.Role;
-                        _audio.PlayGlobal("/Audio/Vanilla/Effects/TTT/innocentbrief.ogg", filter, true);
+                        _audio.PlayGlobal(rule.InoBrief, filter, true);
                         message = Loc.GetString("ttt-innocent-brief", ("color", Color.Green));
                         wrappedMessage = Loc.GetString("chat-manager-server-wrap-message", ("message", message));
                         _chatManager.ChatMessageToOne(
@@ -370,34 +348,34 @@ public sealed class TTTSystem : EntitySystem
             {
                 TimeSpan timetoend = rule.TimeToNewCycle - rule.TimeOnNewCycle;
 
-                if (timetoend < TimeSpan.FromMinutes(5) && rule.anoncments == 0)
+                if (timetoend < TimeSpan.FromMinutes(5) && rule.Anoncments == 0)
                 {
                     SpawnGuns(uid, _random.Next(rule.Playercount, rule.Playercount * 2));
                     DispatchMonospaceAnnouncement(
                         Filter.Empty().AddPlayers(rule.Players),
                         Loc.GetString("ttt-timetoend-5"),
                         Color.Green);
-                    rule.anoncments++;
+                    rule.Anoncments++;
                     continue;
                 }
-                if (timetoend < TimeSpan.FromMinutes(3) && rule.anoncments == 1)
+                if (timetoend < TimeSpan.FromMinutes(3) && rule.Anoncments == 1)
                 {
                     SpawnGuns(uid, _random.Next(rule.Playercount, rule.Playercount * 2));
                     DispatchMonospaceAnnouncement(
                         Filter.Empty().AddPlayers(rule.Players),
                         Loc.GetString("ttt-timetoend-3"),
                         Color.Yellow);
-                    rule.anoncments++;
+                    rule.Anoncments++;
                     continue;
                 }
-                if (timetoend < TimeSpan.FromMinutes(1) && rule.anoncments == 2)
+                if (timetoend < TimeSpan.FromMinutes(1) && rule.Anoncments == 2)
                 {
                     SpawnGuns(uid, _random.Next(rule.Playercount, rule.Playercount * 2));
                     DispatchMonospaceAnnouncement(
                         Filter.Empty().AddPlayers(rule.Players),
                         Loc.GetString("ttt-timetoend-1"),
                         Color.Red);
-                    rule.anoncments++;
+                    rule.Anoncments++;
                     continue;
                 }
                 if (rule.TimeOnNewCycle >= rule.TimeToNewCycle)
@@ -415,7 +393,7 @@ public sealed class TTTSystem : EntitySystem
         rule.CurrentStatus = TTTStatus.awaitstart; //начинаем собирать игроков в раунд
         rule.TimeForPlayersJoin = TimeSpan.FromSeconds(30f);
         rule.TimeOnNewCycle = TimeSpan.FromSeconds(0);
-        rule.anoncments = 0;
+        rule.Anoncments = 0;
 
         //Сообщаем о том что начался новый цикл
         var msg = new TTTInformation(rule.Playercount, rule.TimeForPlayersJoin, rule.CurrentStatus == TTTStatus.awaitstart);
@@ -447,9 +425,9 @@ public sealed class TTTSystem : EntitySystem
             if (rulelink != rule)
                 continue;
 
-            KARMA[marker.Session] = Math.Clamp(KARMA[marker.Session] + 50, -51, 1500);
+            _kARMA[marker.Session] = Math.Clamp(_kARMA[marker.Session] + 50, -51, 1500);
 
-            statsList.Add(new PlayerStats(marker.Session.Name, marker.TotalKills, KARMA[marker.Session], marker.GetRoleName()));
+            statsList.Add(new PlayerStats(marker.Session.Name, marker.TotalKills, _kARMA[marker.Session], marker.GetRoleName()));
             //музыка
             if (marker.Role == TTTRole.traitor)
                 traitorSessions.Add(marker.Session);
@@ -484,13 +462,13 @@ public sealed class TTTSystem : EntitySystem
 
         if (winner)
         {
-            _audio.PlayGlobal("/Audio/Vanilla/Effects/TTT/winsound.ogg", traitorFilter, false);
-            _audio.PlayGlobal("/Audio/Vanilla/Effects/TTT/losesound.ogg", innocentFilter, false);
+            _audio.PlayGlobal(rule.WinSound, traitorFilter, false);
+            _audio.PlayGlobal(rule.LoseSound, innocentFilter, false);
         }
         else
         {
-            _audio.PlayGlobal("/Audio/Vanilla/Effects/TTT/winsound.ogg", innocentFilter, false);
-            _audio.PlayGlobal("/Audio/Vanilla/Effects/TTT/losesound.ogg", traitorFilter, false);
+            _audio.PlayGlobal(rule.WinSound, innocentFilter, false);
+            _audio.PlayGlobal(rule.LoseSound, traitorFilter, false);
         }
         //Удаляем прошлую арену
         Timer.Spawn(TimeSpan.FromSeconds(1), () => QueueDel(rule.Arena));
@@ -505,7 +483,7 @@ public sealed class TTTSystem : EntitySystem
             || args.DamageDelta.GetTotal() <= 0
             || !TryComp<TTTMarkerComponent>(args.Origin, out var sourcecomp)
             || args.Origin == uid
-            || !KARMA.TryGetValue(sourcecomp.Session, out var attackerKarma))
+            || !_kARMA.TryGetValue(sourcecomp.Session, out var attackerKarma))
         {
             return;
         }
@@ -522,14 +500,14 @@ public sealed class TTTSystem : EntitySystem
                 && component.Role == TTTRole.detective)
             karmaChange = -7 * damage;
 
-        KARMA[sourcecomp.Session] = Math.Clamp(attackerKarma + karmaChange, -51, 1500);
+        _kARMA[sourcecomp.Session] = Math.Clamp(attackerKarma + karmaChange, -51, 1500);
     }
 
     private void OnDamageModify(EntityUid uid, TTTMarkerComponent component, DamageModifyEvent args)
     {
         if (!TryComp<TTTMarkerComponent>(args.Origin, out var sourcecomp)
             || args.Origin == uid
-            || !KARMA.TryGetValue(sourcecomp.Session, out var attackerKarma))
+            || !_kARMA.TryGetValue(sourcecomp.Session, out var attackerKarma))
         {
             return;
         }
@@ -572,7 +550,7 @@ public sealed class TTTSystem : EntitySystem
         if (!TryComp<TTTRuleComponent>(ruleEnt, out var rule) || rule.ArenaMapId == null)
             return;
 
-        _specialRespawn.TryFindRandomTile(rule.Arena, _mapManager.GetMapEntityId(rule.ArenaMapId.Value), 10, out var targetCoords);
+        _specialRespawn.TryFindRandomTile(rule.Arena, _mapSystem.GetMap(rule.ArenaMapId.Value), 10, out var targetCoords);
 
         if (!_prototypeManager.TryIndex<SpeciesPrototype>(HumanoidCharacterProfile.DefaultSpecies, out var species))
             throw new ArgumentException($"Invalid species prototype was used: {HumanoidCharacterProfile.DefaultSpecies}");
@@ -673,7 +651,6 @@ public sealed class TTTSystem : EntitySystem
         // Пытаемся загрузить грид на карту
         if (!_mapLoader.TryLoadGrid(rule.ArenaMapId.Value, new ResPath(rule.TDMProto.ArenaPath), out var grid, opts))
         {
-            Logger.Warning($"Не удалось загрузить арену по пути {rule.TDMProto.ArenaPath} на карту {rule.ArenaMapId.Value}");
             return null;
         }
         return grid;
@@ -697,7 +674,7 @@ public sealed class TTTSystem : EntitySystem
 
     private void OnRuleInit(EntityUid uid, TTTRuleComponent rule, MapInitEvent args)
     {
-        Currentrule = uid;
+        _currentrule = uid;
         var msg = new TTTInformation(rule.Playercount, rule.TimeForPlayersJoin, rule.CurrentStatus == TTTStatus.awaitstart);
         RaiseNetworkEvent(msg, Filter.Broadcast());
     }
@@ -705,7 +682,7 @@ public sealed class TTTSystem : EntitySystem
     private void OnRuleShutDown(EntityUid uid, TTTRuleComponent component, ComponentShutdown args)
     {
         GameOver(uid, component);
-        Currentrule = null;
+        _currentrule = null;
     }
 
     public void DispatchMonospaceAnnouncement(Filter filter, string rawMessage, Color color)
@@ -730,7 +707,7 @@ public sealed class TTTSystem : EntitySystem
 
         for (var i = 0; i < count; i++)
         {
-            if (!_specialRespawn.TryFindRandomTile(rule.Arena, _mapManager.GetMapEntityId(rule.ArenaMapId.Value), 10, out var targetCoords))
+            if (!_specialRespawn.TryFindRandomTile(rule.Arena, _mapSystem.GetMap(rule.ArenaMapId.Value), 10, out var targetCoords))
                 continue;
 
             Spawn(_random.Pick(GUNS), targetCoords);

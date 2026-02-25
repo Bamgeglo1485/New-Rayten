@@ -1,19 +1,14 @@
 using Content.Shared.Access;
 using Content.Shared.Access.Components;
-using Content.Shared.Vanilla.Dominator;
-using Content.Shared.Examine;
 using Content.Server.AlertLevel;
 using Content.Server.Station.Systems;
 using Robust.Shared.Prototypes;
 
 namespace Content.Server.Vanilla.Access.AlertLevelAccess;
 
-public class SharedAssSystem : EntitySystem
+public sealed class SharedAssSystem : EntitySystem
 {
     [Dependency] private readonly StationSystem _station = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly SharedDangerMobSystem _dangermob = default!;
-    [Dependency] private readonly ExamineSystemShared _examine = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -64,10 +59,8 @@ public class SharedAssSystem : EntitySystem
         foreach (var tag in tags)
         {
             if (!accessComp.Tags.Contains(tag))
-            {
-                accessComp.Tags.Add(tag);
                 extraAccessComp.AddedAccess.Add(tag);
-            }
+            accessComp.Tags.Add(tag);
         }
     }
 

@@ -1,6 +1,5 @@
 using Content.Shared.Animals.Components;
 using Content.Shared.Vanilla.Archon.BlindPredator;
-using Content.Shared.Animals.Components;
 using Content.Shared.Movement.Components;
 using Content.Shared.Bed.Sleep;
 using Content.Shared.Chat;
