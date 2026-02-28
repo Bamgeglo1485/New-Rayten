@@ -1,6 +1,4 @@
 using Content.Server.Polymorph.Systems;
-using Content.Server.Polymorph.Components;
-using Content.Server.GridPreloader;
 using Content.Shared.Vanilla.Archon.Research;
 using Content.Shared.Vanilla.Archon.OldMan;
 using Content.Shared.Polymorph;
@@ -20,7 +18,6 @@ public sealed partial class OldManSystem : SharedOldManSystem
 
     [Dependency] private readonly SharedStationSystem _station = default!;
     [Dependency] private readonly PolymorphSystem _polymorph = default!;
-    [Dependency] private readonly GridPreloaderSystem _preload = default!;
     [Dependency] private readonly SharedAmbientSoundSystem _ambient = default!;
 
     public override void Initialize()
@@ -135,45 +132,34 @@ public sealed partial class OldManSystem : SharedOldManSystem
         comp.StationGridUid = largestStationGrid;
 
         // ---- Загрузка измерения ----
-        if (_preload.TryGetPreloadedGrid(comp.PreLoadGridProto, out var gridUid))
+        if (!_mapLoader.TryLoadMap(comp.DimensionMap, out var dimension, out var grids))
         {
-            comp.DimensionGridUid = gridUid.Value;
-            comp.DimensionUid = MapSystem.CreateMap(out _, runMapInit: false);
-            Trans.SetParent(comp.DimensionGridUid, comp.DimensionUid);
+            Log.Error($"не удалось загрузить карту при создании старика {uid}");
+            QueueDel(uid);
+            return;
         }
-        else
+
+        comp.DimensionUid = dimension.Value.Owner;
+
+        EntityUid? largestGrid = null;
+        Box2 largestBounds = new Box2();
+
+        foreach (var grid in grids)
         {
-            //если не удалось предзагрузить, то создаем новую карту
-            Log.Warning($"не удалось предзагрузить карту");
-            if (!_mapLoader.TryLoadMap(comp.DimensionMap, out var dimension, out var grids))
-            {
-                Log.Error($"не удалось загрузить карту при создании старика {uid}");
-                QueueDel(uid);
-                return;
-            }
+            if (grid.Comp.LocalAABB.Size.LengthSquared() < largestBounds.Size.LengthSquared())
+                continue;
 
-            comp.DimensionUid = dimension.Value.Owner;
-
-            EntityUid? largestGrid = null;
-            Box2 largestBounds = new Box2();
-
-            foreach (var grid in grids)
-            {
-                if (grid.Comp.LocalAABB.Size.LengthSquared() < largestBounds.Size.LengthSquared())
-                    continue;
-
-                largestBounds = grid.Comp.LocalAABB;
-                largestGrid = grid.Owner;
-            }
-
-            if (largestGrid == null)
-            {
-                Log.Error($"не удалось найти грид при создании старика {uid}");
-                QueueDel(uid);
-                return;
-            }
-            comp.DimensionGridUid = largestGrid.Value;
+            largestBounds = grid.Comp.LocalAABB;
+            largestGrid = grid.Owner;
         }
+
+        if (largestGrid == null)
+        {
+            Log.Error($"не удалось найти грид при создании старика {uid}");
+            QueueDel(uid);
+            return;
+        }
+        comp.DimensionGridUid = largestGrid.Value;
 
         MapSystem.InitializeMap(comp.DimensionUid);
 

@@ -119,3 +119,41 @@
       - PredatorVisibleMark
     canTargetSelf: false
     event: !type:MarkVictim049Event
+
+- type: entity
+  parent: BaseAction
+  id: Action068OrderFollow
+  name: Следовать
+  description: Прикажите своим копиям следовать за вами.
+  components:
+  - type: Action
+    useDelay: 1
+    icon:
+      sprite: Interface/Actions/actions_rat_king.rsi
+      state: followOff
+    iconOn:
+      sprite: Interface/Actions/actions_rat_king.rsi
+      state: follow
+    priority: 6
+  - type: InstantAction
+    event: !type:FigurineOrderActionEvent
+      order: Follow
+
+- type: entity
+  parent: BaseAction
+  id: Action068OrderEat
+  name: преобразуйте металл
+  description: Прикажите своим копиям преобразовывать металл в новые копии.
+  components:
+  - type: Action
+    useDelay: 1
+    icon:
+      sprite: Interface/Actions/actions_rat_king.rsi
+      state: attackOff
+    iconOn:
+      sprite: Interface/Actions/actions_rat_king.rsi
+      state: attack
+    priority: 7
+  - type: InstantAction
+    event: !type:FigurineOrderActionEvent
+      order: Eat

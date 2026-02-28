@@ -1,5 +1,4 @@
 using Content.Shared.Actions;
-using Content.Shared.GridPreloader.Prototypes;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 using Robust.Shared.Audio;
@@ -35,11 +34,6 @@ public sealed partial class OldManComponent : Component
     /// </summary>
     [DataField]
     public ResPath DimensionMap = new ResPath("/Maps/Vanilla/Misc/PocketDimension.yml");
-    /// <summary>
-    /// предзагруженное карманное измерение
-    /// </summary>
-    [DataField(customTypeSerializer: typeof(PrototypeIdSerializer<PreloadedGridPrototype>))]
-    public string PreLoadGridProto = "106Dimension";
 
     [DataField("actionTeleport", customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
     public string ActionId = "Action106Teleport";

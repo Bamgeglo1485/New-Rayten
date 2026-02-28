@@ -1,23 +1,24 @@
-using System.Collections.Generic;
+using System.Linq;
 using Robust.Shared.Network;
-using Robust.Shared.IoC;
-using Robust.Shared.Log;
 
 namespace Content.Shared.Vanilla.Sponsor;
 
 public sealed class SharedSponsorManager
 {
     [Dependency] private readonly INetManager _net = default!;
+    [Dependency] private readonly ILogManager _logManager = default!;
+    private ISawmill _sawmill = default!;
     private readonly Dictionary<NetUserId, sponsorRank> _ranks = [];
     private sponsorRank _clientrank = sponsorRank.None;
     private readonly Dictionary<sponsorRank, HashSet<string>> _rankToPrototypes = [];
+
+
     public void Initialize()
     {
+        _sawmill = _logManager.GetSawmill("Спонсорская система:");
         if (_net.IsClient)
-        {
             _net.RegisterNetMessage<SetSponsorRank>(OnClientSponsorSet);
-        }
-        buildmap();
+        Buildmap();
     }
 
     #region АПИШКИ
@@ -29,7 +30,7 @@ public sealed class SharedSponsorManager
     public HashSet<string> GetSponsorPrototypes(NetUserId userId)
     {
         if (_net.IsClient)
-            return GetPrototypesForRank(_clientrank);
+            return GetSponsorPrototypes();
 
         return _ranks.TryGetValue(userId, out var rank) ? GetPrototypesForRank(rank) : [];
     }
@@ -83,7 +84,15 @@ public sealed class SharedSponsorManager
     private void OnClientSponsorSet(SetSponsorRank message)
     {
         _clientrank = message.rank;
-        Logger.Info($"Получен спонсорский ранг {message.rank}");
+        _sawmill.Info($"Получен спонсорский ранг {message.rank}, доступные прототипы:");
+
+        var protos = GetSponsorPrototypes().ToList();
+
+        for (var i = 0; i < protos.Count; i += 5)
+        {
+            var chunk = protos.Skip(i).Take(5);
+            _sawmill.Info(string.Join(", ", chunk));
+        }
     }
     private HashSet<string> GetPrototypesForRank(sponsorRank rank)
     {
@@ -91,11 +100,15 @@ public sealed class SharedSponsorManager
     }
     #endregion
     #region Список всех доступных прототипов
-    private void buildmap()
+    private void Buildmap()
     {
-        foreach (sponsorRank rank in Enum.GetValues(typeof(sponsorRank)))
+        HashSet<string>? previous = null;
+        foreach (var rank in Enum.GetValues<sponsorRank>())
         {
             HashSet<string> current = [];
+            // добавляем всё из предыдущего ранга
+            if (previous != null)
+                current.UnionWith(previous);
             switch (rank)
             {
                 case sponsorRank.GrayTide:
@@ -103,8 +116,6 @@ public sealed class SharedSponsorManager
                     current.Add("NukeOpfreelancerBackground");
                     current.Add("Trottine");
                     break;
-
-
                 case sponsorRank.Revolutionary:
                     //Предыстории
                     current.Add("BlueGuySpyBackground");
@@ -159,7 +170,6 @@ public sealed class SharedSponsorManager
                     current.Add("SlimeCatEarsCurled"); current.Add("SlimeCatEarsStubby"); current.Add("SlimeCatEars");
                     current.Add("SlimeFoxEars"); current.Add("CatEarsStubby"); current.Add("CatEarsCurled");
                     current.Add("CatEarsTorn"); current.Add("CatTailStripes"); current.Add("FoxEars");
-                    current.Add("HumanFoxTailAnimated");
                     //голоса
                     current.Add("Willow");
                     current.Add("Warly");
@@ -171,6 +181,7 @@ public sealed class SharedSponsorManager
                     current.Add("Meme");
                     break;
             }
+            previous = current;
             _rankToPrototypes[rank] = current;
         }
     }

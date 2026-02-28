@@ -39,6 +39,7 @@ using Content.Server.Vanilla.Danger;
 using Content.Shared.Security.Components;
 
 using Robust.Shared.Timing;
+using Content.Shared.Tag;
 
 namespace Content.Server.NPC.Systems;
 
@@ -65,7 +66,9 @@ public sealed class NPCUtilitySystem : EntitySystem
     [Dependency] private readonly TurretTargetSettingsSystem _turretTargetSettings = default!;
     [Dependency] private readonly DangerMobSystem _dangermob = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
-
+    //rayten-start
+    [Dependency] private readonly TagSystem _tag = default!;
+    //rayten-end
     private EntityQuery<PuddleComponent> _puddleQuery;
     private EntityQuery<TransformComponent> _xformQuery;
 
@@ -516,6 +519,21 @@ public sealed class NPCUtilitySystem : EntitySystem
                     }
                     break;
                 }
+            //rayten-start
+            case TagsQuery tagsQuery:
+                {
+                    if (tagsQuery.Tags.Count == 0)
+                        return;
+
+                    foreach (var ent in _lookup.GetEntitiesInRange<TagComponent>(Transform(owner).Coordinates, vision))
+                    {
+                        if (_tag.HasAnyTag(ent.Comp, tagsQuery.Tags))
+                            entities.Add(ent.Owner);
+                    }
+
+                    break;
+                }
+            //rayten-end
             default:
                 throw new NotImplementedException();
         }
