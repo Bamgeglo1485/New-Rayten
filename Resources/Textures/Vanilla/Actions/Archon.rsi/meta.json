@@ -21,6 +21,12 @@
         },
         {
             "name": "makevictim"
+        },
+        {
+            "name": "figurineFollow"
+        },
+        {
+            "name": "figurineEat"
         }
     ]
 }

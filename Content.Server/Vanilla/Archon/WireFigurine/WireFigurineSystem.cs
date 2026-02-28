@@ -1,7 +1,6 @@
 using Content.Shared.Vanilla.Archon.WireFigurine;
 using Content.Shared.Damage.Systems;
 using Content.Shared.DoAfter;
-using Content.Shared.Gibbing;
 using Content.Server.NPC.HTN;
 using Content.Server.NPC;
 using Content.Server.NPC.Systems;
@@ -24,7 +23,6 @@ using Robust.Shared.Audio.Systems;
 using Content.Shared.Doors.Systems;
 using Robust.Shared.Physics;
 using Content.Shared.Physics;
-using Robust.Shared.Physics.Collision.Shapes;
 using Robust.Shared.Physics.Systems;
 using Content.Shared.Movement.Systems;
 using Robust.Shared.Physics.Components;
@@ -42,9 +40,10 @@ public sealed partial class WireFigurineSystem : EntitySystem
     [Dependency] private readonly MobThresholdSystem _thresh = default!;
     [Dependency] private readonly SharedAudioSystem _audioSystem = default!;
     [Dependency] private readonly SharedPhysicsSystem _physics = default!;
+    [Dependency] private readonly FixtureSystem _fixtures = default!;
     private static readonly ProtoId<TagPrototype> WallTag = "Wall";
     private static readonly ProtoId<TagPrototype> StuctureTag = "Structure";
-
+    private static readonly ProtoId<TagPrototype> BypassInteractionRangeChecksTag = "BypassInteractionRangeChecks";
     public override void Initialize()
     {
         base.Initialize();
@@ -52,8 +51,16 @@ public sealed partial class WireFigurineSystem : EntitySystem
         SubscribeLocalEvent<WireFigurineComponent, ComponentShutdown>(OnShutdown);
         SubscribeLocalEvent<WireFigurineComponent, EatMetal018DoAfterEvent>(OnEatMetalDoAfter);
         SubscribeLocalEvent<WireFigurineMainComponent, FigurineOrderActionEvent>(OnOrderAction);
+        SubscribeLocalEvent<WireFigurineMainComponent, MapInitEvent>(OnMapInit);
         SubscribeLocalEvent<WireFigurineComponent, RefreshMovementSpeedModifiersEvent>(OnRefreshMoveSpeed);
     }
+
+    private void OnMapInit(Entity<WireFigurineMainComponent> ent, ref MapInitEvent args)
+    {
+        if (TryComp<WireFigurineComponent>(ent, out var figurineComp))
+            SetStage((ent, figurineComp), figurineComp.Stage);
+    }
+
     private void OnRefreshMoveSpeed(EntityUid uid, WireFigurineComponent component, RefreshMovementSpeedModifiersEvent args)
     {
         args.ModifySpeed(component.SpeedModifier, component.SpeedModifier);
@@ -221,37 +228,38 @@ public sealed partial class WireFigurineSystem : EntitySystem
     private void SetStage(Entity<WireFigurineComponent> figurine, int stage)
     {
         figurine.Comp.Stage = stage;
-
-        var stageScaleModifier = Math.Clamp(stage * 0.6f, 1f, 20f);
-        var scale = new Vector2(stageScaleModifier, stageScaleModifier);
-        _scaleVisuals.SetSpriteScale(figurine, scale);
+        var multiplier = MathF.Pow(2f, stage - 1);
+        var spriteMultiplier = MathF.Pow(2f, stage - 3);
+        var scale = Math.Clamp(0.4f * spriteMultiplier, 0.4f, 40f);
+        var scaleV2 = new Vector2(scale, scale);
+        _scaleVisuals.SetSpriteScale(figurine, scaleV2);
 
         figurine.Comp.DamageSum = 0;
 
-        var multiplier = MathF.Pow(2f, stage - 1);
-
         figurine.Comp.DamageToReproduce = figurine.Comp.BaseDamageToReproduce * multiplier;
         figurine.Comp.EatDamage = figurine.Comp.BaseEatDamage * multiplier;
-        _thresh.SetMobStateThreshold(
-            figurine,
-            FixedPoint2.New(10 * multiplier),
-            MobState.Dead);
-        if (stage > 3)
+        _thresh.SetMobStateThreshold(figurine, FixedPoint2.New(10 * multiplier), MobState.Dead);
+        if (stage > 4)
         {
             _tag.AddTag(figurine, SharedDoorSystem.DoorBumpTag);
+            // _tag.AddTag(figurine, BypassInteractionRangeChecksTag);
+
             if (!TryComp<FixturesComponent>(figurine, out var fixtures) || !TryComp<PhysicsComponent>(figurine, out var physics))
                 return;
 
             var fixture = fixtures.Fixtures.First();
             _physics.SetCollisionMask(figurine, fixture.Key, fixture.Value, (int)CollisionGroup.MobMask, fixtures, physics);
             _physics.SetCollisionLayer(figurine, fixture.Key, fixture.Value, (int)CollisionGroup.MobLayer, fixtures, physics);
+            var fixureScale = Math.Clamp(0.02f * multiplier, 0.02f, 40f);
+            _physics.SetRadius(figurine, fixture.Key, fixture.Value, fixture.Value.Shape, fixureScale, fixtures);
+            _npc.SetBlackboard(figurine, "InteractRange", (float)stage / 2);
         }
 
         // минус 5% скорости за каждую стадию
-        var slow = 1f * stage * 0.05f;
+        var slowed = 1f - stage * 0.05f;
 
         // не даём упасть ниже 10%
-        figurine.Comp.SpeedModifier = MathF.Max(0.1f, slow);
+        figurine.Comp.SpeedModifier = MathF.Max(0.1f, slowed);
     }
 
     private bool TryGetMainFigurine(Entity<WireFigurineComponent> ent, out Entity<WireFigurineMainComponent> mainFigurine)

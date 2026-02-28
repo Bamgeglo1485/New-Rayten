@@ -129,11 +129,8 @@
   - type: Action
     useDelay: 1
     icon:
-      sprite: Interface/Actions/actions_rat_king.rsi
-      state: followOff
-    iconOn:
-      sprite: Interface/Actions/actions_rat_king.rsi
-      state: follow
+      sprite: Vanilla/Actions/Archon.rsi
+      state: figurineFollow
     priority: 6
   - type: InstantAction
     event: !type:FigurineOrderActionEvent
@@ -148,11 +145,8 @@
   - type: Action
     useDelay: 1
     icon:
-      sprite: Interface/Actions/actions_rat_king.rsi
-      state: attackOff
-    iconOn:
-      sprite: Interface/Actions/actions_rat_king.rsi
-      state: attack
+      sprite: Vanilla/Actions/Archon.rsi
+      state: figurineEat
     priority: 7
   - type: InstantAction
     event: !type:FigurineOrderActionEvent

@@ -31,7 +31,7 @@ public sealed class ApproveGoalCommand : IConsoleCommand
         // Ищем цель во всех станциях
         DepartmentGoalPrototype? foundGoal = null;
         EntityUid stationUid = default;
-        foreach (var (station, goals) in departmentGoalSystem._depGoals)
+        foreach (var (station, goals) in departmentGoalSystem.DepGoals)
         {
             var goal = goals.FirstOrDefault(g => g.ID == goalId);
             if (goal != null)
@@ -59,14 +59,14 @@ public sealed class ApproveGoalCommand : IConsoleCommand
         }
 
         // Удаляем цель из списка станции
-        if (departmentGoalSystem._depGoals.TryGetValue(stationUid, out var goalsList))
+        if (departmentGoalSystem.DepGoals.TryGetValue(stationUid, out var goalsList))
         {
             goalsList.Remove(foundGoal);
 
             // Если у станции больше нет целей, можно удалить её из словаря
             if (goalsList.Count == 0)
             {
-                departmentGoalSystem._depGoals.Remove(stationUid);
+                departmentGoalSystem.DepGoals.Remove(stationUid);
             }
         }
     }
@@ -76,7 +76,7 @@ public sealed class ApproveGoalCommand : IConsoleCommand
         {
             var departmentGoalSystem = _entitySystemManager.GetEntitySystem<DepartmentGoalSystem>();
 
-            var goalIds = departmentGoalSystem._depGoals
+            var goalIds = departmentGoalSystem.DepGoals
                 .SelectMany(kv => kv.Value)  // Выбираем все списки целей
                 .Select(g => g.ID)           // Берём ID каждой цели
                 .Distinct()                  // Убираем дубликаты (если нужно)

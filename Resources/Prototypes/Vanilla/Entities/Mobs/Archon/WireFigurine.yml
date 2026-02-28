@@ -29,10 +29,10 @@
   components:
   - type: Sprite
     drawdepth: SmallMobs
-    sprite: Mobs/Animals/mouse.rsi
+    sprite: Vanilla/Mobs/Archons/WireFigurine.rsi
     layers:
     - map: ["enum.DamageStateVisualLayers.Base"]
-      state: mouse-0
+      state: icon
   - type: WireFigurine
   - type: Item
     size: Tiny
@@ -44,8 +44,8 @@
     rootTask:
       task: 068Compound
     blackboard:
-      FollowRange: !type:Single
-        1.5
+      FollowCloseRange: !type:Single
+        1
   - type: Physics
   - type: FaxableObject
     insertingState: inserting_mouse

@@ -29,7 +29,7 @@ public sealed class DepartmentGoalSystem : EntitySystem
     [Dependency] private readonly CargoSystem _cargo = default!;
     [Dependency] private readonly StationSystem _station = default!;
     [Dependency] private readonly ChatSystem _chatSystem = default!;
-    public Dictionary<EntityUid, List<DepartmentGoalPrototype>> _depGoals = new();
+    public Dictionary<EntityUid, List<DepartmentGoalPrototype>> DepGoals = new();
 
     public override void Initialize()
     {
@@ -39,7 +39,7 @@ public sealed class DepartmentGoalSystem : EntitySystem
     #region отправка целей
     private void OnRoundStarting(RoundStartedEvent ev)
     {
-        _depGoals.Clear();
+        DepGoals.Clear();
 
         // Получаем все прототипы DepartmentGoalPrototype (цели)
         var allGoals = _proto.EnumeratePrototypes<DepartmentGoalPrototype>().ToList();
@@ -94,13 +94,11 @@ public sealed class DepartmentGoalSystem : EntitySystem
             }
 
             // Добавляем цели для текущей станции в словарь
-            _depGoals[stationUid] = departmentGoals;
+            DepGoals[stationUid] = departmentGoals;
 
             // Отправляем выбранные цели для текущей станции
             foreach (var departmentGoal in departmentGoals)
-            {
                 SendStationGoal(stationUid, departmentGoal);
-            }
         }
     }
 
@@ -142,13 +140,10 @@ public sealed class DepartmentGoalSystem : EntitySystem
     public bool ApproveGoal(DepartmentGoalPrototype goal)
     {
         // Находим станцию, к которой привязана эта цель
-        var station = _depGoals.FirstOrDefault(x => x.Value.Contains(goal)).Key;
+        var station = DepGoals.FirstOrDefault(x => x.Value.Contains(goal)).Key;
 
         if (station == default)
-        {
-            Logger.Error($"Не найдена станция для цели: {goal.ID}");
             return false;
-        }
 
         int randomValue = _random.Next(15000, 35000);
         ProtoId<CargoAccountPrototype> account = goal.Department switch

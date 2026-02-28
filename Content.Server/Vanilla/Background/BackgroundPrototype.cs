@@ -1,24 +1,16 @@
 
 using Content.Server.Mind;
 using Content.Server.Roles;
-using Content.Server.Ghost.Roles;
 using Content.Server.Actions;
 using Content.Shared.Hands.EntitySystems;
-using Content.Shared.Mind;
 using Content.Shared.Roles.Components;
 using Content.Shared.Roles;
 using Content.Shared.Actions;
-using Content.Shared.Vanilla.Jammer;
 using Content.Shared.Vanilla.Background;
 using Content.Shared.Implants;
 using Content.Shared.Inventory;
 using Content.Shared.Clothing;
 using Robust.Shared.Prototypes;
-using Robust.Shared.Serialization;
-using Robust.Shared.GameObjects;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.Set;
-using Robust.Shared.Utility;
-using JetBrains.Annotations;
 
 namespace Content.Server.Vanilla.Background;
 
@@ -30,18 +22,18 @@ public sealed partial class ChangeMindSpecial : BackgroundSpecial
     public override void Apply(EntityUid mob)
     {
         var entMan = IoCManager.Resolve<IEntityManager>();
-        var _mind = entMan.System<MindSystem>();
-        var _role = entMan.System<RoleSystem>();
+        var mind = entMan.System<MindSystem>();
+        var role = entMan.System<RoleSystem>();
 
-        if (!_mind.TryGetMind(mob, out var mindId, out var mindcomp))
+        if (!mind.TryGetMind(mob, out var mindId, out var mindcomp))
             return;
 
         // _role.MindRemoveRole<MindRoleComponent>(mindId);
-        _role.MindRemoveRole<GhostRoleMarkerRoleComponent>(mindId);
-        _role.MindRemoveRole<NukeopsRoleComponent>(mindId);
+        role.MindRemoveRole<GhostRoleMarkerRoleComponent>(mindId);
+        role.MindRemoveRole<NukeopsRoleComponent>(mindId);
 
 
-        _role.MindAddRoles(mindId, MindRoles, mindcomp);
+        role.MindAddRoles(mindId, MindRoles, mindcomp);
     }
 }
 
@@ -53,7 +45,7 @@ public sealed partial class AddItemSpecial : BackgroundSpecial
     public override void Apply(EntityUid mob)
     {
         var entMan = IoCManager.Resolve<IEntityManager>();
-        var _hands = entMan.System<SharedHandsSystem>();
+        var hands = entMan.System<SharedHandsSystem>();
         foreach (var someitem in Items)
         {
             var transform = entMan.GetComponent<TransformComponent>(mob);
@@ -61,7 +53,7 @@ public sealed partial class AddItemSpecial : BackgroundSpecial
 
             var item = entMan.SpawnEntity(someitem, coordinates);
 
-            _hands.PickupOrDrop(mob, item);
+            hands.PickupOrDrop(mob, item);
         }
 
     }
@@ -85,16 +77,16 @@ public sealed partial class AddActionSpecial : BackgroundSpecial
     public override void Apply(EntityUid mob)
     {
         var entMan = IoCManager.Resolve<IEntityManager>();
-        var _mind = entMan.System<MindSystem>();
-        var _actions = entMan.System<ActionsSystem>();
-        var _actionContainer = entMan.System<ActionContainerSystem>();
+        var mind = entMan.System<MindSystem>();
+        var actions = entMan.System<ActionsSystem>();
+        var actionContainer = entMan.System<ActionContainerSystem>();
         //give action
         if (!string.IsNullOrWhiteSpace(Action))
         {
-            if (!_mind.TryGetMind(mob, out var mind, out _))
-                _actions.AddAction(mob, Action);
+            if (!mind.TryGetMind(mob, out var mindComp, out _))
+                actions.AddAction(mob, Action);
             else
-                _actionContainer.AddAction(mind, Action);
+                actionContainer.AddAction(mindComp, Action);
         }
 
     }
@@ -136,22 +128,17 @@ public sealed partial class EquipSpecial : BackgroundSpecial
     public override void Apply(EntityUid mob)
     {
         var entMan = IoCManager.Resolve<IEntityManager>();
-        var _loadout = entMan.System<LoadoutSystem>();
-        var _inventory = entMan.System<InventorySystem>();
-
-        if (!entMan.TryGetComponent<InventoryComponent>(mob, out var inventory))
-            return;
-
+        var loadout = entMan.System<LoadoutSystem>();
+        var inventory = entMan.System<InventorySystem>();
         foreach (var slotId in RemoveSlotID)
         {
-            Logger.Info($"обрабатываем {slotId}");
             // Пытаемся снять предмет
-            if (!_inventory.TryUnequip(mob, slotId, out var removedUid, silent: true))
+            if (!inventory.TryUnequip(mob, slotId, out var removedUid, silent: true))
                 continue;
 
             if (entMan.EntityExists(removedUid))
                 entMan.DeleteEntity(removedUid.Value);
         }
-        _loadout.Equip(mob, Loadout, null);
+        loadout.Equip(mob, Loadout, null);
     }
 }
