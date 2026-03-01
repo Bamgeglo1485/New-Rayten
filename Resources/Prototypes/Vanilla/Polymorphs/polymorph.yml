@@ -1,7 +1,7 @@
 - type: polymorph
   id: CursedSkeleton
   configuration:
-    entity: MobSkeletonPerson
+    entity: CursedSkeleton
     forced: true
     inventory: Transfer
     transferName: true
@@ -11,3 +11,20 @@
     polymorphSound: /Audio/Misc/narsie_rises.ogg
     exitPolymorphSound: /Audio/Misc/narsie_rises.ogg
     polymorphPopup: SkeletonCurse-popup
+
+- type: entity
+  parent: MobSkeletonPerson
+  id: CursedSkeleton
+  name: Проклятый скелет
+  components:
+  - type: SkeletonCurse
+  - type: ReplacementAccent
+    accent: genericAggressive
+  - type: Pacified
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 500
+      behaviors:
+      - !type:GibBehavior

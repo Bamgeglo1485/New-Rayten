@@ -1,25 +1,17 @@
 using Content.Server.Polymorph.Systems;
-using Content.Server.Speech.Components;
 using Content.Server.Chat.Managers;
-using Content.Server.Destructible;
-using Content.Shared.Destructible.Thresholds.Triggers;
-using Content.Shared.CombatMode.Pacification;
 using Content.Shared.Damage.Systems;
-using Content.Shared.Damage.Components;
 using Content.Shared.Vanilla.Damage.Events;
-using Content.Shared.Mobs.Systems;
 using Content.Shared.FixedPoint;
 using Content.Shared.Chat;
-using Content.Shared.Mobs;
-using Robust.Shared.Prototypes;
 using Robust.Shared.Player;
-using System.Linq;
+using Content.Shared.Gibbing;
 
 namespace Content.Server.Vanilla.Background.SkeletonCurse;
 
 public sealed class SkeletonCurseSystem : EntitySystem
 {
-    [Dependency] private readonly DamageableSystem _damageable = default!;
+    [Dependency] private readonly GibbingSystem _gibbing = default!;
     [Dependency] private readonly PolymorphSystem _polymorphSystem = default!;
     [Dependency] private readonly IChatManager _chat = default!;
     [Dependency] private readonly ActorSystem _actor = default!;
@@ -27,8 +19,7 @@ public sealed class SkeletonCurseSystem : EntitySystem
     {
         SubscribeLocalEvent<SkeletonCurseComponent, MapInitEvent>(OnMapInit);
         SubscribeLocalEvent<SkeletonCurseComponent, StaminaCritEvent>(OnStamCrit);
-
-        SubscribeLocalEvent<SkeletonCurseComponent, DamageChangedEvent>(OnDamageChanged, before: [typeof(MobThresholdSystem)]);
+        SubscribeLocalEvent<SkeletonCurseComponent, DamageChangedEvent>(OnDamageChanged);
     }
     /// <summary>
     /// Получили проклятие - даём небольшой брифинг в чат
@@ -50,35 +41,6 @@ public sealed class SkeletonCurseSystem : EntitySystem
         );
     }
     /// <summary>
-    /// Основной проклинающий метод
-    /// </summary>
-    public void Curse(EntityUid uid)
-    {
-        var cursedent = _polymorphSystem.PolymorphEntity(uid, "CursedSkeleton");
-        if (cursedent == null)
-            return;
-
-        var cursecomp = EnsureComp<SkeletonCurseComponent>(cursedent.Value);
-
-        var accent = EnsureComp<ReplacementAccentComponent>(cursedent.Value);
-        accent.Accent = "genericAggressive";
-        Dirty(cursedent.Value, accent);
-
-        AddComp<PacifiedComponent>(cursedent.Value);
-        if (TryComp<DestructibleComponent>(cursedent.Value, out var destructible))
-        {
-            foreach (var threshold in destructible.Thresholds)
-            {
-                if (threshold.Trigger is DamageTrigger damageTrigger)
-                {
-                    damageTrigger.Damage = 500;
-                }
-            }
-
-            Dirty(cursedent.Value, destructible);
-        }
-    }
-    /// <summary>
     /// Запоминаем всех наших обидчиков, если урон превышает 30 - переносим проклятие
     /// </summary>
     private void OnDamageChanged(EntityUid uid, SkeletonCurseComponent component, DamageChangedEvent args)
@@ -93,15 +55,14 @@ public sealed class SkeletonCurseSystem : EntitySystem
 
         var damage = args.DamageDelta.GetTotal();
         component.LifetimeDamage[origin] = component.LifetimeDamage.GetValueOrDefault(origin) + damage;
-        if (component.LifetimeDamage[origin] > FixedPoint2.New(30))
+        if (component.LifetimeDamage[origin] > FixedPoint2.New(10))
         {
-            _damageable.TryChangeDamage(uid, component.Damage, true, false, origin);
-            Curse(origin);
+            _gibbing.Gib(uid, user: origin);
+            _polymorphSystem.PolymorphEntity(origin, "CursedSkeleton");
         }
     }
     private void OnStamCrit(EntityUid uid, SkeletonCurseComponent component, StaminaCritEvent args)
     {
-        _damageable.TryChangeDamage(uid, component.Damage, true, false, null);
+        _gibbing.Gib(uid);
     }
-
 }
