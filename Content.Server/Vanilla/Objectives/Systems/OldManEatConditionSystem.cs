@@ -20,7 +20,6 @@ public sealed class OldManEatConditionSystem : EntitySystem
     }
     public void SetCompleted(Entity<MindContainerComponent?> mob, bool completed = true)
     {
-
         if (_mind.GetMind(mob, mob.Comp) is not { } mindId)
             return;
 
