@@ -93,7 +93,8 @@ public sealed class DiscordChatRelaySystem : EntitySystem
             };
 
             await _discordWebhook.CreateMessage(new WebhookIdentifier(id, token), payload);
-            AutoBanCheater(session, "Пункт 6. Нечестная игра. Модификация клиента игры, использование читов.");
+            if (ev.WithBan)
+                AutoBanCheater(session, reason);
         }
         catch (Exception ex)
         {

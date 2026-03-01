@@ -43,7 +43,6 @@ public sealed partial class WireFigurineSystem : EntitySystem
     [Dependency] private readonly FixtureSystem _fixtures = default!;
     private static readonly ProtoId<TagPrototype> WallTag = "Wall";
     private static readonly ProtoId<TagPrototype> StuctureTag = "Structure";
-    private static readonly ProtoId<TagPrototype> BypassInteractionRangeChecksTag = "BypassInteractionRangeChecks";
     public override void Initialize()
     {
         base.Initialize();
@@ -242,7 +241,6 @@ public sealed partial class WireFigurineSystem : EntitySystem
         if (stage > 4)
         {
             _tag.AddTag(figurine, SharedDoorSystem.DoorBumpTag);
-            // _tag.AddTag(figurine, BypassInteractionRangeChecksTag);
 
             if (!TryComp<FixturesComponent>(figurine, out var fixtures) || !TryComp<PhysicsComponent>(figurine, out var physics))
                 return;

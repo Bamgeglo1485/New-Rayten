@@ -1,82 +1,68 @@
 using Content.Shared.Vanilla.Anticheat;
-using Content.Shared.Ghost;
 using Content.Shared.Weapons.Ranged.Events;
-using Content.Shared.Interaction;
-using Content.Shared.Revenant.Components;
-using Content.Shared.Examine;
 using Content.Shared.Movement.Components;
-using Robust.Shared.GameObjects;
-using Robust.Shared.Log;
-using Robust.Shared.Network;
 using Robust.Shared.Timing;
-using Robust.Shared.Player;
 using Robust.Client.Player;
-using Robust.Client.Graphics;
-using Robust.Client.GameObjects;
-using System;
-using System.Collections.Generic;
+namespace Content.Client.Vanilla.Anticheat;
 
-namespace Content.Client.Vanilla.Anticheat
+public sealed partial class ClientAnticheatManager : EntitySystem
 {
-    public sealed class ClientAnticheatManager : EntitySystem
+    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly IPlayerManager _playerManager = default!;
+    private TimeSpan _nextCheck = TimeSpan.Zero;
+
+    public override void Initialize()
     {
-        [Dependency] private readonly IGameTiming _timing = default!;
-        [Dependency] private readonly IPlayerManager _playerManager = default!;
-        private TimeSpan _nextCheck = TimeSpan.Zero;
+        SubscribeLocalEvent<RequestShootEvent>(OnAimBotBait);
+    }
 
-        public override void Initialize()
+    private void OnAimBotBait(RequestShootEvent msg, EntitySessionEventArgs args)
+    {
+        ReportCheat($"Пункт 6. Нечестная игра. Модификация клиента игры, использование читов.");
+    }
+
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+
+        var now = _timing.CurTime;
+
+        if (now < _nextCheck)
+            return;
+
+        _nextCheck = now + TimeSpan.FromSeconds(5);
+        CheckDrawFovFlag();
+    }
+
+    private void CheckDrawFovFlag()
+    {
+        var session = _playerManager.LocalSession;
+
+        if (session == null)
+            return;
+
+        var playerEnt = session.AttachedEntity;
+
+        if (playerEnt == null)
+            return;
+
+
+        if (TryComp<EyeComponent>(playerEnt.Value, out var eye) && !eye.NetSyncEnabled)
         {
-            SubscribeLocalEvent<RequestShootEvent>(OnAimBotBait);
+            ReportCheat("Пункт 6. Нечестная игра. Модификация клиента игры, использование читов.");
+            return;
         }
 
-        private void OnAimBotBait(RequestShootEvent msg, EntitySessionEventArgs args)
+        if (TryComp<ContentEyeComponent>(playerEnt.Value, out var contentEye) && !contentEye.NetSyncEnabled)
         {
-            ReportCheat($"Обнаружен аимбот");
+            ReportCheat("Пункт 6. Нечестная игра. Модификация клиента игры, использование читов.");
+            return;
         }
+    }
 
-        public override void Update(float frameTime)
-        {
-            base.Update(frameTime);
-
-            var now = _timing.CurTime;
-
-            if (now < _nextCheck)
-                return;
-
-            _nextCheck = now + TimeSpan.FromSeconds(5);
-            CheckDrawFovFlag();
-        }
-
-        private void CheckDrawFovFlag()
-        {
-            var session = _playerManager.LocalSession;
-
-            if (session == null)
-                return;
-
-            var playerEnt = session.AttachedEntity;
-
-            if (playerEnt == null)
-                return;
-
-
-            if (TryComp<EyeComponent>(playerEnt.Value, out var eye) && !eye.NetSyncEnabled)
-            {
-                ReportCheat("Отключена синхронизация EyeComponent");
-                return;
-            }
-
-            if (TryComp<ContentEyeComponent>(playerEnt.Value, out var contentEye) && !contentEye.NetSyncEnabled)
-            {
-                ReportCheat("Отключена синхронизация ContentEyeComponent");
-                return;
-            }
-        }
-
-        private void ReportCheat(string reason)
-        {
-            var msg = new SuspiciousClientEvent(reason);
-            RaiseNetworkEvent(msg);
-        }
+    private void ReportCheat(string reason, bool withBan = true)
+    {
+        var msg = new SuspiciousClientEvent(reason, withBan);
+        RaiseNetworkEvent(msg);
     }
 }
