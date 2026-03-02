@@ -40,7 +40,6 @@ public sealed partial class WireFigurineSystem : EntitySystem
     [Dependency] private readonly MobThresholdSystem _thresh = default!;
     [Dependency] private readonly SharedAudioSystem _audioSystem = default!;
     [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly FixtureSystem _fixtures = default!;
     private static readonly ProtoId<TagPrototype> WallTag = "Wall";
     private static readonly ProtoId<TagPrototype> StuctureTag = "Structure";
     public override void Initialize()
