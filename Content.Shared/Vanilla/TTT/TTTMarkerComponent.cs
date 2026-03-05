@@ -10,13 +10,22 @@ using Robust.Shared.Player;
 namespace Content.Shared.Vanilla.Games.TTT;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+public sealed partial class NameOverlayComponent : Component
+{
+    [DataField, AutoNetworkedField]
+    public string Name = "Подозрительный человек";
+
+    [DataField, AutoNetworkedField]
+    public Color NameColor = Color.Green;
+}
+
+
+
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class TTTMarkerComponent : Component
 {
     [DataField]
     public EntityUid? RuleLink = null;
-
-    [DataField, AutoNetworkedField]
-    public string Name = "Подозрительный человек";
 
     [DataField, AutoNetworkedField]
     public TTTRole Role = TTTRole.await;
@@ -59,10 +68,10 @@ public enum TTTRole : byte
 }
 
 [RegisterComponent, NetworkedComponent]
-public sealed partial class ShowTTTTraitorsComponent : Component {}
+public sealed partial class ShowTTTTraitorsComponent : Component { }
 
 [RegisterComponent, NetworkedComponent]
-public sealed partial class ShowTTTDetectiveIconsComponent : Component {}
+public sealed partial class ShowTTTDetectiveIconsComponent : Component { }
 
 [RegisterComponent, NetworkedComponent]
 public sealed partial class TTTTRAITORComponent : Component

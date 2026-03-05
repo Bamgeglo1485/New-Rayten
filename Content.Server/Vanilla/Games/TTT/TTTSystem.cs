@@ -242,7 +242,7 @@ public sealed class TTTSystem : EntitySystem
                     );
                 }
 
-                SpawnGuns(uid, _random.Next(rule.Playercount, rule.Playercount * 2));
+                SpawnGuns(uid, _random.Next(rule.Playercount, rule.Playercount * 3));
 
                 rule.CurrentStatus = TTTStatus.AwaitRolesToAdd; //Вот теперь матч реально начался
             }
@@ -321,6 +321,12 @@ public sealed class TTTSystem : EntitySystem
                                 player.Channel
                             );
                             Dirty(playerent, marker);
+                            if (TryComp<NameOverlayComponent>(playerent, out var nameMarker))
+                            {
+                                nameMarker.NameColor = Color.DodgerBlue;
+                                Dirty(playerent, nameMarker);
+                            }
+
                             continue;
                         }
 
@@ -565,9 +571,8 @@ public sealed class TTTSystem : EntitySystem
         var marker = EnsureComp<TTTMarkerComponent>(mobUid);
         marker.RuleLink = ruleEnt;
         marker.Session = session;
-        marker.Name = session.Name;
-        Dirty(mobUid, marker);
-
+        var nameMarker = EnsureComp<NameOverlayComponent>(mobUid);
+        nameMarker.Name = session.Name;
         //Все видят детектива
         AddComp<ShowTTTDetectiveIconsComponent>(mobUid);
         //Добавляем навыки

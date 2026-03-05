@@ -17,9 +17,10 @@ using Robust.Shared.Configuration;
 using Robust.Shared.Enums;
 using Robust.Shared.Prototypes;
 using Robust.Client.Player;
+using System.Drawing;
 namespace Content.Client.Vanilla.Overlays;
 
-internal sealed class ShowTTTNamesOverlay : Overlay
+public sealed class ShowNamesOverlay : Overlay
 {
     private readonly IEntityManager _entityManager;
     private readonly IEyeManager _eyeManager;
@@ -30,7 +31,7 @@ internal sealed class ShowTTTNamesOverlay : Overlay
     private readonly ExamineSystemShared _examine;
 
 
-    public ShowTTTNamesOverlay(
+    public ShowNamesOverlay(
         IEntityManager entityManager,
         IEyeManager eyeManager,
         IResourceCache resourceCache,
@@ -44,7 +45,7 @@ internal sealed class ShowTTTNamesOverlay : Overlay
         _eyeManager = eyeManager;
         _entityLookup = entityLookup;
         _userInterfaceManager = userInterfaceManager;
-        _font = resourceCache.NotoStack();
+        _font = resourceCache.NotoStack(size: 12);
         _playerManager = playerManager;
         _examine = examineSystemShared;
     }
@@ -61,13 +62,13 @@ internal sealed class ShowTTTNamesOverlay : Overlay
 
         var localPlayer = _playerManager.LocalEntity.Value;
 
-        var query = _entityManager.EntityQueryEnumerator<TTTMarkerComponent>();
+        var query = _entityManager.EntityQueryEnumerator<NameOverlayComponent>();
         while (query.MoveNext(out var entity, out var marker))
         {
-            if ( entity == localPlayer)
+            if (entity == localPlayer)
                 continue;
 
-            if (!_entityManager.EntityExists(entity) || _entityManager.GetComponent<TransformComponent>(entity).MapID != args.MapId)
+            if (_entityManager.GetComponent<TransformComponent>(entity).MapID != args.MapId)
                 continue;
 
             if (!_examine.InRangeUnOccluded(localPlayer, entity, 12f, ignoreInsideBlocker: false))
@@ -84,10 +85,7 @@ internal sealed class ShowTTTNamesOverlay : Overlay
             var centerOffset = new Vector2(-textWidth / 2f, -40f) * uiScale;
             var screenCoordinates = screenCoordinatesCenter + centerOffset;
 
-            var color = Color.Green;
-            if (marker.Role == TTTRole.detective)
-                color = Color.DodgerBlue;
-            args.ScreenHandle.DrawString(_font, screenCoordinates, marker.Name, uiScale, color);
+            args.ScreenHandle.DrawString(_font, screenCoordinates, marker.Name, uiScale, marker.NameColor);
         }
     }
 

@@ -9,7 +9,7 @@ public sealed partial class BackgroundComponent : Component
 {
     [DataField, ViewVariables(VVAccess.ReadOnly), AutoNetworkedField]
     public ProtoId<BackgroundPrototype>? BabyBackground { get; set; } = null;
-    
+
     [DataField, ViewVariables(VVAccess.ReadOnly), AutoNetworkedField]
     public ProtoId<BackgroundPrototype>? AdultBackground { get; set; } = null;
 

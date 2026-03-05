@@ -10,21 +10,21 @@ namespace Content.Client.Vanilla.Games.TTT;
 public sealed class ShowTTTNamesVisualsSystem : EntitySystem
 {
     [Dependency] private readonly IOverlayManager _overlay = default!;
-    [Dependency] private readonly IEyeManager eyeManager = default!;
-    [Dependency] private readonly EntityLookupSystem entityLookup = default!;
-    [Dependency] private readonly IUserInterfaceManager userInterfaceManager = default!;
-    [Dependency] private readonly IPlayerManager playerManager = default!;
-    [Dependency] private readonly ExamineSystemShared examineSystemShared = default!;
+    [Dependency] private readonly IEyeManager _eyeManager = default!;
+    [Dependency] private readonly EntityLookupSystem _entityLookup = default!;
+    [Dependency] private readonly IUserInterfaceManager _userInterfaceManager = default!;
+    [Dependency] private readonly IPlayerManager _playerManager = default!;
+    [Dependency] private readonly ExamineSystemShared _examineSystemShared = default!;
 
     public override void Initialize()
     {
         base.Initialize();
-        _overlay.AddOverlay(new ShowTTTNamesOverlay(EntityManager, eyeManager, IoCManager.Resolve<IResourceCache>(), entityLookup, userInterfaceManager, playerManager, examineSystemShared));
+        _overlay.AddOverlay(new ShowNamesOverlay(EntityManager, _eyeManager, IoCManager.Resolve<IResourceCache>(), _entityLookup, _userInterfaceManager, _playerManager, _examineSystemShared));
     }
 
     public override void Shutdown()
     {
         base.Shutdown();
-        _overlay.RemoveOverlay<ShowTTTNamesOverlay>();
+        _overlay.RemoveOverlay<ShowNamesOverlay>();
     }
 }

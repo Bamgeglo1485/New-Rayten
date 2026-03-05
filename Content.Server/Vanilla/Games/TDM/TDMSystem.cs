@@ -27,6 +27,8 @@ using Timer = Robust.Shared.Timing.Timer;
 using Robust.Shared.Player;
 using Robust.Shared.Random;
 using System.Linq;
+using Robust.Shared.Physics.Events;
+using Content.Shared.Vanilla.Games.TTT;
 
 namespace Content.Server.Vanilla.TDM;
 
@@ -53,18 +55,22 @@ public sealed class TDMSystem : EntitySystem
     [Dependency] private readonly SharedGhostSystem _ghosts = default!;
     [Dependency] private readonly IPlayerManager _playerManager = default!;
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
+    [Dependency] private readonly MetaDataSystem _metaSystem = default!;
     private EntityUid? _currentrule = null;
 
     public override void Initialize()
     {
         base.Initialize();
         SubscribeLocalEvent<TDMMarkerComponent, DamageChangedEvent>(OnDamageChanged, before: [typeof(MobThresholdSystem)]); //записываем урон который нанесли
-        SubscribeLocalEvent<TDMMarkerComponent, DamageModifyEvent>(OnDamageModify);    //НО-френдлифаер
+        SubscribeLocalEvent<TDMMarkerComponent, DamageModifyEvent>(OnDamageModify);
+        SubscribeLocalEvent<TDMMarkerComponent, PreventCollideEvent>(OnPrventCollide);
+
         SubscribeLocalEvent<TDMMarkerComponent, MobStateChangedEvent>(OnMobStateChanged); //Вычёркиваем
         SubscribeLocalEvent<TDMMarkerComponent, MapInitEvent>(OnMarkerInit); //Вычёркиваем
 
         SubscribeLocalEvent<TDMRuleComponent, MapInitEvent>(OnRuleInit);//новый геймрул кайф
         SubscribeLocalEvent<TDMRuleComponent, ComponentShutdown>(OnRuleShutDown); // это конец
+
 
         SubscribeNetworkEvent<TDMInfoRequest>(OnInfoRequest); //Пользователь запросил инфы
         SubscribeNetworkEvent<TPMeToTDMEvent>(OnArenaJoinRequest); //Пользователь захотел зайти на арену
@@ -264,6 +270,15 @@ public sealed class TDMSystem : EntitySystem
                         continue;
 
                     RemComp<AdminFrozenComponent>(player.AttachedEntity.Value);
+                    if (TryComp<BackgroundComponent>(player.AttachedEntity.Value, out var background)
+                        && TryComp<NameOverlayComponent>(player.AttachedEntity.Value, out var markerName))
+                    {
+
+                        if (background.GeneralBackground == "BlueGuySpyBackground")
+                            markerName.NameColor = Color.Red;
+                        if (background.GeneralBackground == "RedGuySpyBackground")
+                            markerName.NameColor = Color.DodgerBlue;
+                    }
                 }
                 rule.CurrentStatus = TDMStatus.started;
             }
@@ -344,7 +359,7 @@ public sealed class TDMSystem : EntitySystem
 
         foreach (var stat in sorted)
         {
-            string name = stat.Name.Length > 32 ? stat.Name[..32] : stat.Name;
+            var name = stat.Name.Length > 32 ? stat.Name[..32] : stat.Name;
             result += name.PadRight(32) + "| " +
                     stat.Kills.ToString().PadRight(10) + "| " +
                     ((int)stat.Damage).ToString().PadRight(10) + "\n";
@@ -403,8 +418,7 @@ public sealed class TDMSystem : EntitySystem
             break;
         }
 
-        if (lastvalidSpawnerCoords == null)
-            lastvalidSpawnerCoords = Transform(rule.Arena).Coordinates;
+        lastvalidSpawnerCoords ??= Transform(rule.Arena).Coordinates;
 
         var profile = _gameTicker.GetPlayerProfile(session);
         var mobUid = _spawning.SpawnPlayerMob(lastvalidSpawnerCoords.Value, null, profile, null);
@@ -412,22 +426,25 @@ public sealed class TDMSystem : EntitySystem
         if (_mindSystem.TryGetMind(session.AttachedEntity!.Value, out var mindId, out var mindComp))
             _mindSystem.TransferTo(mindId, mobUid, true, mind: mindComp);
 
-
         //Добавляем метку
         var marker = EnsureComp<TDMMarkerComponent>(mobUid);
         marker.Team = rule.NextTeam;
         marker.RuleLink = ruleEnt;
+        var nameMarker = EnsureComp<NameOverlayComponent>(mobUid);
+        nameMarker.Name = session.Name;
+        nameMarker.NameColor = marker.Team ? Color.Red : Color.DodgerBlue;
+        _metaSystem.SetEntityName(mobUid, session.Name);
         //Добавляем предыстории
         var background = EnsureComp<AwaitBackgroundComponent>(mobUid);
         background.BackgroundGroup = marker.Team ? "RedGuyBackgroundGroup" : "BlueGuyBackgroundGroup";
 
         //Замораживаем
-        RemComp<AdminFrozenComponent>(mobUid);
-        AddComp<AdminFrozenComponent>(mobUid);
+        EnsureComp<AdminFrozenComponent>(mobUid);
 
         rule.PlayerCharacters[mobUid] = marker.Team; //Добавляем в список игроков
         return usedspawner;
     }
+
     private void OnDamageChanged(EntityUid uid, TDMMarkerComponent component, DamageChangedEvent args)
     {
         if (!args.DamageIncreased || args.DamageDelta == null)
@@ -454,20 +471,22 @@ public sealed class TDMSystem : EntitySystem
         if (!TryComp<TDMRuleComponent>(component.RuleLink, out var rulecomp))
             return;
 
+        if (args.Origin == null)
+            return;
+
         rulecomp.PlayerCharacters.Remove(uid);
+        var nameMarker = EnsureComp<NameOverlayComponent>(args.Origin.Value);
+        var color = nameMarker.NameColor;
 
-        Color color = component.Team ? Color.DodgerBlue : Color.Red;
-
-        if (args.Origin != null && TryComp<TDMMarkerComponent>(args.Origin, out var sourcecomp))
+        if (TryComp<TDMMarkerComponent>(args.Origin, out var sourcecomp))
         {
             var origin = args.Origin.Value;
 
             if (origin != uid)
                 sourcecomp.TotalKills++;
 
-            var sourcename = sourcecomp.Summoner is { } summoner
-                ? MetaData(summoner).EntityName
-                : "Неизвестный";
+            var source = sourcecomp.Summoner ?? args.Origin.Value;
+            var sourcename = MetaData(source).EntityName;
             var victimname = MetaData(uid).EntityName;
 
             if (!rulecomp.Firstblooded)
@@ -481,12 +500,15 @@ public sealed class TDMSystem : EntitySystem
             else
             {
                 var kills = sourcecomp.TotalKills;
-                var filter = Filter.Empty().AddPlayers(rulecomp.Players);
+                if (kills > 1)
+                {
+                    var filter = Filter.Empty().AddPlayers(rulecomp.Players);
 
-                var sound = rulecomp.KillSounds.GetValueOrDefault(kills)
-                            ?? rulecomp.KillSounds[5];
+                    var sound = rulecomp.KillSounds.GetValueOrDefault(kills) ?? rulecomp.KillSounds[5];
 
-                _audio.PlayGlobal(sound, filter, true);
+                    _audio.PlayGlobal(sound, filter, true);
+                }
+
                 DispatchMonospaceAnnouncement(Filter.Empty().AddPlayers(rulecomp.Players), Loc.GetString("tdm-killstreak", ("streak", kills), ("player", sourcename), ("victim", victimname)), color);
             }
         }
@@ -540,18 +562,7 @@ public sealed class TDMSystem : EntitySystem
 
         return _random.Pick(validPrototypes);
     }
-    //НО-френдлифаер
-    private void OnDamageModify(EntityUid uid, TDMMarkerComponent component, DamageModifyEvent args)
-    {
-        if (!TryComp<TDMMarkerComponent>(args.Origin, out var sourcecomp))
-            return;
 
-        if (component.Team != sourcecomp.Team)
-            return;
-
-        // Полностью обнуляем урон
-        args.Damage = new DamageSpecifier();
-    }
     private void OnMarkerInit(EntityUid uid, TDMMarkerComponent marker, MapInitEvent args)
     {
         marker.RuleLink = _currentrule;
@@ -592,6 +603,27 @@ public sealed class TDMSystem : EntitySystem
             colorOverride: color
         );
     }
+    //НО-френдлифаер
+    private void OnDamageModify(EntityUid uid, TDMMarkerComponent component, DamageModifyEvent args)
+    {
+        if (!TryComp<TDMMarkerComponent>(args.Origin, out var sourcecomp))
+            return;
 
+        if (component.Team != sourcecomp.Team)
+            return;
 
+        // Полностью обнуляем урон
+        args.Damage = new DamageSpecifier();
+    }
+    private void OnPrventCollide(EntityUid uid, TDMMarkerComponent component, ref PreventCollideEvent args)
+    {
+        if (args.Cancelled)
+            return;
+
+        if (!TryComp<TDMMarkerComponent>(args.OtherEntity, out var otherMarker))
+            return;
+
+        if (otherMarker.Team == component.Team)
+            args.Cancelled = true;
+    }
 }

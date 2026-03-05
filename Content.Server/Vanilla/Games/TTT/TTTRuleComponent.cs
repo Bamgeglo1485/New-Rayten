@@ -21,7 +21,7 @@ public sealed partial class TTTRuleComponent : Component
     [DataField]
     public SoundSpecifier TraitorBrief = new SoundPathSpecifier("/Audio/Ambience/Antag/traitor_start.ogg");
     [DataField]
-    public SoundSpecifier InoBrief = new SoundPathSpecifier("/Audio/Ambience/Antag/traitor_start.ogg");
+    public SoundSpecifier InoBrief = new SoundPathSpecifier("/Audio/Ambience/Antag/innocentbrief.ogg");
     [DataField]
     public SoundSpecifier DecBrief = new SoundPathSpecifier("/Audio/Vanilla/Effects/TTT/decbrief.ogg");
 
