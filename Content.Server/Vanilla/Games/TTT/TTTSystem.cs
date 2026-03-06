@@ -28,6 +28,7 @@ using System.Linq;
 
 using Content.Shared.Vanilla.TDM;
 using Content.Shared.Vanilla.Games.TTT;
+using Content.Shared.Body.Components;
 
 namespace Content.Server.Vanilla.Games.TTT;
 
@@ -494,8 +495,8 @@ public sealed class TTTSystem : EntitySystem
             return;
         }
 
-        int damage = (int)args.DamageDelta.GetTotal();
-        int karmaChange = 0;
+        var damage = (int)args.DamageDelta.GetTotal();
+        var karmaChange = 0;
 
         if (sourcecomp.Role == TTTRole.traitor && component.Role == TTTRole.traitor)
             karmaChange = -5 * damage;
@@ -506,7 +507,7 @@ public sealed class TTTSystem : EntitySystem
                 && component.Role == TTTRole.detective)
             karmaChange = -7 * damage;
 
-        _kARMA[sourcecomp.Session] = Math.Clamp(attackerKarma + karmaChange, -51, 1500);
+        _kARMA[sourcecomp.Session] = Math.Clamp(attackerKarma + karmaChange, -500, 1500);
     }
 
     private void OnDamageModify(EntityUid uid, TTTMarkerComponent component, DamageModifyEvent args)
@@ -529,7 +530,7 @@ public sealed class TTTSystem : EntitySystem
             return;
 
         //  применяем модификатор урона на основе новой кармы
-        var karmaFraction = Math.Clamp(attackerKarma / 1000f, 0f, 1f);
+        var karmaFraction = Math.Clamp(attackerKarma / 1000f, 0.01f, 1f);
 
         var modify = new DamageModifierSet
         {
@@ -583,7 +584,9 @@ public sealed class TTTSystem : EntitySystem
         {
             "TTTGearInnocent"
         };
-
+        //bloodstream
+        if (TryComp<BloodstreamComponent>(mobUid, out var blood))
+            blood.MaxBleedAmount = 0;
         _loadout.Equip(mobUid, gear, null);
         rule.PlayerCharacters[mobUid] = marker.Role; //Добавляем в список игроков
     }
