@@ -29,6 +29,7 @@ using Robust.Shared.Random;
 using System.Linq;
 using Robust.Shared.Physics.Events;
 using Content.Shared.Vanilla.Games.TTT;
+using Content.Shared.Body.Components;
 
 namespace Content.Server.Vanilla.TDM;
 
@@ -440,6 +441,9 @@ public sealed class TDMSystem : EntitySystem
 
         //Замораживаем
         EnsureComp<AdminFrozenComponent>(mobUid);
+        //bloodstream
+        if (TryComp<BloodstreamComponent>(mobUid, out var blood))
+            blood.MaxBleedAmount = 0;
 
         rule.PlayerCharacters[mobUid] = marker.Team; //Добавляем в список игроков
         return usedspawner;
@@ -541,9 +545,7 @@ public sealed class TDMSystem : EntitySystem
 
         // Пытаемся загрузить грид на карту
         if (!_mapLoader.TryLoadGrid(rule.ArenaMapId.Value, new ResPath(rule.TDMProto.ArenaPath), out var grid, opts))
-        {
             return null;
-        }
 
         return grid;
     }

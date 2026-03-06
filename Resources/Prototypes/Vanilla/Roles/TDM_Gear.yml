@@ -6,8 +6,6 @@
     shoes: ClothingShoesBootsSpeedUnrem
     belt: ClothingBeltBandolierFilled
     outerClothing: ClothingOuterFlannelBlue
-    pocket1: MedicatedSuture
-    pocket2: StimpackMini
     back: BaseBallBat
   inhand:
   - WeaponShotgunSawn
@@ -20,8 +18,6 @@
     shoes: ClothingShoesBootsSpeedUnrem
     belt: ClothingBeltBandolierFilled
     outerClothing: ClothingOuterFlannelBlue
-    pocket1: MedicatedSuture
-    pocket2: StimpackMini
     back: BaseBallBat
   inhand:
   - WeaponShotgunSawn
@@ -38,8 +34,7 @@
     - MagazineLightRifle
     back:
     - GrenadeShrapnel
-    - MedicatedSuture
-    - BruteAutoInjector
+    - ExGrenade
   inhand:
   - WeaponRifleAk
 
@@ -53,8 +48,7 @@
     - MagazineLightRifle
     back:
     - GrenadeShrapnel
-    - MedicatedSuture
-    - BruteAutoInjector
+    - ExGrenade
   inhand:
   - WeaponRifleAk
 
@@ -66,9 +60,6 @@
     outerClothing: ClothingOuterArmorHeavyUnrem
     pocket1: FoodBakedGrilledCheeseSandwich
     head: ClothingHeadHatWeldingMaskFlameBlueUnrem
-  storage:
-    back:
-    - MedicatedSuture
   inhand:
   - WeaponMinigun
 
@@ -79,9 +70,6 @@
     outerClothing: ClothingOuterArmorHeavyUnrem
     pocket1: FoodBakedGrilledCheeseSandwich
     head: ClothingHeadHatWeldingMaskFlameUnrem
-  storage:
-    back:
-    - MedicatedSuture
   inhand:
   - WeaponMinigun
 # Медик
@@ -91,14 +79,21 @@
   parent: RedTeamGearDefault
   equipment:
     eyes: ClothingEyesHudMedical
-    outerClothing: ClothingOuterCoatAbsolute
-    gloves: ClothingHandsGlovesAbsolute
   storage:
     back:
     - MedicatedSuture
     - MedicatedSuture
     - Stimpack
-    - PuncturaseBeakerSmall
+    - ChemistryBottleOmnizine
+    - ChemistryBottleOmnizine
+    - ChemistryBottleOmnizine
+    - ChemistryBottleOmnizine
+    - ChemistryBottleOmnizine
+    - ChemistryBottleOmnizine
+    - ChemistryBottleOmnizine
+    - ChemistryBottleOmnizine
+    - ChemistryBottleOmnizine
+    - ChemistryBottleOmnizine
   inhand:
     - Hypospray
 
@@ -107,14 +102,21 @@
   parent: BlueTeamGearDefault
   equipment:
     eyes: ClothingEyesHudMedical
-    outerClothing: ClothingOuterCoatAbsolute
-    gloves: ClothingHandsGlovesAbsolute
   storage:
     back:
     - MedicatedSuture
     - MedicatedSuture
     - Stimpack
-    - PuncturaseBeakerSmall
+    - ChemistryBottleOmnizine
+    - ChemistryBottleOmnizine
+    - ChemistryBottleOmnizine
+    - ChemistryBottleOmnizine
+    - ChemistryBottleOmnizine
+    - ChemistryBottleOmnizine
+    - ChemistryBottleOmnizine
+    - ChemistryBottleOmnizine
+    - ChemistryBottleOmnizine
+    - ChemistryBottleOmnizine
   inhand:
     - Hypospray
 
@@ -122,26 +124,18 @@
 - type: startingGear
   id: BlueGuySniper
   parent: BlueTeamGearDefault
-  equipment:
-    outerClothing: ClothingOuterFlannelBlue
   storage:
     back:
     - MagazineBoxAntiMateriel
-    - MedicatedSuture
-    - BruteAutoInjector
   inhand:
     - WeaponSniperHristov
 
 - type: startingGear
   id: RedGuySniper
   parent: RedTeamGearDefault
-  equipment:
-    outerClothing: ClothingOuterFlannelRed
   storage:
     back:
     - MagazineBoxAntiMateriel
-    - MedicatedSuture
-    - BruteAutoInjector
   inhand:
     - WeaponSniperHristov
 
@@ -156,8 +150,6 @@
     - MagazinePistolCaselessRifle
     back:
     - SmokeGrenade
-    - BruteAutoInjector
-    - MedicatedSuture
   inhand:
     - WeaponPistolCobra
 
@@ -171,8 +163,6 @@
     - MagazinePistolCaselessRifle
     back:
     - SmokeGrenade
-    - BruteAutoInjector
-    - MedicatedSuture
   inhand:
     - WeaponPistolCobra
 
@@ -188,9 +178,6 @@
   storage:
     belt:
     - TDMRCD
-    back:
-    - MedicatedSuture
-    - BruteAutoInjector
   inhand:
     - ToolboxTurretTDMRed
 
@@ -205,9 +192,6 @@
   storage:
     belt:
     - TDMRCD
-    back:
-    - MedicatedSuture
-    - BruteAutoInjector
   inhand:
     - ToolboxTurretTDMBlue
 
@@ -335,22 +319,6 @@
   - type: ClothingSpeedModifier
     walkModifier: 0.65
     sprintModifier: 0.65
-
-
-- type: entity
-  suffix: puncturase
-  parent: Beaker
-  id: PuncturaseBeakerSmall
-  components:
-  - type: Label
-    currentLabel: reagent-name-puncturase
-  - type: SolutionContainerManager
-    solutions:
-      beaker:
-        maxVol: 50
-        reagents:
-        - ReagentId: Puncturase
-          Quantity: 50
 
 - type: entity
   name: Свёрнутая турель
@@ -491,7 +459,6 @@
     availablePrototypes:
     - WallSolid
     - Window
-    - ReinforcedWindow
 
 - type: entity
   parent: ClothingBeltBandolier
