@@ -1,5 +1,6 @@
 using Content.Shared.FixedPoint;
 using Content.Shared.Damage;
+using Robust.Shared.Network;
 
 namespace Content.Shared.Vanilla.TDM;
 
@@ -8,6 +9,7 @@ public sealed partial class TDMMarkerComponent : Component
 {
     [DataField]
     public EntityUid? RuleLink = null;
+    public NetUserId UserId = default;
 
     [DataField]
     public bool Team = true;

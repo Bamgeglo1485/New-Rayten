@@ -31,15 +31,17 @@ using Robust.Shared.Physics.Events;
 using Content.Shared.Vanilla.Games.TTT;
 using Content.Shared.Body.Components;
 
+
 namespace Content.Server.Vanilla.TDM;
 
-public sealed class TDMSystem : EntitySystem
+public sealed partial class TDMSystem : EntitySystem
 {
-    public sealed class PlayerStats(string name, int kills, float damage)
+    public sealed class PlayerStats(string name, int kills, float damage, int mmr)
     {
         public string Name { get; set; } = name;
         public int Kills { get; set; } = kills;
         public float Damage { get; set; } = damage;
+        public int MMR { get; set; } = mmr;
     }
 
     [Dependency] private readonly MapSystem _mapSystem = default!;
@@ -77,11 +79,13 @@ public sealed class TDMSystem : EntitySystem
         SubscribeNetworkEvent<TPMeToTDMEvent>(OnArenaJoinRequest); //Пользователь захотел зайти на арену
         SubscribeLocalEvent<RoundEndTextAppendEvent>(OnRoundEnded);
         _playerManager.PlayerStatusChanged += OnPlayerStatusChanged;
+        LoadMMR();
     }
     public override void Shutdown()
     {
         base.Shutdown();
         _playerManager.PlayerStatusChanged -= OnPlayerStatusChanged;
+        _ = SaveMMRAsync();
     }
     private void OnRoundEnded(RoundEndTextAppendEvent ev)
     {
@@ -309,20 +313,14 @@ public sealed class TDMSystem : EntitySystem
     /// <summary>
     /// Завершает пизделку, сообщает кто победил, запускает новый цикл, если это не ласт раунд
     /// </summary>
-    private void GameOver(EntityUid uid, TDMRuleComponent rule, bool notstartnewcycle = false)
+    private void GameOver(EntityUid uid, TDMRuleComponent rule)
     {
         rule.CurrentStatus = TDMStatus.ended;
-
-        if (notstartnewcycle)
-        {
-            QueueDel(rule.Arena);
-            return;
-        }
 
         var redguys = rule.PlayerCharacters.Count(p => p.Value == true);
         var blueguys = rule.PlayerCharacters.Count(p => p.Value == false);
 
-        bool winner = blueguys > redguys ? false : true;
+        var winner = blueguys > redguys ? false : true;
         List<PlayerStats> statsList = new();
         var statsByEntity = new Dictionary<EntityUid, PlayerStats>();
 
@@ -335,13 +333,15 @@ public sealed class TDMSystem : EntitySystem
 
             if (rulelink != rule)
                 continue;
+            if (rule.LastRound)
+                AddMMR(marker.UserId, marker.Team == winner ? +25 : -25);
 
             var target = marker.Summoner ?? player;
 
             if (!statsByEntity.TryGetValue(target, out var stats))
             {
                 var name = MetaData(target).EntityName;
-                stats = new PlayerStats(name, 0, 0f);
+                stats = new PlayerStats(name, 0, 0f, GetMMR(marker.UserId));
                 statsByEntity[target] = stats;
             }
 
@@ -354,16 +354,17 @@ public sealed class TDMSystem : EntitySystem
         var sorted = statsList
             .OrderByDescending(s => s.Kills)
             .ThenByDescending(s => s.Damage)
+            .ThenByDescending(s => s.MMR)
             .ToList();
 
-        var result = $"{"Игрок".PadRight(32)}| {"Убийств".PadRight(10)}| {"Урон".PadRight(10)}\n";
+        var result = $"{"Игрок".PadRight(32)}| {"Убийств".PadRight(10)}| {"Урон".PadRight(10)}| {"MMR".PadRight(8)} \n";
 
         foreach (var stat in sorted)
         {
             var name = stat.Name.Length > 32 ? stat.Name[..32] : stat.Name;
             result += name.PadRight(32) + "| " +
-                    stat.Kills.ToString().PadRight(10) + "| " +
-                    ((int)stat.Damage).ToString().PadRight(10) + "\n";
+                      stat.Kills.ToString().PadRight(10) + "| " +
+                      ((int)stat.Damage).ToString().PadRight(10) + (stat.MMR).ToString().PadRight(8);
         }
 
         var draw = Color.Green;
@@ -431,6 +432,7 @@ public sealed class TDMSystem : EntitySystem
         var marker = EnsureComp<TDMMarkerComponent>(mobUid);
         marker.Team = rule.NextTeam;
         marker.RuleLink = ruleEnt;
+        marker.UserId = session.UserId;
         var nameMarker = EnsureComp<NameOverlayComponent>(mobUid);
         nameMarker.Name = session.Name;
         nameMarker.NameColor = marker.Team ? Color.Red : Color.DodgerBlue;
@@ -587,7 +589,7 @@ public sealed class TDMSystem : EntitySystem
     }
     private void OnRuleShutDown(EntityUid uid, TDMRuleComponent component, ComponentShutdown args)
     {
-        GameOver(uid, component, true);
+        QueueDel(component.Arena);
         if (_currentrule == uid)
             _currentrule = null;
     }

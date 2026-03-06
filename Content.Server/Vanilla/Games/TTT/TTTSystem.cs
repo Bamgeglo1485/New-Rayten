@@ -259,8 +259,8 @@ public sealed class TTTSystem : EntitySystem
                 }
                 else
                 {
-                    int traitorsCount = GetTraitorCount(rule.Playercount);
-                    int deccount = GetDecCount(rule.Playercount);
+                    var traitorsCount = GetTraitorCount(rule.Playercount);
+                    var deccount = GetDecCount(rule.Playercount);
                     var shuffledPlayers = rule.Players.ToList();
                     _random.Shuffle(shuffledPlayers);
                     foreach (var player in shuffledPlayers)
