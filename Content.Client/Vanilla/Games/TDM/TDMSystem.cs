@@ -1,4 +1,5 @@
 ﻿using Content.Shared.Vanilla.TDM;
+using Content.Shared.Projectiles;
 using Robust.Shared.Timing;
 using Content.Shared.GameTicking;
 using Content.Client.Vanilla.TDM.UI;
@@ -53,7 +54,10 @@ public sealed class TDMSystem : EntitySystem
         if (args.Cancelled)
             return;
 
-        if (!TryComp<TDMMarkerComponent>(args.OtherEntity, out var otherMarker))
+        if (!TryComp<ProjectileComponent>(args.OtherEntity, out var projectileComp))
+            return;
+
+        if (!TryComp<TDMMarkerComponent>(projectileComp.Shooter, out var otherMarker))
             return;
 
         if (otherMarker.Team == component.Team)

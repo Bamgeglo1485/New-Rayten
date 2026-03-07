@@ -13,6 +13,7 @@ using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Vanilla.TDM;
 using Content.Shared.Ghost;
+using Content.Shared.Projectiles;
 using Robust.Server.GameObjects;
 using Robust.Shared.Utility;
 using Robust.Server.Player;
@@ -58,7 +59,7 @@ public sealed partial class TDMSystem : EntitySystem
     [Dependency] private readonly IPlayerManager _playerManager = default!;
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly MetaDataSystem _metaSystem = default!;
-    [Dependency] private readonly MobStateSystem _mob = default!;
+    [Dependency] private readonly MobThresholdSystem _thresh = default!;
     private EntityUid? _currentrule = null;
 
     public override void Initialize()
@@ -73,7 +74,6 @@ public sealed partial class TDMSystem : EntitySystem
 
         SubscribeLocalEvent<TDMRuleComponent, MapInitEvent>(OnRuleInit);//новый геймрул кайф
         SubscribeLocalEvent<TDMRuleComponent, ComponentShutdown>(OnRuleShutDown); // это конец
-
 
         SubscribeNetworkEvent<TDMInfoRequest>(OnInfoRequest); //Пользователь запросил инфы
         SubscribeNetworkEvent<TPMeToTDMEvent>(OnArenaJoinRequest); //Пользователь захотел зайти на арену
@@ -440,7 +440,8 @@ public sealed partial class TDMSystem : EntitySystem
         //Добавляем предыстории
         var background = EnsureComp<AwaitBackgroundComponent>(mobUid);
         background.BackgroundGroup = marker.Team ? "RedGuyBackgroundGroup" : "BlueGuyBackgroundGroup";
-
+        //трешхолд смерти
+        _thresh.SetMobStateThreshold(mobUid, 100f, MobState.Dead);
         //Замораживаем
         EnsureComp<AdminFrozenComponent>(mobUid);
         //bloodstream
@@ -463,10 +464,7 @@ public sealed partial class TDMSystem : EntitySystem
 
     private void OnMobStateChanged(EntityUid uid, TDMMarkerComponent component, MobStateChangedEvent args)
     {
-        if (args.NewMobState == MobState.Critical)
-            _mob.ChangeMobState(uid, MobState.Dead);
-
-        if (args.NewMobState != MobState.Dead)
+        if (args.OldMobState != MobState.Alive)
             return;
 
         if (component.RuleLink == null)
@@ -477,27 +475,25 @@ public sealed partial class TDMSystem : EntitySystem
 
         rulecomp.PlayerCharacters.Remove(uid);
 
-        if (args.Origin == null)
-            return;
-        var nameMarker = EnsureComp<NameOverlayComponent>(args.Origin.Value);
-        var color = nameMarker.NameColor;
-
         if (TryComp<TDMMarkerComponent>(args.Origin, out var sourcecomp))
         {
+            if (args.Origin == null)
+                return;
             var origin = args.Origin.Value;
+            var nameMarker = EnsureComp<NameOverlayComponent>(origin);
+            var color = nameMarker.NameColor;
 
             if (origin != uid)
                 sourcecomp.TotalKills++;
 
             var source = sourcecomp.Summoner ?? args.Origin.Value;
+            var filter = Filter.Empty().AddPlayers(rulecomp.Players);
             var sourcename = MetaData(source).EntityName;
             var victimname = MetaData(uid).EntityName;
 
             if (!rulecomp.Firstblooded)
             {
                 rulecomp.Firstblooded = true;
-
-                var filter = Filter.Empty().AddPlayers(rulecomp.Players);
                 _audio.PlayGlobal(rulecomp.FirstBloodSound, filter, true);
                 DispatchMonospaceAnnouncement(filter, Loc.GetString("tdm-firstblood", ("player", sourcename), ("victim", victimname)), color);
             }
@@ -506,12 +502,10 @@ public sealed partial class TDMSystem : EntitySystem
                 var kills = sourcecomp.TotalKills;
                 if (kills > 1)
                 {
-                    var filter = Filter.Empty().AddPlayers(rulecomp.Players);
                     var sound = rulecomp.KillSounds.GetValueOrDefault(kills) ?? rulecomp.KillSounds[5];
                     _audio.PlayGlobal(sound, filter, true);
                 }
-
-                DispatchMonospaceAnnouncement(Filter.Empty().AddPlayers(rulecomp.Players), Loc.GetString("tdm-killstreak", ("streak", kills), ("player", sourcename), ("victim", victimname)), color);
+                DispatchMonospaceAnnouncement(filter, Loc.GetString("tdm-killstreak", ("streak", kills), ("player", sourcename), ("victim", victimname)), color);
             }
         }
 
@@ -620,7 +614,10 @@ public sealed partial class TDMSystem : EntitySystem
         if (args.Cancelled)
             return;
 
-        if (!TryComp<TDMMarkerComponent>(args.OtherEntity, out var otherMarker))
+        if (!TryComp<ProjectileComponent>(args.OtherEntity, out var projectileComp))
+            return;
+
+        if (!TryComp<TDMMarkerComponent>(projectileComp.Shooter, out var otherMarker))
             return;
 
         if (otherMarker.Team == component.Team)

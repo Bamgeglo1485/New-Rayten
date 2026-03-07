@@ -15,8 +15,7 @@
   description: Док, чувак ты где?!
   sponsorOnly: false
   skills:
-    Weapon: 2
-    Medicine: 3
+    Weapon: 3
   specialDesc:
     - Вы очень быстры, но убить вас тоже крайне легко.
     - Вы вооружены двустволкой!
@@ -39,8 +38,7 @@
   description: А рокетджамп здесь есть?
   sponsorOnly: false
   skills:
-    Weapon: 2
-    Medicine: 2
+    Weapon: 3
   specialDesc:
     - У вас стандартный АКМС, стандартная броня и... да в целом у вас всё стандартное
   specials:
@@ -63,7 +61,6 @@
   sponsorOnly: false
   skills:
     Weapon: 3
-    Medicine: 2
   specialDesc:
     - Тяжелобронированный пулемётчик, хоть и не очень мобильный.
   specials:
@@ -110,7 +107,6 @@
     - Христов и стандартная броня, стандарт профессионалов.
   skills:
     Weapon: 2
-    Medicine: 2
   specials:
   - !type:EquipSpecial
     removeSlotID:
@@ -133,7 +129,6 @@
     - Вы оделись в одежду другой команды?! Коварно...
   skills:
     Weapon: 3
-    Medicine: 2
   specials:
   - !type:EquipSpecial
     removeSlotID:
@@ -156,7 +151,6 @@
   # sponsorOnly: true
   skills:
     Weapon: 2
-    Engineering: 3
   specialDesc:
     - Вы можете строить, у вас есть турель, а также телепорт!
   specials:
@@ -192,8 +186,7 @@
   description: Док, чувак ты где?!
   sponsorOnly: false
   skills:
-    Weapon: 2
-    Medicine: 2
+    Weapon: 3
   specialDesc:
     - Вы очень быстры, но убить вас тоже крайне легко.
     - Вы вооружены двустволкой!
@@ -216,8 +209,7 @@
   description: А рокетджамп здесь есть?
   sponsorOnly: false
   skills:
-    Weapon: 2
-    Medicine: 2
+    Weapon: 3
   specialDesc:
     - У вас стандартный АКМС, стандартная броня и... да в целом у вас всё стандартное
   specials:
@@ -240,7 +232,6 @@
   sponsorOnly: false
   skills:
     Weapon: 3
-    Medicine: 2
   specialDesc:
     - Тяжелобронированный пулемётчик, хоть и не очень мобильный.
   specials:
@@ -285,7 +276,6 @@
   sponsorOnly: false
   skills:
     Weapon: 2
-    Medicine: 2
   specialDesc:
     - Христов и стандартная броня, стандарт профессионалов.
   specials:
@@ -309,7 +299,6 @@
   sponsorOnly: true
   skills:
     Weapon: 3
-    Medicine: 2
   specialDesc:
     - Вы оделись в одежду другой команды?! Коварно...
   specials:
@@ -334,7 +323,6 @@
   # sponsorOnly: true
   skills:
     Weapon: 2
-    Engineering: 3
   specialDesc:
     - Вы можете строить, у вас есть турель, а также телепорт!
   specials:
