@@ -13,7 +13,7 @@ namespace Content.Shared.Vanilla.Games.TTT;
 public sealed partial class NameOverlayComponent : Component
 {
     [DataField, AutoNetworkedField]
-    public string Name = "Подозрительный человек";
+    public string Name = "Турель";
 
     [DataField, AutoNetworkedField]
     public Color NameColor = Color.Green;

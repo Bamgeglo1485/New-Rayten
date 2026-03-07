@@ -22,15 +22,4 @@ public sealed partial class TDMMarkerComponent : Component
 
     [DataField]
     public EntityUid? Summoner = null;
-
-    [DataField]
-    public bool Summon = false;
-
-    public DamageSpecifier Damage = new()
-    {
-        DamageDict = new()
-        {
-            { "Poison", 1200 }
-        }
-    };
 }

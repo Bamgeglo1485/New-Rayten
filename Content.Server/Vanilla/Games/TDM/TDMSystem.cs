@@ -54,11 +54,11 @@ public sealed partial class TDMSystem : EntitySystem
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly IChatManager _chatManager = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
     [Dependency] private readonly SharedGhostSystem _ghosts = default!;
     [Dependency] private readonly IPlayerManager _playerManager = default!;
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly MetaDataSystem _metaSystem = default!;
+    [Dependency] private readonly MobStateSystem _mob = default!;
     private EntityUid? _currentrule = null;
 
     public override void Initialize()
@@ -283,6 +283,7 @@ public sealed partial class TDMSystem : EntitySystem
                             markerName.NameColor = Color.Red;
                         if (background.GeneralBackground == "RedGuySpyBackground")
                             markerName.NameColor = Color.DodgerBlue;
+                        Dirty(player.AttachedEntity.Value, markerName);
                     }
                 }
                 rule.CurrentStatus = TDMStatus.started;
@@ -357,14 +358,12 @@ public sealed partial class TDMSystem : EntitySystem
             .ThenByDescending(s => s.MMR)
             .ToList();
 
-        var result = $"{"Игрок".PadRight(32)}| {"Убийств".PadRight(10)}| {"Урон".PadRight(10)}| {"MMR".PadRight(8)} \n";
+        var result = $"{"Игрок".PadRight(16)}| {"Убийств".PadRight(7)}| {"Урон".PadRight(6)}| {"MMR".PadRight(5)} \n";
 
         foreach (var stat in sorted)
         {
-            var name = stat.Name.Length > 32 ? stat.Name[..32] : stat.Name;
-            result += name.PadRight(32) + "| " +
-                      stat.Kills.ToString().PadRight(10) + "| " +
-                      ((int)stat.Damage).ToString().PadRight(10) + (stat.MMR).ToString().PadRight(8);
+            var name = stat.Name.Length > 16 ? stat.Name[..16] : stat.Name;
+            result += name.PadRight(16) + "| " + stat.Kills.ToString().PadRight(7) + "| " + ((int)stat.Damage).ToString().PadRight(6) + "| " + (stat.MMR).ToString().PadRight(5) + "\n";
         }
 
         var draw = Color.Green;
@@ -384,6 +383,7 @@ public sealed partial class TDMSystem : EntitySystem
         if (rule.LastRound)
         {
             _gameTicker.RestartRound();
+            _ = SaveMMRAsync();
         }
         else
         {
@@ -463,24 +463,20 @@ public sealed partial class TDMSystem : EntitySystem
 
     private void OnMobStateChanged(EntityUid uid, TDMMarkerComponent component, MobStateChangedEvent args)
     {
-        if (args.NewMobState == MobState.Alive)
+        if (args.OldMobState != MobState.Critical)
             return;
 
-        if (args.OldMobState >= MobState.Critical)
-            return;
-
-        _damageable.TryChangeDamage(uid, component.Damage, true, false, null);
-
+        _mob.ChangeMobState(uid, MobState.Dead);
         if (component.RuleLink == null)
             return;
 
         if (!TryComp<TDMRuleComponent>(component.RuleLink, out var rulecomp))
             return;
 
+        rulecomp.PlayerCharacters.Remove(uid);
+
         if (args.Origin == null)
             return;
-
-        rulecomp.PlayerCharacters.Remove(uid);
         var nameMarker = EnsureComp<NameOverlayComponent>(args.Origin.Value);
         var color = nameMarker.NameColor;
 

@@ -142,6 +142,7 @@
     - BlueGuySpy
   - !type:AddComponentsSpecial
     components:
+    - type: Thieving
     - type: AntagImmune
     - type: NpcFactionMember
       factions:
@@ -319,6 +320,7 @@
     - RedGuySpy
   - !type:AddComponentsSpecial
     components:
+    - type: Thieving
     - type: AntagImmune
     - type: NpcFactionMember
       factions:

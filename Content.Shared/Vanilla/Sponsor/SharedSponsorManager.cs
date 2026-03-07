@@ -114,12 +114,11 @@ public sealed class SharedSponsorManager
                 case sponsorRank.GrayTide:
                     current.Add("ClosetSkeletonJesterBackground");
                     current.Add("NukeOpfreelancerBackground");
+                    current.Add("BlueGuySpyBackground");
+                    current.Add("RedGuySpyBackground");
                     current.Add("Trottine");
                     break;
                 case sponsorRank.Revolutionary:
-                    //Предыстории
-                    current.Add("BlueGuySpyBackground");
-                    current.Add("RedGuySpyBackground");
                     //прически
                     current.Add("HumanHairCotton");
                     current.Add("HumanHairFingerwave");
