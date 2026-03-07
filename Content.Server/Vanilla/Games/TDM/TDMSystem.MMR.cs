@@ -1,39 +1,49 @@
 using System.IO;
 using System.Text.Json;
-using System.Threading.Tasks;
 using Robust.Shared.Network;
-using Timer = Robust.Shared.Timing.Timer;
+
 namespace Content.Server.Vanilla.TDM;
 
 public sealed partial class TDMSystem : EntitySystem
 {
-    private Dictionary<NetUserId, int> _mmr = [];
+    private Dictionary<string, int> _mmr = new();
     private const string LadderPath = "tdm_ladder.json";
+
     private void LoadMMR()
     {
         if (!File.Exists(LadderPath))
             return;
 
         var json = File.ReadAllText(LadderPath);
-        _mmr = JsonSerializer.Deserialize<Dictionary<NetUserId, int>>(json) ?? new();
+        _mmr = JsonSerializer.Deserialize<Dictionary<string, int>>(json) ?? new();
     }
+
     private void SaveMMR()
     {
-        var json = JsonSerializer.Serialize(_mmr, new JsonSerializerOptions
+        try
         {
-            WriteIndented = true
-        });
+            var json = JsonSerializer.Serialize(_mmr, new JsonSerializerOptions
+            {
+                WriteIndented = true
+            });
 
-        File.WriteAllText(LadderPath, json);
+            Logger.Info($"Сохраняем MMR: {Path.GetFullPath(LadderPath)}");
+
+            File.WriteAllText(LadderPath, json);
+        }
+        catch (Exception e)
+        {
+            Logger.Error($"Ошибка сохранения MMR: {e}");
+        }
     }
 
     public int GetMMR(NetUserId id)
     {
-        return _mmr.TryGetValue(id, out var mmr) ? mmr : 1000;
-    }
-    public void AddMMR(NetUserId id, int value)
-    {
-        _mmr[id] = GetMMR(id) + value;
+        return _mmr.TryGetValue(id.ToString(), out var mmr) ? mmr : 1000;
     }
 
+    public void AddMMR(NetUserId id, int value)
+    {
+        _mmr[id.ToString()] = GetMMR(id) + value;
+    }
 }

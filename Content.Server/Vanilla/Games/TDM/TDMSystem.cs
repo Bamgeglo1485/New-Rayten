@@ -463,10 +463,12 @@ public sealed partial class TDMSystem : EntitySystem
 
     private void OnMobStateChanged(EntityUid uid, TDMMarkerComponent component, MobStateChangedEvent args)
     {
-        if (args.NewMobState != MobState.Critical)
+        if (args.NewMobState == MobState.Critical)
+            _mob.ChangeMobState(uid, MobState.Dead);
+
+        if (args.NewMobState != MobState.Dead)
             return;
 
-        _mob.ChangeMobState(uid, MobState.Dead);
         if (component.RuleLink == null)
             return;
 
