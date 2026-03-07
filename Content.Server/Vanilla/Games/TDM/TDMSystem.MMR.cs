@@ -17,17 +17,15 @@ public sealed partial class TDMSystem : EntitySystem
         var json = File.ReadAllText(LadderPath);
         _mmr = JsonSerializer.Deserialize<Dictionary<NetUserId, int>>(json) ?? new();
     }
-    private async Task SaveMMRAsync()
+    private void SaveMMR()
     {
         var json = JsonSerializer.Serialize(_mmr, new JsonSerializerOptions
         {
             WriteIndented = true
         });
 
-        await File.WriteAllTextAsync(LadderPath, json);
+        File.WriteAllText(LadderPath, json);
     }
-
-
 
     public int GetMMR(NetUserId id)
     {

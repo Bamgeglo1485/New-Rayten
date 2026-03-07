@@ -85,7 +85,7 @@ public sealed partial class TDMSystem : EntitySystem
     {
         base.Shutdown();
         _playerManager.PlayerStatusChanged -= OnPlayerStatusChanged;
-        _ = SaveMMRAsync();
+        SaveMMR();
     }
     private void OnRoundEnded(RoundEndTextAppendEvent ev)
     {
@@ -378,12 +378,12 @@ public sealed partial class TDMSystem : EntitySystem
             message,
             (blueguys == redguys) ? draw : wincolor);
 
-        Timer.Spawn(TimeSpan.FromSeconds(1), () => QueueDel(rule.Arena)); //Удаляем прошлую арену
 
+        Timer.Spawn(TimeSpan.FromSeconds(3), () => QueueDel(rule.Arena)); //Удаляем прошлую арену
         if (rule.LastRound)
         {
-            _gameTicker.RestartRound();
-            _ = SaveMMRAsync();
+            Timer.Spawn(TimeSpan.FromSeconds(3), () => _gameTicker.RestartRound());//рестартим раунд
+            SaveMMR();
         }
         else
         {
@@ -463,7 +463,7 @@ public sealed partial class TDMSystem : EntitySystem
 
     private void OnMobStateChanged(EntityUid uid, TDMMarkerComponent component, MobStateChangedEvent args)
     {
-        if (args.OldMobState != MobState.Critical)
+        if (args.NewMobState != MobState.Critical)
             return;
 
         _mob.ChangeMobState(uid, MobState.Dead);
@@ -505,9 +505,7 @@ public sealed partial class TDMSystem : EntitySystem
                 if (kills > 1)
                 {
                     var filter = Filter.Empty().AddPlayers(rulecomp.Players);
-
                     var sound = rulecomp.KillSounds.GetValueOrDefault(kills) ?? rulecomp.KillSounds[5];
-
                     _audio.PlayGlobal(sound, filter, true);
                 }
 
