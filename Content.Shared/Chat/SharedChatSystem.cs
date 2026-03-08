@@ -324,8 +324,7 @@ public abstract partial class SharedChatSystem : EntitySystem
         bool hideLog = false,
         bool checkEmote = true,
         bool ignoreActionBlocker = false,
-        NetUserId? author = null,
-        EntityUid? receiver = null //Rayten
+        NetUserId? author = null
         )
     { }
 

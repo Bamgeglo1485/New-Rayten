@@ -29,14 +29,14 @@ accept-TDM-window-deny-button = Нет
 
 TTT-NotAvailable = TTT
 TTT-Available = TTT { $players }/4 ({ $timer })
-ttt-traitor-brief = [color={ $color }][font size=16]Вы Предатель.[/font] 
+ttt-traitor-brief = [color={ $color }][font size=16]Вы Предатель.[/font]
     Убейте невиновных!
     { "[bold]Вы не можете убивать других предателей[/bold].[/color]" }
 ttt-detective-brief = [color={ $color }][font size=16]Вы Детектив.[/font]
-    Вы должны убить предателей. 
+    Вы должны убить предателей.
     { "[bold]Вы не можете убивать просто так[/bold].[/color]" }
 ttt-innocent-brief = [color={ $color }][font size=16]Вы Невиновный.[/font]
-    Вы должны убить предателей. 
+    Вы должны убить предателей.
     { "[bold]Вы не можете убивать просто так[/bold].[/color]" }
 ttt-awaitrole-brief = [font size=16][color=#7F00FF]Роли будут выданы через 30 секунд![/color][/font]
     Вооружайтесь и кооперируйтесь, но будьте бдительны, ведь кому-то достанется роль [color=#FF0000]предателя[/color].
@@ -49,3 +49,6 @@ ttt-gameover = [font="Monospace" size= 20]{ $winner ->
        *[other] Ничья :c
     }[/font]
     { $result }
+ttt-verb-examine-body-text = осмотреть тело
+ttt-examine-body-title = осмотр тела { $ownerName }
+ttt-confirm-dead = { $user } обнаружил тело { $target }, он был { $role }

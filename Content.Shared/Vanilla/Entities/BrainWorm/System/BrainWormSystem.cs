@@ -175,7 +175,7 @@ public abstract partial class SharedBrainWormSystem : EntitySystem
         hostcomp.HostedBrainWorm = worm;
         wormcomp.SetHost(target);
         var privatetalkcomp = EnsureComp<PrivateTalkComponent>(worm);
-        privatetalkcomp.receiver = target;
+        privatetalkcomp.Receivers.Add(target);
         RemComp<FlammableComponent>(worm);
         if (TryComp(worm, out ActionsComponent? comp))
         {
@@ -216,7 +216,7 @@ public abstract partial class SharedBrainWormSystem : EntitySystem
 
         // Устанавливаем приватное общение с основным телом
         var privatetalkcomp = EnsureComp<PrivateTalkComponent>(component.MindCage);
-        privatetalkcomp.receiver = uid;
+        privatetalkcomp.Receivers.Add(uid);
     }
 
 

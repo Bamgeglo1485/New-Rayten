@@ -4,9 +4,8 @@ namespace Content.Shared.Vanilla.Voices;
 public sealed partial class PrivateTalkComponent : Component
 {
     /// <summary>
-    /// Сущность которая будет слышать любое чат-сообщение,
-    /// туду переделать на массив.
+    /// Сущности которые будут слышать любое чат-сообщение,
     /// </summary>
     [DataField]
-    public EntityUid? receiver;
+    public HashSet<EntityUid> Receivers = [];
 }

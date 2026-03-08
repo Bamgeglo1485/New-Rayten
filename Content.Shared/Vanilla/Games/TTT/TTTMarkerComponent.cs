@@ -1,9 +1,5 @@
-using Content.Shared.FixedPoint;
-using Content.Shared.Damage;
 using Content.Shared.StatusIcon;
-using Robust.Shared.Prototypes;
 using Robust.Shared.GameStates;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 using Robust.Shared.Player;
 
@@ -19,52 +15,73 @@ public sealed partial class NameOverlayComponent : Component
     public Color NameColor = Color.Green;
 }
 
-
-
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class TTTMarkerComponent : Component
 {
     [DataField]
-    public EntityUid? RuleLink = null;
+    public EntityUid RuleLink;
 
     [DataField, AutoNetworkedField]
-    public TTTRole Role = TTTRole.await;
+    public TTTRole Role = TTTRole.Await;
 
     [DataField]
     public int TotalKills = 0;
 
     [DataField]
     public ICommonSession Session;
-
-    public DamageSpecifier Damage = new()
-    {
-        DamageDict = new()
-        {
-            { "Poison", 1200 }
-        }
-    };
+    [DataField]
+    public bool TeamKiller = false;
 
     [DataField("DecStatusIcon", customTypeSerializer: typeof(PrototypeIdSerializer<FactionIconPrototype>))]
     public string DecStatusIcon = "TTTDetectiveFaction";
+
+    public Color GetColor()
+    {
+        return Role switch
+        {
+            TTTRole.Inocent => Color.Green,
+            TTTRole.Traitor => Color.Red,
+            TTTRole.Detective => Color.DodgerBlue,
+            _ => Color.Green
+        };
+    }
+
+
+
+    /// <summary>
+    /// туду в loc
+    /// </summary>
     public string GetRoleName()
     {
         return Role switch
         {
-            TTTRole.inocent => "Невиновный",
-            TTTRole.traitor => "Предатель",
-            TTTRole.detective => "Детектив",
-            TTTRole.await => "Ожидание",
-            _ => "Неизвестная роль"
+            TTTRole.Inocent => "Невиновный",
+            TTTRole.Traitor => "Предатель",
+            TTTRole.Detective => "Детектив",
+            _ => "...ээ?"
+        };
+    }
+    /// <summary>
+    /// туду в loc
+    /// </summary>
+    public string GetUIRoleName()
+    {
+        return Role switch
+        {
+            TTTRole.Inocent => "Невиновным",
+            TTTRole.Traitor => "Предателем",
+            TTTRole.Detective => "Детективом",
+            _ => "....Кем?"
         };
     }
 }
 
 public enum TTTRole : byte
 {
-    await = 0,
-    inocent = 1,
-    detective = 2,
-    traitor = 3,
+    Await = 0,
+    Inocent = 1,
+    Detective = 2,
+    Traitor = 3,
 }
 
 [RegisterComponent, NetworkedComponent]

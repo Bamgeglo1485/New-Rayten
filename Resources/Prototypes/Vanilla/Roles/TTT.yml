@@ -1,0 +1,38 @@
+- type: entity
+  parent: MobHuman
+  id: TTTMob
+  name: Житель города
+  components:
+  - type: ShowTTTDetectiveIcons
+  - type: Skill
+    basicSkills:
+      Weapon: 2
+  - type: Bloodstream
+    maxBleedAmount: 0
+  - type: SlowOnDamage
+    speedModifierThresholds:
+      100: 1
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      100: Dead
+  - type: UserInterface
+    interfaces:
+      enum.HumanoidMarkingModifierKey.Key:
+        type: HumanoidMarkingModifierBoundUserInterface
+      enum.StrippingUiKey.Key:
+        type: StrippableBoundUserInterface
+      enum.BodyExamineUiKey.Key:
+        type: TTTBodyExamineBoundUserInterface
+
+- type: startingGear
+  id: TTTGearInnocent
+  equipment:
+    head: ClothingHeadHatBeaverHat
+    jumpsuit: ClothingUniformJumpsuitLoungewear
+    eyes: ClothingEyesGlassesJamjar
+    gloves: ClothingHandsMercGlovesCombat
+    outerClothing: ClothingOuterFlannelGreen
+    shoes: ClothingShoesBootsWinter
+    neck: ClothingNeckNanoTrasenPin
+    id: PassengerPDAUnrem

@@ -200,16 +200,16 @@ public sealed partial class ChatSystem : SharedChatSystem
         message = SanitizeInGameICMessage(source, message, out var emoteStr, shouldCapitalize, shouldPunctuate, shouldCapitalizeTheWordI);
 
         //Rayten
-        EntityUid? receiver = null;
+        HashSet<EntityUid>? receivers = null;
         if (TryComp<PrivateTalkComponent>(source, out var privateTalkComp))
         {
-            receiver = privateTalkComp.receiver;
+            receivers = privateTalkComp.Receivers;
         }
         //Rayten-end
         // Was there an emote in the message? If so, send it.
         if (player != null && emoteStr != message && emoteStr != null)
         {
-            SendEntityEmote(source, emoteStr, range, nameOverride, ignoreActionBlocker, receiver: receiver);
+            SendEntityEmote(source, emoteStr, range, nameOverride, ignoreActionBlocker);
         }
 
         // This can happen if the entire string is sanitized out.
@@ -221,7 +221,7 @@ public sealed partial class ChatSystem : SharedChatSystem
         {
             if (TryProcessRadioMessage(source, message, out var modMessage, out var channel))
             {
-                SendEntityWhisper(source, modMessage, range, channel, nameOverride, hideLog, ignoreActionBlocker, receiver: receiver);
+                SendEntityWhisper(source, modMessage, range, channel, nameOverride, hideLog, ignoreActionBlocker, receivers: receivers);
                 return;
             }
         }
@@ -230,13 +230,13 @@ public sealed partial class ChatSystem : SharedChatSystem
         switch (desiredType)
         {
             case InGameICChatType.Speak:
-                SendEntitySpeak(source, message, range, nameOverride, hideLog, ignoreActionBlocker, receiver: receiver);
+                SendEntitySpeak(source, message, range, nameOverride, hideLog, ignoreActionBlocker, receivers: receivers);
                 break;
             case InGameICChatType.Whisper:
-                SendEntityWhisper(source, message, range, null, nameOverride, hideLog, ignoreActionBlocker, receiver: receiver);
+                SendEntityWhisper(source, message, range, null, nameOverride, hideLog, ignoreActionBlocker, receivers: receivers);
                 break;
             case InGameICChatType.Emote:
-                SendEntityEmote(source, message, range, nameOverride, hideLog: hideLog, ignoreActionBlocker: ignoreActionBlocker, receiver: receiver);
+                SendEntityEmote(source, message, range, nameOverride, hideLog: hideLog, ignoreActionBlocker: ignoreActionBlocker);
                 break;
         }
     }
@@ -383,7 +383,7 @@ public sealed partial class ChatSystem : SharedChatSystem
         string? nameOverride,
         bool hideLog = false,
         bool ignoreActionBlocker = false,
-        EntityUid? receiver = null //Rayten
+        HashSet<EntityUid>? receivers = null //Rayten
         )
     {
         if (!_actionBlocker.CanSpeak(source) && !ignoreActionBlocker)
@@ -421,7 +421,7 @@ public sealed partial class ChatSystem : SharedChatSystem
             ("fontSize", speech.FontSize),
             ("message", FormattedMessage.EscapeText(message)));
 
-        SendInVoiceRange(ChatChannel.Local, message, wrappedMessage, source, range, receiver: receiver);
+        SendInVoiceRange(ChatChannel.Local, message, wrappedMessage, source, range, receivers: receivers);
 
         var ev = new EntitySpokeEvent(source, message, originalMessage, null, null);
         RaiseLocalEvent(source, ev, true);
@@ -457,7 +457,7 @@ public sealed partial class ChatSystem : SharedChatSystem
         string? nameOverride,
         bool hideLog = false,
         bool ignoreActionBlocker = false,
-        EntityUid? receiver = null //Rayten
+        HashSet<EntityUid>? receivers = null //Rayten
         )
     {
         if (!_actionBlocker.CanSpeak(source) && !ignoreActionBlocker)
@@ -502,7 +502,7 @@ public sealed partial class ChatSystem : SharedChatSystem
                 continue;
             listener = session.AttachedEntity.Value;
             //rayten-start
-            if (receiver != null && listener != receiver && listener != source && !data.Observer)
+            if (receivers != null && !receivers.Contains(listener) && listener != source && !data.Observer)
                 continue;
             //rayten-end
 
@@ -550,8 +550,7 @@ public sealed partial class ChatSystem : SharedChatSystem
         bool hideLog = false,
         bool checkEmote = true,
         bool ignoreActionBlocker = false,
-        NetUserId? author = null,
-        EntityUid? receiver = null //Rayten
+        NetUserId? author = null
         )
     {
         if (!_actionBlocker.CanEmote(source) && !ignoreActionBlocker)
@@ -571,7 +570,7 @@ public sealed partial class ChatSystem : SharedChatSystem
             !TryEmoteChatInput(source, action))
             return;
 
-        SendInVoiceRange(ChatChannel.Emotes, action, wrappedMessage, source, range, author, receiver: receiver);
+        SendInVoiceRange(ChatChannel.Emotes, action, wrappedMessage, source, range, author);
 
         if (!hideLog)
             if (name != Name(source))
@@ -680,24 +679,27 @@ public sealed partial class ChatSystem : SharedChatSystem
     /// <summary>
     ///     Sends a chat message to the given players in range of the source entity.
     /// </summary>
-    private void SendInVoiceRange(ChatChannel channel, string message, string wrappedMessage, EntityUid source, ChatTransmitRange range, NetUserId? author = null, EntityUid? receiver = null)
+    private void SendInVoiceRange(ChatChannel channel, string message, string wrappedMessage, EntityUid source, ChatTransmitRange range, NetUserId? author = null, HashSet<EntityUid>? receivers = null)
     {
-
         foreach (var (session, data) in GetRecipients(source, VoiceRange))
         {
+            var entRange = MessageRangeCheck(session, data, range);
             //rayten-start
-            if (session.AttachedEntity.HasValue)
+            if (session.AttachedEntity.HasValue && receivers != null)
             {
-                EntityUid listener = session.AttachedEntity.Value;
+                var listener = session.AttachedEntity.Value;
 
-                if (receiver != null && listener != receiver && listener != source && !data.Observer)
+                if (!receivers.Contains(listener) && listener != source && !data.Observer)
                     continue;
             }
             //rayten-end
+            else
+            {
+                if (entRange == MessageRangeCheckResult.Disallowed)
+                    continue;
+            }
 
-            var entRange = MessageRangeCheck(session, data, range);
-            if (entRange == MessageRangeCheckResult.Disallowed)
-                continue;
+
 
             var entHideChat = entRange == MessageRangeCheckResult.HideChat;
             _chatManager.ChatMessageToOne(channel, message, wrappedMessage, source, entHideChat, session.Channel, author: author);
