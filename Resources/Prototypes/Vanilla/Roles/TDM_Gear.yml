@@ -323,7 +323,6 @@
     soundGunshot: /Audio/Weapons/Guns/Gunshots/gun_sentry.ogg
   - type: TDMMarker
     team: true
-    summon: true
   - type: NpcFactionMember
     factions:
     - RedTeamTDM
@@ -358,7 +357,6 @@
     soundGunshot: /Audio/Weapons/Guns/Gunshots/gun_sentry.ogg
   - type: TDMMarker
     team: false
-    summon: true
   - type: NpcFactionMember
     factions:
     - BlueTeamTDM

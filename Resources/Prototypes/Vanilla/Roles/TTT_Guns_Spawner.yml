@@ -72,7 +72,7 @@
     - !type:GroupSelector
       weight: 10
       children:
-      - id: TTTL6
+      - id: WeaponLightMachineGunL6
       - id: WeaponMinigun
       - id: WeaponHid
     #редко

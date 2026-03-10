@@ -151,6 +151,7 @@
   # sponsorOnly: true
   skills:
     Weapon: 2
+    Engineering: 3
   specialDesc:
     - Вы можете строить, у вас есть турель, а также телепорт!
   specials:
@@ -323,6 +324,7 @@
   # sponsorOnly: true
   skills:
     Weapon: 2
+    Engineering: 3
   specialDesc:
     - Вы можете строить, у вас есть турель, а также телепорт!
   specials:
