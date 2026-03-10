@@ -1,12 +1,7 @@
-using Content.Shared.FixedPoint;
 using Content.Shared.Roles;
-using Content.Shared.Storage;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
-using Robust.Shared.GameStates;
 using Robust.Shared.Map;
-using Content.Shared.Vanilla.Games.TTT;
 using Content.Shared.Vanilla.TDM;
 using Robust.Shared.Audio;
 namespace Content.Server.Vanilla.Games.TTT;
@@ -21,14 +16,12 @@ public sealed partial class TTTRuleComponent : Component
     [DataField]
     public SoundSpecifier TraitorBrief = new SoundPathSpecifier("/Audio/Ambience/Antag/traitor_start.ogg");
     [DataField]
-    public SoundSpecifier InoBrief = new SoundPathSpecifier("/Audio/Ambience/Antag/innocentbrief.ogg");
+    public SoundSpecifier InoBrief = new SoundPathSpecifier("/Audio/Vanilla/Effects/TTT/innocentbrief.ogg");
     [DataField]
     public SoundSpecifier DecBrief = new SoundPathSpecifier("/Audio/Vanilla/Effects/TTT/decbrief.ogg");
-
-
-
     [DataField]
-    public TimeSpan NextUpdate;
+    public SoundSpecifier AwaitRolesMusic = new SoundPathSpecifier("/Audio/Vanilla/StationEvents/Forever_Blowing_Bubbles.ogg",
+            AudioParams.Default.WithVolume(-6f));
 
     [DataField]
     public TimeSpan TimeOnNewCycle = TimeSpan.FromSeconds(0);
@@ -38,34 +31,35 @@ public sealed partial class TTTRuleComponent : Component
 
     [DataField]
     public TimeSpan TimeForPlayersJoin = TimeSpan.FromMinutes(1f);
-
-    /// <summary>
-    /// игроки, которые будут учавствовать в пвп
-    /// </summary>
     [DataField]
-    public HashSet<ICommonSession> Players = new();
-
-    [DataField]
-    public int Playercount = 0;
-    /// <summary>
-    /// Словарь игровых персонажей и к какой команде они относятся
-    /// </summary>
-    [DataField]
-    public Dictionary<EntityUid, TTTRole> PlayerCharacters = new();
+    public List<ProtoId<StartingGearPrototype>> StartingGear = new()
+    {
+        "TTTGearInnocent"
+    };
 
 
-    [DataField]
-    public TTTStatus CurrentStatus = TTTStatus.awaitstart;
 
-    [DataField]
-    public EntityUid Arena;
+    [ViewVariables]
+    public HashSet<ICommonSession> Sessions = [];
+    [ViewVariables]
+    public TimeSpan NextUpdate;
+    [ViewVariables]
+    public int InoCount = 0;
+    [ViewVariables]
+    public int TraitorsCount = 0;
+    [ViewVariables]
+    public TTTStatus CurrentStatus = TTTStatus.AwaitStart;
 
-    [DataField]
-    public MapId? ArenaMapId = null;
+    [ViewVariables]
+    public EntityUid Arena = default;
 
-    [DataField]
+    [ViewVariables]
+    public MapId ArenaMapId = default;
+
+    [ViewVariables]
     public TDMMapPrototype? TDMProto = null;
-    public int Anoncments = 0;
+    [ViewVariables]
+    public int Announcments = 0;
 }
 
 public enum TTTStatus : byte
@@ -73,12 +67,12 @@ public enum TTTStatus : byte
     /// <summary>
     /// Спавн новой арены, сбор желающих на участие
     /// </summary>
-    awaitstart = 1,
+    AwaitStart = 1,
 
     /// <summary>
     /// Спавн всех игроков на арене, новые игроки не могут подключиться, роли не распределены
     /// </summary>
-    startup = 2,
+    Startup = 2,
 
     /// <summary>
     /// Выдача ролек
@@ -93,5 +87,5 @@ public enum TTTStatus : byte
     /// <summary>
     /// Раунд окончен
     /// </summary>
-    ended = 5
+    Ended = 5
 }

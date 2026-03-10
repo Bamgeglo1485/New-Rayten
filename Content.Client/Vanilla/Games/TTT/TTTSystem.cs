@@ -1,5 +1,6 @@
-using Content.Client.Vanilla.Overlays;
 using Content.Shared.Examine;
+using Content.Shared.Vanilla.Games.TTT;
+using Content.Client.Vanilla.Overlays;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Client.ResourceManagement;
@@ -7,7 +8,7 @@ using Robust.Client.Player;
 
 namespace Content.Client.Vanilla.Games.TTT;
 
-public sealed class ShowTTTNamesVisualsSystem : EntitySystem
+public sealed class TTTSystem : SharedTTTSystem
 {
     [Dependency] private readonly IOverlayManager _overlay = default!;
     [Dependency] private readonly IEyeManager _eyeManager = default!;

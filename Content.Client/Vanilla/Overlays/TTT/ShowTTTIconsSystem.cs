@@ -23,7 +23,7 @@ public sealed class ShowTTTIconsSystem : EquipmentHudSystem<ShowTTTDetectiveIcon
         if (!IsActive)
             return;
 
-        if (component.Role == TTTRole.detective)
+        if (component.Role == TTTRole.Detective)
         {
             if (_prototype.TryIndex<FactionIconPrototype>(component.DecStatusIcon, out var deciconPrototype))
                 ev.StatusIcons.Add(deciconPrototype);
