@@ -1,3 +1,13 @@
+#debug
+- type: entity
+  id: TraitorShopImplanter
+  name: Имплантер трейторшопа
+  parent: BaseImplantOnlyImplanter
+  suffix: Debug
+  components:
+    - type: Implanter
+      implant: TraitorShopImplant
+#end-debug
 - type: entity
   parent: [ BaseSubdermalImplant, StorePresetTraitorShop ]
   id: TraitorShopImplant
@@ -7,9 +17,6 @@
   components:
   - type: SubdermalImplant
     implantAction: ActionOpenTraitorShopImplant
-    whitelist:
-      components:
-      - Hands
   - type: Store
     balance:
       TTTCredit: 2

@@ -10,6 +10,12 @@ namespace Content.Server.Vanilla.Games.TTT;
 public sealed partial class TTTRuleComponent : Component
 {
     [DataField]
+    public List<string> Arenas { get; set; } =
+    [
+        "Maps/Vanilla/Misc/TTT/TTT_Mine.yml",
+        "Maps/Vanilla/Misc/TTT/TTT_RickAndMorty.yml"
+    ];
+    [DataField]
     public SoundSpecifier WinSound = new SoundPathSpecifier("/Audio/Vanilla/Effects/TTT/winsound.ogg");
     [DataField]
     public SoundSpecifier LoseSound = new SoundPathSpecifier("/Audio/Vanilla/Effects/TTT/losesound.ogg");
@@ -27,7 +33,9 @@ public sealed partial class TTTRuleComponent : Component
     public TimeSpan TimeOnNewCycle = TimeSpan.FromSeconds(0);
 
     [DataField]
-    public TimeSpan TimeToNewCycle = TimeSpan.FromSeconds(480);
+    public TimeSpan TimeToNewCycle = TimeSpan.FromSeconds(300);
+    [DataField]
+    public TimeSpan HasteAddTime = TimeSpan.FromSeconds(30);
 
     [DataField]
     public TimeSpan TimeForPlayersJoin = TimeSpan.FromMinutes(1f);

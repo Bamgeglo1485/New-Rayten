@@ -3,13 +3,9 @@
   abstract: true
   components:
   - type: Store
-    name: store-preset-name-spellbook
+    name: store-preset-ttt-traitor
     categories:
-    - SpellbookOffensive    #Fireball, Rod Form
-    - SpellbookDefensive    #Magic Missile, Wall of Force
-    - SpellbookUtility      #Body Swap, Lich, Teleport, Knock, Polymorph
-    - SpellbookEquipment    #Battlemage Robes, Staff of Locker
-    - SpellbookEvents       #Summon Weapons, Summon Ghosts
+    - TTTTraitrorCategory
     currencyWhitelist:
     - TTTCredit
 
@@ -18,7 +14,7 @@
   abstract: true
   components:
   - type: Store
-    name: store-preset-name-spellbook
+    name: store-preset-ttt-detective
     categories:
     - SpellbookOffensive    #Fireball, Rod Form
     - SpellbookDefensive    #Magic Missile, Wall of Force
@@ -30,5 +26,5 @@
 
 - type: currency
   id: TTTCredit
-  displayName: кредит
+  displayName: store-currency-display-ttt-credit
   canWithdraw: false

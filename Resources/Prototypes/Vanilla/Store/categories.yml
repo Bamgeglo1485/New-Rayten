@@ -9,3 +9,9 @@
 - type: storeCategory
   id: BrainWormHostUpgrades
   name: store-category-brain-worm-host-upgrades
+
+# TTT
+- type: storeCategory
+  id: TTTTraitrorCategory
+  name: store-category-ttt-traitor
+

@@ -1,0 +1,222 @@
+- type: entity
+  parent: RandomSpawner
+  name: Спавнер случайного оружия
+  id: TTTRandomGunSpawner
+  suffix: TTT
+  placement:
+    mode: AlignTileAny
+  components:
+  - type: EntityTableSpawner
+    offset: 0.2
+    table: !type:NestedSelector
+      tableId: TTTWeapon
+
+
+- type: entityTable
+  id: TTTWeapon
+  table: !type:GroupSelector
+    children:
+    - !type:NestedSelector
+      weight: 50
+      tableId: TTTPistols
+    - !type:NestedSelector
+      weight: 100
+      tableId: TTTGuns
+
+# пистолеты
+- type: entityTable
+  id: TTTPistols
+  table: !type:GroupSelector
+    children:
+    #редко
+    - !type:GroupSelector
+      weight: 20
+      children:
+      - id: WeaponRevolverDeckard
+      - id: WeaponRevolverInspector
+      - id: WeaponRevolverMateba
+      - id: WeaponRevolverPython
+    #обычно
+    - !type:GroupSelector
+      weight: 100
+      children:
+      - !type:NestedSelector
+        tableId: TTTMK58
+      - !type:NestedSelector
+        tableId: TTTViper
+
+- type: entityTable
+  id: TTTMK58
+  table: !type:AllSelector
+    children:
+    - id: WeaponPistolMk58
+    - id: MagazinePistol
+    - id: MagazinePistol
+    - id: MagazineBoxPistol
+
+- type: entityTable
+  id: TTTViper
+  table: !type:AllSelector
+    children:
+    - id: WeaponPistolViper
+    - id: MagazinePistol
+    - id: MagazinePistol
+    - id: MagazineBoxPistol
+
+# Основное оружие
+- type: entityTable
+  id: TTTGuns
+  table: !type:GroupSelector
+    children:
+    #супер-редко
+    - !type:GroupSelector
+      weight: 10
+      children:
+      - id: TTTL6
+      - id: WeaponMinigun
+      - id: WeaponHid
+    #редко
+    - !type:GroupSelector
+      weight: 50
+      children:
+      - !type:NestedSelector
+        tableId: TTTAKMS
+      - !type:NestedSelector
+        tableId: TTTDrozd
+      - !type:NestedSelector
+        tableId: TTTXL8
+      - !type:NestedSelector
+        tableId: TTTBuldog
+      - !type:NestedSelector
+        tableId: TTTEstoc
+    #обычно
+    - !type:GroupSelector
+      weight: 100
+      children:
+      - !type:NestedSelector
+        tableId: TTTLecter
+      - !type:NestedSelector
+        tableId: TTTM90
+      - !type:NestedSelector
+        tableId: TTTKammerer
+      - !type:NestedSelector
+        tableId: TTTEnforcer
+      - !type:NestedSelector
+        tableId: TTTDoubleBarreled
+      - !type:NestedSelector
+        tableId: TTTAtreides
+      - !type:NestedSelector
+        tableId: TTTC20r
+      - !type:NestedSelector
+        tableId: TTTWT550
+
+- type: entityTable
+  id: TTTAKMS
+  table: !type:AllSelector
+    children:
+    - id: WeaponRifleAk
+    - id: MagazineLightRifle
+    - id: MagazineLightRifle
+    - id: MagazineBoxLightRifle
+
+- type: entityTable
+  id: TTTDrozd
+  table: !type:AllSelector
+    children:
+    - id: WeaponSubMachineGunDrozd
+    - id: MagazinePistolSubMachineGun
+    - id: MagazinePistolSubMachineGun
+    - id: MagazineBoxPistol
+
+- type: entityTable
+  id: TTTXL8
+  table: !type:AllSelector
+    children:
+    - id: WeaponSubMachineGunDrozd
+    - id: MagazineRifle
+    - id: MagazineRifle
+    - id: MagazineBoxRifle
+
+- type: entityTable
+  id: TTTBuldog
+  table: !type:AllSelector
+    children:
+    - id: WeaponShotgunBulldog
+    - id: MagazineShotgun
+    - id: MagazineShotgun
+    - id: MagazineShotgun
+
+- type: entityTable
+  id: TTTLecter
+  table: !type:AllSelector
+    children:
+    - id: WeaponRifleLecter
+    - id: MagazineRifle
+    - id: MagazineRifle
+    - id: MagazineBoxRifle
+
+- type: entityTable
+  id: TTTM90
+  table: !type:AllSelector
+    children:
+    - id: WeaponRifleM90GrenadeLauncher
+    - id: MagazineRifle
+    - id: MagazineRifle
+    - id: MagazineBoxRifle
+
+- type: entityTable
+  id: TTTEstoc
+  table: !type:AllSelector
+    children:
+    - id: WeaponRifleEstoc
+    - id: MagazineRifle
+    - id: MagazineRifle
+    - id: MagazineBoxRifle
+
+- type: entityTable
+  id: TTTKammerer
+  table: !type:AllSelector
+    children:
+    - id: WeaponShotgunKammerer
+    - id: BoxLethalshot
+
+- type: entityTable
+  id: TTTEnforcer
+  table: !type:AllSelector
+    children:
+    - id: WeaponShotgunEnforcer
+    - id: BoxLethalshot
+
+- type: entityTable
+  id: TTTDoubleBarreled
+  table: !type:AllSelector
+    children:
+    - id: WeaponShotgunDoubleBarreled
+    - id: BoxLethalshot
+
+- type: entityTable
+  id: TTTWT550
+  table: !type:AllSelector
+    children:
+    - id: WeaponSubMachineGunWt550
+    - id: MagazinePistolSubMachineGunTopMounted
+    - id: MagazinePistolSubMachineGunTopMounted
+    - id: MagazineBoxPistol
+
+- type: entityTable
+  id: TTTAtreides
+  table: !type:AllSelector
+    children:
+    - id: WeaponSubMachineGunAtreides
+    - id: MagazinePistolSubMachineGun
+    - id: MagazinePistolSubMachineGun
+    - id: MagazineBoxPistol
+
+- type: entityTable
+  id: TTTC20r
+  table: !type:AllSelector
+    children:
+    - id: WeaponSubMachineGunC20r
+    - id: MagazinePistolSubMachineGun
+    - id: MagazinePistolSubMachineGun
+    - id: MagazineBoxPistol

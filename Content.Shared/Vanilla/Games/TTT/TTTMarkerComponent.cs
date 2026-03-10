@@ -1,4 +1,5 @@
 using Content.Shared.StatusIcon;
+using Content.Shared.Actions;
 using Robust.Shared.GameStates;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 using Robust.Shared.Player;
@@ -10,6 +11,8 @@ public sealed partial class NameOverlayComponent : Component
 {
     [DataField, AutoNetworkedField]
     public string Name = "Турель";
+    [DataField]
+    public string OldName = "НЕИЗВЕСТНЫЙ";
 
     [DataField, AutoNetworkedField]
     public Color NameColor = Color.Green;
@@ -95,4 +98,7 @@ public sealed partial class TTTTRAITORComponent : Component
 {
     [DataField("syndStatusIcon", customTypeSerializer: typeof(PrototypeIdSerializer<FactionIconPrototype>))]
     public string SyndStatusIcon = "SyndicateFaction";
+}
+public sealed partial class TTTDisguiserActionEvent : InstantActionEvent
+{
 }

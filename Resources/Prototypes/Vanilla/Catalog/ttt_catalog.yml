@@ -1,0 +1,32 @@
+- type: listing
+  id: TTTBodyArmor
+  name: ttt-body-armor-name
+  description: ttt-body-armor-desc
+  productEntity: TTTBodyArmor
+  cost:
+    TTTCredit: 1
+  categories:
+  - TTTTraitrorCategory
+
+- type: listing
+  id: TTTDisguiser
+  name: ttt-disguiser-name
+  description: ttt-disguiser-desc
+  productAction: ActionDisguiser
+  cost:
+    TTTCredit: 1
+  categories:
+  - TTTTraitrorCategory
+
+- type: listing
+  id: TTTC4
+  name: ttt-c4-name
+  description: ttt-c4-desc
+  productEntity: TTTC4
+  cost:
+    TTTCredit: 1
+  categories:
+  - TTTTraitrorCategory
+
+
+

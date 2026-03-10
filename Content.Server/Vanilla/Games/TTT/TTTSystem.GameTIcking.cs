@@ -12,7 +12,6 @@ using Content.Shared.Vanilla.Voices;
 using System.Linq;
 using Robust.Shared.Utility;
 using Robust.Shared.EntitySerialization;
-using Content.Shared.Vanilla.TDM;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Audio.Systems;
 using Content.Shared.Implants;
@@ -21,6 +20,7 @@ using Robust.Shared.EntitySerialization.Systems;
 using Content.Shared.Strip.Components;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Physics;
+using Content.Shared.HealthExaminable;
 namespace Content.Server.Vanilla.Games.TTT;
 
 public sealed partial class TTTSystem : SharedTTTSystem
@@ -34,21 +34,10 @@ public sealed partial class TTTSystem : SharedTTTSystem
     [Dependency] private readonly LoadoutSystem _loadout = default!;
     [Dependency] private readonly IChatManager _chatManager = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
     [Dependency] private readonly SharedSubdermalImplantSystem _implant = default!;
     [Dependency] private readonly MapLoaderSystem _mapLoader = default!;
     [Dependency] private readonly SharedPhysicsSystem _physics = default!;
     [Dependency] private readonly SharedHandsSystem _hands = default!;
-
-    private static readonly string[] GUNS =
-    [
-        //пистолетики
-        "WeaponPistolCobra", "WeaponPistolMk58", "WeaponPistolN1984",
-        "WeaponRevolverDeckard","WeaponRevolverInspector", "WeaponRevolverMateba","WeaponRevolverPython","WeaponRevolverPirate",
-        //основное оружие
-        "WeaponRifleLecter","WeaponRifleEstoc","WeaponShotgunDoubleBarreled",
-        "WeaponShotgunKammerer","WeaponShotgunSawn","WeaponSubMachineGunC20r","WeaponSubMachineGunDrozd","WeaponSubMachineGunWt550"
-    ];
     private sealed class PlayerStats(string name, int kills, int karma, string role)
     {
         public string Name { get; set; } = name;
@@ -76,6 +65,7 @@ public sealed partial class TTTSystem : SharedTTTSystem
             rule.TraitorsCount--;
         else
             rule.InoCount--;
+        rule.TimeToNewCycle += rule.HasteAddTime;
 
         RemComp<StrippableComponent>(uid);
         RemComp<NameOverlayComponent>(uid);
@@ -112,7 +102,7 @@ public sealed partial class TTTSystem : SharedTTTSystem
             if (rule.CurrentStatus == TTTStatus.AwaitStart)
             {
                 //Количество игроков меньше 4 не трогаем ваще
-                if (rule.Sessions.Count < 4)
+                if (rule.Sessions.Count < 2)
                     rule.TimeForPlayersJoin = TimeSpan.FromSeconds(30f);
                 else if (rule.TimeForPlayersJoin > TimeSpan.FromSeconds(0))
                     rule.TimeForPlayersJoin -= TimeSpan.FromSeconds(1); //обратный отсчёт
@@ -143,25 +133,16 @@ public sealed partial class TTTSystem : SharedTTTSystem
     {
         //Сообщаем о том что всё конец сбора заявок парни
         UpdateInformation(rule);
-        if (rule.Sessions.Count < 4 || !TrySpawnArena(rule.Sessions.Count, rule))
+        if (rule.Sessions.Count < 2 || !TrySpawnArena(rule.Sessions.Count, rule))
         {
             GameOver(rule);
             return;
         }
 
-        HashSet<EntityUid> mobs = [];
         //проходим по всем игрокам и закидываем их на арену
         foreach (var session in rule.Sessions)
-            mobs.Add(AddPlayerToArena(session, rule, uid));
+            AddPlayerToArena(session, rule, uid);
 
-        foreach (var mobUid in mobs)
-        {
-            var privateTalk = EnsureComp<PrivateTalkComponent>(mobUid);
-            privateTalk.Receivers.UnionWith(mobs);
-            privateTalk.Receivers.Remove(mobUid);
-        }
-
-        SpawnGuns(rule);
         _audio.PlayGlobal(rule.AwaitRolesMusic, Filter.Empty().AddPlayers(rule.Sessions), false);
         rule.CurrentStatus = TTTStatus.AwaitRolesToAdd; //Вот теперь матч реально начался
     }
@@ -178,6 +159,7 @@ public sealed partial class TTTSystem : SharedTTTSystem
             _mindSystem.TransferTo(mindId, mobUid, true, mind: mindComp);
 
         //Добавляем метки
+        RemComp<HealthExaminableComponent>(mobUid);
         var marker = EnsureComp<TTTMarkerComponent>(mobUid);
         marker.RuleLink = ruleEnt;
         marker.Session = session;
@@ -239,7 +221,6 @@ public sealed partial class TTTSystem : SharedTTTSystem
             {
                 marker.Role = TTTRole.Inocent;
                 rule.InoCount++;
-
                 _audio.PlayGlobal(rule.InoBrief, uid);
                 message = Loc.GetString("ttt-innocent-brief", ("color", Color.Green));
             }
@@ -257,19 +238,16 @@ public sealed partial class TTTSystem : SharedTTTSystem
 
         if (timetoend < TimeSpan.FromMinutes(5) && rule.Announcments == 0)
         {
-            SpawnGuns(rule);
             DispatchMonospaceAnnouncement(Filter.Empty().AddPlayers(rule.Sessions), Loc.GetString("ttt-timetoend-5"), Color.Green);
             rule.Announcments++;
         }
         if (timetoend < TimeSpan.FromMinutes(3) && rule.Announcments == 1)
         {
-            SpawnGuns(rule);
             DispatchMonospaceAnnouncement(Filter.Empty().AddPlayers(rule.Sessions), Loc.GetString("ttt-timetoend-3"), Color.Yellow);
             rule.Announcments++;
         }
         if (timetoend < TimeSpan.FromMinutes(1) && rule.Announcments == 2)
         {
-            SpawnGuns(rule);
             DispatchMonospaceAnnouncement(Filter.Empty().AddPlayers(rule.Sessions), Loc.GetString("ttt-timetoend-1"), Color.Red);
             rule.Announcments++;
         }
@@ -335,7 +313,7 @@ public sealed partial class TTTSystem : SharedTTTSystem
     public void NewCycle(TTTRuleComponent rule)
     {
         Timer.Spawn(TimeSpan.FromSeconds(1), () => QueueDel(rule.Arena));
-        rule.Sessions = new(); //Сбрасываем предыдущих пользователей
+        rule.Sessions = []; //Сбрасываем предыдущих пользователей
         rule.CurrentStatus = TTTStatus.AwaitStart; //начинаем собирать игроков в раунд
         rule.TimeForPlayersJoin = TimeSpan.FromSeconds(30f);
         rule.TimeOnNewCycle = TimeSpan.FromSeconds(0);
@@ -346,62 +324,18 @@ public sealed partial class TTTSystem : SharedTTTSystem
     }
     private bool TrySpawnArena(int playerCount, TTTRuleComponent rule)
     {
-        rule.TDMProto = PickRandomArena(playerCount);
-
-        if (rule.TDMProto == null)
-            return false;
         if (!_mapSystem.MapExists(rule.ArenaMapId))
         {
             _mapSystem.CreateMap(out var newMapId);
             rule.ArenaMapId = newMapId;
         }
 
-        var opts = DeserializationOptions.Default;
-
         // Пытаемся загрузить грид на карту
-        if (!_mapLoader.TryLoadGrid(rule.ArenaMapId, new ResPath(rule.TDMProto.ArenaPath), out var grid, opts))
+        if (!_mapLoader.TryLoadGrid(rule.ArenaMapId, new ResPath(_random.Pick(rule.Arenas)), out var grid, DeserializationOptions.Default))
             return false;
 
         rule.Arena = grid.Value;
         return true;
-    }
-
-    private TDMMapPrototype? PickRandomArena(int playerCount)
-    {
-        var validPrototypes = new List<TDMMapPrototype>();
-
-        foreach (var proto in _prototypeManager.EnumeratePrototypes<TDMMapPrototype>())
-        {
-            if (proto.ArenaParty >= playerCount)
-                validPrototypes.Add(proto);
-        }
-
-        if (validPrototypes.Count == 0)
-            return null;
-
-        return _random.Pick(validPrototypes);
-    }
-    /// <summary>
-    /// Оружие спавнится х2 от количества игроков, 1 оружие в руки, второе на где-то на карте
-    /// </summary>
-    private void SpawnGuns(TTTRuleComponent rule)
-    {
-        var query = EntityQueryEnumerator<TTTMarkerComponent, TransformComponent>();
-        while (query.MoveNext(out var uid, out var marker, out var xform))
-        {
-            if (!rule.Sessions.Contains(marker.Session))
-                continue;
-
-            //1. спавним где-то на карте
-            if (_specialRespawn.TryFindRandomTile(rule.Arena, _mapSystem.GetMap(rule.ArenaMapId), 10, out var targetCoords))
-                Spawn(_random.Pick(GUNS), targetCoords);
-            else
-                Spawn(_random.Pick(GUNS), xform.Coordinates);
-
-            //2. спавним в руки
-            var gun = Spawn(_random.Pick(GUNS), xform.Coordinates);
-            _hands.TryPickupAnyHand(uid, gun);
-        }
     }
     private static int GetTraitorCount(int playerCount)
     {
@@ -410,7 +344,7 @@ public sealed partial class TTTSystem : SharedTTTSystem
 
     private static int GetDecCount(int playerCount)
     {
-        if (playerCount < 10)
+        if (playerCount < 8)
             return 0;
 
         return Math.Max(1, playerCount / 8);

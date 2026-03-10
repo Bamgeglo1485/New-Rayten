@@ -4,18 +4,22 @@
   name: Житель города
   components:
   - type: ShowTTTDetectiveIcons
+  - type: Puller
+    needsHands: false
   - type: Skill
     basicSkills:
       Weapon: 2
   - type: Bloodstream
     maxBleedAmount: 0
+  - type: DamageVisuals
+    thresholds: [ 110, 120, 130, 150, 170, 200 ]
   - type: SlowOnDamage
     speedModifierThresholds:
       100: 1
   - type: MobThresholds
     thresholds:
       0: Alive
-      100: Dead
+      75: Dead
   - type: UserInterface
     interfaces:
       enum.HumanoidMarkingModifierKey.Key:
@@ -31,8 +35,70 @@
     head: ClothingHeadHatBeaverHat
     jumpsuit: ClothingUniformJumpsuitLoungewear
     eyes: ClothingEyesGlassesJamjar
+    ears: ClothingHeadsetGrey
     gloves: ClothingHandsMercGlovesCombat
     outerClothing: ClothingOuterFlannelGreen
     shoes: ClothingShoesBootsWinter
     neck: ClothingNeckNanoTrasenPin
+    belt: ClothingBeltSecurityWebbing
     id: PassengerPDAUnrem
+
+
+
+- type: entity
+  parent: ClothingOuterFlannelGreen
+  id: TTTBodyArmor
+  name: зелёная фланелевая куртка
+  description: Старомодная зелёная фланелевая куртка для космической осени.
+  components:
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.7
+        Slash: 0.7
+        Piercing: 0.7
+        Heat: 0.7
+        Caustic: 0.7
+
+- type: entity
+  parent: BaseToggleAction
+  id: ActionDisguiser
+  name: Cкрыть имя
+  description: Заменяет ваше имя на "Неизвестный"
+  components:
+  - type: Action
+    itemIconStyle: BigAction
+    useDelay: 1
+    iconOn:
+      sprite: Objects/Devices/chameleon_projector.rsi
+      state: icon-on
+    icon:
+      sprite: Objects/Devices/chameleon_projector.rsi
+      state: icon
+    priority: 7
+  - type: InstantAction
+    event: !type:TTTDisguiserActionEvent
+
+- type: entity
+  name: C4
+  description: БЕГИТЕ ГЛУПЦЫ, БЕГИТЕ
+  parent: C4
+  id: TTTC4
+  components:
+  - type: ExplodeOnTrigger
+    keysIn:
+    - timer
+  - type: Explosive
+    explosionType: Cryo
+    totalIntensity: 6500
+    intensitySlope: 0.5
+    maxIntensity: 5000
+    canCreateVacuum: false
+  - type: TimerTrigger
+    keysIn:
+    - trigger
+    - stuck
+    delay: 45
+    delayOptions: [45, 90, 180, 360, 600]
+    initialBeepDelay: 0
+    beepSound: /Audio/Machines/Nuke/general_beep.ogg
