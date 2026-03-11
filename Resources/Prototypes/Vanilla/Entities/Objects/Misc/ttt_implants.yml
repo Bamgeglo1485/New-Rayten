@@ -74,3 +74,42 @@
       state: old-radio
   - type: InstantAction
     event: !type:OpenUplinkImplantEvent
+
+- type: entity
+  id: DisguiserImplanter
+  name: Имплантер маскировщика
+  parent: BaseImplantOnlyImplanter
+  suffix: TTT
+  components:
+    - type: Implanter
+      implant: DisguiserImplant
+
+- type: entity
+  parent: [ BaseSubdermalImplant, StorePresetTraitorShop ]
+  id: DisguiserImplant
+  name: Маскировщик
+  description: Позволяет скрывать имя владельца
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SubdermalImplant
+    implantAction: ActionDisguiser
+
+
+- type: entity
+  parent: BaseToggleAction
+  id: ActionDisguiser
+  name: Cкрыть имя
+  description: Заменяет ваше имя на "Неизвестный"
+  components:
+  - type: Action
+    itemIconStyle: BigAction
+    useDelay: 1
+    iconOn:
+      sprite: Objects/Devices/chameleon_projector.rsi
+      state: icon-on
+    icon:
+      sprite: Objects/Devices/chameleon_projector.rsi
+      state: icon
+    priority: 7
+  - type: InstantAction
+    event: !type:TTTDisguiserActionEvent

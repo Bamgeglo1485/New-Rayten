@@ -137,7 +137,7 @@ public sealed class TDMSystem : EntitySystem
         }
         TTTInfoUpdated?.Invoke(_timeToStartTTT, _playercountTTT);
 
-        if (_playercountTTT < 4)
+        if (_playercountTTT < 3)
             return;
 
         _timeToStartTTT -= TimeSpan.FromSeconds(1);

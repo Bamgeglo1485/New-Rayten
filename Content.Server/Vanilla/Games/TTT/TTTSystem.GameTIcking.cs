@@ -8,11 +8,10 @@ using Content.Server.Respawn;
 using Content.Shared.Mind;
 using Content.Shared.Clothing;
 using Content.Server.Chat.Managers;
-using Content.Shared.Vanilla.Voices;
+using Content.Server.Destructible;
 using System.Linq;
 using Robust.Shared.Utility;
 using Robust.Shared.EntitySerialization;
-using Robust.Shared.Prototypes;
 using Robust.Shared.Audio.Systems;
 using Content.Shared.Implants;
 using Content.Shared.Hands.EntitySystems;
@@ -29,7 +28,6 @@ public sealed partial class TTTSystem : SharedTTTSystem
     [Dependency] private readonly SpecialRespawnSystem _specialRespawn = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly SharedMapSystem _mapSystem = default!;
-    [Dependency] private readonly MetaDataSystem _metaSystem = default!;
     [Dependency] private readonly SharedMindSystem _mindSystem = default!;
     [Dependency] private readonly LoadoutSystem _loadout = default!;
     [Dependency] private readonly IChatManager _chatManager = default!;
@@ -102,7 +100,7 @@ public sealed partial class TTTSystem : SharedTTTSystem
             if (rule.CurrentStatus == TTTStatus.AwaitStart)
             {
                 //Количество игроков меньше 4 не трогаем ваще
-                if (rule.Sessions.Count < 2)
+                if (rule.Sessions.Count < 3)
                     rule.TimeForPlayersJoin = TimeSpan.FromSeconds(30f);
                 else if (rule.TimeForPlayersJoin > TimeSpan.FromSeconds(0))
                     rule.TimeForPlayersJoin -= TimeSpan.FromSeconds(1); //обратный отсчёт
@@ -133,7 +131,7 @@ public sealed partial class TTTSystem : SharedTTTSystem
     {
         //Сообщаем о том что всё конец сбора заявок парни
         UpdateInformation(rule);
-        if (rule.Sessions.Count < 2 || !TrySpawnArena(rule.Sessions.Count, rule))
+        if (rule.Sessions.Count < 3 || !TrySpawnArena(rule.Sessions.Count, rule))
         {
             GameOver(rule);
             return;
@@ -153,13 +151,14 @@ public sealed partial class TTTSystem : SharedTTTSystem
         _specialRespawn.TryFindRandomTile(rule.Arena, _mapSystem.GetMap(rule.ArenaMapId), 10, out var targetCoords);
 
         var mobUid = Spawn("TTTMob", targetCoords);
-        _metaSystem.SetEntityName(mobUid, session.Name);
+        MetaSystem.SetEntityName(mobUid, session.Name);
 
         if (_mindSystem.TryGetMind(session.AttachedEntity!.Value, out var mindId, out var mindComp))
             _mindSystem.TransferTo(mindId, mobUid, true, mind: mindComp);
 
         //Добавляем метки
         RemComp<HealthExaminableComponent>(mobUid);
+        RemComp<DestructibleComponent>(mobUid);
         var marker = EnsureComp<TTTMarkerComponent>(mobUid);
         marker.RuleLink = ruleEnt;
         marker.Session = session;
@@ -317,6 +316,7 @@ public sealed partial class TTTSystem : SharedTTTSystem
         rule.CurrentStatus = TTTStatus.AwaitStart; //начинаем собирать игроков в раунд
         rule.TimeForPlayersJoin = TimeSpan.FromSeconds(30f);
         rule.TimeOnNewCycle = TimeSpan.FromSeconds(0);
+        rule.TimeToNewCycle = TimeSpan.FromMinutes(5);
         rule.Announcments = 0;
         rule.InoCount = 0;
         rule.TraitorsCount = 0;

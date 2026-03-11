@@ -72,6 +72,8 @@
     - !type:GroupSelector
       weight: 10
       children:
+      - !type:NestedSelector
+        tableId: TTTAtreides
       - id: WeaponLightMachineGunL6
       - id: WeaponMinigun
       - id: WeaponHid
@@ -103,8 +105,6 @@
         tableId: TTTEnforcer
       - !type:NestedSelector
         tableId: TTTDoubleBarreled
-      - !type:NestedSelector
-        tableId: TTTAtreides
       - !type:NestedSelector
         tableId: TTTC20r
       - !type:NestedSelector

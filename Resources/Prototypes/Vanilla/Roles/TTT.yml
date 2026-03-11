@@ -9,10 +9,12 @@
   - type: Skill
     basicSkills:
       Weapon: 2
+      Medicine: 3
+      Engineering: 3
   - type: Bloodstream
     maxBleedAmount: 0
   - type: DamageVisuals
-    thresholds: [ 110, 120, 130, 150, 170, 200 ]
+    thresholds: [ 100 ]
   - type: SlowOnDamage
     speedModifierThresholds:
       100: 1
@@ -43,8 +45,6 @@
     belt: ClothingBeltSecurityWebbing
     id: PassengerPDAUnrem
 
-
-
 - type: entity
   parent: ClothingOuterFlannelGreen
   id: TTTBodyArmor
@@ -61,38 +61,29 @@
         Caustic: 0.7
 
 - type: entity
-  parent: BaseToggleAction
-  id: ActionDisguiser
-  name: Cкрыть имя
-  description: Заменяет ваше имя на "Неизвестный"
-  components:
-  - type: Action
-    itemIconStyle: BigAction
-    useDelay: 1
-    iconOn:
-      sprite: Objects/Devices/chameleon_projector.rsi
-      state: icon-on
-    icon:
-      sprite: Objects/Devices/chameleon_projector.rsi
-      state: icon
-    priority: 7
-  - type: InstantAction
-    event: !type:TTTDisguiserActionEvent
-
-- type: entity
   name: C4
   description: БЕГИТЕ ГЛУПЦЫ, БЕГИТЕ
-  parent: C4
+  parent: BaseItem
   id: TTTC4
   components:
+  - type: Sprite
+    sprite: Objects/Weapons/Bombs/c4.rsi
+    state: icon
+    layers:
+    - state: icon
+      map: ["base"]
+  - type: TTTBomb
   - type: ExplodeOnTrigger
+    keysIn:
+    - timer
+  - type: TTTExplodeOnTrigger
     keysIn:
     - timer
   - type: Explosive
     explosionType: Cryo
-    totalIntensity: 6500
-    intensitySlope: 0.5
-    maxIntensity: 5000
+    totalIntensity: 1500
+    intensitySlope: 0.1
+    maxIntensity: 100
     canCreateVacuum: false
   - type: TimerTrigger
     keysIn:
@@ -102,3 +93,33 @@
     delayOptions: [45, 90, 180, 360, 600]
     initialBeepDelay: 0
     beepSound: /Audio/Machines/Nuke/general_beep.ogg
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.Trigger.TriggerVisuals.VisualState:
+        base:
+          Primed: { state: primed }
+          Unprimed: { state: icon }
+
+- type: entity
+  parent: KitchenKnife
+  id: TTTKnife
+  suffix: TTT
+  name: Нож
+  description: Моментально убивает в спину, не оставляя днк на жертве.
+  components:
+  - type: TTTKnife
+
+
+
+
+
+
+# детективные предметы
+- type: entity
+  parent: Wirecutter
+  id: DifuseKit
+  name: набор сапёра
+  description: Моментально обезвреживает бомбу без риска взорваться.
+  components:
+  - type: DifusalKit

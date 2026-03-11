@@ -5,14 +5,29 @@ namespace Content.Shared.Vanilla.Games.TTT;
 
 public abstract class SharedTTTSystem : EntitySystem
 {
+    [Dependency] protected readonly MetaDataSystem MetaSystem = default!;
     [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
-
     public override void Initialize()
     {
         base.Initialize();
         SubscribeLocalEvent<TTTDeadBodyComponent, GetVerbsEvent<InteractionVerb>>(AddExamineVerb);
         SubscribeLocalEvent<TTTDeadBodyComponent, ActivateInWorldEvent>(OnActivated);
+        SubscribeLocalEvent<NameOverlayComponent, TTTDisguiserActionEvent>(OnDisguiser);
     }
+    #region предметы
+    /// <summary>
+    /// Маскировщик
+    /// </summary>
+    private void OnDisguiser(EntityUid uid, NameOverlayComponent component, TTTDisguiserActionEvent args)
+    {
+        if (args.Handled)
+            return;
+        (component.OldName, component.Name) = (component.Name, component.OldName);
+        Dirty(uid, component);
+        MetaSystem.SetEntityName(uid, component.Name);
+        args.Handled = true;
+    }
+    #endregion
     private void OnActivated(EntityUid uid, TTTDeadBodyComponent component, ActivateInWorldEvent args)
     {
         OpenBodyExamineUi(args.User, (uid, component));

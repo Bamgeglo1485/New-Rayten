@@ -30,21 +30,7 @@ public sealed partial class TTTSystem : SharedTTTSystem
         SubscribeNetworkEvent<TPMeToTTTEvent>(OnTTTJoinRequest); //Пользователь захотел зайти на арену
         _playerManager.PlayerStatusChanged += OnPlayerStatusChanged;
         LoadKarma();
-        //предметы
-        SubscribeLocalEvent<NameOverlayComponent, TTTDisguiserActionEvent>(OnDisguiser);
-
     }
-    #region предметы
-    private void OnDisguiser(EntityUid uid, NameOverlayComponent component, TTTDisguiserActionEvent args)
-    {
-        if (args.Handled)
-            return;
-        (component.OldName, component.Name) = (component.Name, component.OldName);
-        Dirty(uid, component);
-        _metaSystem.SetEntityName(uid, component.Name);
-        args.Handled = true;
-    }
-    #endregion
     public override void Shutdown()
     {
         base.Shutdown();

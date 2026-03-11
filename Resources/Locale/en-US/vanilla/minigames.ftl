@@ -28,15 +28,15 @@ accept-TDM-window-deny-button = Нет
 ## TTT
 
 TTT-NotAvailable = TTT
-TTT-Available = TTT { $players }/4 ({ $timer })
-ttt-traitor-brief = [color={ $color }][font size=16]Вы Предатель.[/font] 
+TTT-Available = TTT { $players }/3 ({ $timer })
+ttt-traitor-brief = [color={ $color }][font size=16]Вы Предатель.[/font]
     Убейте невиновных!
     { "[bold]Вы не можете убивать других предателей[/bold].[/color]" }
 ttt-detective-brief = [color={ $color }][font size=16]Вы Детектив.[/font]
-    Вы должны убить предателей. 
+    Вы должны убить предателей.
     { "[bold]Вы не можете убивать просто так[/bold].[/color]" }
 ttt-innocent-brief = [color={ $color }][font size=16]Вы Невиновный.[/font]
-    Вы должны убить предателей. 
+    Вы должны убить предателей.
     { "[bold]Вы не можете убивать просто так[/bold].[/color]" }
 ttt-awaitrole-brief = [font size=16][color=#7F00FF]Роли будут выданы через 30 секунд![/color][/font]
     Вооружайтесь и кооперируйтесь, но будьте бдительны, ведь кому-то достанется роль [color=#FF0000]предателя[/color].

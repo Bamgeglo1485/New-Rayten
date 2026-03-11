@@ -137,6 +137,7 @@
     - BlueGuySpy
   - !type:AddComponentsSpecial
     components:
+    - type: TTTTRAITOR
     - type: Thieving
     - type: AntagImmune
     - type: NpcFactionMember
@@ -310,6 +311,7 @@
     - RedGuySpy
   - !type:AddComponentsSpecial
     components:
+    - type: TTTTRAITOR
     - type: Thieving
     - type: AntagImmune
     - type: NpcFactionMember

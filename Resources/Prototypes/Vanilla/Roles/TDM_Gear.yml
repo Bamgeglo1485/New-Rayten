@@ -156,6 +156,7 @@
     - SmokeGrenade
   inhand:
     - WeaponPistolCobra
+    - TTTKnife
 
 - type: startingGear
   id: RedGuySpy
@@ -169,7 +170,7 @@
     - SmokeGrenade
   inhand:
     - WeaponPistolCobra
-
+    - TTTKnife
 # инженер
 - type: startingGear
   id: RedGuyEngineer
