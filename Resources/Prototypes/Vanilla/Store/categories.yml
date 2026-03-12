@@ -15,3 +15,6 @@
   id: TTTTraitrorCategory
   name: store-category-ttt-traitor
 
+- type: storeCategory
+  id: TTTDetectiveCategory
+  name: store-category-ttt-detective

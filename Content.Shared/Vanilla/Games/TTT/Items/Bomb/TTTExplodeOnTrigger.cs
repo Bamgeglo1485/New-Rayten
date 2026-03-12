@@ -1,13 +1,15 @@
 using Content.Shared.Trigger;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Vanilla.Games.Items.TTT;
-
+using Content.Shared.Vanilla.Games.TTT.Items.DNAScanner;
+using Content.Shared.Mobs.Systems;
 namespace Content.Shared.Vanilla.Games.TTT.Items;
 
 public sealed class TTTExplodeOnTrigger : XOnTriggerSystem<TTTExplodeOnTriggerComponent>
 {
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly DamageableSystem _damageable = default!;
+    [Dependency] private readonly MobStateSystem _mob = default!;
     protected override void OnTrigger(Entity<TTTExplodeOnTriggerComponent> ent, EntityUid target, ref TriggerEvent args)
     {
         EntityUid? origin = null;
@@ -16,7 +18,13 @@ public sealed class TTTExplodeOnTrigger : XOnTriggerSystem<TTTExplodeOnTriggerCo
 
         var victims = _lookup.GetEntitiesInRange<TTTMarkerComponent>(Transform(ent.Owner).Coordinates, ent.Comp.Range);
         foreach (var victim in victims)
+        {
+            if (!_mob.IsAlive(victim))
+                continue;
+            EnsureComp<TTTNoDnaComponent>(victim);
             _damageable.TryChangeDamage(victim.Owner, ent.Comp.Damage, origin: origin);
+        }
+
         args.Handled = true;
     }
 }

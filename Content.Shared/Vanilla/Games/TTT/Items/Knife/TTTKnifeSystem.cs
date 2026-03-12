@@ -3,14 +3,15 @@ using System.Numerics;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Weapons.Melee.Events;
-
+using Content.Shared.Mobs.Systems;
+using Content.Shared.Vanilla.Games.TTT.Items.DNAScanner;
 namespace Content.Shared.Vanilla.Games.TTT.Items.Knife;
 
 public sealed class TTTBombSystem : EntitySystem
 {
     [Dependency] private readonly DamageableSystem _damageable = default!;
     [Dependency] private readonly SharedTransformSystem _transformSystem = default!;
-
+    [Dependency] private readonly MobStateSystem _mob = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -26,6 +27,9 @@ public sealed class TTTBombSystem : EntitySystem
         {
             if (!HasComp<TTTMarkerComponent>(target))
                 continue;
+            if (!_mob.IsAlive(target))
+                continue;
+            EnsureComp<TTTNoDnaComponent>(target);
             var targetPos = _transformSystem.GetWorldPosition(target);
             var attackerPos = _transformSystem.GetWorldPosition(attacker);
             var delta = attackerPos - targetPos;

@@ -24,6 +24,7 @@ namespace Content.Server.Vanilla.Games.TTT;
 
 public sealed partial class TTTSystem : SharedTTTSystem
 {
+    [Dependency] private readonly MetaDataSystem _meta = default!;
     [Dependency] private readonly IGameTiming _gameTiming = default!;
     [Dependency] private readonly SpecialRespawnSystem _specialRespawn = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
@@ -151,7 +152,7 @@ public sealed partial class TTTSystem : SharedTTTSystem
         _specialRespawn.TryFindRandomTile(rule.Arena, _mapSystem.GetMap(rule.ArenaMapId), 10, out var targetCoords);
 
         var mobUid = Spawn("TTTMob", targetCoords);
-        MetaSystem.SetEntityName(mobUid, session.Name);
+        _meta.SetEntityName(mobUid, session.Name);
 
         if (_mindSystem.TryGetMind(session.AttachedEntity!.Value, out var mindId, out var mindComp))
             _mindSystem.TransferTo(mindId, mobUid, true, mind: mindComp);
@@ -211,6 +212,8 @@ public sealed partial class TTTSystem : SharedTTTSystem
                 var nameMarker = EnsureComp<NameOverlayComponent>(uid);
                 nameMarker.NameColor = Color.DodgerBlue;
                 Dirty(uid, nameMarker);
+                var dnaScanner = Spawn("TTTDNAScanner", Transform(uid).Coordinates);
+                _hands.TryPickupAnyHand(uid, dnaScanner);
 
                 _audio.PlayGlobal(rule.DecBrief, uid);
                 message = Loc.GetString("ttt-Detective-brief", ("color", Color.DodgerBlue));

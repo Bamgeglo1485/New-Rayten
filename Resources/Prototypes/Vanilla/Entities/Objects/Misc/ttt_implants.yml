@@ -3,10 +3,20 @@
   id: TraitorShopImplanter
   name: Имплантер трейторшопа
   parent: BaseImplantOnlyImplanter
-  suffix: Debug
+  suffix: Debug, TTT
   components:
     - type: Implanter
       implant: TraitorShopImplant
+
+- type: entity
+  id: DetectiveShopImplanter
+  name: Имплантер детективШопа
+  parent: BaseImplantOnlyImplanter
+  suffix: Debug, TTT
+  components:
+    - type: Implanter
+      implant: DetectiveShopImplant
+
 #end-debug
 - type: entity
   parent: [ BaseSubdermalImplant, StorePresetTraitorShop ]
@@ -94,7 +104,6 @@
   - type: SubdermalImplant
     implantAction: ActionDisguiser
 
-
 - type: entity
   parent: BaseToggleAction
   id: ActionDisguiser
@@ -102,6 +111,7 @@
   description: Заменяет ваше имя на "Неизвестный"
   components:
   - type: Action
+    raiseOnUser: true
     itemIconStyle: BigAction
     useDelay: 1
     iconOn:
@@ -113,3 +123,41 @@
     priority: 7
   - type: InstantAction
     event: !type:TTTDisguiserActionEvent
+
+- type: entity
+  id: TTTRadarImplanter
+  name: Имплантер радара
+  parent: BaseImplantOnlyImplanter
+  suffix: TTT
+  components:
+  - type: Implanter
+    implant: TTTRadarImplant
+
+- type: entity
+  parent: [ BaseSubdermalImplant, StorePresetTraitorShop ]
+  id: TTTRadarImplant
+  name: радар
+  description: Показывает местоположение всех игроков 1 раз в 30 секунд
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TTTRadar
+  - type: SubdermalImplant
+    implantAction: ActionTTTRadarOpen
+  - type: UserInterface
+    interfaces:
+      enum.StationMapUiKey.Key:
+        type: TTTRadarBoundUserInterface
+        requireInputValidation: false
+
+- type: entity
+  parent: BaseMentalAction
+  id: ActionTTTRadarOpen
+  name: Открыть радар
+  description: Открыть радар, который раз в 30 секунд показывает местоположение всех игроков.
+  components:
+  - type: Action
+    icon: { sprite: Interface/Actions/pai-map.rsi, state: icon }
+    itemIconStyle: NoItem
+  - type: InstantAction
+    event: !type:OpenUiActionEvent
+      key: enum.StationMapUiKey.Key

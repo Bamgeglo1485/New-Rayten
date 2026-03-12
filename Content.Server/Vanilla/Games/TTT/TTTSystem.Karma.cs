@@ -109,6 +109,28 @@ public sealed partial class TTTSystem : SharedTTTSystem
             args.Damage = new DamageSpecifier();
             return;
         }
+        ///у детектива 30% резиста
+        if (component.Role == TTTRole.Detective)
+        {
+            const float detectiveResist = 0.3f;
+            var detectiveModify = new DamageModifierSet
+            {
+                Coefficients = new Dictionary<string, float>
+                {
+                    ["Slash"] = detectiveResist,
+                    ["Piercing"] = detectiveResist,
+                    ["Blunt"] = detectiveResist,
+                    ["Heat"] = detectiveResist,
+                    ["Shock"] = detectiveResist,
+                    ["Cold"] = detectiveResist,
+                    ["Poison"] = detectiveResist,
+                    ["Radiation"] = detectiveResist,
+                    ["Asphyxiation"] = detectiveResist,
+                    ["Bloodloss"] = detectiveResist
+                }
+            };
+            args.Damage = DamageSpecifier.ApplyModifierSet(args.Damage, detectiveModify);
+        }
 
         //  применяем модификатор урона на основе новой кармы
         var attackerKarma = GetKarma(sourcecomp.Session.UserId);

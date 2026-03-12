@@ -13,6 +13,7 @@
   name: ttt-disguiser-name
   description: ttt-disguiser-desc
   productEntity: DisguiserImplanter
+  icon: { sprite: /Textures/Actions/Implants/implants.rsi, state: chameleon }
   cost:
     TTTCredit: 1
   categories:
@@ -38,4 +39,35 @@
   categories:
   - TTTTraitrorCategory
 
+- type: listing
+  id: TTTRadar
+  name: ttt-radar-name
+  description: ttt-radar-desc
+  productEntity: TTTRadarImplanter
+  icon: { sprite: Interface/Actions/pai-map.rsi, state: icon }
+  cost:
+    TTTCredit: 1
+  categories:
+  - TTTTraitrorCategory
+  - TTTDetectiveCategory
+
+- type: listing
+  id: TTTDecoy
+  name: ttt-decoy-name
+  description: ttt-decoy-desc
+  productEntity: TTTDecoy
+  cost:
+    TTTCredit: 1
+  categories:
+  - TTTTraitrorCategory
+
+- type: listing
+  id: DifuseKit
+  name: ttt-defuse-name
+  description: ttt-defuse-desc
+  productEntity: DifuseKit
+  cost:
+    TTTCredit: 1
+  categories:
+  - TTTDetectiveCategory
 

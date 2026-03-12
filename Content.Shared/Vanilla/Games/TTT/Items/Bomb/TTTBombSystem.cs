@@ -1,4 +1,4 @@
-
+using Content.Shared.Vanilla.Games.TTT.Items.DNAScanner;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Item;
 using Content.Shared.Movement.Pulling.Components;
@@ -22,6 +22,9 @@ public sealed class TTTBombSystem : EntitySystem
     [Dependency] private readonly SharedHandsSystem _hands = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private readonly TTTDnaScannerSystem _dnaScanner = default!;
+
+
     private float _timeAcummulator = 0;
     public override void Initialize()
     {
@@ -51,7 +54,11 @@ public sealed class TTTBombSystem : EntitySystem
         if (args.Handled)
             return;
         if (!HasComp<ActiveTimerTriggerComponent>(uid))
+        {
+            if (HasComp<TTTDnaScannerComponent>(args.Used) && component.User != null)
+                _dnaScanner.TrySetTarget(args.Used, component.User.Value);
             return;
+        }
         if (!HasComp<DifusalKitComponent>(args.Used))
             return;
         _popup.PopupEntity("УСПЕХ!", uid, PopupType.LargeCaution);
