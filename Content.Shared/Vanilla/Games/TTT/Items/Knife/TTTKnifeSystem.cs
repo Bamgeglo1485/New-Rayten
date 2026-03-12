@@ -44,7 +44,7 @@ public sealed class TTTBombSystem : EntitySystem
 
             var dot = Vector2.Dot(targetForward, dirToAttacker);
 
-            if (dot < -0.5f)
+            if (dot < 0f)
             {
 
                 var damage = new DamageSpecifier();

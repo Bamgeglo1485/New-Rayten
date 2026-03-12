@@ -3,6 +3,10 @@
   id: TTTMob
   name: Житель города
   components:
+  - type: CombatMode
+    toggleMouseRotator: false
+  - type: NoRotateOnMove
+  - type: MouseRotator
   - type: ShowTTTDetectiveIcons
   - type: Puller
     needsHands: false

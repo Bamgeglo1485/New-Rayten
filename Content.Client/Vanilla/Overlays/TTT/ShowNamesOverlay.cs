@@ -1,24 +1,14 @@
-using System.Collections.Frozen;
-using System.Linq;
 using System.Numerics;
-using Content.Client.Administration.Systems;
 using Content.Client.Stylesheets;
-using Content.Shared.Administration;
-using Content.Shared.CCVar;
-using Content.Shared.Ghost;
-using Content.Shared.Mind;
-using Content.Shared.Roles;
 using Content.Shared.Vanilla.Games.TTT;
 using Content.Shared.Examine;
 using Robust.Client.Graphics;
 using Robust.Client.ResourceManagement;
 using Robust.Client.UserInterface;
-using Robust.Shared.Configuration;
 using Robust.Shared.Enums;
-using Robust.Shared.Prototypes;
 using Robust.Client.Player;
-using System.Drawing;
-namespace Content.Client.Vanilla.Overlays;
+using Robust.Client.GameObjects;
+namespace Content.Client.Vanilla.TTT.Overlays;
 
 public sealed class ShowNamesOverlay : Overlay
 {
@@ -29,8 +19,8 @@ public sealed class ShowNamesOverlay : Overlay
     private readonly Font _font;
     private readonly IPlayerManager _playerManager;
     private readonly ExamineSystemShared _examine;
-
-
+    private readonly SharedTransformSystem _transformSystem;
+    private readonly SpriteSystem _sprite;
     public ShowNamesOverlay(
         IEntityManager entityManager,
         IEyeManager eyeManager,
@@ -48,10 +38,11 @@ public sealed class ShowNamesOverlay : Overlay
         _font = resourceCache.NotoStack(size: 12);
         _playerManager = playerManager;
         _examine = examineSystemShared;
+        _transformSystem = _entityManager.System<SharedTransformSystem>();
+        _sprite = _entityManager.System<SpriteSystem>();
     }
 
     public override OverlaySpace Space => OverlaySpace.ScreenSpace;
-
     protected override void Draw(in OverlayDrawArgs args)
     {
         var viewport = args.WorldAABB;
@@ -62,17 +53,33 @@ public sealed class ShowNamesOverlay : Overlay
 
         var localPlayer = _playerManager.LocalEntity.Value;
 
-        var query = _entityManager.EntityQueryEnumerator<NameOverlayComponent>();
-        while (query.MoveNext(out var entity, out var marker))
+        var playerPos = _transformSystem.GetWorldPosition(localPlayer);
+        var playerForward = _transformSystem.GetWorldRotation(localPlayer).ToWorldVec();
+
+        var query = _entityManager.EntityQueryEnumerator<NameOverlayComponent, SpriteComponent, TransformComponent>();
+        while (query.MoveNext(out var entity, out var marker, out var sprite, out var xform))
         {
             if (entity == localPlayer)
                 continue;
 
-            if (_entityManager.GetComponent<TransformComponent>(entity).MapID != args.MapId)
+            if (xform.MapID != args.MapId)
                 continue;
 
             if (!_examine.InRangeUnOccluded(localPlayer, entity, 12f, ignoreInsideBlocker: false))
                 continue;
+
+            var entityPos = _transformSystem.GetWorldPosition(entity);
+            var dirToEntity = entityPos - playerPos;
+
+            var dirNorm = dirToEntity.Normalized();
+            var dot = Vector2.Dot(playerForward, dirNorm);
+
+            if (dot <= 0f)
+            {
+                _sprite.SetVisible(entity, false);
+                continue;
+            }
+            _sprite.SetVisible(entity, true);
 
             var aabb = _entityLookup.GetWorldAABB(entity);
             if (!aabb.Intersects(in viewport))
@@ -88,10 +95,9 @@ public sealed class ShowNamesOverlay : Overlay
             args.ScreenHandle.DrawString(_font, screenCoordinates, marker.Name, uiScale, marker.NameColor);
         }
     }
-
     private float GetTextWidth(Font font, string text, float scale)
     {
-        float width = 0f;
+        var width = 0f;
         foreach (var rune in text.EnumerateRunes())
         {
             var metrics = font.GetCharMetrics(rune, scale);

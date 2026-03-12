@@ -1,6 +1,6 @@
 using Content.Shared.Examine;
 using Content.Shared.Vanilla.Games.TTT;
-using Content.Client.Vanilla.Overlays;
+using Content.Client.Vanilla.TTT.Overlays;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Client.ResourceManagement;
@@ -20,7 +20,24 @@ public sealed class TTTSystem : SharedTTTSystem
     public override void Initialize()
     {
         base.Initialize();
-        _overlay.AddOverlay(new ShowNamesOverlay(EntityManager, _eyeManager, IoCManager.Resolve<IResourceCache>(), _entityLookup, _userInterfaceManager, _playerManager, _examineSystemShared));
+        SubscribeLocalEvent<NameOverlayComponent, ComponentStartup>(OnStartup);
+        SubscribeLocalEvent<NameOverlayComponent, ComponentShutdown>(OnShutDown);
+    }
+
+    private void OnStartup(EntityUid uid, NameOverlayComponent comp, ComponentStartup args)
+    {
+        if (!_playerManager.LocalEntity.HasValue)
+            return;
+        if (uid == _playerManager.LocalEntity.Value)
+            _overlay.AddOverlay(new ShowNamesOverlay(EntityManager, _eyeManager, IoCManager.Resolve<IResourceCache>(), _entityLookup, _userInterfaceManager, _playerManager, _examineSystemShared));
+    }
+
+    private void OnShutDown(EntityUid uid, NameOverlayComponent comp, ComponentShutdown args)
+    {
+        if (!_playerManager.LocalEntity.HasValue)
+            return;
+        if (uid == _playerManager.LocalEntity.Value)
+            _overlay.RemoveOverlay<ShowNamesOverlay>();
     }
 
     public override void Shutdown()

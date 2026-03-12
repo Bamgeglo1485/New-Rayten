@@ -22,7 +22,6 @@ public sealed partial class TTTDnaScannerSystem : EntitySystem
         SubscribeLocalEvent<TTTDecoyComponent, UseInHandEvent>(OnUseInHand);
     }
 
-
     public override void Update(float frameTime)
     {
         _accumulator += frameTime;
@@ -93,12 +92,16 @@ public sealed partial class TTTDnaScannerSystem : EntitySystem
     {
         if (args.Handled)
             return;
-        if (body.Killer == null || HasComp<TTTNoDnaComponent>(uid))
+        if (TryComp<TTTMarkerComponent>(args.User, out var marker) && marker.Role != TTTRole.Detective)
         {
-            _popup.PopupEntity("ДНК не сохарнились на теле жертвы", args.User, PopupType.LargeCaution);
+            _popup.PopupEntity("Вы не умеете этим пользоваться", args.User, PopupType.LargeCaution);
             return;
         }
-
+        if (body.Killer == null || HasComp<TTTNoDnaComponent>(uid))
+        {
+            _popup.PopupEntity("ДНК не сохранились на теле жертвы", args.User, PopupType.LargeCaution);
+            return;
+        }
         TrySetTarget(uid, body.Killer.Value);
         args.Handled = true;
     }
