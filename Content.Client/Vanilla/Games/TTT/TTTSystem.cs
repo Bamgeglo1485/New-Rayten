@@ -1,6 +1,7 @@
 using Content.Shared.Examine;
 using Content.Shared.Vanilla.Games.TTT;
 using Content.Client.Vanilla.TTT.Overlays;
+using Robust.Shared.Player;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Client.ResourceManagement;
@@ -22,8 +23,17 @@ public sealed class TTTSystem : SharedTTTSystem
         base.Initialize();
         SubscribeLocalEvent<NameOverlayComponent, ComponentStartup>(OnStartup);
         SubscribeLocalEvent<NameOverlayComponent, ComponentShutdown>(OnShutDown);
+        SubscribeLocalEvent<NameOverlayComponent, LocalPlayerAttachedEvent>(OnAttched);
+        SubscribeLocalEvent<NameOverlayComponent, LocalPlayerDetachedEvent>(OnDetached);
     }
-
+    private void OnAttched(EntityUid uid, NameOverlayComponent comp, LocalPlayerAttachedEvent args)
+    {
+        _overlay.AddOverlay(new ShowNamesOverlay(EntityManager, _eyeManager, IoCManager.Resolve<IResourceCache>(), _entityLookup, _userInterfaceManager, _playerManager, _examineSystemShared));
+    }
+    private void OnDetached(EntityUid uid, NameOverlayComponent comp, LocalPlayerDetachedEvent args)
+    {
+        _overlay.RemoveOverlay<ShowNamesOverlay>();
+    }
     private void OnStartup(EntityUid uid, NameOverlayComponent comp, ComponentStartup args)
     {
         if (!_playerManager.LocalEntity.HasValue)

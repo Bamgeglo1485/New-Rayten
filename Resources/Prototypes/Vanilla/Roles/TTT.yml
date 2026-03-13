@@ -113,6 +113,8 @@
   name: нож
   description: Моментально убивает в спину, не оставляя днк на жертве.
   components:
+  - type: MeleeWeapon
+    resetOnHandSelected: false
   - type: TTTKnife
 
 - type: entity
