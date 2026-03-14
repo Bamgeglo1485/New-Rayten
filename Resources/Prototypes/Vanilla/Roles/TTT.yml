@@ -3,8 +3,13 @@
   id: TTTMob
   name: Житель города
   components:
+  - type: MeleeWeapon
+    altDisarm: false
   - type: CombatMode
     toggleMouseRotator: false
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 2.5
+    baseSprintSpeed: 4
   - type: NoRotateOnMove
   - type: MouseRotator
   - type: ShowTTTDetectiveIcons
@@ -26,7 +31,7 @@
   - type: MobThresholds
     thresholds:
       0: Alive
-      75: Dead
+      50: Dead
   - type: UserInterface
     interfaces:
       enum.HumanoidMarkingModifierKey.Key:
@@ -115,6 +120,7 @@
   components:
   - type: MeleeWeapon
     resetOnHandSelected: false
+    soundHit: null
   - type: TTTKnife
 
 - type: entity

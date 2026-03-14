@@ -4,6 +4,7 @@ using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Weapons.Melee.Events;
 using Content.Shared.Mobs.Systems;
+using Content.Shared.Speech.Muting;
 using Content.Shared.Vanilla.Games.TTT.Items.DNAScanner;
 namespace Content.Shared.Vanilla.Games.TTT.Items.Knife;
 
@@ -25,11 +26,10 @@ public sealed class TTTBombSystem : EntitySystem
             return;
         foreach (var target in args.HitEntities)
         {
-            if (!HasComp<TTTMarkerComponent>(target))
-                continue;
             if (!_mob.IsAlive(target))
                 continue;
             EnsureComp<TTTNoDnaComponent>(target);
+            EnsureComp<MutedComponent>(target);
             var targetPos = _transformSystem.GetWorldPosition(target);
             var attackerPos = _transformSystem.GetWorldPosition(attacker);
             var delta = attackerPos - targetPos;
@@ -49,8 +49,7 @@ public sealed class TTTBombSystem : EntitySystem
 
                 var damage = new DamageSpecifier();
                 damage.DamageDict.Add("Slash", 100);
-
-                _damageable.TryChangeDamage(target, damage);
+                _damageable.TryChangeDamage(target, damage, origin: attacker);
             }
         }
     }

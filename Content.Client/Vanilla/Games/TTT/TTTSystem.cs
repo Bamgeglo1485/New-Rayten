@@ -6,17 +6,15 @@ using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Client.ResourceManagement;
 using Robust.Client.Player;
+using Robust.Client.GameObjects;
 
 namespace Content.Client.Vanilla.Games.TTT;
 
 public sealed class TTTSystem : SharedTTTSystem
 {
     [Dependency] private readonly IOverlayManager _overlay = default!;
-    [Dependency] private readonly IEyeManager _eyeManager = default!;
-    [Dependency] private readonly EntityLookupSystem _entityLookup = default!;
-    [Dependency] private readonly IUserInterfaceManager _userInterfaceManager = default!;
     [Dependency] private readonly IPlayerManager _playerManager = default!;
-    [Dependency] private readonly ExamineSystemShared _examineSystemShared = default!;
+    [Dependency] private readonly SpriteSystem _sprite = default!;
 
     public override void Initialize()
     {
@@ -26,28 +24,40 @@ public sealed class TTTSystem : SharedTTTSystem
         SubscribeLocalEvent<NameOverlayComponent, LocalPlayerAttachedEvent>(OnAttched);
         SubscribeLocalEvent<NameOverlayComponent, LocalPlayerDetachedEvent>(OnDetached);
     }
+
     private void OnAttched(EntityUid uid, NameOverlayComponent comp, LocalPlayerAttachedEvent args)
     {
-        _overlay.AddOverlay(new ShowNamesOverlay(EntityManager, _eyeManager, IoCManager.Resolve<IResourceCache>(), _entityLookup, _userInterfaceManager, _playerManager, _examineSystemShared));
+        _overlay.AddOverlay(new ShowNamesOverlay());
     }
+
     private void OnDetached(EntityUid uid, NameOverlayComponent comp, LocalPlayerDetachedEvent args)
     {
         _overlay.RemoveOverlay<ShowNamesOverlay>();
+        var query = EntityQueryEnumerator<NameOverlayComponent, SpriteComponent>();
+        while (query.MoveNext(out var entity, out _, out _))
+            _sprite.SetVisible(entity, true);
     }
+
     private void OnStartup(EntityUid uid, NameOverlayComponent comp, ComponentStartup args)
     {
         if (!_playerManager.LocalEntity.HasValue)
             return;
         if (uid == _playerManager.LocalEntity.Value)
-            _overlay.AddOverlay(new ShowNamesOverlay(EntityManager, _eyeManager, IoCManager.Resolve<IResourceCache>(), _entityLookup, _userInterfaceManager, _playerManager, _examineSystemShared));
+            _overlay.AddOverlay(new ShowNamesOverlay());
     }
 
     private void OnShutDown(EntityUid uid, NameOverlayComponent comp, ComponentShutdown args)
     {
         if (!_playerManager.LocalEntity.HasValue)
             return;
-        if (uid == _playerManager.LocalEntity.Value)
-            _overlay.RemoveOverlay<ShowNamesOverlay>();
+
+        if (uid != _playerManager.LocalEntity.Value)
+            return;
+
+        _overlay.RemoveOverlay<ShowNamesOverlay>();
+        var query = EntityQueryEnumerator<NameOverlayComponent, SpriteComponent>();
+        while (query.MoveNext(out var entity, out _, out _))
+            _sprite.SetVisible(entity, true);
     }
 
     public override void Shutdown()

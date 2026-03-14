@@ -75,6 +75,8 @@
       - !type:NestedSelector
         tableId: TTTAtreides
       - id: WeaponLightMachineGunL6
+      - !type:NestedSelector
+        tableId: TTTBuldog
       - id: WeaponMinigun
       - id: WeaponHid
     #редко
@@ -87,8 +89,6 @@
         tableId: TTTDrozd
       - !type:NestedSelector
         tableId: TTTXL8
-      - !type:NestedSelector
-        tableId: TTTBuldog
       - !type:NestedSelector
         tableId: TTTEstoc
     #обычно
@@ -132,7 +132,7 @@
   id: TTTXL8
   table: !type:AllSelector
     children:
-    - id: WeaponSubMachineGunDrozd
+    - id: WeaponRifleLecterXL8
     - id: MagazineRifle
     - id: MagazineRifle
     - id: MagazineBoxRifle
