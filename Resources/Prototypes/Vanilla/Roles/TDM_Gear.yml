@@ -171,6 +171,7 @@
   inhand:
     - WeaponPistolCobra
     - TTTKnife
+
 # инженер
 - type: startingGear
   id: RedGuyEngineer
@@ -476,49 +477,3 @@
       tags:
         - ShellShotgun
     capacity: 28
-
-- type: entity
-  name: Свёрнутая турель
-  parent: ToolboxMechanical
-  id: ToolboxTurretTDMBlue
-  categories: [ HideSpawnMenu ]
-  description: Гаечным ключём разворачивается
-  components:
-  - type: Damageable
-    damageContainer: Inorganic
-  - type: Destructible
-    thresholds:
-      - trigger:
-          !type:DamageTrigger
-          damage: 1
-        behaviors:
-          - !type:DoActsBehavior
-            acts: [ "Destruction" ]
-          - !type:SpawnEntitiesBehavior
-            spawn:
-              WeaponTurretBlueTeam:
-                min: 1
-                max: 1
-
-- type: entity
-  name: Свёрнутая турель
-  parent: ToolboxEmergency
-  id: ToolboxTurretTDMRed
-  categories: [ HideSpawnMenu ]
-  description: Гаечным ключём разворачивается
-  components:
-  - type: Damageable
-    damageContainer: Inorganic
-  - type: Destructible
-    thresholds:
-      - trigger:
-          !type:DamageTrigger
-          damage: 1
-        behaviors:
-          - !type:DoActsBehavior
-            acts: [ "Destruction" ]
-          - !type:SpawnEntitiesBehavior
-            spawn:
-              WeaponTurretRedTeam:
-                min: 1
-                max: 1
