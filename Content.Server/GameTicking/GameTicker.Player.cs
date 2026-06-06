@@ -19,9 +19,8 @@ namespace Content.Server.GameTicking
     [UsedImplicitly]
     public sealed partial class GameTicker
     {
-        [Dependency] private readonly IPlayerManager _playerManager = default!;
-        [Dependency] private readonly JoinQueueManager _queueManager = default!; // Corvax-Queue
-
+        [Dependency] private IPlayerManager _playerManager = default!;
+        [Dependency] private JoinQueueManager _queueManager = default!; // Corvax-Queue
         private void InitializePlayer()
         {
             _playerManager.PlayerStatusChanged += PlayerStatusChanged;

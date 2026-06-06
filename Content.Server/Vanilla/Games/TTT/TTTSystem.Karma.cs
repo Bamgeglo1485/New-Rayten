@@ -9,8 +9,8 @@ namespace Content.Server.Vanilla.Games.TTT;
 
 public sealed partial class TTTSystem : SharedTTTSystem
 {
-    [Dependency] private readonly MobStateSystem _mob = default!;
-    [Dependency] private readonly ILogManager _log = default!;
+    [Dependency] private MobStateSystem _mob = default!;
+    [Dependency] private ILogManager _log = default!;
     private const float KarmaRatio = 0.002f;//модификатор кармы за тимкилл (-)
     private const float TraitorDamageRatio = 0.0003f;//модификатор кармы за урон по предателю (+)
     private const float KarmaRoundIncrement = 5f;//карма в конце раунда

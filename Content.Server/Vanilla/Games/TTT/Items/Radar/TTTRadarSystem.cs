@@ -9,10 +9,10 @@ using Robust.Server.GameObjects;
 using Robust.Shared.Timing;
 namespace Content.Server.Vanilla.Games.TTT.Items.Radar;
 
-public sealed class TTTRadarSystem : EntitySystem
+public sealed partial class TTTRadarSystem : EntitySystem
 {
-    [Dependency] private readonly UserInterfaceSystem _ui = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private UserInterfaceSystem _ui = default!;
+    [Dependency] private IGameTiming _timing = default!;
     private float _accumulator = 0f;
     public override void Initialize()
     {

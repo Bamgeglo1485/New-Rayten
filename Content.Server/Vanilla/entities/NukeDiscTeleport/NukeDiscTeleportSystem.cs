@@ -11,14 +11,14 @@ using Robust.Shared.Audio;
 
 namespace Content.Server.Vanilla.Nuke;
 
-public sealed class NukeDiskTeleportSystem : EntitySystem
+public sealed partial class NukeDiskTeleportSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _gameTiming = default!;
-    [Dependency] private readonly ChatSystem _chat = default!;
-    [Dependency] private readonly StationSystem _stationSystem = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SpecialRespawnSystem _specialRespawn = default!;
-    [Dependency] private readonly SharedTransformSystem _transformSystem = default!;
+    [Dependency] private IGameTiming _gameTiming = default!;
+    [Dependency] private ChatSystem _chat = default!;
+    [Dependency] private StationSystem _stationSystem = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SpecialRespawnSystem _specialRespawn = default!;
+    [Dependency] private SharedTransformSystem _transformSystem = default!;
     private static readonly SoundSpecifier BlinkSound = new SoundPathSpecifier("/Audio/Magic/blink.ogg");
     private static readonly SoundSpecifier WarningSound = new SoundPathSpecifier("/Audio/Machines/Nuke/angry_beep.ogg");
     public override void Update(float frameTime)

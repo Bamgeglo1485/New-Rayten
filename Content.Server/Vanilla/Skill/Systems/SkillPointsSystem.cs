@@ -15,14 +15,14 @@ namespace Content.Server.Vanilla.Skill
         private void OnSetterComponentInitialized(EntityUid uid, AddSkillPointsComponent setterComp, MapInitEvent args)
         {
             // Проверяем наличие SkillPointsComponent
-            if (!EntityManager.TryGetComponent<SkillComponent>(uid, out var skillComp))
+            if (!TryComp<SkillComponent>(uid, out var skillComp))
                 skillComp = EnsureComp<SkillComponent>(uid);
 
             // Добавляем значения
             skillComp.SkillPoints += setterComp.Points;
             Dirty(uid, skillComp);
 
-            EntityManager.RemoveComponent<AddSkillPointsComponent>(uid);
+            RemComp<AddSkillPointsComponent>(uid);
         }
     }
 }

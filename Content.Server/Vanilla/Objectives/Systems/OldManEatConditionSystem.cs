@@ -5,9 +5,9 @@ using Content.Shared.Objectives.Components;
 
 namespace Content.Server.Vanilla.Objectives.Systems;
 
-public sealed class OldManEatConditionSystem : EntitySystem
+public sealed partial class OldManEatConditionSystem : EntitySystem
 {
-    [Dependency] private readonly SharedMindSystem _mind = default!;
+    [Dependency] private SharedMindSystem _mind = default!;
     public override void Initialize()
     {
         base.Initialize();

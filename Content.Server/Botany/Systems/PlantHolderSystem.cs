@@ -22,34 +22,33 @@ using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
-using Content.Shared.Vanilla.Skill;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Database;
 using Content.Shared.EntityEffects;
-using Content.Shared.Kitchen.Components;
 using Content.Shared.Labels.Components;
+using Content.Shared.Tools.Systems;
 
 namespace Content.Server.Botany.Systems;
 
-public sealed class PlantHolderSystem : EntitySystem
+public sealed partial class PlantHolderSystem : EntitySystem
 {
-    [Dependency] private readonly AtmosphereSystem _atmosphere = default!;
-    [Dependency] private readonly BotanySystem _botany = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly MutationSystem _mutation = default!;
-    [Dependency] private readonly AppearanceSystem _appearance = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly HandsSystem _hands = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly IGameTiming _gameTiming = default!;
-    [Dependency] private readonly SharedSolutionContainerSystem _solutionContainerSystem = default!;
-    [Dependency] private readonly TagSystem _tagSystem = default!;
-    [Dependency] private readonly RandomHelperSystem _randomHelper = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly SharedSkillSystem _skill = default!;
-    [Dependency] private readonly ItemSlotsSystem _itemSlots = default!;
-    [Dependency] private readonly ISharedAdminLogManager _adminLogger = default!;
-    [Dependency] private readonly SharedEntityEffectsSystem _entityEffects = default!;
+    [Dependency] private AtmosphereSystem _atmosphere = default!;
+    [Dependency] private BotanySystem _botany = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private MutationSystem _mutation = default!;
+    [Dependency] private AppearanceSystem _appearance = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private HandsSystem _hands = default!;
+    [Dependency] private PopupSystem _popup = default!;
+    [Dependency] private IGameTiming _gameTiming = default!;
+    [Dependency] private SharedSolutionContainerSystem _solutionContainerSystem = default!;
+    [Dependency] private TagSystem _tagSystem = default!;
+    [Dependency] private RandomHelperSystem _randomHelper = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private ItemSlotsSystem _itemSlots = default!;
+    [Dependency] private ISharedAdminLogManager _adminLogger = default!;
+    [Dependency] private SharedEntityEffectsSystem _entityEffects = default!;
+    [Dependency] private SharedToolSystem _tool = default!;
 
     public const float HydroponicsSpeedMultiplier = 1f;
     public const float HydroponicsConsumptionMultiplier = 2f;
@@ -269,13 +268,6 @@ public sealed class PlantHolderSystem : EntitySystem
         {
             args.Handled = true;
 
-            //Rayten-start
-            if (TryComp<RequiresSkillComponent>(uid, out var requiresSkillComponent))
-            {
-                if (!_skill.HasRequiredSkill(args.User, requiresSkillComponent, WithBeep: true, ServerOnly: true))
-                    return;
-            }
-            //Rayten-end
 
             if (component.Seed == null)
             {
@@ -332,7 +324,8 @@ public sealed class PlantHolderSystem : EntitySystem
             return;
         }
 
-        if (HasComp<SharpComponent>(args.Used))
+        var harvestToolQuality = entity.Comp.HarvestToolQuality;
+        if (harvestToolQuality.HasValue && _tool.HasQuality(args.Used, harvestToolQuality.Value))
         {
             args.Handled = true;
             DoHarvest(uid, args.User, component);
@@ -438,6 +431,7 @@ public sealed class PlantHolderSystem : EntitySystem
             && component.WeedLevel >= component.Seed.WeedHighLevelThreshold)
         {
             Spawn(component.Seed.KudzuPrototype, Transform(uid).Coordinates.SnapToGrid(EntityManager));
+            EnsureUniqueSeed(uid, component);
             component.Seed.TurnIntoKudzu = false;
             component.Health = 0;
         }

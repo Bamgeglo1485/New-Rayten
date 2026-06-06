@@ -25,7 +25,7 @@ public sealed partial class SkillSystem : SharedSkillSystem
             if (!_Random.Prob(FallChance))
                 return;
 
-            var userTransform = EntityManager.GetComponent<TransformComponent>(args.User);
+            var userTransform = Transform(args.User);
 
             var angle = userTransform.LocalRotation;
 

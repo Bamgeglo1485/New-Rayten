@@ -11,10 +11,10 @@ using System.Numerics;
 
 namespace Content.Client.Vanilla.Overlays.ThermalVision;
 
-public sealed class ThermalVisionOverlay : Overlay
+public sealed partial class ThermalVisionOverlay : Overlay
 {
-    [Dependency] private readonly IEntityManager _entity = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
+    [Dependency] private IEntityManager _entity = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
     private readonly float _showRadius;
 
     private readonly EntityLookupSystem _entityLookup;

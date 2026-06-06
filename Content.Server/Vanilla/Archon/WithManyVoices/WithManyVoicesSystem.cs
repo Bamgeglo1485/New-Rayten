@@ -10,9 +10,9 @@ using Content.Shared.FixedPoint;
 
 namespace Content.Server.Vanilla.Archon.BlindPredator;
 
-public sealed class WithManyVoicesSystem : SharedWithManyVoicesSystem
+public sealed partial class WithManyVoicesSystem : SharedWithManyVoicesSystem
 {
-    [Dependency] private readonly HTNSystem _htn = default!;
+    [Dependency] private HTNSystem _htn = default!;
     public override void Initialize()
     {
         base.Initialize();

@@ -45,21 +45,21 @@ public sealed partial class TDMSystem : EntitySystem
         public int MMR { get; set; } = mmr;
     }
 
-    [Dependency] private readonly MapSystem _mapSystem = default!;
-    [Dependency] private readonly MapLoaderSystem _mapLoader = default!;
-    [Dependency] private readonly GameTicker _gameTicker = default!;
-    [Dependency] private readonly IGameTiming _gameTiming = default!;
-    [Dependency] private readonly MindSystem _mindSystem = default!;
-    [Dependency] private readonly StationSpawningSystem _spawning = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly IChatManager _chatManager = default!;
-    [Dependency] private readonly SharedGhostSystem _ghosts = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly MetaDataSystem _metaSystem = default!;
-    [Dependency] private readonly MobThresholdSystem _thresh = default!;
+    [Dependency] private MapSystem _mapSystem = default!;
+    [Dependency] private MapLoaderSystem _mapLoader = default!;
+    [Dependency] private GameTicker _gameTicker = default!;
+    [Dependency] private IGameTiming _gameTiming = default!;
+    [Dependency] private MindSystem _mindSystem = default!;
+    [Dependency] private StationSpawningSystem _spawning = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private IChatManager _chatManager = default!;
+    [Dependency] private SharedGhostSystem _ghosts = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private MetaDataSystem _metaSystem = default!;
+    [Dependency] private MobThresholdSystem _thresh = default!;
     private EntityUid? _currentrule = null;
 
     public override void Initialize()

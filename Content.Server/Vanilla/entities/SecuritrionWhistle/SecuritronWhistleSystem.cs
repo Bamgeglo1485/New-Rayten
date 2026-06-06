@@ -12,12 +12,12 @@ using System.Numerics;
 
 namespace Content.Server.Vanilla.Entities.SecuritronWhistle;
 
-public sealed class SecuritronWhistleSystem : SharedSecuritronWhistleSystem
+public sealed partial class SecuritronWhistleSystem : SharedSecuritronWhistleSystem
 {
-    [Dependency] private readonly NPCSystem _npc = default!;
-    [Dependency] private readonly HTNSystem _htn = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly SharedContainerSystem _container = default!;
+    [Dependency] private NPCSystem _npc = default!;
+    [Dependency] private HTNSystem _htn = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
 
     public override void Initialize()
     {

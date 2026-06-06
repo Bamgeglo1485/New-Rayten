@@ -12,8 +12,7 @@ namespace Content.Client.Vanilla.UserInterface.BrainWorm.Chemicals;
 [GenerateTypedNameReferences]
 public sealed partial class WormChemicalsWindow : DefaultWindow
 {
-    [Dependency]
-    private readonly IPrototypeManager _prototype = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
     private readonly Dictionary<ChemicalControl, float> _controls = new();
     public event Action<string>? OnChemicalSelected;
 

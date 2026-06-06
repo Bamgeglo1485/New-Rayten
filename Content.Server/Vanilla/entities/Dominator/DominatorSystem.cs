@@ -15,16 +15,16 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.Vanilla.Dominator;
 
-public sealed class DominatorSystem : SharedDominatorSystem
+public sealed partial class DominatorSystem : SharedDominatorSystem
 {
-    [Dependency] private readonly AccessReaderSystem _accessReader = default!;
-    [Dependency] private readonly ChatSystem _chat = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly SharedMindSystem _mind = default!;
-    [Dependency] private readonly GhostSystem _ghost = default!;
-    [Dependency] private readonly GhostRoleSystem _ghostrole = default!;
+    [Dependency] private AccessReaderSystem _accessReader = default!;
+    [Dependency] private ChatSystem _chat = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private SharedMindSystem _mind = default!;
+    [Dependency] private GhostSystem _ghost = default!;
+    [Dependency] private GhostRoleSystem _ghostrole = default!;
 
     public override void Initialize()
     {

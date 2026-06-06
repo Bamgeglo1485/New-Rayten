@@ -9,8 +9,8 @@ namespace Content.Client.Vanilla.Games.TTT.Items.Radar;
 [GenerateTypedNameReferences]
 public sealed partial class TTTRadarWindow : FancyWindow
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IEntityManager _ent = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IEntityManager _ent = default!;
     private TimeSpan _next = TimeSpan.Zero;
     private TimeSpan _previous = TimeSpan.Zero;
     public TTTRadarWindow()

@@ -1,19 +1,16 @@
 using Content.Shared.Vanilla.Archon.BlindPredator;
-using Content.Shared.Movement.Components;
 using Content.Client.Vanilla.Overlays.BlindPredator;
-using Robust.Shared.GameStates;
 using Robust.Shared.Player;
 using Robust.Client.Graphics;
 using Robust.Client.GameObjects;
 using Robust.Client.Player;
-using Microsoft.VisualBasic;
 
 namespace Content.Client.Vanilla.Archon.BlindPredator;
 
-public sealed class BlindPredatorSystem : SharedBlindPredatorSystem
+public sealed partial class BlindPredatorSystem : SharedBlindPredatorSystem
 {
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
-    [Dependency] private readonly IOverlayManager _overlayMan = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private IOverlayManager _overlayMan = default!;
     private BlindPredatorOverlay _overlay = default!;
     public override void Initialize()
     {

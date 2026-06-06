@@ -6,10 +6,10 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.Vanilla.Background;
 
-public sealed class BackGroundSystem : EntitySystem
+public sealed partial class BackGroundSystem : EntitySystem
 {
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly AdminFrozenSystem _freeze = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private AdminFrozenSystem _freeze = default!;
 
     public override void Initialize()
     {

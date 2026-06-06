@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Content.Shared.Access.Systems;
 using Content.Shared.CCVar;
 using Content.Shared.Examine;
@@ -14,12 +15,12 @@ namespace Content.Shared.Contraband;
 /// <summary>
 /// This handles showing examine messages for contraband-marked items.
 /// </summary>
-public sealed class ContrabandSystem : EntitySystem
+public sealed partial class ContrabandSystem : EntitySystem
 {
-    [Dependency] private readonly IConfigurationManager _configuration = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly SharedIdCardSystem _id = default!;
-    [Dependency] private readonly ExamineSystemShared _examine = default!;
+    [Dependency] private IConfigurationManager _configuration = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private SharedIdCardSystem _id = default!;
+    [Dependency] private ExamineSystemShared _examine = default!;
 
     private bool _contrabandExamineEnabled;
     private bool _contrabandExamineOnlyInHudEnabled;
@@ -108,8 +109,8 @@ public sealed class ContrabandSystem : EntitySystem
             //капитан может носить любые предметы любых отделов, за исключением предметов которые запрещены всем
             || ((component.AllowedDepartments.Count > 0 || component.AllowedJobs.Count > 0) && jobId == "капитан"))
         {
-            carryingMessage = Loc.GetString("contraband-examine-text-in-the-clear");
-            iconTexture = "/Textures/Interface/VerbIcons/unlock-green.svg.192dpi.png";
+            carryingMessage = Loc.GetString("contraband-examine-text-avoid-carrying-around");
+            iconTexture = "/Textures/Interface/VerbIcons/lock-red.svg.192dpi.png";
         }
         var examineMarkup = GetContrabandExamine(levelExamineMessage, carryingMessage, depExamineMessage);
         _examine.AddHoverExamineVerb(args,
@@ -166,6 +167,43 @@ public sealed class ContrabandSystem : EntitySystem
     private void SetContrabandExamineOnlyInHUD(bool val)
     {
         _contrabandExamineOnlyInHudEnabled = val;
+    }
+
+    /// <summary>
+    /// Determines if an item is contraband for a given player. If no player is provided, will just return if the item
+    /// is contraband in general.
+    /// </summary>
+    /// <param name="contraband">The entity that we are checking for contraband.</param>
+    /// <param name="player">The player that we are checking if they are allowed to have this contraband.</param>
+    /// <param name="contraProtoId">The contraband ProtoId if the item is contraband.</param>
+    /// <returns></returns>
+    public bool IsContraband(Entity<ContrabandComponent?> contraband, EntityUid? player, [NotNullWhen(true)] out ProtoId<ContrabandSeverityPrototype>? contraProtoId)
+    {
+        contraProtoId = null;
+
+        if (!Resolve(contraband.Owner, ref contraband.Comp, false))
+            return false;
+
+        contraProtoId = contraband.Comp.Severity;
+
+        if (player == null)
+            return true;
+
+        List<ProtoId<DepartmentPrototype>> departments = new();
+        var jobId = "";
+        if (_id.TryFindIdCard(player.Value, out var id))
+        {
+            departments = id.Comp.JobDepartments;
+            if (id.Comp.LocalizedJobTitle is not null)
+                jobId = id.Comp.LocalizedJobTitle;
+        }
+
+        var jobs = contraband.Comp.AllowedJobs.Select(p => _proto.Index(p).LocalizedName).ToArray();
+        // if it is fully restricted, you're department-less, or your department isn't in the allowed list, you cannot carry it. Otherwise, you can.
+        if (departments.Intersect(contraband.Comp.AllowedDepartments).Any() || jobs.Contains(jobId))
+            return false;
+
+        return true;
     }
 }
 

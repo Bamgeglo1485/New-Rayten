@@ -20,16 +20,16 @@ namespace Content.Shared.Vanilla.Entities.BrainWorm;
 
 public abstract partial class SharedBrainWormSystem : EntitySystem
 {
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] protected readonly SharedActionsSystem Action = default!;
-    [Dependency] protected readonly SharedDoAfterSystem DoAfter = default!;
-    [Dependency] protected readonly SharedPopupSystem Popup = default!;
-    [Dependency] protected readonly SharedScaleVisualsSystem ScaleVisuals = default!;
-    [Dependency] private readonly BodySystem _body = default!;
-    [Dependency] protected readonly IGameTiming Timing = default!;
-    [Dependency] protected readonly MobStateSystem Mob = default!;
-    [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
-    [Dependency] private readonly InjectorSystem _injector = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] protected SharedActionsSystem Action = default!;
+    [Dependency] protected SharedDoAfterSystem DoAfter = default!;
+    [Dependency] protected SharedPopupSystem Popup = default!;
+    [Dependency] protected SharedScaleVisualsSystem ScaleVisuals = default!;
+    [Dependency] private BodySystem _body = default!;
+    [Dependency] protected IGameTiming Timing = default!;
+    [Dependency] protected MobStateSystem Mob = default!;
+    [Dependency] private SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private InjectorSystem _injector = default!;
 
     private static readonly EntProtoId BrainWormShopId = "ActionBrainWormShop";
     private static readonly EntProtoId BrainWormChemicalsId = "ActionBrainWormChemicals";

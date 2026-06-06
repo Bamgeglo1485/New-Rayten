@@ -19,21 +19,21 @@ using Robust.Shared.EntitySerialization.Systems;
 using Robust.Shared.Utility;
 namespace Content.Server.Vanilla.EventTeam;
 
-public sealed class EventTeamSystem : EntitySystem
+public sealed partial class EventTeamSystem : EntitySystem
 {
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
-    [Dependency] private readonly PopupSystem _popupSystem = default!;
-    [Dependency] private readonly AccessReaderSystem _accessReaderSystem = default!;
-    [Dependency] private readonly MapSystem _mapsystem = default!;
-    [Dependency] private readonly GameTicker _gameTicker = default!;
-    [Dependency] private readonly MapLoaderSystem _map = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly ChatSystem _chatSystem = default!;
-    [Dependency] private readonly JammerSystem _jammer = default!;
-    [Dependency] private readonly IAdminLogManager _adminLogger = default!;
-    [Dependency] private readonly MetaDataSystem _metaData = default!;
-    [Dependency] private readonly StationSystem _stationSystem = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private PopupSystem _popupSystem = default!;
+    [Dependency] private AccessReaderSystem _accessReaderSystem = default!;
+    [Dependency] private MapSystem _mapsystem = default!;
+    [Dependency] private GameTicker _gameTicker = default!;
+    [Dependency] private MapLoaderSystem _map = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private ChatSystem _chatSystem = default!;
+    [Dependency] private JammerSystem _jammer = default!;
+    [Dependency] private IAdminLogManager _adminLogger = default!;
+    [Dependency] private MetaDataSystem _metaData = default!;
+    [Dependency] private StationSystem _stationSystem = default!;
 
     public override void Initialize()
     {
@@ -247,7 +247,7 @@ public sealed class EventTeamSystem : EntitySystem
                 continue;
             // Если маркера нет, спавним в центре шаттла
             var coordinates = FindSpawnCoordinates(spawnMarker, shuttle);
-            EntityManager.SpawnEntity(spawnEntry, coordinates);
+            Spawn(spawnEntry, coordinates);
         }
     }
 
@@ -286,7 +286,7 @@ public sealed class EventTeamSystem : EntitySystem
         while (counter > 0)
         {
             counter--;
-            EntityManager.SpawnEntity(proto.RegularUnit, _random.Pick(spawns));
+            Spawn(proto.RegularUnit, _random.Pick(spawns));
         }
     }
 

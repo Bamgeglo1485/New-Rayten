@@ -10,18 +10,17 @@ using Robust.Shared.Prototypes;
 using System.Linq;
 using System.Text;
 using Content.Shared.Atmos;
-using Content.Shared.Vanilla.Skill;
 
 namespace Content.Server.Botany.Systems; // This is how it supposed to be
 
-public sealed class PlantAnalyzerSystem : EntitySystem
+public sealed partial class PlantAnalyzerSystem : EntitySystem
 {
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly PowerCellSystem _cell = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfterSystem = default!;
-    [Dependency] private readonly UserInterfaceSystem _uiSystem = default!;
-    [Dependency] private readonly SharedSkillSystem _skill = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private PowerCellSystem _cell = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedDoAfterSystem _doAfterSystem = default!;
+    [Dependency] private UserInterfaceSystem _uiSystem = default!;
+
     public override void Initialize()
     {
         base.Initialize();
@@ -38,13 +37,6 @@ public sealed class PlantAnalyzerSystem : EntitySystem
         if (ent.Comp.DoAfter != null)
             return;
 
-        //Rayten-start
-        if (TryComp<RequiresSkillComponent>(ent, out var requiresSkillComponent))
-        {
-            if (!_skill.HasRequiredSkill(args.User, requiresSkillComponent, WithBeep: true, ServerOnly: true))
-                return;
-        }
-        //Rayten-end
 
 
         if (HasComp<SeedComponent>(args.Target) || TryComp<PlantHolderComponent>(args.Target, out var plantHolder) && plantHolder.Seed != null)

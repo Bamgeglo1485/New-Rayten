@@ -15,14 +15,14 @@ using Content.Shared.Random.Helpers;
 
 namespace Content.Shared.Vanilla.Games.Items.TTT;
 
-public sealed class TTTBombSystem : EntitySystem
+public sealed partial class TTTBombSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly TriggerSystem _trigger = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly TTTDnaScannerSystem _dnaScanner = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private TriggerSystem _trigger = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private TTTDnaScannerSystem _dnaScanner = default!;
 
 
     private float _timeAcummulator = 0;

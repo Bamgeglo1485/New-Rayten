@@ -15,15 +15,15 @@ using System.Net.Sockets;
 
 using System.Text.RegularExpressions;
 
-public sealed class DiscordChatRelaySystem : EntitySystem
+public sealed partial class DiscordChatRelaySystem : EntitySystem
 {
-    [Dependency] private readonly DiscordWebhook _discordWebhook = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IAdminManager _adminManager = default!;
-    [Dependency] private readonly IBanManager _bans = default!;
-    [Dependency] private readonly IPlayerLocator _locator = default!;
+    [Dependency] private DiscordWebhook _discordWebhook = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private IAdminManager _adminManager = default!;
+    [Dependency] private IBanManager _bans = default!;
+    [Dependency] private IPlayerLocator _locator = default!;
     private const int Ipv4_CIDR = 32;
     private const int Ipv6_CIDR = 128;
     private string _webhookUrl = "";

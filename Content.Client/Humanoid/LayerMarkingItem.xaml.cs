@@ -17,8 +17,8 @@ namespace Content.Client.Humanoid;
 [GenerateTypedNameReferences]
 public sealed partial class LayerMarkingItem : BoxContainer, ISearchableControl
 {
-    [Dependency] private readonly IEntityManager _entity = default!;
-    [Dependency] private readonly SharedSponsorManager _sponsorsManager = default!;
+    [Dependency] private IEntityManager _entity = default!;
+    [Dependency] private SharedSponsorManager _sponsorsManager = default!;
     private readonly SpriteSystem _sprite;
 
     private readonly MarkingsViewModel _markingsModel;

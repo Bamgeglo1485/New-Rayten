@@ -29,20 +29,20 @@ namespace Content.Server.Vanilla.Archon.OldMan.FemurBreaker;
 
 public sealed partial class FemurBreakerSystem : EntitySystem
 {
-    [Dependency] private readonly PolymorphSystem _polymorph = default!;
-    [Dependency] private readonly MobStateSystem _mob = default!;
-    [Dependency] private readonly PowerReceiverSystem _power = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly SharedJitteringSystem _jittering = default!;
-    [Dependency] private readonly OldManSystem _oldman = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly ActionBlockerSystem _blocker = default!;
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly OldManEatConditionSystem _eatConditionSystem = default!;
+    [Dependency] private PolymorphSystem _polymorph = default!;
+    [Dependency] private MobStateSystem _mob = default!;
+    [Dependency] private PowerReceiverSystem _power = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private SharedJitteringSystem _jittering = default!;
+    [Dependency] private OldManSystem _oldman = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private ActionBlockerSystem _blocker = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private OldManEatConditionSystem _eatConditionSystem = default!;
 
     private const float UpdateRate = 0.25f;
     private float _updateDif;

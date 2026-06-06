@@ -7,11 +7,11 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared.Vanilla.Entities.SecuritronWhistle;
 
-public abstract class SharedSecuritronWhistleSystem : EntitySystem
+public abstract partial class SharedSecuritronWhistleSystem : EntitySystem
 {
-    [Dependency] private readonly EntityLookupSystem _entityLookup = default!;
-    [Dependency] protected readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private EntityLookupSystem _entityLookup = default!;
+    [Dependency] protected IGameTiming _timing = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     public override void Initialize()
     {

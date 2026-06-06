@@ -16,9 +16,9 @@ using Robust.Shared.Serialization;
 
 namespace Content.Server.Vanilla.RoleSkillsSystem;
 
-public sealed class RoleSkillsSystem : EntitySystem
+public sealed partial class RoleSkillsSystem : EntitySystem
 {
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
 
     public override void Initialize()
     {

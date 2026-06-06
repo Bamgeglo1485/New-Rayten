@@ -24,19 +24,19 @@ namespace Content.Server.Vanilla.Games.TTT;
 
 public sealed partial class TTTSystem : SharedTTTSystem
 {
-    [Dependency] private readonly MetaDataSystem _meta = default!;
-    [Dependency] private readonly IGameTiming _gameTiming = default!;
-    [Dependency] private readonly SpecialRespawnSystem _specialRespawn = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly SharedMapSystem _mapSystem = default!;
-    [Dependency] private readonly SharedMindSystem _mindSystem = default!;
-    [Dependency] private readonly LoadoutSystem _loadout = default!;
-    [Dependency] private readonly IChatManager _chatManager = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedSubdermalImplantSystem _implant = default!;
-    [Dependency] private readonly MapLoaderSystem _mapLoader = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
+    [Dependency] private MetaDataSystem _meta = default!;
+    [Dependency] private IGameTiming _gameTiming = default!;
+    [Dependency] private SpecialRespawnSystem _specialRespawn = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private SharedMapSystem _mapSystem = default!;
+    [Dependency] private SharedMindSystem _mindSystem = default!;
+    [Dependency] private LoadoutSystem _loadout = default!;
+    [Dependency] private IChatManager _chatManager = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedSubdermalImplantSystem _implant = default!;
+    [Dependency] private MapLoaderSystem _mapLoader = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
     private sealed class PlayerStats(string name, int kills, int karma, string role)
     {
         public string Name { get; set; } = name;

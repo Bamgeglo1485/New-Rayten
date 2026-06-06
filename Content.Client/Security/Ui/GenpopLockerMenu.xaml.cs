@@ -18,9 +18,8 @@ namespace Content.Client.Security.Ui;
 [GenerateTypedNameReferences]
 public sealed partial class GenpopLockerMenu : FancyWindow
 {
-    [Dependency] private readonly IConfigurationManager _cfgManager = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-
+    [Dependency] private IConfigurationManager _cfgManager = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
     public event Action<string, float, string>? OnConfigurationComplete;
     private readonly Dictionary<int, LawInfoPrototype> _selectedLaws = new();
     private readonly Dictionary<int, LawControl> _selectedControls = new();

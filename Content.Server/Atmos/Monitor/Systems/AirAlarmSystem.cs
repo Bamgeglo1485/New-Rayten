@@ -1,10 +1,8 @@
 using Content.Server.Atmos.Monitor.Components;
-using Content.Server.Atmos.Piping.Components;
 using Content.Server.DeviceLinking.Systems;
 using Content.Server.DeviceNetwork.Systems;
 using Content.Server.Popups;
 using Content.Server.Power.EntitySystems;
-using Content.Shared.Vanilla.Skill;
 using Content.Shared.Access.Components;
 using Content.Shared.Access.Systems;
 using Content.Shared.Administration.Logs;
@@ -21,6 +19,7 @@ using Content.Shared.Power;
 using Content.Shared.Wires;
 using Robust.Server.GameObjects;
 using System.Linq;
+using Content.Shared.Atmos.Components;
 using Content.Shared.DeviceNetwork.Events;
 using Content.Shared.DeviceNetwork.Components;
 
@@ -35,18 +34,18 @@ namespace Content.Server.Atmos.Monitor.Systems;
 // data key. In response, a packet will be transmitted
 // with the response type as its command, and the
 // response data in its data key.
-public sealed class AirAlarmSystem : EntitySystem
+public sealed partial class AirAlarmSystem : EntitySystem
 {
-    [Dependency] private readonly SharedSkillSystem _skill = default!; //vanilla-station
-    [Dependency] private readonly AccessReaderSystem _access = default!;
-    [Dependency] private readonly ISharedAdminLogManager _adminLogger = default!;
-    [Dependency] private readonly AtmosAlarmableSystem _atmosAlarmable = default!;
-    [Dependency] private readonly AtmosDeviceNetworkSystem _atmosDevNet = default!;
-    [Dependency] private readonly DeviceNetworkSystem _deviceNet = default!;
-    [Dependency] private readonly DeviceLinkSystem _deviceLink = default!;
-    [Dependency] private readonly DeviceListSystem _deviceList = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly UserInterfaceSystem _ui = default!;
+    [Dependency] private AccessReaderSystem _access = default!;
+    [Dependency] private ISharedAdminLogManager _adminLogger = default!;
+    [Dependency] private AtmosAlarmableSystem _atmosAlarmable = default!;
+    [Dependency] private AtmosDeviceNetworkSystem _atmosDevNet = default!;
+    [Dependency] private DeviceNetworkSystem _deviceNet = default!;
+    [Dependency] private DeviceLinkSystem _deviceLink = default!;
+    [Dependency] private DeviceListSystem _deviceList = default!;
+    [Dependency] private PopupSystem _popup = default!;
+    [Dependency] private UserInterfaceSystem _ui = default!;
+    [Dependency] private EntityQuery<DeviceNetworkComponent> _deviceNetworkQuery = default!;
 
     #region Device Network API
 
@@ -195,10 +194,9 @@ public sealed class AirAlarmSystem : EntitySystem
 
     private void OnDeviceListUpdate(EntityUid uid, AirAlarmComponent component, DeviceListUpdateEvent args)
     {
-        var query = GetEntityQuery<DeviceNetworkComponent>();
         foreach (var device in args.OldDevices)
         {
-            if (!query.TryGetComponent(device, out var deviceNet))
+            if (!_deviceNetworkQuery.TryGetComponent(device, out var deviceNet))
             {
                 continue;
             }
@@ -264,11 +262,6 @@ public sealed class AirAlarmSystem : EntitySystem
             args.Handled = false;
             return;
         }
-        //vanilla-station-start
-        if (TryComp<RequiresSkillComponent>(uid, out var requiresSkillComp))
-            if (!_skill.HasRequiredSkill(args.User, requiresSkillComp, WithBeep: true, ServerOnly: true))
-                return;
-        //vanilla-station-end
 
         if (!this.IsPowered(uid, EntityManager))
             return;

@@ -13,12 +13,12 @@ namespace Content.Shared.Vanilla.Entities.ArsenalAuthorizator;
 
 public abstract partial class SharedArsenalAuthorizatorSystem : EntitySystem
 {
-    [Dependency] protected readonly SharedStationSystem StationSys = default!;
-    [Dependency] protected readonly SharedAppearanceSystem Appearance = default!;
-    [Dependency] protected readonly AccessReaderSystem Access = default!;
-    [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
-    [Dependency] private readonly SharedPointLightSystem _lights = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] protected SharedStationSystem StationSys = default!;
+    [Dependency] protected SharedAppearanceSystem Appearance = default!;
+    [Dependency] protected AccessReaderSystem Access = default!;
+    [Dependency] private SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private SharedPointLightSystem _lights = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
     public override void Initialize()
     {
         base.Initialize();

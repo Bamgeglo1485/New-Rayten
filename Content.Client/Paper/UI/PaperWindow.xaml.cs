@@ -12,19 +12,15 @@ using Robust.Shared.Utility;
 using Robust.Client.UserInterface.RichText;
 using Content.Client.UserInterface.RichText;
 using Robust.Shared.Input;
-using Content.Shared.Vanilla.Skill;
 using Robust.Client.Player;
 namespace Content.Client.Paper.UI
 {
     [GenerateTypedNameReferences]
     public sealed partial class PaperWindow : BaseWindow
     {
-        private SharedSkillSystem? _skill;
+        [Dependency] private IInputManager _inputManager = default!;
+        [Dependency] private IResourceCache _resCache = default!;
 
-        [Dependency] private readonly IInputManager _inputManager = default!;
-        [Dependency] private readonly IResourceCache _resCache = default!;
-        [Dependency] private readonly IPlayerManager _player = default!;
-        [Dependency] private readonly IEntityManager _entityManager = default!;
         private static Color DefaultTextColor = new(25, 25, 25);
 
         // <summary>
@@ -63,7 +59,6 @@ namespace Content.Client.Paper.UI
         {
             IoCManager.InjectDependencies(this);
             RobustXamlLoader.Load(this);
-            _skill ??= _entityManager.System<SharedSkillSystem>();
 
             // We can't configure the RichTextLabel contents from xaml, so do it here:
             BlankPaperIndicator.SetMessage(Loc.GetString("paper-ui-blank-page-message"), null, DefaultTextColor);
@@ -255,21 +250,12 @@ namespace Content.Client.Paper.UI
             InputContainer.Visible = isEditing;
             EditButtons.Visible = isEditing;
 
-            // Rayten-Start
-            var TEXT = state.FakeText ?? state.Text;
-            var entity = _player.LocalSession?.AttachedEntity;
-            if (entity != null && _skill != null && _skill.HasRequiredSkill(entity.Value, SkillType.Bureaucracy, WithBeep: false))
-            {
-                TEXT = state.Text;
-            }
-            // Rayten-End
-
             var msg = new FormattedMessage();
-            msg.AddMarkupPermissive(TEXT);
+            msg.AddMarkupPermissive(state.Text);
 
             // For premade documents, we want to be able to edit them rather than
             // replace them.
-            var shouldCopyText = 0 == Input.TextLength && 0 != TEXT.Length;
+            var shouldCopyText = 0 == Input.TextLength && 0 != state.Text.Length;
             if (!wasEditing || shouldCopyText)
             {
                 // We can get repeated messages with state.Mode == Write if another
@@ -278,7 +264,7 @@ namespace Content.Client.Paper.UI
                 // don't want to lose any text they already input.
                 Input.TextRope = Rope.Leaf.Empty;
                 Input.CursorPosition = new TextEdit.CursorPos();
-                Input.InsertAtCursor(TEXT);
+                Input.InsertAtCursor(state.Text);
             }
 
             for (var i = 0; i <= state.StampedBy.Count * 3 + 1; i++)
@@ -287,8 +273,8 @@ namespace Content.Client.Paper.UI
             }
             WrittenTextLabel.SetMessage(msg, UserFormattableTags.BaseAllowedTags, DefaultTextColor);
 
-            WrittenTextLabel.Visible = !isEditing && TEXT.Length > 0;
-            BlankPaperIndicator.Visible = !isEditing && TEXT.Length == 0;
+            WrittenTextLabel.Visible = !isEditing && state.Text.Length > 0;
+            BlankPaperIndicator.Visible = !isEditing && state.Text.Length == 0;
 
             StampDisplay.RemoveAllChildren();
             StampDisplay.RemoveStamps();

@@ -22,7 +22,7 @@ public abstract partial class SharedSkillSystem : EntitySystem
         if (args.Handled)
             return;
 
-        if (!EntityManager.TryGetComponent<RequiresSkillComponent>(uid, out var Reqcomponent))
+        if (!TryComp<RequiresSkillComponent>(uid, out var Reqcomponent))
             return;
 
         if (HasRequiredSkill(args.User, Reqcomponent, WithBeep: _timing.IsFirstTimePredicted))

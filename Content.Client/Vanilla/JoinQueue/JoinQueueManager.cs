@@ -4,10 +4,10 @@ using Robust.Shared.Network;
 
 namespace Content.Client.Vanilla.JoinQueue;
 
-public sealed class JoinQueueManager
+public sealed partial class JoinQueueManager
 {
-    [Dependency] private readonly IClientNetManager _netManager = default!;
-    [Dependency] private readonly IStateManager _stateManager = default!;
+    [Dependency] private IClientNetManager _netManager = default!;
+    [Dependency] private IStateManager _stateManager = default!;
 
     public void Initialize()
     {
@@ -21,6 +21,6 @@ public sealed class JoinQueueManager
             _stateManager.RequestStateChange<QueueState>();
         }
 
-        ((QueueState) _stateManager.CurrentState).OnQueueUpdate(msg);
+        ((QueueState)_stateManager.CurrentState).OnQueueUpdate(msg);
     }
 }

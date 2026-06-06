@@ -20,20 +20,20 @@ using Robust.Shared.Player;
 
 namespace Content.Shared.Vanilla.Archon.PlagueDoctor;
 
-public abstract class SharedPlagueDoctorgSystem : EntitySystem
+public abstract partial class SharedPlagueDoctorgSystem : EntitySystem
 {
-    [Dependency] protected readonly SharedPopupSystem Popup = default!;
-    [Dependency] protected readonly SharedBlindPredatorSystem BlindPredator = default!;
-    [Dependency] private readonly AlertsSystem _alerts = default!;
-    [Dependency] private readonly MobStateSystem _mob = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedAmbientSoundSystem _ambient = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly SharedArchonResearchSystem _archon = default!;
+    [Dependency] protected SharedPopupSystem Popup = default!;
+    [Dependency] protected SharedBlindPredatorSystem BlindPredator = default!;
+    [Dependency] private AlertsSystem _alerts = default!;
+    [Dependency] private MobStateSystem _mob = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedAmbientSoundSystem _ambient = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private SharedArchonResearchSystem _archon = default!;
     public override void Initialize()
     {
         base.Initialize();

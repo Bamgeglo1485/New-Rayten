@@ -8,11 +8,11 @@ using Content.Shared.Speech.Muting;
 using Content.Shared.Vanilla.Games.TTT.Items.DNAScanner;
 namespace Content.Shared.Vanilla.Games.TTT.Items.Knife;
 
-public sealed class TTTBombSystem : EntitySystem
+public sealed partial class TTTBombSystem : EntitySystem
 {
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly SharedTransformSystem _transformSystem = default!;
-    [Dependency] private readonly MobStateSystem _mob = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private SharedTransformSystem _transformSystem = default!;
+    [Dependency] private MobStateSystem _mob = default!;
     public override void Initialize()
     {
         base.Initialize();

@@ -9,11 +9,11 @@ using Robust.Shared.Physics.Systems;
 
 namespace Content.Shared.Vanilla.Archon.SuperBall;
 
-public sealed class SuperBallSystem : EntitySystem
+public sealed partial class SuperBallSystem : EntitySystem
 {
-    [Dependency] private readonly DamageableSystem _damage = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private DamageableSystem _damage = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
     public override void Initialize()
     {
         base.Initialize();

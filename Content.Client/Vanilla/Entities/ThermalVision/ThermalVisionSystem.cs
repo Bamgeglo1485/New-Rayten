@@ -1,18 +1,14 @@
 using Content.Shared.Vanilla.Entities.ThermalVision;
-using Content.Shared.Inventory;
 using Content.Shared.Inventory.Events;
 using Content.Client.Vanilla.Overlays.ThermalVision;
 using Content.Client.Overlays;
-using Robust.Shared.Player;
-using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
-using Robust.Client.Player;
 
 namespace Content.Client.Vanilla.Entities.ThermalVision;
 
-public sealed class ThermalVisionSystem : EquipmentHudSystem<ThermalVisionOverlayComponent>
+public sealed partial class ThermalVisionSystem : EquipmentHudSystem<ThermalVisionOverlayComponent>
 {
-    [Dependency] private readonly IOverlayManager _overlayMan = default!;
+    [Dependency] private IOverlayManager _overlayMan = default!;
 
     private ThermalVisionOverlay _overlay = default!;
 

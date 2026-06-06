@@ -10,15 +10,15 @@ using System.Linq;
 
 namespace Content.Server.Vanilla.Competitive;
 
-public sealed class TechnicalAnalysisSystem : EntitySystem
+public sealed partial class TechnicalAnalysisSystem : EntitySystem
 {
     private static readonly char[] Alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'K'];
     public TimeSpan NextSpawn = TimeSpan.Zero;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly UserInterfaceSystem _ui = default!;
-    [Dependency] private readonly ResearchSystem _research = default!;
-    [Dependency] private readonly AudioSystem _audio = default!;
-    [Dependency] private readonly IGameTiming Timing = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private UserInterfaceSystem _ui = default!;
+    [Dependency] private ResearchSystem _research = default!;
+    [Dependency] private AudioSystem _audio = default!;
+    [Dependency] private IGameTiming Timing = default!;
     public override void Initialize()
     {
         base.Initialize();

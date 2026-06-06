@@ -16,8 +16,8 @@ public sealed partial class SpeakDatasetOperator : HTNOperator
     private ChatSystem _chat = default!;
     private RadioSystem _radio = default!;
 
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private IRobustRandom _random = default!;
 
     [DataField(required: true)]
     public ProtoId<LocalizedDatasetPrototype> Dataset = string.Empty;

@@ -2,15 +2,14 @@ using Content.Shared.Vanilla.Games.TTT;
 using Content.Shared.IdentityManagement;
 using Content.Client.Vanilla.Games.TTT.UI;
 using Robust.Shared.Timing;
-using Robust.Client.Player;
 using Robust.Client.UserInterface;
 using JetBrains.Annotations;
 namespace Content.Client.Vanilla.Games.TTT;
 
 [UsedImplicitly]
-public sealed class TTTBodyExamineBoundUserInterface(EntityUid owner, Enum uiKey) : BoundUserInterface(owner, uiKey)
+public sealed partial class TTTBodyExamineBoundUserInterface(EntityUid owner, Enum uiKey) : BoundUserInterface(owner, uiKey)
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private IGameTiming _timing = default!;
     [ViewVariables]
     private TTTBodyExamineMenu? _menu;
 

@@ -6,18 +6,15 @@ using Content.Shared.Throwing;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
 using Robust.Shared.Random;
-using Content.Shared.Vanilla.Skill;
 namespace Content.Server.Containers;
 
-public sealed class ThrowInsertContainerSystem : EntitySystem
+public sealed partial class ThrowInsertContainerSystem : EntitySystem
 {
-    [Dependency] private readonly IAdminLogManager _adminLogger = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedContainerSystem _containerSystem = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly SharedSkillSystem _skill = default!;
-
+    [Dependency] private IAdminLogManager _adminLogger = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedContainerSystem _containerSystem = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private IRobustRandom _random = default!;
 
     public override void Initialize()
     {
@@ -38,20 +35,15 @@ public sealed class ThrowInsertContainerSystem : EntitySystem
 
         if (beforeThrowArgs.Cancelled)
             return;
-        //Rayten-start
         if (args.Component.Thrower != null)
         {
-            if (!_skill.HasRequiredSkill(args.Component.Thrower.Value, SkillType.Weapon, SkillLevel.Expert, WithBeep: false))
+            if (!_random.Prob(ent.Comp.Probability))
             {
-                if (!_random.Prob(ent.Comp.Probability))
-                {
-                    _audio.PlayPvs(ent.Comp.MissSound, ent);
-                    _popup.PopupEntity(Loc.GetString(ent.Comp.MissLocString), ent);
-                    return;
-                }
+                _audio.PlayPvs(ent.Comp.MissSound, ent);
+                _popup.PopupEntity(Loc.GetString(ent.Comp.MissLocString), ent);
+                return;
             }
         }
-        //Rayten-end
         if (!_containerSystem.Insert(args.Thrown, container))
             throw new InvalidOperationException("Container insertion failed but CanInsert returned true");
 

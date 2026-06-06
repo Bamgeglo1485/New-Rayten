@@ -19,8 +19,8 @@ namespace Content.Client.VendingMachines.UI
     [GenerateTypedNameReferences]
     public sealed partial class VendingMachineMenu : FancyWindow
     {
-        [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-        [Dependency] private readonly IEntityManager _entityManager = default!;
+        [Dependency] private IPrototypeManager _prototypeManager = default!;
+        [Dependency] private IEntityManager _entityManager = default!;
 
         private readonly Dictionary<EntProtoId, EntityUid> _dummies = [];
         private readonly Dictionary<EntProtoId, (ListContainerButton Button, VendingMachineItem Item)> _listItems = new();
@@ -64,20 +64,11 @@ namespace Content.Client.VendingMachines.UI
 
         private bool DataFilterCondition(string filter, ListData data)
         {
-            if (data is not VendorItemsListData {ItemProtoID: var protoID, ItemText: var text })
+            if (data is not VendorItemsListData { ItemProtoID: var protoID, ItemText: var text })
                 return false;
 
             if (string.IsNullOrEmpty(filter))
                 return true;
-            //vanilla-station-skills-start
-             if (_dummies.TryGetValue(protoID, out var entityUid))
-                {
-                    if (_entityManager.TryGetComponent<LabelComponent>(entityUid, out var labelComp) && !string.IsNullOrEmpty(labelComp.CurrentLabel))
-                    {
-                        text += $" ({labelComp.CurrentLabel})";
-                    }
-                }
-            //vanilla-station-skills-end
             return text.Contains(filter, StringComparison.CurrentCultureIgnoreCase);
         }
 

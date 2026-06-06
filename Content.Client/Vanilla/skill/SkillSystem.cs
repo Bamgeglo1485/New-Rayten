@@ -2,15 +2,14 @@ using Content.Shared.Vanilla.Skill;
 using Content.Shared.Chemistry.Components;
 using Robust.Client.Player;
 using Robust.Shared.Player;
-using Robust.Shared.Prototypes;
 using Robust.Client.GameObjects;
 
 namespace Content.Client.Vanilla.Skill;
 
 public sealed partial class SkillSystem : SharedSkillSystem
 {
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly AppearanceSystem _appearance = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private AppearanceSystem _appearance = default!;
     public override void Initialize()
     {
         base.Initialize();

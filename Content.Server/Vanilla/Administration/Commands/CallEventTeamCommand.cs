@@ -18,10 +18,10 @@
 // [AdminCommand(AdminFlags.Admin)]
 // public sealed class CallEventTeamCommand : IConsoleCommand
 // {
-//     [Dependency] private readonly IAdminLogManager _adminLogger = default!;
-//     [Dependency] private readonly IEntitySystemManager _entitySystemManager = default!;
-//     [Dependency] private readonly IPrototypeManager _prototypes = default!;
-//     [Dependency] private readonly IGameTiming _timing = default!;
+//     [Dependency] private IAdminLogManager _adminLogger = default!;
+//     [Dependency] private IEntitySystemManager _entitySystemManager = default!;
+//     [Dependency] private IPrototypeManager _prototypes = default!;
+//     [Dependency] private IGameTiming _timing = default!;
 //     public string Command => "calleventteam";
 //     public string Description => "Вызвать отряд на станцию!";
 //     public string Help => "calleventteam";

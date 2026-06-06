@@ -13,7 +13,6 @@ using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Enums;
 using Robust.Shared.Prototypes;
-using Content.Shared.Vanilla.Skill;
 namespace Content.Client.Construction.UI
 {
     /// <summary>
@@ -21,17 +20,16 @@ namespace Content.Client.Construction.UI
     /// model. This is where the bulk of UI work is done, either calling functions in the model to change state, or collecting
     /// data out of the model to *present* to the screen though the UI framework.
     /// </summary>
-    internal sealed class ConstructionMenuPresenter : IDisposable
+    internal sealed partial class ConstructionMenuPresenter : IDisposable
     {
-        [Dependency] private readonly EntityManager _entManager = default!;
-        [Dependency] private readonly IEntitySystemManager _systemManager = default!;
-        [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-        [Dependency] private readonly IPlacementManager _placementManager = default!;
-        [Dependency] private readonly IUserInterfaceManager _uiManager = default!;
-        [Dependency] private readonly IPlayerManager _playerManager = default!;
-        [Dependency] private readonly IClientPreferencesManager _preferencesManager = default!;
-        private readonly SharedSkillSystem _skill;
-        [Dependency] private readonly ILogManager _logManager = default!;
+        [Dependency] private EntityManager _entManager = default!;
+        [Dependency] private IEntitySystemManager _systemManager = default!;
+        [Dependency] private IPrototypeManager _prototypeManager = default!;
+        [Dependency] private IPlacementManager _placementManager = default!;
+        [Dependency] private IUserInterfaceManager _uiManager = default!;
+        [Dependency] private IPlayerManager _playerManager = default!;
+        [Dependency] private IClientPreferencesManager _preferencesManager = default!;
+        [Dependency] private ILogManager _logManager = default!;
 
         private readonly SpriteSystem _spriteSystem;
         private readonly ISawmill _sawmill;
@@ -94,7 +92,6 @@ namespace Content.Client.Construction.UI
             _constructionView = new ConstructionMenu();
             _whitelistSystem = _entManager.System<EntityWhitelistSystem>();
             _spriteSystem = _entManager.System<SpriteSystem>();
-            _skill = _entManager.System<SharedSkillSystem>();
             _sawmill = _logManager.GetSawmill("construction.ui");
 
             // This is required so that if we load after the system is initialized, we can bind to it immediately
@@ -372,13 +369,6 @@ namespace Content.Client.Construction.UI
             if (prototype is null)
                 return;
 
-            //Rayten-start
-            bool craftable = true;
-            var playerEntity = _playerManager.LocalSession?.AttachedEntity;
-            if (playerEntity != null)
-                craftable = _skill.HasRequiredSkill(playerEntity.Value, SkillType.Engineering, prototype.RequiresEngineeringLevel);
-            //Rayten-end
-
             if (!_constructionSystem.TryGetRecipePrototype(prototype.ID, out var targetProtoId))
                 return;
 
@@ -390,7 +380,7 @@ namespace Content.Client.Construction.UI
                 prototype.Description!,
                 proto,
                 prototype.Type != ConstructionType.Item,
-                !_favoritedRecipes.Contains(prototype), prototype.RequiresEngineeringLevel, craftable);
+                !_favoritedRecipes.Contains(prototype));
 
             var stepList = _constructionView.RecipeStepList;
             GenerateStepList(prototype, stepList);

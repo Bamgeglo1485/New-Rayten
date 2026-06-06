@@ -19,11 +19,11 @@ namespace Content.Server.Corvax.DiscordAuth;
 /// <summary>
 ///     Manage Discord linking with SS14 account through external API
 /// </summary>
-public sealed class DiscordAuthManager
+public sealed partial class DiscordAuthManager
 {
-    [Dependency] private readonly IServerNetManager _netMgr = default!;
-    [Dependency] private readonly IPlayerManager _playerMgr = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
+    [Dependency] private IServerNetManager _netMgr = default!;
+    [Dependency] private IPlayerManager _playerMgr = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
 
     private ISawmill _sawmill = default!;
     private readonly HttpClient _httpClient = new();
@@ -49,7 +49,7 @@ public sealed class DiscordAuthManager
         _netMgr.RegisterNetMessage<MsgDiscordAuthSkip>(OnAuthskip);
         _playerMgr.PlayerStatusChanged += OnPlayerStatusChanged;
     }
-    
+
     private async void OnAuthskip(MsgDiscordAuthSkip message)
     {
         var session = _playerMgr.GetSessionById(message.MsgChannel.UserId);
@@ -101,8 +101,8 @@ public sealed class DiscordAuthManager
 
         if (!response.IsSuccessStatusCode)
         {
-           var content = await response.Content.ReadAsStringAsync();
-           throw new Exception($"Verification API returned bad status code: {response.StatusCode}\nResponse: {content}");
+            var content = await response.Content.ReadAsStringAsync();
+            throw new Exception($"Verification API returned bad status code: {response.StatusCode}\nResponse: {content}");
         }
 
         var data = await response.Content.ReadFromJsonAsync<DiscordGenerateLinkResponse>(cancellationToken: cancel);

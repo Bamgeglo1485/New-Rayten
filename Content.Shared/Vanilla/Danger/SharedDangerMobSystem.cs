@@ -19,12 +19,12 @@ using System.Linq;
 
 namespace Content.Shared.Vanilla.Dominator;
 
-public abstract class SharedDangerMobSystem : EntitySystem
+public abstract partial class SharedDangerMobSystem : EntitySystem
 {
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly SharedCombatModeSystem _combat = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private SharedCombatModeSystem _combat = default!;
 
     #region API
     public bool TryGetDangeriousItem(EntityUid target, [NotNullWhen(true)] out EntityUid? mostDangerousItem)

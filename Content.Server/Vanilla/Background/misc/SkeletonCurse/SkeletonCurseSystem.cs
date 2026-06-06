@@ -9,12 +9,12 @@ using Content.Shared.Gibbing;
 
 namespace Content.Server.Vanilla.Background.SkeletonCurse;
 
-public sealed class SkeletonCurseSystem : EntitySystem
+public sealed partial class SkeletonCurseSystem : EntitySystem
 {
-    [Dependency] private readonly GibbingSystem _gibbing = default!;
-    [Dependency] private readonly PolymorphSystem _polymorphSystem = default!;
-    [Dependency] private readonly IChatManager _chat = default!;
-    [Dependency] private readonly ActorSystem _actor = default!;
+    [Dependency] private GibbingSystem _gibbing = default!;
+    [Dependency] private PolymorphSystem _polymorphSystem = default!;
+    [Dependency] private IChatManager _chat = default!;
+    [Dependency] private ActorSystem _actor = default!;
     public override void Initialize()
     {
         SubscribeLocalEvent<SkeletonCurseComponent, MapInitEvent>(OnMapInit);

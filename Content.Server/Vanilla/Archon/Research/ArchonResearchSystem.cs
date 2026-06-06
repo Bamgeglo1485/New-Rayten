@@ -16,12 +16,12 @@ namespace Content.Server.Vanilla.Archon.Research;
 
 public sealed partial class ArchonBeaconSystem : SharedArchonResearchSystem
 {
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedPowerReceiverSystem _power = default!;
-    [Dependency] private readonly ResearchSystem _research = default!;
-    [Dependency] private readonly ChatSystem _chat = default!;
-    [Dependency] private readonly MobStateSystem _mob = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedPowerReceiverSystem _power = default!;
+    [Dependency] private ResearchSystem _research = default!;
+    [Dependency] private ChatSystem _chat = default!;
+    [Dependency] private MobStateSystem _mob = default!;
 
     private TimeSpan NextUpdate;
 

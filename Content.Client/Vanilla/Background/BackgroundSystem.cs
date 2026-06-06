@@ -1,6 +1,4 @@
-using Content.Shared.Mind;
 using Robust.Shared.Prototypes;
-using Robust.Shared.Serialization;
 using Robust.Shared.Player;
 using Robust.Client.Player;
 using Robust.Client.UserInterface;
@@ -9,10 +7,10 @@ using Content.Client.Vanilla.UserInterface.GhostBackground;
 
 namespace Content.Client.Vanilla.Background;
 
-public sealed class BackgroundSystem : EntitySystem
+public sealed partial class BackgroundSystem : EntitySystem
 {
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly IUserInterfaceManager _userInterfaceManager = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private IUserInterfaceManager _userInterfaceManager = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -28,9 +26,9 @@ public sealed class BackgroundSystem : EntitySystem
 
     private void OnPlayerAttached(EntityUid uid, AwaitBackgroundComponent component, LocalPlayerAttachedEvent args)
     {
-        if (component.BackgroundGroup == null )
+        if (component.BackgroundGroup == null)
             return;
-            
+
         _userInterfaceManager.GetUIController<GhostBackgroundUIController>().CreateBackground(component.BackgroundGroup.Value);
     }
 

@@ -14,11 +14,11 @@ namespace Content.Server.Vanilla.Archon.OldMan;
 
 public sealed partial class OldManSystem : SharedOldManSystem
 {
-    [Dependency] private readonly MapLoaderSystem _mapLoader = default!;
+    [Dependency] private MapLoaderSystem _mapLoader = default!;
 
-    [Dependency] private readonly SharedStationSystem _station = default!;
-    [Dependency] private readonly PolymorphSystem _polymorph = default!;
-    [Dependency] private readonly SharedAmbientSoundSystem _ambient = default!;
+    [Dependency] private SharedStationSystem _station = default!;
+    [Dependency] private PolymorphSystem _polymorph = default!;
+    [Dependency] private SharedAmbientSoundSystem _ambient = default!;
 
     public override void Initialize()
     {

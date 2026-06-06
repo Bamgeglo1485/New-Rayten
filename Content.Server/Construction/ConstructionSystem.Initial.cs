@@ -19,19 +19,18 @@ using Robust.Shared.Containers;
 using Robust.Shared.Map;
 using Robust.Shared.Player;
 using Robust.Shared.Timing;
-using Content.Shared.Vanilla.Skill;
 namespace Content.Server.Construction
 {
     public sealed partial class ConstructionSystem
     {
-        [Dependency] private readonly InventorySystem _inventorySystem = default!;
-        [Dependency] private readonly SharedInteractionSystem _interactionSystem = default!;
-        [Dependency] private readonly ActionBlockerSystem _actionBlocker = default!;
-        [Dependency] private readonly SharedHandsSystem _handsSystem = default!;
-        [Dependency] private readonly EntityLookupSystem _lookupSystem = default!;
-        [Dependency] private readonly SharedTransformSystem _transformSystem = default!;
-        [Dependency] private readonly EntityWhitelistSystem _whitelistSystem = default!;
-        [Dependency] private readonly SharedSkillSystem _skill = default!;
+        [Dependency] private InventorySystem _inventorySystem = default!;
+        [Dependency] private SharedInteractionSystem _interactionSystem = default!;
+        [Dependency] private ActionBlockerSystem _actionBlocker = default!;
+        [Dependency] private SharedHandsSystem _handsSystem = default!;
+        [Dependency] private EntityLookupSystem _lookupSystem = default!;
+        [Dependency] private SharedTransformSystem _transformSystem = default!;
+        [Dependency] private EntityWhitelistSystem _whitelistSystem = default!;
+
         // --- WARNING! LEGACY CODE AHEAD! ---
         // This entire file contains the legacy code for initial construction.
         // This is bound to be replaced by a better alternative (probably using dummy entities)
@@ -343,10 +342,6 @@ namespace Content.Server.Construction
                 _popup.PopupEntity(Loc.GetString("construction-system-cannot-start"), user, user);
                 return false;
             }
-            //vanilla-station-start
-            if (!_skill.HasRequiredSkill(user, SkillType.Engineering, constructionPrototype.RequiresEngineeringLevel))
-                return false;
-            //vanilla-station-end
             var startNode = constructionGraph.Nodes[constructionPrototype.StartNode];
             var targetNode = constructionGraph.Nodes[constructionPrototype.TargetNode];
             var pathFind = constructionGraph.Path(startNode.Name, targetNode.Name);
@@ -437,10 +432,6 @@ namespace Content.Server.Construction
                 _popup.PopupEntity(Loc.GetString("construction-system-inside-container"), user, user);
                 return;
             }
-            //vanilla-station-start
-            if (!_skill.HasRequiredSkill(user, SkillType.Engineering, constructionPrototype.RequiresEngineeringLevel, WithBeep: true, ServerOnly: true))
-                return;
-            //vanilla-station-end
             var startNode = constructionGraph.Nodes[constructionPrototype.StartNode];
             var targetNode = constructionGraph.Nodes[constructionPrototype.TargetNode];
             var pathFind = constructionGraph.Path(startNode.Name, targetNode.Name);

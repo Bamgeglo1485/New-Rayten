@@ -5,10 +5,10 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared.Vanilla.Jammer;
 
-public abstract class SharedJammerSystem : EntitySystem
+public abstract partial class SharedJammerSystem : EntitySystem
 {
-    [Dependency] protected readonly IGameTiming Timing = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] protected IGameTiming Timing = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
 
     public override void Initialize()
     {
