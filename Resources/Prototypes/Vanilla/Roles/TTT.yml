@@ -140,8 +140,9 @@
   - type: Item
     sprite: Objects/Devices/communication.rsi
     heldPrefix: walkietalkie
-  - type: Damageable
+  - type: Injurable
     damageContainer: StructuralInorganic
+  - type: Damageable
     damageModifierSet: Card
   - type: Destructible
     thresholds:
