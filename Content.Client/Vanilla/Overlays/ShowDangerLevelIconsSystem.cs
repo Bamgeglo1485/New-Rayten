@@ -1,18 +1,17 @@
 using Content.Shared.StatusIcon;
 using Content.Shared.StatusIcon.Components;
 using Content.Shared.Vanilla.Overlays;
-using Content.Shared.Overlays;
 using Content.Client.Overlays;
 using Content.Shared.Vanilla.Dominator;
 using Robust.Shared.Prototypes;
 
 namespace Content.Client.Vanilla.Overlays;
 
-public sealed class ShowDangerLevelIconsSystem : EquipmentHudSystem<ShowCriminalLevelIconsComponent>
+public sealed partial class ShowDangerLevelIconsSystem : EquipmentHudSystem<ShowCriminalLevelIconsComponent>
 {
 
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly SharedDangerMobSystem _dangermob = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private SharedDangerMobSystem _dangermob = default!;
     public override void Initialize()
     {
         base.Initialize();

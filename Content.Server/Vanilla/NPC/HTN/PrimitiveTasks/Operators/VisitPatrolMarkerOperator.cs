@@ -13,8 +13,8 @@ namespace Content.Server.Vanilla.NPC.HTN.PrimitiveTasks.Operators;
 
 public sealed partial class VisitPatrolMarkerOperator : HTNOperator
 {
-    [Dependency] private readonly IEntityManager _entManager = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private IEntityManager _entManager = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     [DataField("key", required: true)]
     public string Key = default!;

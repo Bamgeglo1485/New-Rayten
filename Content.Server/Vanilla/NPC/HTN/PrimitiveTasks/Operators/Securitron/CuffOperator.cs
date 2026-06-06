@@ -15,7 +15,7 @@ namespace Content.Server.Vanilla.NPC.HTN.PrimitiveTasks.Operators.Securitron;
 
 public sealed partial class CuffOperator : HTNOperator, IHtnConditionalShutdown
 {
-    [Dependency] private readonly IEntityManager _entManager = default!;
+    [Dependency] private IEntityManager _entManager = default!;
     private SharedCuffableSystem _handcuff = default!;
     private SharedHandsSystem _hands = default!;
 

@@ -1,7 +1,6 @@
 ﻿using Content.Shared.Construction.Components;
 using Content.Shared.Interaction;
 using Content.Shared.Tag;
-using Content.Shared.Vanilla.Skill;
 using Robust.Shared.Containers;
 
 namespace Content.Shared.Construction;
@@ -9,11 +8,11 @@ namespace Content.Shared.Construction;
 /// <summary>
 /// This handles <see cref="PartAssemblyComponent"/>
 /// </summary>
-public sealed class PartAssemblySystem : EntitySystem
+public sealed partial class PartAssemblySystem : EntitySystem
 {
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly TagSystem _tag = default!;
-    [Dependency] private readonly SharedSkillSystem _skill = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private TagSystem _tag = default!;
+
     /// <inheritdoc/>
     public override void Initialize()
     {
@@ -76,15 +75,6 @@ public sealed class PartAssemblySystem : EntitySystem
 
         if (!IsPartValid(uid, part, assemblyId, component))
             return false;
-
-        //vanilla-station-start
-        if (TryComp<RequiresSkillComponent>(uid, out var requiresSkillComponent))
-        {
-            var lvl = requiresSkillComponent.BasicSkills.GetValueOrDefault(SkillType.Engineering, SkillLevel.None);
-            if (!_skill.HasRequiredSkill(user, SkillType.Engineering, lvl))
-                return false;
-        }
-        //vanilla-station-end
 
         component.CurrentAssembly = assemblyId;
         _container.Insert(part, component.PartsContainer);

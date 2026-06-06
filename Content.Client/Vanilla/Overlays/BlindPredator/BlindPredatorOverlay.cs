@@ -10,10 +10,10 @@ using System.Numerics;
 
 namespace Content.Client.Vanilla.Overlays.BlindPredator;
 
-public sealed class BlindPredatorOverlay : Overlay
+public sealed partial class BlindPredatorOverlay : Overlay
 {
-    [Dependency] private readonly IEntityManager _entity = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
+    [Dependency] private IEntityManager _entity = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
     private readonly float _showRadius;
     private readonly EntityLookupSystem _entityLookup;
     private readonly TransformSystem _transformSystem;

@@ -12,15 +12,15 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared.Vanilla.Entities.DangerScanner;
 
-public abstract class SharedDangerScannerSystem : EntitySystem
+public abstract partial class SharedDangerScannerSystem : EntitySystem
 {
-    [Dependency] private readonly SharedChatSystem _chat = default!;
-    [Dependency] protected readonly IGameTiming Timing = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly SharedDangerMobSystem _dangermob = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly SharedPowerReceiverSystem _power = default!;
+    [Dependency] private SharedChatSystem _chat = default!;
+    [Dependency] protected IGameTiming Timing = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private SharedDangerMobSystem _dangermob = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private SharedPowerReceiverSystem _power = default!;
 
     public override void Initialize()
     {

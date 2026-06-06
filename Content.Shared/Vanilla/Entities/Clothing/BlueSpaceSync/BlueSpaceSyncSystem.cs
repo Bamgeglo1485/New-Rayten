@@ -10,13 +10,13 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared.Vanilla.Entities.BlueSpaceSync;
 
-public sealed class BlueSpaceSyncSystem : EntitySystem
+public sealed partial class BlueSpaceSyncSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly MovementSpeedModifierSystem _movementSpeed = default!;
-    [Dependency] private readonly SharedStealthSystem _stealth = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private MovementSpeedModifierSystem _movementSpeed = default!;
+    [Dependency] private SharedStealthSystem _stealth = default!;
 
     public override void Initialize()
     {

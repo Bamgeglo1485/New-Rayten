@@ -9,11 +9,11 @@ using Content.Shared.Damage;
 
 namespace Content.Client.Vanilla.TDM;
 
-public sealed class TDMSystem : EntitySystem
+public sealed partial class TDMSystem : EntitySystem
 {
     private SimpleAcceptWindow? _tdmWindow;
 
-    [Dependency] private readonly IGameTiming _gameTiming = default!;
+    [Dependency] private IGameTiming _gameTiming = default!;
     public event Action<TimeSpan, int>? TDMInfoUpdated;
     public event Action<TimeSpan, int>? TTTInfoUpdated;
 

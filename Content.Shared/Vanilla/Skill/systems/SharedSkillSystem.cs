@@ -23,12 +23,12 @@ namespace Content.Shared.Vanilla.Skill;
 
 public abstract partial class SharedSkillSystem : EntitySystem
 {
-    [Dependency] protected readonly SharedAudioSystem Audio = default!;
-    [Dependency] protected readonly IRobustRandom _Random = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedGunSystem _gun = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] protected SharedAudioSystem Audio = default!;
+    [Dependency] protected IRobustRandom _Random = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedGunSystem _gun = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
 
 
     const int EXPERIENCEFROMSKILLPOINT = 600;

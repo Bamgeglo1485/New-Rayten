@@ -9,13 +9,13 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Content.Shared.Vanilla.Weapons.Ranged;
 
-public abstract class SharedMicroHIDSystem : EntitySystem
+public abstract partial class SharedMicroHIDSystem : EntitySystem
 {
-    [Dependency] protected readonly IGameTiming Timing = default!;
-    [Dependency] protected readonly SharedBatterySystem Battery = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedStaminaSystem _stamina = default!;
+    [Dependency] protected IGameTiming Timing = default!;
+    [Dependency] protected SharedBatterySystem Battery = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedStaminaSystem _stamina = default!;
 
     public override void Initialize()
     {

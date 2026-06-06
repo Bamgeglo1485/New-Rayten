@@ -13,15 +13,15 @@ using System.Numerics;
 
 namespace Content.Client.Vanilla.TTT.Overlays;
 
-public sealed class ShowNamesOverlay : Overlay
+public sealed partial class ShowNamesOverlay : Overlay
 {
     const float ViewConeDot = 0.6428f;//угол взгляда 0.6428f ~100градусов
 
-    [Dependency] private readonly IInputManager _input = default!;
-    [Dependency] private readonly IEntityManager _entityManager = default!;
-    [Dependency] private readonly IEyeManager _eyeManager = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
-    [Dependency] private readonly IUserInterfaceManager _userInterfaceManager = default!;
+    [Dependency] private IInputManager _input = default!;
+    [Dependency] private IEntityManager _entityManager = default!;
+    [Dependency] private IEyeManager _eyeManager = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private IUserInterfaceManager _userInterfaceManager = default!;
     private readonly EntityLookupSystem _entityLookup;
     private readonly Font _font;
     private readonly ExamineSystemShared _examine;

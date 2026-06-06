@@ -47,20 +47,19 @@ internal sealed partial class ChatManager : IChatManager
         { "Младший модератор", "#93BFE6" },
         { "Младший гейм-мастер", "#A34DAE" }
     };
-    [Dependency] private readonly IReplayRecordingManager _replay = default!;
-    [Dependency] private readonly IServerNetManager _netManager = default!;
-    [Dependency] private readonly IAdminManager _adminManager = default!;
-    [Dependency] private readonly IAdminLogManager _adminLogger = default!;
-    [Dependency] private readonly IServerPreferencesManager _preferencesManager = default!;
-    [Dependency] private readonly IConfigurationManager _configurationManager = default!;
-    [Dependency] private readonly INetConfigurationManager _netConfigManager = default!;
-    [Dependency] private readonly IEntityManager _entityManager = default!;
-    [Dependency] private readonly PlayerRateLimitManager _rateLimitManager = default!;
-    [Dependency] private readonly ISharedPlayerManager _player = default!;
-    [Dependency] private readonly DiscordChatLink _discordLink = default!;
-    [Dependency] private readonly SharedSponsorManager _sponsorsManager = default!;
-    [Dependency] private readonly ILogManager _logManager = default!;
-
+    [Dependency] private IReplayRecordingManager _replay = default!;
+    [Dependency] private IServerNetManager _netManager = default!;
+    [Dependency] private IAdminManager _adminManager = default!;
+    [Dependency] private IAdminLogManager _adminLogger = default!;
+    [Dependency] private IServerPreferencesManager _preferencesManager = default!;
+    [Dependency] private IConfigurationManager _configurationManager = default!;
+    [Dependency] private INetConfigurationManager _netConfigManager = default!;
+    [Dependency] private IEntityManager _entityManager = default!;
+    [Dependency] private PlayerRateLimitManager _rateLimitManager = default!;
+    [Dependency] private ISharedPlayerManager _player = default!;
+    [Dependency] private DiscordChatLink _discordLink = default!;
+    [Dependency] private ILogManager _logManager = default!;
+    [Dependency] private SharedSponsorManager _sponsorsManager = default!;
     private ISawmill _sawmill = default!;
 
     /// <summary>
@@ -308,11 +307,7 @@ internal sealed partial class ChatManager : IChatManager
             var senderAdmin = _adminManager.GetAdminData(player);
             if (senderAdmin != null && senderAdmin.Title != null && AdminOOCColors.TryGetValue(senderAdmin.Title, out var AdminOOCColor))
             {
-                if (Color.TryParse(AdminOOCColor, out var parsedColor))
-                {
-                    colorOverride = parsedColor;
-                }
-
+                if (Color.TryParse(AdminOOCColor, out var parsedColor)) colorOverride = parsedColor;
                 wrappedMessage = Loc.GetString("chat-manager-send-ooc-admin-wrap-message", ("AdminOocColor", AdminOOCColor), ("AdminOOCPrefix", FormattedMessage.EscapeText(senderAdmin.Title)), ("playerName", player.Name), ("message", FormattedMessage.EscapeText(message)));
             }
             //vanilla-station-end

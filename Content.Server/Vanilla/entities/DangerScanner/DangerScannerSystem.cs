@@ -8,12 +8,12 @@ using Content.Shared.Security;
 
 namespace Content.Server.Vanilla.Entities.DangerScanner;
 
-public sealed class DangerScannerSystem : SharedDangerScannerSystem
+public sealed partial class DangerScannerSystem : SharedDangerScannerSystem
 {
-    [Dependency] private readonly SharedStationRecordsSystem _records = default!;
-    [Dependency] private readonly CriminalRecordsSystem _criminalRecords = default!;
-    [Dependency] private readonly SharedStationSystem _station = default!;
-    [Dependency] private readonly RadioSystem _radio = default!;
+    [Dependency] private SharedStationRecordsSystem _records = default!;
+    [Dependency] private CriminalRecordsSystem _criminalRecords = default!;
+    [Dependency] private SharedStationSystem _station = default!;
+    [Dependency] private RadioSystem _radio = default!;
 
     //server-only
     protected override void SetWanted(EntityUid scanner, DangerScannerComponent component, string target, EntityUid item, ContrabandComponent contraband)

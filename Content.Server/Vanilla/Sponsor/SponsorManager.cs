@@ -13,12 +13,12 @@ using Robust.Shared.Network;
 using Robust.Shared.Player;
 namespace Content.Server.Vanilla.Sponsor;
 
-public sealed class SponsorManager
+public sealed partial class SponsorManager
 {
-    [Dependency] private readonly IPlayerManager _playerMgr = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IServerNetManager _netMgr = default!;
-    [Dependency] private readonly SharedSponsorManager _sharedSponsorManager = default!; // Внедрение SharedSponsorManager
+    [Dependency] private IPlayerManager _playerMgr = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private IServerNetManager _netMgr = default!;
+    [Dependency] private SharedSponsorManager _sharedSponsorManager = default!; // Внедрение SharedSponsorManager
 
     private ISawmill _sawmill = default!;
     private readonly HttpClient _httpClient = new();

@@ -306,8 +306,82 @@
   - type: ClothingSpeedModifier
     walkModifier: 0.65
     sprintModifier: 0.65
-  - type: ExplosionResistance
-    damageCoefficient: 0.25
+
+
+- type: entity
+  suffix: puncturase
+  parent: Beaker
+  id: PuncturaseBeakerSmall
+  components:
+  - type: Label
+    currentLabel: reagent-name-puncturase
+  - type: SolutionContainerManager
+    solutions:
+      beaker:
+        maxVol: 50
+        reagents:
+        - ReagentId: Puncturase
+          Quantity: 50
+
+- type: entity
+  name: Свёрнутая турель
+  parent: ToolboxMechanical
+  id: ToolboxTurretTDMBlue
+  categories: [ HideSpawnMenu ]
+  description: Гаечным ключём разворачивается, отвёрткой сворачивается.
+  components:
+  - type: Damageable
+  - type: Injurable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+      - trigger:
+          !type:DamageTrigger
+          damage: 100
+        behaviors:
+          - !type:DoActsBehavior
+            acts: [ "Destruction" ]
+      - trigger:
+          !type:DamageTrigger
+          damage: 1
+        behaviors:
+          - !type:DoActsBehavior
+            acts: [ "Destruction" ]
+          - !type:SpawnEntitiesBehavior
+            spawn:
+              WeaponTurretBlueTeam:
+                min: 1
+                max: 1
+
+- type: entity
+  name: Свёрнутая турель
+  parent: ToolboxEmergency
+  id: ToolboxTurretTDMRed
+  categories: [ HideSpawnMenu ]
+  description: Гаечным ключём разворачивается, отвёрткой сворачивается.
+  components:
+  - type: Damageable
+  - type: Injurable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+      - trigger:
+          !type:DamageTrigger
+          damage: 100
+        behaviors:
+          - !type:DoActsBehavior
+            acts: [ "Destruction" ]
+      - trigger:
+          !type:DamageTrigger
+          damage: 1
+        behaviors:
+          - !type:DoActsBehavior
+            acts: [ "Destruction" ]
+          - !type:SpawnEntitiesBehavior
+            spawn:
+              WeaponTurretRedTeam:
+                min: 1
+                max: 1
 
 - type: entity
   parent: WeaponTurretSyndicateDisposable

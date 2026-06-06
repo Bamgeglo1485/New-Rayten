@@ -3,10 +3,10 @@ using Robust.Shared.Network;
 
 namespace Content.Shared.Vanilla.Sponsor;
 
-public sealed class SharedSponsorManager
+public sealed partial class SharedSponsorManager
 {
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly ILogManager _logManager = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private ILogManager _logManager = default!;
     private ISawmill _sawmill = default!;
     private readonly Dictionary<NetUserId, sponsorRank> _ranks = [];
     private sponsorRank _clientrank = sponsorRank.None;

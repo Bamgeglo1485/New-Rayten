@@ -1,20 +1,17 @@
-using Content.Shared.Examine;
 using Content.Shared.Vanilla.Games.TTT;
 using Content.Client.Vanilla.TTT.Overlays;
 using Robust.Shared.Player;
 using Robust.Client.Graphics;
-using Robust.Client.UserInterface;
-using Robust.Client.ResourceManagement;
 using Robust.Client.Player;
 using Robust.Client.GameObjects;
 
 namespace Content.Client.Vanilla.Games.TTT;
 
-public sealed class TTTSystem : SharedTTTSystem
+public sealed partial class TTTSystem : SharedTTTSystem
 {
-    [Dependency] private readonly IOverlayManager _overlay = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
-    [Dependency] private readonly SpriteSystem _sprite = default!;
+    [Dependency] private IOverlayManager _overlay = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
 
     public override void Initialize()
     {

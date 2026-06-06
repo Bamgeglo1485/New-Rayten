@@ -20,16 +20,16 @@ using System.Numerics;
 
 namespace Content.Server.Vanilla.Entities.SpacetimeBoots;
 
-public sealed class SpacetimeAbilitySystem : EntitySystem
+public sealed partial class SpacetimeAbilitySystem : EntitySystem
 {
-    [Dependency] private readonly SharedTransformSystem _trans = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly SharedSolutionContainerSystem _solutionContainerSystem = default!;
-    [Dependency] private readonly SharedBloodstreamSystem _blood = default!;
+    [Dependency] private SharedTransformSystem _trans = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private SharedSolutionContainerSystem _solutionContainerSystem = default!;
+    [Dependency] private SharedBloodstreamSystem _blood = default!;
 
 
     public override void Initialize()
@@ -64,7 +64,7 @@ public sealed class SpacetimeAbilitySystem : EntitySystem
             //урон
             DamageSpecifier damageCopy;
             if (TryComp<DamageableComponent>(target, out var damage))
-                damageCopy = new DamageSpecifier(damage.Damage);
+                damageCopy = _damageable.GetAllDamage((target, damage));
             else
                 damageCopy = new DamageSpecifier();
             //пространство
@@ -114,15 +114,15 @@ public sealed class SpacetimeAbilitySystem : EntitySystem
 
         if (_solutionContainerSystem.ResolveSolution(uid, bloodstream.BloodSolutionName, ref bloodstream.BloodSolution, out var bloodSolution))
         {
-            _blood.TryModifyBloodLevel((uid, bloodstream), -1f*(bloodSolution.FillFraction - bloodAmount.Value));
-            _blood.TryModifyBleedAmount((uid, bloodstream), -1f*(bloodstream.BleedAmount - bleedAmount.Value));
+            _blood.TryModifyBloodLevel((uid, bloodstream), -1f * (bloodSolution.FillFraction - bloodAmount.Value));
+            _blood.TryModifyBleedAmount((uid, bloodstream), -1f * (bloodstream.BleedAmount - bleedAmount.Value));
         }
 
     }
 
     private void OnEquip(Entity<SpacetimeAbilityComponent> entity, ref GotEquippedEvent args)
     {
-        entity.Comp.Wearer = args.Equipee;
+        entity.Comp.Wearer = args.EquipTarget;
     }
 
     private void OnInit(Entity<SpacetimeAbilityComponent> entity, ref MapInitEvent args)

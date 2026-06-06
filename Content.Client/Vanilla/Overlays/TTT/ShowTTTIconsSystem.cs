@@ -1,5 +1,3 @@
-using Content.Shared.Overlays;
-using Content.Shared.NukeOps;
 using Content.Shared.StatusIcon;
 using Content.Shared.StatusIcon.Components;
 using Content.Client.Overlays;
@@ -8,9 +6,9 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Client.Vanilla.Overlays;
 
-public sealed class ShowTTTIconsSystem : EquipmentHudSystem<ShowTTTDetectiveIconsComponent>
+public sealed partial class ShowTTTIconsSystem : EquipmentHudSystem<ShowTTTDetectiveIconsComponent>
 {
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
 
     public override void Initialize()
     {
@@ -31,9 +29,9 @@ public sealed class ShowTTTIconsSystem : EquipmentHudSystem<ShowTTTDetectiveIcon
     }
 }
 
-public sealed class ShowTTTTraitorIconsSystem : EquipmentHudSystem<ShowTTTTraitorsComponent>
+public sealed partial class ShowTTTTraitorIconsSystem : EquipmentHudSystem<ShowTTTTraitorsComponent>
 {
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
 
     public override void Initialize()
     {

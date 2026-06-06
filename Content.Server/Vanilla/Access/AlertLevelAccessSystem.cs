@@ -6,9 +6,9 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.Vanilla.Access.AlertLevelAccess;
 
-public sealed class SharedAssSystem : EntitySystem
+public sealed partial class SharedAssSystem : EntitySystem
 {
-    [Dependency] private readonly StationSystem _station = default!;
+    [Dependency] private StationSystem _station = default!;
     public override void Initialize()
     {
         base.Initialize();

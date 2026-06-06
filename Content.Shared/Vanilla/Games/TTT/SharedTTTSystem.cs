@@ -3,9 +3,9 @@ using Content.Shared.Verbs;
 using Robust.Shared.Utility;
 namespace Content.Shared.Vanilla.Games.TTT;
 
-public abstract class SharedTTTSystem : EntitySystem
+public abstract partial class SharedTTTSystem : EntitySystem
 {
-    [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private SharedUserInterfaceSystem _ui = default!;
     public override void Initialize()
     {
         base.Initialize();

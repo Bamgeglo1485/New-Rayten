@@ -5,14 +5,14 @@ using Robust.Shared.Enums;
 using System.Numerics;
 namespace Content.Client.Vanilla.Archon.OldMan;
 
-public sealed class PuddleMaskOverlay : Overlay
+public sealed partial class PuddleMaskOverlay : Overlay
 {
     public override OverlaySpace Space => OverlaySpace.WorldSpaceBelowEntities;
     private static readonly ProtoId<ShaderPrototype> StencilMaskShader = "StencilMask";
     private static readonly ProtoId<ShaderPrototype> StencilEqualDrawShader = "StencilEqualDraw";
 
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly IEntityManager _entManager = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private IEntityManager _entManager = default!;
     private readonly SharedTransformSystem _xform;
 
     public PuddleMaskOverlay()

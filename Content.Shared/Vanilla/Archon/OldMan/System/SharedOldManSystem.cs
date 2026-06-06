@@ -21,16 +21,16 @@ namespace Content.Shared.Vanilla.Archon.OldMan;
 
 public abstract partial class SharedOldManSystem : EntitySystem
 {
-    [Dependency] protected readonly SharedActionsSystem Actions = default!;
-    [Dependency] protected readonly SharedAudioSystem Audio = default!;
-    [Dependency] protected readonly IGameTiming Timing = default!;
-    [Dependency] protected readonly SharedTransformSystem Trans = default!;
-    [Dependency] protected readonly MovementSpeedModifierSystem MovementSpeed = default!;
-    [Dependency] protected readonly SharedMapSystem MapSystem = default!;
-    [Dependency] protected readonly IPrototypeManager Proto = default!;
-    [Dependency] private readonly TurfSystem _turf = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly ActionBlockerSystem _blocker = default!;
+    [Dependency] protected SharedActionsSystem Actions = default!;
+    [Dependency] protected SharedAudioSystem Audio = default!;
+    [Dependency] protected IGameTiming Timing = default!;
+    [Dependency] protected SharedTransformSystem Trans = default!;
+    [Dependency] protected MovementSpeedModifierSystem MovementSpeed = default!;
+    [Dependency] protected SharedMapSystem MapSystem = default!;
+    [Dependency] protected IPrototypeManager Proto = default!;
+    [Dependency] private TurfSystem _turf = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private ActionBlockerSystem _blocker = default!;
     protected const float UpdateRate = 0.1f;
     protected float UpdateDif;
     public override void Initialize()

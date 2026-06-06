@@ -14,16 +14,16 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared.Vanilla.Dominator;
 
-public abstract class SharedDominatorSystem : EntitySystem
+public abstract partial class SharedDominatorSystem : EntitySystem
 {
-    [Dependency] protected readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly ExamineSystemShared _examine = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] protected readonly SharedDangerMobSystem _dangermob = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearanceSystem = default!;
-    [Dependency] private readonly SharedGunSystem _gun = default!;
+    [Dependency] protected InventorySystem _inventory = default!;
+    [Dependency] private ExamineSystemShared _examine = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] protected SharedDangerMobSystem _dangermob = default!;
+    [Dependency] private SharedAppearanceSystem _appearanceSystem = default!;
+    [Dependency] private SharedGunSystem _gun = default!;
 
     public override void Initialize()
     {
@@ -120,7 +120,7 @@ public abstract class SharedDominatorSystem : EntitySystem
     {
         var user = args.User;
 
-        if (comp.AuthorizedID == null || !EntityManager.EntityExists(comp.AuthorizedID.Value))
+        if (comp.AuthorizedID == null || !Exists(comp.AuthorizedID.Value))
         {
             args.Message = "Оружие не авторизовано.";
             args.Cancelled = true;

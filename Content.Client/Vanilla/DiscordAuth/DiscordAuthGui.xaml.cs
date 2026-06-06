@@ -8,7 +8,7 @@ namespace Content.Client.Vanilla.DiscordAuth;
 [GenerateTypedNameReferences]
 public sealed partial class DiscordAuthGui : Control
 {
-    [Dependency] private readonly DiscordAuthManager _discordAuthManager = default!;
+    [Dependency] private DiscordAuthManager _discordAuthManager = default!;
 
     public DiscordAuthGui()
     {

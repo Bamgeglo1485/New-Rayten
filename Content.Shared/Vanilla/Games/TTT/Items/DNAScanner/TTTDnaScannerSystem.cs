@@ -8,10 +8,10 @@ namespace Content.Shared.Vanilla.Games.TTT.Items.DNAScanner;
 
 public sealed partial class TTTDnaScannerSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedPinpointerSystem _pin = default!;
-    [Dependency] private readonly MetaDataSystem _meta = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedPinpointerSystem _pin = default!;
+    [Dependency] private MetaDataSystem _meta = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
     private float _accumulator = 0;
     public override void Initialize()
     {
@@ -121,12 +121,12 @@ public sealed partial class TTTDnaScannerSystem : EntitySystem
         onScaner.Scanners.Add(scanner);
         if (onScaner.Redirect != null)
         {
-            _pin.SetTarget(scanner, onScaner.Redirect, pin);
+            _pin.SetTarget(scanner, onScaner.Redirect);
         }
         else
         {
             if (!onScaner.InStealth)
-                _pin.SetTarget(scanner, target, pin);
+                _pin.SetTarget(scanner, target);
         }
     }
 }

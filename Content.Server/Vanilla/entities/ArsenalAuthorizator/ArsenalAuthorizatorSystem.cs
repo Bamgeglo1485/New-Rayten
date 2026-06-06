@@ -10,11 +10,11 @@ using Robust.Shared.Prototypes;
 namespace Content.Server.Vanilla.Entities.ArsenalAuthorizator;
 
 /// <inheritdoc/>
-public sealed class ArsenalAuthorizatorSystem : SharedArsenalAuthorizatorSystem
+public sealed partial class ArsenalAuthorizatorSystem : SharedArsenalAuthorizatorSystem
 {
-    [Dependency] private readonly AlertLevelSystem _alertLevelSystem = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly UserInterfaceSystem _ui = default!;
+    [Dependency] private AlertLevelSystem _alertLevelSystem = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private UserInterfaceSystem _ui = default!;
     public override void Initialize()
     {
         base.Initialize();

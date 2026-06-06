@@ -16,16 +16,16 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.Vanilla.Archon.PlagueDoctor;
 
-public sealed class PlagueDoctorgSystem : SharedPlagueDoctorgSystem
+public sealed partial class PlagueDoctorgSystem : SharedPlagueDoctorgSystem
 {
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly GibbingSystem _gibbing = default!;
-    [Dependency] private readonly ZombieSystem _zombie = default!;
-    [Dependency] private readonly RejuvenateSystem _rejuvenate = default!;
-    [Dependency] private readonly FlammableSystem _flammableSystem = default!;
-    [Dependency] private readonly ChatSystem _chatSystem = default!;
-    [Dependency] private readonly SharedStunSystem _stun = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private GibbingSystem _gibbing = default!;
+    [Dependency] private ZombieSystem _zombie = default!;
+    [Dependency] private RejuvenateSystem _rejuvenate = default!;
+    [Dependency] private FlammableSystem _flammableSystem = default!;
+    [Dependency] private ChatSystem _chatSystem = default!;
+    [Dependency] private SharedStunSystem _stun = default!;
 
 
     protected override void MakeSurgery(EntityUid uid, PlagueDoctorComponent comp, EntityUid target)

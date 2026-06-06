@@ -12,11 +12,11 @@ using Content.Shared.Vanilla.Skill;
 
 namespace Content.Client.Vanilla.Bureaucracy
 {
-    public sealed class BureaucracyManager : EntitySystem
+    public sealed partial class BureaucracyManager : EntitySystem
     {
-        [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-        [Dependency] private readonly HandsSystem _handSystem = default!;
-        [Dependency] private readonly SharedSkillSystem _skill = default!;
+        [Dependency] private IPrototypeManager _prototypeManager = default!;
+        [Dependency] private HandsSystem _handSystem = default!;
+        [Dependency] private SharedSkillSystem _skill = default!;
         private const string BaseCategory = "BaseBuro";
 
         public override void Initialize()

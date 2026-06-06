@@ -12,8 +12,8 @@ namespace Content.Server.Vanilla.Games.TTT;
 
 public sealed partial class TTTSystem : SharedTTTSystem
 {
-    [Dependency] private readonly SharedGhostSystem _ghosts = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
+    [Dependency] private SharedGhostSystem _ghosts = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
     private EntityUid? _currentrule = null;
 
     public override void Initialize()

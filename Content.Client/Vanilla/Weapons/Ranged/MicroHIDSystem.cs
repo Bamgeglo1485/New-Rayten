@@ -12,12 +12,12 @@ namespace Content.Client.Vanilla.Weapons.Ranged;
 
 public sealed partial class MicroHIDSystem : SharedMicroHIDSystem
 {
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly InputSystem _inputSystem = default!;
-    [Dependency] private readonly IEyeManager _eyeManager = default!;
-    [Dependency] private readonly IInputManager _inputManager = default!;
-    [Dependency] private readonly IStateManager _stateManager = default!;
-    [Dependency] private readonly SharedCombatModeSystem _combatMode = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private InputSystem _inputSystem = default!;
+    [Dependency] private IEyeManager _eyeManager = default!;
+    [Dependency] private IInputManager _inputManager = default!;
+    [Dependency] private IStateManager _stateManager = default!;
+    [Dependency] private SharedCombatModeSystem _combatMode = default!;
     public override void Initialize()
     {
         base.Initialize();

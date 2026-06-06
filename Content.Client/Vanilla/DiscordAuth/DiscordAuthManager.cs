@@ -6,10 +6,10 @@ using Timer = Robust.Shared.Timing.Timer;
 
 namespace Content.Client.Vanilla.DiscordAuth;
 
-public sealed class DiscordAuthManager
+public sealed partial class DiscordAuthManager
 {
-    [Dependency] private readonly IClientNetManager _netManager = default!;
-    [Dependency] private readonly IStateManager _stateManager = default!;
+    [Dependency] private IClientNetManager _netManager = default!;
+    [Dependency] private IStateManager _stateManager = default!;
 
     public string AuthUrl { get; private set; } = string.Empty;
 

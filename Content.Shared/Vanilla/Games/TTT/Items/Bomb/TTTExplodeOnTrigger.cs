@@ -5,11 +5,11 @@ using Content.Shared.Vanilla.Games.TTT.Items.DNAScanner;
 using Content.Shared.Mobs.Systems;
 namespace Content.Shared.Vanilla.Games.TTT.Items;
 
-public sealed class TTTExplodeOnTrigger : XOnTriggerSystem<TTTExplodeOnTriggerComponent>
+public sealed partial class TTTExplodeOnTrigger : XOnTriggerSystem<TTTExplodeOnTriggerComponent>
 {
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly MobStateSystem _mob = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private MobStateSystem _mob = default!;
     protected override void OnTrigger(Entity<TTTExplodeOnTriggerComponent> ent, EntityUid target, ref TriggerEvent args)
     {
         EntityUid? origin = null;

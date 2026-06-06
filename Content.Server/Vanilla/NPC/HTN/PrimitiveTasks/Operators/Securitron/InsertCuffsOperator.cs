@@ -11,7 +11,7 @@ namespace Content.Server.Vanilla.NPC.HTN.PrimitiveTasks.Operators.Securitron;
 
 public sealed partial class InsertCuffsOperator : HTNOperator
 {
-    [Dependency] private readonly IEntityManager _entManager = default!;
+    [Dependency] private IEntityManager _entManager = default!;
 
     private SharedHandsSystem _hands = default!;
 
@@ -52,7 +52,7 @@ public sealed partial class InsertCuffsOperator : HTNOperator
 
         if (_hands.GetActiveItem(owner) is { } heldEntity)
         {
-            if(_hands.TryDropIntoContainer(owner, heldEntity, security.HandCuffContainer))
+            if (_hands.TryDropIntoContainer(owner, heldEntity, security.HandCuffContainer))
                 return HTNOperatorStatus.Finished;
         }
 

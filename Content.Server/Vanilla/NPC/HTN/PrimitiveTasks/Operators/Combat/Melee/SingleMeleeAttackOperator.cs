@@ -14,7 +14,7 @@ namespace Content.Server.Vanilla.NPC.HTN.PrimitiveTasks.Operators.Combat.Melee
 {
     public sealed partial class SingleMeleeAttackOperator : HTNOperator
     {
-        [Dependency] private readonly IEntityManager _entManager = default!;
+        [Dependency] private IEntityManager _entManager = default!;
         private SharedMeleeWeaponSystem _meleeSystem = default!;
         private SharedCombatModeSystem _combat = default!;
 

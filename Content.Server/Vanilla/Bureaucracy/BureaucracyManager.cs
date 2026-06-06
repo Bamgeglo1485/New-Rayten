@@ -8,14 +8,14 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.Vanilla.Bureaucracy;
 
-public sealed class BureaucracyManager : EntitySystem
+public sealed partial class BureaucracyManager : EntitySystem
 {
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly PaperSystem _paperSystem = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly StationSystem _station = default!;
-    [Dependency] private readonly JobSystem _jobs = default!;
-    [Dependency] private readonly MindSystem _minds = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private PaperSystem _paperSystem = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private StationSystem _station = default!;
+    [Dependency] private JobSystem _jobs = default!;
+    [Dependency] private MindSystem _minds = default!;
     public override void Initialize()
     {
         base.Initialize();

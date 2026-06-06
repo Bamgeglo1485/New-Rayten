@@ -4,9 +4,9 @@ using Content.Server.GameTicking.Rules;
 using Content.Server.StationEvents.Events;
 namespace Content.Server.Antag;
 
-public sealed class AntagRandomSpawnSystem : StationEventSystem<AntagRandomSpawnComponent>
+public sealed partial class AntagRandomSpawnSystem : GameRuleSystem<AntagRandomSpawnComponent>
 {
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     public override void Initialize()
     {

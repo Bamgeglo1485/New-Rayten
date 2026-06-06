@@ -19,12 +19,12 @@ namespace Content.Server.Vanilla.Archon.OldMan;
 
 public sealed partial class OldManSystem : SharedOldManSystem
 {
-    [Dependency] private readonly SharedJitteringSystem _jitter = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly MobStateSystem _mobstateSystem = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly OldManEatConditionSystem _eatConditionSystem = default!;
+    [Dependency] private SharedJitteringSystem _jitter = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private MobStateSystem _mobstateSystem = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private OldManEatConditionSystem _eatConditionSystem = default!;
 
     public void EatVictim(EntityUid target, EntityUid oldMan, bool returnVictim = true)
     {

@@ -7,10 +7,10 @@ using Robust.Shared.Configuration;
 
 namespace Content.Client.Vanilla.VoiceSpeech;
 
-public sealed class VoiceSpeechSystem : EntitySystem
+public sealed partial class VoiceSpeechSystem : EntitySystem
 {
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
     public float Volume = 0.0f;
 
     public override void Initialize()

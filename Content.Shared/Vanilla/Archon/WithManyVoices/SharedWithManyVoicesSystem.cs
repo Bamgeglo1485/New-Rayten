@@ -11,14 +11,14 @@ using Robust.Shared.Timing;
 using Robust.Shared.Random;
 namespace Content.Shared.Vanilla.Archon.WithManyVoices;
 
-public abstract class SharedWithManyVoicesSystem : EntitySystem
+public abstract partial class SharedWithManyVoicesSystem : EntitySystem
 {
-    [Dependency] protected readonly IGameTiming Timing = default!;
-    [Dependency] private readonly SharedBlindPredatorSystem _predator = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedChatSystem _chat = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] protected IGameTiming Timing = default!;
+    [Dependency] private SharedBlindPredatorSystem _predator = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedChatSystem _chat = default!;
+    [Dependency] private IRobustRandom _random = default!;
 
     public override void Initialize()
     {

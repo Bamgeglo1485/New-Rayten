@@ -6,13 +6,13 @@ using Robust.Client.GameObjects;
 using System.Numerics;
 namespace Content.Client.Vanilla.Archon.OldMan;
 
-public sealed class OldManSystem : SharedOldManSystem
+public sealed partial class OldManSystem : SharedOldManSystem
 {
     private static readonly ProtoId<ShaderPrototype> StencilEqualDrawShader = "StencilEqualDraw";
-    [Dependency] private readonly AnimationPlayerSystem _animationPlayer = default!;
-    [Dependency] private readonly SpriteSystem _sprite = default!;
-    [Dependency] private readonly IOverlayManager _overlayMan = default!;
-    [Dependency] private readonly IPrototypeManager _protoMan = default!;
+    [Dependency] private AnimationPlayerSystem _animationPlayer = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
+    [Dependency] private IOverlayManager _overlayMan = default!;
+    [Dependency] private IPrototypeManager _protoMan = default!;
     private PuddleMaskOverlay _overlay = default!;
     private ShaderInstance _shader = default!;
 

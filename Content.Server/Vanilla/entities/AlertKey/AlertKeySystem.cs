@@ -13,14 +13,14 @@ using System.Linq;
 
 namespace Content.Server.Vanilla.AlertKey;
 
-public sealed class AlertKeySystem : EntitySystem
+public sealed partial class AlertKeySystem : EntitySystem
 {
-    [Dependency] private readonly AlertLevelSystem _alertLevelSystem = default!;
-    [Dependency] private readonly AccessReaderSystem _accessReaderSystem = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly PopupSystem _popupSystem = default!;
-    [Dependency] private readonly StationSystem _stationSystem = default!;
-    [Dependency] private readonly UserInterfaceSystem _uiSystem = default!;
+    [Dependency] private AlertLevelSystem _alertLevelSystem = default!;
+    [Dependency] private AccessReaderSystem _accessReaderSystem = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private PopupSystem _popupSystem = default!;
+    [Dependency] private StationSystem _stationSystem = default!;
+    [Dependency] private UserInterfaceSystem _uiSystem = default!;
     private const string StationAlertsPrototypeId = "stationAlerts";
     public override void Initialize()
     {

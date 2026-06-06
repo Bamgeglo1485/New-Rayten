@@ -8,7 +8,6 @@ using Content.Client.UserInterface.Systems.Character.Windows;
 using Content.Client.Vanilla.UserInterface.Background;
 using Content.Client.Eui;
 using Content.Shared.IdentityManagement;
-using Robust.Client.UserInterface.CustomControls;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface;
 using Robust.Shared.Prototypes;
@@ -17,11 +16,11 @@ using System.Numerics;
 
 namespace Content.Client.Vanilla.Background.eui;
 
-public sealed class CharacterSheetEui : BaseEui
+public sealed partial class CharacterSheetEui : BaseEui
 {
-    [Dependency] private readonly IEntityManager _entManager = default!;
-    [Dependency] private readonly IUserInterfaceManager UIManager = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IEntityManager _entManager = default!;
+    [Dependency] private IUserInterfaceManager _uIManager = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
 
     private Dictionary<SkillType, SkillControl> _skillControls = [];
     private Dictionary<SkillType, EasyskillsControl> _easyskillsControl = [];
@@ -38,7 +37,7 @@ public sealed class CharacterSheetEui : BaseEui
             return;
 
 
-        _window = UIManager.CreateWindow<CharacterWindow>();
+        _window = _uIManager.CreateWindow<CharacterWindow>();
         LayoutContainer.SetAnchorPreset(_window, LayoutContainer.LayoutPreset.CenterTop);
         _window.TabSkill.OnPressed += SwitchToSkill;
         _window.TabBackground.OnPressed += SwitchToBackground;
@@ -75,17 +74,17 @@ public sealed class CharacterSheetEui : BaseEui
             return;
         _window.BackgroundContainer.Children.Clear();
 
-        if (_entManager.TryGetComponent<BackgroundComponent>(user, out var BackgroundComp))
+        if (_entManager.TryGetComponent<BackgroundComponent>(user, out var backgroundComp))
         {
-            if (BackgroundComp.GeneralBackground == null)
+            if (backgroundComp.GeneralBackground == null)
             {
-                if (_prototypeManager.TryIndex(BackgroundComp.BabyBackground, out var bgProtoBaby))
+                if (_prototypeManager.TryIndex(backgroundComp.BabyBackground, out var bgProtoBaby))
                 {
                     var backgroundControl = new BackgroundControl(bgProtoBaby.Name, bgProtoBaby.Description, bgProtoBaby.SponsorOnly);
                     _window.BackgroundContainer.Children.Add(backgroundControl);
                     _window.TabBackground.Disabled = false;
                 }
-                if (_prototypeManager.TryIndex(BackgroundComp.AdultBackground, out var bgProtoAdult))
+                if (_prototypeManager.TryIndex(backgroundComp.AdultBackground, out var bgProtoAdult))
                 {
                     var backgroundControl = new BackgroundControl(bgProtoAdult.Name, bgProtoAdult.Description, bgProtoAdult.SponsorOnly);
                     _window.BackgroundContainer.Children.Add(backgroundControl);
@@ -94,7 +93,7 @@ public sealed class CharacterSheetEui : BaseEui
             }
             else
             {
-                if (_prototypeManager.TryIndex(BackgroundComp.GeneralBackground, out var bgProtoGeneral))
+                if (_prototypeManager.TryIndex(backgroundComp.GeneralBackground, out var bgProtoGeneral))
                 {
                     var backgroundControl = new BackgroundControl(bgProtoGeneral.Name, bgProtoGeneral.Description, bgProtoGeneral.SponsorOnly);
                     _window.BackgroundContainer.Children.Add(backgroundControl);
@@ -147,8 +146,8 @@ public sealed class CharacterSheetEui : BaseEui
 
         BuildBasicSkills(skillpoints, basicSkills);
         BuildEasySkills(skillpoints, easySkills);
-        if (_entManager.TryGetComponent<SkillAmnesiaComponent>(user, out var SkillAmnesiaComp))
-            UpdateSkillAmnesia(SkillAmnesiaComp);
+        if (_entManager.TryGetComponent<SkillAmnesiaComponent>(user, out var skillAmnesiaComp))
+            UpdateSkillAmnesia(skillAmnesiaComp);
     }
     private void BuildEasySkills(int skillpoints, List<(SkillType Skill, bool have, int Experience)> easyskills)
     {
@@ -190,22 +189,22 @@ public sealed class CharacterSheetEui : BaseEui
         }
     }
 
-    private void UpdateSkillAmnesia(SkillAmnesiaComponent SkillAmnesiaComp)
+    private void UpdateSkillAmnesia(SkillAmnesiaComponent skillAmnesiaComp)
     {
         if (_window == null)
             return;
 
-        if (_skillControls.ContainsKey(SkillAmnesiaComp.Skilltype))
+        if (_skillControls.ContainsKey(skillAmnesiaComp.Skilltype))
         {
-            var skillControl = _skillControls[SkillAmnesiaComp.Skilltype];
-            skillControl.updateamnesia(SkillAmnesiaComp.Skilltype, SkillAmnesiaComp.Exptorestore);
+            var skillControl = _skillControls[skillAmnesiaComp.Skilltype];
+            skillControl.updateamnesia(skillAmnesiaComp.Skilltype, skillAmnesiaComp.Exptorestore);
             return;
         }
 
-        if (_easyskillsControl.ContainsKey(SkillAmnesiaComp.Skilltype))
+        if (_easyskillsControl.ContainsKey(skillAmnesiaComp.Skilltype))
         {
-            var easyskillsControl = _easyskillsControl[SkillAmnesiaComp.Skilltype];
-            easyskillsControl.updateamnesia(SkillAmnesiaComp.Skilltype, SkillAmnesiaComp.Exptorestore);
+            var easyskillsControl = _easyskillsControl[skillAmnesiaComp.Skilltype];
+            easyskillsControl.updateamnesia(skillAmnesiaComp.Skilltype, skillAmnesiaComp.Exptorestore);
         }
     }
 

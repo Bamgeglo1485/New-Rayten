@@ -6,10 +6,10 @@ using Content.Server.Vanilla.LowPop;
 
 namespace Content.Server.StationEvents.Events;
 
-public sealed class AnomalySpawnRule : StationEventSystem<AnomalySpawnRuleComponent>
+public sealed partial class AnomalySpawnRule : StationEventSystem<AnomalySpawnRuleComponent>
 {
-    [Dependency] private readonly AnomalySystem _anomaly = default!;
-    [Dependency] private readonly LowPopSystem _lowpop = default!;
+    [Dependency] private AnomalySystem _anomaly = default!;
+    [Dependency] private LowPopSystem _lowpop = default!;
     protected override void Added(EntityUid uid, AnomalySpawnRuleComponent component, GameRuleComponent gameRule, GameRuleAddedEvent args)
     {
         if (!TryComp<StationEventComponent>(uid, out var stationEvent))

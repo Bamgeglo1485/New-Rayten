@@ -4,17 +4,14 @@ using Content.Shared.DoAfter;
 using Content.Shared.Examine;
 using Content.Shared.Interaction;
 using Content.Shared.Swab;
-using Content.Server.Vanilla.Skill;
-using Content.Shared.Vanilla.Skill;
 
 namespace Content.Server.Botany.Systems;
 
-public sealed class BotanySwabSystem : EntitySystem
+public sealed partial class BotanySwabSystem : EntitySystem
 {
-    [Dependency] private readonly SharedDoAfterSystem _doAfterSystem = default!;
-    [Dependency] private readonly PopupSystem _popupSystem = default!;
-    [Dependency] private readonly MutationSystem _mutationSystem = default!;
-    [Dependency] private readonly SharedSkillSystem _skill = default!;
+    [Dependency] private SharedDoAfterSystem _doAfterSystem = default!;
+    [Dependency] private PopupSystem _popupSystem = default!;
+    [Dependency] private MutationSystem _mutationSystem = default!;
 
     public override void Initialize()
     {
@@ -47,13 +44,6 @@ public sealed class BotanySwabSystem : EntitySystem
         if (args.Target == null || !args.CanReach || !HasComp<PlantHolderComponent>(args.Target))
             return;
 
-        //Rayten-start
-        if (TryComp<RequiresSkillComponent>(args.Target, out var requiresSkillComponent))
-        {
-            if (!_skill.HasRequiredSkill(args.User, requiresSkillComponent, WithBeep: true, ServerOnly: true))
-                return;
-        }
-        //Rayten-end
         _doAfterSystem.TryStartDoAfter(new DoAfterArgs(EntityManager, args.User, swab.SwabDelay, new BotanySwabDoAfterEvent(), uid, target: args.Target, used: uid)
         {
             Broadcast = true,

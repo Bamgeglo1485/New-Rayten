@@ -23,9 +23,9 @@
 
 // public sealed class ReflectCoinSystem : EntitySystem
 // {
-//     [Dependency] private readonly SharedTransformSystem _transformSystem = default!;
-//     [Dependency] private readonly SharedGunSystem _gunSystem = default!;
-//     [Dependency] private readonly NpcFactionSystem _factionSystem = default!;
+//     [Dependency] private SharedTransformSystem _transformSystem = default!;
+//     [Dependency] private SharedGunSystem _gunSystem = default!;
+//     [Dependency] private NpcFactionSystem _factionSystem = default!;
 
 //     public override void Initialize()
 //     {

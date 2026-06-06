@@ -6,7 +6,6 @@ using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.CustomControls;
 using Robust.Client.UserInterface.XAML;
 using Robust.Shared.Prototypes;
-using Content.Shared.Vanilla.Skill;
 using Robust.Shared.Utility;
 
 namespace Content.Client.Construction.UI
@@ -42,7 +41,7 @@ namespace Content.Client.Construction.UI
         event EventHandler ClearAllGhosts;
 
         void ClearRecipeInfo();
-        void SetRecipeInfo(string name, string description, EntityPrototype? targetPrototype, bool isItem, bool isFavorite, SkillLevel Engineering, bool craftable);
+        void SetRecipeInfo(string name, string description, EntityPrototype? targetPrototype, bool isItem, bool isFavorite);
         void ResetPlacement();
 
         #region Window Control
@@ -97,7 +96,7 @@ namespace Content.Client.Construction.UI
             Recipes.NoItemSelected += () => RecipeSelected?.Invoke(this, null);
             Recipes.GenerateItem += (data, button) =>
             {
-                if (data is not ConstructionMenuListData (var prototype, var targetPrototype))
+                if (data is not ConstructionMenuListData(var prototype, var targetPrototype))
                     return;
 
                 var entProtoView = new EntityPrototypeView()
@@ -164,20 +163,8 @@ namespace Content.Client.Construction.UI
             string description,
             EntityPrototype? targetPrototype,
             bool isItem,
-            bool isFavorite,
-            SkillLevel engineering,
-            bool craftable)
+            bool isFavorite)
         {
-            BuildButton.Disabled = !craftable;
-
-            if (!craftable)
-                BuildButton.ToolTip = "Навык недостаточен";
-            //Rayten-start
-            ReqEngineering.Visible = (int)engineering > 0;
-            var engineeringmessage = new FormattedMessage();
-            engineeringmessage.AddMarkupOrThrow(Loc.GetString("construction-menu-skill-engineering", ("lvl", (int)engineering)));
-            ReqEngineering.SetMessage(engineeringmessage);
-            //Rayten-end
 
             BuildButton.Text = Loc.GetString(isItem ? "construction-menu-place-ghost" : "construction-menu-craft");
             TargetName.SetMessage(name);

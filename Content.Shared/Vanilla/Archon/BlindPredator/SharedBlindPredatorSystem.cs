@@ -5,9 +5,9 @@ using System.Linq;
 
 namespace Content.Shared.Vanilla.Archon.BlindPredator;
 
-public abstract class SharedBlindPredatorSystem : EntitySystem
+public abstract partial class SharedBlindPredatorSystem : EntitySystem
 {
-    [Dependency] protected readonly MobStateSystem MobStateSys = default!;
+    [Dependency] protected MobStateSystem MobStateSys = default!;
     public override void Initialize()
     {
         base.Initialize();

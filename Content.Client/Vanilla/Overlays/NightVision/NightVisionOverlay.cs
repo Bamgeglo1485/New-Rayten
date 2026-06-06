@@ -5,11 +5,11 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Client.Vanilla.NightVision;
 
-public sealed class NightVisionOverlay : Overlay
+public sealed partial class NightVisionOverlay : Overlay
 {
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
-    [Dependency] private readonly IEntityManager _entityManager = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private IEntityManager _entityManager = default!;
     public override bool RequestScreenTexture => true;
     public override OverlaySpace Space => OverlaySpace.WorldSpace;
     private static readonly ProtoId<ShaderPrototype> GrayShader = "GreyscaleFullscreen";

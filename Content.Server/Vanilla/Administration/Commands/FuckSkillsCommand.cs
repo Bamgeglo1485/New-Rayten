@@ -12,10 +12,10 @@ using Robust.Shared.GameObjects;
 namespace Content.Server.vanilla.Administration.Commands;
 
 [AdminCommand(AdminFlags.Admin)]
-public sealed class FuckSkillsCommand : IConsoleCommand
+public sealed partial class FuckSkillsCommand : IConsoleCommand
 {
-    [Dependency] private readonly IAdminLogManager _adminLogger = default!;
-    [Dependency] private readonly EntityManager _entityManager = default!;
+    [Dependency] private IAdminLogManager _adminLogger = default!;
+    [Dependency] private EntityManager _entityManager = default!;
     private SharedSkillSystem? _skill;
 
     public string Command => "fuckskills";

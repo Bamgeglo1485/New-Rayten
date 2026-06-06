@@ -10,8 +10,8 @@ namespace Content.Server.Vanilla.Skill;
 public sealed partial class SkillSystem : SharedSkillSystem
 {
     const float HEADSHOTCHANCE = 0.3f;
-    [Dependency] private readonly SharedStaminaSystem _stamina = default!;
-    [Dependency] private readonly HandsSystem _hands = default!;
+    [Dependency] private SharedStaminaSystem _stamina = default!;
+    [Dependency] private HandsSystem _hands = default!;
 
     public override void Initialize()
     {

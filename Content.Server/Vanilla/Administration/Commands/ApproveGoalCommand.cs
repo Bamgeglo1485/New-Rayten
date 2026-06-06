@@ -9,9 +9,9 @@ using System.Linq;
 namespace Content.Server.Vanilla.Administration.Commands;
 
 [AdminCommand(AdminFlags.Admin)]
-public sealed class ApproveGoalCommand : IConsoleCommand
+public sealed partial class ApproveGoalCommand : IConsoleCommand
 {
-    [Dependency] private readonly IEntitySystemManager _entitySystemManager = default!;
+    [Dependency] private IEntitySystemManager _entitySystemManager = default!;
 
     public string Command => "approveGoal";
     public string Description => "Принять цель как выполненную и выдать награду";

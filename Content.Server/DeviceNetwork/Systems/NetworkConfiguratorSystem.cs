@@ -21,25 +21,24 @@ using Robust.Shared.Map.Events;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
-using Content.Server.Vanilla.Skill; //vanilla-station
-using Content.Shared.Vanilla.Skill; //vanilla-station
 
 namespace Content.Server.DeviceNetwork.Systems;
 
 [UsedImplicitly]
-public sealed class NetworkConfiguratorSystem : SharedNetworkConfiguratorSystem
+public sealed partial class NetworkConfiguratorSystem : SharedNetworkConfiguratorSystem
 {
-    [Dependency] private readonly DeviceListSystem _deviceListSystem = default!;
-    [Dependency] private readonly DeviceLinkSystem _deviceLinkSystem = default!;
-    [Dependency] private readonly SharedPopupSystem _popupSystem = default!;
-    [Dependency] private readonly UserInterfaceSystem _uiSystem = default!;
-    [Dependency] private readonly AccessReaderSystem _accessSystem = default!;
-    [Dependency] private readonly SharedInteractionSystem _interactionSystem = default!;
-    [Dependency] private readonly AudioSystem _audioSystem = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearanceSystem = default!;
-    [Dependency] private readonly IGameTiming _gameTiming = default!;
-    [Dependency] private readonly IAdminLogManager _adminLogger = default!;
-    [Dependency] private readonly SharedSkillSystem _skill = default!;
+    [Dependency] private DeviceListSystem _deviceListSystem = default!;
+    [Dependency] private DeviceLinkSystem _deviceLinkSystem = default!;
+    [Dependency] private SharedPopupSystem _popupSystem = default!;
+    [Dependency] private UserInterfaceSystem _uiSystem = default!;
+    [Dependency] private AccessReaderSystem _accessSystem = default!;
+    [Dependency] private SharedInteractionSystem _interactionSystem = default!;
+    [Dependency] private AudioSystem _audioSystem = default!;
+    [Dependency] private SharedAppearanceSystem _appearanceSystem = default!;
+    [Dependency] private IGameTiming _gameTiming = default!;
+    [Dependency] private IAdminLogManager _adminLogger = default!;
+    [Dependency] private EntityQuery<DeviceNetworkComponent> _deviceNetworkQuery = default!;
+
     public override void Initialize()
     {
         base.Initialize();
@@ -340,11 +339,6 @@ public sealed class NetworkConfiguratorSystem : SharedNetworkConfiguratorSystem
             return;
 
         DetermineMode(uid, configurator, target, user);
-        //vanilla-station-start
-        if (TryComp<RequiresSkillComponent>(uid, out var RequiresSkillComp))
-            if (!_skill.HasRequiredSkill(user, RequiresSkillComp, WithBeep: true, ServerOnly: true))
-                return;
-        //vanilla-station-end
         if (configurator.LinkModeActive)
         {
             TryLinkDevice(uid, configurator, target, user);
@@ -638,10 +632,9 @@ public sealed class NetworkConfiguratorSystem : SharedNetworkConfiguratorSystem
 
     private void ClearDevices(EntityUid uid, NetworkConfiguratorComponent component)
     {
-        var query = GetEntityQuery<DeviceNetworkComponent>();
         foreach (var device in component.Devices.Values)
         {
-            if (query.TryGetComponent(device, out var comp))
+            if (_deviceNetworkQuery.TryGetComponent(device, out var comp))
                 comp.Configurators.Remove(uid);
         }
 
@@ -800,10 +793,9 @@ public sealed class NetworkConfiguratorSystem : SharedNetworkConfiguratorSystem
 
                 ClearDevices(uid, component);
 
-                var query = GetEntityQuery<DeviceNetworkComponent>();
                 foreach (var (addr, device) in _deviceListSystem.GetDeviceList(component.ActiveDeviceList.Value))
                 {
-                    if (query.TryGetComponent(device, out var comp))
+                    if (_deviceNetworkQuery.TryGetComponent(device, out var comp))
                     {
                         component.Devices.Add(addr, device);
                         comp.Configurators.Add(uid);

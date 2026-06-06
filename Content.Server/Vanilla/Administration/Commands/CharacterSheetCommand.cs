@@ -11,10 +11,10 @@ using Robust.Shared.Network;
 namespace Content.Server.Vanilla.Administration.Commands;
 
 [AdminCommand(AdminFlags.Admin)]
-public sealed class CharacterSheetCommand : LocalizedCommands
+public sealed partial class CharacterSheetCommand : LocalizedCommands
 {
-    [Dependency] private readonly IEntityManager _entManager = default!;
-    [Dependency] private readonly EuiManager _euiManager = default!;
+    [Dependency] private IEntityManager _entManager = default!;
+    [Dependency] private EuiManager _euiManager = default!;
 
     public override string Command => "charactersheet";
 

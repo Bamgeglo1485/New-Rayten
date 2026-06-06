@@ -21,14 +21,14 @@ namespace Content.Server.Vanilla.DepartmentGoal;
 /// <summary>
 ///     System to spawn paper with station goal.
 /// </summary>
-public sealed class DepartmentGoalSystem : EntitySystem
+public sealed partial class DepartmentGoalSystem : EntitySystem
 {
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly FaxSystem _fax = default!;
-    [Dependency] private readonly CargoSystem _cargo = default!;
-    [Dependency] private readonly StationSystem _station = default!;
-    [Dependency] private readonly ChatSystem _chatSystem = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private FaxSystem _fax = default!;
+    [Dependency] private CargoSystem _cargo = default!;
+    [Dependency] private StationSystem _station = default!;
+    [Dependency] private ChatSystem _chatSystem = default!;
     public Dictionary<EntityUid, List<DepartmentGoalPrototype>> DepGoals = new();
 
     public override void Initialize()

@@ -18,17 +18,17 @@ using System.Linq;
 namespace Content.Client.Vanilla.UserInterface.GhostBackground;
 
 [UsedImplicitly]
-public sealed class GhostBackgroundUIController : UIController,
+public sealed partial class GhostBackgroundUIController : UIController,
     IOnStateEntered<GameplayState>,
     IOnStateExited<GameplayState>,
     IOnSystemChanged<BackgroundSystem>
 {
     private GhostBackgroundWindow? _window;
     private ProtoId<BackgroundGroupPrototype>? _pendingBackground;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly ILogManager _logMan = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly GameplayStateLoadController _gameplayStateLoad = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private ILogManager _logMan = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private GameplayStateLoadController _gameplayStateLoad = default!;
     [UISystemDependency] private readonly BackgroundSystem _backGroundSystem = default!;
     private ISawmill _sawmill = default!;
 

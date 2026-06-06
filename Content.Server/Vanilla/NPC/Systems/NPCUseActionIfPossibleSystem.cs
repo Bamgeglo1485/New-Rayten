@@ -6,10 +6,10 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.Vanilla.NPC.Systems;
 
-public sealed class NPCUseActionIfPossibleSystem : EntitySystem
+public sealed partial class NPCUseActionIfPossibleSystem : EntitySystem
 {
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     private TimeSpan _nextUpdate = TimeSpan.Zero;
 

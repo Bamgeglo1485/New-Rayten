@@ -17,8 +17,6 @@ using Content.Shared.Temperature.Components;
 using Content.Shared.Tools.Systems;
 using Robust.Shared.Containers;
 using Robust.Shared.Utility;
-using Content.Shared.Vanilla.Skill;
-using Content.Server.Vanilla.Skill;
 
 #if EXCEPTION_TOLERANCE
 // ReSharper disable once RedundantUsingDirective
@@ -29,9 +27,9 @@ namespace Content.Server.Construction
 {
     public sealed partial class ConstructionSystem
     {
-        [Dependency] private readonly IAdminLogManager _adminLogger = default!;
+        [Dependency] private IAdminLogManager _adminLogger = default!;
 #if EXCEPTION_TOLERANCE
-        [Dependency] private readonly IRuntimeLog _runtimeLog = default!;
+        [Dependency] private IRuntimeLog _runtimeLog = default!;
 #endif
         private readonly Queue<EntityUid> _constructionUpdateQueue = new();
         private readonly HashSet<EntityUid> _queuedUpdates = new();
@@ -286,14 +284,6 @@ namespace Content.Server.Construction
                         // If we're only testing whether this step would be handled by the given event, then we're done.
                         if (validation)
                             return HandleResult.Validated;
-
-                        if (TryComp<RequiresSkillComponent>(uid, out var requiresSkillComponent) && user != null)
-                        {
-                            var lvl = requiresSkillComponent.BasicSkills.GetValueOrDefault(SkillType.Engineering, SkillLevel.None);
-                            if (!_skill.HasRequiredSkill(user.Value, SkillType.Engineering, lvl, WithBeep: true, ServerOnly: true))
-                                return HandleResult.False;
-                        }
-
                         // If we still haven't completed this step's DoAfter...
                         if (doAfterState == DoAfterState.None && insertStep.DoAfter > 0)
                         {
@@ -370,13 +360,6 @@ namespace Content.Server.Construction
                             return _toolSystem.HasQuality(interactUsing.Used, toolInsertStep.Tool)
                                 ? HandleResult.Validated
                                 : HandleResult.False;
-                        }
-
-                        if (TryComp<RequiresSkillComponent>(uid, out var requiresSkillComponent) && user != null)
-                        {
-                            var lvl = requiresSkillComponent.BasicSkills.GetValueOrDefault(SkillType.Engineering, SkillLevel.None);
-                            if (!_skill.HasRequiredSkill(user.Value, SkillType.Engineering, lvl, WithBeep: true, ServerOnly: true))
-                                return HandleResult.False;
                         }
 
                         // If we're handling an event after its DoAfter finished...

@@ -15,7 +15,6 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 using Robust.Shared.Timing;
 using SharedToolSystem = Content.Shared.Tools.Systems.SharedToolSystem;
-using Content.Shared.Vanilla.Skill;
 
 namespace Content.Shared.Radio.EntitySystems;
 
@@ -24,15 +23,13 @@ namespace Content.Shared.Radio.EntitySystems;
 /// </summary>
 public sealed partial class EncryptionKeySystem : EntitySystem
 {
-    [Dependency] private readonly IPrototypeManager _protoManager = default!;
-    [Dependency] private readonly SharedToolSystem _tool = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly SharedWiresSystem _wires = default!;
-    [Dependency] private readonly SharedSkillSystem _skill = default!;
-
+    [Dependency] private IPrototypeManager _protoManager = default!;
+    [Dependency] private SharedToolSystem _tool = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private SharedWiresSystem _wires = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -126,14 +123,6 @@ public sealed partial class EncryptionKeySystem : EntitySystem
             _popup.PopupClient(Loc.GetString("encryption-key-slots-already-full"), uid, args.User);
             return;
         }
-        //Vanilla-Station-START
-        if (TryComp<RequiresSkillComponent>(uid, out var requiresSkillComponent))
-        {
-            var lvl = requiresSkillComponent.BasicSkills.GetValueOrDefault(SkillType.Engineering, SkillLevel.None);
-            if (!_skill.HasRequiredSkill(args.User, SkillType.Engineering, lvl))
-                return;
-        }
-        //Vanilla-Sttion-END
         if (_container.Insert(args.Used, component.KeyContainer))
         {
             _popup.PopupClient(Loc.GetString("encryption-key-successfully-installed"), uid, args.User);
@@ -163,14 +152,6 @@ public sealed partial class EncryptionKeySystem : EntitySystem
             _popup.PopupClient(Loc.GetString("encryption-keys-no-keys"), uid, args.User);
             return;
         }
-        //Vanilla-Station-START
-        if (TryComp<RequiresSkillComponent>(uid, out var requiresSkillComponent))
-        {
-            var lvl = requiresSkillComponent.BasicSkills.GetValueOrDefault(SkillType.Engineering, SkillLevel.None);
-            if (!_skill.HasRequiredSkill(args.User, SkillType.Engineering, lvl))
-                return;
-        }
-        //Vanilla-Sttion-END
         _tool.UseTool(args.Used, args.User, uid, 1f, component.KeysExtractionMethod, new EncryptionRemovalFinishedEvent(), toolComponent: tool);
     }
 

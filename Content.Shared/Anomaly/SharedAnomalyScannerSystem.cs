@@ -2,7 +2,6 @@ using Content.Shared.Anomaly.Components;
 using Content.Shared.DoAfter;
 using Content.Shared.Interaction;
 using Content.Shared.Popups;
-using Content.Shared.Vanilla.Skill;
 
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Timing;
@@ -10,15 +9,15 @@ using Robust.Shared.Timing;
 namespace Content.Shared.Anomaly;
 
 /// <summary> System for controlling anomaly scanner device. </summary>
-public abstract class SharedAnomalyScannerSystem : EntitySystem
+public abstract partial class SharedAnomalyScannerSystem : EntitySystem
 {
-    [Dependency] protected readonly SharedPopupSystem Popup = default!;
-    [Dependency] protected readonly SharedAudioSystem Audio = default!;
-    [Dependency] protected readonly IGameTiming Timing = default!;
-    [Dependency] protected readonly SharedAppearanceSystem Appearance = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] protected readonly SharedUserInterfaceSystem UI = default!;
-    [Dependency] private readonly SharedSkillSystem _skill = default!;
+    [Dependency] protected SharedPopupSystem Popup = default!;
+    [Dependency] protected SharedAudioSystem Audio = default!;
+    [Dependency] protected IGameTiming Timing = default!;
+    [Dependency] protected SharedAppearanceSystem Appearance = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] protected SharedUserInterfaceSystem UI = default!;
+
     public override void Initialize()
     {
         base.Initialize();
@@ -56,11 +55,6 @@ public abstract class SharedAnomalyScannerSystem : EntitySystem
 
         if (!args.CanReach)
             return;
-
-        //rayten-start
-        if (TryComp<RequiresSkillComponent>(uid, out var reqskillcomp) && !_skill.HasRequiredSkill(args.User, reqskillcomp))
-            return;
-        //rayten-end
 
         var doAfterArgs = new DoAfterArgs(
             EntityManager,

@@ -5,8 +5,8 @@ namespace Content.Server.Vanilla.Weapons.Ranged;
 
 public sealed partial class MicroHIDSystem : SharedMicroHIDSystem
 {
-    [Dependency] private readonly BeamSystem _beam = default!;
-    [Dependency] private readonly SharedLightningSystem _light = default!;
+    [Dependency] private BeamSystem _beam = default!;
+    [Dependency] private SharedLightningSystem _light = default!;
 
     public override void Initialize()
     {

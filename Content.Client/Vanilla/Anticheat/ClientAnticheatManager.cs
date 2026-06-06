@@ -7,8 +7,8 @@ namespace Content.Client.Vanilla.Anticheat;
 
 public sealed partial class ClientAnticheatManager : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
     private TimeSpan _nextCheck = TimeSpan.Zero;
 
     public override void Initialize()

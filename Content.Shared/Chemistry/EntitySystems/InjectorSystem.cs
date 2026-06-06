@@ -20,7 +20,6 @@ using Content.Shared.Verbs;
 using Content.Shared.Weapons.Melee.Events;
 using Content.Shared.Inventory;
 using Content.Shared.Clothing.Components;
-using Content.Shared.Vanilla.Skill;
 using Content.Shared.Mobs.Components;
 using JetBrains.Annotations;
 using Robust.Shared.Audio.Systems;
@@ -35,19 +34,18 @@ namespace Content.Shared.Chemistry.EntitySystems;
 /// <seealso cref="InjectorModePrototype"/>
 public sealed partial class InjectorSystem : EntitySystem
 {
-    [Dependency] private readonly ISharedAdminLogManager _adminLogger = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedForensicsSystem _forensics = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly OpenableSystem _openable = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly ReactiveSystem _reactiveSystem = default!;
-    [Dependency] private readonly SharedSolutionContainerSystem _solutionContainer = default!;
-    [Dependency] private readonly StandingStateSystem _standingState = default!;
-    [Dependency] private readonly UseDelaySystem _useDelay = default!;
-    [Dependency] private readonly InventorySystem _invSystem = default!;
-    [Dependency] private readonly SharedSkillSystem _skill = default!;
+    [Dependency] private ISharedAdminLogManager _adminLogger = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedForensicsSystem _forensics = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private OpenableSystem _openable = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private ReactiveSystem _reactiveSystem = default!;
+    [Dependency] private SharedSolutionContainerSystem _solutionContainer = default!;
+    [Dependency] private StandingStateSystem _standingState = default!;
+    [Dependency] private UseDelaySystem _useDelay = default!;
+    [Dependency] private InventorySystem _invSystem = default!;
     public override void Initialize()
     {
         SubscribeLocalEvent<InjectorComponent, UseInHandEvent>(OnInjectorUse);
@@ -501,12 +499,6 @@ public sealed partial class InjectorSystem : EntitySystem
                 _popup.PopupPredicted(userMessage, otherMessage, target, user);
                 return true;
             }
-
-            if (TryComp<RequiresSkillComponent>(injector.Owner, out var requiresSkillComponent))
-            {
-                if (!_skill.HasRequiredSkill(user, requiresSkillComponent))
-                    return true;
-            }
         }
         //rayten-end
         // Get transfer amount. It may be smaller than _transferAmount if not enough room
@@ -612,13 +604,6 @@ public sealed partial class InjectorSystem : EntitySystem
         // We have some snowflaked behavior for streams.
         if (target.Comp != null)
         {
-            //rayten-start
-            if (TryComp<RequiresSkillComponent>(injector.Owner, out var requiresSkillComponent))
-            {
-                if (!_skill.HasRequiredSkill(user, requiresSkillComponent))
-                    return true;
-            }
-            //rayten-end
             DrawFromBlood(injector, user, (target.Owner, target.Comp), injector.Comp.Solution.Value, realTransferAmount);
             return true;
         }
@@ -702,7 +687,7 @@ public sealed partial class InjectorSystem : EntitySystem
                 || !proto.Behavior.HasFlag(InjectorBehavior.Draw))
                 continue;
 
-            ToggleMode(injector, user, proto);
+            ToggleMode(injector, user, proto, false);
             return;
         }
     }
@@ -733,22 +718,24 @@ public sealed partial class InjectorSystem : EntitySystem
                 || !proto.Behavior.HasFlag(InjectorBehavior.Inject))
                 continue;
 
-            ToggleMode(injector, user, proto);
+            ToggleMode(injector, user, proto, false);
             return;
         }
     }
     #endregion Injecting/Drawing
 
     #region Mode Toggling
+
     /// <summary>
     /// Toggle modes of the injector if possible.
     /// </summary>
     /// <param name="injector">The injector whose mode is to be toggled.</param>
     /// <param name="user">The user toggling the mode.</param>
     /// <param name="mode">The desired mode.</param>
+    /// <param name="popup">Whether we should show popup text for the mode being changed.</param>
     /// <remarks>This will still check if the injector can use that mode.</remarks>
     [PublicAPI]
-    public void ToggleMode(Entity<InjectorComponent> injector, EntityUid user, InjectorModePrototype mode)
+    public void ToggleMode(Entity<InjectorComponent> injector, EntityUid user, InjectorModePrototype mode, bool popup = true)
     {
         var index = injector.Comp.AllowedModes.FindIndex(nextMode => mode == nextMode);
 
@@ -757,10 +744,14 @@ public sealed partial class InjectorSystem : EntitySystem
         if (!_prototypeManager.Resolve(injector.Comp.ActiveModeProtoId, out var newMode))
             return;
 
+        Dirty(injector);
+
+        if (!popup)
+            return;
+
         var modeName = Loc.GetString(newMode.Name);
         var message = Loc.GetString("injector-component-mode-changed-text", ("mode", modeName));
         _popup.PopupClient(message, user, user);
-        Dirty(injector);
     }
 
     /// <summary>

@@ -6,11 +6,11 @@ using Robust.Client.Graphics;
 
 namespace Content.Client.Vanilla.Entities.DangerScanner;
 
-public sealed class DangerScannerSystem : SharedDangerScannerSystem
+public sealed partial class DangerScannerSystem : SharedDangerScannerSystem
 {
     private const string ScannerAnimationKey = "danger-scan";
-    [Dependency] private readonly AnimationPlayerSystem _animation = default!;
-    [Dependency] private readonly SpriteSystem _sprite = default!;
+    [Dependency] private AnimationPlayerSystem _animation = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
     public override void Initialize()
     {
         base.Initialize();
