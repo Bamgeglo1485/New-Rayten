@@ -257,9 +257,6 @@ public sealed partial class HumanoidProfileEditor
 
                 var collection = IoCManager.Instance!;
                 var protoManager = collection.Resolve<IPrototypeManager>();
-                //Rayten-RoleSkills-start
-                var roleSkillsWindowBtn = CreateRoleSkillsButton(job, protoManager);
-                //Rayten-RoleSkills-end
                 // If no loadout found then disabled button
                 if (!protoManager.TryIndex<RoleLoadoutPrototype>(LoadoutSystem.GetJobPrototype(job.ID), out var roleLoadoutProto))
                 {
@@ -288,7 +285,6 @@ public sealed partial class HumanoidProfileEditor
 
                 _jobPriorities.Add((job.ID, selector));
                 jobContainer.AddChild(selector);
-                jobContainer.AddChild(roleSkillsWindowBtn);
                 jobContainer.AddChild(loadoutWindowBtn);
                 category.AddChild(jobContainer);
             }

@@ -26,7 +26,6 @@ using Content.Shared.Throwing;
 using Content.Shared.UserInterface;
 using Content.Shared.Wires;
 using Content.Shared.Whitelist;
-using Content.Shared.Vanilla.Skill;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Configuration;
 using Robust.Shared.Containers;
@@ -65,9 +64,6 @@ public abstract partial class SharedBorgSystem : EntitySystem
     [Dependency] private SharedHandheldLightSystem _handheldLight = default!;
     [Dependency] private SharedAccessSystem _access = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
-    //rayten-start
-    [Dependency] private SharedSkillSystem _skill = default!;
-    //rayten-end
     /// <inheritdoc/>
     public override void Initialize()
     {
@@ -241,14 +237,6 @@ public abstract partial class SharedBorgSystem : EntitySystem
                 _popup.PopupEntity(Loc.GetString("borg-player-not-allowed"), used, args.User);
                 return;
             }
-            //Vanilla-Station-START
-            if (TryComp<RequiresSkillComponent>(chassis.Owner, out var requiresSkillComponent))
-            {
-                var lvl = requiresSkillComponent.BasicSkills.GetValueOrDefault(SkillType.Engineering, SkillLevel.None);
-                if (!_skill.HasRequiredSkill(args.User, SkillType.Engineering, lvl))
-                    return;
-            }
-            //Vanilla-Sttion-END
             _container.Insert(used, chassis.Comp.BrainContainer);
             _adminLog.Add(LogType.Action, LogImpact.Medium,
                 $"{args.User} installed brain {used} into borg {chassis.Owner}");

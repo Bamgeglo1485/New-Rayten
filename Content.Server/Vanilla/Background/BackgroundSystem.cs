@@ -1,7 +1,6 @@
 using Content.Shared.Administration;
 using Content.Shared.Vanilla.Background;
 using Content.Shared.Vanilla.TDM;
-using Content.Shared.Vanilla.Skill;
 using Robust.Shared.Prototypes;
 
 namespace Content.Server.Vanilla.Background;
@@ -44,18 +43,11 @@ public sealed partial class BackGroundSystem : EntitySystem
 
         if (_prototype.TryIndex(msg.Background, out var bgProto))
         {
-            RemComp<SkillComponent>(uid);
-            var skillComp = EnsureComp<SkillComponent>(uid);
-
-            skillComp.BasicSkills = bgProto.Skills;
-            skillComp.EasySkills = bgProto.EasySkills;
-            skillComp.SkillPoints = bgProto.SkillPoints;
             ApplySpecials(uid, bgProto.Specials);
 
             var backgroundcomp = EnsureComp<BackgroundComponent>(uid);
             backgroundcomp.GeneralBackground = msg.Background;
             Dirty(uid, backgroundcomp);
-            Dirty(uid, skillComp);
         }
         else
         {

@@ -23,8 +23,6 @@ using Robust.Shared.Map;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
-using Content.Shared.Vanilla.RoleSkills;
-using Content.Server.Vanilla.RoleSkillsSystem;
 namespace Content.Server.Station.Systems;
 
 /// <summary>
@@ -45,7 +43,6 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
     [Dependency] private PdaSystem _pdaSystem = default!;
     [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private MindSystem _mindSystem = default!;
-    [Dependency] private RoleSkillsSystem _rolesys = default!;
     /// <summary>
     /// Attempts to spawn a player character onto the given station.
     /// </summary>
@@ -167,11 +164,6 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
 
         DoJobSpecials(job, entity.Value);
         _identity.QueueIdentityUpdate(entity.Value);
-        //Rayten-start
-        RoleSkills? roleSkills = null;
-        profile?.RoleSkills.TryGetValue(SharedRoleSkillsSystem.GetJobPrototype(prototype?.ID), out roleSkills);
-        _rolesys.ApplyRoleSkills(entity.Value, roleSkills, prototype?.ID);
-        //Rayten-end
         return entity.Value;
     }
 

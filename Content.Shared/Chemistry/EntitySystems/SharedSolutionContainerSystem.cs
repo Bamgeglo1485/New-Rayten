@@ -21,7 +21,6 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 using Dependency = Robust.Shared.IoC.DependencyAttribute;
-using Content.Shared.Vanilla.Skill;
 namespace Content.Shared.Chemistry.EntitySystems;
 
 /// <summary>

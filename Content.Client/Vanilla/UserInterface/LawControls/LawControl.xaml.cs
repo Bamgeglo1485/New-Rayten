@@ -7,7 +7,6 @@ using Robust.Shared.Utility;
 using Robust.Client.ResourceManagement;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.CustomControls;
-using Content.Shared.Vanilla.Skill;
 
 namespace Content.Client.Vanilla.UserInterface.LawControls;
 

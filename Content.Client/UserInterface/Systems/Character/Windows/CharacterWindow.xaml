@@ -8,31 +8,43 @@
     SetWidth="685"
     MinHeight="850"
     Resizable="False">
-    <ScrollContainer Name="MainScroll" Access="Public">
+    <ScrollContainer Name="MainScroll"
+                     Access="Public">
         <BoxContainer Orientation="Vertical">
             <BoxContainer Orientation="Horizontal">
-                <SpriteView OverrideDirection="South" Scale="2 2" Name="SpriteView" Access="Public" SetSize="64 64"/>
-                <BoxContainer Orientation="Vertical" VerticalAlignment="Top">
-                    <Label Name="NameLabel" Access="Public"/>
-                    <Label Name="SubText" VerticalAlignment="Top" StyleClasses="LabelSubText" Access="Public"/>
-                    <Label Name="RoleType" VerticalAlignment="Top" StyleClasses="LabelSubText" Access="Public"/>
+                <SpriteView OverrideDirection="South"
+                            Scale="2 2"
+                            Name="SpriteView"
+                            Access="Public"
+                            SetSize="64 64"/>
+                <BoxContainer Orientation="Vertical"
+                              VerticalAlignment="Top">
+                    <Label Name="NameLabel"
+                           Access="Public"/>
+                    <Label Name="SubText"
+                           VerticalAlignment="Top"
+                           StyleClasses="LabelSubText"
+                           Access="Public"/>
+                    <Label Name="RoleType"
+                           VerticalAlignment="Top"
+                           StyleClasses="LabelSubText"
+                           Access="Public"/>
                 </BoxContainer>
             </BoxContainer>
 
-            <Label Name="TabName" Text="Навыки" VerticalAlignment="Top" HorizontalAlignment="Center" StyleClasses="LabelHeading" Access="Public"/>
-            <cc:HLine Color="#05014a" Thickness="4" />
-            <cc:HSpacer Spacing="10" />
-            <BoxContainer Orientation="Horizontal" HorizontalExpand="True">
+            <Label Name="TabName"
+                   Text="Навыки"
+                   VerticalAlignment="Top"
+                   HorizontalAlignment="Center"
+                   StyleClasses="LabelHeading"
+                   Access="Public"/>
+            <cc:HLine Color="#05014a"
+                      Thickness="4"/>
+            <cc:HSpacer Spacing="10"/>
+            <BoxContainer Orientation="Horizontal"
+                          HorizontalExpand="True">
                 <Button Name="TabInfo"
                         Text="Информация"
-                        Disabled="False"
-                        HorizontalExpand="True"
-                        VerticalExpand="True"
-                        StyleClasses="ButtonSquare"
-                        Margin="0"
-                        Access="Public"/>
-                <Button Name="TabSkill"
-                        Text="Навыки"
                         Disabled="False"
                         HorizontalExpand="True"
                         VerticalExpand="True"
@@ -48,36 +60,32 @@
                         Margin="0"
                         Access="Public"/>
             </BoxContainer>
-            <cc:HLine Color="#05014a" Thickness="2" />
-            <cc:HSpacer Spacing="10" />
+            <cc:HLine Color="#05014a"
+                      Thickness="2"/>
+            <cc:HSpacer Spacing="10"/>
 
-            <BoxContainer Orientation="Vertical" Name="SkillContainer" Access="Public">
-                <Label Text="Основные навыки" VerticalAlignment="Top" HorizontalAlignment="Center"/>
-                <cc:HLine Color="#05014a" Thickness="2" />
-                <cc:HSpacer Spacing="10" />
 
-                <GridContainer Name="BasicSkillContainer" Rows="2" Columns="3" HorizontalAlignment="Stretch" HorizontalExpand="true" Access="Public" HSeparationOverride="1" VSeparationOverride="1">
-                </GridContainer>
-                <Label Name="Skillpointslabel" MinSize="120 0" Access="Public" />
-
-                <cc:HSpacer Spacing="10" />
-                <Label Text="Лёгкие навыки" VerticalAlignment="Top" HorizontalAlignment="Center"/>
-                <cc:HLine Color="#05014a" Thickness="2" />
-                <cc:HSpacer Spacing="10" />
-
-                <GridContainer Name="EasySkillContainer" Columns="3" HorizontalAlignment="Stretch" HorizontalExpand="true" Access="Public" HSeparationOverride="1" VSeparationOverride="1">
-                </GridContainer>
-
+            <BoxContainer Orientation="Vertical"
+                          Name="InfoContainer"
+                          Visible="false"
+                          Access="Public">
+                <Label Name="ObjectivesLabel"
+                       Access="Public"
+                       Text="{Loc 'character-info-objectives-label'}"
+                       HorizontalAlignment="Center"/>
+                <BoxContainer Orientation="Vertical"
+                              Name="Objectives"
+                              Access="Public"/>
+                <cc:Placeholder Name="RolePlaceholder"
+                                Access="Public"
+                                PlaceholderText="{Loc 'character-info-roles-antagonist-text'}"/>
             </BoxContainer>
 
-
-            <BoxContainer Orientation="Vertical" Name="InfoContainer" Visible="false" Access="Public">
-                <Label Name="ObjectivesLabel" Access="Public" Text="{Loc 'character-info-objectives-label'}" HorizontalAlignment="Center"/>
-                <BoxContainer Orientation="Vertical" Name="Objectives" Access="Public"/>
-                <cc:Placeholder Name="RolePlaceholder" Access="Public" PlaceholderText="{Loc 'character-info-roles-antagonist-text'}"/>
-            </BoxContainer>
-
-            <BoxContainer Orientation="Vertical" Name="BackgroundContainer" Visible="false" Access="Public" SetWidth="660">
+            <BoxContainer Orientation="Vertical"
+                          Name="BackgroundContainer"
+                          Visible="false"
+                          Access="Public"
+                          SetWidth="660">
 
             </BoxContainer>
 
