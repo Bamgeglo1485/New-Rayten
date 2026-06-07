@@ -8,9 +8,6 @@
     snap:
     - Window
   components:
-  - type: RequiresSkill
-    basicSkills:
-      Engineering: 1
   - type: Anchorable
     flags:
     - Anchorable

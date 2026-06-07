@@ -3,9 +3,6 @@
   name: mining window
   parent: WindowRCDResistant
   components:
-  - type: RequiresSkill
-    basicSkills:
-      Engineering: 3
   - type: Sprite
     drawdepth: WallTops
     sprite: Structures/Windows/mining.rsi
@@ -58,9 +55,6 @@
     snap:
     - Window
   components:
-  - type: RequiresSkill
-    basicSkills:
-      Engineering: 3
   - type: Sprite
     drawdepth: WallTops
     sprite: Structures/Windows/mining_diagonal.rsi

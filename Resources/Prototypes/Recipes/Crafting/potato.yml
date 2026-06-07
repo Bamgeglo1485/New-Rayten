@@ -3,14 +3,12 @@
   graph: PowerCellPotato
   startNode: start
   targetNode: potatobattery
-  RequiresEngineeringLevel: 1
   category: construction-category-misc
   objectType: Item
 
 - type: construction
   id: PotatoAI
   graph: PotatoAI
-  RequiresEngineeringLevel: 2
   startNode: start
   targetNode: potatoai
   category: construction-category-misc
@@ -19,7 +17,6 @@
 - type: construction
   id: PotatoAIChip
   graph: PotatoAIChip
-  RequiresEngineeringLevel: 3
   startNode: start
   targetNode: potatoaichip
   category: construction-category-misc

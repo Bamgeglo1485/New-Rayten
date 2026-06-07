@@ -2220,9 +2220,6 @@
   name: ChemVend
   description: Probably not the coffee machine.
   components:
-  - type: RequiresSkill
-    basicSkills:
-      Medicine: 2
   - type: VendingMachine
     pack: ChemVendInventory
     offState: off

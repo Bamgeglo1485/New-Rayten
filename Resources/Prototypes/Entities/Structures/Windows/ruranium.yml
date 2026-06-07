@@ -3,9 +3,6 @@
   name: reinforced uranium window
   parent: [BaseDeltaPressureReinforcedPlasma, WindowRCDResistant]
   components:
-  - type: RequiresSkill
-    basicSkills:
-      Engineering: 2
   - type: Sprite
     drawdepth: WallTops
     sprite: Structures/Windows/reinforced_uranium_window.rsi
@@ -61,9 +58,6 @@
     snap:
     - Window
   components:
-  - type: RequiresSkill
-    basicSkills:
-      Engineering: 2
   - type: Sprite
     sprite: Structures/Windows/directional.rsi
     state: uranium_reinforced_window
@@ -115,9 +109,6 @@
     snap:
     - Window
   components:
-  - type: RequiresSkill
-    basicSkills:
-      Engineering: 2
   - type: Sprite
     drawdepth: WallTops
     sprite: Structures/Windows/reinforced_uranium_diagonal.rsi

@@ -23,8 +23,6 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.Manager;
 using Robust.Shared.Utility;
 using Content.Shared.Vanilla.Sponsor;
-using Content.Shared.Vanilla.RoleSkills;
-using Content.Shared.Vanilla.Skill;
 namespace Content.Server.Preferences.Managers
 {
     /// <summary>
@@ -178,28 +176,6 @@ namespace Content.Server.Preferences.Managers
 
                 loadouts[role.RoleName] = loadout;
             }
-            //Rayten-RoleSkills-start
-            var roleSkills = new Dictionary<string, RoleSkills>();
-
-            foreach (var role in profile.RoleSkills)
-            {
-                var roleSkill = new RoleSkills(role.RoleName)
-                {
-                    // Преобразуем ProfileBasicSkills в словарь
-                    AddedBasicSkills = role.AddedBasicSkills.ToDictionary(
-                        skill => Enum.Parse<SkillType>(skill.SkillId),
-                        skill => (SkillLevel)skill.Level
-                    ),
-
-                    // Преобразуем ProfileEasySkills в коллекцию skillType
-                    AddedEasySkills = new(role.AddedEasySkills.Select(skill => Enum.Parse<SkillType>(skill.SkillId)))
-                };
-
-                roleSkills[role.RoleName] = roleSkill;
-            }
-
-
-            //Rayten-RoleSkills-end
             return new HumanoidCharacterProfile(
                 profile.CharacterName,
                 profile.FlavorText,
@@ -220,8 +196,7 @@ namespace Content.Server.Preferences.Managers
                 (PreferenceUnavailableMode)profile.PreferenceUnavailable,
                 antags.ToHashSet(),
                 traits.ToHashSet(),
-                loadouts,
-                roleSkills //Rayten-RoleSkills
+                loadouts
             );
         }
 

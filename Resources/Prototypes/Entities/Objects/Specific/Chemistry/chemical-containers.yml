@@ -19,9 +19,6 @@
   - type: Tag
     tags:
     - ChemDispensable
-  - type: RequiresSkill
-    basicSkills:
-      Medicine: 2
 
 - type: entity
   parent: Jug

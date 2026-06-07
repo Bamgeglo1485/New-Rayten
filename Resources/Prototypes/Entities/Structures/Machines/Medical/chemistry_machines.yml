@@ -3,9 +3,6 @@
   parent: [ BaseMachinePowered, SmallConstructibleMachine ]
   abstract: true
   components:
-  - type: RequiresSkill
-    basicSkills:
-      Medicine: 3
   - type: Transform
     anchored: true
   - type: SolutionContainerMixer

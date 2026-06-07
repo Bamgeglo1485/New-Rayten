@@ -20,16 +20,6 @@
       prototypes:
         - VisitorWalter
       roleLoadout: [ RoleSurvivalExtended ]
-    - type: Skill
-      basicSkills:
-        Medicine: 3
-        Engineering: 3
-      easySkills:
-      - Piloting
-      - MusInstruments
-      - Botany
-      - Bureaucracy
-      - Research
 
 - type: randomHumanoidSettings
   id: VisitorJuniorCooker
@@ -53,13 +43,3 @@
       prototypes:
         - VisitorJessy
       roleLoadout: [ RoleSurvivalExtended ]
-    - type: Skill
-      basicSkills:
-        Weapon: 3
-        Medicine: 2
-      easySkills:
-      - Piloting
-      - MusInstruments
-      - Botany
-      - Bureaucracy
-      - Research

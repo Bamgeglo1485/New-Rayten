@@ -68,9 +68,6 @@
     - ScannersAndVessels
   - type: Item
     storedRotation: -90
-  - type: RequiresSkill
-    easySkills:
-    - Research
 
 - type: entity
   parent: AnomalyScanner

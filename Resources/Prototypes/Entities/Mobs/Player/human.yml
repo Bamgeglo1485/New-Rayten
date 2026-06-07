@@ -31,15 +31,6 @@
   id: MobHumanSyndicateAgentMedic
   name: syndicate medic
   components:
-  - type: Skill
-    basicSkills:
-      Weapon: 2
-      Medicine: 3
-    easySkills:
-    - Piloting
-    - MusInstruments
-    - Botany
-    - Bureaucracy
   - type: Loadout
     prototypes: [SyndicateReinforcementMedic]
     roleLoadout: [ RoleSurvivalSyndicate ]
@@ -49,15 +40,6 @@
   id: MobHumanSyndicateAgentSpy
   name: syndicate spy
   components:
-  - type: Skill
-    basicSkills:
-      Weapon: 2
-      Medicine: 3
-    easySkills:
-    - Piloting
-    - MusInstruments
-    - Botany
-    - Bureaucracy
   - type: Loadout
     prototypes: [SyndicateReinforcementSpy]
     roleLoadout: [ RoleSurvivalSyndicate ]
@@ -67,15 +49,6 @@
   id: MobHumanSyndicateAgentThief
   name: syndicate thief
   components:
-  - type: Skill
-    basicSkills:
-      Weapon: 2
-      Medicine: 3
-    easySkills:
-    - Piloting
-    - MusInstruments
-    - Botany
-    - Bureaucracy
   - type: Loadout
     prototypes: [SyndicateReinforcementThief]
     roleLoadout: [ RoleSurvivalSyndicate ]
@@ -85,16 +58,6 @@
   id: MobHumanSyndicateAgentNukeops # Reinforcement exclusive to nukeops uplink
   suffix: Human, NukeOps
   components:
-  - type: Skill
-    basicSkills:
-      Weapon: 2
-      Medicine: 2
-      Engineering: 2
-    easySkills:
-    - Piloting
-    - MusInstruments
-    - Botany
-    - Bureaucracy
   - type: NukeOperative
   - type: RandomMetadata
     nameSegments:

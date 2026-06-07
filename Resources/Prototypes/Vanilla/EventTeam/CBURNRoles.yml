@@ -51,17 +51,6 @@
       settings: short
   - type: Loadout
     prototypes: [MobCBURNRegularLoot]
-  - type: Skill
-    basicSkills:
-      Weapon: 3
-      Medicine: 3
-      Engineering: 3
-    easySkills:
-    - Piloting
-    - MusInstruments
-    - Botany
-    - Bureaucracy
-    - Research
 
 - type: entity
   name: Оперативник РХБЗЗ
@@ -80,17 +69,6 @@
       settings: short
   - type: Loadout
     prototypes: [MobCBURNRegularLoot]
-  - type: Skill
-    basicSkills:
-      Weapon: 3
-      Medicine: 3
-      Engineering: 3
-    easySkills:
-    - Piloting
-    - MusInstruments
-    - Botany
-    - Bureaucracy
-    - Research
 
 # экипировка
 

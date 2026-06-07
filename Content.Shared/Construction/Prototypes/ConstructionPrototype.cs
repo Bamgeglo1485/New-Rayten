@@ -1,6 +1,5 @@
 using Content.Shared.Construction.Conditions;
 using Content.Shared.Whitelist;
-using Content.Shared.Vanilla.Skill;
 using Robust.Shared.Prototypes;
 
 namespace Content.Shared.Construction.Prototypes;
@@ -23,11 +22,6 @@ public sealed partial class ConstructionPrototype : IPrototype
     public LocId? SetName;
 
     public string? Name;
-    //Rayten-Start
-    //инженерия
-    [DataField("RequiresEngineeringLevel")]
-    public SkillLevel RequiresEngineeringLevel = 0;
-    //Rayten-end
     /// <summary>
     ///     "Useful" description displayed in the construction GUI.
     /// </summary>

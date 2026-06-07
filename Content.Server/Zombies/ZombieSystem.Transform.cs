@@ -42,7 +42,6 @@ using Content.Shared.IdentityManagement;
 using Content.Shared.Tag;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
-using Content.Shared.Vanilla.Skill;
 using Content.Shared.Vanilla.Dominator;
 using Content.Shared.NPC.Prototypes;
 using Content.Shared.Roles;
@@ -238,15 +237,6 @@ public sealed partial class ZombieSystem
         {
             //This is done here because non-humanoids shouldn't get baller damage
             melee.Damage = zombiecomp.DamageOnBite;
-
-            //Rayten-start
-            var skill = EnsureComp<SkillComponent>(target);
-            skill.BasicSkills[SkillType.Weapon] = SkillLevel.Expert;
-
-            if (!TryComp<DangerMobComponent>(target, out var mobdanger))
-                mobdanger = EnsureComp<DangerMobComponent>(target);
-            mobdanger.MaxDanger = true;
-            //Rayten-end
 
             // humanoid zombies get to pry open doors and shit
             var pryComp = EnsureComp<PryingComponent>(target);

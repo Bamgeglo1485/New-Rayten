@@ -1,5 +1,4 @@
 using Robust.Shared.Prototypes;
-using Content.Shared.Vanilla.Skill;
 
 namespace Content.Shared.Vanilla.Background;
 

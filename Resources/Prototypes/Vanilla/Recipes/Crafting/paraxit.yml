@@ -1,6 +1,5 @@
 - type: construction
   id: SpanishArmyKnife
-  RequiresEngineeringLevel: 3
   graph: praxitObjects
   startNode: start
   targetNode: spanishArmyKnife
@@ -9,7 +8,6 @@
 
 - type: construction
   id: Diamond
-  RequiresEngineeringLevel: 3
   graph: praxitObjects
   startNode: start
   targetNode: diamond
@@ -18,7 +16,6 @@
 
 - type: construction
   id: Uranium
-  RequiresEngineeringLevel: 3
   graph: praxitObjects
   startNode: start
   targetNode: uranium
@@ -27,7 +24,6 @@
 
 - type: construction
   id: Plasma
-  RequiresEngineeringLevel: 3
   graph: praxitObjects
   startNode: start
   targetNode: plasma
@@ -36,7 +32,6 @@
 
 - type: construction
   id: Gold
-  RequiresEngineeringLevel: 3
   graph: praxitObjects
   startNode: start
   targetNode: gold
@@ -45,7 +40,6 @@
 
 - type: construction
   id: Silver
-  RequiresEngineeringLevel: 3
   graph: praxitObjects
   startNode: start
   targetNode: silver
@@ -54,7 +48,6 @@
 
 - type: construction
   id: Glass
-  RequiresEngineeringLevel: 3
   graph: praxitObjects
   startNode: start
   targetNode: glass
@@ -63,7 +56,6 @@
 
 - type: construction
   id: Steel
-  RequiresEngineeringLevel: 3
   graph: praxitObjects
   startNode: start
   targetNode: steel
@@ -72,7 +64,6 @@
 
 - type: construction
   id: Plastic
-  RequiresEngineeringLevel: 3
   graph: praxitObjects
   startNode: start
   targetNode: plastic
@@ -81,7 +72,6 @@
 
 - type: construction
   id: SpaceCash
-  RequiresEngineeringLevel: 3
   graph: praxitObjects
   startNode: start
   targetNode: spaceCash

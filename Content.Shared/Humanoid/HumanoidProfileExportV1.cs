@@ -8,7 +8,6 @@ using Content.Shared.Traits;
 using Robust.Shared.Enums;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
-using Content.Shared.Vanilla.RoleSkills;
 namespace Content.Shared.Humanoid;
 
 /// <summary>
@@ -79,8 +78,6 @@ public sealed partial class HumanoidCharacterProfileV1
     [DataField]
     public PreferenceUnavailableMode PreferenceUnavailable;
     //rayten-start
-    [DataField("_roleSkills")]
-    public Dictionary<string, RoleSkills> RoleSkills = new();
 
     [DataField]
     public float VoicePitch;
@@ -90,7 +87,7 @@ public sealed partial class HumanoidCharacterProfileV1
 
     public HumanoidCharacterProfile ToV2()
     {
-        return new(Name, FlavorText, Species, Voice, VoicePitch, Age, Sex, Gender, Appearance.ToV2(Species), SpawnPriority, JobPriorities, PreferenceUnavailable, AntagPreferences, TraitPreferences, Loadouts, RoleSkills);
+        return new(Name, FlavorText, Species, Voice, VoicePitch, Age, Sex, Gender, Appearance.ToV2(Species), SpawnPriority, JobPriorities, PreferenceUnavailable, AntagPreferences, TraitPreferences, Loadouts);
     }
 }
 

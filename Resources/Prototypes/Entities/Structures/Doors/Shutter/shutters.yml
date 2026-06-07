@@ -7,9 +7,6 @@
   placement:
     mode: SnapgridCenter
   components:
-  - type: RequiresSkill
-    basicSkills:
-      Engineering: 2
   - type: Anchorable
     flags:
     - Anchorable

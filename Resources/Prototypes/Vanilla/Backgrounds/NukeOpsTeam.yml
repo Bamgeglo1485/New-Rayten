@@ -28,11 +28,6 @@
     - Не входит в иерархию Синдиката — вы игнорируете приказы командира, если они кажутся глупыми (то есть всегда).
     - Пиратская экипировка.
     - Вам выдали 5 телекристаллов, правда вы не знаете как ими пользоваться...
-  skills:
-    Weapon: 3
-    Medicine: 2
-  easySkills:
-  - Piloting
   specials:
   - !type:EquipSpecial
     removeSlotID:
@@ -57,12 +52,6 @@
   description: background-nukeops-desc-YoungBlood
   specialDesc:
     - Вам выдали допонительные 5 телекристаллов в честь первого задания
-  skills:
-    Weapon: 2
-    Medicine: 2
-    Engineering: 1
-  easySkills:
-  - Piloting
   specials:
   - !type:AddItemSpecial
     items:
@@ -72,9 +61,6 @@
   id: NukeOpAnimalBackground
   name: background-nukeops-name-Animal
   description: background-nukeops-desc-Animal
-  skills:
-    Weapon: 3
-    Medicine: 3
 
 
 # Ядерный оперативник (командир)
@@ -84,12 +70,6 @@
   description: background-NukeOpComander-desc-Smart
   specialDesc:
     - Глушилка длится на 5 минут дольше.
-  skills:
-    Weapon: 3
-    Engineering: 3
-    Medicine: 2
-  easySkills:
-  - Piloting
   specials:
   - !type:RaiseEventSpecial
     events:
@@ -100,21 +80,11 @@
   id: NukeOpComanderGreedyBackground
   name: background-NukeOpComander-name-Greedy
   description: background-NukeOpComander-desc-Greedy
-  skills:
-    Weapon: 3
-    Medicine: 3
-  easySkills:
-  - Piloting
 
 - type: Background
   id: NukeOpComanderWariorBackground
   name: background-NukeOpComander-name-Warior
   description: background-NukeOpComander-desc-Warior
-  skills:
-    Weapon: 3
-    Medicine: 3
-  easySkills:
-  - Piloting
 
 # Ядерный оперативник (медик)
 
@@ -124,10 +94,6 @@
   description: background-NukeOpMedic-desc-MedEng
   specialDesc:
     - За время подготовки к миссии вы быстренького смастерили саботажного киборга Синдиката
-  skills:
-    Medicine: 3
-    Engineering: 3
-    Weapon: 1
   specials:
   - !type:AddItemSpecial
     items:
@@ -137,7 +103,4 @@
   id: NukeOpMedicWariorBackground
   name: background-NukeOpMedic-name-Warior
   description: background-NukeOpMedic-desc-Warior
-  skills:
-    Weapon: 3
-    Medicine: 3
 

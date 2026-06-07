@@ -16,11 +16,6 @@
   - type: Puller
     needsHands: false
   - type: OnDnaScanner
-  - type: Skill
-    basicSkills:
-      Weapon: 2
-      Medicine: 3
-      Engineering: 3
   - type: Bloodstream
     maxBleedAmount: 0
   - type: DamageVisuals

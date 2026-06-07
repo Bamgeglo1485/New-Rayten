@@ -6,9 +6,6 @@
   parent: BaseItem
   abstract: true
   components:
-  - type: RequiresSkill
-    basicSkills:
-      Medicine: 3
   - type: ItemSlots
   - type: ContainerContainer
     containers:

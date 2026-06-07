@@ -19,9 +19,6 @@
   id: HandheldAlertMonitor
   description: Отображает атмосферные оповещения сигнализаций станции.
   components:
-  - type: RequiresSkill
-    basicSkills:
-      Engineering: 2
   - type: ItemTogglePointLight
   - type: PointLight
     enabled: false
@@ -86,9 +83,6 @@
   id: HandheldAtmosMonitor
   description: Отображает атмосферную сеть труб станции.
   components:
-  - type: RequiresSkill
-    basicSkills:
-      Engineering: 2
   - type: ItemTogglePointLight
   - type: PointLight
     enabled: false
@@ -144,9 +138,6 @@
   id: HandheldPowerMonitor
   description: Отображает уровни энергии и питания станции.
   components:
-  - type: RequiresSkill
-    basicSkills:
-      Engineering: 2
   - type: ItemTogglePointLight
   - type: PointLight
     enabled: false

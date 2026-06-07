@@ -5,9 +5,6 @@
   placement:
     mode: SnapgridCenter
   components:
-  - type: RequiresSkill
-    basicSkills:
-      Engineering: 2
   - type: Clickable
   - type: InteractionOutline
   - type: Sprite

@@ -25,7 +25,6 @@
 - type: construction
   id: makeshiftstunprod
   graph: makeshiftstunprod
-  RequiresEngineeringLevel: 2
   startNode: start
   targetNode: msstunprod
   category: construction-category-weapons
@@ -42,7 +41,6 @@
 - type: construction
   id: pneumaticcannon
   graph: PneumaticCannon
-  RequiresEngineeringLevel: 1
   startNode: start
   targetNode: cannon
   category: construction-category-weapons
@@ -83,7 +81,6 @@
 - type: construction
   id: improvisedshotgun
   graph: ImprovisedShotgunGraph
-  RequiresEngineeringLevel: 1
   startNode: start
   targetNode: shotgun
   category: construction-category-weapons
@@ -92,7 +89,6 @@
 - type: construction
   id: ShellShotgunImprovised
   graph: ImprovisedShotgunShellGraph
-  RequiresEngineeringLevel: 1
   startNode: start
   targetNode: shell
   category: construction-category-weapons
@@ -111,7 +107,6 @@
   graph: FireBomb
   startNode: start
   targetNode: firebomb
-  RequiresEngineeringLevel: 2
   category: construction-category-weapons
   objectType: Item
 
@@ -136,7 +131,6 @@
   graph: PipeBomb
   startNode: start
   targetNode: pipebomb
-  RequiresEngineeringLevel: 2
   category: construction-category-weapons
   objectType: Item
 
@@ -177,7 +171,6 @@
   graph: scraparmor
   startNode: start
   targetNode: scraparmorfinished
-  RequiresEngineeringLevel: 1
   category: construction-category-clothing
   objectType: Item
 
@@ -186,7 +179,6 @@
   graph: scraphelmet
   startNode: start
   targetNode: scraphelmet
-  RequiresEngineeringLevel: 1
   category: construction-category-clothing
   objectType: Item
 

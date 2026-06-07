@@ -4,9 +4,6 @@
   name: blast door
   description: This one says 'BLAST DONGER'.
   components:
-  - type: RequiresSkill
-    basicSkills:
-      Engineering: 2
   - type: AccessReader
     containerAccessProvider: board
   - type: Sprite

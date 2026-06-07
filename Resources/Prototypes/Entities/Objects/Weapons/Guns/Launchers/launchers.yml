@@ -300,7 +300,6 @@
   parent: BaseItem
   id: WeaponGrapplingGun
   components:
-    - type: GunIgnoreSkill
     - type: Item
       size: Small
       shape:

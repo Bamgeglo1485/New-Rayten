@@ -4,9 +4,6 @@
   id: WeaponShotgunDoubleBarreledMakeshift
   description: Feel like a doomguy, unfortunately without hands..
   components:
-  - type: GunCanBeFall
-    RequiresWeaponLevel: 2
-    ChanceToFallPerLevel: 0.8
   - type: Item
     sprite: Vanilla/Objects/Weapons/Makeshift/double_barreled.rsi
     size: Ginormous

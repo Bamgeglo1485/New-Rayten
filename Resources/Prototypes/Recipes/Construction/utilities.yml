@@ -4,7 +4,6 @@
   graph: SurveillanceCamera
   startNode: start
   targetNode: camera
-  RequiresEngineeringLevel: 1
   category: construction-category-utilities
   objectType: Structure
   placementMode: SnapgridCenter
@@ -14,7 +13,6 @@
   graph: WallmountTelescreen
   startNode: start
   targetNode: Telescreen
-  RequiresEngineeringLevel: 2
   category: construction-category-utilities
   objectType: Structure
   placementMode: SnapgridCenter
@@ -25,7 +23,6 @@
   graph: StationMap
   startNode: start
   targetNode: station_map
-  RequiresEngineeringLevel: 2
   category: construction-category-structures
   placementMode: SnapgridCenter
   objectType: Structure
@@ -40,7 +37,6 @@
   graph: APC
   startNode: start
   targetNode: apc
-  RequiresEngineeringLevel: 2
   category: construction-category-utilities
   objectType: Structure
   placementMode: SnapgridCenter
@@ -51,7 +47,6 @@
   graph: CableTerminal
   startNode: start
   targetNode: cable_terminal
-  RequiresEngineeringLevel: 1
   category: construction-category-utilities
   objectType: Structure
   placementMode: SnapgridCenter
@@ -62,7 +57,6 @@
   graph: WallmountSubstation
   startNode: start
   targetNode: substation
-  RequiresEngineeringLevel: 2
   category: construction-category-utilities
   objectType: Structure
   placementMode: SnapgridCenter
@@ -73,7 +67,6 @@
   graph: WallmountGenerator
   startNode: start
   targetNode: generator
-  RequiresEngineeringLevel: 2
   category: construction-category-utilities
   objectType: Structure
   placementMode: SnapgridCenter
@@ -84,7 +77,6 @@
   graph: WallmountGenerator
   startNode: start
   targetNode: APU
-  RequiresEngineeringLevel: 2
   category: construction-category-utilities
   objectType: Structure
   placementMode: SnapgridCenter
@@ -96,7 +88,6 @@
   graph: DisposalMachine
   startNode: start
   targetNode: disposal_unit
-  RequiresEngineeringLevel: 2
   category: construction-category-utilities
   placementMode: SnapgridCenter
   canBuildInImpassable: false
@@ -106,7 +97,6 @@
   graph: DisposalMachine
   startNode: start
   targetNode: mailing_unit
-  RequiresEngineeringLevel: 2
   category: construction-category-utilities
   placementMode: SnapgridCenter
   canBuildInImpassable: false
@@ -116,7 +106,6 @@
   graph: DisposalPipe
   startNode: start
   targetNode: pipe
-  RequiresEngineeringLevel: 1
   category: construction-category-utilities
   placementMode: SnapgridCenter
   canBuildInImpassable: false
@@ -126,7 +115,6 @@
   graph: DisposalPipe
   startNode: start
   targetNode: tagger
-  RequiresEngineeringLevel: 1
   category: construction-category-utilities
   placementMode: SnapgridCenter
   canBuildInImpassable: false
@@ -136,7 +124,6 @@
   graph: DisposalPipe
   startNode: start
   targetNode: signaller
-  RequiresEngineeringLevel: 1
   category: construction-category-utilities
   placementMode: SnapgridCenter
   canBuildInImpassable: false
@@ -146,7 +133,6 @@
   graph: DisposalPipe
   startNode: start
   targetNode: trunk
-  RequiresEngineeringLevel: 1
   category: construction-category-utilities
   placementMode: SnapgridCenter
   canBuildInImpassable: false
@@ -156,7 +142,6 @@
   graph: DisposalPipe
   startNode: start
   targetNode: router
-  RequiresEngineeringLevel: 1
   category: construction-category-utilities
   placementMode: SnapgridCenter
   canBuildInImpassable: false
@@ -168,7 +153,6 @@
   graph: DisposalPipe
   startNode: start
   targetNode: routerflipped
-  RequiresEngineeringLevel: 1
   category: construction-category-utilities
   placementMode: SnapgridCenter
   canBuildInImpassable: false
@@ -179,7 +163,6 @@
   graph: DisposalPipe
   startNode: start
   targetNode: signal_router
-  RequiresEngineeringLevel: 1
   category: construction-category-utilities
   placementMode: SnapgridCenter
   canBuildInImpassable: false
@@ -191,7 +174,6 @@
   graph: DisposalPipe
   startNode: start
   targetNode: signal_router_flipped
-  RequiresEngineeringLevel: 1
   category: construction-category-utilities
   placementMode: SnapgridCenter
   canBuildInImpassable: false
@@ -202,7 +184,6 @@
   graph: DisposalPipe
   startNode: start
   targetNode: junction
-  RequiresEngineeringLevel: 1
   category: construction-category-utilities
   placementMode: SnapgridCenter
   canBuildInImpassable: false
@@ -214,7 +195,6 @@
   graph: DisposalPipe
   startNode: start
   targetNode: junctionflipped
-  RequiresEngineeringLevel: 1
   category: construction-category-utilities
   placementMode: SnapgridCenter
   canBuildInImpassable: false
@@ -225,7 +205,6 @@
   graph: DisposalPipe
   startNode: start
   targetNode: yJunction
-  RequiresEngineeringLevel: 1
   category: construction-category-utilities
   placementMode: SnapgridCenter
   canBuildInImpassable: false
@@ -235,7 +214,6 @@
   graph: DisposalPipe
   startNode: start
   targetNode: xJunction
-  RequiresEngineeringLevel: 1
   category: construction-category-utilities
   placementMode: SnapgridCenter
   canBuildInImpassable: false
@@ -245,7 +223,6 @@
   graph: DisposalPipe
   startNode: start
   targetNode: bend
-  RequiresEngineeringLevel: 1
   category: construction-category-utilities
   placementMode: SnapgridCenter
   canBuildInImpassable: false
@@ -256,7 +233,6 @@
   graph: AirAlarm
   startNode: start
   targetNode: air_alarm
-  RequiresEngineeringLevel: 2
   category: construction-category-structures
   placementMode: SnapgridCenter
   objectType: Structure
@@ -270,7 +246,6 @@
   graph: FireAlarm
   startNode: start
   targetNode: fire_alarm
-  RequiresEngineeringLevel: 2
   category: construction-category-structures
   placementMode: SnapgridCenter
   objectType: Structure
@@ -284,7 +259,6 @@
   graph: AirSensor
   startNode: start
   targetNode: sensor
-  RequiresEngineeringLevel: 1
   category: construction-category-structures
   placementMode: SnapgridCenter
   objectType: Structure
@@ -295,7 +269,6 @@
   graph: GasPipeSensor
   startNode: start
   targetNode: sensor
-  RequiresEngineeringLevel: 1
   category: construction-category-structures
   placementMode: AlignAtmosPipeLayers
   objectType: Structure
@@ -311,7 +284,6 @@
   graph: GasPipeSensor
   startNode: start
   targetNode: sensorAlt1
-  RequiresEngineeringLevel: 1
   category: construction-category-structures
   placementMode: AlignAtmosPipeLayers
   objectType: Structure
@@ -327,7 +299,6 @@
   graph: GasPipeSensor
   startNode: start
   targetNode: sensorAlt2
-  RequiresEngineeringLevel: 1
   category: construction-category-structures
   placementMode: AlignAtmosPipeLayers
   objectType: Structure
@@ -344,7 +315,6 @@
   graph: GasPipe
   startNode: start
   targetNode: half
-  RequiresEngineeringLevel: 1
   category: construction-category-utilities
   placementMode: AlignAtmosPipeLayers
   canBuildInImpassable: true
@@ -359,7 +329,6 @@
   graph: GasPipe
   startNode: start
   targetNode: halfAlt1
-  RequiresEngineeringLevel: 1
   category: construction-category-utilities
   placementMode: AlignAtmosPipeLayers
   canBuildInImpassable: true
@@ -374,7 +343,6 @@
   graph: GasPipe
   startNode: start
   targetNode: halfAlt2
-  RequiresEngineeringLevel: 1
   category: construction-category-utilities
   placementMode: AlignAtmosPipeLayers
   canBuildInImpassable: true
@@ -388,7 +356,6 @@
   graph: GasPipe
   startNode: start
   targetNode: straight
-  RequiresEngineeringLevel: 1
   category: construction-category-utilities
   placementMode: AlignAtmosPipeLayers
   canBuildInImpassable: true
@@ -403,7 +370,6 @@
   graph: GasPipe
   startNode: start
   targetNode: straightAlt1
-  RequiresEngineeringLevel: 1
   category: construction-category-utilities
   placementMode: AlignAtmosPipeLayers
   canBuildInImpassable: true
@@ -418,7 +384,6 @@
   graph: GasPipe
   startNode: start
   targetNode: straightAlt2
-  RequiresEngineeringLevel: 1
   category: construction-category-utilities
   placementMode: AlignAtmosPipeLayers
   canBuildInImpassable: true
@@ -433,7 +398,6 @@
   graph: GasPipe
   startNode: start
   targetNode: bend
-  RequiresEngineeringLevel: 1
   category: construction-category-utilities
   placementMode: AlignAtmosPipeLayers
   canBuildInImpassable: true
@@ -448,7 +412,6 @@
   graph: GasPipe
   startNode: start
   targetNode: bendAlt1
-  RequiresEngineeringLevel: 1
   category: construction-category-utilities
   placementMode: AlignAtmosPipeLayers
   canBuildInImpassable: true
@@ -463,7 +426,6 @@
   graph: GasPipe
   startNode: start
   targetNode: bendAlt2
-  RequiresEngineeringLevel: 1
   category: construction-category-utilities
   placementMode: AlignAtmosPipeLayers
   canBuildInImpassable: true
@@ -478,7 +440,6 @@
   graph: GasPipe
   startNode: start
   targetNode: tjunction
-  RequiresEngineeringLevel: 1
   category: construction-category-utilities
   placementMode: AlignAtmosPipeLayers
   canBuildInImpassable: true
@@ -493,7 +454,6 @@
   graph: GasPipe
   startNode: start
   targetNode: tjunctionAlt1
-  RequiresEngineeringLevel: 1
   category: construction-category-utilities
   placementMode: AlignAtmosPipeLayers
   canBuildInImpassable: true
@@ -508,7 +468,6 @@
   graph: GasPipe
   startNode: start
   targetNode: tjunctionAlt2
-  RequiresEngineeringLevel: 1
   category: construction-category-utilities
   placementMode: AlignAtmosPipeLayers
   canBuildInImpassable: true
@@ -523,7 +482,6 @@
   graph: GasPipe
   startNode: start
   targetNode: fourway
-  RequiresEngineeringLevel: 1
   category: construction-category-utilities
   placementMode: AlignAtmosPipeLayers
   canBuildInImpassable: true
@@ -538,7 +496,6 @@
   graph: GasPipe
   startNode: start
   targetNode: fourwayAlt1
-  RequiresEngineeringLevel: 1
   category: construction-category-utilities
   placementMode: AlignAtmosPipeLayers
   canBuildInImpassable: true
@@ -553,7 +510,6 @@
   graph: GasPipe
   startNode: start
   targetNode: fourwayAlt2
-  RequiresEngineeringLevel: 1
   category: construction-category-utilities
   placementMode: AlignAtmosPipeLayers
   canBuildInImpassable: true
@@ -567,7 +523,6 @@
   graph: GasPipe
   startNode: start
   targetNode: manifold
-  RequiresEngineeringLevel: 1
   category: construction-category-utilities
   placementMode: SnapgridCenter
   canBuildInImpassable: true
@@ -576,7 +531,6 @@
 - type: construction
   id: GasVentPump
   graph: GasUnary
-  RequiresEngineeringLevel: 1
   startNode: start
   targetNode: ventpump
   category: construction-category-utilities
@@ -588,7 +542,6 @@
 - type: construction
   id: GasPassiveVent
   graph: GasUnary
-  RequiresEngineeringLevel: 1
   startNode: start
   targetNode: passivevent
   category: construction-category-utilities
@@ -601,7 +554,6 @@
   id: GasVentScrubber
   graph: GasUnary
   startNode: start
-  RequiresEngineeringLevel: 1
   targetNode: ventscrubber
   category: construction-category-utilities
   placementMode: SnapgridCenter
@@ -613,7 +565,6 @@
   id: GasOutletInjector
   graph: GasUnary
   startNode: start
-  RequiresEngineeringLevel: 1
   targetNode: outletinjector
   category: construction-category-utilities
   placementMode: SnapgridCenter
@@ -627,7 +578,6 @@
   graph: GasBinary
   startNode: start
   targetNode: pressurepump
-  RequiresEngineeringLevel: 1
   category: construction-category-utilities
   placementMode: AlignAtmosPipeLayers
   canBuildInImpassable: false
@@ -644,7 +594,6 @@
   graph: GasBinary
   startNode: start
   targetNode: pressurepumpAlt1
-  RequiresEngineeringLevel: 1
   category: construction-category-utilities
   placementMode: AlignAtmosPipeLayers
   canBuildInImpassable: false
@@ -661,7 +610,6 @@
   graph: GasBinary
   startNode: start
   targetNode: pressurepumpAlt2
-  RequiresEngineeringLevel: 1
   category: construction-category-utilities
   placementMode: AlignAtmosPipeLayers
   canBuildInImpassable: false
@@ -677,7 +625,6 @@
   graph: GasBinary
   startNode: start
   targetNode: volumepump
-  RequiresEngineeringLevel: 1
   category: construction-category-utilities
   placementMode: AlignAtmosPipeLayers
   canBuildInImpassable: false
@@ -694,7 +641,6 @@
   graph: GasBinary
   startNode: start
   targetNode: volumepumpAlt1
-  RequiresEngineeringLevel: 1
   category: construction-category-utilities
   placementMode: AlignAtmosPipeLayers
   canBuildInImpassable: false
@@ -711,7 +657,6 @@
   graph: GasBinary
   startNode: start
   targetNode: volumepumpAlt2
-  RequiresEngineeringLevel: 1
   category: construction-category-utilities
   placementMode: AlignAtmosPipeLayers
   canBuildInImpassable: false
@@ -727,7 +672,6 @@
   graph: GasBinary
   startNode: start
   targetNode: passivegate
-  RequiresEngineeringLevel: 1
   category: construction-category-utilities
   placementMode: AlignAtmosPipeLayers
   canBuildInImpassable: false
@@ -744,7 +688,6 @@
   graph: GasBinary
   startNode: start
   targetNode: passivegateAlt1
-  RequiresEngineeringLevel: 1
   category: construction-category-utilities
   placementMode: AlignAtmosPipeLayers
   canBuildInImpassable: false
@@ -761,7 +704,6 @@
   graph: GasBinary
   startNode: start
   targetNode: passivegateAlt2
-  RequiresEngineeringLevel: 1
   category: construction-category-utilities
   placementMode: AlignAtmosPipeLayers
   canBuildInImpassable: false
@@ -777,7 +719,6 @@
   graph: GasBinary
   startNode: start
   targetNode: pressureregulator
-  RequiresEngineeringLevel: 1
   category: construction-category-utilities
   placementMode: AlignAtmosPipeLayers
   canBuildInImpassable: false
@@ -794,7 +735,6 @@
   graph: GasBinary
   startNode: start
   targetNode: pressureregulatorAlt1
-  RequiresEngineeringLevel: 1
   category: construction-category-utilities
   placementMode: AlignAtmosPipeLayers
   canBuildInImpassable: false
@@ -811,7 +751,6 @@
   graph: GasBinary
   startNode: start
   targetNode: pressureregulatorAlt2
-  RequiresEngineeringLevel: 1
   category: construction-category-utilities
   placementMode: AlignAtmosPipeLayers
   canBuildInImpassable: false
@@ -827,7 +766,6 @@
   graph: GasBinary
   startNode: start
   targetNode: valve
-  RequiresEngineeringLevel: 1
   category: construction-category-utilities
   placementMode: AlignAtmosPipeLayers
   canBuildInImpassable: false
@@ -844,7 +782,6 @@
   graph: GasBinary
   startNode: start
   targetNode: valveAlt1
-  RequiresEngineeringLevel: 1
   category: construction-category-utilities
   placementMode: AlignAtmosPipeLayers
   canBuildInImpassable: false
@@ -861,7 +798,6 @@
   graph: GasBinary
   startNode: start
   targetNode: valveAlt2
-  RequiresEngineeringLevel: 1
   category: construction-category-utilities
   placementMode: AlignAtmosPipeLayers
   canBuildInImpassable: false
@@ -877,7 +813,6 @@
   graph: GasBinary
   startNode: start
   targetNode: signalvalve
-  RequiresEngineeringLevel: 2
   category: construction-category-utilities
   placementMode: AlignAtmosPipeLayers
   canBuildInImpassable: false
@@ -894,7 +829,6 @@
   graph: GasBinary
   startNode: start
   targetNode: signalvalveAlt1
-  RequiresEngineeringLevel: 2
   category: construction-category-utilities
   placementMode: AlignAtmosPipeLayers
   canBuildInImpassable: false
@@ -911,7 +845,6 @@
   graph: GasBinary
   startNode: start
   targetNode: signalvalveAlt2
-  RequiresEngineeringLevel: 2
   category: construction-category-utilities
   placementMode: AlignAtmosPipeLayers
   canBuildInImpassable: false
@@ -927,7 +860,6 @@
   graph: GasBinary
   startNode: start
   targetNode: port
-  RequiresEngineeringLevel: 1
   category: construction-category-utilities
   placementMode: SnapgridCenter
   canBuildInImpassable: false
@@ -939,7 +871,6 @@
   graph: GasBinary
   startNode: start
   targetNode: dualportventpump
-  RequiresEngineeringLevel: 1
   category: construction-category-utilities
   placementMode: SnapgridCenter
   canBuildInImpassable: false
@@ -949,7 +880,6 @@
   graph: GasBinary
   startNode: start
   targetNode: radiator
-  RequiresEngineeringLevel: 1
   category: construction-category-utilities
   placementMode: SnapgridCenter
   canBuildInImpassable: false
@@ -960,7 +890,6 @@
   graph: GasBinary
   startNode: start
   targetNode: bendradiator
-  RequiresEngineeringLevel: 1
   category: construction-category-utilities
   placementMode: SnapgridCenter
   canBuildInImpassable: false
@@ -971,7 +900,6 @@
   graph: GasTrinary
   startNode: start
   targetNode: filter
-  RequiresEngineeringLevel: 2
   category: construction-category-utilities
   placementMode: SnapgridCenter
   canBuildInImpassable: false
@@ -985,7 +913,6 @@
   graph: GasTrinary
   startNode: start
   targetNode: filterflipped
-  RequiresEngineeringLevel: 2
   category: construction-category-utilities
   placementMode: SnapgridCenter
   canBuildInImpassable: false
@@ -998,7 +925,6 @@
   graph: GasTrinary
   startNode: start
   targetNode: mixer
-  RequiresEngineeringLevel: 2
   category: construction-category-utilities
   placementMode: SnapgridCenter
   canBuildInImpassable: false
@@ -1012,7 +938,6 @@
   graph: GasTrinary
   startNode: start
   targetNode: mixerflipped
-  RequiresEngineeringLevel: 2
   category: construction-category-utilities
   placementMode: SnapgridCenter
   canBuildInImpassable: false
@@ -1025,7 +950,6 @@
   graph: GasTrinary
   startNode: start
   targetNode: pneumaticvalve
-  RequiresEngineeringLevel: 1
   category: construction-category-utilities
   placementMode: SnapgridCenter
   canBuildInImpassable: false
@@ -1038,7 +962,6 @@
   graph: Intercom
   startNode: start
   targetNode: intercom
-  RequiresEngineeringLevel: 2
   category: construction-category-structures
   placementMode: SnapgridCenter
   objectType: Structure
@@ -1053,7 +976,6 @@
   graph: Timer
   startNode: start
   targetNode: signal
-  RequiresEngineeringLevel: 2
   category: construction-category-utilities
   objectType: Structure
   placementMode: SnapgridCenter
@@ -1066,7 +988,6 @@
   graph: Timer
   startNode: start
   targetNode: screen
-  RequiresEngineeringLevel: 2
   category: construction-category-utilities
   objectType: Structure
   canRotate: false
@@ -1080,7 +1001,6 @@
   graph: Timer
   startNode: start
   targetNode: brig
-  RequiresEngineeringLevel: 2
   category: construction-category-utilities
   objectType: Structure
   canRotate: false
@@ -1095,7 +1015,6 @@
   graph: WeaponEnergyTurretControlPanel
   startNode: start
   targetNode: finish
-  RequiresEngineeringLevel: 2
   category: construction-category-utilities
   objectType: Structure
   canRotate: true

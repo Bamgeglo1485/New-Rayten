@@ -3,9 +3,6 @@
   parent: [ DrinkBaseMaterialGlass, DrinkBase, DrinkBaseOpenable, DrinkBaseEmptyTrash, DrinkVisualsAll ]
   id: BaseChemistryVial
   components:
-  - type: RequiresSkill
-    basicSkills:
-      Medicine: 2
   - type: Item
     size: Tiny
   - type: Openable

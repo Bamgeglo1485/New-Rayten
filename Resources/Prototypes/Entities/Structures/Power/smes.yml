@@ -8,9 +8,6 @@
   placement:
     mode: SnapgridCenter
   components:
-    - type: RequiresSkill
-      basicSkills:
-        Engineering: 2
     - type: AmbientSound
       volume: -7
       range: 3

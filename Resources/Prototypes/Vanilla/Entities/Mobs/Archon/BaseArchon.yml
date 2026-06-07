@@ -4,9 +4,6 @@
   parent: [ SimpleSpaceMobBase, MobCombat ]
   abstract: true
   components:
-  - type: Skill
-    basicSkills:
-      Weapon: 2
   - type: ComplexInteraction
   - type: Puller
     needsHands: false

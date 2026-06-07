@@ -4,9 +4,6 @@
   name: atmospheric alerts computer
   description: Used to access the station's atmospheric automated alert system.
   components:
-  - type: RequiresSkill
-    basicSkills:
-      Engineering: 2
   - type: Computer
     board: AlertsComputerCircuitboard
   - type: Sprite
@@ -153,9 +150,6 @@
       board: !type:Container
         ents: []
       disk_slot: !type:ContainerSlot {}
-  - type: RequiresSkill
-    easySkills:
-    - Piloting
   - type: GuideHelp
     guides:
     - ShuttleCraft
@@ -303,9 +297,6 @@
   name: power monitoring computer
   description: It monitors power levels across the station.
   components:
-  - type: RequiresSkill
-    basicSkills:
-      Engineering: 2
   - type: Sprite
     layers:
     - map: ["computerLayerBody"]
@@ -520,9 +511,6 @@
   - type: GuideHelp
     guides:
     - Science
-  - type: RequiresSkill
-    easySkills:
-    - Research
 
 - type: entity
   parent: BaseComputerAiAccess
@@ -575,9 +563,6 @@
   - type: GuideHelp
     guides:
     - AnalysisConsole
-  - type: RequiresSkill
-    easySkills:
-    - Research
 
 - type: entity
   parent: BaseComputerAiAccess
@@ -811,9 +796,6 @@
   name: solar control computer
   description: A controller for solar panel arrays.
   components:
-  - type: RequiresSkill
-    basicSkills:
-      Engineering: 2
   - type: Sprite
     layers:
     - map: ["computerLayerBody"]
@@ -1226,9 +1208,6 @@
   - type: GuideHelp
     guides:
     - Cloning
-  - type: RequiresSkill
-    basicSkills:
-      Medicine: 3
 
 - type: entity
   parent: BaseComputerAiAccess

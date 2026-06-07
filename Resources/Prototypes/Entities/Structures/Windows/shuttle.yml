@@ -3,9 +3,6 @@
   name: shuttle window
   parent: [BaseDeltaPressureReinforcedGlass, WindowRCDResistant]
   components:
-  - type: RequiresSkill
-    basicSkills:
-      Engineering: 3
   - type: Sprite
     drawdepth: WallTops
     sprite: Structures/Windows/shuttle_window.rsi
@@ -61,9 +58,6 @@
     snap:
     - Window
   components:
-  - type: RequiresSkill
-    basicSkills:
-      Engineering: 3
   - type: Sprite
     drawdepth: WallTops
     sprite: Structures/Windows/shuttle_window_diagonal.rsi

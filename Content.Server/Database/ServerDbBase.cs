@@ -14,8 +14,6 @@ using Content.Shared.Database;
 using Content.Shared.Humanoid;
 using Content.Shared.Preferences;
 using Content.Shared.Roles;
-using Content.Shared.Vanilla.RoleSkills;
-using Content.Shared.Vanilla.Skill;
 using Microsoft.EntityFrameworkCore;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
@@ -53,14 +51,6 @@ namespace Content.Server.Database
                     .ThenInclude(h => h.Loadouts)
                     .ThenInclude(l => l.Groups)
                     .ThenInclude(group => group.Loadouts)
-                // RAYTEN-START
-                .Include(p => p.Profiles)
-                    .ThenInclude(h => h.RoleSkills)
-                    .ThenInclude(b => b.AddedBasicSkills)
-                .Include(p => p.Profiles)
-                    .ThenInclude(h => h.RoleSkills)
-                    .ThenInclude(b => b.AddedEasySkills)
-                // RAYTEN-END
                 .AsSplitQuery()
                 .SingleOrDefaultAsync(p => p.UserId == userId.UserId, cancel);
         }
@@ -302,43 +292,6 @@ namespace Content.Server.Database
                 profile.Loadouts.Add(dz);
             }
 
-            // RAYTEN-START
-            profile.RoleSkills.Clear();
-            foreach (var (roleId, rb) in humanoid.RoleSkills)
-            {
-                // Преобразование базовых навыков
-                var basic = rb.AddedBasicSkills
-                    .ToDictionary(
-                        kv => kv.Key.ToString(),
-                        kv => (int)kv.Value
-                    );
-
-                // Преобразование лёгких навыков
-                var easy = rb.AddedEasySkills
-                    .Select(s => s.ToString())
-                    .ToList();
-
-                var prb = new ProfileRoleSkills
-                {
-                    RoleName = roleId,
-                    AddedBasicSkills = basic
-                        .Select(pair => new ProfileBasicSkill
-                        {
-                            SkillId = pair.Key,
-                            Level = pair.Value
-                        })
-                        .ToList(),
-                    AddedEasySkills = easy
-                        .Select(skill => new ProfileEasySkill
-                        {
-                            SkillId = skill
-                        })
-                        .ToList()
-                };
-
-                profile.RoleSkills.Add(prb);
-            }
-            //RAYTEN-END
 
             return profile;
         }

@@ -19,16 +19,13 @@ using Robust.Shared.ContentPack;
 using Robust.Shared.Enums;
 using Robust.Shared.Prototypes;
 using Direction = Robust.Shared.Maths.Direction;
-using Content.Shared.Vanilla.RoleSkills;
 using Content.Shared.Roles;
-using Content.Client.Vanilla.UserInterface.Lobby.RoleSkillsUI;
 
 namespace Content.Client.Lobby.UI
 {
     [GenerateTypedNameReferences]
     public sealed partial class HumanoidProfileEditor : BoxContainer
     {
-        private RoleSkillsWindow? _roleSkillsWindow; //RAYTEN
         private readonly IClientPreferencesManager _preferencesManager;
         private readonly IConfigurationManager _cfgManager;
         private readonly IEntityManager _entManager;
@@ -334,75 +331,7 @@ namespace Content.Client.Lobby.UI
             // TODO: Check if profile matches default.
             IsDirty = true;
         }
-        //RAYTEN-START
-        private Button CreateRoleSkillsButton(JobPrototype job, IPrototypeManager protoManager)
-        {
-            var protoId = SharedRoleSkillsSystem.GetJobPrototype(job.ID);
 
-            // Сначала достаём прототип
-            if (!protoManager.TryIndex<RoleSkillsPrototype>(protoId, out var roleSkillsProto))
-            {
-                // Если прототипа нет — создаём отключённую кнопку
-                return new Button
-                {
-                    Text = Loc.GetString("background-window"),
-                    Disabled = true,
-                    StyleClasses = { "chatSelectorOptionButton" },
-                    HorizontalAlignment = HAlignment.Right,
-                    VerticalAlignment = VAlignment.Center,
-                    Margin = new Thickness(3f, 3f, 0f, 0f),
-                };
-            }
-            // Получаем RoleSkills из профиля
-            RoleSkills? roleSkills = null;
-            Profile?.RoleSkills.TryGetValue(protoId, out roleSkills);
-
-            var roleSkillsWindowBtn = new Button
-            {
-                Text = Loc.GetString("background-window"),
-                HorizontalExpand = false,
-                MinWidth = 80,
-                HorizontalAlignment = HAlignment.Right,
-                StyleClasses = { "chatSelectorOptionButton" },
-                VerticalAlignment = VAlignment.Center,
-                Margin = new Thickness(3f, 3f, 0f, 0f),
-            };
-
-            roleSkillsWindowBtn.OnPressed += args =>
-            {
-                var roleSkillsClone = roleSkills?.Clone() ?? new RoleSkills(roleSkillsProto.ID);
-                OpenRoleSkills(job, roleSkillsClone, roleSkillsProto);
-            };
-
-            return roleSkillsWindowBtn;
-        }
-
-        private void OpenRoleSkills(JobPrototype? jobProto, RoleSkills roleSkills, RoleSkillsPrototype roleSkillsProto)
-        {
-            _roleSkillsWindow?.Dispose();
-            _roleSkillsWindow = null;
-            var collection = IoCManager.Instance;
-
-            if (collection == null || _playerManager.LocalSession == null || Profile == null)
-                return;
-
-            _roleSkillsWindow = new RoleSkillsWindow(Profile, roleSkills, roleSkillsProto, collection)
-            {
-                Title = jobProto?.LocalizedName,
-            };
-            LayoutContainer.SetAnchorPreset(_roleSkillsWindow, LayoutContainer.LayoutPreset.Wide);
-            _roleSkillsWindow.Open();
-
-            _roleSkillsWindow.OnSavePressed += (savedRoleSkills) =>
-            {
-                Profile = Profile?.WithRoleSkills(savedRoleSkills);
-                IsDirty = true;
-            };
-        }
-        public void RefreshRoleSkills()
-        {
-            _roleSkillsWindow?.Dispose();
-        }
         private void SetVoice(string newVoice)
         {
             Profile = Profile?.WithVoice(newVoice);
@@ -465,7 +394,6 @@ namespace Content.Client.Lobby.UI
             RefreshAntags();
             RefreshJobs();
             RefreshLoadouts();
-            RefreshRoleSkills();
             RefreshSpecies();
             RefreshTraits();
             RefreshFlavorText();
@@ -499,10 +427,6 @@ namespace Content.Client.Lobby.UI
 
             _loadoutWindow?.Dispose();
             _loadoutWindow = null;
-            //Rayten-start
-            _roleSkillsWindow?.Dispose();
-            _roleSkillsWindow = null;
-            //Rayten-end
         }
 
         protected override void EnteredTree()

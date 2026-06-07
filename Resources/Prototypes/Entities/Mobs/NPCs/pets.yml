@@ -863,13 +863,6 @@
   id: MobMonkeyPunpun
   description: A prominent representative of monkeys with unlimited access to alcohol.
   components:
-  - type: Skill
-    basicSkills:
-      Weapon: 2
-    easySkills:
-    - MusInstruments
-    - Botany
-    - Bureaucracy
   - type: GhostRole
     prob: 1
     makeSentient: true

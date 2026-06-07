@@ -7,9 +7,6 @@
   placement:
     mode: AlignTileAny
   components:
-  - type: RequiresSkill
-    basicSkills:
-      Engineering: 2
   - type: StationAnchor
   - type: Transform
     anchored: true

@@ -10,19 +10,11 @@
   id: LoneOpsButcherBackground
   name: background-loneops-name-butcher
   description: background-loneops-desc-butcher
-  skills:
-    Weapon: 3
-    Medicine: 3
-  easySkills:
-  - Piloting
 
 - type: Background
   id: LoneOpsStandartBackground
   name: background-loneops-name-standart
   description: background-loneops-desc-standart
-  easySkills:
-  - Piloting
-  skillPoints: 11
 
 - type: Background
   id: LoneOpsFriendBackground
@@ -30,11 +22,6 @@
   description: background-loneops-desc-friend
   specialDesc:
     - Вы не антагонист
-  skills:
-    Weapon: 3
-    Medicine: 3
-  easySkills:
-  - Piloting
   specials:
   - !type:ChangeMindSpecial
     mindRoles:
@@ -46,11 +33,6 @@
   description: background-loneops-desc-cats
   specialDesc:
     - На миссию вы взяли трёх своих самых верных пушистиков
-  skills:
-    Weapon: 2
-    Medicine: 3
-  easySkills:
-  - Piloting
   specials:
   - !type:AddItemSpecial
     items:

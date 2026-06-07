@@ -10,17 +10,6 @@
     nameFormat: name-format-standard
   - type: Loadout
     prototypes: [MTFSoldier]
-  - type: Skill
-    basicSkills:
-      Weapon: 3
-      Medicine: 3
-      Engineering: 3
-    easySkills:
-    - Piloting
-    - MusInstruments
-    - Botany
-    - Bureaucracy
-    - Research
 
 - type: entity
   parent: MobEventTeamBase

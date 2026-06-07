@@ -1,9 +1,7 @@
 ﻿using Content.Shared.CharacterInfo;
 using Content.Shared.Objectives;
-using Content.Shared.Vanilla.Skill;
 using Robust.Client.Player;
 using Robust.Client.UserInterface;
-using Content.Client.Vanilla.Skill;
 
 namespace Content.Client.CharacterInfo;
 
@@ -12,12 +10,10 @@ public sealed partial class CharacterInfoSystem : EntitySystem
     [Dependency] private IPlayerManager _players = default!;
 
     public event Action<CharacterData>? OnCharacterUpdate;
-    public event Action<EntityUid>? OnskillupdateUI;
     public override void Initialize()
     {
         base.Initialize();
         SubscribeNetworkEvent<CharacterInfoEvent>(OnCharacterInfoEvent);
-        SubscribeLocalEvent<UpdateSkillUiEvent>(OnskillupdateUIEvent);
     }
 
     public void RequestCharacterInfo()
@@ -30,10 +26,6 @@ public sealed partial class CharacterInfoSystem : EntitySystem
 
         RaiseNetworkEvent(new RequestCharacterInfoEvent(GetNetEntity(entity.Value)));
     }
-    public void SendSkillExperienceEvent(SkillType skill)
-    {
-        RaisePredictiveEvent(new UseSkillPointEvent(skill));
-    }
 
     private void OnCharacterInfoEvent(CharacterInfoEvent msg, EntitySessionEventArgs args)
     {
@@ -41,12 +33,6 @@ public sealed partial class CharacterInfoSystem : EntitySystem
         var data = new CharacterData(entity, msg.JobTitle, msg.Objectives, msg.Briefing, Name(entity));
 
         OnCharacterUpdate?.Invoke(data);
-    }
-    private void OnskillupdateUIEvent(UpdateSkillUiEvent args)
-    {
-        var player = _players.LocalEntity;
-        if (player != null)
-            OnskillupdateUI?.Invoke(player.Value);
     }
 
     public List<Control> GetCharacterInfoControls(EntityUid uid)

@@ -10,7 +10,6 @@
     sprite: Vanilla/Clothing/Head/Soft/hatinvisible.rsi
   - type: InvisibleHat
   - type: Archon
-  - type: SkillInvisible
 
 - type: entity
   parent: [ClothingHeadHeadHatBaseFlipped, Archon268ClothingHeadHatInvisible]

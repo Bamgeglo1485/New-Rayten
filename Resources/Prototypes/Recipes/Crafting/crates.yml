@@ -19,7 +19,6 @@
   graph: CrateSecure
   startNode: start
   targetNode: cratesecure
-  RequiresEngineeringLevel: 1
   category: construction-category-storage
   objectType: Structure
 
@@ -28,7 +27,6 @@
   name: construction-recipe-crate-freezer
   graph: CrateFreezer
   startNode: start
-  RequiresEngineeringLevel: 1
   targetNode: done
   category: construction-category-storage
   objectType: Structure

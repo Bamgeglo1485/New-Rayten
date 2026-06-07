@@ -1751,12 +1751,6 @@
   parent: MobBaseSyndicateMonkey
   suffix: syndicate agent
   components:
-  - type: Skill
-    basicSkills:
-      Weapon: 3
-      Medicine: 1
-    easySkills:
-    - MusInstruments
     # make the player a traitor once its taken
   - type: AutoTraitor
     profile: TraitorReinforcement
@@ -1766,12 +1760,6 @@
   parent: MobBaseSyndicateMonkey
   suffix: NukeOps
   components:
-  - type: Skill
-    basicSkills:
-      Weapon: 3
-      Medicine: 2
-    easySkills:
-    - MusInstruments
   - type: NukeOperative
 
 - type: entity
@@ -1922,12 +1910,6 @@
   parent: MobBaseSyndicateKobold
   suffix: syndicate agent
   components:
-  - type: Skill
-    basicSkills:
-      Weapon: 3
-      Medicine: 1
-    easySkills:
-    - MusInstruments
     # make the player a traitor once its taken
   - type: AutoTraitor
     profile: TraitorReinforcement
@@ -1937,12 +1919,6 @@
   parent: MobBaseSyndicateKobold
   suffix: NukeOps
   components:
-  - type: Skill
-    basicSkills:
-      Weapon: 3
-      Medicine: 2
-    easySkills:
-    - MusInstruments
   - type: NukeOperative
 
 - type: entity

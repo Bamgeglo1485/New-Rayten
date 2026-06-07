@@ -21,7 +21,6 @@ using Robust.Shared.Utility;
 using Robust.Shared;
 using YamlDotNet.RepresentationModel;
 using Content.Shared.Vanilla.VoiceSpeech;
-using Content.Shared.Vanilla.RoleSkills;
 using Content.Shared.Vanilla.Sponsor;
 namespace Content.Shared.Preferences
 {
@@ -78,10 +77,6 @@ namespace Content.Shared.Preferences
         private Dictionary<string, RoleLoadout> _loadouts = new();
 
         //RAYTEN-START
-        public IReadOnlyDictionary<string, RoleSkills> RoleSkills => _roleSkills;
-
-        [DataField]
-        private Dictionary<string, RoleSkills> _roleSkills = new();
         [DataField]
         public float VoicePitch { get; set; } = DefaultVoicePitch;
         [DataField]
@@ -161,8 +156,7 @@ namespace Content.Shared.Preferences
             PreferenceUnavailableMode preferenceUnavailable,
             HashSet<ProtoId<AntagPrototype>> antagPreferences,
             HashSet<ProtoId<TraitPrototype>> traitPreferences,
-            Dictionary<string, RoleLoadout> loadouts,
-            Dictionary<string, RoleSkills> roleSkills)//Rayten-roleSkills
+            Dictionary<string, RoleLoadout> loadouts)
         {
             Name = name;
             FlavorText = flavortext;
@@ -179,7 +173,6 @@ namespace Content.Shared.Preferences
             _antagPreferences = antagPreferences;
             _traitPreferences = traitPreferences;
             _loadouts = loadouts;
-            _roleSkills = roleSkills; //Rayten-roleSkills
             var hasHighPrority = false;
             foreach (var (key, value) in _jobPriorities)
             {
@@ -211,8 +204,7 @@ namespace Content.Shared.Preferences
                 other.PreferenceUnavailable,
                 new HashSet<ProtoId<AntagPrototype>>(other.AntagPreferences),
                 new HashSet<ProtoId<TraitPrototype>>(other.TraitPreferences),
-                new Dictionary<string, RoleLoadout>(other.Loadouts),
-                new Dictionary<string, RoleSkills>(other.RoleSkills)) //Rayten-RoleSkills
+                new Dictionary<string, RoleLoadout>(other.Loadouts))
         {
         }
 
@@ -523,7 +515,6 @@ namespace Content.Shared.Preferences
             if (!_antagPreferences.SequenceEqual(other._antagPreferences)) return false;
             if (!_traitPreferences.SequenceEqual(other._traitPreferences)) return false;
             if (!Loadouts.SequenceEqual(other.Loadouts)) return false;
-            if (!RoleSkills.SequenceEqual(other.RoleSkills)) return false;
             if (FlavorText != other.FlavorText) return false;
             return Appearance.Equals(other.Appearance);
         }
@@ -702,24 +693,6 @@ namespace Content.Shared.Preferences
             }
             // Rayten-End
 
-            // Rayten-RoleSkills-start
-            var roleSkillsstoRemove = new ValueList<string>();
-
-            foreach (var (roleName, roleSkills) in _roleSkills)
-            {
-
-                if (!prototypeManager.HasIndex<RoleSkillsPrototype>(roleName))
-                {
-                    roleSkillsstoRemove.Add(roleName);
-                    continue;
-                }
-                roleSkills.EnsureValid(this, session, collection);
-            }
-
-            foreach (var value in roleSkillsstoRemove)
-                _roleSkills.Remove(value);
-            // Rayten-RoleSkills-end
-
 
             // Checks prototypes exist for all loadouts and dump / set to default if not.
             var toRemove = new ValueList<string>();
@@ -822,7 +795,6 @@ namespace Content.Shared.Preferences
             hashCode.Add(_antagPreferences);
             hashCode.Add(_traitPreferences);
             hashCode.Add(_loadouts);
-            hashCode.Add(_roleSkills);
             hashCode.Add(Name);
             hashCode.Add(FlavorText);
             hashCode.Add(Species);
@@ -856,27 +828,6 @@ namespace Content.Shared.Preferences
             copied[loadout.Role] = loadout.Clone();
             var profile = Clone();
             profile._loadouts = copied;
-            return profile;
-        }
-        public HumanoidCharacterProfile WithRoleSkills(RoleSkills roleSkills)
-        {
-            var copied = new Dictionary<string, RoleSkills>();
-
-            foreach (var proto in _roleSkills)
-            {
-
-                if (proto.Key == roleSkills.Role)
-                    continue;
-
-                copied[proto.Key] = proto.Value.Clone();
-            }
-
-            copied[roleSkills.Role] = roleSkills.Clone();
-
-            var profile = Clone();
-
-            profile._roleSkills = copied;
-
             return profile;
         }
 

@@ -63,9 +63,6 @@
           missingWires: { state: 2 }
           monitorMissing: { state: 3 }
           monitorUnsecured: { state: 4 }
-  - type: RequiresSkill
-    basicSkills:
-      Engineering: 2
 
 - type: entity
   parent: BaseStructureComputer

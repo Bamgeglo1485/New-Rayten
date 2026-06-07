@@ -18,7 +18,6 @@
     size: Large
     shape:
     - 0,0,2,1
-  - type: GunIgnoreSkill
   - type: AmmoCounter
   - type: Gun
     fireRate: 5.5
@@ -48,7 +47,6 @@
       ballistic-ammo: !type:Container
         ents: []
   - type: Archon
-  - type: SkillInvisible
   - type: StaticPrice
     price: 25000
   - type: Speech

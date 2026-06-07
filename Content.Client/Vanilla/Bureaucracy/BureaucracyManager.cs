@@ -8,7 +8,6 @@ using Robust.Shared.Utility;
 using Robust.Client.GameObjects;
 using System.Linq;
 using Robust.Shared.Prototypes;
-using Content.Shared.Vanilla.Skill;
 
 namespace Content.Client.Vanilla.Bureaucracy
 {
@@ -16,7 +15,6 @@ namespace Content.Client.Vanilla.Bureaucracy
     {
         [Dependency] private IPrototypeManager _prototypeManager = default!;
         [Dependency] private HandsSystem _handSystem = default!;
-        [Dependency] private SharedSkillSystem _skill = default!;
         private const string BaseCategory = "BaseBuro";
 
         public override void Initialize()
@@ -38,9 +36,6 @@ namespace Content.Client.Vanilla.Bureaucracy
                 return;
 
             if (!PlayerHasPen(args.User))
-                return;
-
-            if (!PlayerHasSkill(args.User))
                 return;
 
             AddDocumentCategories(args);
@@ -122,11 +117,6 @@ namespace Content.Client.Vanilla.Bureaucracy
                 return false;
 
             return true;
-        }
-        private bool PlayerHasSkill(EntityUid user)
-        {
-
-            return _skill.HasRequiredSkill(user, SkillType.Bureaucracy, WithBeep: false);
         }
     }
 }

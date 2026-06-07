@@ -35,10 +35,6 @@
   placement:
     mode: SnapgridCenter
   components:
-    - type: RequiresSkillToActivateInWorld
-    - type: RequiresSkill
-      basicSkills:
-        Engineering: 1
     - type: SubFloorHide
       visibleLayers:
       - enum.SubfloorLayers.FirstLayer
@@ -138,10 +134,6 @@
   placement:
     mode: SnapgridCenter
   components:
-    - type: RequiresSkillToActivateInWorld
-    - type: RequiresSkill
-      basicSkills:
-        Engineering: 1
     - type: SubFloorHide
       visibleLayers:
       - enum.SubfloorLayers.FirstLayer

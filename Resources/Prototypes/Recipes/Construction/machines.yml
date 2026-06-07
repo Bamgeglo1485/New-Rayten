@@ -3,7 +3,6 @@
   graph: Computer
   startNode: start
   targetNode: computer
-  RequiresEngineeringLevel: 2
   category: construction-category-machines
   placementMode: SnapgridCenter
   canBuildInImpassable: false
@@ -13,7 +12,6 @@
   graph: Machine
   startNode: start
   targetNode: machine
-  RequiresEngineeringLevel: 2
   category: construction-category-machines
   placementMode: SnapgridCenter
   canBuildInImpassable: false
@@ -22,7 +20,6 @@
 - type: construction
   id: TwoWayLeverRecipe
   graph: LeverGraph
-  RequiresEngineeringLevel: 1
   startNode: start
   targetNode: LeverNode
   category: construction-category-machines
@@ -34,7 +31,6 @@
 - type: construction
   id: LightSwitchRecipe
   graph: LightSwitchGraph
-  RequiresEngineeringLevel: 1
   startNode: start
   targetNode: LightSwitchNode
   category: construction-category-machines
@@ -49,7 +45,6 @@
 - type: construction
   id: SignalSwitchRecipe
   graph: SignalSwitchGraph
-  RequiresEngineeringLevel: 1
   startNode: start
   targetNode: SignalSwitchNode
   category: construction-category-machines
@@ -62,7 +57,6 @@
 
 - type: construction
   id: SignalButtonRecipe
-  RequiresEngineeringLevel: 1
   graph: SignalButtonGraph
   startNode: start
   targetNode: SignalButtonNode
@@ -78,7 +72,6 @@
   id: LightSwitchDirectionalRecipe
   name: construction-recipe-light-switch-directional
   graph: LightSwitchDirectionalGraph
-  RequiresEngineeringLevel: 1
   startNode: start
   targetNode: LightSwitchDirectionalNode
   category: construction-category-machines
@@ -94,7 +87,6 @@
   id: SignalSwitchDirectionalRecipe
   name: construction-recipe-signal-switch-directional
   graph: SignalSwitchDirectionalGraph
-  RequiresEngineeringLevel: 1
   startNode: start
   targetNode: SignalSwitchDirectionalNode
   category: construction-category-machines
@@ -109,7 +101,6 @@
   id: SignalButtonDirectionalRecipe
   name: construction-recipe-signal-button-directional
   graph: SignalButtonDirectionalGraph
-  RequiresEngineeringLevel: 1
   startNode: start
   targetNode: SignalButtonDirectionalNode
   category: construction-category-machines
