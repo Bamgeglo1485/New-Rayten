@@ -3,7 +3,6 @@
   graph: PortalGunGraph
   startNode: start
   targetNode: end
-  RequiresEngineeringLevel: 2
   category: construction-category-misc
   objectType: Item
 
@@ -12,7 +11,6 @@
   graph: MakeshiftPortalGunGraph
   startNode: start
   targetNode: end
-  RequiresEngineeringLevel: 3
   category: construction-category-misc
   objectType: Item
 
@@ -21,6 +19,5 @@
   graph: GorgeousPortalGunGraph
   startNode: start
   targetNode: end
-  RequiresEngineeringLevel: 3
   category: construction-category-misc
   objectType: Item

@@ -22,7 +22,6 @@
     contents:
     - id: Pill500Panacea
       amount: 3
-  - type: SkillInvisible
   - type: Archon
 
 - type: entity

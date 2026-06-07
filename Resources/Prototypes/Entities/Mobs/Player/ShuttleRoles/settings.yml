@@ -9,10 +9,6 @@
   id: VisitorHead
   parent: EventHumanoidMindShielded
   components:
-    - type: Skill
-      skillPoints: 5
-    - type: AddSkillPoints
-      Points: 10
     - type: GhostRole
       name: ghost-role-information-command-name
       description: ghost-role-information-command-description
@@ -104,8 +100,6 @@
   id: VisitorSecurity
   parent: EventHumanoidMindShielded
   components:
-    - type: Skill
-      skillPoints: 5
     - type: GhostRole
       name: ghost-role-information-security-name
       description: ghost-role-information-security-description
@@ -159,8 +153,6 @@
   id: VisitorCargonian
   parent: EventHumanoid
   components:
-    - type: Skill
-      skillPoints: 5
     - type: GhostRole
       name: ghost-role-information-cargo-name
       description: ghost-role-information-cargo-description
@@ -194,8 +186,6 @@
   id: VisitorEngineering
   parent: EventHumanoid
   components:
-    - type: Skill
-      skillPoints: 5
     - type: GhostRole
       name: ghost-role-information-engineering-name
       description: ghost-role-information-engineering-description
@@ -239,8 +229,6 @@
   id: VisitorMedical
   parent: EventHumanoid
   components:
-    - type: Skill
-      skillPoints: 5
     - type: GhostRole
       name: ghost-role-information-medical-name
       description: ghost-role-information-medical-description
@@ -334,8 +322,6 @@
   id: VisitorScience
   parent: EventHumanoid
   components:
-    - type: Skill
-      skillPoints: 5
     - type: GhostRole
       name: ghost-role-information-science-name
       description: ghost-role-information-science-description
@@ -369,10 +355,6 @@
   id: VisitorCivilian
   parent: EventHumanoid
   components:
-    - type: Skill
-      skillPoints: 5
-    - type: AddSkillPoints
-      Points: 3
     - type: GhostRole
       name: ghost-role-information-civilian-name
       description: ghost-role-information-civilian-description
@@ -581,8 +563,6 @@
   parent: EventHumanoidMindShielded
   randomizeName: false
   components:
-    - type: AddSkillPoints
-      Points: 10
     - type: GhostRole
       name: ghost-role-information-lost-challenge-commander-name
       description: ghost-role-information-lost-challenge-commander-description
@@ -604,8 +584,6 @@
   parent: EventHumanoidMindShielded
   randomizeName: false
   components:
-    - type: AddSkillPoints
-      Points: 10
     - type: GhostRole
       name: ghost-role-information-lost-challenge-commander-name
       description: ghost-role-information-lost-challenge-commander-description
@@ -627,8 +605,6 @@
   parent: EventHumanoidMindShielded
   randomizeName: false
   components:
-    - type: AddSkillPoints
-      Points: 10
     - type: GhostRole
       name: ghost-role-information-lost-challenge-commander-name
       description: ghost-role-information-lost-challenge-commander-description
@@ -650,8 +626,6 @@
   parent: EventHumanoidMindShielded
   randomizeName: false
   components:
-    - type: AddSkillPoints
-      Points: 10
     - type: GhostRole
       name: ghost-role-information-lost-challenge-commander-name
       description: ghost-role-information-lost-challenge-commander-description
@@ -673,8 +647,6 @@
   parent: EventHumanoidMindShielded
   randomizeName: false
   components:
-    - type: AddSkillPoints
-      Points: 10
     - type: GhostRole
       name: ghost-role-information-lost-challenge-commander-name
       description: ghost-role-information-lost-challenge-commander-description
@@ -696,8 +668,6 @@
   parent: EventHumanoidMindShielded
   randomizeName: false
   components:
-    - type: AddSkillPoints
-      Points: 10
     - type: GhostRole
       name: ghost-role-information-lost-challenge-commander-name
       description: ghost-role-information-lost-challenge-commander-description
@@ -719,8 +689,6 @@
   parent: EventHumanoidMindShielded
   randomizeName: false
   components:
-    - type: AddSkillPoints
-      Points: 10
     - type: GhostRole
       name: ghost-role-information-lost-challenge-commander-name
       description: ghost-role-information-lost-challenge-commander-description
@@ -746,8 +714,6 @@
   id: ChallengeCargoTechnician
   randomizeName: false
   components:
-    - type: AddSkillPoints
-      Points: 10
     - type: GhostRole
       name: ghost-role-information-lost-challenge-cargo-technican-name
       description: ghost-role-information-lost-challenge-cargo-technican-description
@@ -780,8 +746,6 @@
   id: SyndieSoldierTeamLeader
   parent: EventHumanoid
   components:
-    - type: AddSkillPoints
-      Points: 10
     - type: NpcFactionMember
       factions:
       - Syndicate
@@ -802,8 +766,6 @@
   id: SyndieSoldier
   parent: EventHumanoid
   components:
-    - type: AddSkillPoints
-      Points: 10
     - type: NpcFactionMember
       factions:
       - Syndicate
@@ -824,8 +786,6 @@
   id: SyndieVisitor
   parent: EventHumanoid
   components:
-    - type: AddSkillPoints
-      Points: 10
     - type: NpcFactionMember
       factions:
       - Syndicate
@@ -845,8 +805,6 @@
   id: PirateScooner
   parent: EventHumanoid
   components:
-    - type: AddSkillPoints
-      Points: 10
     - type: NpcFactionMember
       factions:
       - Syndicate
@@ -866,8 +824,6 @@
   id: PirateCaptainScooner
   parent: EventHumanoid
   components:
-    - type: AddSkillPoints
-      Points: 10
     - type: NpcFactionMember
       factions:
       - Syndicate
@@ -889,8 +845,6 @@
   id: VisitorBlackmarketeer
   parent: EventHumanoid
   components:
-    - type: AddSkillPoints
-      Points: 10
     - type: GhostRole
       name: ghost-role-information-blackmarketeer-name
       description: ghost-role-information-blackmarketeer-description
@@ -907,8 +861,6 @@
   id: Cossack
   parent: EventHumanoid
   components:
-    - type: AddSkillPoints
-      Points: 777
     - type: RussianAccent
     - type: ScrambledAccent
     - type: SlurredAccent

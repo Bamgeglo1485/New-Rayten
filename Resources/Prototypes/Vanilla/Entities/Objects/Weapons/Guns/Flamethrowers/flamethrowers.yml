@@ -22,7 +22,6 @@
       path: /Audio/Vanilla/Weapons/Guns/flamethrower.ogg
       params:
         volume: -3
-  - type: GunIgnoreSkill
   - type: AmmoCounter
   - type: ItemSlots
     slots:

@@ -5,9 +5,6 @@
   abstract: true
   description: A small bottle.
   components:
-  - type: RequiresSkill
-    basicSkills:
-      Medicine: 2
   - type: Tag
     tags:
     - Bottle

@@ -275,9 +275,6 @@
   placement:
     mode: SnapgridCenter
   components:
-    - type: RequiresSkill
-      basicSkills:
-        Engineering: 1
     - type: StationAiWhitelist
     - type: Sprite
       granularLayersRendering: true
@@ -323,9 +320,6 @@
   placement:
     mode: SnapgridCenter
   components:
-    - type: RequiresSkill
-      basicSkills:
-        Engineering: 1
     - type: StationAiWhitelist
     - type: Sprite
       granularLayersRendering : true

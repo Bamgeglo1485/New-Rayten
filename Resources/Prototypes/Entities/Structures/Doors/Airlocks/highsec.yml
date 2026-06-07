@@ -106,7 +106,6 @@
     boardName: wires-board-name-highsec
     layoutId: HighSec
     alwaysRandomize: true
-    requiresSkillLevel: 3
   - type: UserInterface
     interfaces:
       enum.AiUi.Key:

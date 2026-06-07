@@ -73,7 +73,6 @@
 - type: construction
   id: ClothingEyesHudMedSec
   graph: HudMedSec
-  RequiresEngineeringLevel: 2
   startNode: start
   targetNode: medsecHud
   category: construction-category-clothing
@@ -98,7 +97,6 @@
 - type: construction
   id: ClothingEyesGlassesSecurity
   graph: GlassesSecHUD
-  RequiresEngineeringLevel: 1
   startNode: start
   targetNode: glassesSec
   category: construction-category-clothing
@@ -114,7 +112,6 @@
 
 - type: construction
   id: ClothingHeadHelmetJustice
-  RequiresEngineeringLevel: 1
   graph: HelmetJustice
   startNode: start
   targetNode: helmet

@@ -2,9 +2,6 @@
   id: BaseMechPart
   abstract: true
   components:
-  - type: RequiresSkill
-    basicSkills:
-      Engineering: 2
   - type: Clickable
   - type: InteractionOutline
   - type: CollisionWake

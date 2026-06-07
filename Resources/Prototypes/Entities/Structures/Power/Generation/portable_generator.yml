@@ -130,9 +130,6 @@
   id: PortableGeneratorPacman
   suffix: Plasma, 30 kW
   components:
-    - type: RequiresSkill
-      basicSkills:
-        Engineering: 1
     - type: Sprite
       layers:
         - state: portgen0
@@ -194,9 +191,6 @@
   id: PortableGeneratorSuperPacman
   suffix: Uranium, 50 kW
   components:
-    - type: RequiresSkill
-      basicSkills:
-        Engineering: 2
     - type: Sprite
       layers:
         - state: portgen1

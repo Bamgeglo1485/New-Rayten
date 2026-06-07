@@ -38,6 +38,3 @@
   # - type: GuideHelp
   #   guides:
   #   - Xenoarchaeology
-  - type: RequiresSkill
-    easySkills:
-    - Research

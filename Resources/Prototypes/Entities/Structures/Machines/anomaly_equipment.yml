@@ -329,6 +329,3 @@
   - type: GuideHelp
     guides:
     - AnomalousResearch
-  - type: RequiresSkill
-    easySkills:
-    - Research

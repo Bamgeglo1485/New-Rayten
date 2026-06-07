@@ -48,10 +48,6 @@
         - MachineMask
         layer:
         - MachineLayer
-  - type: RequiresSkill
-    basicSkills:
-      Medicine: 2
-
 
 - type: entity
   id: ChemDispenser

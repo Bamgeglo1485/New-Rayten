@@ -2,7 +2,6 @@
   id: ModularGrenadeRecipe
   graph: ModularGrenadeGraph
   startNode: start
-  RequiresEngineeringLevel: 2
   targetNode: grenade
   category: construction-category-weapons
   objectType: Item
@@ -10,7 +9,6 @@
 - type: construction
   id: ModularMineRecipe
   graph: ModularMineGraph
-  RequiresEngineeringLevel: 2
   startNode: start
   targetNode: mine
   category: construction-category-weapons

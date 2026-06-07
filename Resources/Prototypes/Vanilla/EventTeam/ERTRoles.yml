@@ -123,17 +123,6 @@
   components:
   - type: Loadout
     prototypes: [ERTLeaderLoot]
-  - type: Skill
-    basicSkills:
-      Weapon: 3
-      Medicine: 3
-      Engineering: 3
-    easySkills:
-    - Piloting
-    - MusInstruments
-    - Botany
-    - Bureaucracy
-    - Research
 
 - type: entity
   name: медик ОБР
@@ -143,17 +132,6 @@
   components:
   - type: Loadout
     prototypes: [ERTMedicLoot]
-  - type: Skill
-    basicSkills:
-      Weapon: 3
-      Medicine: 3
-      Engineering: 3
-    easySkills:
-    - Piloting
-    - MusInstruments
-    - Botany
-    - Bureaucracy
-    - Research
 
 - type: entity
   name: Инженер ОБР
@@ -163,17 +141,6 @@
   components:
   - type: Loadout
     prototypes: [ERTEngineerLoot]
-  - type: Skill
-    basicSkills:
-      Weapon: 3
-      Medicine: 3
-      Engineering: 3
-    easySkills:
-    - Piloting
-    - MusInstruments
-    - Botany
-    - Bureaucracy
-    - Research
 
 - type: entity
   name: оперативник ОБР
@@ -183,17 +150,6 @@
   components:
   - type: Loadout
     prototypes: [ERTRegularLoot]
-  - type: Skill
-    basicSkills:
-      Weapon: 3
-      Medicine: 3
-      Engineering: 3
-    easySkills:
-    - Piloting
-    - MusInstruments
-    - Botany
-    - Bureaucracy
-    - Research
 
 # экипировка
 - type: startingGear

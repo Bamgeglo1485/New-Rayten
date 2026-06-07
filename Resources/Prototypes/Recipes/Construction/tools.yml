@@ -9,7 +9,6 @@
 - type: construction
   id: LogicGate
   graph: LogicGate
-  RequiresEngineeringLevel: 1
   startNode: start
   targetNode: logic_gate
   category: construction-category-tools
@@ -18,7 +17,6 @@
 - type: construction
   id: EdgeDetector
   graph: LogicGate
-  RequiresEngineeringLevel: 1
   startNode: start
   targetNode: edge_detector
   category: construction-category-tools
@@ -27,7 +25,6 @@
 - type: construction
   id: PowerSensor
   graph: LogicGate
-  RequiresEngineeringLevel: 1
   startNode: start
   targetNode: power_sensor
   category: construction-category-tools
@@ -36,7 +33,6 @@
 - type: construction
   id: MemoryCell
   graph: LogicGate
-  RequiresEngineeringLevel: 1
   startNode: start
   targetNode: memory_cell
   category: construction-category-tools

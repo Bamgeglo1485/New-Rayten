@@ -3,9 +3,6 @@
   name: plasma window
   parent: [BaseDeltaPressurePlasma, WindowRCDResistant]
   components:
-  - type: RequiresSkill
-    basicSkills:
-      Engineering: 1
   - type: Sprite
     drawdepth: WallTops
     sprite: Structures/Windows/plasma_window.rsi
@@ -58,9 +55,6 @@
     snap:
     - Window
   components:
-  - type: RequiresSkill
-    basicSkills:
-      Engineering: 1
   - type: Sprite
     sprite: Structures/Windows/directional.rsi
     state: plasma_window
@@ -107,9 +101,6 @@
     snap:
     - Window
   components:
-  - type: RequiresSkill
-    basicSkills:
-      Engineering: 1
   - type: Sprite
     drawdepth: WallTops
     sprite: Structures/Windows/plasma_diagonal.rsi

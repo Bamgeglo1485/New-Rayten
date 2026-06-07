@@ -102,9 +102,6 @@
   id: WallBrick
   name: brick wall
   components:
-  - type: RequiresSkill
-    basicSkills:
-      Engineering: 1
   - type: Tag
     tags:
       - Wall
@@ -138,9 +135,6 @@
   id: WallClock
   name: clock wall
   components:
-  - type: RequiresSkill
-    basicSkills:
-      Engineering: 2
   - type: Sprite
     sprite: Structures/Walls/clock.rsi
   - type: Icon
@@ -170,9 +164,6 @@
   id: WallClown
   name: bananium wall
   components:
-  - type: RequiresSkill
-    basicSkills:
-      Engineering: 1
   - type: Sprite
     sprite: Structures/Walls/clown.rsi
   - type: Icon
@@ -218,9 +209,6 @@
   name: meat wall
   description: Sticky.
   components:
-  - type: RequiresSkill
-    basicSkills:
-      Engineering: 1
   - type: Tag
     tags:
       - Wall
@@ -254,9 +242,6 @@
   id: WallCult
   name: cult wall
   components:
-  - type: RequiresSkill
-    basicSkills:
-      Engineering: 1
   - type: Sprite
     sprite: Structures/Walls/cult.rsi
   - type: Icon
@@ -284,9 +269,6 @@
   name: debug wall
   suffix: DEBUG
   components:
-  - type: RequiresSkill
-    basicSkills:
-      Engineering: 1
   - type: Tag
     tags:
       - Wall
@@ -316,9 +298,6 @@
   id: WallDiamond
   name: diamond wall
   components:
-  - type: RequiresSkill
-    basicSkills:
-      Engineering: 1
   - type: Sprite
     sprite: Structures/Walls/diamond.rsi
   - type: Icon
@@ -349,9 +328,6 @@
   id: WallGold
   name: gold wall
   components:
-  - type: RequiresSkill
-    basicSkills:
-      Engineering: 1
   - type: Sprite
     sprite: Structures/Walls/gold.rsi
   - type: Icon
@@ -396,9 +372,6 @@
   id: WallIce
   name: ice wall
   components:
-  - type: RequiresSkill
-    basicSkills:
-      Engineering: 1
   - type: Sprite
     sprite: Structures/Walls/ice.rsi
   - type: Icon
@@ -425,9 +398,6 @@
   id: WallPlasma
   name: plasma wall
   components:
-  - type: RequiresSkill
-    basicSkills:
-      Engineering: 1
   - type: Sprite
     sprite: Structures/Walls/plasma.rsi
   - type: Icon
@@ -463,9 +433,6 @@
   id: WallPlastic
   name: plastic wall
   components:
-  - type: RequiresSkill
-    basicSkills:
-      Engineering: 1
   - type: Sprite
     sprite: Structures/Walls/plastic.rsi
   - type: Icon
@@ -500,9 +467,6 @@
   name: plastitanium wall
   suffix: indestructible
   components:
-    - type: RequiresSkill
-      basicSkills:
-        Engineering: 3
     - type: Sprite
       sprite: Structures/Walls/plastitanium.rsi
     - type: Icon
@@ -574,9 +538,6 @@
   name: plastitanium wall
   suffix: diagonal
   components:
-  - type: RequiresSkill
-    basicSkills:
-      Engineering: 3
   - type: Sprite
     drawdepth: Walls
     sprite: Structures/Walls/plastitanium_diagonal.rsi
@@ -606,9 +567,6 @@
   id: WallReinforced
   name: reinforced wall
   components:
-  - type: RequiresSkill
-    basicSkills:
-      Engineering: 2
   - type: Sprite
     sprite: Structures/Walls/solid.rsi
   - type: Icon
@@ -701,9 +659,6 @@
   id: WallReinforcedDiagonal
   name: reinforced wall
   components:
-  - type: RequiresSkill
-    basicSkills:
-      Engineering: 2
   - type: Sprite
     drawdepth: Walls
     sprite: Structures/Walls/reinforced_diagonal.rsi
@@ -737,9 +692,6 @@
   id: WallRiveted
   name: riveted wall
   components:
-  - type: RequiresSkill
-    basicSkills:
-      Engineering: 3
   - type: Sprite
     sprite: Structures/Walls/riveted.rsi
   - type: Icon
@@ -772,9 +724,6 @@
   id: WallSandstone
   name: sandstone wall
   components:
-  - type: RequiresSkill
-    basicSkills:
-      Engineering: 1
   - type: Sprite
     sprite: Structures/Walls/sandstone.rsi
   - type: Icon
@@ -805,9 +754,6 @@
   id: WallSilver
   name: silver wall
   components:
-  - type: RequiresSkill
-    basicSkills:
-      Engineering: 1
   - type: Sprite
     sprite: Structures/Walls/silver.rsi
   - type: Icon
@@ -842,9 +788,6 @@
   id: WallShuttleDiagonal
   name: shuttle wall
   components:
-  - type: RequiresSkill
-    basicSkills:
-      Engineering: 3
   - type: Sprite
     drawdepth: Walls
     sprite: Structures/Walls/shuttle_diagonal.rsi
@@ -904,9 +847,6 @@
   id: WallShuttle
   name: shuttle wall
   components:
-  - type: RequiresSkill
-    basicSkills:
-      Engineering: 3
   - type: Damageable
     damageModifierSet: StructuralMetallicStrong
   - type: Injurable
@@ -970,9 +910,6 @@
   id: WallSolid
   name: solid wall
   components:
-  - type: RequiresSkill
-    basicSkills:
-      Engineering: 1
   - type: Sprite
     sprite: Structures/Walls/solid.rsi
   - type: WallReplacementMarker
@@ -1007,9 +944,6 @@
   id: WallSolidDiagonal
   name: solid wall
   components:
-  - type: RequiresSkill
-    basicSkills:
-      Engineering: 1
   - type: Sprite
     drawdepth: Walls
     sprite: Structures/Walls/solid_diagonal.rsi
@@ -1036,9 +970,6 @@
   id: WallSolidRust
   suffix: rusted
   components:
-  - type: RequiresSkill
-    basicSkills:
-      Engineering: 1
   - type: Sprite
     sprite: Structures/Walls/solid_rust.rsi
   - type: Icon
@@ -1182,9 +1113,6 @@
   id: WallUranium
   name: uranium wall
   components:
-  - type: RequiresSkill
-    basicSkills:
-      Engineering: 1
   - type: Sprite
     sprite: Structures/Walls/uranium.rsi
   - type: Icon
@@ -1228,9 +1156,6 @@
   name: wood wall
   description: The traditional greytide defense.
   components:
-  - type: RequiresSkill
-    basicSkills:
-      Engineering: 1
   - type: Sprite
     sprite: Structures/Walls/wood.rsi
   - type: Icon
@@ -1261,9 +1186,6 @@
   name: web wall
   description: Keeps the spiders in and the greytide out.
   components:
-  - type: RequiresSkill
-    basicSkills:
-      Engineering: 1
   - type: MeleeSound
     soundGroups:
       Brute:
@@ -1306,9 +1228,6 @@
   id: WallNecropolis
   name: stone wall
   components:
-  - type: RequiresSkill
-    basicSkills:
-      Engineering: 1
   - type: Sprite
     sprite: Structures/Walls/necropolis.rsi
   - type: Icon
@@ -1330,9 +1249,6 @@
   id: WallMining
   name: mining wall
   components:
-  - type: RequiresSkill
-    basicSkills:
-      Engineering: 3
   - type: Sprite
     sprite: Structures/Walls/mining.rsi
   - type: Icon
@@ -1359,9 +1275,6 @@
   id: WallMiningDiagonal
   name: mining wall
   components:
-  - type: RequiresSkill
-    basicSkills:
-      Engineering: 3
   - type: Sprite
     drawdepth: Walls
     sprite: Structures/Walls/mining_diagonal.rsi

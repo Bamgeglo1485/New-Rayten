@@ -14,12 +14,6 @@
   description: background-closetskeleton-desc-Brainless
   specialDesc:
     - Вы не антагонист
-  skills:
-    Research: 3
-    Engineering: 3
-  easySkills:
-  - Botany
-  - Bureaucracy
   specials:
   - !type:ChangeMindSpecial
     mindRoles:
@@ -35,8 +29,6 @@
     - Вы не обладаете интеллектом
     - Вы умеете призывать пироги
     - Шутовской наряд
-  easySkills:
-  - MusInstruments
   specials:
   - !type:ChangeMindSpecial
     mindRoles:
@@ -64,12 +56,6 @@
   specialDesc:
     - Вы не антагонист
     - У вас есть клеймор и броня
-  skills:
-    Medicine: 2
-    Weapon: 3
-  easySkills:
-  - Botany
-  - MusInstruments
   specials:
   - !type:EquipSpecial
     removeSlotID:
@@ -84,9 +70,6 @@
   specialDesc:
     - Вы антагонист
     - Вы не обладаете интеллектом
-  skills:
-    Weapon: 3
-    Medicine: 2
   specials:
   - !type:ChangeMindSpecial
     mindRoles:
@@ -107,9 +90,6 @@
     - Вы антагонист
     - Вы не обладаете интеллектом
     - Вы Пацифист
-  skills:
-    Weapon: 3
-    Medicine: 2
   specials:
   - !type:ChangeMindSpecial
     mindRoles:
@@ -129,11 +109,6 @@
   description: background-closetskeleton-desc-Saboteur
   specialDesc:
     - Вы антагонист
-  skills:
-    Weapon: 3
-    Engineering: 1
-  easySkills:
-  - Piloting
   specials:
   - !type:AddComponentsSpecial
     components:

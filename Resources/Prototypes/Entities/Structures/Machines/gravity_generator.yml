@@ -6,9 +6,6 @@
   placement:
     mode: AlignTileAny
   components:
-  - type: RequiresSkill
-    basicSkills:
-      Engineering: 2
   - type: StationAiWhitelist
   - type: AmbientSound
     enabled: false
@@ -90,9 +87,6 @@
   suffix: Charged
   description: It's what keeps you to the floor, now in fun size.
   components:
-  - type: RequiresSkill
-    basicSkills:
-      Engineering: 2
   - type: StationAiWhitelist
   - type: Sprite
     sprite: Structures/Machines/gravity_generator_mini.rsi

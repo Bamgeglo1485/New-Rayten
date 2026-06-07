@@ -4,9 +4,6 @@
   name: air alarm
   description: An air alarm. Alarms... air?
   components:
-  - type: RequiresSkill
-    basicSkills:
-      Engineering: 2
   - type: StationAiWhitelist
   - type: Electrified
     enabled: false

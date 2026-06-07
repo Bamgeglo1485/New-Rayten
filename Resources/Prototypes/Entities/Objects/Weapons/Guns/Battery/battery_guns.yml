@@ -751,7 +751,6 @@
   id: WeaponPistolCHIMP
   description: Just because it's a little C.H.I.M.P. doesn't mean it can't punch like an A.P.E.
   components:
-  - type: GunIgnoreSkill
   - type: Sprite
     sprite: Vanilla/Objects/Weapons/Guns/Revolvers/chimp.rsi # Rayten-Resprites
     layers:
@@ -799,7 +798,6 @@
   id: WeaponPistolCHIMPUpgraded
   suffix: Syndicate
   components:
-  - type: GunIgnoreSkill
   - type: BatteryWeaponFireModes
     fireModes:
     - proto: AnomalousParticleDeltaStrong
@@ -847,9 +845,6 @@
   id: WeaponEnergyShotgun
   description: A one-of-a-kind prototype energy weapon that uses various shotgun configurations. It offers the possibility of both lethal and non-lethal shots, making it a versatile weapon.
   components:
-  - type: GunCanBeFall
-    RequiresWeaponLevel: 2
-    ChanceToFallPerLevel: 0.5
   - type: Sprite
     sprite: Vanilla/Objects/Weapons/Guns/Battery/energy_shotgun.rsi # Rayten-Resprites
     layers:
