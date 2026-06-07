@@ -165,7 +165,7 @@ namespace Content.Client.Construction.UI
             bool isItem,
             bool isFavorite)
         {
-
+            BuildButton.Disabled = false;
             BuildButton.Text = Loc.GetString(isItem ? "construction-menu-place-ghost" : "construction-menu-craft");
             TargetName.SetMessage(name);
             TargetDesc.SetMessage(description);
