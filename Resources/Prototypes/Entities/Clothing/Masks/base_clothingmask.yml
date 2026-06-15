@@ -11,6 +11,15 @@
     slots: [mask]
   - type: StaticPrice
     price: 25
+  - type: Appearance
+  - type: Stainable
+    clothingVisuals:
+      mask:
+      - sprite: _Funkystation/Effects/blood.rsi
+        state: maskblood
+    iconVisuals:
+    - sprite: _Funkystation/Effects/blood.rsi
+      state: maskbloodicon
 
 - type: entity
   abstract: true
@@ -45,11 +54,17 @@
       Cloth: 50
   - type: Edible
     requiresSpecialDigestion: true
-  - type: Solution
-    solution:
-      reagents:
-      - ReagentId: Fiber
-        Quantity: 15
+  # FUNKY STATION STARTS
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 10
+        reagents:
+        - ReagentId: Fiber
+          Quantity: 10
+      stain:
+        maxVol: 5
+  # FUNKY STATION ENDS
   - type: Tag
     tags:
     - ClothMade
