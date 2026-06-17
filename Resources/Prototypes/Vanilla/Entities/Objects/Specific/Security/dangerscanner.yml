@@ -12,7 +12,6 @@
 
 - type: entity
   name: сканер угрозы
-  parent: [BaseMachine, SecondSecurityContraband]
   id: DangerScanner
   description: Напольная установка, сканирующая всех кто на неё наступит
   components:
