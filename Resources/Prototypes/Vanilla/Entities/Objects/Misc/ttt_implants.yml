@@ -116,7 +116,7 @@
     useDelay: 1
     iconOn:
       sprite: Objects/Devices/chameleon_projector.rsi
-      state: icon-on
+      state: powered
     icon:
       sprite: Objects/Devices/chameleon_projector.rsi
       state: icon
