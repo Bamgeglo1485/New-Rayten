@@ -23,7 +23,6 @@
   dummyEntity: WeaponPistolMk58
   equipment:
     pocket1: WeaponPistolMk58
-    #pocket2: PortableDangerScanner
   storage:
     back:
     - MagazinePistol

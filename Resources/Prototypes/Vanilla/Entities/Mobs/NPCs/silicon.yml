@@ -23,8 +23,8 @@
     - NanoTrasen
   - type: PreventInserting
   - type: MovementSpeedModifier
-    baseWalkSpeed: 2.5
-    baseSprintSpeed: 4.5
+    baseWalkSpeed: 3.5
+    baseSprintSpeed: 3.5
   - type: HTN
     rootTask:
       task: SecuritronCompound
@@ -78,11 +78,12 @@
     damage: 35
     sound: /Audio/Weapons/egloves.ogg
   - type: Gun
+    projectileSpeed: 15
     fireRate: 0.5
     soundGunshot:
       path: /Audio/Vanilla/Weapons/Guns/Gunshots/dominator.ogg
   - type: BatteryAmmoProvider
-    proto: DominatorLethalShot
+    proto: BulletEnergyTurretDisabler
     fireCost: 125
   - type: Battery
     maxCharge: 2000

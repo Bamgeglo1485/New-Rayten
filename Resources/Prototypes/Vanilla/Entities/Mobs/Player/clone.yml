@@ -1,0 +1,11 @@
+- type: cloningSettings
+  id: InstantRespawn
+  parent: [BaseClone, Antag]
+  forceCloning: false
+  copyEquipment:
+  - idcard
+  - innerclothing
+  - feet
+  - eyes
+  copyInternalStorage: false
+  copyImplants: false
