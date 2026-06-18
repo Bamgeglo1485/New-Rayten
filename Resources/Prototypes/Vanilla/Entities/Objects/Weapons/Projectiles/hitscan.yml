@@ -7,7 +7,6 @@
     damage:
       types:
         Heat: 20
-        Cellular: 10
   - type: HitscanBasicVisuals
     muzzleFlash:
       sprite: Objects/Weapons/Guns/Projectiles/projectiles.rsi
@@ -26,7 +25,7 @@
   - type: DangerMobCollider
     minDanger: 6
   - type: HitscanStaminaDamage
-    staminaDamage: 40
+    staminaDamage: 20
   - type: HitscanBasicVisuals
     muzzleFlash:
       sprite: Objects/Weapons/Guns/Projectiles/projectiles.rsi
@@ -47,8 +46,7 @@
   - type: HitscanBasicDamage
     damage:
       types:
-        Heat: 8
-        Cellular: 4
+        Heat: 15
   - type: HitscanBasicVisuals
     muzzleFlash:
       sprite: Objects/Weapons/Guns/Projectiles/projectiles.rsi
@@ -68,7 +66,7 @@
   - type: DangerMobCollider
     minDanger: 6
   - type: HitscanStaminaDamage
-    staminaDamage: 15
+    staminaDamage: 10
   - type: HitscanBasicVisuals
     muzzleFlash:
       sprite: Objects/Weapons/Guns/Projectiles/projectiles.rsi

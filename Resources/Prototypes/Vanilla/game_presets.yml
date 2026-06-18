@@ -1,0 +1,16 @@
+- type: gamePreset
+  id: InstantRespawn
+  alias:
+  - extended
+  - shittersafari
+  name: Безответственный
+  showInVote: false
+  description: НаноТрейзен внедрило в станцию автоматическую систему клонирования членов экипажа после смерти.
+  rules:
+  - TeamDeathMatch
+  - ArchonEventScheduler
+  - BasicStationEventScheduler
+  - MeteorSwarmScheduler
+  - SpaceTrafficControlEventScheduler
+  - BasicRoundstartVariation
+  - InstantRespawn

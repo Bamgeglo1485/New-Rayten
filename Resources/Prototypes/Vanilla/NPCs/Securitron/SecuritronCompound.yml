@@ -2,9 +2,9 @@
   id: SecuritronCompound
   branches:
   #1. Найти и убить опасных существ
-    #- tasks:
-        #- !type:HTNCompoundTask
-          #task: KillDangerMobsCompound
+    - tasks:
+        - !type:HTNCompoundTask
+          task: KillDangerMobsCompound
   #2. Не давай себя таскать
     - tasks:
         - !type:HTNCompoundTask
