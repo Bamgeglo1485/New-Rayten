@@ -11,8 +11,8 @@ namespace Content.Server.Vanilla.CompoundZ.Commands;
 [AdminCommand(AdminFlags.Debug)]
 public sealed partial class MakeSuperCommand : IConsoleCommand
 {
-    [Dependency] private readonly IEntityManager _entityManager = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IEntityManager _entityManager = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
 
     public string Command => "makesuper";
     public string Description => "Даёт указанному объекту суперсилу";
