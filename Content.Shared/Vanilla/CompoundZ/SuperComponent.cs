@@ -21,7 +21,7 @@ public sealed partial class SuperComponent : Component
     public SoundSpecifier? UnsuperedSound = new SoundPathSpecifier("/Audio/Vanilla/Ambience/Antag/Unsuper.ogg");
 }
 
-[Prototype("superAbility")]
+[Prototype]
 public sealed partial class SuperAbilityPrototype : IPrototype
 {
     [IdDataField]
