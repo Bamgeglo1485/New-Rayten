@@ -1,0 +1,289 @@
+- type: superAbility
+  id: ZaWarudo
+  description: Остановка времени на 5 секунд. Но вы теперь вампир и должны высасывать кровь, чтобы не умереть(чтобы всосать кровь, просто встаньте около лужи крови, не пейте)
+  actions:
+  - ActionTimeStop5SecLowDelay
+  unremovableComponents:
+  - type: BloodSucker
+    heal:
+      types:
+        Blunt: 0
+    bloodlessPenalty:
+      types:
+        Heat: 10
+
+- type: superAbility
+  id: SuperSpeed
+  description: Суперскорость. Вы можете делать быстрые рывки и ускоряться путём блюспейса. Но у вас сверхбыстрый голод и очень низкая выносливость.
+  components:
+  - type: JumpAbility
+    jumpThrowSpeed: 60
+    jumpSound: /Audio/Vanilla/Effects/Actions/a-train-dash.ogg
+  - type: BlueSpaceSyncAbility
+    enterSound:
+      path: /Audio/Vanilla/Effects/Actions/a-train.ogg
+      params:
+        volume: -3
+    duration: 10
+    action: ActionBlueSpaceSyncSuper
+  unremovableComponents:
+  - type: Hunger
+    baseDecayRate: 0.2
+  - type: Stamina
+    baseCritThreshold: 15
+
+- type: superAbility
+  id: Splode
+  description: Взрывное касание. Вы можете превращать вещи в бомбы и даже себя. Но у вас самого повышенный урон от взрывов.
+  unremovableComponents:
+  - type: ExplosionResistance
+    damageCoefficient: 2.0
+  actions:
+  - ActionSplodeItem
+  - ActionSelfSplode
+
+- type: superAbility
+  id: LaserEyes
+  description: Лазер из глаз. При атаке вы выпускаете лазеры из глаз(пкм). Но вы сами уязвимы к лазерам.
+  components:
+  - type: BatterySelfRecharger
+    autoRechargeRate: 40
+  - type: Gun
+    fireRate: 8.0
+    useKey: false
+    selectedMode: FullAuto
+    availableModes:
+      - FullAuto
+    soundGunshot: /Audio/Weapons/Guns/Gunshots/laser.ogg
+  - type: BatteryAmmoProvider
+    proto: EyesLaser
+    fireCost: 100
+  - type: Battery
+    maxCharge: 1000
+    startingCharge: 1000
+  unremovableComponents:
+  - type: Damageable
+    damageModifierSet: LaserEyes
+
+- type: entity
+  parent: BasicHitscan
+  id: EyesLaser
+  name: бжжж
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: HitscanBasicDamage
+    damage:
+      types:
+        Heat: 4
+        Structural: 10
+
+- type: damageModifierSet
+  id: LaserEyes
+  coefficients:
+    Heat: 4.0
+
+- type: superAbility
+  id: HeatVision
+  description: Тепловизор. Вы видите живых существ через стены, защищены от вспышек, сварки, здоровья и видите должности.
+  components:
+  - type: ThermalVisionOverlay
+  - type: ShowJobIcons
+  - type: ShowHealthBars
+  - type: ShowHealthIcons
+  - type: FlashImmunity
+  - type: EyeProtection
+
+- type: superAbility
+  id: Invinsible
+  description: Скрытность. Вы невидимы, а также видите живых существ через стены, защищены от вспышек, сварки, здоровья и видите должности.
+  components:
+  - type: ThermalVisionOverlay
+  - type: ShowJobIcons
+  - type: ShowHealthBars
+  - type: ShowHealthIcons
+  - type: FlashImmunity
+  - type: EyeProtection
+  - type: Stealth
+    hadOutline: true
+  - type: StealthOnMove
+    passiveVisibilityRate: -1
+    movementVisibilityRate: 0.20
+
+- type: superAbility
+  id: Regeneration
+  description: Регенерация. Вы сверхбыстро регенерируете и автоматически реанимируетесь, но вы теперь пацифист и имеете крайне низкую выносливость.
+  unremovableComponents:
+  - type: Pacified
+  - type: Stamina
+    baseCritThreshold: 15
+  components:
+  - type: AutoDefibrillator
+    zapHeal:
+      types:
+        Asphyxiation: -40
+  - type: PassiveDamage
+    allowedStates:
+    - Alive
+    - Critical
+    - Dead
+    damage:
+      types:
+        Blunt: -4
+        Piercing: -4
+        Slash: -4
+        Caustic: -0.5
+        Radiation: -0.5
+        Cellular: -0.5
+        Asphyxiation: -4
+        Bloodloss: -5
+        Cold: -2
+        Heat: -2
+        Shock: -2
+
+- type: superAbility
+  id: RatKing
+  description: Король крыс. Вы можете рожать крыс и командовать ими. Но теперь у вас 10 уровень опасности.
+  unremovableComponents:
+  - type: NpcFactionMember
+    factions:
+    - SimpleHostile
+  - type: DangerMob
+  components:
+  - type: RatKing
+    hungerPerArmyUse: 50
+    hungerPerDomainUse: 50
+  - type: MobsterAccent
+
+- type: superAbility
+  id: Teleport
+  description: Телепортер. Вы можете телепортироваться и превращаться в призрака, но вы очень чувствительны ко всему урону.
+  actions:
+  - ActionBlink
+  - ActionVoidApplause
+  - ActionPolymorphJauntIII
+  unremovableComponents:
+  - type: Damageable
+    damageModifierSet: Teleporter
+
+- type: damageModifierSet
+  id: Teleporter
+  coefficients:
+    Heat: 3.0
+    Blunt: 3.0
+    Piercing: 3.0
+    Slash: 3.0
+
+- type: superAbility
+  id: Strength
+  description: Сверхсила. Ваши кулаки намного быстрее и откидывают людей. Но теперь вы неуклюжи.
+  unremovableComponents:
+    - type: Clumsy
+      gunShootFailDamage:
+        types:
+          Blunt: 20
+          Piercing: 20
+      catchingFailDamage:
+        types:
+          Blunt: 1
+  components:
+  - type: MeleeWeapon
+    hidden: false
+    altDisarm: false
+    animation: WeaponArcFist
+    attackRate: 1.8
+    autoAttack: true
+    soundHit:
+      collection: Punch
+    damage:
+      types:
+        Blunt: 15
+        Structural: 20
+  - type: MeleeThrowOnHit
+    speed: 30
+    unanchorOnHit: Unanchorable
+    stunTime: 0
+
+- type: superAbility
+  id: Reflect
+  description: Отражение. Вы отражаете все снаряды и умеете создавать барьеры, но неуклюжи.
+  actions:
+  - ActionForceWall
+  unremovableComponents:
+    - type: Clumsy
+      gunShootFailDamage:
+        types:
+          Blunt: 20
+          Piercing: 20
+      catchingFailDamage:
+        types:
+          Blunt: 1
+  components:
+  - type: Reflect
+    reflectProb: 1.0
+    spread: 0
+
+- type: superAbility
+  id: Homelander
+  description: Сверхчеловек. Вы умеете стрелять лазерами, видите через стены, сильны, умеете делать рывки и обладаете сильной регенерацией, но имеете нарколепсию, чувствительны к лазерам и взрывам.
+  unremovableComponents:
+    - type: ExplosionResistance
+      damageCoefficient: 3.0
+    - type: Damageable
+      damageModifierSet: LaserEyes
+    - type: Narcolepsy
+      maxTimeBetweenIncidents: 600
+      minTimeBetweenIncidents: 300
+      maxDurationOfIncident: 30
+      minDurationOfIncident: 10
+  components:
+  - type: ThermalVisionOverlay
+  - type: JumpAbility
+    jumpThrowSpeed: 60
+    jumpSound: /Audio/Vanilla/Effects/Actions/a-train-dash.ogg
+  - type: MeleeWeapon
+    animation: WeaponArcFist
+    attackRate: 1.8
+    autoAttack: true
+    soundHit:
+      collection: Punch
+    damage:
+      types:
+        Blunt: 15
+        Structural: 20
+  - type: MeleeThrowOnHit
+    speed: 30
+    unanchorOnHit: Unanchorable
+    stunTime: 0
+  - type: BatterySelfRecharger
+    autoRechargeRate: 40
+  - type: Gun
+    fireRate: 8.0
+    useKey: false
+    selectedMode: FullAuto
+    availableModes:
+      - FullAuto
+    soundGunshot: /Audio/Weapons/Guns/Gunshots/laser.ogg
+  - type: BatteryAmmoProvider
+    proto: EyesLaser
+    fireCost: 100
+  - type: Battery
+    maxCharge: 1000
+    startingCharge: 1000
+  - type: PassiveDamage
+    allowedStates:
+    - Alive
+    - Critical
+    - Dead
+    damage:
+      types:
+        Blunt: -4
+        Piercing: -4
+        Slash: -4
+        Caustic: -0.5
+        Radiation: -0.5
+        Cellular: -0.5
+        Asphyxiation: -4
+        Bloodloss: -5
+        Cold: -2
+        Heat: -2
+        Shock: -2

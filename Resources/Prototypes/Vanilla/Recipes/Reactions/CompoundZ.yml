@@ -1,0 +1,9 @@
+- type: reaction
+  id: CompoundZReaction
+  reactants:
+    TranexamicAcid:
+      amount: 50
+    PortalJuice:
+      amount: 50
+  products:
+    CompoundZ: 5

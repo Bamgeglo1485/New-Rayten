@@ -97,6 +97,11 @@
       - !type:AdjustReagent
         reagent: Inaprovaline
         amount: -2.0
+      - !type:RemoveSuper # RAYTEN-SUPERS
+        conditions:
+        - !type:ReagentCondition
+          reagent: Plasma
+          min: 10
     Respiration:
       effects:
       - !type:HealthChange

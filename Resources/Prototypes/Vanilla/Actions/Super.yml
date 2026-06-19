@@ -1,0 +1,13 @@
+- type: entity
+  parent: BaseAction
+  id: ActionBlueSpaceSyncSuper
+  name: Блюспейс-ускорение
+  description: I can't stop!
+  components:
+  - type: Action
+    useDelay: 40
+    icon:
+      sprite: Interface/Actions/jump.rsi
+      state: icon
+  - type: InstantAction
+    event: !type:BlueSpaceSyncEvent {}
