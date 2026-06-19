@@ -4,3 +4,9 @@
   components:
   - type: TDMRule
   - type: TTTRule
+
+- type: entity
+  id: InstantRespawn
+  parent: BaseGameRule
+  components:
+  - type: InstantRespawnRule
