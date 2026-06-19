@@ -92,6 +92,8 @@
       collection: MetalThud
   - type: RefillableSolution
     solution: Sword
+  - type: Solution
+    id: Sword
   - type: SolutionContainerManager
     solutions:
       Sword:

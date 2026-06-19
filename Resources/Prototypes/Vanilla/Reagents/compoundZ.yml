@@ -1,0 +1,21 @@
+- type: reagent
+  id: CompoundZ
+  name: reagent-name-compound-z
+  desc: reagent-desc-compound-z
+  physicalDesc: reagent-physical-desc-unstable-acid
+  flavor: acid
+  color: "#b90047"
+  meltingPoint: 69
+  boilingPoint: 1485
+  metabolisms:
+    Bloodstream:
+      effects:
+      - !type:HealthChange
+        damage:
+          types:
+            Caustic: 5
+      - !type:MakeSuper
+        conditions:
+        - !type:ReagentCondition
+          reagent: CompoundZ
+          min: 5

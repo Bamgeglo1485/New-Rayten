@@ -34,6 +34,8 @@
   - type: Gun
     soundEmpty: null
     showExamineText: false
+  - type: Solution
+    id: portal
   - type: SolutionContainerManager
     solutions:
       portal:
@@ -52,6 +54,8 @@
   - type: DrawableSolution
     solution: portal
   - type: InjectableSolution
+    solution: portal
+  - type: SolutionItemStatus
     solution: portal
   - type: Damageable
   - type: Injurable
