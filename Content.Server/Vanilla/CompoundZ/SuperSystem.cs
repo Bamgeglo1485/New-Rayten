@@ -7,6 +7,7 @@ using Robust.Shared.Player;
 
 namespace Content.Server.Vanilla.CompoundZ;
 
+// Серверная система отвечает только за эффекты
 public sealed partial class SuperSystem : EntitySystem
 {
     [Dependency] private IChatManager _chat = default!;
@@ -28,11 +29,10 @@ public sealed partial class SuperSystem : EntitySystem
         var superPrototype = entity.Comp.Prototype;
         if (superPrototype == null)
             return;
-
-        // Эффекты
+        
         if (entity.Comp.Prototype != null)
         {
-            var message = ($"Вы теперь супер. Ваша способность - {entity.Comp.Prototype.Description}");
+            var message = ($"Вы теперь супер и вольны творить что угодно ради ВАШЕЙ ВЫГОДЫ. Вы в праве как стать героем, так и преследовать корыстные цели без массовых убийств. Ваша способность - {entity.Comp.Prototype.Description}");
             var wrappedMessage = Loc.GetString("chat-manager-server-wrap-message", ("message", message));
             _chat.ChatMessageToOne(ChatChannel.Server,
                       message,

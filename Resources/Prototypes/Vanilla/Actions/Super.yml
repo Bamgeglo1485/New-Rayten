@@ -5,7 +5,7 @@
   description: I can't stop!
   components:
   - type: Action
-    useDelay: 40
+    useDelay: 20
     icon:
       sprite: Interface/Actions/jump.rsi
       state: icon
