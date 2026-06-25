@@ -4,7 +4,6 @@ using Content.Server.Atmos.Components;
 using Content.Server.Atmos.EntitySystems;
 using Content.Server.Decals;
 using Content.Shared._Funkystation.CCVar;
-using Content.Shared._Funkystation.Footprints;
 using Content.Shared._Funkystation.ReagentFires;
 using Content.Shared.Atmos;
 using Content.Shared.Chemistry.EntitySystems;
@@ -29,45 +28,29 @@ namespace Content.Server._Funkystation.ReagentFires.Systems
 {
     public sealed partial class ReagentFireSystem : EntitySystem
     {
-        [Dependency] private AtmosphereSystem _atmos = null!;
-        [Dependency] private SharedTransformSystem _transform = null!;
-        [Dependency] private SharedSolutionContainerSystem _solutionContainerSystem = null!;
-        [Dependency] private IPrototypeManager _prototypeManager = null!;
-        [Dependency] private SharedAppearanceSystem _appearance = null!;
-        [Dependency] private EntityLookupSystem _lookup = null!;
-        [Dependency] private SharedAudioSystem _audio = null!;
-        [Dependency] private SharedPointLightSystem _light = null!;
-        [Dependency] private DecalSystem _decalSystem = null!;
-        [Dependency] private IRobustRandom _random = null!;
-        [Dependency] private DamageableSystem _damageable = null!;
-        [Dependency] private IConfigurationManager _cfg = null!;
-        [Dependency] private InventorySystem _inventory = null!;
+        [Dependency] private readonly AtmosphereSystem _atmos = null!;
+        [Dependency] private readonly SharedTransformSystem _transform = null!;
+        [Dependency] private readonly SharedSolutionContainerSystem _solutionContainerSystem = null!;
+        [Dependency] private readonly IPrototypeManager _prototypeManager = null!;
+        [Dependency] private readonly SharedAppearanceSystem _appearance = null!;
+        [Dependency] private readonly EntityLookupSystem _lookup = null!;
+        [Dependency] private readonly SharedAudioSystem _audio = null!;
+        [Dependency] private readonly SharedPointLightSystem _light = null!;
+        [Dependency] private readonly DecalSystem _decalSystem = null!;
+        [Dependency] private readonly IRobustRandom _random = null!;
+        [Dependency] private readonly DamageableSystem _damageable = null!;
+        [Dependency] private readonly IConfigurationManager _cfg = null!;
 
         private readonly List<EntityUid> _toExtinguish = new();
         private readonly string[] _burntDecals = ["burnt1", "burnt2", "burnt3", "burnt4"];
         private float _puddleDamageMultiplier = 1.0f;
         private readonly List<(EntityUid Uid, ReagentPuddleFireComponent FireComp, PuddleComponent Puddle, TransformComponent Xform)> _activeFires = new();
-        private const string StructuralDamage = "Structural";
-        private const string HeatDamage = "Heat";
-        private bool _footprintsFlammable = true;
-        private float _fireProtectionEffectiveness = 1.0f;
-        private bool _volumeScalingEnabled = true;
-        private float _volumeScalingReference = 20f;
-        private float _volumeScalingCurve = 1.5f;
-        private float _smallPuddleBurnThreshold = 1.0f;
-        private float _smallPuddleBurnPercent = 0.5f;
 
         public override void Initialize()
         {
             base.Initialize();
             Subs.CVar(_cfg, ReagentFireCVars.PuddleFireDamageMultiplier, value => _puddleDamageMultiplier = value, true);
-            Subs.CVar(_cfg, ReagentFireCVars.FootprintsFlammable, value => _footprintsFlammable = value, true);
-            Subs.CVar(_cfg, ReagentFireCVars.FireProtectionEffectiveness, value => _fireProtectionEffectiveness = value, true);
-            Subs.CVar(_cfg, ReagentFireCVars.VolumeScalingEnabled, value => _volumeScalingEnabled = value, true);
-            Subs.CVar(_cfg, ReagentFireCVars.VolumeScalingReference, value => _volumeScalingReference = value, true);
-            Subs.CVar(_cfg, ReagentFireCVars.VolumeScalingCurve, value => _volumeScalingCurve = value, true);
-            Subs.CVar(_cfg, ReagentFireCVars.SmallPuddleBurnThreshold, value => _smallPuddleBurnThreshold = value, true);
-            Subs.CVar(_cfg, ReagentFireCVars.SmallPuddleBurnPercent, value => _smallPuddleBurnPercent = value, true);
+            SubscribeLocalEvent<SolutionComponent, SolutionChangedEvent>(OnSolutionChanged);
             SubscribeLocalEvent<TransformComponent, TileExposedEvent>(OnTileExposed);
             SubscribeLocalEvent<PuddleComponent, TileFireEvent>(OnPuddleTileFire);
             SubscribeLocalEvent<ReagentPuddleFireComponent, ComponentShutdown>(OnFireShutdown);
@@ -505,9 +488,8 @@ namespace Content.Server._Funkystation.ReagentFires.Systems
                 var structuralProto = _prototypeManager.Index<DamageTypePrototype>(StructuralDamage);
                 var heatProto = _prototypeManager.Index<DamageTypePrototype>(HeatDamage);
 
-                // use effectiveFlammability for damage output
-                var structuralDamage = new DamageSpecifier(structuralProto, 2f * effectiveFlammability * _puddleDamageMultiplier);
-                var heatDamage = new DamageSpecifier(heatProto, 2f * effectiveFlammability * _puddleDamageMultiplier);
+                var structuralDamage = new DamageSpecifier(structuralProto, 2f * flammability * _puddleDamageMultiplier);
+                var heatDamage = new DamageSpecifier(heatProto, 2f * flammability * _puddleDamageMultiplier);
 
                 var totalDamage = structuralDamage + heatDamage;
 
