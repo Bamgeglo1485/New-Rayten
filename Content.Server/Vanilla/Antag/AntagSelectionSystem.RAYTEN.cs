@@ -22,8 +22,8 @@ namespace Content.Server.Antag;
 
 public sealed partial class AntagSelectionSystem
 {
-    [Dependency] private readonly EuiManager _eui = default!;
-    [Dependency] private readonly IGameTiming _gameTiming = default!;
+    [Dependency] private EuiManager _eui = default!;
+    [Dependency] private IGameTiming _gameTiming = default!;
 
     public override void Update(float frameTime)
     {
