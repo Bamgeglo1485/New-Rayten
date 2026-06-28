@@ -293,3 +293,60 @@
   shape:
     type: CircleFill
     radius: 0.1
+
+- type: particleEffect
+  id: RaytenExplosion
+  sprite:
+    sprite: Effects/chemsmoke.rsi
+    state: chemsmoke
+  startColor: "#b3b3b3aa"
+  endColor: "#33333300"
+  sizeOverLifetime:
+    - time: 0.0
+      value: 0.5
+    - time: 1.0
+      value: 1.4
+  alphaOverLifetime:
+    - time: 0.0
+      value: 0.0
+    - time: 0.05
+      value: 1.0
+    - time: 0.95
+      value: 1.0
+    - time: 1.0
+      value: 0.0
+  lifetime: 2.5
+  lifetimeVariance: 0.8
+  speed: 1
+  speedVariance: 0.1
+  particleSize: 2.0
+  sizeVariance: 0.4
+  emissionRate: 16
+  maxCount: 48
+  burst: false
+  duration: 1
+  gravity: -0.4
+  drag: 0.15
+  noiseStrength: 0.1
+  noiseFrequency: 0.5
+  spreadAngle: 25
+  emitAngle: 0
+  startRotationVariance: 360
+  rotationSpeedVariance: 40
+  shape:
+    type: CircleFill
+    radius: 1
+
+- type: entity
+  id: EffectExplosion
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TimedDespawn
+    lifetime: 1.0
+  - type: Tag
+    tags:
+    - HideContextMenu
+  # RAYTEN-STARFALL STARTS
+  - type: ParticleEmitter
+    effect: RaytenExplosion
+  # RAYTEN-STARFALL ENDS

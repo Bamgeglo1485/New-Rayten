@@ -12,3 +12,9 @@
   id: Vignette
   kind: source
   path: "/Textures/Vanilla/Shaders/vignette.swsl"
+
+# Funky RMC Explosions
+- type: shader
+  id: ShockWave
+  kind: source
+  path: "/Textures/_Funkystation/Shaders/shock_wave.swsl"
