@@ -61,7 +61,7 @@ public sealed partial class AntagSelectionSystem
             gameRule,
             antags,
             currentAntag,
-            _gameTiming.RealTime.Add(TimeSpan.FromSeconds(60)), // TimeSpan + TimeSpan = TimeSpan
+            _gameTiming.RealTime.Add(TimeSpan.FromSeconds(60)),
             index
         );
 
@@ -87,7 +87,15 @@ public sealed partial class AntagSelectionSystem
     private void OnAntagAcceptAccepted(ICommonSession session, (Entity<AntagSelectionComponent> GameRule, AntagCount[] Antags, AntagCount CurrentAntag, TimeSpan Timeout, int Index) pending)
     {
         _pendingConfirmations.Remove(session);
-        AssignPlayerAsAntag(session, pending.GameRule, pending.Antags, pending.CurrentAntag, pending.Index);
+
+        if (AssignPlayerAsAntag(session, pending.GameRule, pending.Antags, pending.CurrentAntag, pending.Index))
+        {
+            return;
+        }
+        else
+        {
+            ContinueAntagAssignment(pending.GameRule, pending.Antags, pending.CurrentAntag, session);
+        }
     }
 
     private void OnAntagAcceptDenied(ICommonSession session)
@@ -96,13 +104,12 @@ public sealed partial class AntagSelectionSystem
             return;
 
         _pendingConfirmations.Remove(session);
-        ContinueAntagAssignment(pending.GameRule, pending.Antags, pending.CurrentAntag, pending.Index, session);
+        ContinueAntagAssignment(pending.GameRule, pending.Antags, pending.CurrentAntag, session);
     }
 
     private void ContinueAntagAssignment(Entity<AntagSelectionComponent> gameRule,
         AntagCount[] antags,
         AntagCount currentAntag,
-        int currentIndex,
         ICommonSession? skippedPlayer = null)
     {
         var players = GetActivePlayers().ToArray();

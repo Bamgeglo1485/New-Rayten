@@ -573,32 +573,6 @@ public sealed partial class AntagSelectionSystem : GameRuleSystem<AntagSelection
         return true;
     }
 
-    // RAYTEN-STARTS
-    private void ContinueAntagAssignment(Entity<AntagSelectionComponent> gameRule,
-        AntagCount[] antags,
-        AntagCount currentAntag,
-        ICommonSession? skippedPlayer = null)
-    {
-        var players = GetActivePlayers().ToArray();
-        var weightedPool = GetWeightedPlayerPool(players);
-
-        if (skippedPlayer != null && weightedPool.ContainsKey(skippedPlayer))
-            weightedPool.Remove(skippedPlayer);
-
-        while (RobustRandom.TryPickAndTake(weightedPool, out var session))
-        {
-            var newAntags = antags;
-            if (AssignAntag(gameRule, session, ref newAntags))
-            {
-                antags = newAntags;
-                return;
-            }
-        }
-
-        SpawnGhostRoles(gameRule, antags);
-    }
-    // RAYTEN-ENDS
-
     /// <summary>
     /// Checks all preferences from a session to see if they match any of the valid roles from a list of roles available.
     /// </summary>
