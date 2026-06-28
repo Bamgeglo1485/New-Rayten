@@ -36,6 +36,9 @@ using Robust.Shared.Random;
 using Robust.Shared.Utility;
 using static Content.Server.Antag.Components.AntagSelectionTime;
 
+using Content.Shared.Vanilla.AntagAccept;
+using Content.Server.Vanilla.AntagAccept;
+
 namespace Content.Server.Antag;
 
 /// <summary>
@@ -71,6 +74,10 @@ public sealed partial class AntagSelectionSystem : GameRuleSystem<AntagSelection
     [Dependency] private PlayTimeTrackingSystem _playTime = default!;
     [Dependency] private RoleSystem _role = default!;
     [Dependency] private TransformSystem _transform = default!;
+
+    // RAYTEN-STARTS
+    private Dictionary<ICommonSession, (Entity<AntagSelectionComponent> GameRule, AntagCount[] Antags, AntagCount CurrentAntag, TimeSpan Timeout, int Index)> _pendingConfirmations = new();
+    // RAYTEN-ENDS
 
     // arbitrary random number to give late joining some mild interest.
     public const float LateJoinRandomChance = 0.5f;
@@ -500,6 +507,9 @@ public sealed partial class AntagSelectionSystem : GameRuleSystem<AntagSelection
     /// Selects and assigns antags from a list.
     /// Is private because it has it should only ever be run in very specific scenarios.
     /// </summary>
+    /// <summary>
+    /// Selects and assigns antags from a list.
+    /// </summary>
     private bool AssignAntag(Entity<AntagSelectionComponent> gameRule, ICommonSession player, ref AntagCount[] antags)
     {
         // If this session cannot be an antag, then get the next session!
@@ -525,28 +535,69 @@ public sealed partial class AntagSelectionSystem : GameRuleSystem<AntagSelection
             if (!CanBeAntag(player, gameRule, antag.Definition, false))
                 continue;
 
-            // Try to get a valid antag entity.
-            if (!TryGetAntagEntity(gameRule, antag.Definition, player, out var antagEnt))
-                continue; // Something has likely gone horribly wrong if this happens, check your error log!
+            // RAYTEN-STARTS
+            if (gameRule.Comp.AntagAcceptMenu)
+            {
+                RequestAntagAccept(gameRule, antag.Definition, player, antags, antag, i);
+                return true;
+            }
+            // RAYTEN-ENDS
 
-            // Pre-select the session, then initialize the antag!
-            PreSelectSession(gameRule, antag.Definition, player);
-            InitializeAntag(gameRule, antag.Definition, antagEnt.Value, player);
-
-            // Reduce the slots left by one
-            // If we finish assigning all slots
-            antag.Count--;
-            if (antag.Count == 0)
-                antags.RemoveSwap(i);
-            else
-                antags[i] = antag;
-
-            return true;
+            return AssignPlayerAsAntag(player, gameRule, antags, antag, i);
         }
 
-        // If we're here, then we didn't assign a single antag!
         return false;
     }
+
+    private bool AssignPlayerAsAntag(ICommonSession player,
+        Entity<AntagSelectionComponent> gameRule,
+        AntagCount[] antags,
+        AntagCount currentAntag,
+        int index)
+    {
+        // Try to get a valid antag entity.
+        if (!TryGetAntagEntity(gameRule, currentAntag.Definition, player, out var antagEnt))
+            return false;
+
+        // Pre-select the session, then initialize the antag!
+        PreSelectSession(gameRule, currentAntag.Definition, player);
+        InitializeAntag(gameRule, currentAntag.Definition, antagEnt.Value, player);
+
+        // Reduce the slots left by one
+        currentAntag.Count--;
+        if (currentAntag.Count == 0)
+            antags.RemoveSwap(index);
+        else
+            antags[index] = currentAntag;
+
+        return true;
+    }
+
+    // RAYTEN-STARTS
+    private void ContinueAntagAssignment(Entity<AntagSelectionComponent> gameRule,
+        AntagCount[] antags,
+        AntagCount currentAntag,
+        ICommonSession? skippedPlayer = null)
+    {
+        var players = GetActivePlayers().ToArray();
+        var weightedPool = GetWeightedPlayerPool(players);
+
+        if (skippedPlayer != null && weightedPool.ContainsKey(skippedPlayer))
+            weightedPool.Remove(skippedPlayer);
+
+        while (RobustRandom.TryPickAndTake(weightedPool, out var session))
+        {
+            var newAntags = antags;
+            if (AssignAntag(gameRule, session, ref newAntags))
+            {
+                antags = newAntags;
+                return;
+            }
+        }
+
+        SpawnGhostRoles(gameRule, antags);
+    }
+    // RAYTEN-ENDS
 
     /// <summary>
     /// Checks all preferences from a session to see if they match any of the valid roles from a list of roles available.

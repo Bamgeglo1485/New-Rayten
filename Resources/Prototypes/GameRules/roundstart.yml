@@ -177,6 +177,7 @@
     maxDifficulty: 5
   - type: AntagSelection
     agentName: traitor-round-end-agent-name
+    antagAcceptMenu: true # RAYTEN-ANTI-TRYHARD
   - type: DynamicRuleCost
     cost: 100
 
