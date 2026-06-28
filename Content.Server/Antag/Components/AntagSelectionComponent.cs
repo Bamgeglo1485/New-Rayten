@@ -69,6 +69,11 @@ public sealed partial class AntagSelectionComponent : Component
     /// </summary>
     [DataField]
     public bool RemoveUponFailedSpawn = true;
+
+    // RAYTEN-ANTI-TRYHARD-STARTS
+    [DataField]
+    public bool AntagAcceptMenu = false;
+    // RAYTEN-ANTI-TRYHARD-ENDS
 }
 
 /// <remarks>
