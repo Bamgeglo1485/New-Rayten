@@ -175,7 +175,7 @@
   save: false
   components:
   # FUNKY STATION STARTS
-  #- type: ESPainFlash
+  - type: ESPainFlash
   - type: DuoEmote
   # FUNKY STATION ENDS
   - type: Hunger
