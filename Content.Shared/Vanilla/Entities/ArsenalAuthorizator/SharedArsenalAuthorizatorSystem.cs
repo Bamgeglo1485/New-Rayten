@@ -19,6 +19,7 @@ public abstract partial class SharedArsenalAuthorizatorSystem : EntitySystem
     [Dependency] private SharedUserInterfaceSystem _ui = default!;
     [Dependency] private SharedPointLightSystem _lights = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
+
     public override void Initialize()
     {
         base.Initialize();
@@ -111,10 +112,7 @@ public abstract partial class SharedArsenalAuthorizatorSystem : EntitySystem
         if (comp.State is ArsenalAuthorizatorState.Red or ArsenalAuthorizatorState.Gamma)
             return false;
 
-        if (!TryComp<FingerprintComponent>(user, out var fingercomp) || fingercomp.Fingerprint == null)
-            return false;
-
-        if (!comp.AllowedFingerprints.Contains(fingercomp.Fingerprint))
+        if (!Access.IsAllowed(user, uid))
             return false;
 
         return true;
