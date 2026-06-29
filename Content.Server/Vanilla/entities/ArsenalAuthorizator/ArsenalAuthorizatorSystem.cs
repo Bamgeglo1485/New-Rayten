@@ -21,26 +21,6 @@ public sealed partial class ArsenalAuthorizatorSystem : SharedArsenalAuthorizato
         SubscribeLocalEvent<AlertLevelChangedEvent>(OnAlertChanged);
         SubscribeLocalEvent<ArsenalAuthorizatorComponent, MapInitEvent>(OnInit);
         SubscribeLocalEvent<ArsenalDoorComponent, MapInitEvent>(OnInit);
-        SubscribeLocalEvent<PlayerSpawnCompleteEvent>(OnPlayerSpawned);
-    }
-
-    private void OnPlayerSpawned(PlayerSpawnCompleteEvent ev)
-    {
-        if (ev.JobId != "Captain" && ev.JobId != "HeadOfSecurity" && ev.JobId != "Warden")
-            return;
-
-        if (!TryComp<FingerprintComponent>(ev.Mob, out var fingercomp) || fingercomp.Fingerprint == null)
-            return;
-
-        var query = EntityQueryEnumerator<ArsenalAuthorizatorComponent>();
-        while (query.MoveNext(out var uid, out var comp))
-        {
-            if (ev.Station != StationSys.GetOwningStation(uid))
-                continue;
-
-            comp.AllowedFingerprints.Add(fingercomp.Fingerprint);
-            Dirty(uid, comp);
-        }
     }
 
     private void OnInit(EntityUid uid, ArsenalDoorComponent component, ref MapInitEvent args)

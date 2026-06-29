@@ -11,7 +11,7 @@
           mapNameTemplate: "Meteor Arena"
         - type: StationJobs
           availableJobs:
-            ServiceWorker: [ -1, -1 ] # Rayten-graytidegate
+            Passenger: [ -1, -1 ] # Rayten-graytidegate
 - type: gameMap
   id: dm01-entryway
   mapName: DM01 Entryway
@@ -25,4 +25,4 @@
           mapNameTemplate: "DM01 Entryway"
         - type: StationJobs
           availableJobs:
-            ServiceWorker: [ -1, -1 ] # Rayten-graytidegate
+            Passenger: [ -1, -1 ] # Rayten-graytidegate

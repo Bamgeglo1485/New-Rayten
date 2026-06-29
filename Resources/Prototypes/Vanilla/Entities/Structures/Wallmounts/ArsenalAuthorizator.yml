@@ -48,7 +48,7 @@
   - type: Clickable
   - type: InteractionOutline
   - type: AccessReader
-    breakOnAccessBreaker: false
+    breakOnAccessBreaker: true
     access: [["Armory"]]
   - type: Damageable
     damageModifierSet: StructuralMetallic
