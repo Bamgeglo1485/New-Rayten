@@ -33,3 +33,15 @@
     antagPrototype: OldMan
     subtype: role-subtype-old-man
   - type: OldManRole
+
+# Диверсант
+- type: entity
+  parent: BaseMindRoleAntag
+  id: MindRoleDiversionist
+  name: Диверсант
+  components:
+  - type: MindRole
+    antagPrototype: Diversionist
+    exclusiveAntag: true
+    subtype: roles-antag-diversionist-name
+  - type: DiversionistRole

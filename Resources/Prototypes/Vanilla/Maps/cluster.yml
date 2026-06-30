@@ -29,6 +29,7 @@
             Lawyer: [ 1, 1 ]
             Reporter: [ 1, 1 ]
             ServiceWorker: [ -1, -1 ] # Rayten-graytidegate
+            Passanger: [ -1, -1 ]
             #engineering
             ChiefEngineer: [ 1, 1 ]
             AtmosphericTechnician: [ 2, 2 ]

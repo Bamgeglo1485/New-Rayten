@@ -36,7 +36,7 @@ internal sealed partial class ChatManager : IChatManager
     };
     private static readonly Dictionary<string, string> AdminOOCColors = new()
     {
-        { "Хост", "#2ECC71" },
+        { "Хост", "#82002e" },
         { "Администратор", "#FF0000" },
         { "Младший администратор", "#E91E63" },
         { "Старший модератор", "#005AFD" },

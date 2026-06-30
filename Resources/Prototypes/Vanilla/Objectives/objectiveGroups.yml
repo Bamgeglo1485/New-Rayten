@@ -1,0 +1,19 @@
+# Diversionist
+- type: weightedRandom
+  id: DiversionistObjectiveGroups
+  weights:
+    DiversionistObjectiveGroupState: 1
+    TraitorObjectiveGroupSabotage: 1
+    DiversionistObjectiveGroupOther: 1
+
+- type: weightedRandom
+  id: DiversionistObjectiveGroupState
+  weights:
+    EscapeShuttleObjective: 1.0
+    DieObjective: 0.7
+    HijackShuttleObjective: 0.4
+
+- type: weightedRandom
+  id: DiversionistObjectiveGroupOther
+  weights:
+    HijackTradeStationObjective: 1
