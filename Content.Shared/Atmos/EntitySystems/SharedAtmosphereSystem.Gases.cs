@@ -9,8 +9,6 @@ namespace Content.Shared.Atmos.EntitySystems;
 
 public abstract partial class SharedAtmosphereSystem
 {
-    [Dependency] private readonly IPrototypeManager ProtoMan = default!;
-
     /*
      Partial class for operations involving GasMixtures.
 
