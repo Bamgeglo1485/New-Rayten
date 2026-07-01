@@ -190,12 +190,6 @@ public sealed partial class DiversionistRuleSystem : GameRuleSystem<Diversionist
     {
         var sb = new StringBuilder();
         sb.AppendLine(Loc.GetString("diversionist-role-greeting", ("corporation", objectiveIssuer ?? Loc.GetString("objective-issuer-unknown"))));
-        if (codewords != null)
-            sb.AppendLine(Loc.GetString("traitor-role-codewords", ("codewords", string.Join(", ", codewords))));
-        if (uplinkCode != null)
-            sb.AppendLine(Loc.GetString("traitor-role-uplink-code", ("code", string.Join("-", uplinkCode).Replace("sharp", "#"))));
-        else
-            sb.AppendLine(Loc.GetString("traitor-role-uplink-implant"));
 
 
         return sb.ToString();

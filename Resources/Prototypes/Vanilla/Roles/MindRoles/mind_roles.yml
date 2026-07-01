@@ -45,3 +45,4 @@
     exclusiveAntag: true
     subtype: roles-antag-diversionist-name
   - type: DiversionistRole
+  - type: TraitorRole

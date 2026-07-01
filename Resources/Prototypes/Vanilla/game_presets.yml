@@ -14,3 +14,23 @@
   - SpaceTrafficControlEventScheduler
   - BasicRoundstartVariation
   - InstantRespawn
+
+
+- type: gamePreset
+  id: Diversionist
+  alias:
+    - diversionist
+  name: Диверсанты
+  description: Ни слова по синдикатски...
+  showInVote: false
+  rules:
+  - TeamDeathMatch
+  - ArchonEventScheduler
+  - DummyNonAntagChance
+  - Diversionist
+  - Traitor
+  - SubGamemodesRuleNoWizard
+  - BasicStationEventScheduler
+  - MeteorSwarmScheduler
+  - SpaceTrafficControlEventScheduler
+  - BasicRoundstartVariation

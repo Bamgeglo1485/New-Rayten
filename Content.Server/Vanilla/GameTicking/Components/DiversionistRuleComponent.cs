@@ -72,7 +72,7 @@ public sealed partial class DiversionistRuleComponent : Component
     ///     Path to antagonist alert sound.
     /// </summary>
     [DataField]
-    public SoundSpecifier GreetSoundNotification = new SoundPathSpecifier("/Audio/Ambience/Antag/traitor_start.ogg");
+    public SoundSpecifier GreetSoundNotification = new SoundPathSpecifier("/Audio/Vanilla/Ambience/Antag/Diversionist.ogg");
 
     /// <summary>
     /// The amount of TC traitors start with.

@@ -20,7 +20,10 @@
   - type: AntagRandomObjectives
     sets:
     - groups: DiversionistObjectiveGroups
-    maxDifficulty: 5
+      maxPicks: 2
+    - groups: DiversionistObjectiveGroups
+      maxPicks: 2
+    maxDifficulty: 7
   - type: AntagSelection
     agentName: roles-antag-diversionist-name
   - type: DynamicRuleCost
@@ -34,10 +37,10 @@
   id: Diversionist
   components:
   - type: GameRule
-    minPlayers: 0
-    #delay:
-      #min: 240
-      #max: 420
+    minPlayers: 15
+    delay:
+      min: 240
+      max: 420
   - type: AntagSelection
     lateJoinAdditional: true
     antags:

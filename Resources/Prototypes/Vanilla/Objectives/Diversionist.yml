@@ -5,6 +5,7 @@
   components:
   - type: Objective
     issuer: TheSyndicate
+    difficulty: 1.5
   - type: RoleRequirement
     roles:
     - DiversionistRole
