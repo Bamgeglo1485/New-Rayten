@@ -75,17 +75,6 @@
     Heat: 4.0
 
 - type: superAbility
-  id: HeatVision
-  description: Тепловизор. Вы видите живых существ через стены, защищены от вспышек, сварки, здоровья и видите должности.
-  components:
-  - type: ThermalVisionOverlay
-  - type: ShowJobIcons
-  - type: ShowHealthBars
-  - type: ShowHealthIcons
-  - type: FlashImmunity
-  - type: EyeProtection
-
-- type: superAbility
   id: Invinsible
   description: Скрытность. Вы невидимы, а также видите живых существ через стены, защищены от вспышек, сварки, здоровья и видите должности.
   components:
@@ -100,6 +89,12 @@
   - type: StealthOnMove
     passiveVisibilityRate: -1
     movementVisibilityRate: 0.20
+
+- type: superAbility
+  id: Flyer
+  description: Полёт. Вы умеете летать и во время него пробивать своим телом структуры.
+  components:
+  - type: Flyer
 
 - type: superAbility
   id: Regeneration
@@ -228,6 +223,7 @@
       maxDurationOfIncident: 30
       minDurationOfIncident: 10
   components:
+  - type: Flyer
   - type: ThermalVisionOverlay
   - type: JumpAbility
     jumpThrowSpeed: 60
