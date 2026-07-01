@@ -22,11 +22,11 @@ public sealed partial class FlyerComponent : Component
 
     // Базовая скорость коллизии от которого зависит урон
     [DataField, AutoNetworkedField]
-    public float MinCollisionSpeed = 5.0f;
+    public float MinCollisionSpeed = 10.0f;
 
     // Урон наносимый структурам от столкновения
     [DataField, AutoNetworkedField]
-    public float StructuralDamage = 100.0f;
+    public float StructuralDamage = 70.0f;
 
     // Урон наносимый пользователю от столкновения
     [DataField, AutoNetworkedField]

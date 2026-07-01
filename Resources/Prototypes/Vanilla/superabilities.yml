@@ -95,6 +95,7 @@
   description: Полёт. Вы умеете летать и во время него пробивать своим телом структуры.
   components:
   - type: Flyer
+    userBruteDamage: 0.5
 
 - type: superAbility
   id: Regeneration
@@ -224,6 +225,7 @@
       minDurationOfIncident: 10
   components:
   - type: Flyer
+    userBruteDamage: 2.0
   - type: ThermalVisionOverlay
   - type: JumpAbility
     jumpThrowSpeed: 60
