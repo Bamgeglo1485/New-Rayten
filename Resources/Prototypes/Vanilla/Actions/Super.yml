@@ -11,3 +11,17 @@
       state: icon
   - type: InstantAction
     event: !type:BlueSpaceSyncEvent {}
+
+- type: entity
+  parent: BaseAction
+  id: ActionFly
+  name: Переключить полёт
+  description: Это птица, это самолёт? Нет, это 2д космонавтик.
+  components:
+  - type: Action
+    useDelay: 2
+    icon:
+      sprite: Vanilla/Actions/Super.rsi
+      state: fly
+  - type: InstantAction
+    event: !type:FlyActionEvent {}

@@ -1,0 +1,22 @@
+- type: entity
+  abstract: true
+  parent: BaseObjective
+  id: BaseDiversionistObjective
+  components:
+  - type: Objective
+    issuer: TheSyndicate
+    difficulty: 1.5
+  - type: RoleRequirement
+    roles:
+    - DiversionistRole
+
+- type: entity
+  parent: [BaseDiversionistObjective, BaseFreeObjective]
+  id: DiversionistDemonstrateObjective
+  name: Заявите о Синдикате
+  description: Устройте этим корпоративным крысам шоу!
+  components:
+  - type: Objective
+    icon:
+      sprite: Objects/Devices/travel_camera.rsi
+      state: icon
