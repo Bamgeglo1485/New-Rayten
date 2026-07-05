@@ -187,7 +187,8 @@
         Blunt: -0.1
         Slash: -0.1
         Piercing: -0.1
-    # Rayten-end
+  - type: TailDuoEmote # Funky Change
+  # Rayten-end
 
 - type: entity
   parent: OrganBaseOrganic
