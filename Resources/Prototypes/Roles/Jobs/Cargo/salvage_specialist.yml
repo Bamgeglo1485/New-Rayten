@@ -4,8 +4,8 @@
   description: job-description-salvagespec
   playTimeTracker: JobSalvageSpecialist
   requirements:
-  - !type:OverallPlaytimeRequirement
-    time: 5h
+  #- !type:OverallPlaytimeRequirement
+    #time: 5h
   - !type:AgeRequirement
     requiredAge: 22
   icon: "JobIconShaftMiner"
