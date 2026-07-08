@@ -5,7 +5,7 @@
   playTimeTracker: JobAtmosphericTechnician
   requirements:
   - !type:OverallPlaytimeRequirement
-    time: 5h # Vanilla-RoleTime
+    time: 2h # Vanilla-RoleTime
   - !type:AgeRequirement
     requiredAge: 22
   startingGear: AtmosphericTechnicianGear
