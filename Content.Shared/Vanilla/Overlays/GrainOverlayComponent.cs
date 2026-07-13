@@ -11,5 +11,5 @@ public sealed partial class GrainOverlayComponent : Component
 
     [DataField]
     [AutoNetworkedField]
-    public float Strength = 1f;
+    public float Strength = 0.7f;
 }

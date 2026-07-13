@@ -7,7 +7,7 @@ public sealed partial class VignetteOverlayComponent : Component
 {
     [DataField]
     [AutoNetworkedField]
-    public float OuterRadius = 12f;
+    public float OuterRadius = 13f;
 
     [DataField]
     [AutoNetworkedField]
