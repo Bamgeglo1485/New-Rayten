@@ -3,6 +3,9 @@
   id: WeaponArcStatic
   categories: [ HideSpawnMenu ]
   components:
+    # <Trauma>
+    - type: ViewconeOccludable # they have their own viewcone effects
+    # </Trauma>
     - type: TimedDespawn
       lifetime: 2.0
     - type: Sprite

@@ -1,3 +1,6 @@
+// <Trauma>
+using Content.Trauma.Common.Movement;
+// </Trauma>
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using Content.Shared.ActionBlocker;
@@ -356,6 +359,11 @@ public abstract partial class SharedMoverController : VirtualController
                 {
                     _audio.PlayPredicted(sound, uid, uid, audioParams);
                 }
+
+                // <Trauma>
+                var stepEv = new FootStepEvent(uid, wishDir.ToWorldAngle());
+                RaiseLocalEvent(uid, ref stepEv);
+                // </Trauma>
             }
         }
     }

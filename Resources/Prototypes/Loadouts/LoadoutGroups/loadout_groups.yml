@@ -107,10 +107,9 @@
   name: loadout-group-captain-head
   minLimit: 0
   loadouts:
-  - CaptainHead
+  #- CaptainHead
   - CaptainCap
   # Vanilla-Loadouts-Start
-  - CapNavalCap
   - CaptainCapcapWhite
   # Vanilla-Loadouts-end
 
@@ -120,14 +119,9 @@
   loadouts:
   - CaptainJumpsuit
   - CaptainJumpskirt
-  # Corvax-Loadouts-Start
-  - CaptainJumpsuitTurtleneck
-  - CaptainJumpskirtTurtleneck
-  # Corvax-Loadouts-End
-  - CaptainFormalSuit
-  - CaptainFormalSkirt
+  #- CaptainFormalSuit
+  #- CaptainFormalSkirt
   # Vanilla-Loadouts-Start
-  - UniformJumpsuitNavalCaptain
   - UniformJumpsuitWhiteCaptain
   - UniformJumpskirtWhiteCaptain
   # Vanilla-Loadouts-end
@@ -137,13 +131,14 @@
   name: loadout-group-captain-neck
   minLimit: 0
   loadouts:
-  - CaptainCloak
-  - CaptainCloakFormal
-  - CaptainMantle
+  #- CaptainCloak
+  #- CaptainCloakFormal
+  #- CaptainMantle
   # Vanilla-Loadouts-Start
-  - ClothingNeckCaptainWideLoadout
-  - CaptainWhiteMantle
-  - CaptainCloakRoyal
+  - DetectiveTie
+  #- ClothingNeckCaptainWideLoadout
+  #- CaptainWhiteMantle
+  #- CaptainCloakRoyal
   # Vanilla-Loadouts-end
 
 - type: loadoutGroup
@@ -159,9 +154,9 @@
   id: CaptainOuterClothing
   name: loadout-group-captain-outerclothing
   loadouts:
-  - CaptainOuterClothing
+  #- CaptainOuterClothing
   - CaptainWintercoat
-  - ClothingOuterCoat
+  #- ClothingOuterCoat
   # Vanilla-Loadouts-Start
   - CoatNavalCaptain
   - ClothingOuterCoatCaptainWhite

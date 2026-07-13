@@ -112,6 +112,17 @@
       - state: CAP-equipped-OUTERCLOTHING
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHatHoodWinterCaptain
+  # RAYTEN-STARTS
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.5
+        Slash: 0.5
+        Piercing: 0.6
+        Heat: 0.5
+        Caustic: 0.9
+  - type: GroupExamine
+  # RAYTEN-ENDS
 
 - type: entity
   parent: ClothingOuterWinterCoatToggleable

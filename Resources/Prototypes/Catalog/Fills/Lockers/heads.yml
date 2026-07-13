@@ -34,14 +34,13 @@
     - id: CigarGoldCase
       prob: 0.25
     # - id: ClothingBeltSheathFilled #Vanilla-loadouts
-    - id: ClothingUniformJumpsuitPatriot # RAYTEN-SUPERS
     - id: AlertKeyUniversal
     - id: ClothingHeadsetAltCommand
-    - id: ClothingOuterArmorCaptainCarapace
     - id: BoxCaptainCircuitboards
     - id: DoorRemoteCustom
     - id: MedalCase
     - id: NukeDisk
+    - id: NukeCodePaperStation # RAYTEN
     - id: PinpointerNuclear
     - id: PlushieNuke
       prob: 0.1

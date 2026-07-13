@@ -1,0 +1,24 @@
+uniform sampler2D SCREEN_TEXTURE;
+uniform highp float exponent;
+uniform highp float strength;
+
+void fragment() {
+    highp vec2 coord = FRAGCOORD.xy * SCREEN_PIXEL_SIZE.xy;
+    highp vec4 screen = zTextureSpec(SCREEN_TEXTURE, coord);
+
+    highp vec2 iResolution = 1.0 / SCREEN_PIXEL_SIZE;
+    highp vec2 uv = FRAGCOORD.xy / iResolution.xy;
+
+    highp float x = (uv.x + 4.0) * (uv.y + 4.0) * (TIME * 10.0);
+
+    highp float brightness = dot(screen.rgb, vec3(0.299, 0.587, 0.114));
+    highp float darkness = 1.0 - brightness;
+
+    highp float grain_factor = pow(darkness, exponent);
+    highp float grain = mod(mod(x, 13.0) * mod(x, 123.0), 0.01) - 0.005;
+
+    screen += grain * grain_factor * strength;
+    screen = 1.0 - screen;
+
+    COLOR = screen;
+}

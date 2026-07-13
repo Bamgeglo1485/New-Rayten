@@ -141,6 +141,10 @@
   placement:
     mode: SnapgridCenter
   components:
+  # <Trauma>
+  - type: ViewconeOccludable # seeing some guy bleeding behind you... not very good
+    occludeIfAnchored: true # they're always anchored
+  # </Trauma>
   - type: Clickable
   - type: Slippery
     staminaDamage: 0

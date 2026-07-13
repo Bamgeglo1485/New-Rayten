@@ -3,6 +3,17 @@
   parent: BaseItem
   abstract: true
   components:
+  # <Trauma>
+  - type: EmitSoundOnPickup
+    sound:
+      collection: LasersPickUp
+  - type: EmitSoundOnDrop
+    sound:
+      collection: LasersDrop
+  - type: EmitSoundOnLand
+    sound:
+      collection: LasersDrop
+  # </Trauma>
   - type: Sprite
   - type: Item
     size: Huge

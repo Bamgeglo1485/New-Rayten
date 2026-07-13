@@ -4,6 +4,17 @@
   save: false
   id: BaseControllable
   components:
+  # <Trauma>
+  - type: Viewcone
+  - type: ViewconeOccludable # if it can move, you probably can't remember it forever?
+    useMemory: false # forgor
+  - type: ViewconeFootstepsEffect # if you can hear it move you will see steps effects on screen
+  # </Trauma>
+  # Rayten
+  - type: SinCityOverlay
+  - type: GrainOverlay
+  - type: VignetteOverlay
+  # Rayten-End
   - type: Sprite
     noRot: true
     drawdepth: Mobs
