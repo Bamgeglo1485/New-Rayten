@@ -107,6 +107,7 @@
     - /Audio/Ambience/ambitech.ogg
     - /Audio/Ambience/ambitech2.ogg
     - /Audio/Ambience/ambitech3.ogg
+    - /Audio/Vanilla/Ambience/Music/Engie0.ogg # RAYTEN
 
 - type: soundCollection
   id: AmbienceGeneral
@@ -124,6 +125,29 @@
     - /Audio/Ambience/ambigen12.ogg
     - /Audio/Ambience/ambigen14.ogg
     - /Audio/Ambience/ambigen15.ogg
+    - /Audio/Vanilla/Ambience/General/Ambient0.ogg # RAYTEN
+    - /Audio/Vanilla/Ambience/General/Ambient1.ogg # RAYTEN
+    - /Audio/Vanilla/Ambience/General/Ambient2.ogg # RAYTEN
+    - /Audio/Vanilla/Ambience/General/Ambient3.ogg # RAYTEN
+    - /Audio/Vanilla/Ambience/General/Ambient4.ogg # RAYTEN
+    - /Audio/Vanilla/Ambience/General/Ambient5.ogg # RAYTEN
+    - /Audio/Vanilla/Ambience/General/Ambient6.ogg # RAYTEN
+    - /Audio/Vanilla/Ambience/General/Ambient7.ogg # RAYTEN
+    - /Audio/Vanilla/Ambience/General/Ambient8.ogg # RAYTEN
+    - /Audio/Vanilla/Ambience/General/Ambient9.ogg # RAYTEN
+    - /Audio/Vanilla/Ambience/General/Ambient10.ogg # RAYTEN
+    - /Audio/Vanilla/Ambience/General/Ambient11.ogg # RAYTEN
+    - /Audio/Vanilla/Ambience/General/Ambient12.ogg # RAYTEN
+    - /Audio/Vanilla/Ambience/Music/General0.ogg # RAYTEN
+    - /Audio/Ambience/ambimo2.ogg # RAYTEN
+    - /Audio/Ambience/ambilava1.ogg # RAYTEN
+    - /Audio/Ambience/ambilava2.ogg # RAYTEN
+    - /Audio/Ambience/ambiruin4.ogg # RAYTEN
+    - /Audio/Ambience/ambiruin5.ogg # RAYTEN
+    - /Audio/Ambience/ambiruin6.ogg # RAYTEN
+    - /Audio/Ambience/ambiruin7.ogg # RAYTEN
+    - /Audio/Ambience/ambidanger.ogg # RAYTEN
+    - /Audio/Ambience/ambidanger2.ogg # RAYTEN
 
 - type: soundCollection
   id: AmbienceHoly
@@ -150,6 +174,10 @@
     - /Audio/Voice/Misc/lowHiss3.ogg
     - /Audio/Voice/Misc/lowHiss4.ogg
     - /Audio/Ambience/maintambience.ogg
+    - /Audio/Vanilla/Ambience/Music/Maints0.ogg # RAYTEN
+    - /Audio/Vanilla/Ambience/Music/Maints1.ogg # RAYTEN
+    - /Audio/Vanilla/Ambience/Music/Maints2.ogg # RAYTEN
+    - /Audio/Vanilla/Ambience/Music/Maints3.ogg # RAYTEN
 
 - type: soundCollection
   id: AmbienceMedical
@@ -197,13 +225,16 @@
 - type: soundCollection
   id: AmbienceSpace
   files:
-    - /Audio/Ambience/constellations.ogg
-    - /Audio/Ambience/starlight.ogg
-    - /Audio/Ambience/drifting.ogg
+    #- /Audio/Ambience/constellations.ogg
+    #- /Audio/Ambience/starlight.ogg
+    #- /Audio/Ambience/drifting.ogg
     - /Audio/Ambience/spookyspace1.ogg
     - /Audio/Ambience/spookyspace2.ogg
     - /Audio/Ambience/ambispace2.ogg
-    - /Audio/Lobby/title2.ogg
+    #- /Audio/Lobby/title2.ogg
+    - /Audio/Vanilla/Ambience/173ambient1.ogg # RAYTEN
+    - /Audio/Vanilla/Ambience/939ambient1.ogg # RAYTEN
+    - /Audio/Vanilla/Ambience/939ambient2.ogg # RAYTEN
 
 - type: soundCollection
   id: AmbienceSpooky
