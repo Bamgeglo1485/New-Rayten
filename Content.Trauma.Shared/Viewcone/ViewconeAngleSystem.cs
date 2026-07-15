@@ -86,26 +86,6 @@ public sealed partial class ViewconeAngleSystem : EntitySystem
         // clamps to 0, 360 since this is could easily go over with stacking equipment items and shit
         return Math.Clamp(ent.Comp.BaseConeAngle * ev.AngleModifier, 0f, 360f);
     }
-
-    public bool IsInCone(EntityUid viewer, EntityUid target)
-    {
-        if (!_query.TryComp(viewer, out var viewcone))
-            return false;
-
-        var viewerPos = _transform.GetWorldPosition(viewer);
-        var targetPos = _transform.GetWorldPosition(target);
-
-        var angle = GetAngle((viewer, viewcone));
-
-        var direction = targetPos - viewerPos;
-        var angleToTarget = new Angle(direction);
-        var viewerAngle = _transform.GetWorldRotation(viewer);
-        var angleDiff = (angleToTarget - viewerAngle).Degrees;
-
-        angleDiff = Angle.Normalize(angleDiff);
-
-        return Math.Abs(angleDiff) <= angle / 2;
-    }
 }
 
 /// <summary>
