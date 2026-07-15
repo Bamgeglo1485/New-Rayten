@@ -1246,18 +1246,18 @@
   id: SecurityOuterClothing
   name: loadout-group-security-outerclothing
   loadouts:
-  - ArmorVestSec # Corvax
+  #- ArmorVestSec # Corvax # Rayten-Remove
   - ArmorVest
-  - ArmorVestSlim
+  #- ArmorVestSlim # Rayten-Remove
   - SecurityOfficerWintercoat
 
 - type: loadoutGroup
   id: SecurityShoes
   name: loadout-group-security-shoes
   loadouts:
-  - JackSecBoots # Corvax
+  #- JackSecBoots # Corvax
   - JackBoots
-  - SecurityWinterBoots
+  #- SecurityWinterBoots # Rayten-Remove
 
 - type: loadoutGroup
   id: SecurityPDA
