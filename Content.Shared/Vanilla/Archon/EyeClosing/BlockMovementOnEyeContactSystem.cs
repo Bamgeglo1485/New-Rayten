@@ -8,7 +8,6 @@ using Content.Shared.Movement.Events;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Physics;
 using Content.Shared.Eye.Blinding.Components;
-using Content.Trauma.Shared.Viewcone.Components;
 
 using Robust.Shared.Player;
 using Robust.Shared.Maths;
@@ -229,9 +228,6 @@ public sealed partial class BlockMovementOnEyeContactSystem : EntitySystem
             if (!_examine.InRangeUnOccluded(ent.Owner, uid, range))
                 continue;
 
-            if (!CheckNotInCone(uid, ent.Owner))
-                continue;
-
             any = true;
             GetNextBlink(ent.Comp, now, out var start, out var end);
             if (start > globalStart)
@@ -271,31 +267,6 @@ public sealed partial class BlockMovementOnEyeContactSystem : EntitySystem
         var cycles = Math.Ceiling((now - start).TotalSeconds / comp.BlinkInterval.TotalSeconds);
         nextStart = start + TimeSpan.FromSeconds(cycles * comp.BlinkInterval.TotalSeconds);
         nextEnd = nextStart + comp.BlinkDuration;
-    }
-
-    private bool CheckNotInCone(EntityUid target, EntityUid viewer)
-    {
-        if (!TryComp<ViewconeComponent>(viewer, out var viewcone))
-            return false;
-
-        var viewerPos = Transform(viewer).WorldPosition;
-        var targetPos = Transform(target).WorldPosition;
-
-        if ((targetPos - viewerPos).Length() > viewcone.Range)
-            return false;
-
-        var direction = targetPos - viewerPos;
-        var angleToTarget = direction.ToAngle();
-
-        var viewerAngle = Transform(viewer).WorldRotation;
-        var angleDifference = angleToTarget - viewerAngle;
-
-        var degrees = angleDifference.Degrees;
-        while (degrees > 180) degrees -= 360;
-        while (degrees < -180) degrees += 360;
-
-        var halfCone = viewcone.ConeAngle / 2;
-        return Math.Abs(degrees) <= halfCone;
     }
 
     private void OnMapInit(EntityUid uid, BlockMovementOnEyeContactComponent comp, ref MapInitEvent args)
