@@ -1,8 +1,8 @@
 ﻿- type: entity
   id: WashingMachine
   parent: [ BaseMachinePowered, ConstructibleMachine ]
-  name: Nanotrasen Commercial Model-C washing machine
-  description: An industrial-grade washing machine designed to clean even the grimiest of uniforms. Keep hands, hard objects and small crewmembers away from drum during cycle.
+  name: Стиральная Машина
+  description: Единственная машина, которой нормально управляет женщина.
   placement:
     mode: SnapgridCenter
   components:

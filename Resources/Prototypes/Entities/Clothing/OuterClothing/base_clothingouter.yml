@@ -8,9 +8,6 @@
     - outerClothing
   - type: Sprite
     state: icon
-  - type: Tag # Rayten
-    tags:
-    - OuterClothing
   - type: Appearance
   - type: Stainable
     clothingVisuals:
@@ -20,15 +17,14 @@
     iconVisuals:
     - sprite: _Funkystation/Effects/blood.rsi
       state: outerclothing
-  - type: SolutionContainerManager
+  - type: SolutionManager
     solutions:
-      food:
-        maxVol: 30
-        reagents:
-        - ReagentId: Fiber
-          Quantity: 30
-      stain:
-        maxVol: 5
+    - SolutionStain
+  - type: Solution
+    solution:
+      reagents:
+      - ReagentId: Fiber
+        Quantity: 30
   - type: StainBlocker
     slots: [INNERCLOTHING]
 
@@ -187,7 +183,6 @@
   - type: HeldSpeedModifier
   - type: Item
     size: Ginormous
-  - type: InjectionProtection # Vanill Station
   - type: Armor
     modifiers:
       coefficients:
@@ -238,7 +233,6 @@
     walkModifier: 0.8
     sprintModifier: 0.8
   - type: HeldSpeedModifier
-  - type: InjectionProtection # Vanilla Station
   - type: Item
     size: Huge
   - type: ProtectedFromStepTriggers
