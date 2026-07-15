@@ -37,19 +37,21 @@
   <Project Path="Content.Server/Content.Server.csproj" />
   <Project Path="Content.Shared.Database/Content.Shared.Database.csproj" />
   <Project Path="Content.Shared/Content.Shared.csproj" />
-  <!-- <Goob Start> -->
+  <!-- <Trauma> -->
+  <Project Path="Content.Trauma.Server/Content.Trauma.Server.csproj" />
+  <Project Path="Content.Trauma.Shared/Content.Trauma.Shared.csproj" />
+  <Project Path="Content.Trauma.Client/Content.Trauma.Client.csproj" />
+  <Project Path="Content.Trauma.Common/Content.Trauma.Common.csproj" />
   <Project Path="Content.Goobstation.Server/Content.Goobstation.Server.csproj" />
   <Project Path="Content.Goobstation.Shared/Content.Goobstation.Shared.csproj" />
   <Project Path="Content.Goobstation.Client/Content.Goobstation.Client.csproj" />
   <Project Path="Content.Goobstation.Common/Content.Goobstation.Common.csproj" />
-  <Project Path="Content.Goobstation.Maths/Content.Goobstation.Maths.csproj" />
-  <Project Path="Content.ModuleManager/Content.ModuleManager.csproj" />
-  <!-- </Goob End> -->
+  <Project Path="Content.Common/Content.Common.csproj" />
+  <!-- </Trauma> -->
   <Project Path="Content.Tests/Content.Tests.csproj" />
   <Project Path="Content.Tools/Content.Tools.csproj" />
   <Project Path="Content.YAMLLinter/Content.YAMLLinter.csproj" />
   <Project Path="Pow3r/Pow3r.csproj" />
-  <Folder Name="/RobustToolbox/.github/" />
   <Folder Name="/RobustToolbox/.github/workflows/">
     <File Path="RobustToolbox/.github/workflows/benchmarks.yml" />
     <File Path="RobustToolbox/.github/workflows/build-all-configurations.yml" />
@@ -159,6 +161,7 @@
     <Project Path="RobustToolbox/Robust.Server.IntegrationTests/Robust.Server.IntegrationTests.csproj" />
     <Project Path="RobustToolbox/Robust.Server.Testing/Robust.Server.Testing.csproj" />
     <Project Path="RobustToolbox/Robust.Server/Robust.Server.csproj" />
+    <Project Path="RobustToolbox/Robust.Shared.EntitySystemSubscriptionsGenerator/Robust.Shared.EntitySystemSubscriptionsGenerator.csproj" />
     <Project Path="RobustToolbox/Robust.Shared.IntegrationTests/Robust.Shared.IntegrationTests.csproj" />
     <Project Path="RobustToolbox/Robust.Shared.Maths.Testing/Robust.Shared.Maths.Testing.csproj" />
     <Project Path="RobustToolbox/Robust.Shared.Maths.Tests/Robust.Shared.Maths.Tests.csproj" />
