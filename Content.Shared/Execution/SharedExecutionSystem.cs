@@ -211,8 +211,8 @@ public sealed partial class SharedExecutionSystem : EntitySystem
             var suicideEvent = new SuicideEvent(victim);
             RaiseLocalEvent(victim, suicideEvent);
 
-            var suicideGhostEvent = new SuicideGhostEvent(victim);
-            RaiseLocalEvent(victim, suicideGhostEvent);
+            //var suicideGhostEvent = new SuicideGhostEvent(victim); RAYTEN
+            //RaiseLocalEvent(victim, suicideGhostEvent); RAYTEN
         }
         else
         {
