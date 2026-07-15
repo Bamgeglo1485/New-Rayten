@@ -99,9 +99,9 @@ fence-rattle-success = *rattle*
 
 ## Patting players on the back. Funky Change
 
-hugging-success-generic = You pat {THE($target)} on the back.
-hugging-success-generic-others = { CAPITALIZE(THE($user)) } pats {THE($target)} on the back.
-hugging-success-generic-target = { CAPITALIZE(THE($user)) } pats you on the back.
+hugging-success-generic = Вы похплопываете {THE($target)} по плечу.
+hugging-success-generic-others = { CAPITALIZE(THE($user)) } похлопывает {THE($target)} по плечу.
+hugging-success-generic-target = { CAPITALIZE(THE($user)) } похлопывает по твоему плечу.
 
 ## Other
 

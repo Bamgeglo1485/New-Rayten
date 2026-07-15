@@ -24,4 +24,4 @@ gun-execution-empty-others = { $weapon } { CAPITALIZE($attacker) } щелкае�
 gun-execution-suicide-complete-self = Вы простреливаете себе голову!
 gun-execution-suicide-complete-others = { CAPITALIZE($attacker) } простреливает себе голову!
 gun-execution-complete-self = Вы простреливаете голову { $victim }!
-gun-execution-complete-others { CAPITALIZE($attacker) } простреливает голову { $victim }!
+gun-execution-complete-others = { CAPITALIZE($attacker) } простреливает голову { $victim }!
