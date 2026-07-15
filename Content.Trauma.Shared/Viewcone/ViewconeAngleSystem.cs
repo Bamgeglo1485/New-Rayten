@@ -101,7 +101,7 @@ public sealed partial class ViewconeAngleSystem : EntitySystem
         var angleToTarget = new Robust.Shared.Maths.Angle(direction);
         var viewerAngle = _transform.GetWorldRotation(viewer);
         var angleDiff = (angleToTarget - viewerAngle).Degrees;
-        angleDiff = Robust.Shared.Maths.Angle.Normalize(angleDiff);
+        angleDiff = Robust.Shared.Maths.Angle(angleDiff);
 
         return Math.Abs(angleDiff) <= angle / 2;
     }
