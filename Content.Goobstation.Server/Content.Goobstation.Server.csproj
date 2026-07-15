@@ -8,7 +8,6 @@ SPDX-License-Identifier: AGPL-3.0-or-later
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <OutputPath>..\bin\Content.Server\</OutputPath>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-    <OutputType Condition="'$(FullRelease)' != 'True'">Exe</OutputType>
     <NoWarn>1998</NoWarn>
     <WarningsAsErrors>false</WarningsAsErrors>
     <ServerGarbageCollection>true</ServerGarbageCollection>
@@ -22,9 +21,8 @@ SPDX-License-Identifier: AGPL-3.0-or-later
   <Import Project="..\RobustToolbox\Imports\Shared.props" />
 
   <ItemGroup>
-    <ProjectReference Include="..\Content.Goobstation.Maths\Content.Goobstation.Maths.csproj" />
+    <ProjectReference Include="..\Content.Common\Content.Common.csproj" />
     <ProjectReference Include="..\Content.Goobstation.Shared\Content.Goobstation.Shared.csproj" />
-    <ProjectReference Include="..\Content.Goobstation.Common\Content.Goobstation.Common.csproj" />
     <ProjectReference Include="..\Content.Server\Content.Server.csproj" />
   </ItemGroup>
 

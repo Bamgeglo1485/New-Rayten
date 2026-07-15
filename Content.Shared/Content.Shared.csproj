@@ -14,11 +14,9 @@
   <Import Project="..\RobustToolbox\Imports\Shared.props" />
 
   <ItemGroup>
-    <ProjectReference Include="..\Content.Shared.Database\Content.Shared.Database.csproj" />
     <!-- <Trauma> -->
     <ProjectReference Include="../Content.Trauma.Common/Content.Trauma.Common.csproj" />
     <ProjectReference Include="../Content.Goobstation.Common/Content.Goobstation.Common.csproj" />
-    <ProjectReference Include="..\Content.Goobstation.Maths\Content.Goobstation.Maths.csproj" />
     <ProjectReference Include="../Content.Common/Content.Common.csproj" />
     <!-- </Trauma> -->
     <ProjectReference Include="..\Content.Shared.Database\Content.Shared.Database.csproj" />
