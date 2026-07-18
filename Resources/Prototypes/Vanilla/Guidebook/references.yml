@@ -1,0 +1,198 @@
+- type: guideEntry
+  id: References
+  name: guide-entry-references
+  priority: 30
+  text: "/ServerInfo/Guidebook/References.xml"
+  children:
+  - Chemicals
+  - Drinks
+  - FoodRecipes
+
+- type: guideEntry
+  id: Drinks
+  name: guide-entry-drinks
+  text: "/ServerInfo/Guidebook/Service/Drinks.xml"
+  filterEnabled: True
+
+- type: guideEntry
+  id: FoodRecipes
+  name: guide-entry-foodrecipes
+  text: "/ServerInfo/Guidebook/Service/FoodRecipes.xml"
+  filterEnabled: True
+  children:
+  - PizzaRecipes
+  - SavoryRecipes
+  - BreadRecipes
+  - BreakfastRecipes
+  - MothRecipes
+  - PastaRecipes
+  - DessertRecipes
+  - SoupRecipes
+  - PieRecipes
+  - BarsAndCookiesRecipes
+  - CakeRecipes
+  - SaladRecipes
+  - OtherRecipes
+  - MedicinalRecipes
+  - SecretRecipes
+
+- type: guideEntry
+  id: PizzaRecipes
+  name: guide-entry-pizza-recipes
+  text: "/ServerInfo/Guidebook/Service/PizzaRecipes.xml"
+  filterEnabled: True
+
+- type: guideEntry
+  id: SavoryRecipes
+  name: guide-entry-savory-recipes
+  text: "/ServerInfo/Guidebook/Service/SavoryRecipes.xml"
+  filterEnabled: True
+
+- type: guideEntry
+  id: BreadRecipes
+  name: guide-entry-bread-recipes
+  text: "/ServerInfo/Guidebook/Service/BreadRecipes.xml"
+  filterEnabled: True
+
+- type: guideEntry
+  id: BreakfastRecipes
+  name: guide-entry-breakfast-recipes
+  text: "/ServerInfo/Guidebook/Service/BreakfastRecipes.xml"
+  filterEnabled: True
+
+- type: guideEntry
+  id: MothRecipes
+  name: guide-entry-moth-recipes
+  text: "/ServerInfo/Guidebook/Service/MothRecipes.xml"
+  filterEnabled: True
+
+- type: guideEntry
+  id: PastaRecipes
+  name: guide-entry-pasta-recipes
+  text: "/ServerInfo/Guidebook/Service/PastaRecipes.xml"
+  filterEnabled: True
+
+- type: guideEntry
+  id: DessertRecipes
+  name: guide-entry-dessert-recipes
+  text: "/ServerInfo/Guidebook/Service/DessertRecipes.xml"
+  filterEnabled: True
+
+- type: guideEntry
+  id: SoupRecipes
+  name: guide-entry-soup-recipes
+  text: "/ServerInfo/Guidebook/Service/SoupRecipes.xml"
+  filterEnabled: True
+
+- type: guideEntry
+  id: PieRecipes
+  name: guide-entry-pie-recipes
+  text: "/ServerInfo/Guidebook/Service/PieRecipes.xml"
+  filterEnabled: True
+
+- type: guideEntry
+  id: BarsAndCookiesRecipes
+  name: guide-entry-barsandcookies-recipes
+  text: "/ServerInfo/Guidebook/Service/BarsAndCookiesRecipes.xml"
+  filterEnabled: True
+
+- type: guideEntry
+  id: CakeRecipes
+  name: guide-entry-cake-recipes
+  text: "/ServerInfo/Guidebook/Service/CakeRecipes.xml"
+  filterEnabled: True
+
+- type: guideEntry
+  id: SaladRecipes
+  name: guide-entry-salad-recipes
+  text: "/ServerInfo/Guidebook/Service/SaladRecipes.xml"
+  filterEnabled: True
+
+- type: guideEntry
+  id: OtherRecipes
+  name: guide-entry-other-recipes
+  text: "/ServerInfo/Guidebook/Service/OtherRecipes.xml"
+  filterEnabled: True
+
+- type: guideEntry
+  id: MedicinalRecipes
+  name: guide-entry-medicinal-recipes
+  text: "/ServerInfo/Guidebook/Service/MedicinalRecipes.xml"
+  filterEnabled: True
+
+- type: guideEntry
+  id: SecretRecipes
+  name: guide-entry-secret-recipes
+  text: "/ServerInfo/Guidebook/Service/SecretRecipes.xml"
+  filterEnabled: True
+
+- type: guideEntry
+  id: Chemicals
+  name: guide-entry-chemicals
+  text: "/ServerInfo/Guidebook/Chemicals.xml"
+  children:
+  - Elements
+  - Medicine
+  - Narcotics
+  - Pyrotechnic
+  - Toxins
+  - Foods
+  - Botanical
+  - Biological
+  - Special
+  - Others
+  filterEnabled: True
+
+- type: guideEntry
+  id: Elements
+  name: guide-entry-elements
+  text: "/ServerInfo/Guidebook/ChemicalTabs/Elements.xml"
+  filterEnabled: True
+
+- type: guideEntry
+  id: Narcotics
+  name: guide-entry-narcotics
+  text: "/ServerInfo/Guidebook/ChemicalTabs/Narcotics.xml"
+  filterEnabled: True
+
+- type: guideEntry
+  id: Pyrotechnic
+  name: guide-entry-pyrotechnics
+  text: "/ServerInfo/Guidebook/ChemicalTabs/Pyrotechnic.xml"
+  filterEnabled: True
+
+- type: guideEntry
+  id: Toxins
+  name: guide-entry-toxins
+  text: "/ServerInfo/Guidebook/ChemicalTabs/Toxins.xml"
+  filterEnabled: True
+
+- type: guideEntry
+  id: Foods
+  name: guide-entry-foods
+  text: "/ServerInfo/Guidebook/ChemicalTabs/Foods.xml"
+  filterEnabled: True
+
+- type: guideEntry
+  id: Botanical
+  name: guide-entry-botanical
+  text: "/ServerInfo/Guidebook/Medical/Botanicals.xml"
+  filterEnabled: True
+
+- type: guideEntry
+  id: Biological
+  name: guide-entry-biological
+  text: "/ServerInfo/Guidebook/ChemicalTabs/Biological.xml"
+  filterEnabled: True
+
+- type: guideEntry
+  id: Special
+  name: guide-entry-special
+  text: "/ServerInfo/Guidebook/ChemicalTabs/Special.xml"
+  filterEnabled: True
+
+- type: guideEntry
+  id: Others
+  name: guide-entry-others
+  text: "/ServerInfo/Guidebook/ChemicalTabs/Other.xml"
+  filterEnabled: True

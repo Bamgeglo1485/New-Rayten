@@ -86,4 +86,12 @@
       forceEnableEmergencyLights: true
       shuttleTime: 600
       subcode: true
+    nirvana:
+      announcement: alert-level-nirvana-announcement
+      announcementdisable: alert-level-nirvana-announcement-disable
+      color: "#940d3a"
+      emergencyLightColor: "#ff0759"
+      forceEnableEmergencyLights: true
+      shuttleTime: 600
+      alarmSound: /Audio/Vanilla/Effects/Alarms/Nirvana.ogg
 # RAYTENDS

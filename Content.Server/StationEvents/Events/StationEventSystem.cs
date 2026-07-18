@@ -46,10 +46,10 @@ public abstract partial class StationEventSystem<T> : GameRuleSystem<T> where T 
         // we don't want to send to players who aren't in game (i.e. in the lobby)
         Filter allPlayersInGame = Filter.Empty().AddWhere(GameTicker.UserHasJoinedGame);
 
+        // RAYTEN STARTS
         if (stationEvent.StartAnnouncement != null)
-            ChatSystem.DispatchFilteredAnnouncement(allPlayersInGame, Loc.GetString(stationEvent.StartAnnouncement), playSound: false, colorOverride: stationEvent.StartAnnouncementColor);
-
-        Audio.PlayGlobal(stationEvent.StartAudio, allPlayersInGame, true);
+            ChatSystem.DispatchFilteredAnnouncement(allPlayersInGame, Loc.GetString(stationEvent.StartAnnouncement), announcementSound: stationEvent.StartAudio, colorOverride: stationEvent.StartAnnouncementColor);
+        // RAYTEN ENDS
     }
 
     /// <inheritdoc/>
@@ -85,10 +85,10 @@ public abstract partial class StationEventSystem<T> : GameRuleSystem<T> where T 
         // we don't want to send to players who aren't in game (i.e. in the lobby)
         Filter allPlayersInGame = Filter.Empty().AddWhere(GameTicker.UserHasJoinedGame);
 
+        // RAYTEN STARTS
         if (stationEvent.EndAnnouncement != null)
-            ChatSystem.DispatchFilteredAnnouncement(allPlayersInGame, Loc.GetString(stationEvent.EndAnnouncement), playSound: false, colorOverride: stationEvent.EndAnnouncementColor);
-
-        Audio.PlayGlobal(stationEvent.EndAudio, allPlayersInGame, true);
+            ChatSystem.DispatchFilteredAnnouncement(allPlayersInGame, Loc.GetString(stationEvent.EndAnnouncement), announcementSound: stationEvent.EndAudio, colorOverride: stationEvent.EndAnnouncementColor);
+        // RAYTEN ENDS
     }
 
     /// <summary>

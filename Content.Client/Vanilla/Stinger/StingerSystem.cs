@@ -1,4 +1,5 @@
 using Content.Shared.Mobs;
+using Content.Shared.Medical;
 using Robust.Client.Player;
 using Robust.Shared.Player;
 using Robust.Shared.Audio;
@@ -24,6 +25,7 @@ public sealed class StingerSystem : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<ActorComponent, MobStateChangedEvent>(OnMobStateChanged);
+        SubscribeLocalEvent<TargetBeforeDefibrillatorZapsEvent>(OnDefibZap);
     }
 
     private void OnMobStateChanged(Entity<ActorComponent> ent, ref MobStateChangedEvent args)
@@ -40,12 +42,13 @@ public sealed class StingerSystem : EntitySystem
             _audio.PlayGlobal(_death, ent);
             _lastPlayTime = currentTime;
         }
-        else if (args.NewMobState == MobState.Critical)
+    }
+
+    private void OnDefibZap(TargetBeforeDefibrillatorZapsEvent args)
+    {
+        if (_player.LocalSession?.AttachedEntity != args.DefibTarget)
             return;
-        else if (args.NewMobState == MobState.Alive)
-        {
-            _audio.PlayGlobal(_revive, ent);
-            _lastPlayTime = currentTime;
-        }
+
+        _audio.PlayGlobal(_revive, args.DefibTarget);
     }
 }

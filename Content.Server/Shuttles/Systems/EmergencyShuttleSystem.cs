@@ -404,8 +404,6 @@ public sealed partial class EmergencyShuttleSystem : SharedEmergencyShuttleSyste
     {
         // This is handled on map-init, so that centcomm has finished initializing by the time the StationPostInitEvent
         // gets raised
-        if (!_emergencyShuttleEnabled)
-            return;
 
         // Post mapinit? fancy
         if (TryComp(component.Entity, out TransformComponent? xform))

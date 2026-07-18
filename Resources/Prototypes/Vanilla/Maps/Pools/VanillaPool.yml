@@ -2,9 +2,5 @@
   id: VanillaMapPool
   maps:
   # Lowpop (0)
-  - Saltern
   - Cluster
-  - Packed
-  - CorvaxTushkan
-  - CorvaxMaus
   # Highpop (25)

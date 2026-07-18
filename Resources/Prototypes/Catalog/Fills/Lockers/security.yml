@@ -26,6 +26,15 @@
   id: FillLockerWarden
   table: !type:AllSelector
     children:
+     # RAYTEN STARTS
+    - id: MedkitCombatFilled
+      amount: 2
+    - id: ForensicScanner
+    - id: LogProbeCartridge
+    - id: BoxForensicPad
+    - id: ClothingHandsGlovesForensic
+    - id: BoxEvidenceMarkers
+     # RAYTEN ENDS
     - id: FlashlightSeclite
     - id: WeaponDisabler
     - id: WeaponTaser

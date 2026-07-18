@@ -60,3 +60,9 @@ alert-level-apollyon-announcement =
     3. Экипаж должен держать значительную дистанцию от местоположения аномальных объектов и сообщать о всех паранормальных происшествиях в общую рацию.
 alert-level-apollyon-announcement-disable = Условия содержания объектов класса "Архонт" восстановлены.
 alert-level-apollyon-instructions = Гражданский персонал обязан оставаться в безопасных местах и категорически не контактировать с аномальными объектами. Обратитесь к научному руководителю за дополнительными инструкциями.
+
+alert-level-nirvana = Нирвана
+alert-level-nirvana-announcement =
+    Станция и её активы признаны утерянными.
+alert-level-nirvana-announcement-disable = Чего?..
+alert-level-nirvana-instructions = БЕГИТЕ.

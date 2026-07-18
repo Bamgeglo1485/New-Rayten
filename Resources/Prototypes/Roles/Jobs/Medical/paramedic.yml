@@ -6,24 +6,61 @@
   requirements:
   - !type:AgeRequirement
     requiredAge: 25 # Vanilla
+  - !type:DepartmentTimeRequirement
+    department: Security
+    time: 2h # RAYTEN
   startingGear: ParamedicGear
   icon: "JobIconParamedic"
   supervisors: job-supervisors-cmo
+  # RAYTEN STARTS
+  special:
+  - !type:AddImplantSpecial
+    implants: [ MindShieldImplant ]
   access:
-  - Medical
+  # Парамедику расширенный доступ
+  - Command
+  - Bar
+  - Service
   - Maintenance
-  extendedAccess:
+  - Janitor
+  - Theatre
+  - Kitchen
+  - Chapel
+  - Hydroponics
+  - External
+  - Cryogenics
   - Chemistry
+  - Engineering
+  - Research
+  - Detective
+  - Salvage
+  - Security
+  - Brig
+  - Lawyer
+  - Cargo
+  - Atmospherics
+  - Medical
+  - GenpopEnter
+  - GenpopLeave
+  # RAYTEN ENDS
 
 - type: startingGear
   id: ParamedicGear
   equipment:
     id: ParamedicPDA
     ears: ClothingHeadsetMedical
+  # RAYTEN STARTS
+  # Парамедику средство обороны
+  storage:
+    back:
+    - WeaponPistolMk58
+    - MagazinePistol
+  # RAYTEN ENDS
 
 - type: chameleonOutfit
   id: ParamedicChameleonOutfit
   job: Paramedic
+  hasMindShield: true # RAYTEN
   equipment:
     head: ClothingHeadHatParamedicsoft
     eyes: ClothingEyesHudMedical

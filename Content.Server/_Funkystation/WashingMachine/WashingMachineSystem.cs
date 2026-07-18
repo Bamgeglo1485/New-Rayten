@@ -1,4 +1,4 @@
-﻿using Content.Shared._Funkystation.WashingMachine;
+using Content.Shared._Funkystation.WashingMachine;
 using Content.Shared._Funkystation.Stains.Components;
 using Content.Shared._Funkystation.Stains.Systems;
 using Content.Shared.Chemistry.EntitySystems;
@@ -16,17 +16,27 @@ using System.Linq;
 using Content.Shared.Chemistry;
 using Content.Shared.Damage.Systems;
 
+// RAYTEN STARTS
+using Content.Server.Physics.Components;
+using Robust.Shared.Physics.Components;
+using Robust.Shared.Physics.Controllers;
+using Robust.Shared.Physics.Systems;
+using Content.Shared.Throwing;
+using System.Numerics;
+// RAYTEN ENDS
+
 namespace Content.Server._Funkystation.WashingMachine;
 
 public sealed class WashingMachineSystem : SharedWashingMachineSystem
 {
-    [Dependency] private readonly SharedSolutionContainerSystem _solution = null!;
-    [Dependency] private readonly SharedStainSystem _stains = null!;
-    [Dependency] private readonly ForensicsSystem _forensics = null!;
-    [Dependency] private readonly DamageableSystem _damageable = null!;
-    [Dependency] private readonly IPrototypeManager _proto = null!;
-    [Dependency] private readonly IRobustRandom _random = null!;
-    [Dependency] private readonly ReactiveSystem _reactive = null!;
+    [Dependency] private SharedSolutionContainerSystem _solution = null!;
+    [Dependency] private SharedStainSystem _stains = null!;
+    [Dependency] private ForensicsSystem _forensics = null!;
+    [Dependency] private DamageableSystem _damageable = null!;
+    [Dependency] private IPrototypeManager _proto = null!;
+    [Dependency] private IRobustRandom _random = null!;
+    [Dependency] private ReactiveSystem _reactive = null!;
+    [Dependency] private SharedPhysicsSystem _physics = default!; // RAYTEN
 
     private static readonly SoundSpecifier HitSound = new SoundCollectionSpecifier("MetalThud");
 
@@ -58,6 +68,17 @@ public sealed class WashingMachineSystem : SharedWashingMachineSystem
             }
 
             ProcessWashingHazards(uid, comp, frameTime);
+
+            // RAYTEN STARTS
+            if (!TryComp<PhysicsComponent>(uid, out var physics))
+                return;
+
+            var pushVec = _random.NextAngle().ToVec();
+            pushVec.Normalize();
+            var pushStrength = _random.NextFloat(0, 5);
+
+            _physics.SetLinearVelocity(uid, pushVec * pushStrength, body: physics);
+            // RAYTEN ENDS
         }
     }
 

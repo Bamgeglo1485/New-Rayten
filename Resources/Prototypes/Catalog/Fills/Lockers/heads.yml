@@ -217,7 +217,7 @@
     - id: AlertKeyViolet
     - id: ClothingEyesHudMedical
     - id: ClothingBeltMedicalFilled
-    - id: HandheldCrewMonitor
+    #- id: HandheldCrewMonitor # RAYTEN
     - id: Hypospray
     - id: MedTekCartridge
     # Standard command gear

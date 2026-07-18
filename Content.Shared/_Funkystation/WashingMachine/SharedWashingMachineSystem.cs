@@ -1,4 +1,4 @@
-﻿using Content.Shared.Interaction;
+using Content.Shared.Interaction;
 using Content.Shared.Popups;
 using Content.Shared.Power.EntitySystems;
 using Content.Shared.Storage.Components;
@@ -39,7 +39,7 @@ public abstract class SharedWashingMachineSystem : EntitySystem
         if (args.Handled || !args.Complex)
             return;
 
-        if (ent.Comp.State != WashingMachineState.Idle || !_power.IsPowered(ent.Owner) || Storage.IsOpen(ent.Owner))
+        if (ent.Comp.State != WashingMachineState.Idle || Storage.IsOpen(ent.Owner)) // СТИРАЛКА ДОЛЖНА РАБОТАТЬ БЕЗ ЭЛЕКТРИЧЕСТВА
             return;
 
         if (!TryComp<EntityStorageComponent>(ent, out var storage) || storage.Contents.ContainedEntities.Count == 0)
@@ -61,7 +61,7 @@ public abstract class SharedWashingMachineSystem : EntitySystem
         if (!args.CanInteract || !args.CanComplexInteract)
             return;
 
-        if (ent.Comp.State != WashingMachineState.Idle || !_power.IsPowered(ent.Owner) || Storage.IsOpen(ent.Owner))
+        if (ent.Comp.State != WashingMachineState.Idle || Storage.IsOpen(ent.Owner)) // СТИРАЛКА ДОЛЖНА РАБОТАТЬ БЕЗ ЭЛЕКТРИЧЕСТВА
             return;
 
         if (!TryComp<EntityStorageComponent>(ent, out var storage) || storage.Contents.ContainedEntities.Count == 0)
@@ -86,7 +86,7 @@ public abstract class SharedWashingMachineSystem : EntitySystem
 
     protected virtual bool TryStartWash(Entity<WashingMachineComponent> ent, EntityUid user)
     {
-        if (ent.Comp.State != WashingMachineState.Idle || !_power.IsPowered(ent.Owner) || Storage.IsOpen(ent.Owner))
+        if (ent.Comp.State != WashingMachineState.Idle || Storage.IsOpen(ent.Owner)) // СТИРАЛКА ДОЛЖНА РАБОТАТЬ БЕЗ ЭЛЕКТРИЧЕСТВА
             return false;
 
         if (Timing.CurTime < ent.Comp.NextWashAllowed)

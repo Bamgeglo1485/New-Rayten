@@ -1,0 +1,5 @@
+- type: guideEntry
+  id: Lore
+  name: Лор
+  priority: 1
+  text: "/ServerInfo/Vanilla/Guidebook/Void/Lore.xml"

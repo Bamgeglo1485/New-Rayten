@@ -1,0 +1,5 @@
+- type: guideEntry
+  id: Codex
+  name: Кодекс Персонала
+  priority: 2
+  text: "/ServerInfo/Vanilla/Guidebook/Void/Codex.xml"

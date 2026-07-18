@@ -350,6 +350,10 @@
   name: space law
   description: A set of Nanotrasen guidelines for keeping law and order on their space stations.
   components:
+  - type: GuideHelp
+    openOnActivation: true
+    guides:
+    - Codex
   - type: Sprite
     layers:
     - state: paper

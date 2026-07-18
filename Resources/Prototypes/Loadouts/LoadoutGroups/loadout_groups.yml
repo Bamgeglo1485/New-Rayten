@@ -1145,14 +1145,10 @@
   loadouts:
   - HeadofSecurityJumpsuit
   - HeadofSecurityJumpskirt
-  - HeadofSecurityTurtleneck
-  - HeadofSecurityTurtleneckSkirt
-  - HeadofSecurityFormalSuit
-  - HeadofSecurityFormalSkirt
-  # Corvax-Loadouts-Start
-  - HeadofSecurityJumpsuitBlack
-  - HeadofSecurityJumpskirtBlack
-  # Corvax-Loadouts-End
+  #- HeadofSecurityTurtleneck # RAYTEN-DELETE
+  #- HeadofSecurityTurtleneckSkirt # RAYTEN-DELETE
+  #- HeadofSecurityFormalSuit # RAYTEN-DELETE
+  #- HeadofSecurityFormalSkirt # RAYTEN-DELETE
 
 - type: loadoutGroup
   id: HeadofSecurityNeck
@@ -1196,7 +1192,7 @@
   name: loadout-group-warden-outerclothing
   loadouts:
   - WardenCoat
-  - WardenArmoredWinterCoat
+  #- WardenArmoredWinterCoat # RAYTEN-DELETE
 
 - type: loadoutGroup
   id: WardenJobTrinkets
