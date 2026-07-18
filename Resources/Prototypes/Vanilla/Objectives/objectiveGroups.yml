@@ -18,3 +18,12 @@
   weights:
     DieObjective: 1.0
     HijackShuttleObjective: 0.7
+
+# Traitor
+
+- type: weightedRandom
+  id: TraitorObjectiveGroupRP
+  weights:
+    JailRPObjective: 1
+    VerbRPObjective: 1
+    VerbEnrageObjective: 1
