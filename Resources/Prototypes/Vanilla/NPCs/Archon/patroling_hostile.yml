@@ -1,0 +1,9 @@
+- type: htnCompound
+  id: PatrolingHostileCompound
+  branches:
+    - tasks:
+        - !type:HTNCompoundTask
+          task: MeleeCombatCompound
+    - tasks:
+        - !type:HTNCompoundTask
+          task: PatrolCompound

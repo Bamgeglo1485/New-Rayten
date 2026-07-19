@@ -32,6 +32,7 @@
     - id: KingRatMigration
     - id: RevenantSpawn
     - id: BrainWormSpawn # rayten
+    - id: CentipedeSpawn # rayten
     - !type:NestedSelector
       tableId: DerelictBorgEventTable
 

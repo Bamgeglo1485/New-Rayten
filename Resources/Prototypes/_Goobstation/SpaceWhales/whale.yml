@@ -3,7 +3,7 @@
   parent: [ SimpleSpaceMobBase, FlyingMobBase, MobCombat ]
   name: космический левиафан
   description: Ты бы лучше бежал, а не рассматривал эту хуйню.
-  suffix: keeps tiles, no despawn
+  suffix: оставляет тайлы, не деспавнится
   components:
   - type: TailedEntity
     amount: 65
@@ -93,7 +93,7 @@
 - type: entity
   id: SpaceWhaleSegment
   parent: FlyingMobBase
-  suffix: do not spawn
+  categories: [ HideSpawnMenu ]
   components:
   - type: RadarBlip
     scale: 2
@@ -112,7 +112,7 @@
 - type: entity
   id: SpaceLeviathanDespawn
   parent: SpaceLeviathan
-  suffix: despawns
+  suffix: деспавнится
   components:
   - type: TimedDespawn
     lifetime: 190 # to further prevent shitters from abusing it if something came up

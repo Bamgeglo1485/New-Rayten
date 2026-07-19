@@ -1,0 +1,105 @@
+- type: entity
+  id: Centipede
+  parent: [ SimpleMobBase, MobCombat, BaseDangerMarker ]
+  name: многоножка
+  description: Интересный факт. Число пар ног у многоножек практически всегда нечетное. Ученым до сих пор не удалось найти ни одного вида, у которого было бы ровно 40 ножек. Эта - исключение...
+  components:
+  - type: DangerMob
+  - type: TailedEntity
+    amount: 10
+    speed: 3
+    spacing: 0.5
+    prototype: CentipedeSegment
+  - type: MovementSpeedModifier
+    baseSprintSpeed: 1.5
+    baseWalkSpeed: 1.5
+  - type: HTN
+    rootTask:
+      task: PatrolingHostileCompound
+    blackboard:
+      NavClimb: !type:Bool
+        true
+      NavInteract: !type:Bool
+        true
+      NavPry: !type:Bool
+        true
+      NavSmash: !type:Bool
+        true
+  - type: NpcFactionMember
+    factions:
+    - SimpleHostile
+  - type: Physics
+  - type: MeleeWeapon
+    altDisarm: false
+    attackRate: 0.3
+    angle: 0
+    animation: WeaponArcBite
+    soundHit:
+      path: /Audio/Effects/bite.ogg
+    damage:
+      types:
+        Slash: 25
+        Structural: 200
+  - type: Speech
+    speechVerb: LargeMob
+  - type: InteractionPopup
+    interactSuccessString: petting-success-leviathan
+    interactFailureString: petting-failure-leviathan
+    interactFailureSound:
+      path: /Audio/Effects/bite.ogg
+  - type: Sprite
+    sprite: _Goobstation/Mobs/SpaceWhale/centipede.rsi
+    state: head
+    noRot: false
+  - type: Vocal
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      300: Dead # todo maybe add some good loot in the future to make space salv go whale hunting
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 400
+      behaviors:
+      - !type:GibBehavior
+  - type: Tag
+    tags:
+      - DoorBumpOpener
+      - CannotSuicide
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.2
+        density: 100
+        mask:
+        - SmallMobMask
+        layer:
+        - SmallMobLayer
+  - type: AmbientSound
+    enabled: true
+    volume: 0
+    range: 10
+    sound:
+      path: /Audio/Vanilla/Effects/Footsteps/centipede.ogg
+
+- type: entity
+  id: CentipedeSegment
+  parent: BaseMob
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _Goobstation/Mobs/SpaceWhale/centipede.rsi
+    state: segment
+    noRot: false
+  - type: Tag
+    tags:
+    - HideContextMenu
+  - type: Physics
+    canCollide: false
+  - type: Prying
+    pryPowered: true
+    force: false
+    speedModifier: 2

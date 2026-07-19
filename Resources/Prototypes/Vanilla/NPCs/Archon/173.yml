@@ -7,7 +7,7 @@
           task: 173CombatCompound
     - tasks:
         - !type:HTNCompoundTask
-          task: IdleCompound
+          task: PatrolCompound
 
 - type: htnCompound
   id: 173CombatCompound
