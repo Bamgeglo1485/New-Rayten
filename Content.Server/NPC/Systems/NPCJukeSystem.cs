@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 using System.Numerics;
 using Content.Server.NPC.Components;
 using Content.Server.NPC.Events;
@@ -10,22 +12,26 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.NPC.Systems;
 
-public sealed partial class NPCJukeSystem : EntitySystem
+public sealed class NPCJukeSystem : EntitySystem
 {
-    [Dependency] private IGameTiming _timing = default!;
-    [Dependency] private IRobustRandom _random = default!;
-    [Dependency] private EntityLookupSystem _lookup = default!;
-    [Dependency] private MeleeWeaponSystem _melee = default!;
-    [Dependency] private SharedMapSystem _mapSystem = default!;
-    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private readonly EntityLookupSystem _lookup = default!;
+    [Dependency] private readonly MeleeWeaponSystem _melee = default!;
+    [Dependency] private readonly SharedMapSystem _mapSystem = default!;
+    [Dependency] private readonly SharedTransformSystem _transform = default!;
 
-    [Dependency] private EntityQuery<NPCMeleeCombatComponent> _npcMeleeQuery = default!;
-    [Dependency] private EntityQuery<NPCRangedCombatComponent> _npcRangedQuery = default!;
-    [Dependency] private EntityQuery<PhysicsComponent> _physicsQuery = default!;
+    private EntityQuery<NPCMeleeCombatComponent> _npcMeleeQuery;
+    private EntityQuery<NPCRangedCombatComponent> _npcRangedQuery;
+    private EntityQuery<PhysicsComponent> _physicsQuery;
 
     public override void Initialize()
     {
         base.Initialize();
+        _npcMeleeQuery = GetEntityQuery<NPCMeleeCombatComponent>();
+        _npcRangedQuery = GetEntityQuery<NPCRangedCombatComponent>();
+        _physicsQuery = GetEntityQuery<PhysicsComponent>();
+
         SubscribeLocalEvent<NPCJukeComponent, NPCSteeringEvent>(OnJukeSteering);
     }
 

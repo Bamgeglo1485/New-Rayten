@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: MIT
+
 using System.Numerics;
 using System.Threading;
 using Content.Server.NPC.Pathfinding;
@@ -54,7 +56,7 @@ public sealed partial class NPCSteeringComponent : Component
     [DataField("lastStuckCoordinates")]
     public EntityCoordinates LastStuckCoordinates;
 
-    [DataField("lastStuckTime", customTypeSerializer:typeof(TimeOffsetSerializer))]
+    [DataField("lastStuckTime", customTypeSerializer: typeof(TimeOffsetSerializer))]
     [AutoPausedField]
     public TimeSpan LastStuckTime;
 
@@ -97,6 +99,18 @@ public sealed partial class NPCSteeringComponent : Component
     /// How close are we trying to get to the coordinates before being considered in range.
     /// </summary>
     [ViewVariables(VVAccess.ReadWrite)] public float Range = 0.2f;
+
+    // Goobstation
+    /// <summary>
+    /// Whether to ignore pathing and just move directly to target.
+    /// </summary>
+    [ViewVariables(VVAccess.ReadWrite)] public bool DirectMove = false;
+
+    // Goobstation
+    /// <summary>
+    /// Up to how fast can we be going before being considered in range, if not null.
+    /// </summary>
+    [ViewVariables(VVAccess.ReadWrite)] public float? InRangeMaxSpeed = null;
 
     /// <summary>
     /// How far does the last node in the path need to be before considering re-pathfinding.
