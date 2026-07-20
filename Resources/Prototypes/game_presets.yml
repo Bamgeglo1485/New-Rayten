@@ -12,7 +12,7 @@
  # RAYTEN-end
     - MeteorSwarmScheduler
     - RampingStationEventScheduler
-    - SpaceTrafficControlEventScheduler
+    #- SpaceTrafficControlEventScheduler
     - BasicRoundstartVariation
 
 - type: gamePreset
@@ -31,7 +31,7 @@
  # RAYTEN-end
     - KesslerSyndromeScheduler
     - RampingStationEventScheduler
-    - SpaceTrafficControlEventScheduler
+    #- SpaceTrafficControlEventScheduler
     - BasicRoundstartVariation
 
 - type: gamePreset
@@ -54,7 +54,7 @@
     - Xenoborgs
     - KesslerSyndromeScheduler
     - RampingStationEventScheduler
-    - SpaceTrafficControlEventScheduler
+    #- SpaceTrafficControlEventScheduler
     - BasicRoundstartVariation
 
 - type: gamePreset
@@ -83,7 +83,7 @@
     - MeteorSwarmMildScheduler
     - MeteorSwarmScheduler
     - RampingStationEventScheduler
-    - SpaceTrafficControlEventScheduler
+    #- SpaceTrafficControlEventScheduler
     - BasicRoundstartVariation
 
 - type: gamePreset
@@ -101,7 +101,7 @@
  # RAYTEN-end
   - BasicStationEventScheduler
   - MeteorSwarmScheduler
-  - SpaceTrafficControlEventScheduler
+  #- SpaceTrafficControlEventScheduler
   - BasicRoundstartVariation
 
 - type: gamePreset
@@ -134,7 +134,7 @@
   - DummyNonAntag
   - DynamicStationEventScheduler
   - MeteorSwarmScheduler
-  - SpaceTrafficControlEventScheduler
+  #- SpaceTrafficControlEventScheduler
   - BasicRoundstartVariation
 
 - type: gamePreset
@@ -178,7 +178,7 @@
   - SubGamemodesRuleNoWizard
   - BasicStationEventScheduler
   - MeteorSwarmScheduler
-  - SpaceTrafficControlEventScheduler
+  #- SpaceTrafficControlEventScheduler
   - BasicRoundstartVariation
 
 - type: gamePreset
@@ -211,7 +211,7 @@
   - SubGamemodesRuleNoWizard
   - BasicStationEventScheduler
   - MeteorSwarmScheduler
-  - SpaceTrafficControlEventScheduler
+  #- SpaceTrafficControlEventScheduler
   - BasicRoundstartVariation
 
 - type: gamePreset
@@ -233,7 +233,7 @@
   - SubGamemodesRuleNoWizard
   - BasicStationEventScheduler
   - MeteorSwarmScheduler
-  - SpaceTrafficControlEventScheduler
+  #- SpaceTrafficControlEventScheduler
   - BasicRoundstartVariation
 
 - type: gamePreset
@@ -253,7 +253,7 @@
   - SubGamemodesRuleNoWizard #No Dual Wizards at the start, midround is fine
   - BasicStationEventScheduler
   - MeteorSwarmScheduler
-  - SpaceTrafficControlEventScheduler
+  #- SpaceTrafficControlEventScheduler
   - BasicRoundstartVariation
 
 - type: gamePreset
@@ -273,7 +273,7 @@
   - SubGamemodesRuleNoWizardNoXenoborg # no two motherships
   - BasicStationEventScheduler
   - MeteorSwarmScheduler
-  - SpaceTrafficControlEventScheduler
+  #- SpaceTrafficControlEventScheduler
   - BasicRoundstartVariation
 
 - type: gamePreset
@@ -295,7 +295,7 @@
   - Zombie
   - BasicStationEventScheduler
   - MeteorSwarmScheduler
-  - SpaceTrafficControlEventScheduler
+  #- SpaceTrafficControlEventScheduler
   - BasicRoundstartVariation
 
 - type: gamePreset
@@ -315,5 +315,5 @@
   - Zombie
   - BasicStationEventScheduler
   - KesslerSyndromeScheduler
-  - SpaceTrafficControlEventScheduler
+  #- SpaceTrafficControlEventScheduler
   - BasicRoundstartVariation

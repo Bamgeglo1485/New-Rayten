@@ -388,8 +388,8 @@
         tableId: BasicAntagEventsTable
       - !type:NestedSelector
         tableId: ModerateAntagEventsTable
-      - !type:NestedSelector
-        tableId: CargoGiftsTable
+      #- !type:NestedSelector
+        #tableId: CargoGiftsTable
       - !type:NestedSelector
         tableId: CalmPestEventsTable
       - !type:NestedSelector
@@ -403,8 +403,8 @@
       tableId: BasicCalmEventsTable
     - !type:NestedSelector
       tableId: BasicAntagEventsTable
-    - !type:NestedSelector
-      tableId: CargoGiftsTable
+    #- !type:NestedSelector
+      #tableId: CargoGiftsTable
     - !type:NestedSelector
       tableId: CalmPestEventsTable
     - !type:NestedSelector

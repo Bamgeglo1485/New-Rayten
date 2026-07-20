@@ -8,10 +8,13 @@ using Robust.Shared.Player;
 using Robust.Shared.Random;
 using Robust.Shared.Utility;
 
+using Content.Shared._CorvaxGoob.DynamicAudio.Effects; // RAYTEN VACUUM SILENCE
+
 namespace Content.Server.Chat.Systems;
 
 public sealed partial class ChatSystem
 {
+
     private void SendEntitySpeak(
         EntityUid source,
         string originalMessage,
@@ -22,6 +25,9 @@ public sealed partial class ChatSystem
         )
     {
         if (!_actionBlocker.CanSpeak(source) && !ignoreActionBlocker)
+            return;
+
+        if (HasComp<InBarotraumaAudioEffectComponent>(source)) // RAYTEN VACUUM SILENCE
             return;
 
         var message = TransformSpeech(source, originalMessage);
@@ -128,32 +134,36 @@ public sealed partial class ChatSystem
         var wrappedUnknownMessage = Loc.GetString("chat-manager-entity-whisper-unknown-wrap-message",
             ("message", FormattedMessage.EscapeText(obfuscatedMessage)));
 
-
-        foreach (var (session, data) in GetRecipients(source, WhisperMuffledRange))
+        if (!HasComp<InBarotraumaAudioEffectComponent>(source)) // RAYTEN
         {
-            EntityUid listener;
+            foreach (var (session, data) in GetRecipients(source, WhisperMuffledRange))
+            {
+                EntityUid listener;
 
-            if (session.AttachedEntity is not { Valid: true } playerEntity)
-                continue;
-            listener = session.AttachedEntity.Value;
+                if (session.AttachedEntity is not { Valid: true } playerEntity)
+                    continue;
+                listener = session.AttachedEntity.Value;
 
-            if (MessageRangeCheck(session, data, range) != MessageRangeCheckResult.Full)
-                continue; // Won't get logged to chat, and ghosts are too far away to see the pop-up, so we just won't send it to them.
+                if (HasComp<InBarotraumaAudioEffectComponent>(listener)) // RAYTEN
+                    continue;
 
-            if (data.Range <= WhisperClearRange || data.Observer)
-                _chatManager.ChatMessageToOne(ChatChannel.Whisper, message, wrappedMessage, source, false, session.Channel);
-            //If listener is too far, they only hear fragments of the message
-            else if (_examineSystem.InRangeUnOccluded(source, listener, WhisperMuffledRange))
-                _chatManager.ChatMessageToOne(ChatChannel.Whisper, obfuscatedMessage, wrappedobfuscatedMessage, source, false, session.Channel);
-            //If listener is too far and has no line of sight, they can't identify the whisperer's identity
-            else
-                _chatManager.ChatMessageToOne(ChatChannel.Whisper, obfuscatedMessage, wrappedUnknownMessage, source, false, session.Channel);
+                if (MessageRangeCheck(session, data, range) != MessageRangeCheckResult.Full)
+                    continue;
+
+                if (data.Range <= WhisperClearRange || data.Observer)
+                    _chatManager.ChatMessageToOne(ChatChannel.Whisper, message, wrappedMessage, source, false, session.Channel);
+                else if (_examineSystem.InRangeUnOccluded(source, listener, WhisperMuffledRange))
+                    _chatManager.ChatMessageToOne(ChatChannel.Whisper, obfuscatedMessage, wrappedobfuscatedMessage, source, false, session.Channel);
+                else
+                    _chatManager.ChatMessageToOne(ChatChannel.Whisper, obfuscatedMessage, wrappedUnknownMessage, source, false, session.Channel);
+            }
         }
 
         _replay.RecordServerMessage(new ChatMessage(ChatChannel.Whisper, message, wrappedMessage, GetNetEntity(source), null, MessageRangeHideChatForReplay(range)));
 
         var ev = new EntitySpokeEvent(source, message, channel, obfuscatedMessage);
         RaiseLocalEvent(source, ev, true);
+
         if (!hideLog)
             if (originalMessage == message)
             {

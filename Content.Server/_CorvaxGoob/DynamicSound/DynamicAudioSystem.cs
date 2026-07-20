@@ -5,6 +5,7 @@ using Robust.Shared.Audio.Components;
 using Robust.Shared.Configuration;
 using Robust.Shared.Player;
 using Robust.Shared.Timing;
+using Content.Server.Atmos.Components;
 
 namespace Content.Server._CorvaxGoob.DynamicSound;
 
@@ -18,7 +19,7 @@ public sealed class DynamicAudioSystem : EntitySystem
     private float _soundBarotraumaMoles = 10;
 
     private TimeSpan _nextPlayersBarotraumaCheck = new TimeSpan();
-    private TimeSpan _cooldownPlayersCheck = TimeSpan.FromMilliseconds(100);
+    private TimeSpan _cooldownPlayersCheck = TimeSpan.FromMilliseconds(200);
 
     public override void Initialize()
     {
@@ -44,6 +45,9 @@ public sealed class DynamicAudioSystem : EntitySystem
     public void DoDynamicChecks(EntityUid entityUid)
     {
         if (TerminatingOrDeleted(entityUid) || Paused(entityUid))
+            return;
+
+        if (!HasComp<BarotraumaComponent>(entityUid))
             return;
 
         var mixture = _atmos.GetTileMixture((entityUid, Transform(entityUid)));
