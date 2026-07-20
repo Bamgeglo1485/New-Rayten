@@ -81,7 +81,12 @@
         damage: 4000
       behaviors:
       - !type:GibBehavior
-#        gibContents:
+        recursive: false
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          MaterialParaxit1:
+            min: 50
+            max: 90
   - type: DamageOnCollide
     inverted: true # fuck you wrath components!
     damage:

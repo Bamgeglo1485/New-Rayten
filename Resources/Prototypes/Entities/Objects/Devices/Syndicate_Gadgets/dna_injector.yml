@@ -11,7 +11,7 @@
   description: Can be used to take a DNA sample from someone and inject it into another person, turning them into a clone of the original.
   components:
   - type: Sprite
-    sprite: Objects/Specific/Medical/implanter.rsi
+    sprite: Objects/Specific/Medical/syndi_implanter.rsi
     state: implanter0
     layers:
     - state: implanter0
@@ -21,7 +21,7 @@
       map: [ "fillState" ]
       visible: false
   - type: Item
-    sprite: Objects/Specific/Medical/implanter.rsi
+    sprite: Objects/Specific/Medical/syndi_implanter.rsi
     heldPrefix: implanter
     size: Small
   - type: Appearance
