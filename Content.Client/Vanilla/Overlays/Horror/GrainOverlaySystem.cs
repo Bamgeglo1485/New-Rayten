@@ -1,12 +1,15 @@
 using Content.Shared.Inventory.Events;
 using Content.Shared.Overlays;
 using Robust.Client.Graphics;
+using Robust.Shared.Configuration;
+using Content.Shared.Vanilla.CCVars;
 
 namespace Content.Client.Overlays;
 
 public sealed partial class GrainOverlaySystem : EquipmentHudSystem<GrainOverlayComponent>
 {
     [Dependency] private IOverlayManager _overlayMan = default!;
+    [Dependency] private readonly IConfigurationManager _cfg = default!;
 
     private GrainOverlay _overlay = default!;
 
@@ -14,18 +17,22 @@ public sealed partial class GrainOverlaySystem : EquipmentHudSystem<GrainOverlay
     {
         base.Initialize();
 
-        _overlay = new();
+        _overlay = new GrainOverlay();
+        _cfg.OnValueChanged(CCVVars.GrainStrength, OnGrainStrengthChanged, true);
+    }
+
+    private void OnGrainStrengthChanged(float value)
+    {
+        if (_overlay != null)
+        {
+            _overlay.Strength = value;
+        }
     }
 
     protected override void UpdateInternal(RefreshEquipmentHudEvent<GrainOverlayComponent> component)
     {
         base.UpdateInternal(component);
 
-        foreach (var comp in component.Components)
-        {
-            _overlay._exponent = comp.Exponent;
-            _overlay._strength = comp.Strength;
-        }
         _overlayMan.AddOverlay(_overlay);
     }
 

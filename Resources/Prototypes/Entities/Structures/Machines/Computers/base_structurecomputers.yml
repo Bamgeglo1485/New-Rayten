@@ -85,6 +85,15 @@
   - type: Wires
     boardName: wires-board-name-computer
     layoutId: Computer
+    # RAYTEN STARTS
+  - type: AmbientOnPowered
+  - type: AmbientSound
+    volume: -15
+    range: 2
+    enabled: false
+    sound:
+      path: /Audio/Vanilla/Ambience/Objects/computer.ogg
+    # RAYTEN ENDS
 #
 #     This is overwritten by children, so needs to be defined there
 #  - type: UserInterface

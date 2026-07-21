@@ -6,8 +6,8 @@
   components:
   - type: DangerMob
   - type: TailedEntity
-    amount: 10
-    speed: 3
+    amount: 7
+    speed: 2
     spacing: 0.5
     prototype: CentipedeSegment
   - type: MovementSpeedModifier

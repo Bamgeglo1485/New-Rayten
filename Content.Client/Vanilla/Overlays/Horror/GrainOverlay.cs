@@ -11,7 +11,7 @@ public sealed partial class GrainOverlay : Overlay
     [Dependency] private IPrototypeManager _prototypeManager = default!;
 
     public float _exponent = 20f;
-    public float _strength = 4f;
+    public float Strength = 4f;
 
     public override OverlaySpace Space => OverlaySpace.WorldSpace;
     public override bool RequestScreenTexture => true;
@@ -31,7 +31,7 @@ public sealed partial class GrainOverlay : Overlay
 
         var handle = args.WorldHandle;
         _grainShader.SetParameter("exponent", _exponent);
-        _grainShader.SetParameter("strength", _strength);
+        _grainShader.SetParameter("strength", Strength);
         _grainShader.SetParameter("SCREEN_TEXTURE", ScreenTexture);
         handle.UseShader(_grainShader);
         handle.DrawRect(args.WorldBounds, Color.White);

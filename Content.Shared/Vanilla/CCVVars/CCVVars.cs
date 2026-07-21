@@ -44,4 +44,15 @@ public sealed class CCVVars
     /// </summary>
     public static readonly CVarDef<bool> TDMRoundEndEnabled = CVarDef.Create("game.tdmroundend_enabled", false, CVar.SERVERONLY);
 
+    /// <summary>
+    /// Эффект шума
+    /// </summary>
+    public static readonly CVarDef<float> GrainStrength =
+    CVarDef.Create("shader.grain_strength", 0.7f, CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    /// <summary>
+    /// Эффект черно-белого
+    /// </summary>
+    public static readonly CVarDef<float> SinCitySaturation =
+    CVarDef.Create("shader.sin_city_saturation", 0.65f, CVar.CLIENTONLY | CVar.ARCHIVE);
 }

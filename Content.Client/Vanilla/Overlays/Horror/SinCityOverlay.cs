@@ -10,7 +10,7 @@ public sealed partial class SinCityOverlay : Overlay
 
     [Dependency] private IPrototypeManager _prototypeManager = default!;
 
-    public float _saturation = 0.65f;
+    public float Saturation = 0.65f;
 
     public override OverlaySpace Space => OverlaySpace.WorldSpace;
     public override bool RequestScreenTexture => true;
@@ -29,7 +29,7 @@ public sealed partial class SinCityOverlay : Overlay
             return;
 
         var handle = args.WorldHandle;
-        _grainShader.SetParameter("EnvironmentSaturation", _saturation);
+        _grainShader.SetParameter("EnvironmentSaturation", Saturation);
         _grainShader.SetParameter("SCREEN_TEXTURE", ScreenTexture);
         handle.UseShader(_grainShader);
         handle.DrawRect(args.WorldBounds, Color.White);

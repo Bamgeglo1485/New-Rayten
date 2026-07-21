@@ -71,7 +71,7 @@ public sealed partial class ChatSystem
         foreach (var (session, data) in GetRecipients(source, VoiceRange))
         {
             // RAYTEN STARTS
-            if (session.AttachedEntity is { Valid: true } listenerEntity &&
+            if (channel != ChatChannel.Emotes && session.AttachedEntity is { Valid: true } listenerEntity &&
                 HasComp<InBarotraumaAudioEffectComponent>(listenerEntity))
                 continue;
             // RAYTEN ENDS

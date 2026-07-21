@@ -1,12 +1,15 @@
 using Content.Shared.Inventory.Events;
 using Content.Shared.Overlays;
 using Robust.Client.Graphics;
+using Robust.Shared.Configuration;
+using Content.Shared.Vanilla.CCVars;
 
 namespace Content.Client.Overlays;
 
 public sealed partial class SinCityOverlaySystem : EquipmentHudSystem<SinCityOverlayComponent>
 {
     [Dependency] private IOverlayManager _overlayMan = default!;
+    [Dependency] private readonly IConfigurationManager _cfg = default!;
 
     private SinCityOverlay _overlay = default!;
 
@@ -14,17 +17,22 @@ public sealed partial class SinCityOverlaySystem : EquipmentHudSystem<SinCityOve
     {
         base.Initialize();
 
-        _overlay = new();
+        _overlay = new SinCityOverlay();
+        _cfg.OnValueChanged(CCVVars.SinCitySaturation, OnSinCitySaturationChanged, true);
+    }
+
+    private void OnSinCitySaturationChanged(float value)
+    {
+        if (_overlay != null)
+        {
+            _overlay.Saturation = value;
+        }
     }
 
     protected override void UpdateInternal(RefreshEquipmentHudEvent<SinCityOverlayComponent> component)
     {
         base.UpdateInternal(component);
 
-        foreach (var comp in component.Components)
-        {
-            _overlay._saturation = comp.Saturation;
-        }
         _overlayMan.AddOverlay(_overlay);
     }
 

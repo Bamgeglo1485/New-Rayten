@@ -1,6 +1,6 @@
 ## RoundEndSystem
 
-round-end-system-shuttle-called-announcement = Процедура гибернации начата, конец смены через: { $time } { $units }. Закончите свои рабочие дела и перейдите в жилые зоны.
+round-end-system-shuttle-called-announcement = Процедура гибернации станции начата, конец смены через: { $time } { $units }. Персоналу требуется закончить свои рабочие обязанности и пройти в свои жилые зоны.
 round-end-system-shuttle-already-called-announcement = Процедура гибернации уже начата.
 round-end-system-shuttle-auto-called-announcement = Процедура гибернации начата, конец смены через: { $time } { $units }.
 round-end-system-shuttle-recalled-announcement = Процедура гибернации отменена.

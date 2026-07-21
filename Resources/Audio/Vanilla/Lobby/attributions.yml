@@ -1,74 +1,24 @@
-- files: ["peace_in_the_lags.ogg"]
-  license: "CC-BY-3.0"
-  copyright: "Made by qdzava prod. Oxygen. Converted from MP3 to OGG."
-  source: "https://www.youtube.com/channel/UCKL0ZRkj9nOP684aRGh09ZQ"
+﻿- files: ["SafeForNow.ogg"]
+  license: "Custom"
+  copyright: "Jeremy Blake"
+  source: "https://youtu.be/dQw4w9WgXcQ?si=QCiT3KYL-DbjDTAN"
 
-- files: ["Nightforce.ogg"]
-  license: "CC-BY-NC-SA-3.0"
-  copyright: "Power Glove"
-  source: "https://www.youtube.com/watch?v=aLgOzNbNVc4&ab_channel=loosebrie"
+- files: ["SoulsForYou.ogg"]
+  license: "Custom"
+  copyright: "Jeremy Blake"
+  source: "https://youtu.be/dQw4w9WgXcQ?si=QCiT3KYL-DbjDTAN"
 
-- files: ["Future-Club.ogg"]
-  license: "CC-BY-NC-SA-3.0"
-  copyright: "Perturbator"
-  source: "https://www.youtube.com/watch?v=RY66fdMt4vc&ab_channel=BlooodMusic"
+- files: ["WeNeedSleep.ogg"]
+  license: "Custom"
+  copyright: "Jeremy Blake"
+  source: "https://youtu.be/dQw4w9WgXcQ?si=QCiT3KYL-DbjDTAN"
 
-- files: ["Corporate-Rats.ogg"]
-  license: "CC-BY-NC-SA-3.0"
-  copyright: "Bolgarich"
-  source: "https://www.youtube.com/watch?v=F4OkYAPaqeI&ab_channel=%D0%91%D0%BE%D0%BB%D0%B3%D0%B0%D1%80%D1%8B%D1%87%2FBolgarich"
+- files: ["SCP.ogg"]
+  license: "Custom"
+  copyright: "Tim Morrison"
+  source: "https://youtu.be/dQw4w9WgXcQ?si=QCiT3KYL-DbjDTAN"
 
-- files: ["Human.ogg"]
-  license: "CC-BY-NC-SA-3.0"
-  copyright: "Borrtex"
-  source: "https://www.youtube.com/watch?v=XrdldqW-7CY&ab_channel=Borrtex"
-
-- files: ["Viol.ogg"]
-  license: "CC-BY-3.0"
-  copyright: "Gesaffelstein"
-  source: "https://www.youtube.com/watch?v=qYG0tKyz0lo&ab_channel=Gesaffelstein-Topic"
-
-- files: ["Aleph.ogg"]
-  license: "CC-BY-3.0"
-  copyright: "Gesaffelstein"
-  source: "https://www.youtube.com/watch?v=co2HfQBeREY&ab_channel=GesaffelsteinChannel"
-
-- files: ["Concrete.ogg"]
-  license: "CC-BY-3.0"
-  copyright: "Shotacore"
-  source: "https://www.youtube.com/watch?v=uA457FDfcBU&ab_channel=Shotacore"
-
-- files: ["Venger.ogg"]
-  license: "CC-BY-3.0"
-  copyright: "Perturbator"
-  source: "https://www.youtube.com/watch?v=-B7-Vcdlld8&ab_channel=Perturbator"
-
-- files: ["Roi.ogg"]
-  license: "CC-BY-3.0"
-  copyright: "VIDEOCLUB"
-  source: "https://www.youtube.com/watch?v=YkiOhP3wdvw&ab_channel=DragonBoy"
-
-- files: ["Pay-Phone.ogg"]
-  license: "CC-BY-3.0"
-  copyright: "Fantom '87"
-  source: "https://www.youtube.com/watch?v=XZBViguI8VA&ab_channel=DRIVERadio"
-
-- files: ["Dust.ogg"]
-  license: "CC-BY-3.0"
-  copyright: "M.O.O.N"
-  source: "https://www.youtube.com/watch?v=phL6fDiYNJk&ab_channel=The%2780sGuy"
-
-- files: ["Amnesia.ogg"]
-  license: "CC-BY-3.0"
-  copyright: "Cyter"
-  source: "https://www.youtube.com/watch?v=VnAA8B33V7M&ab_channel=GivenCyberMusic"
-
-- files: ["Drained.ogg"]
-  license: "CC-BY-3.0"
-  copyright: "auritni"
-  source: "https://www.youtube.com/watch?v=95XmCt17-Dg&ab_channel=auritni-Topic"
-
-- files: ["Bite-My-Tongue.ogg"]
-  license: "CC-BY-3.0"
-  copyright: "Sansurai83"
-  source: "https://www.youtube.com/watch?v=li-0yrBIs1A&list=RDli-0yrBIs1A&start_radio=1"
+- files: ["Votv.ogg"]
+  license: "Custom"
+  copyright: "Хз кто это разраб VotV"
+  source: "https://youtu.be/dQw4w9WgXcQ?si=QCiT3KYL-DbjDTAN"
