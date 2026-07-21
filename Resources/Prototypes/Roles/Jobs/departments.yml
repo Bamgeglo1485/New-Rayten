@@ -6,7 +6,8 @@
   roles:
   - CargoTechnician
   - Quartermaster
-  - SalvageSpecialist
+  primary: false # RAYTEN LOWPOP
+  editorHidden: true # RAYTEN LOWPOP
 
 - type: department
   id: Civilian
@@ -92,12 +93,12 @@
   description: department-Medical-description
   color: "#52B4E9"
   roles:
-  - Chemist
   - ChiefMedicalOfficer
   - MedicalDoctor
   - MedicalIntern
   - Psychologist
-  - Paramedic
+  primary: false # RAYTEN LOWPOP
+  editorHidden: true # RAYTEN LOWPOP
 
 - type: department
   id: Security
@@ -112,6 +113,7 @@
   - Detective
   - Warden
 #Rayten-start
+  - Paramedic # RAYTEN-LOWPOP
   - CentralCommandOfficial
   - CBURN
   - ERTLeader
@@ -132,6 +134,8 @@
   - ResearchDirector
   - Scientist
   - ResearchAssistant
+  - SalvageSpecialist # RAYTEN-LOWPOP
+  - Chemist # RAYTEN-LOWPOP
 
 - type: department
   id: Silicon

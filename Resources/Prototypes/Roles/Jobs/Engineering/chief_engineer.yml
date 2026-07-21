@@ -25,6 +25,8 @@
   - Atmospherics
   - Brig
   - Cryogenics
+  - Salvage
+  - Cargo
   special:
   - !type:AddImplantSpecial
     implants: [ MindShieldImplant ]

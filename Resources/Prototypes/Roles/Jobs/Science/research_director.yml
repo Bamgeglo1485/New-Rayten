@@ -24,6 +24,10 @@
   - ResearchDirector
   - Brig
   - Cryogenics
+  - Salvage
+  - Cargo
+  - Medical
+  - Chemistry
   special:
   - !type:AddImplantSpecial
     implants: [ MindShieldImplant ]

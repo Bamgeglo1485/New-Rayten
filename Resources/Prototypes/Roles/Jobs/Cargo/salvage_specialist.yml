@@ -16,6 +16,7 @@
   - Salvage
   - Maintenance
   - External
+  - Research
   # Rayten-start
   special:
   - !type:AddComponentSpecial

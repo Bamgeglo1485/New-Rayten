@@ -16,6 +16,8 @@
   - Engineering
   - External
   - Atmospherics
+  - Salvage
+  - Cargo
   special:
   - !type:GiveItemOnHolidaySpecial
     holiday: FirefighterDay

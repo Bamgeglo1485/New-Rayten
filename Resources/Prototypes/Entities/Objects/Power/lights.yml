@@ -111,7 +111,7 @@
   components:
   - type: LightBulb
     bulb: Bulb
-    color: "#e1e0ff" # RAYTEN
+    color: "#b1b0d6" # RAYTEN
     lightEnergy: 0.85
     lightRadius: 6
     lightSoftness: 1.1
@@ -128,7 +128,7 @@
   components:
   - type: LightBulb
     bulb: Bulb
-    color: "#e1e0ff" # RAYTEN
+    color: "#b1b0d6" # RAYTEN
     lightEnergy: 0.85
     lightRadius: 8
     lightSoftness: 1
@@ -221,7 +221,7 @@
   description: A light fixture.
   components:
   - type: LightBulb
-    color: "#e1e0ff" # RAYTEN
+    color: "#b1b0d6" # RAYTEN
     lightEnergy: 0.85
     lightRadius: 10
     lightSoftness: 1
@@ -234,9 +234,9 @@
   description: An aging light fixture.
   components:
   - type: LightBulb
-    color: "#FFDABB" # old fluorescents are yellower-4500K temp
+    color: "#dad6ff" # old fluorescents are yellower-4500K temp
     lightEnergy: 0.5
-    lightRadius: 10
+    lightRadius: 5
     lightSoftness: 1
     PowerUse: 10
 

@@ -15,6 +15,10 @@
   access:
   - Research
   - Maintenance
+  - Salvage
+  - Cargo
+  - Medical
+  - Chemistry
 
 - type: startingGear
   id: ScientistGear
