@@ -33,7 +33,7 @@ public sealed partial class PTLVisualsSystem : EntitySystem
     }
 }
 
-enum PTLVisualLayers : byte
+public enum PTLVisualLayers : byte
 {
     Base,
     Unpowered,
