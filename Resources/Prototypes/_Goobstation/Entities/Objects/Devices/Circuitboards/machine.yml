@@ -39,7 +39,7 @@
 - type: entity
   parent: BaseMachineCircuitboard
   id: StorageBinCircuitboard
-  name: плата контейнера
+  name: плата хранилища
   components:
   - type: MachineBoard
     prototype: StorageBin

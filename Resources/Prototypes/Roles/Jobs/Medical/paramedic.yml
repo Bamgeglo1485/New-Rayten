@@ -48,8 +48,8 @@
   id: ParamedicGear
   equipment:
     id: ParamedicPDA
-    ears: ClothingHeadsetMedical
   # RAYTEN STARTS
+    ears: ClothingHeadsetSecurity
   # Парамедику средство обороны
   storage:
     back:

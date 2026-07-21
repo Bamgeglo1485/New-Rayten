@@ -59,11 +59,11 @@
   roles:
   - Captain
   - ChiefEngineer
-  - ChiefMedicalOfficer
+  #- ChiefMedicalOfficer # RAYTEN
   - HeadOfPersonnel
   - HeadOfSecurity
   - ResearchDirector
-  - Quartermaster
+  #- Quartermaster # RAYTEN
   - CentralCommandOfficial
   - CBURN
   - ERTLeader
