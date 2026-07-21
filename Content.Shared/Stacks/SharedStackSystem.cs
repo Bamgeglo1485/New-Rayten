@@ -11,6 +11,7 @@ using Robust.Shared.GameStates;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
+using Robust.Shared.Map; // Goobstation
 
 namespace Content.Shared.Stacks;
 
@@ -230,6 +231,15 @@ public abstract partial class SharedStackSystem : EntitySystem
     protected virtual void UserSplit(Entity<StackComponent> stack, Entity<TransformComponent?> user, int amount)
     {
 
+    }
+
+    /// <summary>
+    /// Goobstation - virtual method to allow calling from shared.
+    /// Does nothing on the client.
+    /// </summary>
+    public virtual EntityUid? Split(EntityUid uid, int amount, EntityCoordinates spawnPosition, StackComponent? stack = null)
+    {
+        return null;
     }
 }
 

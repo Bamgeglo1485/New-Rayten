@@ -1,0 +1,83 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
+- type: entity
+  parent: BaseMachineCircuitboard
+  id: RoboticArmCircuitboard
+  name: плата манипулятора
+  components:
+  - type: Sprite
+    state: engineering
+  - type: MachineBoard
+    prototype: RoboticArm
+    stackRequirements:
+      Manipulator: 4
+      Steel: 6
+      Cable: 5
+    tagRequirements:
+      BorgArm:
+        amount: 2
+        defaultPrototype: LeftArmBorg
+
+- type: entity
+  parent: BaseMachineCircuitboard
+  id: ConstructorCircuitboard
+  name: плата сборщика
+  components:
+  - type: Sprite
+    state: engineering
+  - type: MachineBoard
+    prototype: Constructor
+    stackRequirements:
+      Manipulator: 5
+      Steel: 10
+      Cable: 5
+    tagRequirements:
+      BorgArm:
+        amount: 4
+        defaultPrototype: LeftArmBorg
+
+- type: entity
+  parent: BaseMachineCircuitboard
+  id: StorageBinCircuitboard
+  name: плата контейнера
+  components:
+  - type: MachineBoard
+    prototype: StorageBin
+    stackRequirements:
+      Manipulator: 4
+      Steel: 1
+
+- type: entity
+  parent: BaseMachineCircuitboard
+  id: InteractorCircuitboard
+  name: плата интерактора
+  components:
+  - type: Sprite
+    state: engineering
+  - type: MachineBoard
+    prototype: Interactor
+    stackRequirements:
+      Manipulator: 4
+      Plastic: 4
+      Cable: 5
+    tagRequirements:
+      BorgArm:
+        amount: 1
+        defaultPrototype: LeftArmBorg
+
+- type: entity
+  parent: BaseMachineCircuitboard
+  id: PlumbingPumpCircuitboard
+  name: плата жидкостного насоса
+  components:
+  - type: Sprite
+    state: engineering
+  - type: MachineBoard
+    prototype: PlumbingPump
+    stackRequirements:
+      Manipulator: 4
+      Steel: 5
+    tagRequirements:
+      GlassBeaker:
+        amount: 2
+        defaultPrototype: Beaker

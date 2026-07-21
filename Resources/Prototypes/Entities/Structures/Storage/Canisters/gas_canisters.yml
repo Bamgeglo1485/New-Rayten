@@ -5,6 +5,17 @@
   name: gas canister
   description: A canister that can contain any type of gas. It can be attached to connector ports using a wrench.
   components:
+  - type: AutomationSlots # Goobstation
+    slots:
+    - !type:AutomatedItemSlot
+      input: AutomationSlotGasTank
+      output: AutomationSlotGasTank
+      slotId: tank_slot
+    - !type:AutomatedPorts
+      sinks:
+      - Open
+      - Close
+      - Toggle
   - type: Animateable
   - type: InteractionOutline
   - type: Transform
