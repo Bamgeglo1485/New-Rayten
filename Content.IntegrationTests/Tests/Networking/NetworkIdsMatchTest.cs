@@ -1,15 +1,16 @@
-using Content.IntegrationTests.Fixtures;
+// SPDX-License-Identifier: MIT
+
 using Robust.Shared.GameObjects;
 
 namespace Content.IntegrationTests.Tests.Networking
 {
     [TestFixture]
-    public sealed class NetworkIdsMatchTest : GameTest
+    public sealed class NetworkIdsMatchTest
     {
         [Test]
         public async Task TestConnect()
         {
-            var pair = Pair;
+            await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true });
             var server = pair.Server;
             var client = pair.Client;
 
@@ -39,6 +40,7 @@ namespace Content.IntegrationTests.Tests.Networking
                     Assert.That(clientNetComps[netId].Name, Is.EqualTo(serverNetComps[netId].Name));
                 }
             });
+            await pair.CleanReturnAsync();
         }
     }
 }

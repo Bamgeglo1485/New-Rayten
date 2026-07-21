@@ -1,8 +1,7 @@
-using Content.IntegrationTests.Fixtures;
+// SPDX-License-Identifier: MIT
+
 using Content.Shared.Damage;
-using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Prototypes;
-using Content.Shared.Damage.Systems;
 using Content.Shared.Destructible.Thresholds.Triggers;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
@@ -13,12 +12,12 @@ namespace Content.IntegrationTests.Tests.Destructible
     [TestFixture]
     [TestOf(typeof(DamageTypeTrigger))]
     [TestOf(typeof(AndTrigger))]
-    public sealed class DestructibleDamageTypeTest : GameTest
+    public sealed class DestructibleDamageTypeTest
     {
         [Test]
         public async Task Test()
         {
-            var pair = Pair;
+            await using var pair = await PoolManager.GetServerClient();
             var server = pair.Server;
 
             var testMap = await pair.CreateTestMap();
@@ -189,6 +188,7 @@ namespace Content.IntegrationTests.Tests.Destructible
                 // No new thresholds reached as triggers once is set to true and it already triggered before
                 Assert.That(sTestThresholdListenerSystem.ThresholdsReached, Is.Empty);
             });
+            await pair.CleanReturnAsync();
         }
     }
 }

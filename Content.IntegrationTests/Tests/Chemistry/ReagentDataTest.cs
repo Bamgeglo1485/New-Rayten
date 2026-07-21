@@ -1,4 +1,5 @@
-using Content.IntegrationTests.Fixtures;
+// SPDX-License-Identifier: MIT
+
 using Content.IntegrationTests.Tests.Interaction;
 using Content.Shared.Chemistry.Reagent;
 using Robust.Shared.Reflection;
@@ -9,12 +10,12 @@ namespace Content.IntegrationTests.Tests.Chemistry;
 
 [TestFixture]
 [TestOf(typeof(ReagentData))]
-public sealed class ReagentDataTest : GameTest
+public sealed class ReagentDataTest : InteractionTest
 {
     [Test]
     public async Task ReagentDataIsSerializable()
     {
-        var pair = Pair;
+        await using var pair = await PoolManager.GetServerClient();
         var reflection = pair.Server.ResolveDependency<IReflectionManager>();
 
         Assert.Multiple(() =>
@@ -25,5 +26,7 @@ public sealed class ReagentDataTest : GameTest
                 Assert.That(instance.HasCustomAttribute<SerializableAttribute>(), $"{instance} must have the serializable attribute.");
             }
         });
+
+        await pair.CleanReturnAsync();
     }
 }

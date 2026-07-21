@@ -1,16 +1,17 @@
-using Content.IntegrationTests.Fixtures;
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Chemistry.Reaction;
 using Content.Shared.Chemistry.Reagent;
-using Content.Shared.FixedPoint;
+using Content.Goobstation.Maths.FixedPoint;
 using Robust.Shared.GameObjects;
 
 namespace Content.IntegrationTests.Tests.Chemistry;
 
 [TestFixture]
 [TestOf(typeof(ChemicalReactionSystem))]
-public sealed class SolutionRoundingTest : GameTest
+public sealed class SolutionRoundingTest
 {
     // This test tests two things:
     // * A rounding error in reaction code while I was making chloral hydrate
@@ -21,10 +22,10 @@ public sealed class SolutionRoundingTest : GameTest
 - type: entity
   id: SolutionRoundingTestContainer
   components:
-  - type: Solution
-    id: beaker
-    solution:
-      maxVol: 100
+  - type: SolutionContainerManager
+    solutions:
+      beaker:
+        maxVol: 100
 
 # This is the Chloral Hydrate recipe fyi.
 - type: reagent
@@ -73,7 +74,7 @@ public sealed class SolutionRoundingTest : GameTest
     [Test]
     public async Task Test()
     {
-        var pair = Pair;
+        await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
         var testMap = await pair.CreateTestMap();
 
@@ -122,5 +123,7 @@ public sealed class SolutionRoundingTest : GameTest
                     Is.EqualTo((FixedPoint2) 30));
             });
         });
+
+        await pair.CleanReturnAsync();
     }
 }

@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 using Content.IntegrationTests.Tests.Interaction;
 using Content.Shared.Trigger.Components;
 using Content.Shared.Trigger.Systems;
@@ -9,7 +11,7 @@ namespace Content.IntegrationTests.Tests.Payload;
 public sealed class ModularGrenadeTests : InteractionTest
 {
     public const string Trigger = "TimerTrigger";
-    public const string Payload = "ExplosivePayload";
+    public const string Payload = "ShrapnelPayload";
 
     /// <summary>
     /// Test that a modular grenade can be fully crafted and detonated.
@@ -63,7 +65,9 @@ public sealed class ModularGrenadeTests : InteractionTest
 
         // Wait until grenade explodes
         var triggerSys = SEntMan.System<TriggerSystem>();
-        while (Target != null && triggerSys.GetRemainingTime(SEntMan.GetEntity(Target.Value))?.TotalSeconds >= 0.0)
+        Target = SEntMan.GetNetEntity(await FindEntity(Payload)); // Goobstation - shrapnel payload start
+        var modgrenadeEnt = await FindEntity("ModularGrenade");
+        while (Target != null && triggerSys.GetRemainingTime(modgrenadeEnt)?.TotalSeconds >= 0.0) // Goobstation - shrapnel payload end
         {
             await RunTicks(10);
         }

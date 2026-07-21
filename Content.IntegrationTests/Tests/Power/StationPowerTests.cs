@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Content.IntegrationTests.Fixtures;
 using Content.Server.GameTicking;
 using Content.Server.Power.Components;
 using Content.Server.Power.EntitySystems;
@@ -14,7 +13,8 @@ using Robust.Shared.EntitySerialization;
 
 namespace Content.IntegrationTests.Tests.Power;
 
-public sealed class StationPowerTests : GameTest
+[Explicit] // Goobstation we are not readyto unexplicit this.
+public sealed class StationPowerTests
 {
     /// <summary>
     /// How long the station should be able to survive on stored power if nothing is changed from round start.
@@ -22,30 +22,30 @@ public sealed class StationPowerTests : GameTest
     private const float MinimumPowerDurationSeconds = 10 * 60;
 
     private static readonly string[] GameMaps =
-    [
+    [ // Goobstation only maps in rotation
+        "Atlas",
+        "Amber",
         "Bagel",
         "Box",
         "Elkridge",
         "Fland",
         "Marathon",
         "Oasis",
+        "Packed",
         "Plasma",
         "Relic",
         "Snowball",
-        "Reach",
         "Exo",
     ];
-
-    public override PoolSettings PoolSettings => new ()
-    {
-        Dirty = true,
-    };
 
     [Explicit]
     [Test, TestCaseSource(nameof(GameMaps))]
     public async Task TestStationStartingPowerWindow(string mapProtoId)
     {
-        var pair = Pair;
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings
+        {
+            Dirty = true,
+        });
         var server = pair.Server;
 
         var entMan = server.EntMan;
@@ -98,12 +98,17 @@ public sealed class StationPowerTests : GameTest
             Assert.That(totalStartingCharge, Is.GreaterThanOrEqualTo(requiredStoredPower),
                 $"Needs at least {requiredStoredPower - totalStartingCharge} more stored power!");
         });
+
+        await pair.CleanReturnAsync();
     }
 
     [Test, TestCaseSource(nameof(GameMaps))]
     public async Task TestApcLoad(string mapProtoId)
     {
-        var pair = Pair;
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings
+        {
+            Dirty = true,
+        });
         var server = pair.Server;
 
         var entMan = server.EntMan;
@@ -142,5 +147,7 @@ public sealed class StationPowerTests : GameTest
                 }
             }
         });
+
+        await pair.CleanReturnAsync();
     }
 }

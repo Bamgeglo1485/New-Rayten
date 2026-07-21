@@ -1,7 +1,7 @@
 using Content.IntegrationTests.Tests.Interaction;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Chemistry.Reagent;
-using Content.Shared.FixedPoint;
+using Content.Goobstation.Maths.FixedPoint;
 using Content.Shared.Fluids.Components;
 using Content.Shared.Nutrition.Components;
 using Robust.Shared.Prototypes;
@@ -23,15 +23,15 @@ public sealed class DrainTest : InteractionTest
 - type: entity
   parent: Puddle
   id: PuddleBloodTest
-  suffix: Blood
+  suffix: Blood (30u)
   components:
-  - type: Solution
-    id: puddle
-    solution:
-      maxVol: 1000
-      reagents:
-      - ReagentId: {BloodReagent}
-        Quantity: {PuddleVolume}
+  - type: SolutionContainerManager
+    solutions:
+      puddle:
+        maxVol: 1000
+        reagents:
+        - ReagentId: {BloodReagent}
+          Quantity: {PuddleVolume}
 ";
 
 

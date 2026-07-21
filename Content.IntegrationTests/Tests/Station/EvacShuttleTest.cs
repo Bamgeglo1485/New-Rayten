@@ -1,5 +1,6 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 using System.Linq;
-using Content.IntegrationTests.Fixtures;
 using Content.Server.GameTicking;
 using Content.Server.Shuttles.Components;
 using Content.Server.Shuttles.Systems;
@@ -13,21 +14,15 @@ namespace Content.IntegrationTests.Tests.Station;
 
 [TestFixture]
 [TestOf(typeof(EmergencyShuttleSystem))]
-public sealed class EvacShuttleTest : GameTest
+public sealed class EvacShuttleTest
 {
-    public override PoolSettings PoolSettings => new PoolSettings()
-    {
-        DummyTicker = true,
-        Dirty = true,
-    };
-
     /// <summary>
     /// Ensure that the emergency shuttle can be called, and that it will travel to centcomm
     /// </summary>
     [Test]
     public async Task EmergencyEvacTest()
     {
-        var pair = Pair;
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { DummyTicker = true, Dirty = true });
         var server = pair.Server;
         var entMan = server.EntMan;
         var ticker = server.System<GameTicker>();
@@ -39,7 +34,7 @@ public sealed class EvacShuttleTest : GameTest
         pair.Server.CfgMan.SetCVar(CCVars.EmergencyShuttleEnabled, true);
         pair.Server.CfgMan.SetCVar(CCVars.GameDummyTicker, false);
         var gameMap = pair.Server.CfgMan.GetCVar(CCVars.GameMap);
-        pair.Server.CfgMan.SetCVar(CCVars.GameMap, PoolManager.TestStation);
+        pair.Server.CfgMan.SetCVar(CCVars.GameMap, "Saltern");
 
         await server.WaitPost(() => ticker.RestartRound());
         await pair.RunTicksSync(25);
@@ -57,7 +52,7 @@ public sealed class EvacShuttleTest : GameTest
         var data = entMan.GetComponent<StationDataComponent>(station);
         var shuttleData = entMan.GetComponent<StationEmergencyShuttleComponent>(station);
 
-        var saltern = data.Grids.Single();
+        var saltern = data.Grids.First(x => !entMan.HasComponent<Content.Server._Lavaland.Procedural.Components.LavalandStationComponent>(x)); // Lavaland change - ignore lavaland outpost
         Assert.That(entMan.HasComponent<MapGridComponent>(saltern));
 
         var shuttle = shuttleData.EmergencyShuttle!.Value;
@@ -129,5 +124,6 @@ public sealed class EvacShuttleTest : GameTest
         server.CfgMan.SetCVar(CCVars.EmergencyShuttleDockTime, dockTime);
         pair.Server.CfgMan.SetCVar(CCVars.EmergencyShuttleEnabled, false);
         pair.Server.CfgMan.SetCVar(CCVars.GameMap, gameMap);
+        await pair.CleanReturnAsync();
     }
 }

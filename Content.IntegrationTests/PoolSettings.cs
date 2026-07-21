@@ -1,4 +1,10 @@
-﻿namespace Content.IntegrationTests;
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
+#nullable enable
+
+using Robust.Shared.Random;
+
+namespace Content.IntegrationTests;
 
 /// <inheritdoc/>
 public sealed class PoolSettings : PairSettings

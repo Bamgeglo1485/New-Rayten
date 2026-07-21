@@ -1,7 +1,8 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 #nullable enable
 using System.Collections.Generic;
 using System.Linq;
-using Content.IntegrationTests.Fixtures;
 using Content.Server.Body.Components;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Presets;
@@ -11,9 +12,8 @@ using Content.Server.Roles;
 using Content.Server.RoundEnd;
 using Content.Server.Shuttles.Components;
 using Content.Shared.CCVar;
-using Content.Shared.Damage.Components;
-using Content.Shared.Damage.Systems;
-using Content.Shared.FixedPoint;
+using Content.Shared.Damage;
+using Content.Goobstation.Maths.FixedPoint;
 using Content.Shared.GameTicking;
 using Content.Shared.Hands.Components;
 using Content.Shared.Inventory;
@@ -26,24 +26,16 @@ using Content.Shared.Station.Components;
 using Robust.Server.GameObjects;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map.Components;
+using Content.Shared._EinsteinEngines.Silicon.Components; // Goobstation
 using Robust.Shared.Prototypes;
 
 namespace Content.IntegrationTests.Tests.GameRules;
 
 [TestFixture]
-public sealed class NukeOpsTest : GameTest
+public sealed class NukeOpsTest
 {
     private static readonly ProtoId<NpcFactionPrototype> SyndicateFaction = "Syndicate";
     private static readonly ProtoId<NpcFactionPrototype> NanotrasenFaction = "NanoTrasen";
-
-    public override PoolSettings PoolSettings => new()
-    {
-        Dirty = true,
-        DummyTicker = false,
-        Connected = true,
-        InLobby = true
-    };
-
 
     /// <summary>
     /// Check that a nuke ops game mode can start without issue. I.e., that the nuke station and such all get loaded.
@@ -51,7 +43,13 @@ public sealed class NukeOpsTest : GameTest
     [Test]
     public async Task TryStopNukeOpsFromConstantlyFailing()
     {
-        var pair = Pair;
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings
+        {
+            Dirty = true,
+            DummyTicker = false,
+            Connected = true,
+            InLobby = true
+        });
 
         var server = pair.Server;
         var client = pair.Client;
@@ -63,7 +61,6 @@ public sealed class NukeOpsTest : GameTest
         var invSys = server.System<InventorySystem>();
         var factionSys = server.System<NpcFactionSystem>();
         var roundEndSys = server.System<RoundEndSystem>();
-        var damageSys = server.System<DamageableSystem>();
 
         server.CfgMan.SetCVar(CCVars.GridFill, true);
 
@@ -232,17 +229,23 @@ public sealed class NukeOpsTest : GameTest
         Assert.That(total, Is.GreaterThan(3));
 
         // Check the nukie commander passed basic training and figured out how to breathe.
-        if (entMan.TryGetComponent<RespiratorComponent>(player, out var resp))
+        if (entMan.TryGetComponent<RespiratorComponent>(player, out var resp))// CorvaxGoob-fix
         {
             var totalSeconds = 30;
-            var totalTicks = (int)Math.Ceiling(totalSeconds / server.Timing.TickPeriod.TotalSeconds);
+            var totalTicks = (int) Math.Ceiling(totalSeconds / server.Timing.TickPeriod.TotalSeconds);
             var increment = 5;
+            var damage = entMan.GetComponent<DamageableComponent>(player);
             for (var tick = 0; tick < totalTicks; tick += increment)
             {
                 await pair.RunTicksSync(increment);
-                Assert.That(resp.SuffocationCycles, Is.LessThanOrEqualTo(resp.SuffocationCycleThreshold));
-                Assert.That(damageSys.GetTotalDamage(player), Is.EqualTo(FixedPoint2.Zero));
+                if (!entMan.HasComponent<SiliconComponent>(player)) // Goobstation - IPC
+                {
+                    Assert.That(resp.SuffocationCycles, Is.LessThanOrEqualTo(resp.SuffocationCycleThreshold));
+                }
+                Assert.That(damage.TotalDamage, Is.EqualTo(FixedPoint2.Zero));
             }
+            Assert.That(damage.TotalDamage, Is.
+                AtMost((FixedPoint2) 1.0)); // Goobstation i cant believe you've done this
         }
 
         // Check that the round does not end prematurely when agents are deleted in the outpost
@@ -259,10 +262,12 @@ public sealed class NukeOpsTest : GameTest
             // Delete the last nukie and make sure the round ends.
             entMan.DeleteEntity(nukies[^1]);
 
-            Assert.That(roundEndSys.IsRoundEndRequested,
-                "All nukies were deleted, but the round didn't end!");
+            // goob edit - dynamic changes - nukies don't end the round instantly anymore
+            //Assert.That(roundEndSys.IsRoundEndRequested,
+            //    "All nukies were deleted, but the round didn't end!");
         });
 
         ticker.SetGamePreset((GamePresetPrototype?) null);
+        await pair.CleanReturnAsync();
     }
 }

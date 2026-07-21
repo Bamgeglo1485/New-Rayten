@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 using Content.IntegrationTests.Tests.Interaction;
 using Content.Shared.Buckle;
 using Content.Shared.Buckle.Components;
@@ -23,6 +25,7 @@ public sealed class BuckleDragTest : InteractionTest
 
 #pragma warning disable RA0002
         buckle.Delay = TimeSpan.Zero;
+        strap.UnbuckleDoafterTime = 0f; // Goobstation - disable doafter for test
 #pragma warning restore RA0002
 
         // Initially not buckled to the chair and not pulling anything

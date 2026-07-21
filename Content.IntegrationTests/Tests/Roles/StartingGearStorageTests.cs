@@ -1,5 +1,6 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 using System.Linq;
-using Content.IntegrationTests.Fixtures;
 using Content.Shared.Roles;
 using Content.Server.Storage.EntitySystems;
 using Robust.Shared.GameObjects;
@@ -8,17 +9,16 @@ using Robust.Shared.Collections;
 namespace Content.IntegrationTests.Tests.Roles;
 
 [TestFixture]
-public sealed class StartingGearPrototypeStorageTest : GameTest
+public sealed class StartingGearPrototypeStorageTest
 {
-    public override PoolSettings PoolSettings => new() { Connected = true, Dirty = true };
-
     /// <summary>
     /// Checks that a storage fill on a StartingGearPrototype will properly fill
     /// </summary>
     [Test]
     public async Task TestStartingGearStorage()
     {
-        var pair = Pair;
+        var settings = new PoolSettings { Connected = true, Dirty = true };
+        await using var pair = await PoolManager.GetServerClient(settings);
         var server = pair.Server;
         var mapSystem = server.System<SharedMapSystem>();
         var storageSystem = server.System<StorageSystem>();
@@ -67,5 +67,7 @@ public sealed class StartingGearPrototypeStorageTest : GameTest
 
             mapSystem.DeleteMap(testMap.MapId);
         });
+
+        await pair.CleanReturnAsync();
     }
 }

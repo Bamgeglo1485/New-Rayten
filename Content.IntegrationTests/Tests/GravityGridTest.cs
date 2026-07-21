@@ -1,4 +1,6 @@
-using Content.IntegrationTests.Fixtures;
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
+using Content.Server.Gravity;
 using Content.Server.Power.Components;
 using Content.Shared.Gravity;
 using Robust.Shared.GameObjects;
@@ -12,7 +14,7 @@ namespace Content.IntegrationTests.Tests
     /// making sure that gravity is applied to the correct grids.
     [TestFixture]
     [TestOf(typeof(GravityGeneratorComponent))]
-    public sealed class GravityGridTest : GameTest
+    public sealed class GravityGridTest
     {
         [TestPrototypes]
         private const string Prototypes = @"
@@ -32,7 +34,7 @@ namespace Content.IntegrationTests.Tests
         [Test]
         public async Task Test()
         {
-            var pair = Pair;
+            await using var pair = await PoolManager.GetServerClient();
             var server = pair.Server;
 
             var testMap = await pair.CreateTestMap();
@@ -97,6 +99,8 @@ namespace Content.IntegrationTests.Tests
                     Assert.That(entityMan.GetComponent<GravityComponent>(grid2).Enabled, Is.False);
                 });
             });
+
+            await pair.CleanReturnAsync();
         }
     }
 }

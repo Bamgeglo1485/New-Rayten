@@ -1,4 +1,5 @@
-using Content.IntegrationTests.Fixtures;
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 using Content.Server.Gravity;
 using Content.Shared.Alert;
 using Content.Shared.Gravity;
@@ -9,7 +10,7 @@ namespace Content.IntegrationTests.Tests.Gravity
     [TestFixture]
     [TestOf(typeof(GravitySystem))]
     [TestOf(typeof(GravityGeneratorComponent))]
-    public sealed class WeightlessStatusTests : GameTest
+    public sealed class WeightlessStatusTests
     {
         [TestPrototypes]
         private const string Prototypes = @"
@@ -39,7 +40,7 @@ namespace Content.IntegrationTests.Tests.Gravity
         [Test]
         public async Task WeightlessStatusTest()
         {
-            var pair = Pair;
+            await using var pair = await PoolManager.GetServerClient();
             var server = pair.Server;
 
             var entityManager = server.ResolveDependency<IEntityManager>();
@@ -87,6 +88,8 @@ namespace Content.IntegrationTests.Tests.Gravity
             });
 
             await pair.RunTicksSync(10);
+
+            await pair.CleanReturnAsync();
         }
     }
 }

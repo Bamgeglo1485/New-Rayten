@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 using Content.IntegrationTests.Tests.Interaction;
 
 namespace Content.IntegrationTests.Tests.Construction.Interaction;
@@ -94,4 +96,3 @@ public sealed class ComputerConstruction : InteractionTest
         AssertPrototype("ComputerCargoOrders");
     }
 }
-

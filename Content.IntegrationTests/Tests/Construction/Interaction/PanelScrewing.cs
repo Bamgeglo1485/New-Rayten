@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 using System.Linq;
 using Content.IntegrationTests.Tests.Interaction;
 using Content.Shared.DoAfter;
@@ -37,4 +39,3 @@ public sealed class PanelScrewing : InteractionTest
         Assert.That(comp.Open, Is.False);
     }
 }
-

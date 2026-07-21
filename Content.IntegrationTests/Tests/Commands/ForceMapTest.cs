@@ -1,4 +1,5 @@
-using Content.IntegrationTests.Fixtures;
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 using Content.Server.Maps;
 using Content.Shared.CCVar;
 using Robust.Shared.Configuration;
@@ -7,7 +8,7 @@ using Robust.Shared.Console;
 namespace Content.IntegrationTests.Tests.Commands;
 
 [TestFixture]
-public sealed class ForceMapTest : GameTest
+public sealed class ForceMapTest
 {
     private const string DefaultMapName = "Empty";
     private const string BadMapName = "asdf_asd-fa__sdfAsd_f"; // Hopefully no one ever names a map this...
@@ -45,7 +46,7 @@ public sealed class ForceMapTest : GameTest
     [Test]
     public async Task TestForceMapCommand()
     {
-        var pair = Pair;
+        await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
 
         var entMan = server.EntMan;
@@ -83,5 +84,7 @@ public sealed class ForceMapTest : GameTest
 
         // Cleanup
         configManager.SetCVar(CCVars.GameMap, DefaultMapName);
+
+        await pair.CleanReturnAsync();
     }
 }

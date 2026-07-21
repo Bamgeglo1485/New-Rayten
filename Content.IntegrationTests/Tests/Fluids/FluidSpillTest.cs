@@ -1,9 +1,10 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 #nullable enable
-using Content.IntegrationTests.Fixtures;
 using Content.Server.Fluids.EntitySystems;
 using Content.Server.Spreader;
 using Content.Shared.Chemistry.Components;
-using Content.Shared.FixedPoint;
+using Content.Goobstation.Maths.FixedPoint;
 using Content.Shared.Fluids.Components;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
@@ -15,7 +16,7 @@ namespace Content.IntegrationTests.Tests.Fluids;
 
 [TestFixture]
 [TestOf(typeof(SpreaderSystem))]
-public sealed class FluidSpill : GameTest
+public sealed class FluidSpill
 {
     private static PuddleComponent? GetPuddle(IEntityManager entityManager, Entity<MapGridComponent> mapGrid, Vector2i pos)
     {
@@ -37,7 +38,7 @@ public sealed class FluidSpill : GameTest
     [Test]
     public async Task SpillCorner()
     {
-        var pair = Pair;
+        await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
         var mapManager = server.ResolveDependency<IMapManager>();
         var entityManager = server.ResolveDependency<IEntityManager>();
@@ -111,5 +112,7 @@ public sealed class FluidSpill : GameTest
                 }
             }
         });
+
+        await pair.CleanReturnAsync();
     }
 }

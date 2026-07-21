@@ -1,4 +1,5 @@
-using Content.IntegrationTests.Fixtures;
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 using Content.Shared.Hands.Components;
 using Content.Shared.Movement.Pulling.Components;
 using Content.Shared.Prototypes;
@@ -10,7 +11,7 @@ namespace Content.IntegrationTests.Tests.Puller;
 #nullable enable
 
 [TestFixture]
-public sealed class PullerTest : GameTest
+public sealed class PullerTest
 {
     /// <summary>
     /// Checks that needsHands on PullerComponent is not set on mobs that don't even have hands.
@@ -18,7 +19,7 @@ public sealed class PullerTest : GameTest
     [Test]
     public async Task PullerSanityTest()
     {
-        var pair = Pair;
+        await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
 
         var compFactory = server.ResolveDependency<IComponentFactory>();
@@ -40,5 +41,7 @@ public sealed class PullerTest : GameTest
                 }
             });
         });
+
+        await pair.CleanReturnAsync();
     }
 }

@@ -1,17 +1,21 @@
-﻿using Content.Client.Gameplay;
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
+using Content.Client.Gameplay;
 using Content.Client.Mapping;
-using Content.IntegrationTests.Fixtures;
 using Robust.Client.State;
 
 namespace Content.IntegrationTests.Tests;
 
 [TestFixture]
-public sealed class MappingEditorTest : GameTest
+public sealed class MappingEditorTest
 {
     [Test]
     public async Task StopHardCodingWidgetsJesusChristTest()
     {
-        var pair = Pair;
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings
+        {
+            Connected = true
+        });
         var client = pair.Client;
         var state = client.ResolveDependency<IStateManager>();
 
@@ -33,5 +37,7 @@ public sealed class MappingEditorTest : GameTest
                 state.RequestStateChange<GameplayState>();
             });
         });
+
+        await pair.CleanReturnAsync();
     }
 }

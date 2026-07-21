@@ -1,5 +1,5 @@
-﻿using Content.IntegrationTests.Fixtures;
-using Content.IntegrationTests.Fixtures.Attributes;
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 using Content.Shared.CCVar;
 using Content.Shared.Salvage;
 using Robust.Shared.Configuration;
@@ -10,16 +10,15 @@ using Robust.Shared.Prototypes;
 namespace Content.IntegrationTests.Tests;
 
 [TestFixture]
-public sealed class SalvageTest : GameTest
+public sealed class SalvageTest
 {
     /// <summary>
     /// Asserts that all salvage maps have been saved as grids and are loadable.
     /// </summary>
     [Test]
-    [EnsureCVar(Side.Server, typeof(CCVars), nameof(CCVars.GridFill), false)]
     public async Task AllSalvageMapsLoadableTest()
     {
-        var pair = Pair;
+        await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
 
         var entManager = server.ResolveDependency<IEntityManager>();
@@ -27,6 +26,7 @@ public sealed class SalvageTest : GameTest
         var prototypeManager = server.ResolveDependency<IPrototypeManager>();
         var cfg = server.ResolveDependency<IConfigurationManager>();
         var mapSystem = entManager.System<SharedMapSystem>();
+        Assert.That(cfg.GetCVar(CCVars.GridFill), Is.False);
 
         await server.WaitPost(() =>
         {
@@ -52,6 +52,8 @@ public sealed class SalvageTest : GameTest
                 }
             }
         });
-        await RunUntilSynced();
+        await server.WaitRunTicks(1);
+
+        await pair.CleanReturnAsync();
     }
 }

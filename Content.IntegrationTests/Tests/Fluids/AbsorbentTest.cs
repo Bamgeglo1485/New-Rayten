@@ -1,19 +1,20 @@
+// SPDX-License-Identifier: MIT
+
 using Content.Server.Fluids.EntitySystems;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.EntitySystems;
-using Content.Shared.FixedPoint;
+using Content.Goobstation.Maths.FixedPoint;
 using Content.Shared.Fluids;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
 using System.Collections.Generic;
 using System.Linq;
-using Content.IntegrationTests.Fixtures;
 
 namespace Content.IntegrationTests.Tests.Fluids;
 
 [TestFixture]
 [TestOf(typeof(AbsorbentComponent))]
-public sealed class AbsorbentTest : GameTest
+public sealed class AbsorbentTest
 {
     private const string UserDummyId = "UserDummy";
     private const string AbsorbentDummyId = "AbsorbentDummy";
@@ -35,19 +36,19 @@ public sealed class AbsorbentTest : GameTest
   components:
   - type: Absorbent
     useAbsorberSolution: true
-  - type: Solution
-    id: absorbed
-    solution:
-      maxVol: 100
+  - type: SolutionContainerManager
+    solutions:
+      absorbed:
+        maxVol: 100
 
 - type: entity
   name: {RefillableDummyId}
   id: {RefillableDummyId}
   components:
-  - type: Solution
-    id: refillable
-    solution:
-      maxVol: 200
+  - type: SolutionContainerManager
+    solutions:
+      refillable:
+        maxVol: 200
   - type: RefillableSolution
     solution: refillable
 
@@ -55,10 +56,10 @@ public sealed class AbsorbentTest : GameTest
   name: {SmallRefillableDummyId}
   id: {SmallRefillableDummyId}
   components:
-  - type: Solution
-    id: refillable
-    solution:
-      maxVol: 20
+  - type: SolutionContainerManager
+    solutions:
+      refillable:
+        maxVol: 20
   - type: RefillableSolution
     solution: refillable
 ";
@@ -74,7 +75,7 @@ public sealed class AbsorbentTest : GameTest
     [TestCaseSource(nameof(TestCasesToRun))]
     public async Task AbsorbentOnRefillableTest(TestSolutionCase testCase)
     {
-        var pair = Pair;
+        await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
 
         var testMap = await pair.CreateTestMap();
@@ -124,12 +125,15 @@ public sealed class AbsorbentTest : GameTest
                 Assert.That(VolumeOfPrototypeInComposition(refillableComposition, NonEvaporablePrototypeId), Is.EqualTo(testCase.ExpectedRefillableSolution.VolumeOfNonEvaporable));
             });
         });
+        await pair.RunTicksSync(5);
+
+        await pair.CleanReturnAsync();
     }
 
     [TestCaseSource(nameof(TestCasesToRunOnSmallRefillable))]
     public async Task AbsorbentOnSmallRefillableTest(TestSolutionCase testCase)
     {
-        var pair = Pair;
+        await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
 
         var testMap = await pair.CreateTestMap();
@@ -178,6 +182,9 @@ public sealed class AbsorbentTest : GameTest
                 Assert.That(VolumeOfPrototypeInComposition(refillableComposition, NonEvaporablePrototypeId), Is.EqualTo(testCase.ExpectedRefillableSolution.VolumeOfNonEvaporable));
             });
         });
+        await pair.RunTicksSync(5);
+
+        await pair.CleanReturnAsync();
     }
 
     private static FixedPoint2 VolumeOfPrototypeInComposition(Dictionary<string, FixedPoint2> composition, string prototypeId)

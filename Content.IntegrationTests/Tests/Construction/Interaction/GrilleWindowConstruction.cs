@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 using Content.IntegrationTests.Tests.Interaction;
 using Content.Shared.Construction.Prototypes;
 using Robust.Shared.Maths;
@@ -53,4 +55,3 @@ public sealed class GrilleWindowConstruction : InteractionTest
         });
     }
 }
-

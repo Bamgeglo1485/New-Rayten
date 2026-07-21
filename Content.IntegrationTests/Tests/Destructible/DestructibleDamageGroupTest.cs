@@ -1,10 +1,9 @@
-using Content.IntegrationTests.Fixtures;
+// SPDX-License-Identifier: MIT
+
 using Content.Shared.Damage;
-using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Prototypes;
-using Content.Shared.Damage.Systems;
+using Content.Goobstation.Maths.FixedPoint;
 using Content.Shared.Destructible.Thresholds.Triggers;
-using Content.Shared.FixedPoint;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
 using static Content.IntegrationTests.Tests.Destructible.DestructibleTestPrototypes;
@@ -14,12 +13,12 @@ namespace Content.IntegrationTests.Tests.Destructible
     [TestFixture]
     [TestOf(typeof(DamageGroupTrigger))]
     [TestOf(typeof(AndTrigger))]
-    public sealed class DestructibleDamageGroupTest : GameTest
+    public sealed class DestructibleDamageGroupTest
     {
         [Test]
         public async Task AndTest()
         {
-            var pair = Pair;
+            await using var pair = await PoolManager.GetServerClient();
             var server = pair.Server;
 
             var testMap = await pair.CreateTestMap();
@@ -118,7 +117,7 @@ namespace Content.IntegrationTests.Tests.Destructible
                 sDamageableSystem.TryChangeDamage(sDestructibleEntity, bruteDamage * -10);
                 Assert.Multiple(() =>
                 {
-                    Assert.That(sDamageableSystem.GetTotalDamage(sDestructibleEntity), Is.EqualTo(FixedPoint2.New(20)));
+                    Assert.That(sDamageableComponent.TotalDamage, Is.EqualTo(FixedPoint2.New(20)));
 
                     // No new thresholds reached, healing should not trigger it
                     Assert.That(sTestThresholdListenerSystem.ThresholdsReached, Is.Empty);
@@ -133,7 +132,7 @@ namespace Content.IntegrationTests.Tests.Destructible
                 sTestThresholdListenerSystem.ThresholdsReached.Clear();
 
                 // Heal both classes of damage to 0
-                sDamageableSystem.ClearAllDamage((sDestructibleEntity, sDamageableComponent));
+                sDamageableSystem.SetAllDamage(sDestructibleEntity, sDamageableComponent, 0);
 
                 // No new thresholds reached, healing should not trigger it
                 Assert.That(sTestThresholdListenerSystem.ThresholdsReached, Is.Empty);
@@ -177,7 +176,7 @@ namespace Content.IntegrationTests.Tests.Destructible
                 threshold.TriggersOnce = true;
 
                 // Heal brute and burn back to 0
-                sDamageableSystem.ClearAllDamage((sDestructibleEntity, sDamageableComponent));
+                sDamageableSystem.SetAllDamage(sDestructibleEntity, sDamageableComponent, 0);
 
                 // No new thresholds reached from healing
                 Assert.That(sTestThresholdListenerSystem.ThresholdsReached, Is.Empty);
@@ -194,6 +193,7 @@ namespace Content.IntegrationTests.Tests.Destructible
                 // No new thresholds reached as triggers once is set to true and it already triggered before
                 Assert.That(sTestThresholdListenerSystem.ThresholdsReached, Is.Empty);
             });
+            await pair.CleanReturnAsync();
         }
     }
 }

@@ -1,6 +1,7 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 using System.Collections.Generic;
 using System.Linq;
-using Content.IntegrationTests.Fixtures;
 using Content.Shared.Lathe;
 using Content.Shared.Materials;
 using Content.Shared.Prototypes;
@@ -12,12 +13,12 @@ using Robust.Shared.Prototypes;
 namespace Content.IntegrationTests.Tests.Lathe;
 
 [TestFixture]
-public sealed class LatheTest : GameTest
+public sealed class LatheTest
 {
     [Test]
     public async Task TestLatheRecipeIngredientsFitLathe()
     {
-        var pair = Pair;
+        await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
 
         var mapData = await pair.CreateTestMap();
@@ -112,12 +113,14 @@ public sealed class LatheTest : GameTest
                 }
             });
         });
+
+        await pair.CleanReturnAsync();
     }
 
     [Test]
     public async Task AllLatheRecipesValidTest()
     {
-        var pair = Pair;
+        await using var pair = await PoolManager.GetServerClient();
 
         var server = pair.Server;
         var proto = server.ProtoMan;
@@ -130,5 +133,7 @@ public sealed class LatheTest : GameTest
                     Assert.That(recipe.ResultReagents, Is.Not.Null, $"Recipe '{recipe.ID}' has no result or result reagents.");
             }
         });
+
+        await pair.CleanReturnAsync();
     }
 }

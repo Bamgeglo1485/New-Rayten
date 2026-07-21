@@ -1,4 +1,5 @@
-using Content.IntegrationTests.Fixtures;
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 using Content.Shared.Contraband;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
@@ -6,12 +7,12 @@ using Robust.Shared.Prototypes;
 namespace Content.IntegrationTests.Tests;
 
 [TestFixture]
-public sealed class ContrabandTest : GameTest
+public sealed class ContrabandTest
 {
     [Test]
     public async Task EntityShowDepartmentsAndJobs()
     {
-        var pair = Pair;
+        await using var pair = await PoolManager.GetServerClient();
         var client = pair.Client;
         var protoMan = client.ResolveDependency<IPrototypeManager>();
         var componentFactory = client.ResolveDependency<IComponentFactory>();
@@ -42,5 +43,7 @@ public sealed class ContrabandTest : GameTest
                 }
             });
         });
+
+        await pair.CleanReturnAsync();
     }
 }

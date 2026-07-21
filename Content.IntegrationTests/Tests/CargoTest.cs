@@ -1,9 +1,12 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using Content.IntegrationTests.Fixtures;
 using Content.Server.Cargo.Components;
 using Content.Server.Cargo.Systems;
+using Content.Server.Nutrition.Components;
+using Content.Server.Nutrition.EntitySystems;
 using Content.Shared.Cargo.Prototypes;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Prototypes;
@@ -12,13 +15,11 @@ using Content.Shared.Whitelist;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
-using Content.Shared.Storage;
-using Content.Shared.Tools.Components;
 
 namespace Content.IntegrationTests.Tests;
 
 [TestFixture]
-public sealed class CargoTest : GameTest
+public sealed class CargoTest
 {
     private static readonly HashSet<ProtoId<CargoProductPrototype>> Ignored =
     [
@@ -29,7 +30,7 @@ public sealed class CargoTest : GameTest
     [Test]
     public async Task NoCargoOrderArbitrage()
     {
-        var pair = Pair;
+        await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
 
         var testMap = await pair.CreateTestMap();
@@ -55,11 +56,13 @@ public sealed class CargoTest : GameTest
                 }
             });
         });
+
+        await pair.CleanReturnAsync();
     }
     [Test]
     public async Task NoCargoBountyArbitrageTest()
     {
-        var pair = Pair;
+        await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
 
         var testMap = await pair.CreateTestMap();
@@ -93,12 +96,14 @@ public sealed class CargoTest : GameTest
 
             mapSystem.DeleteMap(mapId);
         });
+
+        await pair.CleanReturnAsync();
     }
 
     [Test]
     public async Task NoStaticPriceAndStackPrice()
     {
-        var pair = Pair;
+        await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
 
         var protoManager = server.ProtoMan;
@@ -130,6 +135,8 @@ public sealed class CargoTest : GameTest
                 }
             }
         });
+
+        await pair.CleanReturnAsync();
     }
 
     /// <summary>
@@ -139,7 +146,7 @@ public sealed class CargoTest : GameTest
     [Test]
     public async Task NoSliceableBountyArbitrageTest()
     {
-        var pair = Pair;
+        await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
 
         var testMap = await pair.CreateTestMap();
@@ -151,6 +158,7 @@ public sealed class CargoTest : GameTest
         var componentFactory = server.ResolveDependency<IComponentFactory>();
         var whitelist = entManager.System<EntityWhitelistSystem>();
         var cargo = entManager.System<CargoSystem>();
+        var sliceableSys = entManager.System<SliceableFoodSystem>();
 
         var bounties = protoManager.EnumeratePrototypes<CargoBountyPrototype>().ToList();
 
@@ -163,14 +171,14 @@ public sealed class CargoTest : GameTest
             var sliceableEntityProtos = protoManager.EnumeratePrototypes<EntityPrototype>()
                 .Where(p => !p.Abstract)
                 .Where(p => !pair.IsTestPrototype(p))
-                .Where(p => p.TryGetComponent<ToolRefinableComponent>(out _, componentFactory))
+                .Where(p => p.TryGetComponent<SliceableFoodComponent>(out _, componentFactory))
                 .Select(p => p.ID)
                 .ToList();
 
             foreach (var proto in sliceableEntityProtos)
             {
                 var ent = entManager.SpawnEntity(proto, coord);
-                var sliceable = entManager.GetComponent<ToolRefinableComponent>(ent);
+                var sliceable = entManager.GetComponent<SliceableFoodComponent>(ent);
 
                 // Check each bounty
                 foreach (var bounty in bounties)
@@ -183,32 +191,19 @@ public sealed class CargoTest : GameTest
                             continue;
 
                         // Spawn a slice
+                        var slice = entManager.SpawnEntity(sliceable.Slice, coord);
 
-                        var sliceCountByProtoId = EntitySpawnCollection.GetSpawns(sliceable.RefineResult)
-                                                                    .GroupBy(x => x)
-                                                                    .ToDictionary(x => x.Key, x => x.Count());
-
-                        foreach (var (sliceProtoId, sliceCount) in sliceCountByProtoId)
+                        // See if the slice also counts for this bounty entry
+                        if (!cargo.IsValidBountyEntry(slice, entry))
                         {
-                            var slice = entManager.SpawnEntity(sliceProtoId, coord);
-
-                            // See if the slice also counts for this bounty entry
-                            if (!cargo.IsValidBountyEntry(slice, entry))
-                            {
-                                entManager.DeleteEntity(slice);
-                                continue;
-                            }
-
                             entManager.DeleteEntity(slice);
-
-                            // If for some reason it can only make one slice, that's okay, I guess
-                            Assert.That(
-                                sliceCount,
-                                Is.EqualTo(1),
-                                $"{proto} counts as part of cargo bounty {bounty.ID} "
-                                + $"and slices into {sliceCount} slices which count for the same bounty!"
-                            );
+                            continue;
                         }
+
+                        entManager.DeleteEntity(slice);
+
+                        // If for some reason it can only make one slice, that's okay, I guess
+                        Assert.That(sliceable.TotalCount, Is.EqualTo(1), $"{proto} counts as part of cargo bounty {bounty.ID} and slices into {sliceable.TotalCount} slices which count for the same bounty!");
                     }
                 }
 
@@ -216,6 +211,8 @@ public sealed class CargoTest : GameTest
             }
             mapSystem.DeleteMap(mapId);
         });
+
+        await pair.CleanReturnAsync();
     }
 
     [TestPrototypes]
@@ -238,7 +235,7 @@ public sealed class CargoTest : GameTest
     [Test]
     public async Task StackPrice()
     {
-        var pair = Pair;
+        await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
         var entManager = server.ResolveDependency<IEntityManager>();
 
@@ -250,12 +247,14 @@ public sealed class CargoTest : GameTest
             var price = priceSystem.GetPrice(ent);
             Assert.That(price, Is.EqualTo(100.0));
         });
+
+        await pair.CleanReturnAsync();
     }
 
     [Test]
     public async Task MobPrice()
     {
-        var pair = Pair;
+        await using var pair = await PoolManager.GetServerClient();
 
         var componentFactory = pair.Server.ResolveDependency<IComponentFactory>();
 
@@ -269,5 +268,7 @@ public sealed class CargoTest : GameTest
                 }
             });
         });
+
+        await pair.CleanReturnAsync();
     }
 }

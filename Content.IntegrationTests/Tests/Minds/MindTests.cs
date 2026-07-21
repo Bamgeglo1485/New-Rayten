@@ -1,14 +1,18 @@
-﻿#nullable enable
-using System.Linq;
-using Content.IntegrationTests.Fixtures;
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
+#nullable enable
+using Content.Goobstation.Maths.FixedPoint;
+using Content.Server.Database;
 using Content.Server.Ghost.Roles;
 using Content.Server.Ghost.Roles.Components;
 using Content.Server.Mind;
+using Content.Server.Roles;
+using Content.Shared._Shitmed.Body;
+using Content.Shared._Shitmed.Medical.Surgery.Wounds.Systems;
+using Content.Shared.Body.Components;
+using Content.Shared.Body.Part;
 using Content.Shared.Damage;
-using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Prototypes;
-using Content.Shared.Damage.Systems;
-using Content.Shared.FixedPoint;
 using Content.Shared.Mind;
 using Content.Shared.Mind.Components;
 using Content.Shared.Players;
@@ -20,11 +24,12 @@ using Robust.Server.Player;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
+using System.Linq;
 
 namespace Content.IntegrationTests.Tests.Minds;
 
 [TestFixture]
-public sealed partial class MindTests : GameTest
+public sealed partial class MindTests
 {
     private static readonly ProtoId<DamageTypePrototype> BluntDamageType = "Blunt";
 
@@ -35,7 +40,6 @@ public sealed partial class MindTests : GameTest
   components:
   - type: MindContainer
   - type: Damageable
-  - type: Injurable
     damageContainer: Biological
   - type: Body
     prototype: Human
@@ -58,7 +62,7 @@ public sealed partial class MindTests : GameTest
     [Test]
     public async Task TestCreateAndTransferMindToNewEntity()
     {
-        var pair = Pair;
+        await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
 
         var entMan = server.ResolveDependency<IServerEntityManager>();
@@ -77,12 +81,14 @@ public sealed partial class MindTests : GameTest
             mindSystem.TransferTo(mind, entity, mind: mind);
             Assert.That(mindSystem.GetMind(entity, mindComp), Is.EqualTo(mind.Owner));
         });
+
+        await pair.CleanReturnAsync();
     }
 
     [Test]
     public async Task TestReplaceMind()
     {
-        var pair = Pair;
+        await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
 
         var entMan = server.ResolveDependency<IServerEntityManager>();
@@ -107,12 +113,14 @@ public sealed partial class MindTests : GameTest
                 Assert.That(mind.OwnedEntity, Is.Not.EqualTo(entity));
             });
         });
+
+        await pair.CleanReturnAsync();
     }
 
     [Test]
     public async Task TestEntityDeadWhenGibbed()
     {
-        var pair = Pair;
+        await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
 
         var entMan = server.ResolveDependency<IServerEntityManager>();
@@ -123,6 +131,7 @@ public sealed partial class MindTests : GameTest
         EntityUid mindId = default!;
         var mindSystem = entMan.EntitySysManager.GetEntitySystem<SharedMindSystem>();
         var damageableSystem = entMan.EntitySysManager.GetEntitySystem<DamageableSystem>();
+        var woundSystem = entMan.EntitySysManager.GetEntitySystem<WoundSystem>();
 
         await server.WaitAssertion(() =>
         {
@@ -147,7 +156,26 @@ public sealed partial class MindTests : GameTest
             var damageable = entMan.GetComponent<DamageableComponent>(entity);
             var prototype = protoMan.Index(BluntDamageType);
 
-            damageableSystem.SetDamage((entity, damageable), new DamageSpecifier(prototype, FixedPoint2.New(401)));
+            // Goob start
+
+            if (entMan.TryGetComponent(entity, out BodyComponent? body) &&
+                body.BodyType == BodyType.Complex &&
+                body.RootContainer?.ContainedEntity is EntityUid rootPart)
+            {
+                foreach (var (woundable, _) in woundSystem.GetAllWoundableChildren(rootPart))
+                {
+                    if (!entMan.TryGetComponent(woundable, out DamageableComponent? wdc) ||
+                        !entMan.TryGetComponent(woundable, out BodyPartComponent? bpc))
+                    {
+                        continue;
+                    }
+
+                    damageableSystem.SetDamage(woundable, wdc, new DamageSpecifier(prototype, FixedPoint2.New(100)));
+                }
+            }
+
+            // Goob End
+            damageableSystem.SetDamage(entity, damageable, new DamageSpecifier(prototype, FixedPoint2.New(401)));
             Assert.That(mindSystem.GetMind(entity, mindContainerComp), Is.EqualTo(mindId));
         });
 
@@ -158,12 +186,14 @@ public sealed partial class MindTests : GameTest
             var mind = entMan.GetComponent<MindComponent>(mindId);
             Assert.That(mindSystem.IsCharacterDeadPhysically(mind));
         });
+
+        await pair.CleanReturnAsync();
     }
 
     [Test]
     public async Task TestMindTransfersToOtherEntity()
     {
-        var pair = Pair;
+        await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
 
         var entMan = server.ResolveDependency<IServerEntityManager>();
@@ -190,12 +220,18 @@ public sealed partial class MindTests : GameTest
                 Assert.That(mindSystem.GetMind(targetEntity), Is.EqualTo(mind));
             });
         });
+
+        await pair.CleanReturnAsync();
     }
 
     [Test]
     public async Task TestOwningPlayerCanBeChanged()
     {
-        var pair = Pair;
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings
+        {
+            Connected = true,
+            DummyTicker = false
+        });
         var server = pair.Server;
 
         var entMan = server.ResolveDependency<IServerEntityManager>();
@@ -243,12 +279,14 @@ public sealed partial class MindTests : GameTest
         });
 
         await pair.RunTicksSync(5);
+
+        await pair.CleanReturnAsync();
     }
 
     [Test]
     public async Task TestAddRemoveHasRoles()
     {
-        var pair = Pair;
+        await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
 
         var entMan = server.ResolveDependency<IServerEntityManager>();
@@ -311,13 +349,15 @@ public sealed partial class MindTests : GameTest
                 Assert.That(roleSystem.MindHasRole<JobRoleComponent>(mindId), Is.False);
             });
         });
+
+        await pair.CleanReturnAsync();
     }
 
     [Test]
     public async Task TestPlayerCanGhost()
     {
         // Client is needed to spawn session
-        var pair = Pair;
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true, DummyTicker = false });
         var server = pair.Server;
 
         var entMan = server.ResolveDependency<IServerEntityManager>();
@@ -385,12 +425,19 @@ public sealed partial class MindTests : GameTest
                 Assert.That(mId, Is.Not.EqualTo(mindId));
             });
         });
+
+        await pair.CleanReturnAsync();
     }
 
     [Test]
     public async Task TestGhostDoesNotInfiniteLoop()
     {
-        var pair = Pair;
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings
+        {
+            DummyTicker = false,
+            Connected = true,
+            Dirty = true
+        });
         var server = pair.Server;
 
         var entMan = server.ResolveDependency<IServerEntityManager>();
@@ -461,5 +508,7 @@ public sealed partial class MindTests : GameTest
             Assert.That(player.AttachedEntity, Is.Not.Null);
             Assert.That(player.AttachedEntity!.Value, Is.EqualTo(ghost));
         });
+
+        await pair.CleanReturnAsync();
     }
 }
