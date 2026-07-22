@@ -56,14 +56,7 @@
             <!-- EmergencyPart -->
             <BoxContainer Orientation="Vertical"
                 SeparationOverride="6">
-                <controls:ConfirmButton
-                    Name="CallERTButton"
-                    Access="Public"
-                    Text="Вызвать ОБР"
-                    ConfirmationText="{Loc 'admin-player-actions-confirm'}"
-                    ToolTip="{Loc 'comms-console-menu-ert-button-tooltip'}"/>
                 <RichTextLabel Name="CountdownLabel"/>
-
                 <Button Name="EmergencyShuttleButton"
                     Access="Public"
                     Text="Placeholder Text"

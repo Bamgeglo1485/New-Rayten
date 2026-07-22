@@ -1,0 +1,159 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
+- type: entity
+  abstract: true
+  parent: BaseItem
+  id: BaseAutomationFilter
+  name: фильтр
+  description: Фильтр, который можно установить на производственные машины.
+  components:
+  - type: Sprite
+    sprite: _Goobstation/Objects/Misc/filter.rsi
+    state: icon
+  - type: Item
+    size: Tiny
+  - type: AutomationFilter
+  - type: Construction
+    graph: AutomationFilter
+
+- type: entity
+  abstract: true
+  parent: BaseAutomationFilter
+  id: BaseAutomationFilterToggled
+  components:
+  - type: ItemToggle
+    soundActivate: /Audio/Machines/lightswitch.ogg
+    soundDeactivate: /Audio/Machines/lightswitch.ogg
+  - type: ToggleExamine
+
+- type: entity
+  parent: BaseAutomationFilter
+  id: AutomationFilterLabel
+  name: фильтр этикеток
+  description: Фильтр, который можно установить на производственные машины. Эта сканирует этикетки предметов.
+  components:
+  - type: LabelFilter
+  - type: ActivatableUI
+    key: enum.LabelFilterUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.LabelFilterUiKey.Key:
+        type: LabelFilterBUI
+  - type: Construction
+    node: label
+
+- type: entity
+  parent: BaseAutomationFilter
+  id: AutomationFilterName
+  name: именной фильтр
+  description: Фильтр, который можно установить на производственные машины. Эта сканирует название предметов.
+  components:
+  - type: NameFilter
+  - type: ActivatableUI
+    key: enum.NameFilterUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.NameFilterUiKey.Key:
+        type: NameFilterBUI
+  - type: Construction
+    node: name
+
+- type: entity
+  parent: BaseAutomationFilter
+  id: AutomationFilterStack
+  name: фильтр стопок
+  description: Фильтр, который можно установить на производственные машины. Эта сканирует размер стопок.
+  components:
+  - type: StackFilter
+  - type: ActivatableUI
+    key: enum.StackFilterUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.StackFilterUiKey.Key:
+        type: StackFilterBUI
+  - type: Construction
+    node: stack
+
+- type: entity
+  parent: BaseAutomationFilter
+  id: AutomationFilterPressure
+  name: фильтр давления
+  description: Фильтр, который можно установить на производственные машины. Эта сканирует давление.
+  components:
+  - type: PressureFilter
+  - type: ActivatableUI
+    key: enum.PressureFilterUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.PressureFilterUiKey.Key:
+        type: PressureFilterBUI
+  - type: Construction
+    node: pressure
+
+- type: entity
+  parent: BaseAutomationFilter
+  id: AutomationFilterCombined
+  name: фильтр комбинирования
+  description: Фильтр, который можно установить на производственные машины. Эта использует логические шлюзы.
+  components:
+  - type: CombinedFilter
+  - type: ItemSlots
+    slots:
+      combined_filter_a:
+        name: Filter A
+        whitelist:
+          components:
+          - AutomationFilter
+      combined_filter_b:
+        name: Filter B
+        whitelist:
+          components:
+          - AutomationFilter
+  - type: ContainerContainer
+    containers:
+      combined_filter_a: !type:ContainerSlot
+      combined_filter_b: !type:ContainerSlot
+  - type: Construction
+    node: combined
+
+- type: entity
+  parent: BaseAutomationFilterToggled
+  id: AutomationFilterAnchor
+  name: фильтр закрепления
+  description: Фильтр, который можно установить на производственные машины. Этот компонент обнаруживает объект, который можно закрепить, и определяет, закреплен он или нет.
+  components:
+  - type: AnchorFilter
+  - type: ToggleExamine
+    enabled: anchor-filter-examine-enabled
+    disabled: anchor-filter-examine-disabled
+  - type: Construction
+    node: anchor
+
+- type: entity
+  parent: BaseAutomationFilter
+  id: AutomationFilterMob
+  name: фильтр живности
+  description: Фильтр, который можно установить на производственные машины. Это устройство обнаруживает живых существ и выполняет фильтрацию по их состоянию. Живы они, находятся в критическом состоянии или мертвы.
+  components:
+  - type: MobFilter
+  - type: ActivatableUI
+    key: enum.MobFilterUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.MobFilterUiKey.Key:
+        type: MobFilterBUI
+  - type: Construction
+    node: mob
+
+- type: entity
+  parent: BaseAutomationFilterToggled
+  id: AutomationFilterCuff
+  name: фильтр наручников
+  description: Фильтр, который можно установить на производственные машины. Это устройство определяет, закованы ли люди... кто это вообще сделал?!
+  components:
+  - type: CuffFilter
+  - type: ToggleExamine
+    enabled: cuff-filter-examine-enabled
+    disabled: cuff-filter-examine-disabled
+  - type: Construction
+    node: cuff

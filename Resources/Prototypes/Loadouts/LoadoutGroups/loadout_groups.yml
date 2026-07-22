@@ -107,10 +107,9 @@
   name: loadout-group-captain-head
   minLimit: 0
   loadouts:
-  - CaptainHead
+  #- CaptainHead
   - CaptainCap
   # Vanilla-Loadouts-Start
-  - CapNavalCap
   - CaptainCapcapWhite
   # Vanilla-Loadouts-end
 
@@ -120,14 +119,9 @@
   loadouts:
   - CaptainJumpsuit
   - CaptainJumpskirt
-  # Corvax-Loadouts-Start
-  - CaptainJumpsuitTurtleneck
-  - CaptainJumpskirtTurtleneck
-  # Corvax-Loadouts-End
-  - CaptainFormalSuit
-  - CaptainFormalSkirt
+  #- CaptainFormalSuit
+  #- CaptainFormalSkirt
   # Vanilla-Loadouts-Start
-  - UniformJumpsuitNavalCaptain
   - UniformJumpsuitWhiteCaptain
   - UniformJumpskirtWhiteCaptain
   # Vanilla-Loadouts-end
@@ -137,13 +131,14 @@
   name: loadout-group-captain-neck
   minLimit: 0
   loadouts:
-  - CaptainCloak
-  - CaptainCloakFormal
-  - CaptainMantle
+  #- CaptainCloak
+  #- CaptainCloakFormal
+  #- CaptainMantle
   # Vanilla-Loadouts-Start
-  - ClothingNeckCaptainWideLoadout
-  - CaptainWhiteMantle
-  - CaptainCloakRoyal
+  - DetectiveTie
+  #- ClothingNeckCaptainWideLoadout
+  #- CaptainWhiteMantle
+  #- CaptainCloakRoyal
   # Vanilla-Loadouts-end
 
 - type: loadoutGroup
@@ -159,9 +154,9 @@
   id: CaptainOuterClothing
   name: loadout-group-captain-outerclothing
   loadouts:
-  - CaptainOuterClothing
+  #- CaptainOuterClothing
   - CaptainWintercoat
-  - ClothingOuterCoat
+  #- ClothingOuterCoat
   # Vanilla-Loadouts-Start
   - CoatNavalCaptain
   - ClothingOuterCoatCaptainWhite
@@ -1150,14 +1145,10 @@
   loadouts:
   - HeadofSecurityJumpsuit
   - HeadofSecurityJumpskirt
-  - HeadofSecurityTurtleneck
-  - HeadofSecurityTurtleneckSkirt
-  - HeadofSecurityFormalSuit
-  - HeadofSecurityFormalSkirt
-  # Corvax-Loadouts-Start
-  - HeadofSecurityJumpsuitBlack
-  - HeadofSecurityJumpskirtBlack
-  # Corvax-Loadouts-End
+  #- HeadofSecurityTurtleneck # RAYTEN-DELETE
+  #- HeadofSecurityTurtleneckSkirt # RAYTEN-DELETE
+  #- HeadofSecurityFormalSuit # RAYTEN-DELETE
+  #- HeadofSecurityFormalSkirt # RAYTEN-DELETE
 
 - type: loadoutGroup
   id: HeadofSecurityNeck
@@ -1201,7 +1192,7 @@
   name: loadout-group-warden-outerclothing
   loadouts:
   - WardenCoat
-  - WardenArmoredWinterCoat
+  #- WardenArmoredWinterCoat # RAYTEN-DELETE
 
 - type: loadoutGroup
   id: WardenJobTrinkets
@@ -1251,18 +1242,18 @@
   id: SecurityOuterClothing
   name: loadout-group-security-outerclothing
   loadouts:
-  - ArmorVestSec # Corvax
+  #- ArmorVestSec # Corvax # Rayten-Remove
   - ArmorVest
-  - ArmorVestSlim
+  #- ArmorVestSlim # Rayten-Remove
   - SecurityOfficerWintercoat
 
 - type: loadoutGroup
   id: SecurityShoes
   name: loadout-group-security-shoes
   loadouts:
-  - JackSecBoots # Corvax
+  #- JackSecBoots # Corvax
   - JackBoots
-  - SecurityWinterBoots
+  #- SecurityWinterBoots # Rayten-Remove
 
 - type: loadoutGroup
   id: SecurityPDA

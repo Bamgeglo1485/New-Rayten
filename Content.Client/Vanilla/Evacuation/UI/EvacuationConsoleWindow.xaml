@@ -1,0 +1,100 @@
+<controls:FancyWindow xmlns="https://spacestation14.io"
+                           xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
+                           xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
+                           Title=""
+                           MinSize="400 350"
+                           Resizable="False"
+                           MouseFilter="Stop">
+
+    <PanelContainer StyleClasses="PdaBackgroundRect"
+                    ModulateSelfOverride="#4a5466"/>
+    <PanelContainer StyleClasses="PdaBorderRect"/>
+
+    <BoxContainer Orientation="Vertical"
+                  HorizontalExpand="True">
+
+        <Control Margin="18 0"
+                 RectClipContent="True"
+                 VerticalExpand="true"
+                 HorizontalExpand="True">
+            <PanelContainer StyleClasses="PdaBackground"/>
+            <Control Margin="3 3"
+                     Modulate="#FFFFFF">
+
+                <PanelContainer StyleClasses="PdaContentBackground"/>
+
+                <BoxContainer Orientation="Vertical">
+
+                    <Label Text="КОНСОЛЬ ЭКСТРЕННОЙ ЭВАКУАЦИИ"
+                           StyleClasses="ConsoleHeading"
+                           HorizontalAlignment="Center"
+                           Margin="0 5 0 0"/>
+
+                    <PanelContainer Margin="10 5 10 5">
+                        <PanelContainer.PanelOverride>
+                            <gfx:StyleBoxFlat BorderColor="#71122a"
+                                              BorderThickness="2"/>
+                        </PanelContainer.PanelOverride>
+
+                        <BoxContainer Orientation="Vertical"
+                                      MinHeight="200"
+                                      Margin="5 5 5 5">
+                            <Label Text="ВНИМАНИЕ"
+                                   StyleClasses="ConsoleSubHeading"
+                                   HorizontalAlignment="Center"
+                                   FontColorOverride="#a31c3e"/>
+
+                            <PanelContainer StyleClasses="LowDivider"
+                                            HorizontalExpand="True"
+                                            Margin="-5 5 -5 5"
+                                            SetHeight="2">
+                                <PanelContainer.PanelOverride>
+                                    <gfx:StyleBoxFlat BackgroundColor="#71122a"/>
+                                </PanelContainer.PanelOverride>
+                            </PanelContainer>
+
+                            <Label Name="WarningLabel"
+                                   HorizontalAlignment="Center"
+                                   Text="Вызывайте эвакуационный шаттл только тогда,&#10;когда станция никак не может справиться&#10;с серьёзной угрозой ВСЕМУ персоналу.&#10;&#10;При вызове эвакуации вы соглашаетесь с тем,&#10;что будете признаны убыточными активами&#10;и помещены в перманентное заключение."
+                                   Align="Center"
+                                   StyleClasses="ConsoleText"
+                                   Margin="0 10 0 0"/>
+                        </BoxContainer>
+                    </PanelContainer>
+
+                    <PanelContainer Margin="10 0 10 5">
+                        <PanelContainer.PanelOverride>
+                            <gfx:StyleBoxFlat BorderColor="#71122a"
+                                              BorderThickness="2"/>
+                        </PanelContainer.PanelOverride>
+
+                        <BoxContainer Orientation="Horizontal"
+                                      Margin="10 10 10 10">
+                            <Button Name="EvacuateButton"
+                                    Text="НАЧАТЬ ЭВАКУАЦИЮ"
+                                    StyleClasses="OpenBoth"
+                                    HorizontalExpand="True"
+                                    MinHeight="50"
+                                    ModulateSelfOverride="#71122a"/>
+                        </BoxContainer>
+                    </PanelContainer>
+                </BoxContainer>
+            </Control>
+        </Control>
+
+        <BoxContainer Orientation="Horizontal"
+                      SetHeight="28">
+            <Label Text="⚠"
+                   Margin="0 0 4 4"
+                   HorizontalExpand="True"
+                   HorizontalAlignment="Right"/>
+            <Label Text="ЭВАКУАЦИЯ ТОЛЬКО В КРАЙНЕМ СЛУЧАЕ"
+                   HorizontalAlignment="Center"
+                   Margin="0 0 0 4"/>
+            <Label Text="⚠"
+                   Margin="4 0 0 4"
+                   HorizontalExpand="True"
+                   HorizontalAlignment="Left"/>
+        </BoxContainer>
+    </BoxContainer>
+</controls:FancyWindow>

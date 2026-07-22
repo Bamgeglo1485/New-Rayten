@@ -15,6 +15,8 @@ namespace Content.Client.Options.UI
             RobustXamlLoader.Load(this);
             IoCManager.InjectDependencies(this);
 
+            
+            Tabs.SetTabTitle(0, "Хоррор"); //  РЕЙТЕН МЕНЯТЬ ВНИКНУВ
             Tabs.SetTabTitle(0, Loc.GetString("ui-options-tab-misc"));
             Tabs.SetTabTitle(1, Loc.GetString("ui-options-tab-graphics"));
             Tabs.SetTabTitle(2, Loc.GetString("ui-options-tab-controls"));
@@ -28,8 +30,9 @@ namespace Content.Client.Options.UI
         public void UpdateTabs()
         {
             var isAdmin = _adminManager.IsAdmin(true);
-            Tabs.SetTabVisible(5, isAdmin);
+            Tabs.SetTabVisible(6, isAdmin); //  РЕЙТЕН МЕНЯТЬ ВНИКНУВ
 
+            HorrorTab.Control.ReloadValues(); //  РЕЙТЕН МЕНЯТЬ ВНИКНУВ
             GraphicsTab.Control.ReloadValues();
             MiscTab.Control.ReloadValues();
             AccessibilityTab.Control.ReloadValues();

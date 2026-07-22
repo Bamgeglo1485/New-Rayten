@@ -56,7 +56,6 @@
   name: loadout-group-Captain-gloves
   maxLimit: 1
   loadouts:
-  - CaptainGlovesDefault
   - CaptainGlovesWhite
 
 - type: loadoutGroup

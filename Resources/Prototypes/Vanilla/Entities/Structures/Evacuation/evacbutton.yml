@@ -1,0 +1,40 @@
+﻿- type: entity
+  parent: BaseStructure
+  id: EvacuationButtonConsole
+  name: кнопка экстренной эвакуации
+  description: БОЛЬШАЯ КРАСНАЯ КНОПКА, КОТОРУЮ ВАМ РЕАЛЬНО НЕ СЛЕДУЕТ НАЖИМАТЬ!!!
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: MeleeSound
+    soundGroups:
+      Brute:
+        collection: GlassSmash
+  - type: Computer
+  - type: Sprite
+    sprite: Vanilla/Structures/Evacuation/evacbutton.rsi
+    state: icon
+  - type: LitOnPowered
+  - type: PointLight
+    radius: 1.5
+    energy: 1.6
+    enabled: false
+    mask: /Textures/Effects/LightMasks/cone.png
+    autoRot: true
+    offset: "0, 0.4"
+    color: "#960340"
+    castShadows: false
+  - type: LightningTarget
+    priority: 1
+  - type: RequireProjectileTarget
+  - type: ActivatableUI
+    key: enum.EvacuationConsoleUiKey.Key
+  - type: UserInterface
+    interfaces:
+        enum.EvacuationConsoleUiKey.Key:
+          type: EvacuationConsoleBoundUserInterface
+  - type: InteractionOutline
+  - type: AccessReader
+    breakOnAccessBreaker: true
+    access: [["Command"]]
+  - type: ActivatableUIRequiresAccess

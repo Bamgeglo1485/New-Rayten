@@ -1,0 +1,14 @@
+uniform sampler2D SCREEN_TEXTURE;
+uniform highp float OuterRadius;
+uniform highp float MainAlpha;
+
+void fragment() {
+    highp vec2 uv = FRAGCOORD.xy * SCREEN_PIXEL_SIZE.xy;
+
+    highp float x = abs(uv.x - 0.5) * 2.0;
+    highp float y = abs(uv.y - 0.5) * 2.0;
+
+    highp float v = (sqrt((x * x) + (y * y)) / OuterRadius);
+
+    COLOR = vec4(0.0, 0.0, 0.0, v * MainAlpha);
+}

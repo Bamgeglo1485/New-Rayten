@@ -18,6 +18,10 @@ using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 using static Robust.Client.UserInterface.Controls.BoxContainer;
 
+// RAYTEN STARTS
+using Content.Shared.SurveillanceCamera.Components;
+// RAYTEN ENDS
+
 namespace Content.Client.Medical.CrewMonitoring;
 
 [GenerateTypedNameReferences]
@@ -167,6 +171,13 @@ public sealed partial class CrewMonitoringWindow : FancyWindow
         {
             NavMap.TrackedEntities[_entManager.GetNetEntity(monitor)] = new NavMapBlip(monitorCoords.Value, _blipTexture, Color.Cyan, true, false);
         }
+
+        // RAYTEN STARTS
+        if (NavMap.MapUid != null)
+        {
+            AddCamerasToNavMap();
+        }
+        // RAYTEN ENDS
     }
 
     private void PopulateDepartmentList(IEnumerable<SuitSensorStatus> departmentSensors)
@@ -447,6 +458,44 @@ public sealed partial class CrewMonitoringWindow : FancyWindow
         NavMap.TrackedEntities.Clear();
         NavMap.LocalizedNames.Clear();
     }
+
+    // RAYTEN STARTS
+    private void AddCamerasToNavMap()
+    {
+        if (NavMap.MapUid == null || _blipTexture == null)
+            return;
+
+        if (!_entManager.TryGetComponent<SurveillanceCameraMapComponent>(NavMap.MapUid.Value, out var cameraMapComp))
+            return;
+
+        foreach (var (netEntity, cameraMarker) in cameraMapComp.Cameras)
+        {
+            var entity = _entManager.GetEntity(netEntity);
+
+            if (!_entManager.TryGetComponent<SurveillanceCameraComponent>(entity, out var cameraComp))
+                continue;
+
+            if (!cameraComp.JustMarker)
+                continue;
+
+            var gridUid = NavMap.MapUid.Value;
+            var gridXform = _entManager.GetComponent<TransformComponent>(gridUid);
+            var worldPos = _transformSystem.GetWorldPosition(gridXform) + cameraMarker.Position;
+
+            var coords = new EntityCoordinates(gridUid, cameraMarker.Position);
+
+            var color = Color.FromHex("#ff1952");
+
+            NavMap.TrackedEntities.TryAdd(netEntity, new NavMapBlip(
+                coords,
+                _blipTexture,
+                color,
+                false,
+                false
+            ));
+        }
+    }
+    // RAYTEN END
 }
 
 public sealed class CrewMonitoringButton : Button

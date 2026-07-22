@@ -1,8 +1,10 @@
 <DefaultWindow xmlns="https://spacestation14.io"
             xmlns:tabs="clr-namespace:Content.Client.Options.UI.Tabs"
+            xmlns:tabs69="clr-namespace:Content.Client.Vanilla.Options.UI.Tabs"
             Title="{Loc 'ui-options-title'}"
             MinSize="800 450">
     <TabContainer Name="Tabs" Access="Public">
+        <tabs69:HorrorTab Name="HorrorTab" /> <!-- RAYTEN -->
         <tabs:MiscTab Name="MiscTab" />
         <tabs:GraphicsTab Name="GraphicsTab" />
         <tabs:KeyRebindTab Name="KeyRebindTab" />

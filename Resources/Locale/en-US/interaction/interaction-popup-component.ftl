@@ -97,11 +97,11 @@ petting-success-station-ai-others = { CAPITALIZE(THE($user)) } pets {THE($target
 
 fence-rattle-success = *rattle*
 
-## Hugging players
+## Patting players on the back. Funky Change
 
-hugging-success-generic = You hug {THE($target)}.
-hugging-success-generic-others = { CAPITALIZE(THE($user)) } hugs {THE($target)}.
-hugging-success-generic-target = { CAPITALIZE(THE($user)) } hugs you.
+hugging-success-generic = Вы похплопываете {THE($target)} по плечу.
+hugging-success-generic-others = { CAPITALIZE(THE($user)) } похлопывает {THE($target)} по плечу.
+hugging-success-generic-target = { CAPITALIZE(THE($user)) } похлопывает по твоему плечу.
 
 ## Other
 

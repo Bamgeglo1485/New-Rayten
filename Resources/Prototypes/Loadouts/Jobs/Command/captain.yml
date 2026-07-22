@@ -19,21 +19,21 @@
   equipment:
     jumpsuit: ClothingUniformJumpskirtCaptain
 
-- type: loadout
-  id: CaptainFormalSuit
-  equipment:
-    jumpsuit: ClothingUniformJumpsuitCapFormal
-  effects: # Vanilla-captain-drip
-  - !type:GroupLoadoutEffect
-    proto: MasterCap
+#- type: loadout
+#  id: CaptainFormalSuit
+#  equipment:
+#    jumpsuit: ClothingUniformJumpsuitCapFormal
+#  effects: # Vanilla-captain-drip
+#  - !type:GroupLoadoutEffect
+#    proto: MasterCap
 
-- type: loadout
-  id: CaptainFormalSkirt
-  equipment:
-    jumpsuit: ClothingUniformJumpskirtCapFormalDress
-  effects: # Vanilla-captain-drip
-  - !type:GroupLoadoutEffect
-    proto: MasterCap
+#- type: loadout
+#  id: CaptainFormalSkirt
+#  equipment:
+#    jumpsuit: ClothingUniformJumpskirtCapFormalDress
+#  effects: # Vanilla-captain-drip
+#  - !type:GroupLoadoutEffect
+#    proto: MasterCap
 
 # Head
 - type: loadout
@@ -90,10 +90,10 @@
     back: ClothingBackpackDuffelCaptain
 
 # Outer clothing
-- type: loadout
-  id: CaptainOuterClothing
-  equipment:
-    outerClothing: ClothingOuterArmorCaptainCarapace
+#- type: loadout
+#  id: CaptainOuterClothing
+#  equipment:
+#    outerClothing: ClothingOuterArmorCaptainCarapace
 
 - type: loadout
   id: CaptainWintercoat

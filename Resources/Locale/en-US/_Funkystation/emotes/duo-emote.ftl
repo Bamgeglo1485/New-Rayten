@@ -1,0 +1,33 @@
+﻿duo-emote-left-hanging = Твоё рукопожатие проигнорировано...
+duo-emote-get-closer = Подойдите ближе.
+duo-emote-no-tail = {$target} нет хвоста для хвостопожатия...
+
+duo-emote-fistbump-perform = Кулачок
+duo-emote-fistbump-attempt-self = Вы подносите свой кулак перед {$target}.
+duo-emote-fistbump-attempt = {$ent} подносит свой кулак {POSS-ADJ($ent)} перед {$target}.
+duo-emote-fistbump-self = Вы стучитесь кулачками с {$target}!
+duo-emote-fistbump = {$ent} стучится кулаком с {$target}!
+
+duo-emote-highfive-perform = Дайть пять
+duo-emote-highfive-attempt-self = Вы поднимаете ладонь перед {$target}.
+duo-emote-highfive-attempt = {$ent} поднимает свою ладонь {POSS-ADJ($ent)} перед {$target}.
+duo-emote-highfive-self = Вы даёте пять {$target}!
+duo-emote-highfive = {$ent} даёт пять {$target}!
+
+duo-emote-hug-perform = Обнять
+duo-emote-hug-attempt-self = Вы раздвигаете руки для обнятия перед {$target}.
+duo-emote-hug-attempt = {$ent} раздвигает руки для обнятия {POSS-ADJ($ent)} перед {$target}.
+duo-emote-hug-self = Вы обнимаетесь с {$target}.
+duo-emote-hug = {$ent} обнимается с {$target}.
+
+duo-emote-tailswipe-perform = Хвостопожатие
+duo-emote-tailswipe-attempt-self = Вы подносите свой хост перед {$target}.
+duo-emote-tailswipe-attempt = {$ent} подносит свой хвост {POSS-ADJ($ent)} перед {$target}.
+duo-emote-tailswipe-self = вы делаете хвостопожатие {$target}!
+duo-emote-tailswipe = {$ent} делает хвостопожатие с {$target}!
+
+duo-emote-handshake-perform = Рукопожатие
+duo-emote-handshake-attempt-self = Вы протягиваете руку для рукопожатия с {$target}.
+duo-emote-handshake-attempt = {$ent} протягивает руку {POSS-ADJ($ent)} для рукопожатия с {$target}.
+duo-emote-handshake-self = Вы пожимаете руку {$target}.
+duo-emote-handshake = {$ent} пожимает руку {$target}.

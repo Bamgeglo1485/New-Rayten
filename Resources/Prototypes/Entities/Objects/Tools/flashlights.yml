@@ -59,6 +59,7 @@
     sprite: Objects/Tools/flashlight.rsi
     storedRotation: -90
   - type: PointLight
+    color: "#e1e0ff" # RAYTEN
     enabled: false
     mask: /Textures/Effects/LightMasks/cone.png
     autoRot: true
@@ -118,6 +119,7 @@
   - type: Item
     sprite: Objects/Tools/seclite.rsi
   - type: PointLight
+    color: "#e1e0ff" # RAYTEN
     enabled: false
     radius: 8
   - type: Clothing

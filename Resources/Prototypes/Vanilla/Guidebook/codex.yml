@@ -1,0 +1,5 @@
+- type: guideEntry
+  id: Codex
+  name: guide-entry-codex
+  priority: -7
+  text: "/ServerInfo/Vanilla/Guidebook/Void/Codex.xml"

@@ -64,6 +64,7 @@
   - type: UnpoweredFlashlight
   - type: PointLight
     enabled: false
+    color: "#e1e0ff" # RAYTEN
     radius: 1.7
     falloff: 3
     softness: 5

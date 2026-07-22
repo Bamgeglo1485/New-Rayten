@@ -29,6 +29,7 @@
   id: SecurityCadetGear
   equipment:
     shoes: ClothingShoesBootsJackSec # Corvax-Resprite-MRP
+    eyes: ClothingEyesGlassesSecurity # Rayten
     outerClothing: ClothingOuterArmorBasic
     id: SecurityCadetPDA
     ears: ClothingHeadsetSecurity

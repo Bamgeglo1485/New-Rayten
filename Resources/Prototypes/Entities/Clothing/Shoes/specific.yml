@@ -117,6 +117,7 @@
   - type: SpeedModifierContactCapClothing # Corvax-MRP
     maxContactSprintSlowdown: 0.9
     maxContactWalkSlowdown: 0.9
+  - type: NoFootprints # Funky change
 
 - type: entity
   parent: [ClothingShoesBaseButcherable, ThirdContraband]

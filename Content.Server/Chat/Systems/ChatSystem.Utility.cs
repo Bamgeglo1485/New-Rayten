@@ -11,6 +11,8 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Utility;
 
+using Content.Shared._CorvaxGoob.DynamicAudio.Effects; // RAYTEN VACUUM SILENCE
+
 namespace Content.Server.Chat.Systems;
 
 public sealed partial class ChatSystem
@@ -68,6 +70,12 @@ public sealed partial class ChatSystem
     {
         foreach (var (session, data) in GetRecipients(source, VoiceRange))
         {
+            // RAYTEN STARTS
+            if (channel != ChatChannel.Emotes && session.AttachedEntity is { Valid: true } listenerEntity &&
+                HasComp<InBarotraumaAudioEffectComponent>(listenerEntity))
+                continue;
+            // RAYTEN ENDS
+
             var entRange = MessageRangeCheck(session, data, range);
             if (entRange == MessageRangeCheckResult.Disallowed)
                 continue;

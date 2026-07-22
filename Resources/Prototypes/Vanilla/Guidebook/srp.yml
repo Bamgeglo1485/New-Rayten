@@ -1,0 +1,18 @@
+- type: guideEntry
+  id: SRP
+  name: guide-entry-srp
+  priority: -6
+  text: "/ServerInfo/Vanilla/Guidebook/Void/SRP/SRP.xml"
+  children:
+  - SRPCommand
+  - SRPSecurity
+
+- type: guideEntry
+  id: SRPSecurity
+  name: guide-entry-srp-sec
+  text: "/ServerInfo/Vanilla/Guidebook/Void/SRP/Security.xml"
+
+- type: guideEntry
+  id: SRPCommand
+  name: guide-entry-srp-com
+  text: "/ServerInfo/Vanilla/Guidebook/Void/SRP/Command.xml"

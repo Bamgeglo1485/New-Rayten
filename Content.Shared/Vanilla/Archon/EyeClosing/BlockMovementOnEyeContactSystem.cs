@@ -10,8 +10,10 @@ using Content.Shared.Physics;
 using Content.Shared.Eye.Blinding.Components;
 
 using Robust.Shared.Player;
+using Robust.Shared.Maths;
 using Robust.Shared.Timing;
 using Robust.Shared.Audio.Systems;
+using System.Numerics;
 
 namespace Content.Shared.Vanilla.Archon.EyeClosing;
 

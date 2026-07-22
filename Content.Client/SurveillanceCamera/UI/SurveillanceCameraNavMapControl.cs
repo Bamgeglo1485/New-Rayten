@@ -14,8 +14,11 @@ public sealed partial class SurveillanceCameraNavMapControl : NavMapControl
 
     private static readonly Color CameraActiveColor = Color.FromHex("#FF00FF");
     private static readonly Color CameraInactiveColor = Color.FromHex("#a09f9fff");
-    private static readonly Color CameraSelectedColor = Color.FromHex("#fbff19ff");
-    private static readonly Color CameraInvalidColor = Color.FromHex("#fa1f1fff");
+    private static readonly Color CameraSelectedColor = Color.FromHex("#19ff8c");
+    private static readonly Color CameraInvalidColor = Color.FromHex("#fbff19ff");
+    // RAYTEN STARTS
+    private static readonly Color DangerMarker = Color.FromHex("#ff1952");
+    // RAYTEN ENDS
 
     private readonly Texture _activeTexture;
     private readonly Texture _inactiveTexture;
@@ -97,7 +100,14 @@ public sealed partial class SurveillanceCameraNavMapControl : NavMapControl
             Texture texture;
             Color color;
 
-            if (string.IsNullOrEmpty(marker.Address))
+            // RAYTEN STARTS
+            if (marker.JustMarker)
+            {
+                color = DangerMarker;
+                texture = _inactiveTexture;
+            }
+            // RAYTEN ENDS
+            else if (string.IsNullOrEmpty(marker.Address))
             {
                 color = CameraInvalidColor;
                 texture = _invalidTexture;

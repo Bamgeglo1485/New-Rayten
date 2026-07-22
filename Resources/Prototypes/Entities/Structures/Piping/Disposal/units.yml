@@ -1,7 +1,6 @@
 - type: entity
   abstract: true
   id: DisposalUnitBase
-  parent: BaseMachinePowered
   description: A pneumatic waste disposal unit.
   placement:
     mode: SnapgridCenter
@@ -40,11 +39,11 @@
       enum.DisposalUnitVisuals.IsReady:
         enum.DisposalUnitVisualLayers.Base:
           True: { state: disposal }
-          False: { state: disposal-charging }         
+          False: { state: disposal-charging }
       enum.DisposalUnitVisuals.IsFlushing:
         enum.DisposalUnitVisualLayers.OverlayFlushing:
           True: { visible: true }
-          False: { visible: false }      
+          False: { visible: false }
       enum.DisposalUnitVisuals.IsEngaged:
         enum.DisposalUnitVisualLayers.OverlayEngaged:
           True: { visible: true }
@@ -67,7 +66,7 @@
           True: { state: disposal }
           False: { state: condisposal }
         enum.DisposalUnitVisualLayers.OverlayEngaged:
-          False: { visible: false } 
+          False: { visible: false }
         enum.DisposalUnitVisualLayers.OverlayCharging:
           False: { visible: false }
         enum.DisposalUnitVisualLayers.OverlayFull:
@@ -117,9 +116,23 @@
 
 - type: entity
   id: DisposalUnit
-  parent: DisposalUnitBase
+  parent: [DisposalUnitBase, BaseAutomatedMachine ] # Goob: Automati
   name: disposal unit
   components:
+  - type: AutomationSlots # Goobstation
+    slots:
+    - !type:AutomatedContainer
+      input: AutomationSlotInput
+      output: AutomationSlotInput
+      containerId: DisposalUnitComponent
+      maxItems: 30 # disposals doesn't have a limit this is just so you can't use it as an ME system
+    - !type:AutomatedPorts
+      sinks:
+      - Toggle
+      - DisposalFlush
+      - DisposalEject
+      sources:
+      - DisposalReady
   - type: Sprite
     sprite: Structures/Piping/disposal.rsi
     snapCardinals: true
@@ -185,7 +198,7 @@
           True: { state: mailing }
           False: { state: conmailing }
         enum.DisposalUnitVisualLayers.OverlayEngaged:
-          False: { visible: false } 
+          False: { visible: false }
         enum.DisposalUnitVisualLayers.OverlayCharging:
           False: { visible: false }
         enum.DisposalUnitVisualLayers.OverlayFull:

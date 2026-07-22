@@ -165,6 +165,18 @@ public sealed partial class EmergencyLightSystem : SharedEmergencyLightSystem
                 light.ForciblyEnabled = false;
                 UpdateState((uid, light));
             }
+
+            // RAYTEN STARTS
+            if (details.AlarmSound != null)
+            {
+                _ambient.SetAmbience(uid, true);
+                _ambient.SetSound(uid, details.AlarmSound);
+            }
+            else
+            {
+                _ambient.SetAmbience(uid, false);
+            }
+            // RAYTEN ENDS
         }
     }
 

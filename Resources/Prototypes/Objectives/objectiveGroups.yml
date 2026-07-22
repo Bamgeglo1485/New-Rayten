@@ -2,11 +2,12 @@
 - type: weightedRandom
   id: TraitorObjectiveGroups
   weights:
-    TraitorObjectiveGroupSteal: 1
+    #TraitorObjectiveGroupSteal: 1
     TraitorObjectiveGroupKill: 1
-    TraitorObjectiveGroupState: 1 #As in, something about your character. Alive, dead, arrested, gained an ability...
-    TraitorObjectiveGroupSocial: 1 #Involves helping/harming others without killing them or stealing their stuff
-    TraitorObjectiveGroupSabotage: 1
+    TraitorObjectiveGroupState: 1 # RAYTEN НАХУЙ
+    #TraitorObjectiveGroupSocial: 1 # RAYTEN НАХУЙ
+    #TraitorObjectiveGroupSabotage: 1 # RAYTEN НАХУЙ
+    TraitorObjectiveGroupRP: 1 # RAYTEN ДА
     TraitorObjectiveGroupOther: 1
 
 - type: weightedRandom
@@ -36,8 +37,8 @@
 - type: weightedRandom
   id: TraitorObjectiveGroupState
   weights:
-    EscapeShuttleObjective: 1
-    DieObjective: 0.2
+    #EscapeShuttleObjective: 1
+    DieObjective: 0.05
     #HijackShuttleObjective: 0.02
 
 - type: weightedRandom
@@ -55,8 +56,10 @@
 - type: weightedRandom
   id: TraitorObjectiveGroupOther
   weights:
-    HijackTradeStationObjective: 1
+    #HijackTradeStationObjective: 1 # нет
     MailFraudObjective: 1
+    TeachRandomPersonObjective: 1 # RAYTEN
+    TeachRandomHeadObjective: 1 # RAYTEN
 
 
 #Thief groups

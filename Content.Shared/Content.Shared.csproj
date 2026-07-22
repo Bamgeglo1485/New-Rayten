@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <WarningsAsErrors>RA0032;nullable</WarningsAsErrors>
@@ -14,6 +14,11 @@
   <Import Project="..\RobustToolbox\Imports\Shared.props" />
 
   <ItemGroup>
+    <!-- <Trauma> -->
+    <ProjectReference Include="../Content.Trauma.Common/Content.Trauma.Common.csproj" />
+    <ProjectReference Include="../Content.Goobstation.Common/Content.Goobstation.Common.csproj" />
+    <ProjectReference Include="../Content.Common/Content.Common.csproj" />
+    <!-- </Trauma> -->
     <ProjectReference Include="..\Content.Shared.Database\Content.Shared.Database.csproj" />
   </ItemGroup>
 

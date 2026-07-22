@@ -1,0 +1,75 @@
+﻿- type: entity
+  parent: BaseStructure
+  id: EvacuationPod
+  name: эвакуационная капсула
+  description: Блюспейс капсула для эвакуации персонала.
+  components:
+  - type: Sprite
+    sprite: Vanilla/Structures/Evacuation/evacpod.rsi
+    noRot: true
+    layers:
+    - state: icon
+      map: ["enum.StorageVisualLayers.Door"]
+    - state: opened
+      visible: false
+    - state: unlit
+      shader: unshaded
+  - type: InteractionOutline
+  - type: Transform
+    noRot: true
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,0.5,0.5"
+        density: 200
+        mask:
+          - MachineMask
+        layer:
+          - MachineLayer
+  - type: Appearance
+  - type: Damageable
+    damageModifierSet: StructuralMetallic
+  - type: Injurable
+    damageContainer: StructuralInorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 400
+      behaviors:
+      - !type:EmptyAllContainersBehaviour
+      - !type:PlaySoundBehavior
+        sound:
+          collection: WindowShatter
+      - !type:ChangeConstructionNodeBehavior
+        node: machineFrame
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: PointLight
+    enabled: false
+    mask: /Textures/Effects/LightMasks/double_cone.png
+    color: "#960340"
+    energy: 10
+    radius: 10
+    softness: 0
+    shadow: true
+    offset: "0, 0.35"
+  - type: RotatingLight
+    speed: 230
+  - type: EntityStorage
+    capacity: 1
+    airtight: false
+  - type: PlaceableSurface
+    isPlaceable: false
+  - type: EntityStorageVisuals
+    stateDoorOpen: opened
+    stateDoorClosed: icon
+  - type: ContainerContainer
+    containers:
+      entity_storage: !type:Container
+      paper_label: !type:ContainerSlot
+  - type: StaticPrice
+    price: 50000
+  - type: EvacPod

@@ -25,6 +25,7 @@ using Content.Shared.Mobs.Systems;
 using Content.Shared.Physics;
 using Content.Shared.Popups;
 using Content.Shared.StatusEffect;
+using Content.Shared.Throwing;
 using Content.Shared.Weapons.Melee.Components;
 using Content.Shared.Weapons.Melee.Events;
 using Content.Shared.Weapons.Ranged.Components;
@@ -32,14 +33,20 @@ using Content.Shared.Weapons.Ranged.Events;
 using Content.Shared.Weapons.Ranged.Systems;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.Configuration;
 using Robust.Shared.Map;
 using Robust.Shared.Network;
 using Robust.Shared.Physics;
+using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
+using Content.Shared._EinsteinEngines.Contests;
+using Content.Shared.Coordinates;
+using Content.Shared.Item;
+
 using ItemToggleMeleeWeaponComponent = Content.Shared.Item.ItemToggle.Components.ItemToggleMeleeWeaponComponent;
 
 namespace Content.Shared.Weapons.Melee;
@@ -66,7 +73,9 @@ public abstract partial class SharedMeleeWeaponSystem : EntitySystem
     [Dependency] protected SharedTransformSystem TransformSystem = default!;
     [Dependency] private SharedStaminaSystem _stamina = default!;
     [Dependency] private DamageExamineSystem _damageExamine = default!;
-
+    [Dependency] private ContestsSystem _contests = default!;
+    [Dependency] private ThrowingSystem _throwing = default!;
+    [Dependency] private INetConfigurationManager _config = default!;
     [Dependency] private EntityQuery<DamageableComponent> _damageQuery = default!;
 
     private const int AttackMask = (int) (CollisionGroup.MobMask | CollisionGroup.Opaque);
@@ -80,6 +89,10 @@ public abstract partial class SharedMeleeWeaponSystem : EntitySystem
     /// If an attack is released within this buffer it's assumed to be full damage.
     /// </summary>
     public const float GracePeriod = 0.05f;
+
+    private float _shoveRange = 0.6f;
+    private float _shoveSpeed = 4f;
+    private float _shoveMass = 3f;
 
     public override void Initialize()
     {
@@ -836,131 +849,148 @@ public abstract partial class SharedMeleeWeaponSystem : EntitySystem
         if (HasComp<DisarmProneComponent>(disarmed))
             return 0.0f;
 
-        var chance = disarmerComp.BaseDisarmFailChance;
+        var chance = 1 - disarmerComp.BaseDisarmFailChance;
+
+        chance *= Math.Clamp(
+            _contests.StaminaContest(disarmer, disarmed)
+            * _contests.HealthContest(disarmer, disarmed),
+            0f,
+            1f);
+
         if (inTargetHand != null && TryComp<DisarmMalusComponent>(inTargetHand, out var malus))
-        {
-            chance += malus.Malus;
-        }
+            chance *= 1 - malus.Malus;
 
+        if (TryComp<ShovingComponent>(disarmer, out var shoving))
+            chance *= 1 + shoving.DisarmBonus;
 
-        return Math.Clamp(chance, 0f, 1f);
+        return chance;
     }
 
-    private bool DoDisarm(EntityUid user, DisarmAttackEvent ev, EntityUid meleeUid, MeleeWeaponComponent component, ICommonSession? session)
+    private float CalculateShoveStaminaDamage(EntityUid disarmer, EntityUid disarmed)
     {
-        var target = GetEntity(ev.Target);
+        var baseStaminaDamage = TryComp<ShovingComponent>(disarmer, out var shoving) ? shoving.StaminaDamage : ShovingComponent.DefaultStaminaDamage;
 
-        if (Deleted(target) ||
-            user == target)
-        {
+        return baseStaminaDamage * _contests.MassContest(disarmer, disarmed);
+    }
+
+    protected virtual bool DoDisarm(EntityUid user,
+        DisarmAttackEvent ev,
+        EntityUid meleeUid,
+        MeleeWeaponComponent component,
+        ICommonSession? session) // Goobstation - Shove Rework
+    {
+        if (!ev.Target.HasValue)
             return false;
-        }
 
+        var target = GetEntity(ev.Target.Value);
 
-        if (MobState.IsIncapacitated(target.Value))
-        {
+        if (Deleted(target))
             return false;
-        }
 
-        if (!TryComp<CombatModeComponent>(user, out var combatMode) ||
-            combatMode.CanDisarm != true)
-        {
+        if (!TryComp<CombatModeComponent>(user, out var combatMode))
             return false;
-        }
 
-        // Need hands or to be able to be shoved over.
+        if (!InRange(user, target, component.Range, session))
+            return false;
+
+        PhysicalShove(user, target);
+        Interaction.DoContactInteraction(user, target);
+
+        if (MobState.IsIncapacitated(target))
+            return true;
+
+        if (!TryComp<PhysicsComponent>(target, out var targetPhysicsComponent))
+            return false;
+
         if (!TryComp<HandsComponent>(target, out var targetHandsComponent))
         {
             if (!TryComp<StatusEffectsComponent>(target, out var status) ||
                 !status.AllowedEffects.Contains("KnockedDown"))
             {
-                // Notify disarmable
-                if (HasComp<MobStateComponent>(target.Value))
-                    PopupSystem.PopupClient(Loc.GetString("disarm-action-disarmable", ("targetName", target.Value)), target.Value);
-
-                return false;
+                return true;
             }
         }
 
-        if (!InRange(user, target.Value, component.Range, session))
+        if (!InRange(user, target, component.Range, session))
         {
             return false;
         }
 
         EntityUid? inTargetHand = null;
 
-        if (_hands.TryGetActiveItem(target.Value, out var activeHeldEntity))
+        if (_hands.TryGetActiveItem(target, out var activeHeldEntity))
         {
             inTargetHand = activeHeldEntity.Value;
         }
 
-        var attemptEvent = new DisarmAttemptEvent(target.Value, user, inTargetHand);
-
+        var attemptEvent = new DisarmAttemptEvent(target, user, inTargetHand);
         if (inTargetHand != null)
         {
             RaiseLocalEvent(inTargetHand.Value, ref attemptEvent);
         }
 
-        RaiseLocalEvent(target.Value, ref attemptEvent);
+        RaiseLocalEvent(target, ref attemptEvent);
 
         if (attemptEvent.Cancelled)
-            return false;
+            return true;
 
-        var chance = CalculateDisarmChance(user, target.Value, inTargetHand, combatMode);
+        var chance = CalculateDisarmChance(user, target, inTargetHand, combatMode);
 
-        // At this point we diverge
-        if (_netMan.IsClient)
+        _audio.PlayPredicted(combatMode.DisarmSuccessSound,
+            user, user,
+            AudioParams.Default.WithVariation(0.025f).WithVolume(5f));
+        AdminLogger.Add(LogType.DisarmedAction,
+            $"{ToPrettyString(user):user} used disarm on {ToPrettyString(target):target}");
+
+        var staminaDamage = CalculateShoveStaminaDamage(user, target);
+
+        var eventArgs = new DisarmedEvent(target,user,chance)
         {
-            // Play a sound to give instant feedback; same with playing the animations
-            _meleeSound.PlaySwingSound(user, meleeUid, component);
+            StaminaDamage = staminaDamage,
+            DisarmProbability = chance
+        };
+        RaiseLocalEvent(target, ref eventArgs);
+
+        if (!eventArgs.Handled)
+        {
+            ShoveOrDisarmPopup(false);
             return true;
         }
 
-        if (_random.Prob(chance))
-        {
-            return false;
-        }
-
-        var eventArgs = new DisarmedEvent(target.Value, user, 1 - chance);
-        RaiseLocalEvent(target.Value, ref eventArgs);
-
-        // Nothing handled it so abort.
-        if (!eventArgs.Handled)
-        {
-            return false;
-        }
-
-        Interaction.DoContactInteraction(user, target);
-        AdminLogger.Add(LogType.DisarmedAction, $"{ToPrettyString(user):user} used disarm on {ToPrettyString(target):target}");
-
-        AdminLogger.Add(LogType.DisarmedAction, $"{ToPrettyString(user):user} used disarm on {ToPrettyString(target):target}");
-
-        _audio.PlayPvs(component.WeaponDisarm ? combatMode.WeaponDisarmSound : combatMode.DisarmSuccessSound, target.Value, AudioParams.Default.WithVariation(0.025f).WithVolume(5f));
-        var targetEnt = Identity.Entity(target.Value, EntityManager);
-        var userEnt = Identity.Entity(user, EntityManager);
-
-        var msgOther = Loc.GetString(
-            eventArgs.PopupPrefix + "popup-message-other-clients",
-            ("performerName", userEnt),
-            ("targetName", targetEnt));
-
-        var msgUser = Loc.GetString(eventArgs.PopupPrefix + "popup-message-cursor", ("targetName", targetEnt));
-
-        var filterOther = Filter.PvsExcept(user, entityManager: EntityManager);
-
-        PopupSystem.PopupEntity(msgOther, user, filterOther, true);
-        PopupSystem.PopupEntity(msgUser, target.Value, user);
-
-        if (eventArgs.IsStunned)
-        {
-
-            PopupSystem.PopupEntity(Loc.GetString("stunned-component-disarm-success-others", ("source", userEnt), ("target", targetEnt)), targetEnt, Filter.PvsExcept(user), true, PopupType.LargeCaution);
-            PopupSystem.PopupCursor(Loc.GetString("stunned-component-disarm-success", ("target", targetEnt)), user, PopupType.Large);
-
-            AdminLogger.Add(LogType.DisarmedKnockdown, LogImpact.Medium, $"{ToPrettyString(user):user} knocked down {ToPrettyString(target):target}");
-        }
+        ShoveOrDisarmPopup(true);
 
         return true;
+
+        // Goob - Shove Rework edit (moved to function)
+        void ShoveOrDisarmPopup(bool disarm)
+        {
+            var filterOther = Filter.PvsExcept(user, entityManager: EntityManager);
+            var msgPrefix = "disarm-action-";
+
+            if (!disarm)
+                msgPrefix = "disarm-action-shove-";
+
+            var msgOther = Loc.GetString(
+                msgPrefix + "popup-message-other-clients",
+                ("performerName", Identity.Entity(user, EntityManager)),
+                ("targetName", Identity.Entity(target, EntityManager)));
+
+            var msgUser = Loc.GetString(msgPrefix + "popup-message-cursor", ("targetName", Identity.Entity(target, EntityManager)));
+
+            PopupSystem.PopupPredicted(msgOther, target, null, filterOther, false);
+            PopupSystem.PopupClient(msgUser, user);
+        }
+    }
+
+    private void PhysicalShove(EntityUid user, EntityUid target)
+    {
+        var force = _shoveRange * _contests.MassContest(user, target, rangeFactor: _shoveMass);
+
+        var userPos = TransformSystem.ToMapCoordinates(user.ToCoordinates()).Position;
+        var targetPos = TransformSystem.ToMapCoordinates(target.ToCoordinates()).Position;
+        var pushVector = (targetPos - userPos).Normalized() * force;
+        var animated = HasComp<ItemComponent>(target);
+        _throwing.TryThrow(target, pushVector, force * _shoveSpeed, animated: animated);
     }
 
     private void DoLungeAnimation(EntityUid user, EntityUid weapon, Angle angle, MapCoordinates coordinates, float length, string? animation)

@@ -36,3 +36,16 @@
     Telecrystal: 6
   categories:
   - UplinkWeaponry
+
+- type: listing
+  id: UplinkDNAInjector
+  name: uplink-dna-injector-name
+  description: uplink-dna-injector-desc
+  productEntity: DnaInjector
+  discountCategory: rareDiscounts
+  discountDownTo:
+    Telecrystal: 4
+  cost:
+    Telecrystal: 6
+  categories:
+  - UplinkDeception

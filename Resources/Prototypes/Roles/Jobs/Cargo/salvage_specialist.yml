@@ -16,6 +16,7 @@
   - Salvage
   - Maintenance
   - External
+  - Research
   # Rayten-start
   special:
   - !type:AddComponentSpecial
@@ -28,7 +29,7 @@
   equipment:
     jumpsuit: ClothingUniformJumpsuitSalvageSpecialist
     id: SalvagePDA
-    ears: ClothingHeadsetCargo
+    ears: ClothingHeadsetScience
   #storage:
     #back:
     #- Stuff

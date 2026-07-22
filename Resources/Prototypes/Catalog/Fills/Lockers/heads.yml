@@ -3,15 +3,15 @@
   table: !type:AllSelector
     children:
     - id: BoxEncryptionKeyCargo
-    - id: BoxFolderQmClipboard
+    #- id: BoxFolderQmClipboard # RAYTEN
     - id: BoxQMCircuitboards
     - id: BoxQMStamps
     - id: CigPackGreen
       prob: 0.50
     - id: ClothingHeadsetAltCargo
-    - id: DoorRemoteCargo
-    - id: AstroNavCartridge
-    - id: ClothingHandsKnuckleDustersQM
+    #- id: DoorRemoteCargo # RAYTEN
+    #- id: AstroNavCartridge # RAYTEN
+    #- id: ClothingHandsKnuckleDustersQM # RAYTEN
     - id: PlushieLizardJobQuartermaster
       prob: 0.02
 
@@ -34,14 +34,13 @@
     - id: CigarGoldCase
       prob: 0.25
     # - id: ClothingBeltSheathFilled #Vanilla-loadouts
-    - id: ClothingUniformJumpsuitPatriot # RAYTEN-SUPERS
     - id: AlertKeyUniversal
     - id: ClothingHeadsetAltCommand
-    - id: ClothingOuterArmorCaptainCarapace
     - id: BoxCaptainCircuitboards
     - id: DoorRemoteCustom
     - id: MedalCase
     - id: NukeDisk
+    - id: NukeCodePaperStation # RAYTEN
     - id: PinpointerNuclear
     - id: PlushieNuke
       prob: 0.1
@@ -155,6 +154,9 @@
   id: LockerFillChiefEngineerNoHardsuit
   table: !type:AllSelector
     children:
+    - id: DoorRemoteCargo # RAYTEN
+    - id: AstroNavCartridge # RAYTEN
+    - id: BoxFolderQmClipboard # RAYTEN
     - id: AlertKeyYellow
     - id: AccessConfigurator
     - id: BoxEncryptionKeyEngineering
@@ -215,16 +217,16 @@
   id: LockerFillChiefMedicalOfficerNoHardsuit
   table: !type:AllSelector
     children:
-    - id: AlertKeyViolet
+    #- id: AlertKeyViolet # RAYTEN
     - id: ClothingEyesHudMedical
     - id: ClothingBeltMedicalFilled
-    - id: HandheldCrewMonitor
-    - id: Hypospray
-    - id: MedTekCartridge
+    #- id: HandheldCrewMonitor # RAYTEN
+    #- id: Hypospray # RAYTEN
+    #- id: MedTekCartridge # RAYTEN
     # Standard command gear
     - id: RubberStampCMO
     - id: ClothingHeadsetAltMedical
-    - id: DoorRemoteMedical
+    #- id: DoorRemoteMedical # RAYTEN
     - id: BoxEncryptionKeyMedical
     - id: BoxCMOCircuitboards
     - id: PlushieLizardJobChiefmedicalofficer
@@ -270,6 +272,10 @@
   id: LockerFillResearchDirectorNoHardsuit
   table: !type:AllSelector
     children:
+    - id: Hypospray # RAYTEN
+    - id: MedTekCartridge # RAYTEN
+    - id: DoorRemoteMedical # RAYTEN
+    - id: AlertKeyViolet # RAYTEN
     - id: Intellicard
     - id: BoxEncryptionKeyScience
     - id: BoxRDCircuitboards

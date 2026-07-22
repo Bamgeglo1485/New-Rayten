@@ -5,6 +5,8 @@ using Robust.Shared.Audio;
 using Robust.Shared.Player;
 using Robust.Shared.Utility;
 
+using Content.Server.Light.Components; // RAYTEN
+
 namespace Content.Server.Chat.Systems;
 
 public sealed partial class ChatSystem
@@ -22,10 +24,22 @@ public sealed partial class ChatSystem
 
         var wrappedMessage = Loc.GetString("chat-manager-sender-announcement-wrap-message", ("sender", sender), ("message", FormattedMessage.EscapeText(message)));
         _chatManager.ChatMessageToAll(ChatChannel.Radio, message, wrappedMessage, default, false, true, colorOverride);
+
+        // RAYTEN STARTS
         if (playSound)
         {
-            _audio.PlayGlobal(announcementSound ?? DefaultAnnouncementSound, Filter.Broadcast(), true, AudioParams.Default.WithVolume(-2f));
+            var soundToPlay = announcementSound ?? DefaultAnnouncementSound;
+            if (soundToPlay != null)
+            {
+                var query = EntityManager.EntityQueryEnumerator<EmergencyLightComponent, TransformComponent>();
+                while (query.MoveNext(out var uid, out _, out _))
+                {
+                    _audio.PlayPvs(soundToPlay, uid, AudioParams.Default.WithVolume(-10f));
+                }
+            }
         }
+        // RAYTEN ENDS
+
         _adminLogger.Add(LogType.Chat, LogImpact.Low, $"Global station announcement from {sender}: {message}");
     }
 
@@ -43,10 +57,20 @@ public sealed partial class ChatSystem
 
         var wrappedMessage = Loc.GetString("chat-manager-sender-announcement-wrap-message", ("sender", sender), ("message", FormattedMessage.EscapeText(message)));
         _chatManager.ChatMessageToManyFiltered(filter, ChatChannel.Radio, message, wrappedMessage, source ?? default, false, true, colorOverride);
+        // RAYTEN STARTS
         if (playSound)
         {
-            _audio.PlayGlobal(announcementSound ?? DefaultAnnouncementSound, filter, true, AudioParams.Default.WithVolume(-2f));
+            var soundToPlay = announcementSound ?? DefaultAnnouncementSound;
+            if (soundToPlay != null)
+            {
+                var query = EntityManager.EntityQueryEnumerator<EmergencyLightComponent, TransformComponent>();
+                while (query.MoveNext(out var uid, out _, out _))
+                {
+                    _audio.PlayPvs(soundToPlay, uid, AudioParams.Default.WithVolume(-10f));
+                }
+            }
         }
+        // RAYTEN ENDS
         _adminLogger.Add(LogType.Chat, LogImpact.Low, $"Station Announcement from {sender}: {message}");
     }
 
@@ -76,10 +100,20 @@ public sealed partial class ChatSystem
 
         _chatManager.ChatMessageToManyFiltered(filter, ChatChannel.Radio, message, wrappedMessage, source, false, true, colorOverride);
 
+        // RAYTEN STARTS
         if (playDefaultSound)
         {
-            _audio.PlayGlobal(announcementSound ?? DefaultAnnouncementSound, filter, true, AudioParams.Default.WithVolume(-2f));
+            var soundToPlay = announcementSound ?? DefaultAnnouncementSound;
+            if (soundToPlay != null)
+            {
+                var query = EntityManager.EntityQueryEnumerator<EmergencyLightComponent, TransformComponent>();
+                while (query.MoveNext(out var uid, out _, out _))
+                {
+                    _audio.PlayPvs(soundToPlay, uid, AudioParams.Default.WithVolume(-15f));
+                }
+            }
         }
+        // RAYTEN ENDS
 
         _adminLogger.Add(LogType.Chat, LogImpact.Low, $"Station Announcement on {station} from {sender}: {message}");
     }

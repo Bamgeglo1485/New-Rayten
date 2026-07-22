@@ -71,7 +71,7 @@ namespace Content.Client.Communications.UI
 
             // AlertLevelButton.Disabled = !AlertLevelSelectable;
             //rayten-start
-            CallERTButton.OnPressed += _ => CallERT?.Invoke();
+            //CallERTButton.OnPressed += _ => CallERT?.Invoke();
             //CallERTButton.Disabled = !CanCall; ТУДУ
             //rayten-end
             EmergencyShuttleButton.OnPressed += _ => OnEmergencyLevel?.Invoke();

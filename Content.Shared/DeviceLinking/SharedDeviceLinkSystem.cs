@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 using System.Linq;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Database;
@@ -10,15 +12,13 @@ using Robust.Shared.Utility;
 
 namespace Content.Shared.DeviceLinking;
 
-public abstract partial class SharedDeviceLinkSystem : EntitySystem
+public abstract class SharedDeviceLinkSystem : EntitySystem
 {
-    [Dependency] private IPrototypeManager _prototypeManager = default!;
-    [Dependency] private SharedPopupSystem _popupSystem = default!;
-    [Dependency] private ISharedAdminLogManager _adminLogger = default!;
-    [Dependency] private SharedTransformSystem _transform = default!;
-    [Dependency] private IGameTiming _gameTiming = default!;
-
-    [Dependency] private EntityQuery<DeviceLinkSinkComponent> _deviceLinkSinkQuery = default!;
+    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+    [Dependency] private readonly SharedPopupSystem _popupSystem = default!;
+    [Dependency] private readonly ISharedAdminLogManager _adminLogger = default!;
+    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private readonly IGameTiming _gameTiming = default!;
 
     public const string InvokedPort = "link_port";
 
@@ -39,7 +39,7 @@ public abstract partial class SharedDeviceLinkSystem : EntitySystem
     {
         List<EntityUid> invalidSinks = new();
         List<(string, string)> invalidLinks = new();
-        foreach (var (sink, links)  in source.Comp.LinkedPorts)
+        foreach (var (sink, links) in source.Comp.LinkedPorts)
         {
             if (!TryComp(sink, out DeviceLinkSinkComponent? sinkComponent))
             {
@@ -84,9 +84,10 @@ public abstract partial class SharedDeviceLinkSystem : EntitySystem
     /// </summary>
     private void OnSourceRemoved(Entity<DeviceLinkSourceComponent> source, ref ComponentRemove args)
     {
+        var query = GetEntityQuery<DeviceLinkSinkComponent>();
         foreach (var sinkUid in source.Comp.LinkedPorts.Keys)
         {
-            if (_deviceLinkSinkQuery.TryGetComponent(sinkUid, out var sink))
+            if (query.TryGetComponent(sinkUid, out var sink))
                 RemoveSinkFromSourceInternal(source, sinkUid, source, sink);
             else
                 Log.Error($"Device source {ToPrettyString(source)} links to invalid entity: {ToPrettyString(sinkUid)}");
@@ -199,6 +200,32 @@ public abstract partial class SharedDeviceLinkSystem : EntitySystem
             return port;
 
         return Loc.GetString(proto.Name);
+    }
+
+    /// <summary>
+    /// Goobstation - Removes a port from a source.
+    /// </summary>
+    public void RemoveSourcePort(EntityUid uid, ProtoId<SourcePortPrototype> port)
+    {
+        if (!TryComp<DeviceLinkSourceComponent>(uid, out var comp))
+            return;
+
+        comp.Ports.Remove(port);
+        if (comp.Ports.Count == 0)
+            RemCompDeferred<DeviceLinkSourceComponent>(uid);
+    }
+
+    /// <summary>
+    /// Goobstation - Removes a port from a sink.
+    /// </summary>
+    public void RemoveSinkPort(EntityUid uid, ProtoId<SinkPortPrototype> port)
+    {
+        if (!TryComp<DeviceLinkSinkComponent>(uid, out var comp))
+            return;
+
+        comp.Ports.Remove(port);
+        if (comp.Ports.Count == 0)
+            RemCompDeferred<DeviceLinkSinkComponent>(uid);
     }
     #endregion
 
@@ -346,6 +373,20 @@ public abstract partial class SharedDeviceLinkSystem : EntitySystem
     }
 
     /// <summary>
+    /// Einstein Engines: Removes every link from the given sink
+    /// </summary>
+    public void RemoveAllFromSource(EntityUid sourceUid, DeviceLinkSourceComponent? sourceComponent = null, Predicate<EntityUid>? filter = null)
+    {
+        if (!Resolve(sourceUid, ref sourceComponent))
+            return;
+
+        foreach (var sinkUid in sourceComponent.LinkedPorts.Where(sinkUid => filter == null || filter.Invoke(sinkUid.Key)))
+        {
+            RemoveSinkFromSource(sourceUid, sinkUid.Key, sourceComponent);
+        }
+    }
+
+    /// <summary>
     /// Removes all links between a source and a sink
     /// </summary>
     public void RemoveSinkFromSource(
@@ -390,8 +431,8 @@ public abstract partial class SharedDeviceLinkSystem : EntitySystem
         {
             foreach (var (sourcePort, sinkPort) in ports)
             {
-                RaiseLocalEvent(sourceUid, new PortDisconnectedEvent(sourcePort));
-                RaiseLocalEvent(sinkUid, new PortDisconnectedEvent(sinkPort));
+                RaiseLocalEvent(sourceUid, new PortDisconnectedEvent(sourcePort, sinkUid)); // EE edit: added Uid field
+                RaiseLocalEvent(sinkUid, new PortDisconnectedEvent(sinkPort, sourceUid)); // EE edit: added Uid field
             }
         }
 
@@ -429,8 +470,8 @@ public abstract partial class SharedDeviceLinkSystem : EntitySystem
             else
                 _adminLogger.Add(LogType.DeviceLinking, LogImpact.Low, $"unlinked {ToPrettyString(sourceUid):source} {source} and {ToPrettyString(sinkUid):sink} {sink}");
 
-            RaiseLocalEvent(sourceUid, new PortDisconnectedEvent(source));
-            RaiseLocalEvent(sinkUid, new PortDisconnectedEvent(sink));
+            RaiseLocalEvent(sourceUid, new PortDisconnectedEvent(source, sinkUid)); // EE edit: added Uid field
+            RaiseLocalEvent(sinkUid, new PortDisconnectedEvent(sink, sourceUid)); // EE edit: added Uid field
 
             outputs.Remove(sinkUid);
             linkedPorts.Remove((source, sink));
@@ -498,7 +539,7 @@ public abstract partial class SharedDeviceLinkSystem : EntitySystem
         RaiseLocalEvent(sinkUid, linkAttemptEvent, true);
         if (linkAttemptEvent.Cancelled && userId.HasValue)
         {
-            _popupSystem.PopupCursor(Loc.GetString("signal-linker-component-connection-refused", ("machine", source)), userId.Value);
+            _popupSystem.PopupCursor(Loc.GetString("signal-linker-component-connection-refused", ("machine", sink)), userId.Value); // Goobstation - sink instead of source
             return false;
         }
 
@@ -548,6 +589,24 @@ public abstract partial class SharedDeviceLinkSystem : EntitySystem
         DeviceLinkSourceComponent? sourceComponent = null)
     {
         // NOOP on client for the moment.
+    }
+
+    /// <summary>
+    /// Goobstation - moved out of server
+    /// Helper function that invokes a port with a high/low binary logic signal.
+    /// </summary>
+    public void SendSignal(EntityUid uid, string port, bool signal, DeviceLinkSourceComponent? comp = null)
+    {
+        if (!Resolve(uid, ref comp))
+            return;
+
+        var data = new NetworkPayload
+        {
+            [DeviceNetworkConstants.LogicState] = signal ? SignalState.High : SignalState.Low
+        };
+        InvokePort(uid, port, data, comp);
+
+        comp.LastSignals[port] = signal;
     }
     #endregion
 

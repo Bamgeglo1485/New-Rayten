@@ -22,6 +22,18 @@
     tags:
     - ClothMade
     - WhitelistChameleon
+  - type: Appearance
+  - type: Stainable
+    clothingVisuals:
+      head:
+      - sprite: _Funkystation/Effects/blood.rsi
+        state: helmetblood
+    iconVisuals:
+    - sprite: _Funkystation/Effects/blood.rsi
+      state: helmetbloodicon
+  - type: SolutionManager
+    solutions:
+    - SolutionStain
 
 - type: entity
   abstract: true
@@ -113,7 +125,6 @@
   - type: BreathMask
   - type: Item
     size: Normal
-  - type: InjectionProtection # Vanilla Station
   - type: PressureProtection
     highPressureMultiplier: 0.6
     lowPressureMultiplier: 1000
@@ -131,7 +142,6 @@
     tags:
     - WhitelistChameleon
     - HelmetEVA
-    - HardsuitHelmet # RAYTEN WHITEOUT
   - type: IdentityBlocker
   - type: HideLayerClothing
     slots:
@@ -140,6 +150,8 @@
     - HeadTop
     - HeadSide
     - FacialHair
+  - type: StainBlocker
+    slots: [MASK]
 
 - type: entity
   abstract: true
@@ -156,7 +168,6 @@
     state: icon # default state used by most inheritors
   - type: Clickable
   - type: InteractionOutline
-  - type: InjectionProtection # Vanill Station
   - type: Clothing
     #Apparently the hardsuit helmet equip sound is from a walking mech?
     equipSound: /Audio/Mecha/mechmove03.ogg
@@ -182,7 +193,6 @@
   - type: Tag
     tags:
     - WhitelistChameleon
-    - HardsuitHelmet # RAYTEN WHITEOUT
   - type: IdentityBlocker
   - type: HideLayerClothing
     slots:
@@ -191,6 +201,17 @@
     - HeadTop
     - HeadSide
     - FacialHair
+  - type: Appearance
+  - type: Stainable
+    clothingVisuals:
+      head:
+      - sprite: _Funkystation/Effects/blood.rsi
+        state: helmetblood
+    iconVisuals:
+    - sprite: _Funkystation/Effects/blood.rsi
+      state: helmetbloodicon
+  - type: StainBlocker
+    slots: [MASK]
 
 - type: entity
   abstract: true
@@ -278,3 +299,12 @@
     - Hair
     - HeadTop
     - HeadSide
+  - type: Appearance
+  - type: Stainable
+    clothingVisuals:
+      head:
+      - sprite: _Funkystation/Effects/blood.rsi
+        state: helmetblood
+    iconVisuals:
+    - sprite: _Funkystation/Effects/blood.rsi
+      state: helmetbloodicon

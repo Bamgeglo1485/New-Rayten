@@ -141,6 +141,10 @@
   placement:
     mode: SnapgridCenter
   components:
+  # <Trauma>
+  - type: ViewconeOccludable # seeing some guy bleeding behind you... not very good
+    occludeIfAnchored: true # they're always anchored
+  # </Trauma>
   - type: Clickable
   - type: Slippery
     staminaDamage: 0
@@ -203,3 +207,54 @@
     ignoreWhitelist:
       components:
       - OldMan
+
+# Funky footprints
+- type: entity
+  name: footprint
+  id: Footprint
+  save: false
+  description: Huh? Whose footprints are these?
+  placement:
+    mode: SnapgridCenter
+  components:
+  # <Trauma>
+  - type: ViewconeOccludable # seeing some guy bleeding behind you... not very good
+    occludeIfAnchored: true # they're always anchored
+  # </Trauma>
+  - type: Appearance
+  - type: Clickable
+  - type: Transform
+    noRot: false
+    anchored: true
+  - type: Sprite
+    drawdepth: FloorObjects
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      slipFixture:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.4,-0.4,0.4,0.4"
+        mask:
+        - ItemMask
+        layer:
+        - SlipLayer
+        hard: false
+  - type: SolutionContainerManager
+  - type: Footprint
+  - type: Puddle
+    solution: print
+    affectsMovement: false
+    affectsSound: false
+  - type: ExaminableSolution
+    solution: print
+  - type: MixableSolution
+    solution: print
+  - type: DrawableSolution
+    solution: print
+  - type: BadDrink
+  - type: IgnoresFingerprints
+  - type: Tag
+    tags:
+    - DNASolutionScannable

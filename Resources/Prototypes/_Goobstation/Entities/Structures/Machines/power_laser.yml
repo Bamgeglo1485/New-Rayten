@@ -1,0 +1,109 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
+- type: entity
+  id: MachinePowerTransmissionLaser
+  parent: [ BaseMachine ]
+  name: лазер передачи энергии
+  description: С помощью блюспейс лазера переносит энергию в другие станции. За это вам будут платить кредиты.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: PTL
+    active: false
+    baseBeamDamage:
+      types:
+        Heat: 5
+  - type: PTLVisuals
+  - type: Sprite
+    sprite: _Goobstation/Structures/Machines/PTL/pt_laser.rsi
+    layers:
+    - state: base
+      map: ["enum.PTLVisualLayers.Base"]
+    - state: unpowered
+      shader: unshaded
+      visible: true
+      map: ["enum.PTLVisualLayers.Unpowered"]
+    - state: charge-1
+      shader: unshaded
+      visible: false
+      map: ["enum.PTLVisualLayers.Charge"]
+  - type: Transform
+    anchored: true
+    noRot: false
+  - type: Appearance
+  - type: PowerNetworkBattery
+    maxChargeRate: 5000000 # 5MJ
+  - type: Battery
+    netsync: false
+    startingCharge: 0
+    maxCharge: 100000000 # 100MJ
+  - type: ExaminableBattery
+  - type: BatteryCharger
+    voltage: High
+    node: input
+  - type: NodeContainer
+    examinable: true
+    nodes:
+      input:
+        !type:CableDeviceNode
+        nodeGroupID: HVPower
+  - type: Damageable
+    damageModifierSet: Metallic
+  - type: BatterySensor
+  - type: Gun
+    showExamineText: false
+    fireRate: 10
+    selectedMode: SemiAuto
+    availableModes:
+      - SemiAuto
+    soundGunshot:
+      path: /Audio/Weapons/Guns/Gunshots/laser_cannon.ogg
+  - type: BatteryAmmoProvider
+    proto: PTL
+    fireCost: 1000
+  - type: Physics
+    bodyType: Static
+  - type: Rotatable # or people end up trying to rotate it by edging on solid ents in space, which never works
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-1.5,-1.5,1.5,1.5"
+        density: 50
+        mask:
+        - LargeMobMask
+        layer:
+        - WallLayer
+  - type: StationAiWhitelist
+  # ui todo
+  #- type: ActivatableUI
+  #  key: enum.PTLUiKey.Key
+  #- type: ActivatableUIRequiresPower
+  #- type: UserInterface
+  #  interfaces:
+  #    enum.PTLUiKey.Key:
+  #      type: PTLBoundUserInterface
+  - type: AmbientSound
+    range: 5
+    sound:
+      path: /Audio/Ambience/Objects/engine_hum.ogg
+
+- type: entity
+  parent: BasicHitscan
+  id: PTL
+  components:
+  - type: HitscanBasicDamage
+    damage:
+      types:
+        Heat: 30
+  - type: HitscanBasicVisuals
+    muzzleFlash:
+      sprite: _Goobstation/Structures/Machines/PTL/pt_beam.rsi
+      state: ptl_beam
+    travelFlash:
+      sprite: _Goobstation/Structures/Machines/PTL/pt_beam.rsi
+      state: ptl_beam
+    impactFlash:
+      sprite: _Goobstation/Structures/Machines/PTL/pt_beam.rsi
+      state: ptl_beam

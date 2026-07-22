@@ -1,4 +1,4 @@
-﻿using Content.Shared.Vanilla.TDM;
+using Content.Shared.Vanilla.TDM;
 using Content.Shared.Projectiles;
 using Robust.Shared.Timing;
 using Content.Shared.GameTicking;

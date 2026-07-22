@@ -53,7 +53,7 @@ note_stale_days = 180.0
 note_fresh_days = 90.0
 
 [console]
-login_host_user = "Lemniscate"
+login_host_user = "Geglo1485x"
 
 [ahelp]
 admin_prefix = 1
@@ -95,3 +95,6 @@ storage_limit = 3
 
 [queue]
 enabled = true
+
+[viewport]
+maximum_width = 30

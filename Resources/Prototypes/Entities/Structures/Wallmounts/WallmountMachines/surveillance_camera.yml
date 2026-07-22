@@ -4,6 +4,10 @@
   name: camera
   description: A surveillance camera. It's watching you. Kinda.
   components:
+  # <Trauma>
+  - type: Viewcone
+    baseConeAngle: 36000
+  # </Trauma>
   - type: Physics
     bodyType: Static
   - type: Fixtures

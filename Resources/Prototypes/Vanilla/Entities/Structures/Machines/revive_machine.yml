@@ -1,0 +1,181 @@
+﻿- type: entity
+  parent: BaseStructure
+  id: RespawnMachine
+  name: машина возрождения
+  description: Машина, которая клонирует существ после начала их гниения. Важнейшее устройство на станции. It's eternity in there...
+  components:
+  - type: Sprite
+    sprite: Vanilla/Structures/Machines/revive.rsi
+    drawdepth: Mobs
+    noRot: true
+    offset: 0, 0.5
+    layers:
+    - state: base
+      map: ["base"]
+    - state: unlit
+      shader: unshaded
+  - type: InteractionOutline
+  - type: Transform
+    noRot: true
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,0.5,0.5"
+        density: 200
+        mask:
+          - MachineMask
+        layer:
+          - MachineLayer
+  - type: ContainerContainer
+    containers:
+      storage: !type:ContainerSlot
+  - type: Appearance
+  - type: Damageable
+    damageModifierSet: StructuralMetallic
+  - type: Injurable
+    damageContainer: StructuralInorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 400
+      behaviors:
+      - !type:EmptyAllContainersBehaviour
+      - !type:PlaySoundBehavior
+        sound:
+          collection: WindowShatter
+      - !type:ChangeConstructionNodeBehavior
+        node: machineFrame
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: ApcPowerReceiver
+    powerLoad: 1000
+  - type: ExtensionCableReceiver
+  - type: PointLight
+    mask: /Textures/Effects/LightMasks/double_cone.png
+    color: "#960340"
+    energy: 10
+    radius: 10
+    softness: 0
+    shadow: true
+    offset: "0, 0.35"
+  - type: RotatingLight
+  - type: EmptyOnMachineDeconstruct
+    containers:
+      - storage
+  - type: Climbable
+    vaultable: false
+  - type: DragInsertContainer
+    containerId: storage
+    entryDelay: 2
+  - type: ExitContainerOnMove
+    containerId: storage
+  - type: AmbientSound
+    volume: -10
+    range: 4
+    sound:
+      path: /Audio/Vanilla/Ambience/revive_machine.ogg
+  - type: RespawnMachine
+  - type: AmbientOnPowered
+  - type: TypingIndicator
+    proto: robot
+  - type: Speech
+    speechVerb: Robotic
+    speechSounds: Vending
+  - type: SpookySpeaker
+    messageSet: SpookySpeakerMessagesGeneric
+    speakChance: 0.2
+  - type: IntrinsicRadioReceiver
+  - type: ActiveRadio
+    channels:
+    - Common
+  - type: DeviceList
+  - type: DeviceNetwork
+    deviceNetId: Wired
+  - type: DeviceLinkSource
+    range: 10
+    ports:
+      - RespawnMachineSender
+
+- type: entity
+  parent: RespawnMachine
+  id: RespawnMachineFast
+  suffix: Быстрое возрождение(5 сек)
+  components:
+  - type: RespawnMachine
+    respawnDelay: 5
+
+- type: entity
+  id: InventoryTaker
+  parent: BaseStructure
+  name: квантовый инвентаризатор
+  description: Использует технологию квантового спина для телепортации вещей умершего.
+  components:
+  - type: Sprite
+    sprite: Vanilla/Structures/Machines/inventory_taker.rsi
+    drawdepth: HighFloorObjects
+    noRot: true
+    layers:
+    - state: base
+      map: ["base"]
+    - state: unlit
+      shader: unshaded
+  - type: InteractionOutline
+  - type: Transform
+    noRot: true
+  - type: Appearance
+  - type: Damageable
+    damageModifierSet: StructuralMetallic
+  - type: Injurable
+    damageContainer: StructuralInorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 400
+      behaviors:
+      - !type:EmptyAllContainersBehaviour
+      - !type:PlaySoundBehavior
+        sound:
+          collection: WindowShatter
+      - !type:ChangeConstructionNodeBehavior
+        node: machineFrame
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: ApcPowerReceiver
+    powerLoad: 1000
+  - type: ExtensionCableReceiver
+  - type: AmbientSound
+    volume: -15
+    range: 4
+    sound:
+      path: /Audio/Vanilla/Ambience/forcefield.ogg
+  - type: DeviceNetwork
+    deviceNetId: Wired
+    receiveFrequencyId: BasicDevice
+  - type: DeviceList
+  - type: DeviceLinkSink
+    ports:
+      - InventoryTakerReceiver
+  - type: InventoryTaker
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.25
+        mask:
+        - Impassable
+
+- type: sinkPort
+  id: InventoryTakerReceiver
+  name: инвентаризатор
+  description: присоединяется к машине возрождения
+
+- type: sourcePort
+  id: RespawnMachineSender
+  name: машина возрождения
+  description: присоединяется к инвентаризатору
+  defaultLinks: [ InventoryTakerReceiver ]

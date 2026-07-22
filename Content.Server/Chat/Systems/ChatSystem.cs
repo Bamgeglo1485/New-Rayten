@@ -22,6 +22,7 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Replays;
 using Content.Shared.Vanilla.Voices;
+
 namespace Content.Server.Chat.Systems;
 
 // TODO refactor whatever active warzone this class and chatmanager have become
@@ -47,7 +48,6 @@ public sealed partial class ChatSystem : SharedChatSystem
     [Dependency] private ReplacementAccentSystem _wordreplacement = default!;
     [Dependency] private ExamineSystemShared _examineSystem = default!;
     [Dependency] private EntityQuery<GhostHearingComponent> _ghostHearingQuery = default!;
-    public const int SkillWhisperMuffledRange = 2;
 
     private bool _loocEnabled = true;
     private bool _deadLoocEnabled;

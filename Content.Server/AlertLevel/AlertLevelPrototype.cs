@@ -77,6 +77,12 @@ public sealed partial class AlertLevelDetail
     /// </summary>
     [DataField("shuttleTime")] public TimeSpan ShuttleTime { get; private set; } = TimeSpan.FromMinutes(5);
 
+    
+    /// <summary>
+    /// vanilla-station
+    /// звук экстренного цвета
+    /// </summary>
+    [DataField("alarmSound")] public SoundSpecifier? AlarmSound { get; private set; }
     /// <summary>
     /// vanilla-station
     /// Это основной код угрозы или дополнительный?

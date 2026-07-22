@@ -1,0 +1,315 @@
+<Document>
+# Кодекс Персонала
+## Таблица
+
+Расстяните окно в сторону через верхнюю панель для удобства просмотра
+  
+  <Table Columns="7">
+    <ColorBox>
+      <Box>
+        Код
+      </Box>
+    </ColorBox>
+    <ColorBox>
+      <Box>
+        1xx
+      </Box>
+    </ColorBox>
+    <ColorBox>
+      <Box>
+        2xx
+      </Box>
+    </ColorBox>
+    <ColorBox>
+      <Box>
+        3xx
+      </Box>
+    </ColorBox>
+    <ColorBox>
+      <Box>
+        4xx
+      </Box>
+    </ColorBox>
+    <ColorBox>
+      <Box>
+        5xx
+      </Box>
+    </ColorBox>
+    <ColorBox>
+      <Box>
+        6xx
+      </Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box>
+        00
+      </Box>
+    </ColorBox>
+    <ColorBox>
+      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
+      </Box>
+    </ColorBox>
+    <ColorBox Color="#4a506b">
+      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
+        Сопротивление сотрудникам СБ
+      </Box>
+    </ColorBox>
+    <ColorBox Color="#4a506b">
+      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
+        Незаконное строительство
+      </Box>
+    </ColorBox>
+    <ColorBox>
+      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
+      </Box>
+    </ColorBox>
+    <ColorBox>
+      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
+      </Box>
+    </ColorBox>
+    <ColorBox Color="#4a506b">
+      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
+        Мятеж
+      </Box>
+    </ColorBox>
+    
+    <ColorBox>
+      <Box>
+        01
+      </Box>
+    </ColorBox>
+    <ColorBox Color="#4a506b">
+      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
+        Посягательство на честь и достоинство
+      </Box>
+    </ColorBox>
+    <ColorBox Color="#4a506b">
+      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
+        Нанесение легких телесных повреждений
+      </Box>
+    </ColorBox>
+    <ColorBox Color="#4a506b">
+      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
+        Похищение
+      </Box>
+    </ColorBox>
+    <ColorBox Color="#4a506b">
+      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
+        Причинение тяжкого вреда здоровью
+      </Box>
+    </ColorBox>
+    <ColorBox Color="#4a506b">
+      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
+        Убийство
+      </Box>
+    </ColorBox>
+    <ColorBox Color="#4a506b">
+      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
+        Уничтожение тела
+      </Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box>
+        02
+      </Box>
+    </ColorBox>
+    <ColorBox>
+      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
+      </Box>
+    </ColorBox>
+    <ColorBox Color="#4a506b">
+      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
+        Оборот предметов I класса опасности
+      </Box>
+    </ColorBox>
+    <ColorBox>
+      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
+      </Box>
+    </ColorBox>
+    <ColorBox Color="#4a506b">
+      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
+        Оборот предметов II класса опасности
+      </Box>
+    </ColorBox>
+    <ColorBox Color="#4a506b">
+      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
+        Оборот предметов III класса опасности
+      </Box>
+    </ColorBox>
+    <ColorBox>
+      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
+      </Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box>
+        03
+      </Box>
+    </ColorBox>
+    <ColorBox>
+      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
+      </Box>
+    </ColorBox>
+    <ColorBox Color="#4a506b">
+      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
+        Хулиганство
+      </Box>
+    </ColorBox>
+    <ColorBox Color="#4a506b">
+      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
+        Жесткое обращение с непризнанными
+      </Box>
+    </ColorBox>
+    <ColorBox>
+      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
+      </Box>
+    </ColorBox>
+    <ColorBox>
+      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
+      </Box>
+    </ColorBox>
+    <ColorBox>
+      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
+      </Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box>
+        04
+      </Box>
+    </ColorBox>
+    <ColorBox>
+      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
+      </Box>
+    </ColorBox>
+    <ColorBox Color="#4a506b">
+      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
+        Хищение
+      </Box>
+    </ColorBox>
+    <ColorBox>
+      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
+      </Box>
+    </ColorBox>
+    <ColorBox Color="#4a506b">
+      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
+        Мошенничество
+      </Box>
+    </ColorBox>
+    <ColorBox>
+      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
+      </Box>
+    </ColorBox>
+    <ColorBox>
+      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
+      </Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box>
+        05
+      </Box>
+    </ColorBox>
+    <ColorBox Color="#4a506b">
+      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
+        Необоснованное посещение космоса
+      </Box>
+    </ColorBox>
+    <ColorBox Color="#4a506b">
+      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
+        Проникновение
+      </Box>
+    </ColorBox>
+    <ColorBox Color="#4a506b">
+      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
+        Проникновение в страт. точку
+      </Box>
+    </ColorBox>
+    <ColorBox>
+      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
+      </Box>
+    </ColorBox>
+    <ColorBox Color="#4a506b">
+      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
+        Проникновение в защищенную точку
+      </Box>
+    </ColorBox>
+    <ColorBox>
+      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
+      </Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box>
+        06
+      </Box>
+    </ColorBox>
+    <ColorBox>
+      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
+      </Box>
+    </ColorBox>
+    <ColorBox>
+      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
+      </Box>
+    </ColorBox>
+    <ColorBox Color="#4a506b">
+      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
+        Саботаж
+      </Box>
+    </ColorBox>
+    <ColorBox>
+      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
+      </Box>
+    </ColorBox>
+    <ColorBox>
+      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
+      </Box>
+    </ColorBox>
+    <ColorBox Color="#4a506b">
+      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
+        Особо крупный саботаж
+      </Box>
+    </ColorBox>
+  </Table>
+
+  ## Определения
+  В таблице есть 3 термина - раздел, код и статья.
+
+  Раздел - это тяжесть преступления, обозначается вертикальными столбцами. Тяжесть увеличивается слева-направо. Пример: 1хх, 2хх, 4хх.
+
+  Код - это тип преступления, обозначается горизонтальными строками. Определяет смысл преступления, например, статьи кода 01 связаны с причинением вреда, а 05 проникновениями в разные зоны. Пример: 01, 02, 05.
+
+  Статья - это комбинация раздела и кода. Обозначет само преступление. Например: 201 - нанесение легких телесных. Раздел 2хх, код 01.
+
+  ## Сроки за статьи
+  Срок считается по разделам. Например, 1хх это легкое преступление, а 6хх уже военное.
+
+
+  1xx - Предупреждение. 5 минут заключения за рецедив.
+  
+  2xx - 5 минут
+  
+  3xx - 15 минут
+  
+  4xx - 20 минут
+  
+  5xx - Перманентное
+  
+  6xx - Казнь
+
+  ## Правила составление срока
+
+  Срок считается по такой формуле - X + (5*Y) + Z/2
+  
+  X - Основной раздел преступления. Например, 2хх это 5 минут срока.
+
+  Y - Это количество рецедивов по статье преступления. Например, если клоун до этого нарушил 201, то он получает дополнительные 5 минут. Если дважды нарушил 201, то 10 минут.
+
+  Z - Это второстепенные статьи. Например, этот же клоун проникнул в инженерный и избил кого-то. Легкие телесные это основная статья, переменная X. Проникновение это дополнительная статья и срок его тяжести делиться на половину.
+
+  
+  
+
+</Document>

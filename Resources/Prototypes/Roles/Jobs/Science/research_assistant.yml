@@ -12,6 +12,8 @@
   access:
   - Research
   - Maintenance
+  - Medical
+  - Chemistry
 
 - type: startingGear
   id: ResearchAssistantGear

@@ -57,7 +57,7 @@
     - type: Prying
       pryPowered: true
       force: false
-      speedModifier: 1
+      speedModifier: 2
     - type: HTN
       rootTask:
         task: 939Compound

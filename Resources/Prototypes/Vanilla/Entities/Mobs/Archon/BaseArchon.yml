@@ -1,7 +1,7 @@
 - type: entity
   name: Архонт-объект моб
   id: BaseMobArchon
-  parent: [ SimpleSpaceMobBase, MobCombat ]
+  parent: [ SimpleSpaceMobBase, MobCombat, BaseDangerMarker ]
   abstract: true
   components:
   - type: ComplexInteraction

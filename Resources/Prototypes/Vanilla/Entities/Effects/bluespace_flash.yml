@@ -1,0 +1,22 @@
+- type: entity
+  id: EffectFlashBluespaceExplosion
+  components:
+  - type: PointLight
+    radius: 10.5
+    energy: 15
+    color: "#18abf5"
+  - type: TimedDespawn
+    lifetime: 1
+  - type: EmitSoundOnSpawn
+    sound:
+      path: /Audio/Effects/Lightning/lightningbolt.ogg
+  - type: Explosive
+    explosionType: Transparent
+    maxIntensity: 1
+    intensitySlope: 1
+    totalIntensity: 1
+    canCreateVacuum: false
+  - type: ExplodeOnTrigger
+  - type: TriggerOnSpawn
+  - type: ExplosionEffect
+
