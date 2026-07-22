@@ -1,3 +1,7 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
+using Content.Shared.Atmos.Components;  //Goobstation - Ventcrawler
+using Content.Shared.DrawDepth;
 using Content.Client.UserInterface.Systems.Sandbox;
 using Content.Shared.SubFloor;
 using Robust.Client.GameObjects;
@@ -6,13 +10,14 @@ using Robust.Shared.Player;
 
 namespace Content.Client.SubFloor;
 
-public sealed partial class SubFloorHideSystem : SharedSubFloorHideSystem
+public sealed class SubFloorHideSystem : SharedSubFloorHideSystem
 {
-    [Dependency] private SharedAppearanceSystem _appearance = default!;
-    [Dependency] private SpriteSystem _sprite = default!;
-    [Dependency] private IUserInterfaceManager _ui = default!;
+    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
+    [Dependency] private readonly SpriteSystem _sprite = default!;
+    [Dependency] private readonly IUserInterfaceManager _ui = default!;
 
     private bool _showAll;
+    private bool _showVentPipe; //Goobstation - Ventcrawler
 
     [ViewVariables(VVAccess.ReadWrite)]
     public bool ShowAll
@@ -29,6 +34,20 @@ public sealed partial class SubFloorHideSystem : SharedSubFloorHideSystem
                 Value = value,
             };
             RaiseNetworkEvent(ev);
+        }
+    }
+
+    [ViewVariables(VVAccess.ReadWrite)]
+    public bool ShowVentPipe     //Goobstation - Ventcrawler
+    {
+        get => _showVentPipe;
+        set
+        {
+            if (_showVentPipe == value)
+                return;
+            _showVentPipe = value;
+
+            UpdateAll();
         }
     }
 
@@ -63,7 +82,8 @@ public sealed partial class SubFloorHideSystem : SharedSubFloorHideSystem
 
         scannerRevealed &= !ShowAll; // no transparency for show-subfloor mode.
 
-        var revealed = !covered || ShowAll || scannerRevealed;
+        var showVentPipe = HasComp<PipeAppearanceComponent>(uid) && ShowVentPipe;    //Goobstation - Ventcrawler
+        var revealed = !covered || ShowAll || scannerRevealed || showVentPipe;   //Goobstation - Ventcrawler
 
         // set visibility & color of each layer
         foreach (var layer in args.Sprite.AllLayers)

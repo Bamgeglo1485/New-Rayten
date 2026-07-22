@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
 - type: entity
   abstract: true
   parent: BaseItem
@@ -15,13 +17,10 @@
     anchored: true
   - type: Damageable
     damageModifierSet: Metallic
-  - type: Injurable
-    damageContainer: StructuralInorganic
   - type: SubFloorHide
   - type: CollideOnAnchor
   - type: Anchorable
   - type: Rotatable
-    increment: 90
   - type: Destructible
     thresholds:
     - trigger: # for nukes
@@ -67,6 +66,9 @@
     bodyType: static
   - type: StaticPrice
     price: 30
+  - type: ContainerContainer # Goobstation - ventcrawl
+    containers:
+      VentCrawlerTube: !type:Container
 
 - type: entity
   abstract: true
@@ -79,11 +81,11 @@
         Primary: Structures/Piping/Atmospherics/pipe.rsi
         Secondary: Structures/Piping/Atmospherics/pipe_alt1.rsi
         Tertiary: Structures/Piping/Atmospherics/pipe_alt2.rsi
-  - type: PressureExplosion # Rayten-Rebalances
 
 #Note: The PipeDirection of the PipeNode should be the south-facing version, because the entity starts at an angle of 0 (south)
 
 - type: entity
+  # Goobstation - Allow device-on-pipe stacking
   parent: GasPipeBase
   id: GasPipeHalf
   suffix: Half
@@ -96,7 +98,6 @@
         !type:PipeNode
         nodeGroupID: Pipe
         pipeDirection: South
-        volume: 100
   - type: Sprite
     layers:
     - state: pipeHalf
@@ -132,6 +133,12 @@
         !type:PipeNode
         nodeGroupID: Pipe
         pipeDirection: Longitudinal
+  - type: VentCrawlerTube # Goobstation - ventcrawl
+    containerId: VentCrawlerTube
+  - type: VentCrawlerTransit # Goobstation - ventcrawl
+  - type: ContainerContainer # Goobstation - ventcrawl
+    containers:
+      VentCrawlerTube: !type:Container
   - type: Sprite
     layers:
     - state: pipeStraight
@@ -175,6 +182,12 @@
         !type:PipeNode
         nodeGroupID: Pipe
         pipeDirection: SWBend
+  - type: VentCrawlerTube # Goobstation - ventcrawl
+    containerId: VentCrawlerTube
+  - type: VentCrawlerBend # Goobstation - ventcrawl
+  - type: ContainerContainer # Goobstation - ventcrawl
+    containers:
+      VentCrawlerTube: !type:Container
   - type: Sprite
     layers:
       - state: pipeBend
@@ -254,6 +267,16 @@
     guides:
     - Pipes
     - PipeNetworks
+  - type: VentCrawlerTube # Goobstation - ventcrawl
+    containerId: VentCrawlerTube
+  - type: VentCrawlerJunction # Goobstation - ventcrawl
+    degrees:
+      - 0
+      - 90
+      - -90
+  - type: ContainerContainer # Goobstation - ventcrawl
+    containers:
+      VentCrawlerTube: !type:Container
 
 - type: entity
   parent: GasPipeBase
@@ -282,6 +305,17 @@
   - type: Construction
     graph: GasPipe
     node: fourway
+  - type: VentCrawlerTube # Goobstation - ventcrawl
+    containerId: VentCrawlerTube
+  - type: VentCrawlerJunction # Goobstation - ventcrawl
+    degrees:
+      - 0
+      - 90
+      - -90
+      - 180
+  - type: ContainerContainer # Goobstation - ventcrawl
+    containers:
+      VentCrawlerTube: !type:Container
   - type: Item
     heldPrefix: Fourway
     storedSprite:
