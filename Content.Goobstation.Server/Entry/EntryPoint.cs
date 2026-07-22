@@ -1,6 +1,4 @@
 
-using Content.Goobstation.Server.Voice;
-using Content.Goobstation.Common.ServerCurrency;
 using Robust.Shared.ContentPack;
 using Robust.Shared.Timing;
 
