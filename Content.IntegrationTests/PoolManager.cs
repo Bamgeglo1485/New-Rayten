@@ -1,7 +1,4 @@
-// SPDX-License-Identifier: AGPL-3.0-or-later
-
 #nullable enable
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Content.IntegrationTests.Pair;
@@ -15,6 +12,11 @@ public static partial class PoolManager
 {
     public static readonly ContentPoolManager Instance = new();
     public const string TestMap = "Empty";
+
+    /// <summary>
+    /// Designated load bearing station. Sometimes you need a station for a test.
+    /// </summary>
+    public const string TestStation = "Cluster";
 
     /// <summary>
     /// Runs a server, or a client until a condition is true
@@ -89,7 +91,7 @@ public static partial class PoolManager
 /// </summary>
 public sealed class ContentPoolManager : PoolManager<TestPair>
 {
-    public override PairSettings DefaultSettings =>  new PoolSettings();
+    public override PairSettings DefaultSettings => new PoolSettings();
     protected override string GetDefaultTestName(ITestContextLike testContext)
     {
         return testContext.FullName.Replace("Content.IntegrationTests.Tests.", "");
