@@ -45,6 +45,23 @@
                     StyleClasses="OpenRight"/> -->
 
             </BoxContainer>
+            <!-- RAYTEN ERT -->
+            <!-- <BoxContainer Orientation="Vertical"
+                SeparationOverride="6">
+
+                <RichTextLabel Name="CallERTLabel"/>
+
+
+            </BoxContainer> -->
+            <!-- EmergencyPart -->
+            <BoxContainer Orientation="Vertical"
+                SeparationOverride="6">
+
+                <Button Name="EmergencyShuttleButton"
+                    Access="Public"
+                    Text="Placeholder Text"
+                    ToolTip="{Loc 'comms-console-menu-emergency-shuttle-button-tooltip'}"/>
+            </BoxContainer>
         </BoxContainer>
     </BoxContainer>
 </controls:FancyWindow>
