@@ -1,0 +1,39 @@
+- type: entity
+  parent: [ ClothingUniformJumpsuitAtmos, ThirdContraband ]
+  id: ClothingUniformJumpsuitAtmosSyndie
+  name: комбинезон акробата
+  description: Он предатель, он был в вентиляции! "Я инженер"
+  components:
+  - type: ClothingGrantComponent #Goobstation edit
+    component:
+    - type: VentCrawler
+      allowInventory: false
+
+- type: entity  # Goobstation original
+  parent: ClothingUniformJumpsuitAtmosSyndie
+  id: ClothingUniformJumpsuitAtmosSyndieAdmin
+  suffix: Админ
+  components:
+  - type: ClothingGrantComponent
+    component:
+    - type: VentCrawler
+      allowInventory: true
+
+- type: entity
+  parent: [ClothingUniformJumpsuitAtmos, GrandTheftContraband]
+  id: ClothingUniformJumpsuitCEVent
+  name: акробатический комбинезон СИ
+  description: Позволяет ползать по вентиляции, если на вас нет сумки или верхней одежды.
+  components:
+  - type: ClothingGrantComponent #Goobstation edit
+    component:
+    - type: VentCrawler
+      allowInventory: false
+  - type: Sprite
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/ce_vent.rsi
+  - type: Clothing
+    sprite: Vanilla/Clothing/Uniforms/Jumpsuit/ce_vent.rsi
+  - type: Tag
+    tags:
+    - WhitelistChameleon
+    - HighRiskItem

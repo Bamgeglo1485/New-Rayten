@@ -157,6 +157,7 @@
     - id: DoorRemoteCargo # RAYTEN
     - id: AstroNavCartridge # RAYTEN
     - id: BoxFolderQmClipboard # RAYTEN
+    - id: ClothingUniformJumpsuitCEVent # RAYTEN
     - id: AlertKeyYellow
     - id: AccessConfigurator
     - id: BoxEncryptionKeyEngineering

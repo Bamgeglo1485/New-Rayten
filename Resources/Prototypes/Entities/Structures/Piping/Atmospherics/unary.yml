@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
 - type: entity
   parent: GasPipeBase
   abstract: true
@@ -28,6 +30,12 @@
   placement:
     mode: SnapgridCenter
   components:
+    - type: VentCrawlerTube  # Goobstation - ventcrawl
+      containerId: VentCrawlerTube
+    - type: VentCrawlerEntry
+    - type: ContainerContainer # Goobstation - ventcrawl
+      containers:
+        VentCrawlerTube: !type:Container
     - type: ApcPowerReceiver
     - type: ExtensionCableReceiver
     - type: DeviceNetwork
@@ -42,6 +50,7 @@
     - type: Sprite
       drawdepth: FloorObjects
       sprite: Structures/Piping/Atmospherics/vent.rsi
+      noRot: true
       layers:
         - sprite: Structures/Piping/Atmospherics/pipe.rsi
           state: pipeUnaryConnectors
@@ -60,6 +69,7 @@
             Welded: { state: vent_welded }
             Lockout: { state: vent_lockout }
     - type: GasVentPump
+      underPressureLockoutThreshold: 60
     - type: Construction
       graph: GasUnary
       node: ventpump
@@ -92,6 +102,7 @@
     - type: Sprite
       drawdepth: FloorObjects
       sprite: Structures/Piping/Atmospherics/vent.rsi
+      noRot: true
       layers:
         - sprite: Structures/Piping/Atmospherics/pipe.rsi
           state: pipeUnaryConnectors
@@ -109,6 +120,14 @@
     - type: GuideHelp
       guides:
       - PassiveVent
+    - type: VentCrawlerEntry # Goobstation - ventcrawl
+    - type: VentCrawlerTube # Goobstation - ventcrawl
+      containerId: VentCrawlerTube
+    - type: ContainerContainer # Goobstation - ventcrawl
+      containers:
+        VentCrawlerTube: !type:Container
+    - type: Weldable  # Goobstation - ventcrawl
+      time: 3
 
 - type: entity
   parent: [GasUnaryBase, AirSensorBase]
@@ -118,6 +137,12 @@
   placement:
     mode: SnapgridCenter
   components:
+    - type: VentCrawlerTube # Goobstation - ventcrawl
+      containerId: VentCrawlerTube
+    - type: VentCrawlerEntry  # Goobstation - ventcrawl
+    - type: ContainerContainer # Goobstation - ventcrawl
+      containers:
+        VentCrawlerTube: !type:Container
     - type: ApcPowerReceiver
     - type: ExtensionCableReceiver
     - type: DeviceNetwork
@@ -132,6 +157,7 @@
     - type: Sprite
       drawdepth: FloorObjects
       sprite: Structures/Piping/Atmospherics/scrubber.rsi
+      noRot: true
       layers:
         - sprite: Structures/Piping/Atmospherics/pipe.rsi
           state: pipeUnaryConnectors
@@ -163,6 +189,7 @@
     - type: Weldable
     - type: AtmosMonitoringConsoleDevice
       navMapBlip: GasVentScrubber
+    - type: VentCritterSpawnLocation # DeltaV
     - type: GuideHelp
       guides:
       - AirScrubber
@@ -211,6 +238,14 @@
     - type: GuideHelp
       guides:
       - AirInjector
+    - type: VentCrawlerTube # Goobstation - ventcrawl
+      containerId: VentCrawlerTube
+    - type: VentCrawlerJunction # Goobstation - ventcrawl
+      degrees:
+        - 0
+    - type: ContainerContainer # Goobstation - ventcrawl
+      containers:
+        VentCrawlerTube: !type:Container
 
 - type: entity
   parent: [ BaseMachinePowered, ConstructibleMachine ]
@@ -388,7 +423,7 @@
     board: HellfireHeaterMachineCircuitBoard
 
 - type: entity
-  parent: [ SolutionTank, SolutionHuge, BaseMachinePowered, SmallConstructibleMachine ]
+  parent: [ BaseMachinePowered, SmallConstructibleMachine, BaseAutomatedMachine ] # Goob: Automation
   id: BaseGasCondenser
   name: condenser
   description: Condenses gases into liquids. Now we just need some plumbing.
@@ -443,6 +478,12 @@
     thresholds:
     - trigger:
         !type:DamageTrigger
+        damage: 200
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+    - trigger:
+        !type:DamageTrigger
         damage: 100
       behaviors:
       - !type:DoActsBehavior
@@ -460,6 +501,10 @@
         pipeDirection: South
   - type: Transform
     noRot: false
+  - type: SolutionContainerManager
+    solutions:
+      tank:
+        maxVol: 400
   - type: MixableSolution
     solution: tank
   - type: DrainableSolution
@@ -469,7 +514,12 @@
   - type: PowerSwitch
   - type: AtmosMonitoringConsoleDevice
     navMapBlip: Thermoregulator
+  - type: AutomationSlots # Goobstation
+    slots:
+    - !type:AutomatedSolution
+      solutionName: tank
+      input: PlumbingInput
+      output: PlumbingOutput
   - type: GuideHelp
     guides:
     - GasCondensing
-

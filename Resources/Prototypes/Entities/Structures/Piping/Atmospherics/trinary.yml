@@ -78,6 +78,16 @@
     - type: GuideHelp
       guides:
       - MixingAndFiltering
+    - type: VentCrawlerTube # Goobstation - ventcrawl
+      containerId: VentCrawlerTube
+    - type: VentCrawlerJunction # Goobstation - ventcrawl
+      degrees:
+        - 0
+        - -90
+        - 180
+    - type: ContainerContainer # Goobstation - ventcrawl
+      containers:
+        VentCrawlerTube: !type:Container
 
 - type: entity
   parent: GasFilter
@@ -177,6 +187,16 @@
     - type: GuideHelp
       guides:
       - MixingAndFiltering
+    - type: VentCrawlerTube # Goobstation - ventcrawl
+      containerId: VentCrawlerTube
+    - type: VentCrawlerJunction # Goobstation - ventcrawl
+      degrees:
+        - 0
+        - -90
+        - 180
+    - type: ContainerContainer # Goobstation - ventcrawl
+      containers:
+        VentCrawlerTube: !type:Container
 
 - type: entity
   parent: GasMixer
@@ -285,3 +305,13 @@
       - PneumaticValve
       - Pumps
       - Valves
+    - type: VentCrawlerTube # Goobstation - ventcrawl
+      containerId: VentCrawlerTube
+    - type: VentCrawlerJunction # Goobstation - ventcrawl
+      degrees:
+        - 0
+        - -90
+        - 180
+    - type: ContainerContainer # Goobstation - ventcrawl
+      containers:
+        VentCrawlerTube: !type:Container
