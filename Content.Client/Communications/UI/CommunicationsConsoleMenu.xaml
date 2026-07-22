@@ -56,7 +56,7 @@
             <!-- EmergencyPart -->
             <BoxContainer Orientation="Vertical"
                 SeparationOverride="6">
-
+                <RichTextLabel Name="CountdownLabel"/>
                 <Button Name="EmergencyShuttleButton"
                     Access="Public"
                     Text="Placeholder Text"
