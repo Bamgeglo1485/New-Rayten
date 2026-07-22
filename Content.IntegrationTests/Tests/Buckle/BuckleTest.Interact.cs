@@ -1,6 +1,4 @@
-// SPDX-License-Identifier: AGPL-3.0-or-later
-
-using Content.Shared.Buckle;
+﻿using Content.Shared.Buckle;
 using Content.Shared.Buckle.Components;
 using Content.Shared.Interaction;
 using Robust.Server.GameObjects;
@@ -14,7 +12,7 @@ public sealed partial class BuckleTest
     [Test]
     public async Task BuckleInteractUnbuckleOther()
     {
-        await using var pair = await PoolManager.GetServerClient();
+        var pair = Pair;
         var server = pair.Server;
 
         var entMan = server.ResolveDependency<IServerEntityManager>();
@@ -37,7 +35,6 @@ public sealed partial class BuckleTest
 
 #pragma warning disable RA0002
             buckle.Delay = TimeSpan.Zero;
-            strap.UnbuckleDoafterTime = 0f; // Goobstation - disable doafter for test
 #pragma warning restore RA0002
 
             // Buckle victim to chair
@@ -58,14 +55,12 @@ public sealed partial class BuckleTest
                 Assert.That(strap.BuckledEntities, Does.Not.Contain(victim));
             });
         });
-
-        await pair.CleanReturnAsync();
     }
 
     [Test]
     public async Task BuckleInteractBuckleUnbuckleSelf()
     {
-        await using var pair = await PoolManager.GetServerClient();
+        var pair = Pair;
         var server = pair.Server;
 
         var entMan = server.ResolveDependency<IServerEntityManager>();
@@ -105,7 +100,5 @@ public sealed partial class BuckleTest
                 Assert.That(strap.BuckledEntities, Does.Not.Contain(user));
             });
         });
-
-        await pair.CleanReturnAsync();
     }
 }

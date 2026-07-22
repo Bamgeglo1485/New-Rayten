@@ -1,5 +1,3 @@
-// SPDX-License-Identifier: AGPL-3.0-or-later
-
 using Content.IntegrationTests.Tests.Interaction;
 using Content.Shared.Placeable;
 
@@ -22,3 +20,4 @@ public sealed class PlaceableDeconstruction : InteractionTest
         await AssertEntityLookup((Steel, 1), (Rod, 2));
     }
 }
+

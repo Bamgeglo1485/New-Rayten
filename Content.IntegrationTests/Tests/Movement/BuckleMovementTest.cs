@@ -1,5 +1,3 @@
-// SPDX-License-Identifier: AGPL-3.0-or-later
-
 using Content.Shared.Alert;
 using Content.Shared.Buckle.Components;
 using Robust.Shared.Maths;

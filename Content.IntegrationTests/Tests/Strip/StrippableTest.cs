@@ -1,7 +1,4 @@
-// SPDX-License-Identifier: AGPL-3.0-or-later
-
-using Content.Client.Interaction;
-using Content.IntegrationTests.Tests.Interaction;
+﻿using Content.IntegrationTests.Tests.Interaction;
 using Content.Shared.Strip.Components;
 using Robust.Shared.GameObjects;
 

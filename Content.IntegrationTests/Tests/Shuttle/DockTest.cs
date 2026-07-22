@@ -1,8 +1,7 @@
-// SPDX-License-Identifier: AGPL-3.0-or-later
-
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using Content.IntegrationTests.Fixtures;
 using Content.Server.Shuttles.Systems;
 using Content.Tests;
 using Robust.Server.GameObjects;
@@ -15,7 +14,7 @@ using Robust.Shared.Utility;
 
 namespace Content.IntegrationTests.Tests.Shuttle;
 
-public sealed class DockTest : ContentUnitTest
+public sealed class DockTest : GameTest
 {
     private static IEnumerable<object[]> TestSource()
     {
@@ -28,7 +27,7 @@ public sealed class DockTest : ContentUnitTest
     [TestCaseSource(nameof(TestSource))]
     public async Task TestDockingConfig(Vector2 dock1Pos, Vector2 dock2Pos, Angle dock1Angle, Angle dock2Angle, bool result)
     {
-        await using var pair = await PoolManager.GetServerClient();
+        var pair = Pair;
         var server = pair.Server;
 
         var map = await pair.CreateTestMap();
@@ -85,14 +84,12 @@ public sealed class DockTest : ContentUnitTest
 
             Assert.That(result, Is.EqualTo(config != null));
         });
-
-        await pair.CleanReturnAsync();
     }
 
     [Test]
     public async Task TestPlanetDock()
     {
-        await using var pair = await PoolManager.GetServerClient();
+        var pair = Pair;
         var server = pair.Server;
 
         var map = await pair.CreateTestMap();
@@ -128,7 +125,5 @@ public sealed class DockTest : ContentUnitTest
             var dockingConfig = dockingSystem.GetDockingConfig(shuttle, map.MapUid);
             Assert.That(dockingConfig, Is.Not.EqualTo(null));
         });
-
-        await pair.CleanReturnAsync();
     }
 }

@@ -1,6 +1,4 @@
-// SPDX-License-Identifier: AGPL-3.0-or-later
-
-using System.Linq;
+﻿using System.Linq;
 using Content.IntegrationTests.Pair;
 using Content.Server.GameTicking;
 using Content.Server.Mind;
@@ -20,6 +18,14 @@ namespace Content.IntegrationTests.Tests.Minds;
 // This partial class contains misc helper functions for other tests.
 public sealed partial class MindTests
 {
+    // TODO GAMETEST: Rewrite this test to use improved GameTest pair management when I have an API for that figured out.
+    public override PoolSettings PoolSettings => new()
+    {
+        DummyTicker = false,
+        Connected = true,
+        Dirty = true,
+    };
+
     /// <summary>
     /// Gets a server-client pair and ensures that the client is attached to a simple mind test entity.
     /// </summary>
@@ -28,15 +34,9 @@ public sealed partial class MindTests
     /// the player's mind's current entity, likely because some previous test directly changed the players attached
     /// entity.
     /// </remarks>
-    private static async Task<Pair.TestPair> SetupPair(bool dirty = false)
+    private async Task<Pair.TestPair> SetupPair(bool dirty = false)
     {
-        var pair = await PoolManager.GetServerClient(new PoolSettings
-        {
-            DummyTicker = false,
-            Connected = true,
-            Dirty = dirty
-        });
-
+        var pair = Pair;
         var entMan = pair.Server.ResolveDependency<IServerEntityManager>();
         var playerMan = pair.Server.ResolveDependency<IPlayerManager>();
         var mindSys = entMan.System<SharedMindSystem>();

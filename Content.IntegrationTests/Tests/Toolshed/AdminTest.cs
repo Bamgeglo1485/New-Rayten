@@ -1,6 +1,4 @@
-// SPDX-License-Identifier: AGPL-3.0-or-later
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Reflection;
 using Content.Server.Administration.Managers;
 using Robust.Shared.Toolshed;

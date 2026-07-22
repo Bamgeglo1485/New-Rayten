@@ -1,9 +1,8 @@
-// SPDX-License-Identifier: AGPL-3.0-or-later
-
+using Content.IntegrationTests.Fixtures;
 using Content.Server.Fluids.EntitySystems;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Coordinates;
-using Content.Goobstation.Maths.FixedPoint;
+using Content.Shared.FixedPoint;
 using Content.Shared.Fluids.Components;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
@@ -12,12 +11,12 @@ namespace Content.IntegrationTests.Tests.Fluids
 {
     [TestFixture]
     [TestOf(typeof(PuddleComponent))]
-    public sealed class PuddleTest
+    public sealed class PuddleTest : GameTest
     {
         [Test]
         public async Task TilePuddleTest()
         {
-            await using var pair = await PoolManager.GetServerClient();
+            var pair = Pair;
             var server = pair.Server;
 
             var testMap = await pair.CreateTestMap();
@@ -34,15 +33,12 @@ namespace Content.IntegrationTests.Tests.Fluids
 
                 Assert.That(spillSystem.TrySpillAt(coordinates, solution, out _), Is.True);
             });
-            await pair.RunTicksSync(5);
-
-            await pair.CleanReturnAsync();
         }
 
         [Test]
         public async Task SpaceNoPuddleTest()
         {
-            await using var pair = await PoolManager.GetServerClient();
+            var pair = Pair;
             var server = pair.Server;
 
             var testMap = await pair.CreateTestMap();
@@ -71,8 +67,6 @@ namespace Content.IntegrationTests.Tests.Fluids
 
                 Assert.That(spillSystem.TrySpillAt(coordinates, solution, out _), Is.False);
             });
-
-            await pair.CleanReturnAsync();
         }
     }
 }

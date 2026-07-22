@@ -1,5 +1,3 @@
-// SPDX-License-Identifier: AGPL-3.0-or-later
-
 using System.Linq;
 using Content.IntegrationTests.Tests.Construction.Interaction;
 using Content.IntegrationTests.Tests.Interaction;
@@ -68,12 +66,10 @@ public sealed class DoAfterCancellationTests : InteractionTest
     {
         await SetTile(Floor);
         await InteractUsing(Pry, awaitDoAfters: false);
-        // Goob edit start - instant prying
-        await CancelDoAfters(0, 0);
-        // await AssertTile(Floor);
+        await CancelDoAfters();
+        await AssertTile(Floor);
 
-        // await InteractUsing(Pry);
-        // Goob edit end
+        await InteractUsing(Pry);
         await AssertTile(Plating);
     }
 
@@ -83,11 +79,8 @@ public sealed class DoAfterCancellationTests : InteractionTest
         await SetTile(Floor);
         await InteractUsing(Pry, awaitDoAfters: false);
         await RunTicks(1);
-        // Goob edit start - instant prying
-        Assert.That(ActiveDoAfters.Count(), Is.EqualTo(0));
-        await AssertTile(Plating);
-        return;
-        // Goob edit end
+        Assert.That(ActiveDoAfters.Count(), Is.EqualTo(1));
+        await AssertTile(Floor);
 
         // Second DoAfter cancels the first.
         await Server.WaitPost(() => InteractSys.UserInteraction(SEntMan.GetEntity(Player), SEntMan.GetCoordinates(TargetCoords), SEntMan.GetEntity(Target)));

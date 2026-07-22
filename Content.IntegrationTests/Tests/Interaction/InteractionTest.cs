@@ -1,5 +1,3 @@
-// SPDX-License-Identifier: AGPL-3.0-or-later
-
 #nullable enable
 using System.Numerics;
 using Content.Client.Construction;
@@ -177,7 +175,7 @@ public abstract partial class InteractionTest
     [SetUp]
     public virtual async Task Setup()
     {
-        Pair = await PoolManager.GetServerClient(Settings);
+        Pair = await PoolManager.GetServerClient(Settings, new NUnitTestContextWrap(TestContext.CurrentContext, TestContext.Out));
 
         // server dependencies
         SEntMan = Server.ResolveDependency<IEntityManager>();

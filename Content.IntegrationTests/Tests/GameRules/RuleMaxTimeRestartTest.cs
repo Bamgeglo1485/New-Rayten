@@ -1,22 +1,26 @@
-// SPDX-License-Identifier: AGPL-3.0-or-later
-
+using Content.IntegrationTests.Fixtures;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Rules;
 using Content.Server.GameTicking.Rules.Components;
 using Content.Shared.GameTicking.Components;
 using Robust.Shared.GameObjects;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
 namespace Content.IntegrationTests.Tests.GameRules
 {
     [TestFixture]
     [TestOf(typeof(MaxTimeRestartRuleSystem))]
-    public sealed class RuleMaxTimeRestartTest
+    public sealed class RuleMaxTimeRestartTest : GameTest
     {
+        public override PoolSettings PoolSettings => new() { InLobby = true };
+
+        private static readonly EntProtoId MaxTimeRestartGameRule = "MaxTimeRestart";
+
         [Test]
         public async Task RestartTest()
         {
-            await using var pair = await PoolManager.GetServerClient(new PoolSettings { InLobby = true });
+            var pair = Pair;
             var server = pair.Server;
 
             Assert.That(server.EntMan.Count<GameRuleComponent>(), Is.Zero);
@@ -29,7 +33,7 @@ namespace Content.IntegrationTests.Tests.GameRules
             MaxTimeRestartRuleComponent maxTime = null;
             await server.WaitPost(() =>
             {
-                sGameTicker.StartGameRule("MaxTimeRestart", out var ruleEntity);
+                sGameTicker.StartGameRule(MaxTimeRestartGameRule, out var ruleEntity);
                 Assert.That(entityManager.TryGetComponent<MaxTimeRestartRuleComponent>(ruleEntity, out maxTime));
             });
 
@@ -43,9 +47,8 @@ namespace Content.IntegrationTests.Tests.GameRules
                 sGameTicker.StartRound();
             });
 
-            // MisandryBox/JobObjectiveRule - either this or fucking every preset.yml.
-            Assert.That(server.EntMan.Count<GameRuleComponent>(), Is.EqualTo(2));
-            Assert.That(server.EntMan.Count<ActiveGameRuleComponent>(), Is.EqualTo(2));
+            Assert.That(server.EntMan.Count<GameRuleComponent>(), Is.EqualTo(1));
+            Assert.That(server.EntMan.Count<ActiveGameRuleComponent>(), Is.EqualTo(1));
 
             await server.WaitAssertion(() =>
             {
@@ -67,8 +70,6 @@ namespace Content.IntegrationTests.Tests.GameRules
             {
                 Assert.That(sGameTicker.RunLevel, Is.EqualTo(GameRunLevel.PreRoundLobby));
             });
-
-            await pair.CleanReturnAsync();
         }
     }
 }
