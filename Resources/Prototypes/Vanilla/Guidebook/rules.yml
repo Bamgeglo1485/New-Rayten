@@ -1,13 +1,6 @@
 - type: guideEntry
   id: MRPRulset
   name: guide-entry-mrp-rulset
-  priority: 0
+  priority: -10
   ruleEntry: true
-  text: "/ServerInfo/Vanilla/Guidebook/ServerRules/MRPRulset.xml"
-
-- type: guideEntry # Default for forks and stuff. Should not be listed anywhere if the server is using a custom ruleset.
-  id: DefaultRuleset
-  name: Правила
-  ruleEntry: true
-  priority: 0
   text: "/ServerInfo/Vanilla/Guidebook/ServerRules/MRPRulset.xml"

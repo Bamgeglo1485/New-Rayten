@@ -96,7 +96,6 @@
     delay: 0.5 # to avoid tps lag machines
   # Fake interaction stuff
   - type: DoAfter
-    raiseEndedEvent: true # so Completed can be fired off
   - type: Hands
     showInHands: false
   - type: Strippable

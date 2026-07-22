@@ -6,7 +6,6 @@
     - !type:HTNPrimitiveTask
       operator: !type:UtilityOperator
         proto: MedibotInjectable
-        returnType: EnumerableDescending
     - !type:HTNPrimitiveTask
       operator: !type:PickNearbyInjectableOperator
         targetKey: Target

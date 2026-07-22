@@ -1,5 +1,5 @@
 - type: guideEntry
   id: CorporatePolitics
-  name: Корпоративная политика
-  priority: 2
+  name: guide-entry-corporate-politics
+  priority: -8
   text: "/ServerInfo/Vanilla/Guidebook/Void/CorporatePolitic.xml"

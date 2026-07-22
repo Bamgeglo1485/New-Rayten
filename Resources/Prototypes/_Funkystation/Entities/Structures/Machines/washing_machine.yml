@@ -79,7 +79,6 @@
     node: machine
     containers: [machine_parts, machine_board, entity_storage]
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: Metallic
   - type: Destructible
     thresholds:

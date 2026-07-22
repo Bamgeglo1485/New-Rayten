@@ -2,7 +2,7 @@
   parent: BaseStructure
   id: EvacuationButtonConsole
   name: кнопка экстренной эвакуации
-  desciption: БОЛЬШАЯ КРАСНАЯ КНОПКА, КОТОРУЮ ВАМ РЕАЛЬНО НЕ СЛЕДУЕТ НАЖИМАТЬ!!!
+  description: БОЛЬШАЯ КРАСНАЯ КНОПКА, КОТОРУЮ ВАМ РЕАЛЬНО НЕ СЛЕДУЕТ НАЖИМАТЬ!!!
   placement:
     mode: SnapgridCenter
   components:

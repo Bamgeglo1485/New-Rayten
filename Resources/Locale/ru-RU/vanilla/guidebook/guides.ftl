@@ -1,0 +1,11 @@
+guide-entry-R-1 = R1
+guide-entry-whiteout = Великая Буря
+guide-entry-mrp-rulset = Правила сервера
+
+guide-entry-lore = Лор
+guide-entry-codex = Кодекс Персонала
+guide-entry-corporate-politics = Корпоративная политика
+
+guide-entry-srp = Регламент Персонала
+guide-entry-srp-sec = Регламент СБ
+guide-entry-srp-com = Регламент Командования

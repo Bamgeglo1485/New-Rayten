@@ -1,7 +1,7 @@
 - type: guideEntry
   id: SRP
-  name: Регламент Персонала
-  priority: 3
+  name: guide-entry-srp
+  priority: -6
   text: "/ServerInfo/Vanilla/Guidebook/Void/SRP/SRP.xml"
   children:
   - SRPCommand
@@ -9,10 +9,10 @@
 
 - type: guideEntry
   id: SRPSecurity
-  name: Регламент СБ
+  name: guide-entry-srp-sec
   text: "/ServerInfo/Vanilla/Guidebook/Void/SRP/Security.xml"
 
 - type: guideEntry
   id: SRPCommand
-  name: Регламент Командования
+  name: guide-entry-srp-com
   text: "/ServerInfo/Vanilla/Guidebook/Void/SRP/Command.xml"

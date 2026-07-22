@@ -48,8 +48,7 @@
         !type:CableDeviceNode
         nodeGroupID: HVPower
   - type: Damageable
-    damageContainer: StructuralInorganic
-    damageModifierSet: StructuralMetallicStrong
+    damageModifierSet: Metallic
   - type: BatterySensor
   - type: Gun
     showExamineText: false
@@ -60,7 +59,6 @@
     soundGunshot:
       path: /Audio/Weapons/Guns/Gunshots/laser_cannon.ogg
   - type: BatteryAmmoProvider
-    examinable: false
     proto: PTL
     fireCost: 1000
   - type: Physics
