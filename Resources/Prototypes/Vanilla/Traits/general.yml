@@ -1,0 +1,251 @@
+# If you add a new trait, make sure to add the corresponding component to the whitelist in \Resources\Prototypes\Entities\Mobs\Player\clone.yml so it gets copied to clones correctly!
+
+- type: trait
+  id: Pacifist
+  name: trait-pacifist-name
+  description: trait-pacifist-desc
+  category: General
+  cost: -3
+  components:
+  - type: Pacified
+
+- type: trait
+  id: Blindness
+  name: trait-blindness-name
+  description: trait-blindness-desc
+  traitGear: WhiteCane
+  category: General
+  cost: -4
+  whitelist:
+    components:
+      - Blindable
+  components:
+    - type: PermanentBlindness
+
+- type: trait
+  id: PoorVision
+  name: trait-poor-vision-name
+  description: trait-poor-vision-desc
+  traitGear: ClothingEyesGlasses
+  category: General
+  cost: -2
+  whitelist:
+    components:
+      - Blindable
+  components:
+    - type: PermanentBlindness
+      blindness: 4
+
+- type: trait
+  id: Narcolepsy
+  name: trait-narcolepsy-name
+  description: trait-narcolepsy-desc
+  category: General
+  cost: -2
+  components:
+    - type: Narcolepsy
+      maxTimeBetweenIncidents: 600
+      minTimeBetweenIncidents: 300
+      maxDurationOfIncident: 30
+      minDurationOfIncident: 10
+
+- type: trait
+  id: Unrevivable
+  name: trait-unrevivable-name
+  description: trait-unrevivable-desc
+  category: General
+  cost: -2
+  components:
+    - type: Unrevivable
+      cloneable: true
+
+- type: trait
+  id: Muted
+  name: trait-muted-name
+  description: trait-muted-desc
+  category: General
+  cost: -3
+  blacklist:
+    components:
+      - BorgChassis
+  components:
+    - type: Muted
+
+- type: trait
+  id: Hemophilia
+  name: trait-hemophilia-name
+  description: trait-hemophilia-desc
+  category: General
+  cost: -1
+  specials:
+  - !type:ApplyStatusEffectSpecial
+    statusEffects:
+    - TraitStatusEffectHemophilia
+
+- type: trait
+  id: ImpairedMobility
+  name: trait-impaired-mobility-name
+  description: trait-impaired-mobility-desc
+  traitGear: OffsetCane
+  category: General
+  cost: -2
+  components:
+    - type: ImpairedMobility
+
+- type: trait
+  id: TunnelVision
+  name: trait-tunnel-name
+  description: trait-tunnel-desc
+  category: General
+  cost: -2
+  components:
+    - type: ViewconeModifier
+      angleModifier: 0.5
+
+- type: trait
+  id: FullVision
+  name: trait-full-name
+  description: trait-full-desc
+  category: General
+  cost: 2
+  components:
+    - type: ViewconeModifier
+      angleModifier: 4
+
+- type: trait
+  id: Wimp
+  name: trait-wimp-name
+  description: trait-wimp-desc
+  category: General
+  cost: -3
+  components:
+    - type: MobThresholds
+      thresholds:
+        0: Alive
+        70: Critical
+        150: Dead
+
+- type: trait
+  id: Respawn
+  name: trait-respawn-name
+  description: trait-respawn-desc
+  category: General
+  cost: 3
+  components:
+    - type: ForceRespawn
+
+- type: trait
+  id: Thieving
+  name: trait-thieving-name
+  description: trait-thieving-desc
+  category: General
+  cost: 2
+  components:
+    - type: Thieving
+      stripTimeReduction: 2.5
+      stealthy: false
+
+- type: trait
+  id: Speed
+  name: trait-speed-name
+  description: trait-speed-desc
+  category: General
+  cost: 2
+  components:
+    - type: MovementSpeedModifier
+      baseSprintSpeed: 3
+      baseWalkSpeed: 5
+
+- type: trait
+  id: Regeneration
+  name: trait-regeneration-name
+  description: trait-regeneration-desc
+  category: General
+  cost: 2
+  traitGear: NanoRobotsImplanter
+
+- type: trait
+  id: Defib
+  name: trait-defib-name
+  description: trait-defib-desc
+  category: General
+  cost: 2
+  traitGear: DefibrillatorImplanter
+
+- type: trait
+  id: Super
+  name: trait-super-name
+  description: trait-super-desc
+  category: General
+  cost: 5
+  components:
+    - type: Super
+      antag: false
+
+- type: trait
+  id: Corporate
+  name: trait-corporate-name
+  description: trait-corporate-desc
+  category: General
+  cost: 1
+  traitGear: SyndicateBusinessCard
+  components:
+    - type: AntagImmune
+    - type: AutoImplant
+      implants:
+      - MindShieldImplant
+
+- type: trait
+  id: Shooter
+  name: trait-shooter-name
+  description: trait-shooter-desc
+  category: General
+  cost: 3
+  traitGear: WeaponPistolMk58
+
+- type: trait
+  id: Melee
+  name: trait-melee-name
+  description: trait-melee-desc
+  category: General
+  cost: 2
+  components:
+    - type: Shoving
+      staminaDamage: 15
+    - type: BonusMeleeDamage
+      bonusDamage:
+        types:
+          Blunt: 5
+
+- type: trait
+  id: Богач
+  name: trait-rich-name
+  description: trait-rich-desc
+  category: General
+  traitGear: SpaceCash10000
+  cost: 1
+
+- type: trait
+  id: Danger
+  name: trait-danger-name
+  description: trait-danger-desc
+  category: General
+  cost: -2
+  components:
+    - type: DangerMob
+      maxDanger: true
+
+- type: trait
+  id: Gib
+  name: trait-gib-name
+  description: trait-gib-desc
+  category: General
+  cost: -6
+  components:
+    - type: GibOnTrigger
+      keysIn: [timer]
+    - type: TimerTrigger
+      delay: 2400
+    - type: Unrevivable
+      cloneable: false
+    - type: TriggerOnSpawn

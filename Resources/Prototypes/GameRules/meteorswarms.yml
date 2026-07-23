@@ -101,7 +101,7 @@
   - type: StationEvent
     reoccurrenceDelay: 1
     earliestStart: 12
-    minimumPlayers: 25
+    minimumPlayers: 7 # rayten
   - type: MeteorSwarm
     announcementSound: /Audio/Announcements/meteors_start.ogg # Corvax-Announcements
 
@@ -152,7 +152,7 @@
   components:
   - type: StationEvent
     weight: 18
-    minimumPlayers: 15
+    minimumPlayers: 0 # rayten
   - type: MeteorSwarm
     meteors:
       MeteorSmall: 7
@@ -164,6 +164,7 @@
   components:
   - type: StationEvent
     weight: 10
+    minimumPlayers: 5 # rayten
   - type: MeteorSwarm
     meteors:
       MeteorSmall: 3
@@ -176,6 +177,7 @@
   components:
   - type: StationEvent
     weight: 5
+    minimumPlayers: 10 # rayten
   - type: MeteorSwarm
     meteors:
       MeteorSmall: 2
@@ -212,7 +214,7 @@
     reoccurrenceDelay: 1
     duration: 1
     earliestStart: 30
-    minimumPlayers: 25
+    minimumPlayers: 15
   - type: ImmovableRodRule
     rodPrototypes:
     - id: ImmovableRodKeepTilesStill

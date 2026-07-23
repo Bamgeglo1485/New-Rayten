@@ -67,12 +67,22 @@ public sealed partial class HumanoidProfileEditor
                 });
             }
 
+            // RAYTEN STARTS - ТРЕЙТЫ СОРТИРУЮТСЯ ТАК - СПЕРВА ПОЛОЖИТЕЛЬНЫЕ, ПОТОМ ОТРИЦАТЕЛЬНЫЕ
+            var sortedCategoryTraits = categoryTraits
+                .Select(id => _prototypeManager.Index<TraitPrototype>(id))
+                .OrderByDescending(t => t.Cost > 0)
+                .ThenByDescending(t => t.Cost)
+                .ThenBy(t => t.Cost)
+                .ToList();
+            // RAYTEN ENDS
+
             List<TraitPreferenceSelector?> selectors = new();
             var selectionCount = 0;
 
-            foreach (var traitProto in categoryTraits)
+            // RAYTEN STARTS
+            foreach (var trait in sortedCategoryTraits)
+            // RAYTEN ENDS
             {
-                var trait = _prototypeManager.Index<TraitPrototype>(traitProto);
                 var selector = new TraitPreferenceSelector(trait);
 
                 selector.Preference = Profile?.TraitPreferences.Contains(trait.ID) == true;

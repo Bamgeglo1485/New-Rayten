@@ -11,6 +11,8 @@ using Robust.Shared.Timing;
 using Content.Shared.EntityTable.EntitySelectors;
 using Content.Shared.EntityTable;
 
+using Content.Server.Vanilla.LowPop; // RAYTEN LOWPOP
+
 namespace Content.Server.StationEvents;
 
 public sealed partial class EventManagerSystem : EntitySystem
@@ -26,6 +28,7 @@ public sealed partial class EventManagerSystem : EntitySystem
     public bool EventsEnabled { get; private set; }
     private void SetEnabled(bool value) => EventsEnabled = value;
     private readonly List<(TimeSpan Until, string SourceEventId)> _activeEventBlocks = new();//rayten
+    [Dependency] private LowPopSystem _lowpop = default!; // rayten
 
     public Dictionary<EntityPrototype, StationEventComponent>? AllEventCache;
 
@@ -341,7 +344,7 @@ public sealed partial class EventManagerSystem : EntitySystem
             return false;
         }
 
-        if (playerCount < stationEvent.MinimumPlayers)
+        if (playerCount < stationEvent.MinimumPlayers && _lowpop.GetSecurityCount() < stationEvent.MinimumSecurity) // RAYTEN 
         {
             return false;
         }

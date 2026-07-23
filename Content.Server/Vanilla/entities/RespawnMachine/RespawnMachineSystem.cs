@@ -27,6 +27,7 @@ using Robust.Shared.Prototypes;
 using System.Numerics;
 using Content.Shared.Inventory;
 using Content.Shared.Objectives.Systems;
+using Content.Shared.Traits.Assorted;
 
 namespace Content.Server.Vanilla.Entities.RespawnMachine;
 
@@ -205,8 +206,12 @@ public sealed partial class RespawnMachineSystem : EntitySystem
 
     private bool LegitToRespawn(EntityUid stationUid, EntityUid player)
     {
+
         if (HasComp<ForceRespawnComponent>(player))
             return true;
+
+        if (HasComp<UnrevivableComponent>(player))
+            return false;
 
         var playerName = MetaData(player).EntityName;
         if (string.IsNullOrEmpty(playerName))

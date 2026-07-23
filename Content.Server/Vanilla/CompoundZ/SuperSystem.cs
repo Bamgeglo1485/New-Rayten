@@ -26,6 +26,9 @@ public sealed partial class SuperSystem : EntitySystem
         if (!TryComp<ActorComponent>(entity, out var actor))
             return;
 
+        if (!entity.Comp.Antag)
+            return;
+
         var superPrototype = entity.Comp.Prototype;
         if (superPrototype == null)
             return;
