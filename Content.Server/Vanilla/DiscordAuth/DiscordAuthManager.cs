@@ -27,7 +27,7 @@ public sealed partial class DiscordAuthManager
 
     private ISawmill _sawmill = default!;
     private readonly HttpClient _httpClient = new();
-    private bool _isEnabled = true;
+    private bool _isEnabled = false;
     private string _apiUrl = string.Empty;
     private string _apiKey = string.Empty;
 
