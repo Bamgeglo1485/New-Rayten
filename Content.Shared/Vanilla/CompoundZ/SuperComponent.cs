@@ -19,6 +19,10 @@ public sealed partial class SuperComponent : Component
 
     [DataField]
     public SoundSpecifier? UnsuperedSound = new SoundPathSpecifier("/Audio/Vanilla/Ambience/Antag/Unsuper.ogg");
+
+
+    [DataField]
+    public bool Antag = true;
 }
 
 [Prototype]

@@ -1,0 +1,9 @@
+- type: entity
+  id: SoulTieRule
+  parent: BaseGameRule
+  components:
+  - type: StationEvent
+    weight: 1
+    duration: 30
+    minimumPlayers: 2
+  - type: SoulTieRule
