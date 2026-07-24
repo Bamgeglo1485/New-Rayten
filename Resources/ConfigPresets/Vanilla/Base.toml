@@ -95,6 +95,3 @@ storage_limit = 3
 
 [queue]
 enabled = true
-
-[viewport]
-maximum_width = 30
