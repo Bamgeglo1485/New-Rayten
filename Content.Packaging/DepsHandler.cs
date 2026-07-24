@@ -47,14 +47,7 @@ public sealed class DepsHandler
         if (!set.Add(start))
             return;
 
-        if (!Libraries.TryGetValue(start, out var lib))
-        {
-            Console.WriteLine(
-                $"Warning: dependency '{start}' was referenced but not found in deps.json.");
-
-            return;
-        }
-
+        var lib = Libraries[start];
         if (lib.Dependencies == null)
             return;
 
@@ -81,7 +74,7 @@ public sealed class DepsHandler
         // Paths are like lib/netstandard2.0/JetBrains.Annotations.dll
         public IEnumerable<string> GetDllNames()
         {
-            return Runtime == null ? [] : Runtime.Keys.Select(p => p.Split('/')[^1]);
+            return Runtime == null?[] : Runtime.Keys.Select(p => p.Split('/')[^1]);
         }
     }
 }
