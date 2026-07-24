@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.IO.Compression;
 using Robust.Packaging;
 using Robust.Packaging.AssetProcessing;
@@ -19,6 +19,7 @@ public static class ClientPackaging
 
         if (!skipBuild)
         {
+            // RAYTEN STARTS
             var startInfo = new ProcessStartInfo
             {
                 FileName = "dotnet",
@@ -42,6 +43,7 @@ public static class ClientPackaging
             }
 
             await ProcessHelpers.RunCheck(startInfo);
+            // RAYTEN ENDS
         }
 
         logger.Info("Packaging client...");
@@ -79,11 +81,17 @@ public static class ClientPackaging
 
         var inputPass = graph.Input;
 
+        // RAYTEN STARTS
+        var sourcePath = Path.Combine(contentDir, "bin", "Content.Client");
+        var deps = DepsHandler.Load(Path.Combine(sourcePath, "Content.Client.deps.json"));
+        var contentAssemblies = ServerPackaging.GetContentAssemblyNamesToCopy(deps, "Client");
+        // RAYTEN ENDS
+
         await RobustSharedPackaging.WriteContentAssemblies(
             inputPass,
             contentDir,
             "Content.Client",
-            new[] { "Content.Client", "Content.Shared", "Content.Shared.Database" },
+            contentAssemblies,
             cancel: cancel);
 
         await RobustClientPackaging.WriteClientResources(
