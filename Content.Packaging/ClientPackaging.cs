@@ -19,14 +19,13 @@ public static class ClientPackaging
 
         if (!skipBuild)
         {
-            // RAYTEN STARTS
             var startInfo = new ProcessStartInfo
             {
                 FileName = "dotnet",
                 ArgumentList =
                 {
                     "build",
-                    Path.Combine("Content.Client", "Content.Client.csproj"),
+                    Path.Combine("Content.Trauma.Client", "Content.Trauma.Client.csproj"), // Trauma - Trauma.Client depends on everything
                     "-c", configuration,
                     "--nologo",
                     "/v:m",
@@ -43,7 +42,6 @@ public static class ClientPackaging
             }
 
             await ProcessHelpers.RunCheck(startInfo);
-            // RAYTEN ENDS
         }
 
         logger.Info("Packaging client...");
@@ -81,17 +79,17 @@ public static class ClientPackaging
 
         var inputPass = graph.Input;
 
-        // RAYTEN STARTS
+        // <Trauma> - use DepsHandler instead of manually writing assemblies
         var sourcePath = Path.Combine(contentDir, "bin", "Content.Client");
-        var deps = DepsHandler.Load(Path.Combine(sourcePath, "Content.Client.deps.json"));
+        var deps = DepsHandler.Load(Path.Combine(sourcePath, "Content.Trauma.Client.deps.json"));
         var contentAssemblies = ServerPackaging.GetContentAssemblyNamesToCopy(deps, "Client");
-        // RAYTEN ENDS
+        // </Trauma>
 
         await RobustSharedPackaging.WriteContentAssemblies(
             inputPass,
             contentDir,
             "Content.Client",
-            contentAssemblies,
+            contentAssemblies, // Trauma - use DepsHandler above
             cancel: cancel);
 
         await RobustClientPackaging.WriteClientResources(
