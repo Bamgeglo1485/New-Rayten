@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Content.Packaging;
@@ -47,7 +47,14 @@ public sealed class DepsHandler
         if (!set.Add(start))
             return;
 
-        var lib = Libraries[start];
+        if (!Libraries.TryGetValue(start, out var lib))
+        {
+            Console.WriteLine(
+                $"Warning: dependency '{start}' was referenced but not found in deps.json.");
+
+            return;
+        }
+
         if (lib.Dependencies == null)
             return;
 

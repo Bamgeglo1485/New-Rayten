@@ -228,22 +228,29 @@ public static class ServerPackaging
         var depsContent = new HashSet<string>();
         var depsRobust = new HashSet<string>();
 
-        // Add Content.Server/Client assemblies
-        depsContent.UnionWith(deps.RecursiveGetLibrariesFrom($"Content.{side}").SelectMany(GetLibraryNames));
+        // Base Content assemblies
+        if (deps.Libraries.ContainsKey($"Content.{side}"))
+        {
+            depsContent.UnionWith(deps.RecursiveGetLibrariesFrom($"Content.{side}").SelectMany(GetLibraryNames));
+        }
+
         depsRobust.UnionWith(deps.RecursiveGetLibrariesFrom($"Robust.{side}").SelectMany(GetLibraryNames));
 
-        // Add assemblies from all content projects
         foreach (var prefix in ContentProjectPrefixes)
         {
-            depsContent.UnionWith(deps.RecursiveGetLibrariesFrom($"{prefix}.{side}").SelectMany(GetLibraryNames));
+            var key = $"{prefix}.{side}";
+
+            if (!deps.Libraries.TryGetValue(key, out var library))
+                continue;
+
+            depsContent.UnionWith(library.GetDllNames());
         }
 
         var depsContentExclusive = depsContent.Except(depsRobust).ToHashSet();
 
-        // Remove .dll suffix and apply filtering.
-        var names = depsContentExclusive.Select(p => p[..^4]).Where(p => !ServerNotExtraAssemblies.Any(p.StartsWith));
-
-        return names;
+        return depsContentExclusive
+            .Select(p => p[..^4])
+            .Where(p => !ServerNotExtraAssemblies.Any(p.StartsWith));
 
         IEnumerable<string> GetLibraryNames(string library) => deps.Libraries[library].GetDllNames();
     }
