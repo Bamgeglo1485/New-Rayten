@@ -10,3 +10,4 @@
   femaleFirstNames: NamesVulpFirstFeMale
   maleLastNames: NamesVulpLast
   femaleLastNames: NamesVulpLast
+  sponsorOnly: true # RAYTEN
