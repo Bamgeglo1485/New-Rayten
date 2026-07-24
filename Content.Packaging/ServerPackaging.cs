@@ -60,6 +60,14 @@ public static class ServerPackaging
         "zh-Hant"
     };
 
+    // RAYTEN STARTS
+    private static readonly List<string> ContentProjectPrefixes = new()
+    {
+        "Content.Trauma",
+        "Content.Goobstation",
+    };
+    // RAYTEN ENDS
+
     public static async Task PackageServer(bool skipBuild, bool hybridAcz, bool logBuild, IPackageLogger logger, string configuration, List<string>? platforms = null)
     {
         if (platforms == null)
@@ -69,14 +77,9 @@ public static class ServerPackaging
 
         if (hybridAcz)
         {
-            // Hybrid ACZ involves a file "Content.Client.zip" in the server executable directory.
-            // Rather than hosting the client ZIP on the watchdog or on a separate server,
-            //  Hybrid ACZ uses the ACZ hosting functionality to host it as part of the status host,
-            //  which means that features such as automatic UPnP forwarding still work properly.
             await ClientPackaging.PackageClient(skipBuild, logBuild, configuration, logger);
         }
 
-        // Good variable naming right here.
         foreach (var platform in Platforms)
         {
             if (!platforms.Contains(platform.Rid))
@@ -97,6 +100,7 @@ public static class ServerPackaging
 
         if (!skipBuild)
         {
+            // RAYTEN STARTS
             var startInfo = new ProcessStartInfo
             {
                 FileName = "dotnet",
@@ -121,6 +125,7 @@ public static class ServerPackaging
             }
 
             await ProcessHelpers.RunCheck(startInfo);
+            // RAYTEN ENDS
 
             await PublishClientServer(platform.Rid, platform.TargetOs, configuration);
         }
@@ -179,19 +184,21 @@ public static class ServerPackaging
         var inputPassCore = graph.InputCore;
         var inputPassResources = graph.InputResources;
 
-        // Additional assemblies that need to be copied such as EFCore.
         var sourcePath = Path.Combine(contentDir, "bin", "Content.Server");
 
+        // RAYTEN STARTS
         var deps = DepsHandler.Load(Path.Combine(sourcePath, "Content.Server.deps.json"));
+        // RAYTEN ENDS
 
-        var contentAssemblies = GetContentAssemblyNamesToCopy(deps).ToList();
+        var contentAssemblies = GetContentAssemblyNamesToCopy(deps, "Server");
+
         await RobustSharedPackaging.DoResourceCopy(
             Path.Combine("RobustToolbox", "bin", "Server",
             platform.Rid,
-                "publish"),
-                inputPassCore,
-                BinSkipFolders,
-                cancel: cancel);
+            "publish"),
+            inputPassCore,
+            BinSkipFolders,
+            cancel: cancel);
 
         await RobustSharedPackaging.WriteContentAssemblies(
             inputPassResources,
@@ -215,23 +222,39 @@ public static class ServerPackaging
         inputPassResources.InjectFinished();
     }
 
-    // This returns both content assemblies (e.g. Content.Server.dll) and dependencies (e.g. Npgsql)
-    private static IEnumerable<string> GetContentAssemblyNamesToCopy(DepsHandler deps)
+    // RAYTEN STARTS
+    public static IEnumerable<string> GetContentAssemblyNamesToCopy(DepsHandler deps, string side)
     {
-        var depsContent = deps.RecursiveGetLibrariesFrom("Content.Server").SelectMany(GetLibraryNames);
-        var depsRobust = deps.RecursiveGetLibrariesFrom("Robust.Server").SelectMany(GetLibraryNames);
+        var depsContent = new HashSet<string>();
+        var depsRobust = new HashSet<string>();
+
+        // Base Content assemblies
+        if (deps.Libraries.ContainsKey($"Content.{side}"))
+        {
+            depsContent.UnionWith(deps.RecursiveGetLibrariesFrom($"Content.{side}").SelectMany(GetLibraryNames));
+        }
+
+        depsRobust.UnionWith(deps.RecursiveGetLibrariesFrom($"Robust.{side}").SelectMany(GetLibraryNames));
+
+        foreach (var prefix in ContentProjectPrefixes)
+        {
+            var key = $"{prefix}.{side}";
+
+            if (!deps.Libraries.TryGetValue(key, out var library))
+                continue;
+
+            depsContent.UnionWith(library.GetDllNames());
+        }
 
         var depsContentExclusive = depsContent.Except(depsRobust).ToHashSet();
 
-        // Remove .dll suffix and apply filtering.
-        var names = depsContentExclusive.Select(p => p[..^4]).Where(p => !ServerNotExtraAssemblies.Any(p.StartsWith));
-
-        return names;
+        return depsContentExclusive
+            .Select(p => p[..^4])
+            .Where(p => !ServerNotExtraAssemblies.Any(p.StartsWith));
 
         IEnumerable<string> GetLibraryNames(string library) => deps.Libraries[library].GetDllNames();
     }
+    // RAYTEN ENDS
 
     private readonly record struct PlatformReg(string Rid, string TargetOs, bool BuildByDefault);
-
-
 }
