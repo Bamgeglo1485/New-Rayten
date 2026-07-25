@@ -1,6 +1,7 @@
 - type: entity
   abstract: true
   id: DisposalUnitBase
+  parent: BaseMachinePowered
   description: A pneumatic waste disposal unit.
   placement:
     mode: SnapgridCenter
@@ -116,23 +117,9 @@
 
 - type: entity
   id: DisposalUnit
-  parent: [DisposalUnitBase, BaseAutomatedMachine ] # Goob: Automati
+  parent: DisposalUnitBase
   name: disposal unit
   components:
-  - type: AutomationSlots # Goobstation
-    slots:
-    - !type:AutomatedContainer
-      input: AutomationSlotInput
-      output: AutomationSlotInput
-      containerId: DisposalUnitComponent
-      maxItems: 30 # disposals doesn't have a limit this is just so you can't use it as an ME system
-    - !type:AutomatedPorts
-      sinks:
-      - Toggle
-      - DisposalFlush
-      - DisposalEject
-      sources:
-      - DisposalReady
   - type: Sprite
     sprite: Structures/Piping/disposal.rsi
     snapCardinals: true

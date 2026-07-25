@@ -177,7 +177,7 @@
   name: trait-super-name
   description: trait-super-desc
   category: General
-  cost: 5
+  cost: 8
   components:
     - type: Super
       antag: false
@@ -218,7 +218,7 @@
           Blunt: 5
 
 - type: trait
-  id: Богач
+  id: Rich
   name: trait-rich-name
   description: trait-rich-desc
   category: General
