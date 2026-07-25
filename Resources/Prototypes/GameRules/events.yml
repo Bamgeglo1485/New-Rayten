@@ -625,8 +625,8 @@
   - type: StationEvent
     earliestStart: 30
     weight: 8
-    minimumPlayers: 10
-    minimumSecurity: 2 # rayten
+    minimumPlayers: 4
+    minimumSecurity: 1 # rayten
     maxOccurrences: 1 # can only happen once per round
     startAnnouncement: station-event-communication-interception
     startAudio:
