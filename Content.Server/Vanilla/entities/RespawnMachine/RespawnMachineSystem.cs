@@ -49,7 +49,6 @@ public sealed partial class RespawnMachineSystem : EntitySystem
     [Dependency] private StationRecordsSystem _recordsSystem = default!;
     [Dependency] private SharedDeviceLinkSystem _deviceLink = default!;
     [Dependency] private InventorySystem _inventory = default!;
-    [Dependency] private AliveHumanoidTargetSystem _target = default!;
 
     private readonly List<RespawnQueueEntry> _respawnQueue = new();
     private readonly Dictionary<string, int> _respawnCounts = new();
@@ -263,7 +262,7 @@ public sealed partial class RespawnMachineSystem : EntitySystem
         var body_to_clone = player;
         if (_random.Prob(machine.Comp.WrongBodyChance))
         {
-            var allHumans = _target.GetAliveHumans(player);
+            var allHumans = _mindSystem.GetAliveHumans(player);
             if (allHumans.Count > 0)
                 body_to_clone = _random.Pick(allHumans);
         }

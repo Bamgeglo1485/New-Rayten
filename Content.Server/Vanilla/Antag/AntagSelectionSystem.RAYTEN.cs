@@ -123,17 +123,19 @@ public sealed partial class AntagSelectionSystem
             var session = weightedPool.Keys.ElementAt(RobustRandom.Next(weightedPool.Count));
             weightedPool.Remove(session);
 
-            var newAntags = antags.ToArray();
-            if (AssignAntag(gameRule, session, ref newAntags))
+            var antagsList = antags.ToList();
+
+            if (AssignAntag(gameRule, session, ref antagsList))
             {
-                for (int i = 0; i < antags.Length; i++)
+                for (int i = 0; i < antags.Length && i < antagsList.Count; i++)
                 {
-                    antags[i] = newAntags[i];
+                    antags[i] = antagsList[i];
                 }
                 return;
             }
         }
 
-        SpawnGhostRoles(gameRule, antags);
+        var antagList = antags.ToList();
+        SpawnGhostRoles(gameRule, antagList);
     }
 }

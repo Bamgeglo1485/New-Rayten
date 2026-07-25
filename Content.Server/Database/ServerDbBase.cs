@@ -212,8 +212,8 @@ namespace Content.Server.Database
             profile.CharacterName = humanoid.Name;
             profile.FlavorText = humanoid.FlavorText;
             profile.Species = humanoid.Species;
-            profile.Voice = humanoid.Voice; // Rayten-TTS
-            profile.VoicePitch = humanoid.VoicePitch; // Rayten-TTS
+            profile.Voice = humanoid.BarkVoice; // Rayten-TTS
+            profile.BarkVoicePitch = humanoid.BarkVoicePitch; // Rayten-TTS
             profile.Age = humanoid.Age;
             profile.Sex = humanoid.Sex.ToString();
             profile.Voice = humanoid.Voice.ToString();

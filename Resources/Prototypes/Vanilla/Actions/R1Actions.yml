@@ -98,28 +98,14 @@
     lifetime: 0.5
 
 - type: entity
-  categories: [ HideSpawnMenu ]
-  id: FistfulOfDollar
-  name: fistful of dollar
-  description: +fistful of dollar
-  components:
-  - type: RechargeBasicEntityAmmo
-    rechargeCooldown: 6
-  - type: BasicEntityAmmoProvider
-    proto: ReflectCoin
-    capacity: 4
-    count: 4
-  - type: Gun
-    soundEmpty: null
-    projectileSpeed: 6
-
-- type: entity
   id: FistfulOfDollarAction
   name: Fistful Of Dollar
   description: +Fistful Of Dollar +Ricoshot
   components:
   - type: WorldTargetAction
-    event: !type:ActionGunShootEvent
+    event: !type:ProjectileSpellEvent
+      prototype: ReflectCoin
+      projectileSpeed: 6
   - type: Action
     icon: { sprite : Vanilla/Actions/R1.rsi, state: Fistful }
     priority: -99

@@ -104,8 +104,8 @@ public sealed partial class HumanoidProfileEditor
         {
             SetVoice(_voiceList[firstVoiceChoiceId].ID);
         }
-        Pitch.Value = Profile.VoicePitch;
-        PitchInput.Value = Profile.VoicePitch;
+        Pitch.Value = Profile.BarkVoicePitch;
+        PitchInput.Value = Profile.BarkVoicePitch;
         PitchInput.IsValid = value => value >= 0.5f && value <= 1.5f;
     }
 
@@ -129,7 +129,7 @@ public sealed partial class HumanoidProfileEditor
 
         var Sound = protoVoice.Voice;
         AudioParams audioparms = AudioParams.Default
-                .WithPitchScale(Profile.VoicePitch)
+                .WithPitchScale(Profile.BarkVoicePitch)
                 .WithVariation(0.05f)
                 .WithVolume(_voiceSys.AdjustVolume(false, protoVoice.Basevolume));
 

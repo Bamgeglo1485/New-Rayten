@@ -76,7 +76,7 @@
 
 ## Plastic Explosives used in game
 - type: entity
-  parent: [BasePlasticExplosive, BaseSyndicateContraband]
+  parent: [BasePlasticExplosive, SecondSyndicateContraband]
   id: C4
   name: composition C-4
   description: Used to put holes in specific areas without too much extra hole. A saboteur's favorite.
@@ -105,7 +105,7 @@
     price: 625 # 5000 for a bundle of 8
 
 - type: entity
-  parent: [ BasePlasticExplosive, BaseSecurityCargoContraband ]
+  parent: [ BasePlasticExplosive, SecondCargoContraband ]
   id: SeismicCharge
   name: seismic charge
   description: Concussion based explosive designed to destroy large amounts of rock.

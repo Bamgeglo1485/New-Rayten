@@ -447,7 +447,7 @@ namespace Content.Server.Construction
             NetEntity? with = null)
         {
             // </Goobstation>
-            if (!ProtoMan.TryIndex(ev.PrototypeName, out ConstructionPrototype? constructionPrototype))
+            if (!ProtoMan.TryIndex(prototypeName, out ConstructionPrototype? constructionPrototype) || constructionPrototype == null)
             {
                 Log.Error($"Tried to start construction of invalid recipe '{prototypeName}'!");
                 RaiseNetworkEvent(new AckStructureConstructionMessage(ack), user);

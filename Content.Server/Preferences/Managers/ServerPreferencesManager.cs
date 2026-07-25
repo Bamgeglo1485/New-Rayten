@@ -109,13 +109,13 @@ namespace Content.Server.Preferences.Managers
                 gender = genderVal;
 
             // Rayten-TTS-Start
-            var voice = profile.Voice;
-            if (voice == String.Empty)
-                voice = HumanoidCharacterProfile.DefaultSexVoice[sex];
+            var barkVoice = profile.Voice ?? string.Empty;
+            if (string.IsNullOrEmpty(barkVoice))
+                barkVoice = HumanoidCharacterProfile.DefaultSexVoice[sex];
 
-            var voicePitch = profile.VoicePitch;
-            if (voicePitch == 0)
-                voicePitch = 1f;
+            var barkVoicePitch = profile.BarkVoicePitch;
+            if (barkVoicePitch == 0)
+                barkVoicePitch = 1f;
             // Rayten-TTS-End
 
             var markings =
@@ -189,8 +189,8 @@ namespace Content.Server.Preferences.Managers
                 profile.CharacterName,
                 profile.FlavorText,
                 species,
-                voice, // Rayten-TTS
-                voicePitch, //Rayten-TTS
+                barkVoice, // Rayten-TTS
+                barkVoicePitch, //Rayten-TTS
                 profile.Age,
                 sex,
                 voice,

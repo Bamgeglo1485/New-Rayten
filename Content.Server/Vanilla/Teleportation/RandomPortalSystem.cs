@@ -176,8 +176,7 @@ public sealed partial class RandomPortalSystem : EntitySystem
         if (portal.Comp.AllowedDungeons.Count == 0)
             return;
 
-        var mapId = _mapSystem.CreateMap();
-        var mapUid = _mapSystem.GetMapEntityId(mapId);
+        var mapUid = _mapSystem.CreateMap(out var mapId);
 
         var gravity = EnsureComp<GravityComponent>(mapUid);
         gravity.Enabled = true;
@@ -190,7 +189,7 @@ public sealed partial class RandomPortalSystem : EntitySystem
             parallax.Parallax = _random.Pick(portal.Comp.AllowedParallaxes);
         }
 
-        var gridUid = _mapSystem.CreateGrid(mapId).Owner;
+        var gridUid = _mapSystem.CreateGridEntity(mapId).Owner;
         if (!TryComp<MapGridComponent>(gridUid, out var gridComp))
         {
             _mapSystem.DeleteMap(mapId);
@@ -209,14 +208,13 @@ public sealed partial class RandomPortalSystem : EntitySystem
         if (portal.Comp.AllowedPlanets.Count == 0)
             return;
 
-        var mapId = _mapSystem.CreateMap();
-        _mapSystem.SetMapPaused(mapId, false);
-        var mapUid = _mapSystem.GetMapEntityId(mapId);
+        var mapUid = _mapSystem.CreateMap(out var mapId);
+        _mapSystem.SetPaused(mapId, false);
 
         var biomeProto = _prototype.Index<BiomeTemplatePrototype>(_random.Pick(portal.Comp.AllowedPlanets));
         _biomeSystem.EnsurePlanet(mapUid, biomeProto);
 
-        var grid = _mapSystem.CreateGrid(mapId);
+        var grid = _mapSystem.CreateGridEntity(mapId);
         var gridUid = grid.Owner;
 
         EnsureComp<PortalMapComponent>(mapUid);

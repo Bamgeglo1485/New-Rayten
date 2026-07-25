@@ -62,6 +62,7 @@ internal sealed partial class ChatManager : IChatManager
     [Dependency] private DiscordChatLink _discordLink = default!;
     [Dependency] private ILogManager _logManager = default!;
     [Dependency] private ILocalizationManager _localizationManager = default!;
+    [Dependency] private SharedSponsorManager _sponsorsManager = default!;
 
     private ISawmill? _sawmill = default!;
 

@@ -37,7 +37,6 @@ using Content.Shared.Weapons.Ranged.Events;
 using Content.Shared.Wieldable;
 using Content.Shared.Zombies;
 using Content.Shared.Vanilla.Overlays;
-using Content.Shared.Vanilla.Entities.NightVision;
 using Content.Shared.Vanilla.Entities.ThermalVision;
 namespace Content.Shared.Inventory;
 
@@ -105,8 +104,7 @@ public partial class InventorySystem
         SubscribeLocalEvent<InventoryComponent, RefreshEquipmentHudEvent<ShowHealthIconsComponent>>(RefRelayInventoryEvent);
         //Rayten-start
         SubscribeLocalEvent<InventoryComponent, RefreshEquipmentHudEvent<ShowDominantDamageGroupIconComponent>>(RefRelayInventoryEvent);
-        SubscribeLocalEvent<InventoryComponent, RefreshEquipmentHudEvent < ShowCriminalLevelIconsComponent>>(RefRelayInventoryEvent);
-        SubscribeLocalEvent<InventoryComponent, RefreshEquipmentHudEvent<NightVisionOverlayComponent>>(RefRelayInventoryEvent);
+        SubscribeLocalEvent<InventoryComponent, RefreshEquipmentHudEvent<ShowCriminalLevelIconsComponent>>(RefRelayInventoryEvent);
         SubscribeLocalEvent<InventoryComponent, RefreshEquipmentHudEvent<ThermalVisionOverlayComponent>>(RefRelayInventoryEvent);
         //Rayten-end
         SubscribeLocalEvent<InventoryComponent, RefreshEquipmentHudEvent<ShowHungerIconsComponent>>(RefRelayInventoryEvent);

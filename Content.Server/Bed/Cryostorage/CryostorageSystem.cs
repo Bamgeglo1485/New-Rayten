@@ -26,6 +26,7 @@ using Content.Shared.Station;
 using Content.Shared.StationRecords.Components;
 using Content.Shared.StationRecords.Systems;
 using Robust.Shared.Audio.Systems;
+using Content.Server.Vanilla.LowPop; // RAYTEN
 
 namespace Content.Server.Bed.Cryostorage;
 

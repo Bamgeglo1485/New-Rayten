@@ -534,12 +534,12 @@ public sealed partial class AntagSelectionSystem : GameRuleSystem<AntagSelection
             // RAYTEN-STARTS
             if (gameRule.Comp.AntagAcceptMenu)
             {
-                RequestAntagAccept(gameRule, antag.Definition, player, antags, antag, i);
+                RequestAntagAccept(gameRule, antag.Definition, player, antags.ToArray(), antag, i);
                 return true;
             }
             // RAYTEN-ENDS
 
-            return AssignPlayerAsAntag(player, gameRule, antags, antag, i);
+            return AssignPlayerAsAntag(player, gameRule, antags.ToArray(), antag, i);
         }
 
         return false;

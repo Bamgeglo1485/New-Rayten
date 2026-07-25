@@ -1,7 +1,4 @@
-// SPDX-License-Identifier: AGPL-3.0-or-later
-
 using Content.Server.Administration.Logs;
-using Content.Server.Body.Systems;
 using Content.Server.Buckle.Systems;
 using Content.Server.Parallax;
 using Content.Server.Procedural;
@@ -9,9 +6,9 @@ using Content.Server.Shuttles.Components;
 using Content.Server.Shuttles.Events;
 using Content.Server.Station.Systems;
 using Content.Server.Stunnable;
-using Content.Shared._NF.Shuttles;
 using Content.Shared.Buckle.Components;
-using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
+using Content.Shared.Gibbing;
 using Content.Shared.Light.Components;
 using Content.Shared.Movement.Events;
 using Content.Shared.Salvage;
@@ -30,9 +27,6 @@ using Robust.Shared.Physics.Systems;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using Content.Shared.Maps;
-using Content.Shared.Body;
-using Content.Shared.Damage.Systems;
-using Content.Shared.Gibbing;
 
 namespace Content.Server.Shuttles.Systems;
 
@@ -45,21 +39,34 @@ public sealed partial class ShuttleSystem : SharedShuttleSystem
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private BiomeSystem _biomes = default!;
     [Dependency] private GibbingSystem _gibbing = default!;
-    [Dependency] private EntityQuery<MapGridComponent> _mapGridQuery = default!;
+    [Dependency] private BuckleSystem _buckle = default!;
+    [Dependency] private DamageableSystem _damageSys = default!;
+    [Dependency] private DockingSystem _dockSystem = default!;
+    [Dependency] private DungeonSystem _dungeon = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private MapLoaderSystem _loader = default!;
+    [Dependency] private MapSystem _mapSystem = default!;
+    [Dependency] private MetaDataSystem _metadata = default!;
+    [Dependency] private PvsOverrideSystem _pvs = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedSalvageSystem _salvage = default!;
+    [Dependency] private ShuttleConsoleSystem _console = default!;
+    [Dependency] private StationSystem _station = default!;
+    [Dependency] private StunSystem _stuns = default!;
+    [Dependency] private ThrowingSystem _throwing = default!;
+    [Dependency] private ThrusterSystem _thruster = default!;
+    [Dependency] private UserInterfaceSystem _uiSystem = default!;
+    [Dependency] private TurfSystem _turf = default!;
 
-    private EntityQuery<BuckleComponent> _buckleQuery;
-    private EntityQuery<MapGridComponent> _gridQuery;
-    private EntityQuery<PhysicsComponent> _physicsQuery;
-    private EntityQuery<TransformComponent> _xformQuery;
+    [Dependency] private EntityQuery<BuckleComponent> _buckleQuery = default!;
+    [Dependency] private EntityQuery<MapGridComponent> _gridQuery = default!;
+    [Dependency] private EntityQuery<PhysicsComponent> _physicsQuery = default!;
 
     public override void Initialize()
     {
         base.Initialize();
-
-        _buckleQuery = GetEntityQuery<BuckleComponent>();
-        _gridQuery = GetEntityQuery<MapGridComponent>();
-        _physicsQuery = GetEntityQuery<PhysicsComponent>();
-        _xformQuery = GetEntityQuery<TransformComponent>();
 
         InitializeFTL();
         InitializeGridFills();
@@ -88,8 +95,6 @@ public sealed partial class ShuttleSystem : SharedShuttleSystem
             return;
 
         EnsureComp<ShuttleComponent>(ev.EntityUid);
-        EnsureComp<ImplicitRoofComponent>(ev.EntityUid);
-        EnsureComp<FTLDriveComponent>(ev.EntityUid); // Frontier edit
 
         // This and RoofComponent should be mutually exclusive, so ImplicitRoof should be removed if the grid has RoofComponent
         if (HasComp<RoofComponent>(ev.EntityUid))

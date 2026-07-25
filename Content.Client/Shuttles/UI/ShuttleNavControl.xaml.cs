@@ -27,6 +27,7 @@ public sealed partial class ShuttleNavControl : BaseShuttleControl
     private readonly SharedShuttleSystem _shuttles;
     private readonly SharedTransformSystem _transform;
     private readonly RadarBlipsSystem _blips;
+    [Dependency] private readonly IUserInterfaceManager _uiManager = default!;
 
     /// <summary>
     /// Used to transform all of the radar objects. Typically is a shuttle console parented to a grid.
@@ -338,8 +339,7 @@ public sealed partial class ShuttleNavControl : BaseShuttleControl
                 var gridCenterMapPos = _transform.ToWorldPosition(new EntityCoordinates(gUid, gridBody.LocalCenter));
 
                 var gridDistance = (gridCenterMapPos - mapPos.Position).Length();
-                var labelText = Loc.GetString("shuttle-console-iff-label", ("name", labelName),
-                    ("distance", $"{gridDistance:0.0}"));
+                var labelText = Loc.GetString("shuttle-console-iff-label", ("name", labelName ?? "Unknown"), ("distance", $"{gridDistance:0.0}"));
                 var coordsText = $"({gridCenterMapPos.X:0.0}, {gridCenterMapPos.Y:0.0})";
 
                 // yes 1.0 scale is intended here.

@@ -29,7 +29,7 @@
       path: /Audio/Weapons/Guns/Gunshots/grenade_launcher.ogg
 
 - type: entity
-  parent: [ BaseWeaponLauncher, BaseSyndicateContraband ]
+  parent: [ BaseWeaponLauncher, ThirdSyndicateContraband ]
   id: WeaponLauncherChinaLake
   name: china lake
   description: PLOOP.
@@ -106,7 +106,7 @@
     proto: GrenadeFrag
 
 - type: entity
-  parent: [ BaseWeaponLauncher, BaseMajorContraband ]
+  parent: [ BaseWeaponLauncher, ThirdContraband ]
   id: WeaponLauncherRocket
   name: RPG-7
   description: A modified ancient rocket-propelled grenade launcher.

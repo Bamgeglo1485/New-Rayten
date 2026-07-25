@@ -1,10 +1,7 @@
-// SPDX-License-Identifier: AGPL-3.0-or-later
-
 using Content.Server.Power.EntitySystems;
 using Content.Server.Shuttles.Components;
 using Content.Server.Shuttles.Events;
 using Content.Server.Station.Systems;
-using Content.Shared._NF.Shuttles.Events;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Alert;
 using Content.Shared.Popups;
@@ -24,6 +21,7 @@ using Robust.Shared.Map;
 using Robust.Shared.Utility;
 using Content.Shared.UserInterface;
 using Robust.Shared.Prototypes;
+using Content.Shared._NF.Shuttles.Events; // Frontier
 
 namespace Content.Server.Shuttles.Systems;
 
@@ -46,11 +44,6 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
     public override void Initialize()
     {
         base.Initialize();
-
-        _metaQuery = GetEntityQuery<MetaDataComponent>();
-        _xformQuery = GetEntityQuery<TransformComponent>();
-
-        InitializeNf(); // Frontier
 
         SubscribeLocalEvent<ShuttleConsoleComponent, ComponentShutdown>(OnConsoleShutdown);
         SubscribeLocalEvent<ShuttleConsoleComponent, PowerChangedEvent>(OnConsolePowerChange);
@@ -80,6 +73,7 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
         SubscribeLocalEvent<FTLDestinationComponent, ComponentShutdown>(OnFtlDestShutdown);
 
         InitializeFTL();
+        InitializeNf(); // Frontier
     }
 
     private void OnFtlDestStartup(EntityUid uid, FTLDestinationComponent component, ComponentStartup args)
@@ -166,7 +160,6 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
     {
         DockingInterfaceState? dockState = null;
         UpdateState(uid, ref dockState);
-        _shuttle.NfSetPowered(uid, component, args.Powered); // Frontier
     }
 
     private bool TryPilot(EntityUid user, EntityUid uid)
@@ -232,7 +225,7 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
                 Angle = xform.LocalRotation,
                 Entity = GetNetEntity(uid),
                 GridDockedWith =
-                    _xformQuery.TryGetComponent(comp.DockedWith, out var otherDockXform) ?
+                    TryComp(comp.DockedWith, out TransformComponent? otherDockXform) ?
                     GetNetEntity(otherDockXform.GridUid) :
                     null,
                 Color = comp.RadarColor,
@@ -336,7 +329,7 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
 
         pilotComponent.Console = uid;
         ActionBlockerSystem.UpdateCanMove(entity);
-        pilotComponent.Position = Comp<TransformComponent>(entity).Coordinates;
+        pilotComponent.Position = Transform(entity).Coordinates;
         Dirty(entity, pilotComponent);
     }
 
@@ -372,10 +365,9 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
 
     public void ClearPilots(ShuttleConsoleComponent component)
     {
-        var query = GetEntityQuery<PilotComponent>();
         while (component.SubscribedPilots.TryGetValue(0, out var pilot))
         {
-            if (query.TryGetComponent(pilot, out var pilotComponent))
+            if (_pilotQuery.TryGetComponent(pilot, out var pilotComponent))
                 RemovePilot(pilot, pilotComponent);
         }
     }

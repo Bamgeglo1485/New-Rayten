@@ -1094,8 +1094,8 @@
     sprite: Vanilla/Clothing/Uniforms/Jumpsuit/pirate.rsi # Rayten Resprites
   - type: Clothing
     sprite: Vanilla/Clothing/Uniforms/Jumpsuit/pirate.rsi # Rayten Resprites
-  - type: AddAccentClothing
-    accent: PirateAccent
+  - type: PirateAccent
+    relayAccent: true
 
 - type: entity
   parent: ClothingUniformBase

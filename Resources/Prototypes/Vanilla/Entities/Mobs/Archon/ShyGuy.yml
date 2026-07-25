@@ -52,7 +52,7 @@
               sprite: Mobs/Animals/scurret/displacement.rsi
               state: mask
   - type: ShyGuy
-  - type: Muted
+  - type: MutedStatusEffect
   - type: BlindPredator
   - type: Pacified
     disallowAllCombat: true

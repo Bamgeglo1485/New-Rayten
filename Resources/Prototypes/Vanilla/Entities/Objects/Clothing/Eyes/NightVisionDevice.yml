@@ -49,9 +49,6 @@
       params:
         volume: -4
         maxDistance: 5
-  - type: ComponentToggler
-    components:
-    - type: NightVisionOverlay
   - type: PowerCellSlot
     cellSlotId: cell_slot
   - type: ContainerContainer
@@ -72,7 +69,14 @@
     netsync: false
   - type: IdentityBlocker
     coverage: EYES
-
+  - type: NightVision
+    enabled: false
+    action: ActionChangelingNightVision
+    lightingColor: "#09af3baa"
+    noiseAmount: 1
+    noiseMultiplier: 2
+    overlayColor: "#08ab51aa"
+    prioritized: false
 
 - type: entity
   parent: ClothingEyesNightVisionDeviceEmpty
@@ -84,16 +88,3 @@
       cell_slot:
         name: power-cell-slot-component-slot-name-default
         startingItem: PowerCellSmall
-
-
-- type: entity
-  parent: BaseAction
-  id: ActionToggleNightVision
-  name: Включить ПНВ
-  description: Всем выйти из сумрака!
-  components:
-  - type: Action
-    useDelay: 5
-    itemIconStyle: BigItem
-  - type: InstantAction
-    event: !type:ToggleActionEvent
