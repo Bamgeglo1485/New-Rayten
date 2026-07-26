@@ -40,20 +40,19 @@
     implantComponents:
     - type: PassiveDamage
       allowedStates:
-      - Alive
       - Critical
       - Dead
       damage:
         types:
-          Blunt: -2
-          Piercing: -2
-          Slash: -2
+          Blunt: -0.5
+          Piercing: -0.5
+          Slash: -0.5
           Caustic: -0.15
           Radiation: -0.15
           Cellular: -0.15
           Asphyxiation: -1.5
           Bloodloss: -1.5
-          Cold: -1
-          Heat: -1
-          Poison: -1
-          Shock: -1
+          Cold: -0.5
+          Heat: -0.5
+          Poison: -0.5
+          Shock: -0.5
