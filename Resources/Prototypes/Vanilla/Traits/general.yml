@@ -142,8 +142,7 @@
   cost: 2
   components:
     - type: Thieving
-      stripTimeReduction: 2.5
-      stealthy: false
+      stripTimeReduction: -10
 
 - type: trait
   id: Speed
