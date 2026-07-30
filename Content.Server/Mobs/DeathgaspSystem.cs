@@ -1,8 +1,7 @@
-﻿using Content.Server.Chat.Systems;
-using Content.Server.Speech.Muting;
+using Content.Server.Chat.Systems;
 using Content.Shared.Mobs;
 using Content.Shared.Speech.Muting;
-using Robust.Shared.Prototypes;
+using Content.Shared.StatusEffectNew;
 
 namespace Content.Server.Mobs;
 
@@ -10,6 +9,7 @@ namespace Content.Server.Mobs;
 public sealed partial class DeathgaspSystem: EntitySystem
 {
     [Dependency] private ChatSystem _chat = default!;
+    [Dependency] private StatusEffectsSystem _statusEffects = default!;
 
     public override void Initialize()
     {
@@ -35,7 +35,7 @@ public sealed partial class DeathgaspSystem: EntitySystem
         if (!Resolve(uid, ref component, false))
             return false;
 
-        if (HasComp<MutedComponent>(uid))
+        if (_statusEffects.HasEffectComp<MutedStatusEffectComponent>(uid))
             return false;
 
         _chat.TryEmoteWithChat(uid, component.Prototype, ignoreActionBlocker: true);
