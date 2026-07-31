@@ -172,16 +172,6 @@
   traitGear: DefibrillatorImplanter
 
 - type: trait
-  id: Super
-  name: trait-super-name
-  description: trait-super-desc
-  category: General
-  cost: 8
-  components:
-    - type: Super
-      antag: false
-
-- type: trait
   id: Corporate
   name: trait-corporate-name
   description: trait-corporate-desc
@@ -244,7 +234,7 @@
     - type: GibOnTrigger
       keysIn: [timer]
     - type: TimerTrigger
-      delay: 2400
+      delay: 1800
     - type: Unrevivable
       cloneable: false
     - type: TriggerOnSpawn

@@ -46,6 +46,12 @@
     damage:
       types:
         Heat: 7
+  # RAYTEN STARTS
+  - type: ChangeTemperatureOnTrigger
+    heat: 8000
+    targetUser: true
+  - type: TriggerOnHitscanHit
+  # RAYTEN ENDS
 
 - type: entity
   parent: BasicHitscan
@@ -57,6 +63,12 @@
     damage:
       types:
         Heat: 14
+  # RAYTEN STARTS
+  - type: ChangeTemperatureOnTrigger
+    heat: 8000
+    targetUser: true
+  - type: TriggerOnHitscanHit
+  # RAYTEN ENDS
 
 - type: entity
   parent: BasicHitscan
@@ -68,6 +80,12 @@
     damage:
       types:
         Heat: 17
+  # RAYTEN STARTS
+  - type: ChangeTemperatureOnTrigger
+    heat: 8000
+    targetUser: true
+  - type: TriggerOnHitscanHit
+  # RAYTEN ENDS
 
 - type: entity
   parent: BasicHitscan
@@ -89,6 +107,12 @@
     impactFlash:
       sprite: Objects/Weapons/Guns/Projectiles/projectiles.rsi
       state: impact_beam_heavy
+  # RAYTEN STARTS
+  - type: ChangeTemperatureOnTrigger
+    heat: 8000
+    targetUser: true
+  - type: TriggerOnHitscanHit
+  # RAYTEN ENDS
 
 - type: entity
   parent: BasicHitscan

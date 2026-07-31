@@ -8,6 +8,11 @@ using Content.Shared.Projectiles;
 using Content.Shared.Temperature.Components;
 using Content.Shared.Temperature.Systems;
 
+// RAYTEN STARTS
+using Content.Shared.Trigger;
+using Content.Shared.Trigger.Components.Effects;
+// RAYTEN ENDS
+
 namespace Content.Server.Temperature.Systems;
 
 public sealed partial class TemperatureSystem : SharedTemperatureSystem
@@ -25,6 +30,7 @@ public sealed partial class TemperatureSystem : SharedTemperatureSystem
         SubscribeLocalEvent<InternalTemperatureComponent, MapInitEvent>(OnInit);
 
         SubscribeLocalEvent<ChangeTemperatureOnCollideComponent, ProjectileHitEvent>(ChangeTemperatureOnCollide);
+        SubscribeLocalEvent<ChangeTemperatureOnTriggerComponent, TriggerEvent>(OnTrigger); // RAYTEN
 
         InitializeDamage();
     }
@@ -134,4 +140,21 @@ public sealed partial class TemperatureSystem : SharedTemperatureSystem
     {
         ChangeHeat(args.Target, ent.Comp.Heat, ent.Comp.IgnoreHeatResistance);// adjust the temperature
     }
+
+    // RAYTEN STARTS
+    private void OnTrigger(Entity<ChangeTemperatureOnTriggerComponent> ent, ref TriggerEvent args)
+    {
+        if (args.Key != null && !ent.Comp.KeysIn.Contains(args.Key))
+            return;
+
+        var target = ent.Comp.TargetUser ? args.User : ent.Owner;
+
+        if (target == null)
+            return;
+
+        ChangeHeat(target.Value, ent.Comp.Heat, ent.Comp.IgnoreHeatResistance);
+
+        args.Handled = true;
+    }
+    // RAYTEN ENDS
 }
