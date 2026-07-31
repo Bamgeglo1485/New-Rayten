@@ -27,7 +27,8 @@
     - Wall
   - type: IsRoof
   - type: Sprite
-    drawdepth: Walls
+    drawdepth: Mobs # RAYTEN TALL WALLS
+  - type: Clickable
   - type: Icon
     state: full
   - type: PlacementReplacement

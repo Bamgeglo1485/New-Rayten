@@ -23,7 +23,7 @@
       - ForceFixRotations
       - Window
   - type: Sprite
-    drawdepth: WallTops
+    drawdepth: Mobs # RAYTEN TALL WALLS
     sprite: Structures/Windows/window.rsi
   - type: Icon
     sprite: Structures/Windows/window.rsi

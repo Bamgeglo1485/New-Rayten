@@ -17,7 +17,6 @@
   - type: InteractionOutline
   - type: Sprite
     sprite: Structures/Doors/Airlocks/Standard/basic.rsi
-    snapCardinals: true
     layers:
     - state: closed
       map: ["enum.DoorVisualLayers.Base"]
@@ -71,6 +70,14 @@
   - type: AccessReader
     containerAccessProvider: board
   - type: Door
+    openDrawDepth: 5
+    closedDrawDepth: 6
+    openTimeOne: 0.2
+    openTimeTwo: 0.14
+    closeTimeOne: 0.2
+    closeTimeTwo: 0.14
+    openingAnimationTime: 0.3
+    closingAnimationTime: 0.3
     crushDamage:
       types:
         Blunt: 15

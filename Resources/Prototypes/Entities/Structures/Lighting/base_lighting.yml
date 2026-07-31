@@ -461,10 +461,7 @@
     layers:
     - state: base
       map: [ "enum.EmergencyLightVisualLayers.Base" ]
-    - state: emergency_light_off
-      map: [ "enum.EmergencyLightVisualLayers.LightOff" ]
-      color: "#7CFC00"
-    - state: emergency_light_on
+    - state: glow
       map: [ "enum.EmergencyLightVisualLayers.LightOn" ]
       color: "#7CFC00"
       shader: "unshaded"

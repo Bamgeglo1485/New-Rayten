@@ -56,13 +56,13 @@ namespace Content.Shared.DrawDepth
         /// </summary>
         SmallMobs = DrawDepthTag.Default - 3,
 
-        Walls = DrawDepthTag.Default - 2,
+        Walls = DrawDepthTag.Default + 6, // RAYTEN TALL WALLS
 
         /// <summary>
         ///     Used for windows (grilles use walls) and misc signage. Useful if you want to have an APC in the middle
         ///     of some wall-art or something.
         /// </summary>
-        WallTops = DrawDepthTag.Default - 1,
+        WallTops = DrawDepthTag.Default + 7, // RAYTEN TALL WALLS
 
         /// <summary>
         ///     Furniture, crates, tables. etc. If an entity should be drawn on top of a table, it needs a draw depth
@@ -80,7 +80,7 @@ namespace Content.Shared.DrawDepth
         /// <summary>
         ///     Posters, APCs, air alarms, etc. This also includes most lights & lamps.
         /// </summary>
-        WallMountedItems = DrawDepthTag.Default + 2,
+        WallMountedItems = DrawDepthTag.Default + 7, // RAYTEN TALL WALLS
 
         /// <summary>
         ///     To use for objects that would usually fall under SmallObjects, but appear taller than 1 tile. For example: Reagent Grinder

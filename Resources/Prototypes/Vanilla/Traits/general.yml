@@ -172,16 +172,6 @@
   traitGear: DefibrillatorImplanter
 
 - type: trait
-  id: Super
-  name: trait-super-name
-  description: trait-super-desc
-  category: General
-  cost: 8
-  components:
-    - type: Super
-      antag: false
-
-- type: trait
   id: Corporate
   name: trait-corporate-name
   description: trait-corporate-desc
