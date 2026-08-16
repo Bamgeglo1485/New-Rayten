@@ -6,6 +6,7 @@ using Robust.Shared.Audio.Systems;
 using Content.Shared.Trigger;
 using Content.Shared.DoAfter;
 using Robust.Shared.Timing;
+using Robust.Shared.Map;
 
 namespace Content.Shared.Vanilla.Teleportation;
 
@@ -25,6 +26,8 @@ public sealed partial class SharedPortalGunSystem : EntitySystem
 
         SubscribeLocalEvent<PortalGunComponent, PortalGunDoAfterEvent>(OnDoAfter);
         SubscribeLocalEvent<PortalGunComponent, UseInHandEvent>(OnUseInHand);
+
+        SubscribeLocalEvent<PortalGunComponent, PortalGunIndexChangeMessage>(OnIndexChange);
     }
 
     private void AttemptShoot(EntityUid uid, PortalGunComponent component, ref ShotAttemptedEvent args)
@@ -47,21 +50,24 @@ public sealed partial class SharedPortalGunSystem : EntitySystem
         if (args.Cancelled || args.Handled)
             return;
 
-        if (component.SavedCoordinates != null)
+        while (component.SavedCoordinates.Count <= component.Index)
         {
-            var lastMapUid = _mapSystem.GetMapOrInvalid(component.SavedCoordinates.Value.MapId);
+            component.SavedCoordinates.Add(null);
+        }
 
+        var oldCoords = component.SavedCoordinates[component.Index];
+        if (oldCoords != null)
+        {
+            var lastMapUid = _mapSystem.GetMapOrInvalid(oldCoords.Value.MapId);
             if (TryComp<PortalMapComponent>(lastMapUid, out var lastPortalMapComp))
                 lastPortalMapComp.Enabled = true;
         }
 
         var coords = _transform.GetMapCoordinates(uid);
-
-        component.SavedCoordinates = coords;
+        component.SavedCoordinates[component.Index] = coords;
         _audio.PlayPvs(component.SaveCoordinatesSound, uid);
 
         var mapUid = _mapSystem.GetMapOrInvalid(coords.MapId);
-
         if (TryComp<PortalMapComponent>(mapUid, out var portalMapComp))
             portalMapComp.Enabled = false;
 
@@ -99,5 +105,10 @@ public sealed partial class SharedPortalGunSystem : EntitySystem
         _link.TryLink(portal, exitPortal, true);
 
         args.Handled = true;
+    }
+
+    private void OnIndexChange(Entity<PortalGunComponent> ent, ref PortalGunIndexChangeMessage args)
+    {
+        ent.Comp.Index = args.Index;
     }
 }

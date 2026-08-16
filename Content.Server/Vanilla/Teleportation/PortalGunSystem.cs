@@ -3,13 +3,21 @@ using Content.Shared.FixedPoint;
 using Content.Shared.Projectiles;
 using Content.Shared.Vanilla.Teleportation.Components;
 using Content.Shared.Weapons.Ranged.Components;
+using Content.Shared.Vanilla.Teleportation;
+using Content.Shared.Maps;
+using Content.Shared.Popups;
+using Content.Shared.Verbs;
+
+using Content.Server.Administration;
+
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Systems;
-using Content.Shared.Verbs;
+using Robust.Shared.GameObjects;
 using Robust.Shared.Player;
 using Robust.Shared.Map;
+
 using Robust.Server.Audio;
-using Content.Server.Administration;
+
 using System.Numerics;
 
 namespace Content.Server.Vanilla.Teleportation;
@@ -21,6 +29,8 @@ public sealed partial class PortalGunSystem : EntitySystem
     [Dependency] private QuickDialogSystem _quickDialog = default!;
     [Dependency] private SharedPhysicsSystem _physics = default!;
     [Dependency] private AudioSystem _audio = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedMapSystem _mapSystem = default!;
 
     public override void Initialize()
     {
@@ -31,7 +41,6 @@ public sealed partial class PortalGunSystem : EntitySystem
 
     private void AttemptShoot(EntityUid uid, PortalGunComponent component, ref PortalGunShootEvent args)
     {
-
         if (!_solutionSystem.TryGetSolution(uid, component.SolutionName, out var solution, out var solutionComp))
             return;
 
@@ -42,9 +51,10 @@ public sealed partial class PortalGunSystem : EntitySystem
         var currentMode = fireModes.FireModes[fireModes.CurrentFireMode];
 
         if (currentMode.Prototype == component.CoordinatedPortalProjectile &&
-            component.SavedCoordinates == null)
+            (component.SavedCoordinates.Count <= component.Index || component.SavedCoordinates[component.Index] == null))
         {
             _audio.PlayPvs(component.EmptyShotSound, uid);
+            _popup.PopupEntity("Нет сохраненных координат для этой позиции!", uid, args.User);
             return;
         }
 
@@ -60,15 +70,22 @@ public sealed partial class PortalGunSystem : EntitySystem
         var projectile = Spawn(currentMode.Prototype, _transform.GetMapCoordinates(uid));
         _audio.PlayPvs(component.ShotSound, uid);
 
-        if (TryComp<SpawnCoordinatedPortalOnTriggerComponent>(projectile, out var cordPortalComp) && component.SavedCoordinates != null)
-            cordPortalComp.Coordinates = component.SavedCoordinates.Value;
+        if (TryComp<SpawnCoordinatedPortalOnTriggerComponent>(projectile, out var cordPortalComp) &&
+            component.SavedCoordinates.Count > component.Index &&
+            component.SavedCoordinates[component.Index] != null)
+        {
+            cordPortalComp.Coordinates = component.SavedCoordinates[component.Index];
+        }
 
         if (TryComp<ProjectileComponent>(projectile, out var projectileComp))
             projectileComp.Shooter = args.User;
 
         if (TryComp<PhysicsComponent>(projectile, out var physics) && TryComp<GunComponent>(uid, out var gun))
         {
-            var direction = _transform.GetWorldRotation(args.User).ToWorldVec();
+            var userXform = Transform(args.User);
+            var direction = userXform.LocalRotation.ToWorldVec();
+            direction = direction.Normalized();
+
             _physics.SetLinearVelocity(projectile, direction * gun.ProjectileSpeed, body: physics);
         }
     }
@@ -84,60 +101,86 @@ public sealed partial class PortalGunSystem : EntitySystem
         if (!args.CanInteract)
             return;
 
-        var x = 0;
-        var y = 0;
-
         var verb = new ActivationVerb
         {
             Text = "Ввести координаты",
             Act = () =>
             {
-                _quickDialog.OpenDialog(actor.PlayerSession, "Ввести координаты", "Введите Y координату", (string message) =>
+                EnsureCoordinatesListSize(comp);
+
+                var x = 0;
+                var y = 0;
+
+                var currentCoord = comp.SavedCoordinates[comp.Index];
+                if (currentCoord != null)
                 {
-                    if (!int.TryParse(message, out var yMes))
-                        return;
+                    x = (int)currentCoord.Value.Position.X;
+                    y = (int)currentCoord.Value.Position.Y;
+                }
 
-                    if (yMes > 1000)
-                        yMes = 1000;
+                var xVal = x;
+                var yVal = y;
 
-                    if (yMes < -1000)
-                        yMes = -1000;
+                _quickDialog.OpenDialog(actor.PlayerSession, "Ввести координаты",
+                    $"Введите X координату (текущая: {xVal})", (string message) =>
+                    {
+                        if (!int.TryParse(message, out var xMes))
+                            return;
 
-                    y = yMes;
-                    _audio.PlayPvs(comp.SaveCoordinatesSound, uid);
+                        if (xMes > 1000)
+                            xMes = 1000;
+                        if (xMes < -1000)
+                            xMes = -1000;
 
-                    if (comp.SavedCoordinates == null)
-                        x = 0;
-                    else
-                        x = (int)comp.SavedCoordinates.Value.Position.X;
+                        xVal = xMes;
+                        _audio.PlayPvs(comp.SaveCoordinatesSound, uid);
 
-                    comp.SavedCoordinates = new MapCoordinates(new Vector2(x, y), _transform.GetMapCoordinates(uid).MapId);
-                });
+                        SaveCoordinates(uid, comp, comp.Index, xVal, yVal);
+                    });
 
-                _quickDialog.OpenDialog(actor.PlayerSession, "Ввести координаты", "Введите X координату", (string message) =>
-                {
-                    if (!int.TryParse(message, out var xMes))
-                        return;
+                _quickDialog.OpenDialog(actor.PlayerSession, "Ввести координаты",
+                    $"Введите Y координату (текущая: {yVal})", (string message) =>
+                    {
+                        if (!int.TryParse(message, out var yMes))
+                            return;
 
-                    if (xMes > 1000)
-                        xMes = 1000;
+                        if (yMes > 1000)
+                            yMes = 1000;
+                        if (yMes < -1000)
+                            yMes = -1000;
 
-                    if (xMes < -1000)
-                        xMes = -1000;
+                        yVal = yMes;
+                        _audio.PlayPvs(comp.SaveCoordinatesSound, uid);
 
-                    x = xMes;
-                    _audio.PlayPvs(comp.SaveCoordinatesSound, uid);
-
-                    if (comp.SavedCoordinates == null)
-                        y = 0;
-                    else
-                        y = (int)comp.SavedCoordinates.Value.Position.Y;
-
-                    comp.SavedCoordinates = new MapCoordinates(new Vector2(x, y), _transform.GetMapCoordinates(uid).MapId);
-                });
+                        SaveCoordinates(uid, comp, comp.Index, xVal, yVal);
+                    });
             },
         };
 
         args.Verbs.Add(verb);
+    }
+
+    private void EnsureCoordinatesListSize(PortalGunComponent comp)
+    {
+        while (comp.SavedCoordinates.Count <= comp.Index)
+        {
+            comp.SavedCoordinates.Add(null);
+        }
+    }
+
+    private void SaveCoordinates(EntityUid uid, PortalGunComponent comp, int index, int x, int y)
+    {
+        while (comp.SavedCoordinates.Count <= index)
+        {
+            comp.SavedCoordinates.Add(null);
+        }
+
+        var mapId = _transform.GetMapCoordinates(uid).MapId;
+        comp.SavedCoordinates[index] = new MapCoordinates(new Vector2(x, y), mapId);
+
+        _popup.PopupEntity($"Сохранены координаты для ячейки {index}: X={x}, Y={y}", uid);
+        _audio.PlayPvs(comp.SaveCoordinatesSound, uid);
+
+        Dirty(uid, comp);
     }
 }
