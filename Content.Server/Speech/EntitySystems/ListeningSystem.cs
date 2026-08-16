@@ -38,14 +38,18 @@ public sealed partial class ListeningSystem : EntitySystem
 
         while(query.MoveNext(out var listenerUid, out var listener, out var xform))
         {
-            if (xform.MapID != sourceXform.MapID)
-                continue;
-
-            // range checks
-            // TODO proper speech occlusion
             var distance = (sourcePos - _xforms.GetWorldPosition(xform)).LengthSquared();
-            if (distance > listener.Range * listener.Range)
-                continue;
+
+            if (listener.Range < 100) // RAYTEN 
+            {
+                if (xform.MapID != sourceXform.MapID)
+                    continue;
+
+                // range checks
+                // TODO proper speech occlusion
+                if (distance > listener.Range * listener.Range)
+                    continue;
+            }
 
             RaiseLocalEvent(listenerUid, attemptEv);
             if (attemptEv.Cancelled)

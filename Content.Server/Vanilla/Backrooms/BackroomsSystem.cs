@@ -1,0 +1,171 @@
+using Content.Server.Station.Systems;
+using Content.Shared.Maps;
+using Content.Shared.AlternateDimension;
+using Content.Shared.Tag;
+using Content.Shared.Magic.Components;
+using Content.Shared.Atmos.Components;
+using Content.Shared.Sprite;
+using Content.Shared.Humanoid;
+using Content.Shared.Overlays;
+
+using Robust.Shared.Map;
+using Robust.Shared.Prototypes;
+using Robust.Shared.Random;
+using Robust.Shared.Containers;
+using Robust.Shared.Timing;
+
+using System.Numerics;
+
+namespace Content.Server.Backrooms;
+
+public sealed partial class BackroomsSystem : EntitySystem
+{
+    [Dependency] private IMapManager _mapManager = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private SharedMapSystem _mapSystem = default!;
+    [Dependency] private SharedAlternateDimensionSystem _alternate = default!;
+    [Dependency] private TagSystem _tagSystem = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private SharedScaleVisualsSystem ScaleVisuals = default!;
+    [Dependency] private IGameTiming _timing = default!;
+
+    public override void Initialize()
+    {
+        base.Initialize();
+
+        SubscribeLocalEvent<BackroomsComponent, MapInitEvent>(OnMapInit);
+        SubscribeLocalEvent<HumanoidProfileComponent, EntParentChangedMessage>(OnParentChanged);
+    }
+
+    private void OnParentChanged(Entity<HumanoidProfileComponent> ent, ref EntParentChangedMessage args)
+    {
+        if (args.OldParent != null && HasComp<BackroomsComponent>(args.OldParent.Value) && HasComp<BackroomsOverlayComponent>(ent))
+            RemComp<BackroomsOverlayComponent>(ent);
+        else if (args.Transform.GridUid != null && HasComp<BackroomsComponent>(args.Transform.GridUid))
+            EnsureComp<BackroomsOverlayComponent>(ent);
+    }
+
+    public void OnMapInit(Entity<BackroomsComponent> ent, ref MapInitEvent args)
+    {
+        if (!TryComp<AlternateDimensionGridComponent>(ent, out var dimension))
+            return;
+
+        ent.Comp.RealGrid = dimension.RealDimensionGrid;
+        ent.Comp.DimensionType = dimension.DimensionType;
+
+        Copy(ent);
+    }
+
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+
+        var query = EntityQuery<BackroomsComponent>();
+        foreach (var comp in query)
+        {
+            var ent = new Entity<BackroomsComponent>(comp.Owner, comp);
+
+            if (_timing.CurTime < comp.NextHumanCopy)
+                continue;
+
+            comp.NextHumanCopy = _timing.CurTime + comp.HumanCopyDelay;
+
+            CopyHuman(ent);
+        }
+    }
+
+    public void Copy(Entity<BackroomsComponent> ent)
+    {
+        var realGrid = ent.Comp.RealGrid;
+        if (realGrid == null)
+            return;
+
+        var entitiesToCopy = new List<(string PrototypeId, EntityCoordinates Coordinates, Angle Rotation)>();
+
+        var query = AllEntityQuery<AnimateableComponent, TransformComponent>();
+        while (query.MoveNext(out var uid, out _, out var xform))
+        {
+            if (xform.GridUid != realGrid)
+                continue;
+
+            if (HasComp<AtmosDeviceComponent>(uid))
+                continue;
+
+            if (_tagSystem.HasTag(uid, "Pipe") || _tagSystem.HasTag(uid, "Table"))
+                continue;
+
+            if (!TryComp<MetaDataComponent>(uid, out var metaData))
+                continue;
+
+            if (_container.IsEntityOrParentInContainer(uid, metaData, xform))
+                continue;
+
+            if (!_random.Prob(ent.Comp.CopyChance))
+                continue;
+
+            var prototypeId = metaData.EntityPrototype?.ID;
+            if (string.IsNullOrEmpty(prototypeId))
+                continue;
+
+            var coords = _alternate.GetAlternateRealityCoordinates(uid, ent.Comp.DimensionType);
+            if (coords == null)
+                continue;
+
+            entitiesToCopy.Add((prototypeId, coords.Value, xform.LocalRotation));
+        }
+
+        foreach (var (prototypeId, coords, rotation) in entitiesToCopy)
+        {
+            var spawned = Spawn(prototypeId, coords);
+            if (TryComp<TransformComponent>(spawned, out var spawnedXform))
+            {
+                spawnedXform.LocalRotation = rotation;
+            }
+
+            var scale = new Vector2(_random.NextFloat(0.5f, 2.0f), _random.NextFloat(0.5f, 2.0f));
+            ScaleVisuals.SetSpriteScale(spawned, scale);
+        }
+    }
+
+    public void CopyHuman(Entity<BackroomsComponent> ent)
+    {
+        var realGrid = ent.Comp.RealGrid;
+        if (realGrid == null)
+            return;
+
+        if (string.IsNullOrEmpty(ent.Comp.ClonePrototype))
+            return;
+        
+        var humans = new List<EntityUid>();
+        var query = AllEntityQuery<HumanoidProfileComponent, TransformComponent, MetaDataComponent>();
+
+        while (query.MoveNext(out var uid, out _, out var xform, out var meta))
+        {
+            if (Deleted(uid))
+                continue;
+
+            if (xform.GridUid != realGrid)
+                continue;
+
+            humans.Add(uid);
+        }
+
+        if (humans.Count == 0)
+            return;
+
+        var randomHuman = _random.Pick(humans);
+
+        if (Deleted(randomHuman))
+            return;
+
+        var altCoords = _alternate.GetAlternateRealityCoordinates(randomHuman, ent.Comp.DimensionType);
+        if (altCoords == null)
+            return;
+
+        if (!altCoords.Value.IsValid(EntityManager))
+            return;
+
+       Spawn(ent.Comp.ClonePrototype, altCoords.Value);
+    }
+}

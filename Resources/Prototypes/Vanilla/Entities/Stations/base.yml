@@ -9,3 +9,11 @@
   abstract: true
   components:
     - type: StationERT
+
+- type: entity
+  id: BaseStationAlternateDimension
+  abstract: true
+  components:
+    - type: StationAlternateDimensionGenerator
+      dimensions:
+      - Backrooms

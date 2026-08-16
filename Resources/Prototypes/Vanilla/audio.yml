@@ -28,6 +28,15 @@
   priority: 5
   fadeIn: true
 
+- type: ambientMusic
+  id: BackroomsAmbient
+  sound:
+    params:
+      volume: -10
+    collection: AmbienceBackrooms
+  rules: Backrooms
+  priority: 10
+
 #- type: ambientMusic
 #  id: ArchonticAmbient
 #  sound:
@@ -75,6 +84,15 @@
         tags:
           - ShyGuy
 
+- type: rules
+  id: Backrooms
+  rules:
+    - !type:NearbyEntitiesRule
+      count: 1
+      whitelist:
+        tags:
+          - Backrooms
+
 #- type: rules
 #  id: NearArchontic
 #  rules:
@@ -112,6 +130,15 @@
   id: Ambience096
   files:
     - /Audio/Vanilla/Ambience/096ambient1.ogg
+
+- type: soundCollection
+  id: AmbienceBackrooms
+  files:
+    - /Audio/Vanilla/Ambience/Backrooms/endless_space.ogg
+    - /Audio/Vanilla/Ambience/Backrooms/mod.flip-flap.ogg
+    - /Audio/Vanilla/Ambience/Backrooms/pwmur.ogg
+    - /Audio/Vanilla/Ambience/Backrooms/space_asshole.ogg
+
 
 #- type: soundCollection
 #  id: AmbienceArchontic

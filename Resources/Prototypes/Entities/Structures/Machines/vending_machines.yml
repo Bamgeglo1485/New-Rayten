@@ -7,6 +7,9 @@
   description: Just add capitalism!
   abstract: true
   components:
+  - type: Tag
+    tags:
+    - Vending # RAYTEN
   - type: ActionGrant
     actions:
     - ActionVendingThrow

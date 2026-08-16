@@ -29,4 +29,9 @@ public sealed partial class ParrotListenerComponent : Component
     /// </summary>
     [DataField]
     public EntityWhitelist? Blacklist;
+
+    // RAYTEN STARTS
+    [DataField]
+    public bool SameName = false;
+    // RAYTEN ENDS
 }

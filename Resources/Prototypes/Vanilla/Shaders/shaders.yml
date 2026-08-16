@@ -13,6 +13,11 @@
   kind: source
   path: "/Textures/Vanilla/Shaders/vignette.swsl"
 
+- type: shader
+  id: Backrooms
+  kind: source
+  path: "/Textures/Vanilla/Shaders/backrooms.swsl"
+
 # Funky RMC Explosions
 - type: shader
   id: ShockWave

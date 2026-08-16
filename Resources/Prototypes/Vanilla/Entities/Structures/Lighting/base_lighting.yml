@@ -1,0 +1,17 @@
+- type: entity
+  parent: AlwaysPoweredWallLight
+  id: AlwaysPoweredFluorescentLight
+  name: неуютный светильник
+  description: Бзззззззз
+  suffix: Закулисье
+  components:
+  - type: PointLight
+    radius: 6
+    energy: 3
+    softness: 0.5
+    color: "#ffe600"
+  - type: AmbientSound
+    volume: 0
+    range: 4
+    sound:
+      path: /Audio/Vanilla/Ambience/backrooms.ogg

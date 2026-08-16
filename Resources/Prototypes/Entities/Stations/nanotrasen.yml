@@ -12,6 +12,7 @@
     - BaseStation
     - BaseStationJammer # Rayten-Jammer
     - BaseStationERT # Rayten-ERT
+    - BaseStationAlternateDimension # RAYTEN
     - BaseStationNews
     - BaseStationCargo
     - BaseStationJobsSpawning

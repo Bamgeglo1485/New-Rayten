@@ -1,0 +1,214 @@
+- type: entity
+  parent: BaseStructure
+  id: BackroomsWall
+  name: неуютная стена
+  description: Похоже я за закулисьем реальности...
+  suffix: Закулисье
+  placement:
+    mode: SnapgridCenter
+    snap:
+    - Wall
+  components:
+  - type: Rotatable
+  - type: RangedDamageSound
+    soundGroups:
+      Brute:
+        collection:
+          MetalBulletImpact
+    soundTypes:
+      Heat:
+        collection:
+          MetalLaserImpact
+  - type: Tag
+    tags:
+    - Wall
+    - Backrooms
+  - type: Anchorable
+    flags:
+    - Anchorable
+  - type: IsRoof
+  - type: Sprite
+    sprite: Vanilla/Structures/Walls/backrooms.rsi
+    drawdepth: Mobs
+  - type: Icon
+    sprite: Vanilla/Structures/Walls/backrooms.rsi
+    state: full
+  - type: Clickable
+  - type: PlacementReplacement
+    key: walls
+  - type: Damageable
+    damageModifierSet: StructuralMetallic
+  - type: Injurable
+    damageContainer: StructuralInorganic
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,0.5,0.5"
+        mask:
+        - FullTileMask
+        layer:
+        - WallLayer
+        density: 1000
+  - type: Airtight
+  - type: StaticPrice
+    price: 75
+  - type: RadiationBlocker
+    resistance: 2
+  - type: BlockWeather
+  - type: SunShadowCast
+  - type: Occluder
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 200
+      behaviors:
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          Girder:
+            min: 1
+            max: 1
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: IconSmooth
+    key: walls
+    base: solid
+  - type: RCDDeconstructable
+    cost: 6
+    delay: 8
+    fx: EffectRCDDeconstruct8
+
+- type: entity
+  id: BackroomsWallSpawner
+  name: спавнер стены закулисья
+  categories: [ HideSpawnMenu ]
+  parent: MarkerBase
+  components:
+  - type: Sprite
+    layers:
+      - state: red
+      - sprite: /Textures/Vanilla/Structures/Walls/backrooms.rsi
+        state: full
+  - type: RandomSpawner
+    prototypes:
+      - BackroomsWall
+
+- type: entity
+  id: BackroomsTableSpawner
+  name: спавнер стола закулисья
+  categories: [ HideSpawnMenu ]
+  parent: MarkerBase
+  components:
+  - type: Sprite
+    layers:
+      - state: red
+      - sprite: /Textures/Vanilla/Structures/Walls/backrooms.rsi
+        state: full
+  - type: RandomSpawner
+    prototypes:
+      - TableWood
+
+- type: entity
+  parent: [ WallSolid, BasePortal ]
+  id: WallSolidBackrooms
+  suffix: Телепорт в закулисье
+  name: странная ржавая стена
+  description: Очень странная стена...
+  components:
+  - type: Sprite
+    sprite: Structures/Walls/solid_rust.rsi
+  - type: Icon
+    sprite: Structures/Walls/solid_rust.rsi
+    state: full
+  - type: Construction
+    graph: Girder
+    node: wallrust
+  - type: IconSmooth
+    key: walls
+    base: solid
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 150
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalSlam
+      - !type:ChangeConstructionNodeBehavior
+        node: girder
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+  - type: AmbientSound
+    volume: 5
+    range: 2
+    sound:
+      path: /Audio/Vanilla/Ambience/backrooms.ogg
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,0.5,0.5"
+        mask:
+        - FullTileMask
+        layer:
+        - WallLayer
+        density: 1000
+        hard: false
+      portalFixture:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.25,-0.48,0.25,0.48"
+        mask:
+        - FullTileMask
+        layer:
+        - WallLayer
+        hard: false
+  - type: AlternateDimensionAutoPortal
+    otherSidePortal: WallSolidBackroomsOtherSide
+    targetDimension: Backrooms
+  - type: Tag
+    tags:
+    - Structure
+
+- type: entity
+  parent: [ BackroomsWall, BasePortal ]
+  id: WallSolidBackroomsOtherSide
+  suffix: Телепорт в закулисье
+  name: странная стена
+  description: Очень странная стена...
+  components:
+  - type: AmbientSound
+    range: 2
+    volume: -3
+    sound:
+      path: /Audio/Ambience/anomaly_scary.ogg
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,0.5,0.5"
+        mask:
+        - FullTileMask
+        layer:
+        - WallLayer
+        density: 1000
+        hard: false
+      portalFixture:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.25,-0.48,0.25,0.48"
+        mask:
+        - FullTileMask
+        layer:
+        - WallLayer
+        hard: false
+  - type: Tag
+    tags:
+    - Structure

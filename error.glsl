@@ -233,6 +233,8 @@ varying highp vec4 VtxModulate;
 uniform sampler2D lightMap;
 
 uniform sampler2D SCREEN_TEXTURE;
+uniform ARRAY_HIGHP float BRIGHTNESS =  1.3;
+uniform ARRAY_HIGHP float BLUR_STRENGTH =  0.3;
 
 
 
@@ -269,17 +271,32 @@ void main()
     // Requires breaking changes.
     lowp vec3 lightSample = LIGHT.xyz;
 
-     vec4 screen = texture ( SCREEN_TEXTURE , SCREEN_UV ) ;
- vec2 iResolution = 1.0 / SCREEN_PIXEL_SIZE ;
- vec2 uv = FRAGCOORD . xy / iResolution . xy ;
- float x = ( uv . x + 4.0 ) * ( uv . y + 4.0 ) * ( TIME * 10.0 ) ;
- float brightness = dot ( screen . rgb , vec3 ( 0.299 , 0.587 , 0.114 ) ) ;
- float darkness = 1.0 - brightness ;
- float grain_factor = pow ( darkness , exponent ) ;
- float grain = mod ( mod ( x , 13.0 ) * mod ( x , 123.0 ) , 0.01 ) - 0.005 ;
- screen += grain * grain_factor * strength ;
- screen = 1.0 - screen ;
- COLOR = screen ;
+     highp vec2 pixelSize = 1.0 / vec2 ( zTextureSize ( SCREEN_TEXTURE ) ) ;
+ highp vec4 color = zTextureSpec ( SCREEN_TEXTURE , UV ) ;
+ highp vec4 blurred = vec4 ( 0.0 ) ;
+ highp float total = 0.0 ;
+ highp float strength = BLUR_STRENGTH * 0.5 ;
+ for ( int x = - 1 ;
+ x <= 1 ;
+ x ++ ) {
+ for ( int y = - 1 ;
+ y <= 1 ;
+ y ++ ) {
+ highp vec2 offset = vec2 ( float ( x ) , float ( y ) ) * pixelSize * strength ;
+ highp vec2 sampleUV = UV + offset ;
+ if ( sampleUV . x >= 0.0 && sampleUV . x <= 1.0 && sampleUV . y >= 0.0 && sampleUV . y <= 1.0 ) {
+ highp float weight = ( x == 0 && y == 0 ) ? 4.0 : 1.0 ;
+ blurred += zTexture ( sampleUV ) * weight ;
+ total += weight ;
+ }
+ }
+ }
+ blurred /= total ;
+ highp vec4 mixed = mix ( color , blurred , min ( BLUR_STRENGTH * 0.6 , 0.6 ) ) ;
+ highp vec3 brightened = mixed . rgb * BRIGHTNESS ;
+ highp float lum = dot ( brightened , vec3 ( 0.299 , 0.587 , 0.114 ) ) ;
+ brightened += vec3 ( lum ) * ( BRIGHTNESS - 1.0 ) * 0.2 ;
+ COLOR = vec4 ( clamp ( brightened , 0.0 , 1.0 ) , color . a ) ;
 
 
     LIGHT.xyz = lightSample;

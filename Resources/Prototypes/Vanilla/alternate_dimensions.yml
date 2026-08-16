@@ -1,0 +1,40 @@
+
+- type: alternateDimension
+  id: Backrooms
+  defaultTile: FloorBackrooms
+  mapComponents:
+  - type: MapAtmosphere
+    space: False
+    mixture:
+      volume: 2500
+      immutable: True
+      temperature: 293.2
+      moles:
+      - 21.824879
+      - 82.10312
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+  gridComponents:
+  - type: Gravity
+    enabled: true
+    inherent: true
+  - type: Backrooms
+  replacements:
+    Wall: BackroomsWallSpawner
+    Window: BackroomsWallSpawner
+    Lighting: AlwaysPoweredFluorescentLight
+    Table: BackroomsTableSpawner
+    Vending: DebugPowerReceiver
+    FootstepSound: SpawnGhostNPC
+  portalWallReplacementAverage: 10
+  portalWallReplacementStdDev: 200
+  portalWallReplacements:
+  - id: WallSolidBackrooms
