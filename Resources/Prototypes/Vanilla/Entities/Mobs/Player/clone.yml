@@ -33,7 +33,7 @@
     state: preview
   - type: DistortedCloneSpawner
     settings: Distorted
-    agressiveChance: 1.0
+    agressiveChance: 0.4
     components:
     - type: Vocalizer
       maxVocalizeInterval: 20
