@@ -9,3 +9,98 @@
   - eyes
   copyInternalStorage: false
   copyImplants: false
+
+- type: cloningSettings
+  id: Distorted
+  parent: [BaseClone, Antag]
+  forceCloning: true
+  copyEquipment:
+  - innerclothing
+  - outerclothing
+  - head
+  - neck
+  - feet
+  - eyes
+  copyInternalStorage: false
+  copyImplants: false
+
+- type: entity
+  id: DistortedCloneSpawner
+  name: Искажённый Клон
+  components:
+  - type: Sprite
+    sprite: Mobs/Aliens/paradox_clone.rsi
+    state: preview
+  - type: DistortedCloneSpawner
+    settings: Distorted
+    agressiveChance: 1.0
+    components:
+    - type: Vocalizer
+      maxVocalizeInterval: 20
+      minVocalizeInterval: 15
+    - type: ParrotListener
+      sameName: true
+    - type: ParrotMemory
+      learnChance: 1.0
+    - type: ActiveListener
+      range: 150
+
+- type: entity
+  id: DistortedCloneSpawnerAgressive
+  parent: DistortedCloneSpawner
+  name: Искажённый Клон
+  suffix: "Злой:("
+  components:
+  - type: DistortedCloneSpawner
+    agressiveChance: 1.0
+
+- type: entity
+  id: DistortedCloneSpawnerKind
+  parent: DistortedCloneSpawner
+  name: Искажённый Клон
+  suffix: "Добри:)"
+  components:
+  - type: DistortedCloneSpawner
+    agressiveChance: 0.0
+
+- type: entity
+  name: Призрачный НПС
+  parent: BaseMob
+  id: GhostNPC
+  components:
+  - type: HTN
+    constantlyReplan: false
+    rootTask:
+      task: MouseCompound
+  - type: Physics
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.2
+        density: 100
+        mask:
+        - SmallMobMask
+        layer:
+        - SmallMobLayer
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      1000: Critical
+      1001: Dead
+  - type: Tag
+    tags:
+    - FootstepSound
+
+- type: entity
+  name: спавнер призрачного НПС
+  id: SpawnGhostNPC
+  parent: MarkerBase
+  components:
+  - type: Sprite
+    layers:
+    - state: green
+  - type: ConditionalSpawner
+    prototypes:
+    - GhostNPC

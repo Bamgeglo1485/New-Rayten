@@ -10,6 +10,11 @@
   description: "An always powered light."
   suffix: Always powered
   components:
+  # RAYTEN STARTS
+  - type: Tag
+    tags:
+    - Lighting
+  # RAYTEN ENDS
   - type: MeleeSound
     soundGroups:
       Brute:

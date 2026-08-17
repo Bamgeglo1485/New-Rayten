@@ -61,7 +61,7 @@
   - type: TriggerOnCollide
     fixtureID: projectile
   - type: RepeatingTrigger
-    delay: 0.5
+    delay: 1.0
   - type: DeleteOnTrigger
   - type: SpawnOnTrigger
     proto: RandomPortalEntry
@@ -70,7 +70,7 @@
       projectile:
         shape:
           !type:PhysShapeAabb
-          bounds: "-0.3,-0.3,0.3,0.3"
+          bounds: "-0.8,-0.8,0.8,0.8"
         hard: false
         mask:
         - Impassable
@@ -144,7 +144,7 @@
   - type: TriggerOnCollide
     fixtureID: projectile
   - type: RepeatingTrigger
-    delay: 0.5
+    delay: 1.0
   - type: DeleteOnTrigger
   - type: SpawnCoordinatedPortalOnTrigger
   - type: Fixtures
@@ -152,7 +152,7 @@
       projectile:
         shape:
           !type:PhysShapeAabb
-          bounds: "-0.3,-0.3,0.3,0.3"
+          bounds: "-0.8,-0.8,0.8,0.8"
         hard: false
         mask:
         - Impassable

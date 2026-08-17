@@ -12,7 +12,7 @@ namespace Content.Shared.Vanilla.Teleportation.Components;
 /// <summary>
 ///     Давай морти приключение на 20 минут
 /// </summary>
-[RegisterComponent]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class PortalGunComponent : Component
 {
 
@@ -46,14 +46,20 @@ public sealed partial class PortalGunComponent : Component
     [DataField]
     public bool CanSaveCoordinates = false;
 
-    [DataField]
-    public MapCoordinates? SavedCoordinates;
-
     /// <summary>
     /// Бля такие костыли
     /// </summary>
     [DataField]
     public EntProtoId? CoordinatedPortalProjectile = new();
+
+    [DataField, AutoNetworkedField]
+    public List<MapCoordinates?> SavedCoordinates = new();
+
+    [DataField, AutoNetworkedField]
+    public int Index = 0;
+
+    [DataField, AutoNetworkedField]
+    public int MaxIndex = 4;
 
     [DataField]
     public SoundSpecifier SaveCoordinatesSound =
@@ -87,4 +93,16 @@ public sealed partial class PortalGunShootEvent : EntityEventArgs
     {
         User = user;
     }
+}
+
+[Serializable, NetSerializable]
+public sealed class PortalGunIndexChangeMessage : BoundUserInterfaceMessage
+{
+    public int Index;
+}
+
+[Serializable, NetSerializable]
+public enum PortalGunUiKey : byte
+{
+    Key
 }

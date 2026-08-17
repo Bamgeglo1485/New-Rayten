@@ -58,3 +58,12 @@
   id: Paraxit
 - type: Tag
   id: DisableEmotes
+- type: Tag
+  id: Lighting
+- type: Tag
+  id: Backrooms
+- type: Tag
+  id: Table
+- type: Tag
+  id: Vending
+

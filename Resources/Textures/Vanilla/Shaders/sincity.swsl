@@ -5,7 +5,7 @@ uniform sampler2D SCREEN_TEXTURE;
 // Sensitivity, in degrees.
 const highp float RedHueRange = 5.0;
 const highp float MinSaturation = 0.4;
-uniform highp float EnvironmentSaturation = 0.8;
+uniform highp float EnvironmentSaturation;
 
 // https://en.wikipedia.org/wiki/HSL_and_HSV#From_RGB
 highp vec3 rgb2hsv(highp vec3 c) {

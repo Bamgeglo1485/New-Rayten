@@ -41,6 +41,7 @@
   - type: Tag
     tags:
     - ForceFixRotations
+    - Table # RAYTEN
 
 - type: entity
   id: CounterBase

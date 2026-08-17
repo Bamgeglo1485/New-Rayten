@@ -34,6 +34,7 @@
   - type: Gun
     soundEmpty: null
     showExamineText: false
+    projectileSpeed: 2
   - type: Solution
     id: portal
   - type: SolutionContainerManager
@@ -107,6 +108,13 @@
   - type: Item
     sprite: Vanilla/Objects/Devices/portal_gun.rsi
     heldPrefix: classic
+  - type: UserInterface
+    interfaces:
+      enum.PortalGunUiKey.Key:
+        type: PortalGunBoundUserInterface
+  - type: ActivatableUI
+    inHandsOnly: true
+    key: enum.PortalGunUiKey.Key
 
 - type: entity
   name: кустарная портальная пушка
@@ -123,6 +131,8 @@
   - type: BatteryWeaponFireModes
     fireModes:
     - proto: ProjectilePortalGun
+      fireCost: 5
+    - proto: ProjectilePortalGunStation
       fireCost: 5
     - proto: ProjectilePortalGunDimensional
       fireCost: 10
@@ -200,6 +210,13 @@
   - type: Item
     sprite: Vanilla/Objects/Devices/portal_gun.rsi
     heldPrefix: gorgeous
+  - type: UserInterface
+    interfaces:
+      enum.PortalGunUiKey.Key:
+        type: PortalGunBoundUserInterface
+  - type: ActivatableUI
+    inHandsOnly: true
+    key: enum.PortalGunUiKey.Key
 
 - type: entity
   name: продвинутая портальная пушка

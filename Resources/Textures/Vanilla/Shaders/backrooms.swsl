@@ -1,0 +1,283 @@
+uniform sampler2D SCREEN_TEXTURE;
+
+const highp float BLUR_STRENGTH = 0.5;
+const highp float BLUR_MIX = 0.3;
+const highp float SATURATION = 1.3;
+
+const highp float VHS_STRENGTH = 0.15;
+const highp float VHS_JITTER = 0.004;
+const highp float VHS_SCANLINES = 0.2;
+const highp float VHS_RGB_SHIFT = 0.003;
+const highp float VHS_NOISE = 0.0;
+const highp float VHS_SMEAR = 0.0;
+
+
+highp vec3 rgb2yiq(highp vec3 c)
+{
+    return vec3(
+        0.2989 * c.r + 0.5959 * c.g + 0.2115 * c.b,
+        0.5870 * c.r - 0.2744 * c.g - 0.5229 * c.b,
+        0.1140 * c.r - 0.3216 * c.g + 0.3114 * c.b
+    );
+}
+
+highp vec3 yiq2rgb(highp vec3 c)
+{
+    return vec3(
+        c.x + c.y + c.z,
+        c.x - 0.2720 * c.y - 1.1060 * c.z,
+        c.x - 0.6474 * c.y + 1.7046 * c.z
+    );
+}
+
+highp float hash(highp vec2 p)
+{
+    return fract(
+        sin(dot(p, vec2(127.1, 311.7))) * 43758.5453
+    );
+}
+
+highp vec2 vhsUV(highp vec2 uv)
+{
+    highp float line =
+        floor(uv.y * 240.0);
+
+    highp float randomLine =
+        hash(vec2(line, floor(TIME * 12.0)));
+
+    highp float wave =
+        sin(
+            uv.y * 40.0
+            + TIME * 8.0
+        );
+
+    highp float glitch =
+        step(
+            0.92,
+            randomLine
+        );
+
+    highp float jitter =
+        wave * VHS_JITTER * 0.25;
+
+    jitter +=
+        (randomLine - 0.5)
+        * VHS_JITTER
+        * glitch;
+
+    uv.x += jitter * VHS_STRENGTH;
+
+    return uv;
+}
+
+highp vec3 getBlur(highp vec2 uv)
+{
+    highp vec3 blur = vec3(0.0);
+    highp float total = 0.0;
+
+    for (int x = -2; x <= 2; x++)
+    {
+        for (int y = -2; y <= 2; y++)
+        {
+            highp float d =
+                float(x * x + y * y);
+
+            highp float weight =
+                1.0 / (1.0 + d);
+
+            highp vec2 offset =
+                vec2(
+                    float(x),
+                    float(y)
+                )
+                * SCREEN_PIXEL_SIZE
+                * BLUR_STRENGTH;
+
+            blur += texture(
+                SCREEN_TEXTURE,
+                uv + offset
+            ).rgb * weight;
+
+            total += weight;
+        }
+    }
+
+    return blur / total;
+}
+
+
+highp vec3 smear(
+    highp vec2 uv,
+    highp float amount
+)
+{
+    highp vec3 result = vec3(0.0);
+
+    result += texture(
+        SCREEN_TEXTURE,
+        uv + vec2(-amount * 2.0, 0.0)
+    ).rgb * 0.10;
+
+    result += texture(
+        SCREEN_TEXTURE,
+        uv + vec2(-amount, 0.0)
+    ).rgb * 0.20;
+
+    result += texture(
+        SCREEN_TEXTURE,
+        uv
+    ).rgb * 0.40;
+
+    result += texture(
+        SCREEN_TEXTURE,
+        uv + vec2(amount, 0.0)
+    ).rgb * 0.20;
+
+    result += texture(
+        SCREEN_TEXTURE,
+        uv + vec2(amount * 2.0, 0.0)
+    ).rgb * 0.10;
+
+    return result;
+}
+
+void fragment()
+{
+    highp vec2 uv = UV;
+
+    uv = vhsUV(uv);
+
+    highp vec4 base =
+        texture(
+            SCREEN_TEXTURE,
+            uv
+        );
+
+    highp vec3 blurred =
+        getBlur(uv);
+
+    highp vec3 color =
+        mix(
+            base.rgb,
+            blurred,
+            BLUR_MIX
+        );
+
+    highp vec3 smeared =
+        smear(
+            uv,
+            VHS_SMEAR
+        );
+
+    color =
+        mix(
+            color,
+            smeared,
+            VHS_STRENGTH * 0.35
+        );
+
+    highp float rgbShift =
+        VHS_RGB_SHIFT
+        * VHS_STRENGTH;
+
+    highp float red =
+        texture(
+            SCREEN_TEXTURE,
+            uv + vec2(rgbShift, 0.0)
+        ).r;
+
+    highp float green =
+        texture(
+            SCREEN_TEXTURE,
+            uv
+        ).g;
+
+    highp float blue =
+        texture(
+            SCREEN_TEXTURE,
+            uv - vec2(rgbShift, 0.0)
+        ).b;
+
+    highp vec3 rgbShifted =
+        vec3(red, green, blue);
+
+    color =
+        mix(
+            color,
+            rgbShifted,
+            VHS_STRENGTH
+        );
+
+    highp float luminance =
+        dot(
+            color,
+            vec3(
+                0.2126,
+                0.7152,
+                0.0722
+            )
+        );
+
+    color =
+        mix(
+            vec3(luminance),
+            color,
+            SATURATION
+        );
+
+    highp float scanline =
+        sin(
+            UV.y
+            * 1200.0
+        );
+
+    scanline =
+        1.0
+        - scanline
+        * VHS_SCANLINES
+        * VHS_STRENGTH;
+
+    color *= scanline;
+
+    highp float noise =
+        hash(
+            floor(
+                UV
+                * vec2(640.0, 360.0)
+            )
+            + floor(TIME * 24.0)
+        );
+
+    noise =
+        (noise - 0.5)
+        * VHS_NOISE
+        * VHS_STRENGTH;
+
+    color += noise;
+
+    highp float vignette =
+        UV.x
+        * (1.0 - UV.x)
+        * UV.y
+        * (1.0 - UV.y);
+
+    vignette =
+        pow(
+            vignette * 16.0,
+            0.15
+        );
+
+    color *=
+        mix(
+            0.88,
+            1.0,
+            vignette * VHS_STRENGTH
+        );
+
+
+    COLOR =
+        vec4(
+            clamp(color, 0.0, 1.0),
+            base.a
+        );
+}

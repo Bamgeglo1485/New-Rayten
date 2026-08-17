@@ -111,6 +111,9 @@ public sealed partial class ParrotMemorySystem : SharedParrotMemorySystem
         if (!_whitelist.CheckBoth(source, entity.Comp2.Blacklist, entity.Comp2.Whitelist))
             return;
 
+        if (entity.Comp2.SameName == true && MetaData(entity).EntityName != MetaData(source).EntityName) // RAYTEN
+            return;
+
         if (source.Equals(entity) || _mobState.IsIncapacitated(entity))
             return;
 

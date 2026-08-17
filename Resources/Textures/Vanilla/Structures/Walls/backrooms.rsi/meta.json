@@ -1,0 +1,46 @@
+{
+  "version": 2,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Geglo",
+  "size": {
+    "x": 32,
+    "y": 64
+  },
+  "states": [
+    {
+      "name": "full"
+    },
+    {
+      "name": "solid0",
+      "directions": 4
+    },
+    {
+      "name": "solid1",
+      "directions": 4
+    },
+    {
+      "name": "solid2",
+      "directions": 4
+    },
+    {
+      "name": "solid3",
+      "directions": 4
+    },
+    {
+      "name": "solid4",
+      "directions": 4
+    },
+    {
+      "name": "solid5",
+      "directions": 4
+    },
+    {
+      "name": "solid6",
+      "directions": 4
+    },
+    {
+      "name": "solid7",
+      "directions": 4
+    }
+  ]
+}

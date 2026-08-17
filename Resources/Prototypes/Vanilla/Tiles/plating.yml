@@ -1,0 +1,10 @@
+﻿- type: tile
+  id: FloorBackrooms
+  parent: BasePlating
+  name: tiles-backrooms-floor
+  sprite: /Textures/Vanilla/Tiles/backrooms.png
+  footstepSounds:
+    collection: FootstepCarpet
+  barestepSounds:
+    collection: BarestepCarpet
+  friction: 1.25
