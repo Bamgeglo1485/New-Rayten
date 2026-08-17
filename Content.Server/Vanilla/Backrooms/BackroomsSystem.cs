@@ -7,6 +7,9 @@ using Content.Shared.Atmos.Components;
 using Content.Shared.Sprite;
 using Content.Shared.Humanoid;
 using Content.Shared.Overlays;
+using Content.Shared.Weapons.Ranged.Components;
+using Content.Shared.Fluids.Components;
+using Content.Shared.Body;
 
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
@@ -55,6 +58,8 @@ public sealed partial class BackroomsSystem : EntitySystem
         ent.Comp.DimensionType = dimension.DimensionType;
 
         Copy(ent);
+
+        ent.Comp.NextCleaning = _timing.CurTime + ent.Comp.CleaningDelay;
     }
 
     public override void Update(float frameTime)
@@ -66,12 +71,53 @@ public sealed partial class BackroomsSystem : EntitySystem
         {
             var ent = new Entity<BackroomsComponent>(comp.Owner, comp);
 
-            if (_timing.CurTime < comp.NextHumanCopy)
+            HumanCopyProcess(ent);
+            CleaningProcess(ent);
+        }
+    }
+
+    private void HumanCopyProcess(Entity<BackroomsComponent> ent)
+    {
+        if (_timing.CurTime < ent.Comp.NextHumanCopy)
+            return;
+
+        ent.Comp.NextHumanCopy = _timing.CurTime + ent.Comp.HumanCopyDelay;
+
+        CopyHuman(ent);
+    }
+
+    private void CleaningProcess(Entity<BackroomsComponent> ent)
+    {
+        if (_timing.CurTime < ent.Comp.NextCleaning)
+            return;
+
+        ent.Comp.NextCleaning = _timing.CurTime + ent.Comp.CleaningDelay;
+
+        var puddleQuery = AllEntityQuery<PuddleComponent, TransformComponent>();
+        while (puddleQuery.MoveNext(out var uid, out _, out var xform))
+        {
+            if (xform.GridUid != ent)
                 continue;
 
-            comp.NextHumanCopy = _timing.CurTime + comp.HumanCopyDelay;
+            QueueDel(uid);
+        }
 
-            CopyHuman(ent);
+        var ammoQuery = AllEntityQuery<CartridgeAmmoComponent, TransformComponent>();
+        while (ammoQuery.MoveNext(out var uid, out var ammo, out var xform))
+        {
+            if (xform.GridUid != ent || ammo.Spent == false)
+                continue;
+
+            QueueDel(uid);
+        }
+
+        var organQuery = AllEntityQuery<OrganComponent, TransformComponent>();
+        while (organQuery.MoveNext(out var uid, out var organ, out var xform))
+        {
+            if (xform.GridUid != ent || organ.Body != null)
+                continue;
+
+            QueueDel(uid);
         }
     }
 
@@ -123,7 +169,7 @@ public sealed partial class BackroomsSystem : EntitySystem
                 spawnedXform.LocalRotation = rotation;
             }
 
-            var scale = new Vector2(_random.NextFloat(0.5f, 2.0f), _random.NextFloat(0.5f, 2.0f));
+            var scale = new Vector2(_random.NextFloat(0.7f, 1.5f), _random.NextFloat(0.5f, 2.0f));
             ScaleVisuals.SetSpriteScale(spawned, scale);
         }
     }

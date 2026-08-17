@@ -12,10 +12,16 @@ public sealed partial class BackroomsComponent : Component
     public float CopyChance = 0.05f;
 
     [DataField]
-    public TimeSpan HumanCopyDelay { get; set; } = TimeSpan.FromSeconds(300);
+    public TimeSpan HumanCopyDelay { get; set; } = TimeSpan.FromSeconds(600);
 
     [DataField]
     public TimeSpan NextHumanCopy { get; set; } = TimeSpan.Zero;
+
+    [DataField]
+    public TimeSpan CleaningDelay { get; set; } = TimeSpan.FromSeconds(300);
+
+    [DataField]
+    public TimeSpan NextCleaning { get; set; } = TimeSpan.Zero;
 
     [DataField(customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
     public string ClonePrototype = "DistortedCloneSpawner";

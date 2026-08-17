@@ -1,25 +1,30 @@
-using Content.Server.Cloning.Components;
-using Content.Shared.Mind;
-using Content.Shared.Mobs.Systems;
-using Content.Shared.Mobs;
-using Content.Shared.Objectives.Systems;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Containers;
 using Robust.Shared.Random;
-using Content.Server.Cloning;
-using Content.Shared.Sprite;
-using System.Numerics;
-using Content.Shared.Body.Components;
-using Content.Shared.SSDIndicator;
 
+using Content.Server.Cloning.Components;
 using Content.Server.NPC;
 using Content.Server.NPC.HTN;
 using Content.Server.NPC.Systems;
-using Content.Shared.NPC.Components;
-using Content.Shared.NPC.Systems;
+using Content.Server.Cloning;
 
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
+using Content.Shared.NPC.Components;
+using Content.Shared.NPC.Systems;
+using Content.Shared.Inventory;
 using Content.Shared.Damage;
+using Content.Shared.Sprite;
+using Content.Shared.Body.Components;
+using Content.Shared.SSDIndicator;
+using Content.Shared.Mind;
+using Content.Shared.Objectives.Systems;
+using Content.Shared.Interaction.Components;
+using Content.Shared.Mobs.Systems;
+using Content.Shared.Mobs;
+
+using System.Numerics;
+
 
 namespace Content.Server.Vanilla.Backrooms;
 
@@ -35,6 +40,7 @@ public sealed partial class DistortedCloneSpawnerSystem : EntitySystem
     [Dependency] private NpcFactionSystem _npcFaction = default!;
     [Dependency] private NPCSystem _npc = default!;
     [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private MobThresholdSystem _mobState = default!;
 
     public override void Initialize()
@@ -93,11 +99,24 @@ public sealed partial class DistortedCloneSpawnerSystem : EntitySystem
 
         var damage = new DamageSpecifier();
         damage.DamageDict.Add("Slash", 40);
+        damage.DamageDict.Add("Burn", 40);
         _damageable.TryChangeDamage(clone.Value, damage);
 
-        _mobState.SetMobStateThreshold(clone.Value, 100f, MobState.Dead);
+        _mobState.SetMobStateThreshold(clone.Value, 400f, MobState.Dead);
+        _mobState.SetMobStateThreshold(clone.Value, 350f, MobState.Critical);
 
         if (ent.Comp.Components.Count > 0)
-            EntityManager.AddComponents(clone.Value, ent.Comp.Components, false);
+            EntityManager.AddComponents(clone.Value, ent.Comp.Components, true);
+
+        if (!TryComp<InventoryComponent>(clone.Value, out var inventoryComp))
+            return;
+
+        foreach (var slot in inventoryComp.Slots)
+        {
+            if (!_inventory.TryGetSlotEntity(clone.Value, slot.Name, out var item) || item == null)
+                continue;
+
+            EnsureComp<UnremoveableComponent>(item.Value);
+        }
     }
 }

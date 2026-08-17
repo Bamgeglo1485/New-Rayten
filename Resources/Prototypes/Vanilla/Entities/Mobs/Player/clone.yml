@@ -44,6 +44,27 @@
       learnChance: 1.0
     - type: ActiveListener
       range: 150
+    - type: MovementSpeedModifier
+      baseSprintSpeed: 2.0
+      baseWalkSpeed: 2.0
+    - type: Hands
+    - type: MeleeWeapon
+      altDisarm: false
+      attackRate: 0.3
+      angle: 0
+      animation: WeaponArcBite
+      soundHit:
+        path: /Audio/Effects/bite.ogg
+      damage:
+        types:
+          Slash: 25
+    - type: Destructible
+      thresholds:
+      - trigger:
+          !type:DamageTrigger
+          damage: 349
+        behaviors:
+        - !type:GibBehavior
 
 - type: entity
   id: DistortedCloneSpawnerAgressive
