@@ -169,7 +169,7 @@ namespace Content.Shared.Preferences
             Name = name;
             FlavorText = flavortext;
             Species = species;
-            BarkVoice = voice; // Rayten-TTS
+            BarkVoice = barkvoice ?? DefaultBarkVoice; // Rayten-TTS
             BarkVoicePitch = barkvoicepith; // Rayten-TTS
             Age = age;
             Sex = sex;
@@ -828,11 +828,14 @@ namespace Content.Shared.Preferences
 
             // Rayten-start
             //Rayten-voice
-            if (!prototypeManager.TryIndex<VoiceSpeechPrototype>(BarkVoice, out var voicePrototype) || voicePrototype.RoundStart == false)
+            if (string.IsNullOrEmpty(BarkVoice) ||
+                !prototypeManager.TryIndex<VoiceSpeechPrototype>(BarkVoice, out var voicePrototype) ||
+                voicePrototype.RoundStart == false)
             {
                 BarkVoice = HumanoidCharacterProfile.DefaultSexVoice[sex];
                 voicePrototype = prototypeManager.Index<VoiceSpeechPrototype>(BarkVoice);
             }
+
             if (BarkVoicePitch < 0.5f)
                 BarkVoicePitch = 0.5f;
             if (BarkVoicePitch > 1.5f)
