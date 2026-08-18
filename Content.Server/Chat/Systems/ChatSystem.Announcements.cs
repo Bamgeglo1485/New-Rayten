@@ -31,7 +31,7 @@ public sealed partial class ChatSystem
             var soundToPlay = announcementSound ?? DefaultAnnouncementSound;
             if (soundToPlay != null)
             {
-                var query = EntityManager.EntityQueryEnumerator<EmergencyLightComponent, TransformComponent>();
+                var query = EntityQueryEnumerator<EmergencyLightComponent, TransformComponent>();
                 while (query.MoveNext(out var uid, out _, out _))
                 {
                     _audio.PlayPvs(soundToPlay, uid, AudioParams.Default.WithVolume(-10f));
@@ -63,7 +63,7 @@ public sealed partial class ChatSystem
             var soundToPlay = announcementSound ?? DefaultAnnouncementSound;
             if (soundToPlay != null)
             {
-                var query = EntityManager.EntityQueryEnumerator<EmergencyLightComponent, TransformComponent>();
+                var query = EntityQueryEnumerator<EmergencyLightComponent, TransformComponent>();
                 while (query.MoveNext(out var uid, out _, out _))
                 {
                     _audio.PlayPvs(soundToPlay, uid, AudioParams.Default.WithVolume(-10f));
@@ -106,7 +106,7 @@ public sealed partial class ChatSystem
             var soundToPlay = announcementSound ?? DefaultAnnouncementSound;
             if (soundToPlay != null)
             {
-                var query = EntityManager.EntityQueryEnumerator<EmergencyLightComponent, TransformComponent>();
+                var query = EntityQueryEnumerator<EmergencyLightComponent, TransformComponent>();
                 while (query.MoveNext(out var uid, out _, out _))
                 {
                     _audio.PlayPvs(soundToPlay, uid, AudioParams.Default.WithVolume(-15f));

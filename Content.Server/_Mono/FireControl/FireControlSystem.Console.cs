@@ -15,8 +15,8 @@ namespace Content.Server._Mono.FireControl;
 
 public sealed partial class FireControlSystem : EntitySystem
 {
-    [Dependency] private readonly UserInterfaceSystem _ui = default!;
-    [Dependency] private readonly ShuttleConsoleSystem _shuttleConsoleSystem = default!;
+    [Dependency] private UserInterfaceSystem _ui = default!;
+    [Dependency] private ShuttleConsoleSystem _shuttleConsoleSystem = default!;
     private void InitializeConsole()
     {
         SubscribeLocalEvent<FireControlConsoleComponent, PowerChangedEvent>(OnPowerChanged);
@@ -119,7 +119,7 @@ public sealed partial class FireControlSystem : EntitySystem
             foreach (var controllable in server.Controlled)
             {
                 var controlled = new FireControllableEntry();
-                controlled.NetEntity = EntityManager.GetNetEntity(controllable);
+                controlled.NetEntity = GetNetEntity(controllable);
                 controlled.Coordinates = GetNetCoordinates(Transform(controllable).Coordinates);
                 controlled.Name = MetaData(controllable).EntityName;
 

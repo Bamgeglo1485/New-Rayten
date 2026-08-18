@@ -16,15 +16,15 @@ namespace Content.Server.AlternateDimension;
 
 public sealed partial class AlternateDimensionSystem : SharedAlternateDimensionSystem
 {
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly MetaDataSystem _metaData = default!;
-    [Dependency] private readonly SharedMapSystem _mapSystem = default!;
-    [Dependency] private readonly StationSystem _stationSystem = default!;
-    [Dependency] private readonly ITileDefinitionManager _tileManager = default!;
-    [Dependency] private readonly TileSystem _tileSystem = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly TagSystem _tag = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private MetaDataSystem _metaData = default!;
+    [Dependency] private SharedMapSystem _mapSystem = default!;
+    [Dependency] private StationSystem _stationSystem = default!;
+    [Dependency] private ITileDefinitionManager _tileManager = default!;
+    [Dependency] private TileSystem _tileSystem = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private TagSystem _tag = default!;
 
     private readonly JobQueue _jobQueue = new();
     private readonly List<(SpawnAlternateDimensionJob Job, CancellationTokenSource CancelToken)> _jobs = new();
@@ -66,7 +66,7 @@ public sealed partial class AlternateDimensionSystem : SharedAlternateDimensionS
 
         //Create and setup map
         _mapSystem.CreateMap(out var alternateMapId, false);
-        var gridMetaData = EntityManager.EnsureComponent<MetaDataComponent>(originalGrid);
+        EnsureComp<MetaDataComponent>(originalGrid, out var gridMetaData);
 
         //Create and setup grid
         var alternateGrid = _mapSystem.CreateGridEntity(alternateMapId);

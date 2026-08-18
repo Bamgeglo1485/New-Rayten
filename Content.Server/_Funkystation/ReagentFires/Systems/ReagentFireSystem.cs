@@ -1,4 +1,4 @@
-﻿﻿﻿using Content.Server._Funkystation.Atmos.Events;
+﻿﻿using Content.Server._Funkystation.Atmos.Events;
 using Content.Server._Funkystation.ReagentFires.Components;
 using Content.Server.Atmos.Components;
 using Content.Server.Atmos.EntitySystems;
@@ -41,7 +41,6 @@ namespace Content.Server._Funkystation.ReagentFires.Systems
         [Dependency] private DamageableSystem _damageable = null!;
         [Dependency] private IConfigurationManager _cfg = null!;
         [Dependency] private InventorySystem _inventory = null!;
-        [Dependency] private IPrototypeManager ProtoMan = default!;
 
         private readonly List<EntityUid> _toExtinguish = new();
         private readonly string[] _burntDecals = ["burnt1", "burnt2", "burnt3", "burnt4"];

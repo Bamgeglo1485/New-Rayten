@@ -9,11 +9,11 @@ namespace Content.Server._Mono.Projectiles.TargetSeeking;
 /// <summary>
 /// Handles the logic for target-seeking projectiles.
 /// </summary>
-public sealed class TargetSeekingSystem : EntitySystem
+public sealed partial class TargetSeekingSystem : EntitySystem
 {
-    [Dependency] private readonly SharedTransformSystem _transform = null!;
-    [Dependency] private readonly RotateToFaceSystem _rotateToFace = null!;
-    [Dependency] private readonly PhysicsSystem _physics = null!;
+    [Dependency] private SharedTransformSystem _transform = null!;
+    [Dependency] private RotateToFaceSystem _rotateToFace = null!;
+    [Dependency] private PhysicsSystem _physics = null!;
 
     public override void Initialize()
     {
@@ -163,7 +163,7 @@ public sealed class TargetSeekingSystem : EntitySystem
     /// </summary>
     public void ApplyPredictiveTracking(EntityUid uid, TargetSeekingComponent comp, TransformComponent xform, float frameTime)
     {
-        if (!comp.CurrentTarget.HasValue || !TryComp<TransformComponent>(comp.CurrentTarget.Value, out var targetXform))
+        if (!comp.CurrentTarget.HasValue || !TryComp(comp.CurrentTarget.Value, out TransformComponent? targetXform))
         {
             return;
         }
@@ -211,7 +211,7 @@ public sealed class TargetSeekingSystem : EntitySystem
     /// </summary>
     public void ApplyDirectTracking(EntityUid uid, TargetSeekingComponent comp, TransformComponent xform, float frameTime)
     {
-        if (!comp.CurrentTarget.HasValue || !TryComp<TransformComponent>(comp.CurrentTarget.Value, out var targetXform))
+        if (!comp.CurrentTarget.HasValue || !TryComp(comp.CurrentTarget.Value, out TransformComponent? targetXform))
         {
             return;
         }

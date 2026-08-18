@@ -27,7 +27,7 @@ using System.Numerics;
 
 namespace Content.Server._Funkystation.WashingMachine;
 
-public sealed class WashingMachineSystem : SharedWashingMachineSystem
+public sealed partial class WashingMachineSystem : SharedWashingMachineSystem
 {
     [Dependency] private SharedSolutionContainerSystem _solution = null!;
     [Dependency] private SharedStainSystem _stains = null!;
@@ -87,7 +87,7 @@ public sealed class WashingMachineSystem : SharedWashingMachineSystem
         if (!TryComp<EntityStorageComponent>(uid, out var storage) || storage.Contents.ContainedEntities.Count == 0)
             return;
 
-        var bluntProto = _proto.Index<DamageTypePrototype>("Blunt");
+        var bluntProto = _proto.Index(new ProtoId<DamageTypePrototype>("Blunt"));
         var damage = new DamageSpecifier(bluntProto, comp.BluntDamagePerSecond * frameTime);
 
         var waterSpray = new Solution();
@@ -166,7 +166,7 @@ public sealed class WashingMachineSystem : SharedWashingMachineSystem
 
         if (comp.AccumulatedSelfDamage > 0)
         {
-            var bluntProto = _proto.Index<DamageTypePrototype>("Blunt");
+            var bluntProto = _proto.Index(new ProtoId<DamageTypePrototype>("Blunt"));
             var selfDamage = new DamageSpecifier(bluntProto, comp.AccumulatedSelfDamage);
             _damageable.TryChangeDamage(uid, selfDamage, ignoreResistances: true);
             comp.AccumulatedSelfDamage = 0;

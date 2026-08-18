@@ -95,7 +95,7 @@ public sealed partial class DeviceLinkSystem : SharedDeviceLinkSystem
     /// <summary>
     /// Helper function that invokes a port with a high/low binary logic signal.
     /// </summary>
-    public void SendSignal(EntityUid uid, string port, bool signal, DeviceLinkSourceComponent? comp = null)
+    public new void SendSignal(EntityUid uid, string port, bool signal, DeviceLinkSourceComponent? comp = null)
     {
         if (!Resolve(uid, ref comp))
             return;

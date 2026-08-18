@@ -2,7 +2,6 @@ using Content.Server.GameTicking.Rules.Components;
 using Content.Server.Station.Systems;
 using Content.Shared.Chat;
 using Content.Shared.GameTicking.Components;
-using Content.Shared.Mind;
 using Content.Shared.Mobs;
 using Content.Shared.Players;
 using Robust.Shared.Network;

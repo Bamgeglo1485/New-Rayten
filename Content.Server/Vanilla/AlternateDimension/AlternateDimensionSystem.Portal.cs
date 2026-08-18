@@ -8,9 +8,9 @@ namespace Content.Server.AlternateDimension;
 
 public sealed partial class AlternateDimensionSystem
 {
-    [Dependency] private readonly LinkedEntitySystem _link = default!;
-    [Dependency] private readonly SharedTransformSystem _transformSystem = default!;
-    [Dependency] private readonly IEntityManager _entityManager = default!;
+    [Dependency] private LinkedEntitySystem _link = default!;
+    [Dependency] private SharedTransformSystem _transformSystem = default!;
+    [Dependency] private IEntityManager _entityManager = default!;
 
     private void InitializePortal()
     {

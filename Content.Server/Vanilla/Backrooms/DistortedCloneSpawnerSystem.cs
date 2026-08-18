@@ -7,6 +7,7 @@ using Content.Server.NPC;
 using Content.Server.NPC.HTN;
 using Content.Server.NPC.Systems;
 using Content.Server.Cloning;
+using Content.Shared.NPC.Prototypes;
 
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
@@ -42,6 +43,8 @@ public sealed partial class DistortedCloneSpawnerSystem : EntitySystem
     [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private MobThresholdSystem _mobState = default!;
+
+    public static readonly ProtoId<NpcFactionPrototype> _agressiveFaction = new("AllHostile");
 
     public override void Initialize()
     {
@@ -86,7 +89,7 @@ public sealed partial class DistortedCloneSpawnerSystem : EntitySystem
 
         var npcFaction = EnsureComp<NpcFactionMemberComponent>(clone.Value);
         _npcFaction.ClearFactions((clone.Value, npcFaction), false);
-        _npcFaction.AddFaction((clone.Value, npcFaction), "AllHostile");
+        _npcFaction.AddFaction((clone.Value, npcFaction), _agressiveFaction);
 
         EnsureComp<HTNComponent>(clone.Value, out var htn);
         if (_random.Prob(ent.Comp.AgressiveChance))

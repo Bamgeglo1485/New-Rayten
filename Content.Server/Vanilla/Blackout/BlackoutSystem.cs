@@ -15,7 +15,7 @@ using Robust.Shared.Audio;
 
 namespace Content.Server.Vanilla.Blackout;
 
-public sealed class BlackoutSystem : EntitySystem
+public sealed partial class BlackoutSystem : EntitySystem
 {
     [Dependency] private SharedDoorSystem _doorSystem = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
@@ -93,7 +93,7 @@ public sealed class BlackoutSystem : EntitySystem
         }
     }
 
-    protected bool TryGetRandomStation(out EntityUid? station)
+    private bool TryGetRandomStation(out EntityUid? station)
     {
         var stations = new ValueList<EntityUid>(Count<StationDataComponent>());
 

@@ -10,11 +10,11 @@ using Robust.Shared.Containers;
 
 namespace Content.Server._Starlight.VentCrawling;
 
-public sealed class VentCrawableSystem : EntitySystem
+public sealed partial class VentCrawableSystem : EntitySystem
 {
-    [Dependency] private readonly SharedPhysicsSystem _physicsSystem = default!;
-    [Dependency] private readonly SharedContainerSystem _containerSystem = default!;
-    [Dependency] private readonly SharedTransformSystem _xformSystem = default!;
+    [Dependency] private SharedPhysicsSystem _physicsSystem = default!;
+    [Dependency] private SharedContainerSystem _containerSystem = default!;
+    [Dependency] private SharedTransformSystem _xformSystem = default!;
 
     public override void Initialize()
     {
@@ -66,10 +66,10 @@ public sealed class VentCrawableSystem : EntitySystem
                 Dirty(entity , ventCrawComp);
             }
 
-            if (EntityManager.TryGetComponent(entity, out PhysicsComponent? physics))
+            if (TryComp(entity, out PhysicsComponent? physics))
                 _physicsSystem.WakeBody(entity, body: physics);
         }
 
-        EntityManager.DeleteEntity(uid);
+        Del(uid);
     }
 }

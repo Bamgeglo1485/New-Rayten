@@ -44,9 +44,6 @@ using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 using Content.Shared.Vanilla.Dominator;
-using Content.Shared.NPC.Prototypes;
-using Content.Shared.Roles;
-using Content.Shared.Temperature.Components;
 
 namespace Content.Server.Zombies;
 

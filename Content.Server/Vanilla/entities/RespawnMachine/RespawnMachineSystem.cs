@@ -107,7 +107,7 @@ public sealed partial class RespawnMachineSystem : EntitySystem
                 continue;
             }
 
-            if (!EntityManager.EntityExists(entry.Player))
+            if (!Exists(entry.Player))
             {
                 _respawnQueue.RemoveAt(i);
                 continue;
@@ -348,7 +348,7 @@ public sealed partial class RespawnMachineSystem : EntitySystem
         // телепортируем все вещи
         foreach (var item in itemsToTeleport)
         {
-            if (Deleted(item) || Terminating(item) || !EntityManager.EntityExists(item))
+            if (Deleted(item) || Terminating(item) || !Exists(item))
                 continue;
 
             _transformSystem.SetCoordinates(item, targetCoords);

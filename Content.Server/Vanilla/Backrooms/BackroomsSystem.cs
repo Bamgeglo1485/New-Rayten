@@ -30,6 +30,9 @@ public sealed partial class BackroomsSystem : EntitySystem
     [Dependency] private SharedScaleVisualsSystem ScaleVisuals = default!;
     [Dependency] private IGameTiming _timing = default!;
 
+    public static readonly ProtoId<TagPrototype> _tableTag = new("Table");
+    public static readonly ProtoId<TagPrototype> _pipeTag = new("Pipe");
+
     public override void Initialize()
     {
         base.Initialize();
@@ -135,10 +138,10 @@ public sealed partial class BackroomsSystem : EntitySystem
             if (HasComp<AtmosDeviceComponent>(uid))
                 continue;
 
-            if (_tagSystem.HasTag(uid, "Pipe") || _tagSystem.HasTag(uid, "Table"))
+            if (_tagSystem.HasTag(uid, _pipeTag) || _tagSystem.HasTag(uid, _tableTag))
                 continue;
 
-            if (!TryComp<MetaDataComponent>(uid, out var metaData))
+            if (!TryComp(uid, out MetaDataComponent? metaData))
                 continue;
 
             if (_container.IsEntityOrParentInContainer(uid, metaData, xform))
@@ -161,7 +164,7 @@ public sealed partial class BackroomsSystem : EntitySystem
         foreach (var (prototypeId, coords, rotation) in entitiesToCopy)
         {
             var spawned = Spawn(prototypeId, coords);
-            if (TryComp<TransformComponent>(spawned, out var spawnedXform))
+            if (TryComp(spawned, out TransformComponent? spawnedXform))
             {
                 spawnedXform.LocalRotation = rotation;
             }

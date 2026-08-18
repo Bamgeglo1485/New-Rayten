@@ -1,5 +1,4 @@
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using Content.Server.Access.Systems;
 using Content.Server.AlertLevel;
 using Content.Server.CartridgeLoader;
