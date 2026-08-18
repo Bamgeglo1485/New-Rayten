@@ -109,7 +109,7 @@ namespace Content.Server.Preferences.Managers
                 gender = genderVal;
 
             // Rayten-TTS-Start
-            var barkVoice = profile.Voice ?? string.Empty;
+            var barkVoice = profile.BarkVoice ?? string.Empty;
             if (string.IsNullOrEmpty(barkVoice))
                 barkVoice = HumanoidCharacterProfile.DefaultSexVoice[sex];
 

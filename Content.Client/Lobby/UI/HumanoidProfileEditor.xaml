@@ -106,11 +106,11 @@
                                             Orientation="Vertical">
                                     <Label Text="{Loc 'humanoid-profile-editor-voice-label'}"/>
                                     <BoxContainer Orientation="Horizontal">
-                                        <OptionButton Name="VoiceButton"
+                                        <OptionButton Name="BarkVoiceButton"
                                                     HorizontalAlignment="Left"
                                                     MinWidth="140"
                                                     MaxWidth="240"/>
-                                        <Button Name="VoicePlayButton"
+                                        <Button Name="BarkVoicePlayButton"
                                                 HorizontalAlignment="Left"
                                                 Text="{Loc 'humanoid-profile-editor-voice-play'}"
                                                 MaxWidth="80"/>

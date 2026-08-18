@@ -77,6 +77,7 @@
     noiseMultiplier: 2
     overlayColor: "#08ab51aa"
     prioritized: false
+    relayOverlay: true
 
 - type: entity
   parent: ClothingEyesNightVisionDeviceEmpty

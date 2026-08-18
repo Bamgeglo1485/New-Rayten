@@ -457,7 +457,7 @@ namespace Content.Shared.Preferences
         }
 
         // Rayten-TTS-Start
-        public HumanoidCharacterProfile WithVoice(string voice)
+        public HumanoidCharacterProfile WithBarkVoice(string voice)
         {
             return new(this) { BarkVoice = voice };
         }
@@ -659,6 +659,8 @@ namespace Content.Shared.Preferences
             if (Age != other.Age) return false;
             if (Sex != other.Sex) return false;
             if (Voice != other.Voice) return false;
+            if (BarkVoice != other.BarkVoice) return false;
+            if (BarkVoicePitch != other.BarkVoicePitch) return false;
             if (Gender != other.Gender) return false;
             if (Species != other.Species) return false;
             if (PreferenceUnavailable != other.PreferenceUnavailable) return false;
@@ -828,9 +830,7 @@ namespace Content.Shared.Preferences
 
             // Rayten-start
             //Rayten-voice
-            if (string.IsNullOrEmpty(BarkVoice) ||
-                !prototypeManager.TryIndex<VoiceSpeechPrototype>(BarkVoice, out var voicePrototype) ||
-                voicePrototype.RoundStart == false)
+            if (!prototypeManager.TryIndex<VoiceSpeechPrototype>(BarkVoice, out var voicePrototype) || voicePrototype.RoundStart == false)
             {
                 BarkVoice = HumanoidCharacterProfile.DefaultSexVoice[sex];
                 voicePrototype = prototypeManager.Index<VoiceSpeechPrototype>(BarkVoice);

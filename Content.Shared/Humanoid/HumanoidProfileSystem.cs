@@ -40,7 +40,7 @@ public sealed partial class HumanoidProfileSystem : EntitySystem
         //rayten-start
         if (TryComp<VoiceEmitterComponent>(ent.Owner, out var voice))
         {
-            voice.VoicePrototypeId = profile.Voice;
+            voice.VoicePrototypeId = profile.BarkVoice;
             voice.Pitch = profile.BarkVoicePitch;
             Dirty(ent.Owner, voice);
         }

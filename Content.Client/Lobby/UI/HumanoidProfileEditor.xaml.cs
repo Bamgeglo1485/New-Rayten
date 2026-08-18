@@ -346,6 +346,11 @@ namespace Content.Client.Lobby.UI
             Profile = Profile?.WithVoice(newVoice);
             IsDirty = true;
         }
+        private void SetBarkVoice(string newVoice)
+        {
+            Profile = Profile?.WithBarkVoice(newVoice);
+            IsDirty = true;
+        }
         private void SetVoicePitch(float newVoicePitch)
         {
             Profile = Profile?.WithVoicePitch(newVoicePitch);
