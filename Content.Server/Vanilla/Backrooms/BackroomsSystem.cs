@@ -23,10 +23,7 @@ namespace Content.Server.Backrooms;
 
 public sealed partial class BackroomsSystem : EntitySystem
 {
-    [Dependency] private IMapManager _mapManager = default!;
-    [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private IRobustRandom _random = default!;
-    [Dependency] private SharedMapSystem _mapSystem = default!;
     [Dependency] private SharedAlternateDimensionSystem _alternate = default!;
     [Dependency] private TagSystem _tagSystem = default!;
     [Dependency] private SharedContainerSystem _container = default!;

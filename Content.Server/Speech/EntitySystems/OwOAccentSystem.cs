@@ -9,16 +9,15 @@ public sealed partial class OwOAccentSystem : RelayAccentSystem<OwOAccentCompone
     [Dependency] private IRobustRandom _random = default!;
 
     private static readonly IReadOnlyList<string> Faces = new List<string>{
-            " (•`ω´•)", " ;;w;;", " owo", " UwU", " >w<", " ^w^"
-        }.AsReadOnly();
+        " (•`ω´•)", " ;;w;;", " owo", " UwU", " >w<", " ^w^"
+    }.AsReadOnly();
 
     private static readonly IReadOnlyDictionary<string, string> SpecialWords = new Dictionary<string, string>()
-        {
-            { "you", "wu" },
-            { "ты", "ти" }, // Corvax-Localization
-        };
+    {
+        { "you", "wu" },
+    };
 
-    public string Accentuate(string message)
+    public override string Accentuate(string message, Entity<OwOAccentComponent>? ent = null)
     {
         foreach (var (word, repl) in SpecialWords)
         {
@@ -26,16 +25,7 @@ public sealed partial class OwOAccentSystem : RelayAccentSystem<OwOAccentCompone
         }
 
         return message.Replace("!", _random.Pick(Faces))
-            // Corvax-Localization-Start
-            .Replace("р", "в").Replace("Р", "В")
-            .Replace("л", "в").Replace("Л", "В")
-            // Corvax-Localization-End
             .Replace("r", "w").Replace("R", "W")
             .Replace("l", "w").Replace("L", "W");
-    }
-
-    protected override string AccentuateInternal(EntityUid uid, OwOAccentComponent comp, string message)
-    {
-        return Accentuate(message);
     }
 }

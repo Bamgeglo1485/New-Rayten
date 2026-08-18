@@ -3,14 +3,14 @@ using Content.Server.Station.Systems;
 using Content.Server.Cloning;
 using Content.Server.Chat.Systems;
 using Content.Server.Radio.EntitySystems;
-using Content.Server.StationRecords.Systems;
+using Content.Shared.StationRecords.Systems;
+using Content.Shared.StationRecords;
 using Content.Shared.Chat;
 using Content.Shared.Mind;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Vanilla.Entities.RespawnMachine;
 using Content.Shared.Mind.Components;
-using Content.Shared.StationRecords;
 using Content.Shared.Forensics.Components;
 using Content.Shared.GameTicking;
 using Robust.Server.Audio;
@@ -49,7 +49,7 @@ public sealed partial class RespawnMachineSystem : EntitySystem
     [Dependency] private StationRecordsSystem _recordsSystem = default!;
     [Dependency] private SharedDeviceLinkSystem _deviceLink = default!;
     [Dependency] private InventorySystem _inventory = default!;
-    [Dependency] private TargetSystem _target = default!;
+    [Dependency] private AliveHumanoidTargetSystem _target = default!;
 
     private readonly List<RespawnQueueEntry> _respawnQueue = new();
     private readonly Dictionary<string, int> _respawnCounts = new();

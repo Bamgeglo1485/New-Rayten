@@ -163,6 +163,15 @@
   id: MobVox
   name: Urist McVox
   components:
+  #RAYTEN-START
+  - type: MovementSpeedModifier
+    baseWeightlessAcceleration: 2 # легче передвигаются в космосе
+    baseWeightlessFriction: 1
+    baseWeightlessModifier: 1
+  - type: Perishable
+    rotAfter: 1200 # 20 минут до старта гниения
+  - type: MemoryShield # Кортикальный стек, невозможно вытащить имплантером
+  #RAYTEN-END
   - type: Damageable
     damageModifierSet: Vox
   - type: Speech
@@ -176,19 +185,7 @@
       sprite: Effects/creampie.rsi
       state: creampie_vox
   - type: Vocal
-    sounds:
-      Male: UnisexVox
-      Female: UnisexVox
-      Unsexed: UnisexVox
-  #RAYTEN-START
-  - type: MovementSpeedModifier
-    baseWeightlessAcceleration: 2 # легче передвигаются в космосе
-    baseWeightlessFriction: 1
-    baseWeightlessModifier: 1
-  - type: Perishable
-    rotAfter: 1200 # 20 минут до старта гниения
-  - type: MemoryShield # Кортикальный стек, невозможно вытащить имплантером
-  #RAYTEN-END
+    emoteSounds: UnisexVox
   - type: Butcherable
     spawned:
     - id: FoodMeatChicken
@@ -310,6 +307,10 @@
 - type: entity
   parent: [ OrganBaseTorso, OrganVoxExternal ]
   id: OrganVoxTorso
+  components:
+  - type: VisualOrganMarkings
+    hideableLayers:
+    - enum.HumanoidVisualLayers.Tail
 
 - type: entity
   parent: [ OrganBaseHead, OrganVoxExternal ]

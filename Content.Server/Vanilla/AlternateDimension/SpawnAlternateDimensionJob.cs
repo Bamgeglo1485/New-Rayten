@@ -19,7 +19,6 @@ namespace Content.Server.AlternateDimension;
 public sealed class SpawnAlternateDimensionJob : Job<bool>
 {
     private readonly IEntityManager _entManager;
-    private readonly IMapManager _mapManager;
     private readonly IPrototypeManager _prototypeManager;
     private readonly SharedMapSystem _mapSystem;
     private readonly ITileDefinitionManager _tileDefManager;
@@ -39,7 +38,7 @@ public sealed class SpawnAlternateDimensionJob : Job<bool>
     public SpawnAlternateDimensionJob(
         double maxTime,
         IEntityManager entManager,
-        IMapManager mapManager,
+        SharedMapSystem mapManager,
         IPrototypeManager protoManager,
         SharedMapSystem map,
         ITileDefinitionManager tileDefManager,
@@ -54,7 +53,7 @@ public sealed class SpawnAlternateDimensionJob : Job<bool>
         CancellationToken cancellation = default) : base(maxTime, cancellation)
     {
         _entManager = entManager;
-        _mapManager = mapManager;
+        _mapSystem = mapManager;
         _prototypeManager = protoManager;
         _mapSystem = map;
         _tileDefManager = tileDefManager;

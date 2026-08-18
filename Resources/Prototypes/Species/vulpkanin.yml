@@ -6,8 +6,13 @@
   defaultSkinTone: "#5a3f2d"
   dollPrototype: AppearanceVulpkanin
   skinColoration: VulpkaninColors
-  maleFirstNames: NamesVulpFirstMale
-  femaleFirstNames: NamesVulpFirstFeMale
-  maleLastNames: NamesVulpLast
-  femaleLastNames: NamesVulpLast
-  sponsorOnly: true # RAYTEN
+  maleFirstNames: names_vulpkanin_male
+  femaleFirstNames: names_vulpkanin_female
+  lastNames: names_vulpkanin_last
+  defaultSoundsBySex:
+  - MaleVulpkanin
+  - FemaleVulpkanin
+  - MaleVulpkanin
+  voices:
+  - MaleVulpkanin
+  - FemaleVulpkanin

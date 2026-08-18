@@ -51,7 +51,6 @@ public sealed partial class RandomPortalSystem : EntitySystem
     [Dependency] private SharedMapSystem _mapSystem = default!;
     [Dependency] private LinkedEntitySystem _link = default!;
     [Dependency] private BiomeSystem _biomeSystem = default!;
-    [Dependency] private IMapManager _mapManager = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private IGameTiming _timing = default!;
 
@@ -177,8 +176,8 @@ public sealed partial class RandomPortalSystem : EntitySystem
         if (portal.Comp.AllowedDungeons.Count == 0)
             return;
 
-        var mapId = _mapManager.CreateMap();
-        var mapUid = _mapManager.GetMapEntityId(mapId);
+        var mapId = _mapSystem.CreateMap();
+        var mapUid = _mapSystem.GetMapEntityId(mapId);
 
         var gravity = EnsureComp<GravityComponent>(mapUid);
         gravity.Enabled = true;
@@ -191,17 +190,17 @@ public sealed partial class RandomPortalSystem : EntitySystem
             parallax.Parallax = _random.Pick(portal.Comp.AllowedParallaxes);
         }
 
-        var gridUid = _mapManager.CreateGrid(mapId).Owner;
+        var gridUid = _mapSystem.CreateGrid(mapId).Owner;
         if (!TryComp<MapGridComponent>(gridUid, out var gridComp))
         {
-            _mapManager.DeleteMap(mapId);
+            _mapSystem.DeleteMap(mapId);
             return;
         }
 
         var dungeonProto = _prototype.Index<DungeonConfigPrototype>(_random.Pick(portal.Comp.AllowedDungeons));
         await _dungeonSystem.GenerateDungeonAsync(dungeonProto, gridUid, gridComp, Vector2i.Zero, _random.Next());
 
-        if (_mapManager.MapExists(mapId) && TryFindSuitableTile(gridUid, gridComp, out var coords))
+        if (_mapSystem.MapExists(mapId) && TryFindSuitableTile(gridUid, gridComp, out var coords))
             SpawnAndLinkPortal(portal, coords);
     }
 
@@ -210,21 +209,21 @@ public sealed partial class RandomPortalSystem : EntitySystem
         if (portal.Comp.AllowedPlanets.Count == 0)
             return;
 
-        var mapId = _mapManager.CreateMap();
-        _mapManager.SetMapPaused(mapId, false);
-        var mapUid = _mapManager.GetMapEntityId(mapId);
+        var mapId = _mapSystem.CreateMap();
+        _mapSystem.SetMapPaused(mapId, false);
+        var mapUid = _mapSystem.GetMapEntityId(mapId);
 
         var biomeProto = _prototype.Index<BiomeTemplatePrototype>(_random.Pick(portal.Comp.AllowedPlanets));
         _biomeSystem.EnsurePlanet(mapUid, biomeProto);
 
-        var grid = _mapManager.CreateGrid(mapId);
+        var grid = _mapSystem.CreateGrid(mapId);
         var gridUid = grid.Owner;
 
         EnsureComp<PortalMapComponent>(mapUid);
 
         if (!TryComp<MapGridComponent>(gridUid, out var gridComp))
         {
-            _mapManager.DeleteMap(mapId);
+            _mapSystem.DeleteMap(mapId);
             return;
         }
 

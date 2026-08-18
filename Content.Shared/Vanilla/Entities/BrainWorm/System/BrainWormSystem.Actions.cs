@@ -85,11 +85,7 @@ public abstract partial class SharedBrainWormSystem : EntitySystem
             Popup.PopupClient(Loc.GetString("brainworm-popup-host-not-humanoid"), worm, worm, PopupType.Medium);
             return;
         }
-        if (_injector.HasInjectionProtection(target))
-        {
-            Popup.PopupClient(Loc.GetString("injector-component-inject-target-protected"), target, worm);
-            return;
-        }
+        
         var doAfterEventArgs = new DoAfterArgs(EntityManager, worm, wormcomp.InsertDoAfterTime, new InsertBrainDoAfterEvent(), eventTarget: worm, target: target)
         {
             DistanceThreshold = 2f,

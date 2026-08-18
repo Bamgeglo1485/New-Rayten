@@ -34,7 +34,6 @@ public sealed partial class DistortedCloneSpawnerSystem : EntitySystem
     [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private SharedTransformSystem _transformSystem = default!;
-    [Dependency] private TargetSystem _target = default!;
     [Dependency] private SharedScaleVisualsSystem ScaleVisuals = default!;
     [Dependency] private HTNSystem _htn = default!;
     [Dependency] private NpcFactionSystem _npcFaction = default!;
@@ -42,6 +41,7 @@ public sealed partial class DistortedCloneSpawnerSystem : EntitySystem
     [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private MobThresholdSystem _mobState = default!;
+    [Dependency] private AliveHumanoidTargetSystem _target = default!;
 
     public override void Initialize()
     {

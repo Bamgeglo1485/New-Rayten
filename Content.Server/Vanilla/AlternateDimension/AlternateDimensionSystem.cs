@@ -16,7 +16,6 @@ namespace Content.Server.AlternateDimension;
 
 public sealed partial class AlternateDimensionSystem : SharedAlternateDimensionSystem
 {
-    [Dependency] private readonly IMapManager _mapManager = default!;
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly MetaDataSystem _metaData = default!;
@@ -70,7 +69,7 @@ public sealed partial class AlternateDimensionSystem : SharedAlternateDimensionS
         var gridMetaData = EntityManager.EnsureComponent<MetaDataComponent>(originalGrid);
 
         //Create and setup grid
-        var alternateGrid = _mapManager.CreateGridEntity(alternateMapId);
+        var alternateGrid = _mapSystem.CreateGridEntity(alternateMapId);
         var dimensionComp = EnsureComp<AlternateDimensionGridComponent>(alternateGrid);
         dimensionComp.DimensionType = args.Dimension;
         dimensionComp.RealDimensionGrid = originalGrid;
@@ -84,7 +83,7 @@ public sealed partial class AlternateDimensionSystem : SharedAlternateDimensionS
         var job = new SpawnAlternateDimensionJob(
             JobTime,
             EntityManager,
-            _mapManager,
+            _mapSystem,
             _prototypeManager,
             _mapSystem,
             _tileManager,

@@ -32,11 +32,15 @@ using FTLMapComponent = Content.Shared.Shuttles.Components.FTLMapComponent;
 
 namespace Content.Server.Shuttles.Systems;
 
+/// <summary>
+/// This is a way to move a shuttle from one location to another, via an intermediate map for fanciness.
+/// </summary>
 public sealed partial class ShuttleSystem
 {
-    /*
-     * This is a way to move a shuttle from one location to another, via an intermediate map for fanciness.
-     */
+    [Dependency] private EntityQuery<BodyComponent> _bodyQuery = default!;
+    [Dependency] private EntityQuery<FTLSmashImmuneComponent> _immuneQuery = default!;
+    [Dependency] private EntityQuery<MapComponent> _mapQuery = default!;
+    [Dependency] private EntityWhitelistSystem _whitelistSystem = default!;
 
     private readonly SoundSpecifier _startupSound = new SoundPathSpecifier("/Audio/Effects/Shuttle/hyperspace_begin.ogg")
     {
@@ -75,8 +79,6 @@ public sealed partial class ShuttleSystem
     private readonly HashSet<EntityUid> _immuneEnts = new();
     private readonly HashSet<Entity<NoFTLComponent>> _noFtls = new();
 
-    private EntityQuery<BodyComponent> _bodyQuery;
-    private EntityQuery<FTLSmashImmuneComponent> _immuneQuery;
     private EntityQuery<StatusEffectsComponent> _statusQuery;
 
     private void InitializeFTL()
@@ -84,8 +86,6 @@ public sealed partial class ShuttleSystem
         SubscribeLocalEvent<StationPostInitEvent>(OnStationPostInit);
         SubscribeLocalEvent<FTLComponent, ComponentShutdown>(OnFtlShutdown);
 
-        _bodyQuery = GetEntityQuery<BodyComponent>();
-        _immuneQuery = GetEntityQuery<FTLSmashImmuneComponent>();
         _statusQuery = GetEntityQuery<StatusEffectsComponent>();
 
         _cfg.OnValueChanged(CCVars.FTLStartupTime, time => DefaultStartupTime = time, true);
@@ -362,7 +362,7 @@ public sealed partial class ShuttleSystem
 
         _thruster.DisableLinearThrusters(shuttle);
         _thruster.EnableLinearThrustDirection(shuttle, DirectionFlag.North);
-        _thruster.SetAngularThrust(shuttle, false);
+        _thruster.SetAngularThrustVisualState(shuttle, false);
         _dockSystem.UndockDocks(uid);
 
         component = AddComp<FTLComponent>(uid);
@@ -420,7 +420,7 @@ public sealed partial class ShuttleSystem
         LeaveNoFTLBehind((entity.Owner, xform), oldGridMatrix, oldMapUid);
 
         // Reset rotation so they always face the same direction.
-        xform.LocalRotation = Angle.Zero;
+        _transform.SetLocalRotation(entity, Angle.Zero, xform);
         _index += width + Buffer;
         comp.StateTime = StartEndTime.FromCurTime(_gameTiming, comp.TravelTime - (entity.Comp3.Data.ArrivalTime ?? DefaultArrivalTime)); // Frontier edit
 
@@ -491,12 +491,15 @@ public sealed partial class ShuttleSystem
 
         if (!Exists(entity.Comp1.TargetCoordinates.EntityId))
         {
-            // Uhh good luck
-            // Pick earliest map?
-            var maps = EntityQuery<MapComponent>().Select(o => o.MapId).ToList();
-            var map = maps.Min(o => o.GetHashCode());
+            // Get a list of maps
+            var maps = EntityQuery<MapComponent, FTLDestinationComponent>()
+                .OrderBy(o => o.Item1.MapId.GetHashCode());
 
-            mapId = new MapId(map);
+            // Get the first map that passes the FTL whitelist
+            mapId = maps.First(o =>
+                _whitelistSystem.IsWhitelistPassOrNull(o.Item2.Whitelist, entity))
+                .Item1.MapId;
+
             TryFTLProximity(uid, _mapSystem.GetMap(mapId));
         }
         // Docking FTL
@@ -608,14 +611,6 @@ public sealed partial class ShuttleSystem
                     break;
             }
         }
-    }
-
-    private float GetSoundRange(EntityUid uid)
-    {
-        if (!TryComp<MapGridComponent>(uid, out var grid))
-            return 4f;
-
-        return MathF.Max(grid.LocalAABB.Width, grid.LocalAABB.Height) + 12.5f;
     }
 
     /// <summary>
@@ -821,7 +816,7 @@ public sealed partial class ShuttleSystem
             // We don't include this in the actual targetAABB because then we would be double-expanding it.
             // Once in this loop, then again when placing the shuttle later.
             // Note that targetAABB already has expansionAmount factored in already.
-            _mapManager.FindGridsIntersecting(mapId, targetAABB.Enlarged(maxOffset), ref grids);
+            Maps.FindGridsIntersecting(mapId, targetAABB.Enlarged(maxOffset), ref grids);
 
             foreach (var grid in grids)
             {

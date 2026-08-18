@@ -85,6 +85,8 @@
   components:
   - type: Sprite
     sprite: Vanilla/Objects/Weapons/Guns/Pistols/viper.rsi # Rayten-Resprites
+  - type: Gun
+    selectedMode: FullAuto # Override of BaseWeaponPistol to default to full-auto
   - type: ItemSlots
     slots:
       gun_magazine:

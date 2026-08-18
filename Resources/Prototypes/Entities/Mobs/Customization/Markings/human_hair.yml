@@ -628,6 +628,8 @@
   sprites:
     - sprite: Mobs/Customization/human_hair.rsi
       state: longovereye
+    - sprite: Mobs/Customization/human_hair.rsi
+      state: longovereye_highlight
 - type: marking
   id: HumanHairLbangs
   bodyPart: Hair
@@ -1139,6 +1141,8 @@
   sprites:
     - sprite: Mobs/Customization/human_hair.rsi
       state: longest2
+    - sprite: Mobs/Customization/human_hair.rsi
+      state: longovereye_highlight
 - type: marking
   id: HumanHairVeryshortovereyealternate
   bodyPart: Hair
@@ -1212,3 +1216,19 @@
   sprites:
   - sprite: Mobs/Customization/human_hair.rsi
     state: overeyepigtail
+- type: marking
+  id: HumanHairTerminal
+  bodyPart: Hair
+  coloring:
+    layers:
+      terminal_headband:
+        type:
+          !type:SimpleColoring
+            color: "#C3C3C3"
+  sprites:
+  - sprite: Mobs/Customization/human_hair.rsi
+    state: terminal
+  - sprite: Mobs/Customization/human_hair.rsi
+    state: terminal_highlight
+  - sprite: Mobs/Customization/human_hair.rsi
+    state: terminal_headband

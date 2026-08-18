@@ -9,24 +9,18 @@ public sealed partial class BarkAccentSystem : RelayAccentSystem<BarkAccentCompo
     [Dependency] private IRobustRandom _random = default!;
 
     private static readonly IReadOnlyList<string> Barks = new List<string>{
-            " Гав!", " ГАВ", " вуф-вуф"  // Corvax-Localization
-        }.AsReadOnly();
+        " Woof!", " WOOF", " wof-wof"
+    }.AsReadOnly();
 
     private static readonly IReadOnlyDictionary<string, string> SpecialWords = new Dictionary<string, string>()
-        {
-            { "ah", "arf" },
-            { "Ah", "Arf" },
-            { "oh", "oof" },
-            { "Oh", "Oof" },
-            //Corvax-Localization-Start
-            { "га", "гаф" },
-            { "Га", "Гаф" },
-            { "угу", "вуф" },
-            { "Угу", "Вуф" },
-            //Corvax-Localization-End
-        };
+    {
+        { "ah", "arf" },
+        { "Ah", "Arf" },
+        { "oh", "oof" },
+        { "Oh", "Oof" },
+    };
 
-    protected override string AccentuateInternal(EntityUid uid, BarkAccentComponent comp, string message)
+    public override string Accentuate(string message, Entity<BarkAccentComponent>? ent = null)
     {
         foreach (var (word, repl) in SpecialWords)
         {
@@ -34,9 +28,6 @@ public sealed partial class BarkAccentSystem : RelayAccentSystem<BarkAccentCompo
         }
 
         return message.Replace("!", _random.Pick(Barks))
-        //Corvax-Localization-Start
-            .Replace("l", "r").Replace("L", "R")
-            .Replace("л", "р").Replace("Л", "Р");
-        //Corvax-Localization-End
+            .Replace("l", "r").Replace("L", "R");
     }
 }

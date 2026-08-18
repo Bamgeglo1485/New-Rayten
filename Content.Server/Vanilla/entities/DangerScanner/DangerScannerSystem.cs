@@ -10,7 +10,6 @@ namespace Content.Server.Vanilla.Entities.DangerScanner;
 
 public sealed partial class DangerScannerSystem : SharedDangerScannerSystem
 {
-    [Dependency] private SharedStationRecordsSystem _records = default!;
     [Dependency] private CriminalRecordsSystem _criminalRecords = default!;
     [Dependency] private SharedStationSystem _station = default!;
     [Dependency] private RadioSystem _radio = default!;
@@ -20,7 +19,7 @@ public sealed partial class DangerScannerSystem : SharedDangerScannerSystem
     {
         if (_station.GetOwningStation(scanner) is { } station)
         {
-            var id = _records.GetRecordByName(station, target);
+            var id = _criminalRecords.GetRecordByName(station, target);
             if (id != null)
             {
                 var key = new StationRecordKey(id.Value, station);

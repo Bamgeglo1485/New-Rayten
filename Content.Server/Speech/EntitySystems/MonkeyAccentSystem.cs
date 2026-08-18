@@ -1,20 +1,15 @@
 using System.Text;
 using Content.Server.Speech.Components;
-using Content.Shared.Speech;
+using Content.Shared.Speech.EntitySystems;
 using Robust.Shared.Random;
 
 namespace Content.Server.Speech.EntitySystems;
 
-public sealed partial class MonkeyAccentSystem : EntitySystem
+public sealed partial class MonkeyAccentSystem : RelayAccentSystem<MonkeyAccentComponent>
 {
     [Dependency] private IRobustRandom _random = default!;
 
-    public override void Initialize()
-    {
-        SubscribeLocalEvent<MonkeyAccentComponent, AccentGetEvent>(OnAccent);
-    }
-
-    public string Accentuate(string message)
+    public override string Accentuate(string message, Entity<MonkeyAccentComponent>? ent = null)
     {
         var words = message.Split();
         var accentedMessage = new StringBuilder(message.Length + 2);
@@ -27,25 +22,25 @@ public sealed partial class MonkeyAccentSystem : EntitySystem
             {
                 if (word.Length > 1)
                 {
-                    foreach (var _ in word)
+                    foreach (var __ in word)
                     {
-                        accentedMessage.Append('У');  // Corvax-Localization
+                        accentedMessage.Append('O');
                     }
 
                     if (_random.NextDouble() >= 0.3)
-                        accentedMessage.Append('К');  // Corvax-Localization
+                        accentedMessage.Append('K');
                 }
                 else
-                    accentedMessage.Append('У');  // Corvax-Localization
+                    accentedMessage.Append('O');
             }
             else
             {
-                foreach (var _ in word)
+                foreach (var __ in word)
                 {
                     if (_random.NextDouble() >= 0.8)
-                        accentedMessage.Append('Г');  // Corvax-Localization
+                        accentedMessage.Append('H');
                     else
-                        accentedMessage.Append('А');  // Corvax-Localization
+                        accentedMessage.Append('A');
                 }
 
             }
@@ -57,10 +52,5 @@ public sealed partial class MonkeyAccentSystem : EntitySystem
         accentedMessage.Append('!');
 
         return accentedMessage.ToString();
-    }
-
-    private void OnAccent(EntityUid uid, MonkeyAccentComponent component, AccentGetEvent args)
-    {
-        args.Message = Accentuate(args.Message);
     }
 }

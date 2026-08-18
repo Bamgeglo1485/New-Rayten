@@ -12,3 +12,9 @@
   femaleLastNames: NamesArachnidLast # Rayten-LastnameGender
   sexes:
   - Unsexed
+  defaultSoundsBySex:
+  - UnisexArachnid
+  - UnisexArachnid
+  - UnisexArachnid
+  voices:
+  - UnisexArachnid

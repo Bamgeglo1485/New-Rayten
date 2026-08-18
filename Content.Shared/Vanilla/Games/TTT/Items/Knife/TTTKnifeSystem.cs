@@ -29,7 +29,6 @@ public sealed partial class TTTBombSystem : EntitySystem
             if (!_mob.IsAlive(target))
                 continue;
             EnsureComp<TTTNoDnaComponent>(target);
-            EnsureComp<MutedComponent>(target);
             var targetPos = _transformSystem.GetWorldPosition(target);
             var attackerPos = _transformSystem.GetWorldPosition(attacker);
             var delta = attackerPos - targetPos;
