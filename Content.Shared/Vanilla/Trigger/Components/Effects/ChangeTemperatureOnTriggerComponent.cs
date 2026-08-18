@@ -4,7 +4,7 @@ using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 namespace Content.Shared.Trigger.Components.Effects;
 
 [RegisterComponent, NetworkedComponent]
-[AutoGenerateComponentState, AutoGenerateComponentPause]
+[AutoGenerateComponentState]
 public sealed partial class ChangeTemperatureOnTriggerComponent : BaseXOnTriggerComponent
 {
     /// <summary>

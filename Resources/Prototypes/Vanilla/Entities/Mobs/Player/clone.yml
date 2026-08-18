@@ -45,8 +45,8 @@
     - type: ActiveListener
       range: 150
     - type: MovementSpeedModifier
-      baseSprintSpeed: 2.0
-      baseWalkSpeed: 2.0
+      baseSprintSpeed: 2.5
+      baseWalkSpeed: 2.5
     - type: Hands
     - type: MeleeWeapon
       altDisarm: false
@@ -58,6 +58,11 @@
       damage:
         types:
           Slash: 25
+    - type: MeleeThrowOnHit
+      speed: 10
+      distance: 2
+      unanchorOnHit: Unanchorable
+      stunTime: 0.5
     - type: Destructible
       thresholds:
       - trigger:

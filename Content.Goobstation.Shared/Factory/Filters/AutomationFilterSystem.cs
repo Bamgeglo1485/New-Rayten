@@ -17,13 +17,13 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Goobstation.Shared.Factory.Filters;
 
-public sealed class AutomationFilterSystem : EntitySystem
+public sealed partial class AutomationFilterSystem : EntitySystem
 {
-    [Dependency] private readonly ItemSlotsSystem _slots = default!;
-    [Dependency] private readonly ItemToggleSystem _toggle = default!;
-    [Dependency] private readonly SharedCuffableSystem _cuffable = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedStackSystem _stack = default!;
+    [Dependency] private ItemSlotsSystem _slots = default!;
+    [Dependency] private ItemToggleSystem _toggle = default!;
+    [Dependency] private SharedCuffableSystem _cuffable = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedStackSystem _stack = default!;
 
     private EntityQuery<AnchorableComponent> _anchorableQuery;
     private EntityQuery<CuffableComponent> _cuffableQuery;
@@ -173,7 +173,8 @@ public sealed class AutomationFilterSystem : EntitySystem
             NameFilterMode.Contain => name.Contains(check),
             NameFilterMode.Start => name.StartsWith(check),
             NameFilterMode.End => name.EndsWith(check),
-            NameFilterMode.Match => name == check
+            NameFilterMode.Match => name == check,
+            _ => name == check
         };
         // entity names usually don't change except for the end including a label
         args.CouldAllow = ent.Comp.Mode switch
@@ -276,7 +277,8 @@ public sealed class AutomationFilterSystem : EntitySystem
             LogicGate.Xor => a != b,
             LogicGate.Nor => !(a || b),
             LogicGate.Nand => !(a && b),
-            LogicGate.Xnor => a == b
+            LogicGate.Xnor => a == b,
+            _ => a == b
         };
         args.CouldAllow = couldAllowA || couldAllowB; // if any subfilter could allow it, this could allow it too
     }
