@@ -1,4 +1,4 @@
-﻿using Content.Shared.CCVar;
+using Content.Shared.CCVar;
 using Content.Shared.Chat;
 using Content.Shared.Communications;
 using Robust.Client.UserInterface;
@@ -27,7 +27,6 @@ namespace Content.Client.Communications.UI
             _menu.OnBroadcast += BroadcastButtonPressed;
             // _menu.OnAlertLevel += AlertLevelSelected;
             _menu.OnEmergencyLevel += EmergencyShuttleButtonPressed;
-            _menu.CallERT += CallERT;//rayten
         }
 
         // public void AlertLevelSelected(string level)
@@ -38,12 +37,6 @@ namespace Content.Client.Communications.UI
         //         SendMessage(new CommunicationsConsoleSelectAlertLevelMessage(level));
         //     }
         // }
-
-
-        public void CallERT()
-        {
-            SendMessage(new CommunicationsConsoleCallERTMessage());
-        }
 
         public void EmergencyShuttleButtonPressed()
         {

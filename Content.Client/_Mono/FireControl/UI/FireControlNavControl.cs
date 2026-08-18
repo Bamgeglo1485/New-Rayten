@@ -24,12 +24,11 @@ using Robust.Shared.Timing;
 
 namespace Content.Client._Mono.FireControl.UI;
 
-public sealed class FireControlNavControl : BaseShuttleControl
+public sealed partial class FireControlNavControl : BaseShuttleControl
 {
-    [Dependency] private readonly SharedMapSystem _mapManager = default!;
+    [Dependency] private SharedMapSystem _mapManager = default!;
     private readonly SharedShuttleSystem _shuttles;
     private readonly SharedTransformSystem _transform;
-    private readonly IEntitySystemManager _sysManager = default!;
     private readonly RadarBlipsSystem _blips;
     private readonly SharedPhysicsSystem _physics;
 

@@ -4,20 +4,18 @@ using Robust.Shared.Audio.Components;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Player;
 using Robust.Shared.Audio;
-using Robust.Shared.Audio.Components;
-using Robust.Shared.Audio.Systems;
 using Robust.Client.Audio;
 using Content.Shared.CCVar;
 using Robust.Shared.Configuration;
 
 namespace Content.Client._CorvaxGoob.DynamicAudio;
 
-public sealed class DynamicAudioSystem : EntitySystem
+public sealed partial class DynamicAudioSystem : EntitySystem
 {
-    [Dependency] private readonly SharedDynamicAudioSystem _dynamicAudio = default!;
-    [Dependency] private readonly ISharedPlayerManager _playerManager = default!;
-    [Dependency] private readonly IAudioManager _audio = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
+    [Dependency] private SharedDynamicAudioSystem _dynamicAudio = default!;
+    [Dependency] private ISharedPlayerManager _playerManager = default!;
+    [Dependency] private IAudioManager _audio = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
 
     public override void Initialize()
     {

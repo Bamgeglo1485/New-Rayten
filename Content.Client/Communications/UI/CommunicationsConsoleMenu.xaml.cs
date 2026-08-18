@@ -25,7 +25,6 @@ namespace Content.Client.Communications.UI
         public TimeSpan? CountdownEnd;
 
         public event Action? OnEmergencyLevel;
-        public event Action? CallERT; //RAYTEN
         // public event Action<string>? OnAlertLevel;
         public event Action<string>? OnAnnounce;
         public event Action<string>? OnBroadcast;

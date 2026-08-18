@@ -23,11 +23,11 @@ namespace Content.Client.Shuttles.UI;
 [GenerateTypedNameReferences]
 public sealed partial class ShuttleNavControl : BaseShuttleControl
 {
-    private readonly SharedMapSystem _maps;
-    private readonly SharedShuttleSystem _shuttles;
-    private readonly SharedTransformSystem _transform;
-    private readonly RadarBlipsSystem _blips;
-    [Dependency] private readonly IUserInterfaceManager _uiManager = default!;
+    private SharedMapSystem _maps;
+    private SharedShuttleSystem _shuttles;
+    private SharedTransformSystem _transform;
+    private RadarBlipsSystem _blips;
+    [Dependency] private IUserInterfaceManager _uiManager = default!;
 
     /// <summary>
     /// Used to transform all of the radar objects. Typically is a shuttle console parented to a grid.

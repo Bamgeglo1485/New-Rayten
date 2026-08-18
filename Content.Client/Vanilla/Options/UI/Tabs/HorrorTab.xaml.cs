@@ -13,7 +13,6 @@ namespace Content.Client.Vanilla.Options.UI.Tabs;
 [GenerateTypedNameReferences]
 public sealed partial class HorrorTab : Control
 {
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
 
     public HorrorTab()
     {

@@ -9,7 +9,7 @@ namespace Content.Client.Overlays;
 public sealed partial class GrainOverlaySystem : EquipmentHudSystem<GrainOverlayComponent>
 {
     [Dependency] private IOverlayManager _overlayMan = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
 
     private GrainOverlay _overlay = default!;
 
