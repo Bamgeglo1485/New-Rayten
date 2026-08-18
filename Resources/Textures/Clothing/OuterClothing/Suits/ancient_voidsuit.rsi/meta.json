@@ -12,63 +12,11 @@
         },
         {
             "name": "equipped-OUTERCLOTHING",
-            "directions": 4,
-            "delays": [
-                [
-                    0.2,
-                    0.2,
-                    0.2,
-                    0.2
-                ],
-                [
-                    0.2,
-                    0.2,
-                    0.2,
-                    0.2
-                ],
-                [
-                    0.2,
-                    0.2,
-                    0.2,
-                    0.2
-                ],
-                [
-                    0.2,
-                    0.2,
-                    0.2,
-                    0.2
-                ]
-            ]
+            "directions": 4
         },
         {
             "name": "equipped-OUTERCLOTHING-reptilian",
-            "directions": 4,
-            "delays": [
-                [
-                    0.2,
-                    0.2,
-                    0.2,
-                    0.2
-                ],
-                [
-                    0.2,
-                    0.2,
-                    0.2,
-                    0.2
-                ],
-                [
-                    0.2,
-                    0.2,
-                    0.2,
-                    0.2
-                ],
-                [
-                    0.2,
-                    0.2,
-                    0.2,
-                    0.2
-                ]
-            ]
+            "directions": 4
         },
         {
             "name": "equipped-OUTERCLOTHING-vox",
