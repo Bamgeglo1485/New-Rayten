@@ -68,8 +68,10 @@
   blacklist:
     components:
       - BorgChassis
-  components:
-    - type: Muted
+  specials:
+  - !type:ApplyStatusEffectSpecial
+    statusEffects:
+    - TraitStatusEffectMuted
 
 - type: trait
   id: Hemophilia
