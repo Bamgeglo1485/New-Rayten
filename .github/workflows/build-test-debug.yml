@@ -46,9 +46,6 @@ jobs:
     - name: Install dependencies
       run: dotnet restore
 
-    - name: Build Robust.Client.Injectors
-      run: dotnet build RobustToolbox/Robust.Client.Injectors/Robust.Client.Injectors.csproj --configuration Debug
-
     - name: Build Project
       run: dotnet build --configuration DebugOpt --no-restore /m
 

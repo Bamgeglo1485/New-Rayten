@@ -29,6 +29,8 @@ jobs:
           dotnet-version: 10.0.x
       - name: Install dependencies
         run: dotnet restore
+      - name: Build Robust.Client.Injectors
+        run: dotnet build RobustToolbox/Robust.Client.Injectors/Robust.Client.Injectors.csproj --configuration Debug --no-restore
       - name: Build
         run: dotnet build --configuration Release --no-restore /p:WarningsAsErrors= /m
       - name: Run Linter
