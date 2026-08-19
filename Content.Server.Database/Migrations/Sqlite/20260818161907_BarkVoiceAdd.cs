@@ -23,6 +23,12 @@ namespace Content.Server.Database.Migrations.Sqlite
                 type: "REAL",
                 nullable: false,
                 defaultValue: 1f);
+
+            migrationBuilder.AddColumn<string>(
+                name: "voice",
+                table: "profile",
+                type: "TEXT",
+                nullable: true);
         }
 
         /// <inheritdoc />
@@ -34,6 +40,10 @@ namespace Content.Server.Database.Migrations.Sqlite
 
             migrationBuilder.DropColumn(
                 name: "bark_voice_pitch",
+                table: "profile");
+
+            migrationBuilder.DropColumn(
+                name: "voice",
                 table: "profile");
         }
     }
