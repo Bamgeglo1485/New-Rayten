@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Content.Server.Database.Migrations.Sqlite
 {
     /// <inheritdoc />
-    public partial class BarkVoiceAdd : Migration
+    public partial class TTSrename : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -23,12 +23,6 @@ namespace Content.Server.Database.Migrations.Sqlite
                 type: "REAL",
                 nullable: false,
                 defaultValue: 1f);
-
-            migrationBuilder.AddColumn<string>(
-                name: "voice",
-                table: "profile",
-                type: "TEXT",
-                nullable: true);
         }
 
         /// <inheritdoc />
@@ -40,10 +34,6 @@ namespace Content.Server.Database.Migrations.Sqlite
 
             migrationBuilder.DropColumn(
                 name: "bark_voice_pitch",
-                table: "profile");
-
-            migrationBuilder.DropColumn(
-                name: "voice",
                 table: "profile");
         }
     }
