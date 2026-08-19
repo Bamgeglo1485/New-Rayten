@@ -44,8 +44,8 @@
   - type: TargetObjective
     title: objective-condition-teach-lesson-title
   - type: PickRandomPerson
-    filters:
-    - !type:BodyMindFilter
+    conditions:
+    - !type:BodyWhitelistCondition
       whitelist:
         components:
         - CommandStaff
@@ -105,8 +105,8 @@
   - type: TargetObjective
     title: objective-condition-enrage-rp-title
   - type: PickRandomPerson
-    filters:
-    - !type:BodyMindFilter
+    conditions:
+    - !type:BodyWhitelistCondition
       whitelist:
         components:
         - CommandStaff

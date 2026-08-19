@@ -30,5 +30,5 @@ public sealed partial class BackroomsComponent : Component
     public EntityUid? RealGrid = null;
 
     [DataField]
-    public ProtoId<AlternateDimensionPrototype> DimensionType = default!;
+    public ProtoId<AlternateDimensionPrototype> DimensionType = "Backrooms";
 }
