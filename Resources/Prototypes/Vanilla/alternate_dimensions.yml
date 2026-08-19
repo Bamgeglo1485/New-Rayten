@@ -1,4 +1,3 @@
-
 - type: alternateDimension
   id: Backrooms
   defaultTile: FloorBackrooms
@@ -34,7 +33,7 @@
     Table: BackroomsTableSpawner
     Vending: DebugPowerReceiver
     FootstepSound: SpawnGhostNPC
-  portalWallReplacementAverage: 10
+  portalWallReplacementAverage: 5
   portalWallReplacementStdDev: 200
   portalWallReplacements:
   - id: WallSolidBackrooms

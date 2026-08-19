@@ -1,5 +1,7 @@
 ent-BaseSoap = мыло
     .desc = { ent-BaseItem.desc }
+ent-SolutionSoapBase = { ent-SolutionFood }
+    .desc = { ent-SolutionFood.desc }
 ent-Soap = мыло
     .desc = Дешёвый брусок мыла. Не пахнет.
 ent-SoapNT = мыло

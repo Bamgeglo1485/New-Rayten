@@ -19,7 +19,7 @@
       reagents:
       - ReagentId: Corrosion
         Quantity: 300
-  - type: Muted
+  - type: MutedStatusEffect
   - type: Archon
     researchCoolDown: 5m
   - type: MeleeWeapon

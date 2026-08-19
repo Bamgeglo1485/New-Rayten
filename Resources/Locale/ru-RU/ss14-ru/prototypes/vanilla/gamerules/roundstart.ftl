@@ -1,2 +1,10 @@
 ent-TeamDeathMatch = { ent-BaseGameRule }
     .desc = { ent-BaseGameRule.desc }
+ent-InstantRespawn = { ent-BaseGameRule }
+    .desc = { ent-BaseGameRule.desc }
+ent-BaseDiversionistRule = { ent-BaseGameRule }
+    .desc = { ent-BaseGameRule.desc }
+ent-Diversionist = { ent-BaseDiversionistRule }
+    .desc = { ent-BaseDiversionistRule.desc }
+ent-SleeperDiversionists = { ent-BaseDiversionistRule }
+    .desc = { ent-BaseDiversionistRule.desc }

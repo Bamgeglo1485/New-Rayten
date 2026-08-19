@@ -1,0 +1,13 @@
+ent-BackroomsWall = неуютная стена
+    .desc = Похоже я за закулисьем реальности...
+    .suffix = Закулисье
+ent-BackroomsWallSpawner = спавнер стены закулисья
+    .desc = { ent-MarkerBase.desc }
+ent-BackroomsTableSpawner = спавнер стола закулисья
+    .desc = { ent-MarkerBase.desc }
+ent-WallSolidBackrooms = странная ржавая стена
+    .desc = Очень странная стена...
+    .suffix = Телепорт в закулисье
+ent-WallSolidBackroomsOtherSide = странная стена
+    .desc = Очень странная стена...
+    .suffix = Телепорт в закулисье

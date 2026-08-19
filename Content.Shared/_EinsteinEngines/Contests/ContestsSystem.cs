@@ -10,7 +10,7 @@ namespace Content.Shared._EinsteinEngines.Contests // Goob Edit
 {
     public sealed partial class ContestsSystem : EntitySystem
     {
-        [Dependency] private readonly MobThresholdSystem _mobThreshold = default!;
+        [Dependency] private MobThresholdSystem _mobThreshold = default!;
 
         public override void Initialize()
         {

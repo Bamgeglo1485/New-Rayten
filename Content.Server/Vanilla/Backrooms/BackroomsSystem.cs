@@ -7,6 +7,9 @@ using Content.Shared.Atmos.Components;
 using Content.Shared.Sprite;
 using Content.Shared.Humanoid;
 using Content.Shared.Overlays;
+using Content.Shared.Weapons.Ranged.Components;
+using Content.Shared.Fluids.Components;
+using Content.Shared.Body;
 
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
@@ -20,15 +23,15 @@ namespace Content.Server.Backrooms;
 
 public sealed partial class BackroomsSystem : EntitySystem
 {
-    [Dependency] private IMapManager _mapManager = default!;
-    [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private IRobustRandom _random = default!;
-    [Dependency] private SharedMapSystem _mapSystem = default!;
     [Dependency] private SharedAlternateDimensionSystem _alternate = default!;
     [Dependency] private TagSystem _tagSystem = default!;
     [Dependency] private SharedContainerSystem _container = default!;
     [Dependency] private SharedScaleVisualsSystem ScaleVisuals = default!;
     [Dependency] private IGameTiming _timing = default!;
+
+    public static readonly ProtoId<TagPrototype> _tableTag = new("Table");
+    public static readonly ProtoId<TagPrototype> _pipeTag = new("Pipe");
 
     public override void Initialize()
     {
@@ -55,6 +58,8 @@ public sealed partial class BackroomsSystem : EntitySystem
         ent.Comp.DimensionType = dimension.DimensionType;
 
         Copy(ent);
+
+        ent.Comp.NextCleaning = _timing.CurTime + ent.Comp.CleaningDelay;
     }
 
     public override void Update(float frameTime)
@@ -66,12 +71,53 @@ public sealed partial class BackroomsSystem : EntitySystem
         {
             var ent = new Entity<BackroomsComponent>(comp.Owner, comp);
 
-            if (_timing.CurTime < comp.NextHumanCopy)
+            HumanCopyProcess(ent);
+            CleaningProcess(ent);
+        }
+    }
+
+    private void HumanCopyProcess(Entity<BackroomsComponent> ent)
+    {
+        if (_timing.CurTime < ent.Comp.NextHumanCopy)
+            return;
+
+        ent.Comp.NextHumanCopy = _timing.CurTime + ent.Comp.HumanCopyDelay;
+
+        CopyHuman(ent);
+    }
+
+    private void CleaningProcess(Entity<BackroomsComponent> ent)
+    {
+        if (_timing.CurTime < ent.Comp.NextCleaning)
+            return;
+
+        ent.Comp.NextCleaning = _timing.CurTime + ent.Comp.CleaningDelay;
+
+        var puddleQuery = AllEntityQuery<PuddleComponent, TransformComponent>();
+        while (puddleQuery.MoveNext(out var uid, out _, out var xform))
+        {
+            if (xform.GridUid != ent)
                 continue;
 
-            comp.NextHumanCopy = _timing.CurTime + comp.HumanCopyDelay;
+            QueueDel(uid);
+        }
 
-            CopyHuman(ent);
+        var ammoQuery = AllEntityQuery<CartridgeAmmoComponent, TransformComponent>();
+        while (ammoQuery.MoveNext(out var uid, out var ammo, out var xform))
+        {
+            if (xform.GridUid != ent || ammo.Spent == false)
+                continue;
+
+            QueueDel(uid);
+        }
+
+        var organQuery = AllEntityQuery<OrganComponent, TransformComponent>();
+        while (organQuery.MoveNext(out var uid, out var organ, out var xform))
+        {
+            if (xform.GridUid != ent || organ.Body != null)
+                continue;
+
+            QueueDel(uid);
         }
     }
 
@@ -92,10 +138,10 @@ public sealed partial class BackroomsSystem : EntitySystem
             if (HasComp<AtmosDeviceComponent>(uid))
                 continue;
 
-            if (_tagSystem.HasTag(uid, "Pipe") || _tagSystem.HasTag(uid, "Table"))
+            if (_tagSystem.HasTag(uid, _pipeTag) || _tagSystem.HasTag(uid, _tableTag))
                 continue;
 
-            if (!TryComp<MetaDataComponent>(uid, out var metaData))
+            if (!TryComp(uid, out MetaDataComponent? metaData))
                 continue;
 
             if (_container.IsEntityOrParentInContainer(uid, metaData, xform))
@@ -118,12 +164,12 @@ public sealed partial class BackroomsSystem : EntitySystem
         foreach (var (prototypeId, coords, rotation) in entitiesToCopy)
         {
             var spawned = Spawn(prototypeId, coords);
-            if (TryComp<TransformComponent>(spawned, out var spawnedXform))
+            if (TryComp(spawned, out TransformComponent? spawnedXform))
             {
                 spawnedXform.LocalRotation = rotation;
             }
 
-            var scale = new Vector2(_random.NextFloat(0.5f, 2.0f), _random.NextFloat(0.5f, 2.0f));
+            var scale = new Vector2(_random.NextFloat(0.7f, 1.5f), _random.NextFloat(0.5f, 2.0f));
             ScaleVisuals.SetSpriteScale(spawned, scale);
         }
     }

@@ -32,7 +32,6 @@ public sealed class StationPowerTests : GameTest
         "Plasma",
         "Relic",
         "Snowball",
-        "Reach",
         "Exo",
     ];
 

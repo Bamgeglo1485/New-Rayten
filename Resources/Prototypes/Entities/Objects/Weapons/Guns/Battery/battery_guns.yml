@@ -355,7 +355,7 @@
   - type: Clothing
     sprite: Vanilla/Objects/Weapons/Guns/Battery/pulse_carbine.rsi # Rayten-Resprites
   - type: Gun
-    selectedMode: SemiAuto
+    selectedMode: FullAuto
     fireRate: 3
     availableModes:
       - SemiAuto

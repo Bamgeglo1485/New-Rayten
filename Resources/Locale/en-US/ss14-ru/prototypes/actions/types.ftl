@@ -66,10 +66,14 @@ ent-FakeMindShieldToggleAction = [color=green]Toggle Fake Mindshield[/color]
     .desc = Turn the Fake Mindshield implant's transmission on/off
 ent-ActionToggleParamedicSiren = Toggle Paramedic Siren
     .desc = Toggles the paramedic siren on and off.
+ent-ActionToggleNightVision = Toggle night vision
+    .desc = Toggles the night vision on and off.
 ent-ActionToggleWaggingVulpkanin = { ent-ActionToggleWagging }
     .desc = { ent-ActionToggleWagging.desc }
 ent-ActionGravityJump = Jump
     .desc = Activating the advanced propulsion system, you propel yourself a short distance in the direction of your gaze.
+ent-ActionJumpBoost = Jump boost
+    .desc = { ent-ActionGravityJump.desc }
 ent-ActionVulpkaninGravityJump = Leap
     .desc = Use your agile legs to leap a short distance. Be careful not to bump into anything!
 ent-ActionToggleRootable = Rootable

@@ -1,0 +1,12 @@
+ent-DistortedCloneSpawner = Искажённый Клон
+    .desc = { "" }
+ent-DistortedCloneSpawnerAgressive = Искажённый Клон
+    .suffix = Злой:(
+    .desc = { ent-DistortedCloneSpawner.desc }
+ent-DistortedCloneSpawnerKind = Искажённый Клон
+    .suffix = Добри:)
+    .desc = { ent-DistortedCloneSpawner.desc }
+ent-GhostNPC = Призрачный НПС
+    .desc = { ent-BaseMob.desc }
+ent-SpawnGhostNPC = спавнер призрачного НПС
+    .desc = { ent-MarkerBase.desc }

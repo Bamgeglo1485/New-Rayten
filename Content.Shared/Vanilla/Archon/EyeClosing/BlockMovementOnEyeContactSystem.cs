@@ -100,7 +100,7 @@ public sealed partial class BlockMovementOnEyeContactSystem : EntitySystem
 
         if (!TryGetBlinkTiming(uid, out var TPTime, now))
         {
-            _popup.PopupCursor(Loc.GetString("Нет подходящего момента для телепортации"));
+            _popup.PopupCursor(Loc.GetString("Нет подходящего момента для телепортации"), uid);
             return;
         }
 
@@ -141,13 +141,13 @@ public sealed partial class BlockMovementOnEyeContactSystem : EntitySystem
 
         if (!_mobStateSystem.IsAlive(target))
         {
-            _popup.PopupCursor(Loc.GetString("цель должна быть живой"));
+            _popup.PopupCursor(Loc.GetString("цель должна быть живой"), uid);
             return;
         }
 
         if (!TryGetBlinkTiming(uid, out var killTime, now))
         {
-            _popup.PopupCursor(Loc.GetString("Нет подходящего момента для убийства"));
+            _popup.PopupCursor(Loc.GetString("Нет подходящего момента для убийства"), uid);
             return;
         }
 

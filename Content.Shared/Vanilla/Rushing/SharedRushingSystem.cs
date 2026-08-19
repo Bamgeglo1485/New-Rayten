@@ -10,11 +10,11 @@ using Content.Shared.Gravity;
 
 namespace Content.Shared.Vanilla.Rushing;
 
-public sealed class SharedRushingSystem : EntitySystem
+public sealed partial class SharedRushingSystem : EntitySystem
 {
-    [Dependency] private readonly SharedGravitySystem _gravity = default!;
-    [Dependency] private readonly SharedStaminaSystem _stamina = default!;
-    [Dependency] private readonly ThrowingSystem _throwing = default!;
+    [Dependency] private SharedGravitySystem _gravity = default!;
+    [Dependency] private SharedStaminaSystem _stamina = default!;
+    [Dependency] private ThrowingSystem _throwing = default!;
 
     public override void Initialize()
     {

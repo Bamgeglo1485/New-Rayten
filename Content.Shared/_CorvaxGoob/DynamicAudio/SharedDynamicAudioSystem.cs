@@ -19,7 +19,7 @@ using System.Numerics;
 
 namespace Content.Shared._CorvaxGoob.DynamicAudio;
 
-public sealed class SharedDynamicAudioSystem : EntitySystem
+public sealed partial class SharedDynamicAudioSystem : EntitySystem
 {
     private Dictionary<ProtoId<AudioPresetPrototype>, EntityUid> _presets = new();
     private Dictionary<int, string> _areaPresets = new Dictionary<int, string> // sort it or will be broken
@@ -33,19 +33,18 @@ public sealed class SharedDynamicAudioSystem : EntitySystem
     };
 
     private string _defaultPreset = "LivingRoom";
-    private string _inSpacePreset = "InSpace";
     private string _onPlanetPreset = "Forest";
 
     private int _maxAreaScanRadius = 8; // prefer to set value of pvs divided by 2
     private int _maxTilesScanCount = 100;
 
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly SharedTransformSystem _xform = default!;
-    [Dependency] private readonly ISharedPlayerManager _playerManager = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly EntityLookupSystem _lookUp = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedTransformSystem _xform = default!;
+    [Dependency] private ISharedPlayerManager _playerManager = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private EntityLookupSystem _lookUp = default!;
 
     public override void Initialize()
     {

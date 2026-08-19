@@ -13,3 +13,9 @@
   naming: TheFirstofLast
   sexes:
   - Unsexed
+  defaultSoundsBySex:
+  - UnisexDiona
+  - UnisexDiona
+  - UnisexDiona
+  voices:
+  - UnisexDiona

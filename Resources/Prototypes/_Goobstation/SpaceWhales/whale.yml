@@ -19,9 +19,6 @@
     visibleFromOtherGrids: true
   - type: MovementIgnoreGravity
     weightless: true
-  - type: WarpPoint
-    follow: true
-    location: космический левиафан
   - type: HTN
     rootTask:
       task: DragonCarpCompound

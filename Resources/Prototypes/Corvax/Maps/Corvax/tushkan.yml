@@ -4,7 +4,7 @@
   mapPath: /Maps/Corvax/corvax_tushkan.yml
   maxRandomOffset: 0
   randomRotation: false
-  minPlayers: 15
+  minPlayers: 0
   maxPlayers: 25
   stations:
     Tushkan:
@@ -22,32 +22,24 @@
             # command
             Captain: [ 1, 1 ]
             Lawyer: [ 1, 1 ]
-            # cargo
-            Quartermaster: [ 1, 1 ]
-            SalvageSpecialist: [ 2, 2 ]
-            CargoTechnician: [ 2, 2 ]
             # engineering
             ChiefEngineer: [ 1, 1 ]
             AtmosphericTechnician: [ 1, 1 ]
             StationEngineer: [ 3, 3 ]
             TechnicalAssistant: [ 1, 1 ]
-            # medical
-            ChiefMedicalOfficer: [ 1, 1 ]
-            MedicalDoctor: [ 2, 2 ]
-            MedicalIntern: [ 1, 1 ]
-            Psychologist: [ 1, 1 ]
-            Paramedic: [ 1, 1 ]
-            Chemist: [ 1, 1 ]
             # science
             ResearchDirector: [ 1, 1 ]
             Scientist: [ 2, 2 ]
             ResearchAssistant: [ 1, 1 ]
+            SalvageSpecialist: [ 2, 2 ]
+            Chemist: [ 1, 1 ]
             # security
             HeadOfSecurity: [ 1, 1 ]
             Warden: [ 1, 1 ]
             SecurityOfficer: [ 3, 3 ]
             SecurityCadet: [ 1, 1 ]
             Detective: [ 1, 1 ]
+            Paramedic: [ 1, 1 ]
             #Pilot: [ 1, 1 ]
             # service
             HeadOfPersonnel: [ 1, 1 ]

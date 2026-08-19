@@ -10,9 +10,9 @@ using Content.Shared.Whitelist;
 
 namespace Content.Shared.AlternateDimension;
 
-public abstract class SharedAlternateDimensionSystem : EntitySystem
+public abstract partial class SharedAlternateDimensionSystem : EntitySystem
 {
-    [Dependency] private readonly SharedMapSystem _mapSystem = default!;
+    [Dependency] private SharedMapSystem _mapSystem = default!;
 
     private Vector2 MirrorCoordinates(Vector2 position, EntityUid gridUid, MapGridComponent gridComp)
     {
@@ -100,7 +100,7 @@ public sealed record AlternateDimensionParams
     public ProtoId<AlternateDimensionPrototype> Dimension = new();
 }
 
-[Prototype("alternateDimension")]
+[Prototype]
 public sealed partial class AlternateDimensionPrototype : IPrototype
 {
     [IdDataField]

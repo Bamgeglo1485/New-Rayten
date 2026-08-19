@@ -20,16 +20,16 @@ public enum StainVisuals : byte
     Toggle
 }
 
-public abstract class SharedStainSystem : EntitySystem
+public abstract partial class SharedStainSystem : EntitySystem
 {
-    [Dependency] private readonly SharedSolutionContainerSystem _solution = null!;
-    [Dependency] private readonly SharedItemSystem _item = null!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = null!;
-    [Dependency] private readonly SharedContainerSystem _container = null!;
-    [Dependency] private readonly InventorySystem _inventory = null!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = null!;
-    [Dependency] private readonly SharedPuddleSystem _puddle = null!;
-    [Dependency] private readonly SharedPopupSystem _popup = null!;
+    [Dependency] private SharedSolutionContainerSystem _solution = null!;
+    [Dependency] private SharedItemSystem _item = null!;
+    [Dependency] private SharedAppearanceSystem _appearance = null!;
+    [Dependency] private SharedContainerSystem _container = null!;
+    [Dependency] private InventorySystem _inventory = null!;
+    [Dependency] private SharedDoAfterSystem _doAfter = null!;
+    [Dependency] private SharedPuddleSystem _puddle = null!;
+    [Dependency] private SharedPopupSystem _popup = null!;
 
     public override void Initialize()
     {
@@ -44,9 +44,6 @@ public abstract class SharedStainSystem : EntitySystem
 
     private void OnSolutionChanged(Entity<StainableComponent> ent, ref SolutionChangedEvent args)
     {
-        if (args.Solution == null)
-            return;
-
         if (!_solution.TryGetSolution(ent.Owner, ent.Comp.SolutionName, out var ourSolution))
             return;
 

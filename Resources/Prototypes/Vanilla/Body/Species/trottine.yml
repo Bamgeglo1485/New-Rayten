@@ -150,10 +150,7 @@
   - type: Speech
     allowedEmotes: ['Grunt']
   - type: Vocal
-    sounds:
-      Male: UnisexTrottine
-      Female: UnisexTrottine
-      Unsexed: UnisexTrottine
+    emoteSounds: UnisexTrottine
   - type: Damageable
     damageModifierSet: Trottine
   - type: Injurable

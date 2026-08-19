@@ -10,6 +10,7 @@
   - CaptainsSabers
   - CaptainBackpack
   - CaptainOuterClothing
+  - AssistiveItems
   - Survival
   - VanillaLegends # Vanilla-Loadouts
   - Trinkets
@@ -27,6 +28,7 @@
   - HoPBackpack
   - HoPOuterClothing
   - Glasses
+  - AssistiveItems
   - Survival
   - VanillaLegends # Vanilla-Loadouts
   - Trinkets
@@ -58,6 +60,7 @@
   - PassengerOuterClothing
   - PassengerShoes
   - Glasses
+  - AssistiveItems
   - Survival
   - VanillaLegends # Vanilla-Loadouts
   - Trinkets
@@ -74,6 +77,7 @@
   - CommonBackpack
   - BartenderOuterClothing
   - Glasses
+  - AssistiveItems
   - Survival
   - VanillaLegends # Vanilla-Loadouts
   - Trinkets
@@ -88,6 +92,7 @@
   - BartenderJumpsuit
   - CommonBackpack
   - Glasses
+  - AssistiveItems
   - Survival
   - VanillaLegends # Vanilla-Loadouts
   - Trinkets
@@ -105,6 +110,7 @@
   - CommonBackpack
   - ChefOuterClothing
   - Glasses
+  - AssistiveItems
   - Survival
   - VanillaLegends # Vanilla-Loadouts
   - Trinkets
@@ -119,6 +125,7 @@
   - LibrarianJumpsuit
   - CommonBackpack
   - Glasses
+  - AssistiveItems
   - Survival
   - VanillaLegends # Vanilla-Loadouts
   - Trinkets
@@ -134,6 +141,7 @@
   - LawyerJumpsuit
   - CommonBackpack
   - Glasses
+  - AssistiveItems
   - Survival
   - VanillaLegends # Vanilla-Loadouts
   - Trinkets
@@ -154,6 +162,7 @@
   - ChaplainOuterClothing
   - ChaplainBible
   - Glasses
+  - AssistiveItems
   - Survival
   - VanillaLegends # Vanilla-Loadouts
   - Trinkets
@@ -171,6 +180,7 @@
   - CommonBackpack
   - JanitorOuterClothing
   - Glasses
+  - AssistiveItems
   - Survival
   - VanillaLegends # Vanilla-Loadouts
   - Trinkets
@@ -187,6 +197,7 @@
   - BotanistBackpack
   - BotanistOuterClothing
   - Glasses
+  - AssistiveItems
   - Survival
   - VanillaLegends # Vanilla-Loadouts
   - Trinkets
@@ -205,6 +216,7 @@
   - ClownOuterClothing
   - ClownShoes
   - Glasses
+  - AssistiveItems
   - SurvivalClown
   - VanillaLegends # Vanilla-Loadouts
   - Trinkets
@@ -223,9 +235,10 @@
   - MimeOuterClothing
   - MimeBelt
   - Glasses
-  - SurvivalMime
-  - VanillaLegends # Vanilla-Loadouts
+  - AssistiveItems
+  - Survival
   - Trinkets
+  - VanillaLegends # rayten
   #- MimeJobTrinkets
 
 - type: roleLoadout
@@ -237,12 +250,13 @@
   - MusicianJumpsuit
   - CommonBackpack
   - MusicianOuterClothing
+  - Instruments
   - Glasses
+  - AssistiveItems
   - Survival
   - VanillaLegends # Vanilla-Loadouts
   - Trinkets
   #- MusicianJobTrinkets
-  - Instruments
   - GroupSpeciesBreathTool
 
 # Cargo
@@ -258,6 +272,7 @@
   - QuartermasterOuterClothing
   - QuartermasterShoes
   - Glasses
+  - AssistiveItems
   - Survival
   - VanillaLegends # Vanilla-Loadouts
   - Trinkets
@@ -276,6 +291,7 @@
   - CargoTechnicianShoes
   - CargoTechnicianID
   - Glasses
+  - AssistiveItems
   - Survival
   - VanillaLegends # Vanilla-Loadouts
   - Trinkets
@@ -291,6 +307,7 @@
   - SalvageSpecialistOuterClothing
   - SalvageSpecialistShoes
   - Glasses
+  - AssistiveItems
   - Survival
   - VanillaLegends # Vanilla-Loadouts
   - Trinkets
@@ -309,6 +326,7 @@
   - ChiefEngineerNeck
   - ChiefEngineerOuterClothing
   - ChiefEngineerShoes
+  - AssistiveItems
   - SurvivalExtended
   - VanillaLegends # Vanilla-Loadouts
   - Trinkets
@@ -322,6 +340,7 @@
   - GroupTankHarness
   - TechnicalAssistantJumpsuit
   - StationEngineerBackpack
+  - AssistiveItems
   - SurvivalExtended
   - VanillaLegends # Vanilla-Loadouts
   - Trinkets
@@ -339,6 +358,7 @@
   - StationEngineerOuterClothing
   - StationEngineerShoes
   - StationEngineerID
+  - AssistiveItems
   - SurvivalExtended
   - VanillaLegends # Vanilla-Loadouts
   - Trinkets
@@ -354,6 +374,7 @@
   - AtmosphericTechnicianBackpack
   - AtmosphericTechnicianOuterClothing
   - AtmosphericTechnicianShoes
+  - AssistiveItems
   - SurvivalExtended
   - VanillaLegends # Vanilla-Loadouts
   - Trinkets
@@ -374,6 +395,7 @@
   - ScientistGloves
   - ResearchDirectorShoes
   - Glasses
+  - AssistiveItems
   - Survival
   - VanillaLegends # Vanilla-Loadouts
   - Trinkets
@@ -394,6 +416,7 @@
   - ScientistShoes
   - ScientistPDA
   - Glasses
+  - AssistiveItems
   - Survival
   - VanillaLegends # Vanilla-Loadouts
   - Trinkets
@@ -408,6 +431,7 @@
   - ResearchAssistantJumpsuit
   - ScientistBackpack
   - Glasses
+  - AssistiveItems
   - Survival
   - VanillaLegends # Vanilla-Loadouts
   - Trinkets
@@ -426,6 +450,7 @@
   - SecurityBelt
   - HeadofSecurityOuterClothing
   - SecurityShoes
+  - AssistiveItems
   - SurvivalSecurity
   - VanillaLegends # Vanilla-Loadouts
   - HOSGuns # Rayten-Loadouts
@@ -443,6 +468,7 @@
   - SecurityBelt
   - WardenOuterClothing
   - SecurityShoes
+  - AssistiveItems
   - SurvivalSecurity
   - VanillaLegends # Vanilla-Loadouts
   - WardenGuns # Rayten-Loadouts
@@ -461,6 +487,7 @@
   - SecurityShoes
   - SecurityPDA
   - SecurityBelt
+  - AssistiveItems
   - SurvivalSecurity
   - VanillaLegends # Vanilla-Loadouts
   - SecGuns # Rayten-Loadouts
@@ -479,6 +506,7 @@
   - SecurityBackpack
   - DetectiveOuterClothing
   - SecurityShoes
+  - AssistiveItems
   - SurvivalSecurity
   - VanillaLegends # Vanilla-Loadouts
   - Trinkets
@@ -491,6 +519,7 @@
 #  - Inventory # Corvax-Loadouts
   - SecurityCadetJumpsuit
   - SecurityBackpack
+  - AssistiveItems
   - SurvivalSecurity
   - VanillaLegends # Vanilla-Loadouts
   - SecGuns # Rayten-Loadouts
@@ -509,6 +538,7 @@
   - ReporterOuterClothing
   - CommonBackpack
   - Glasses
+  - AssistiveItems
   - Survival
   - VanillaLegends # Vanilla-Loadouts
   - Trinkets
@@ -523,6 +553,7 @@
   - PsychologistJumpsuit
   - MedicalBackpack
   - Glasses
+  - AssistiveItems
   - Survival
   - VanillaLegends # Vanilla-Loadouts
   - Trinkets
@@ -568,6 +599,13 @@
   - GroupTankHarness
 
 - type: roleLoadout
+  id: RoleSurvivalExtendedAntag # Used by antagonists that spawn off-station (e.g wizards)
+  groups:
+  - SurvivalExtendedAntag
+  - GroupSpeciesBreathTool
+  - GroupTankHarness
+
+- type: roleLoadout
   id: RoleSurvivalMedical
   groups:
   - SurvivalMedical
@@ -605,6 +643,12 @@
   groups:
   - GroupEVATank
   - SurvivalExtended
+
+- type: roleLoadout
+  id: RoleSurvivalEVAAntag # Used by antagonists that spawn off-station AND in space (e.g ninjas)
+  groups:
+  - GroupEVATank
+  - SurvivalExtendedAntag
 
 - type: roleLoadout
   id: RoleSurvivalSpaceNinja

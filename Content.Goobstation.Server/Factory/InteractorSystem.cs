@@ -6,9 +6,10 @@ using Content.Shared.Timing;
 
 namespace Content.Goobstation.Server.Factory;
 
-public sealed class InteractorSystem : SharedInteractorSystem
+public sealed partial class InteractorSystem : SharedInteractorSystem
 {
-    [Dependency] private readonly UseDelaySystem _useDelay = default!;
+    [Dependency] private UseDelaySystem _useDelay = default!;
+    [Dependency] private StartableMachineSystem _machine = default!;
 
     private EntityQuery<ConstructionComponent> _constructionQuery;
     private EntityQuery<UseDelayComponent> _useDelayQuery;
@@ -32,14 +33,14 @@ public sealed class InteractorSystem : SharedInteractorSystem
         // another doafter is already running
         if (HasDoAfter(ent))
         {
-            Machine.Failed(ent.Owner);
+            _machine.Failed(ent.Owner);
             return;
         }
 
         // nothing there
         if (FindTarget(ent) is not {} target)
         {
-            Machine.Failed(ent.Owner);
+            _machine.Failed(ent.Owner);
             return;
         }
 
@@ -48,7 +49,7 @@ public sealed class InteractorSystem : SharedInteractorSystem
         if (!InteractWith(ent, target))
         {
             // have to remove it since user's filter was bad due to unhandled interaction
-            Machine.Failed(ent.Owner);
+            _machine.Failed(ent.Owner);
             return;
         }
 
@@ -57,13 +58,13 @@ public sealed class InteractorSystem : SharedInteractorSystem
         if (newCount > originalCount
             || HasDoAfter(ent))
         {
-            Machine.Started(ent.Owner);
+            _machine.Started(ent.Owner);
             UpdateAppearance(ent, InteractorState.Active);
         }
         else
         {
             // no doafter, complete it immediately
-            Machine.Completed(ent.Owner);
+            _machine.Completed(ent.Owner);
             UpdateAppearance(ent);
         }
     }

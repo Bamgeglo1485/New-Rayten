@@ -54,34 +54,7 @@
     - type: Sprite
       sprite: Objects/Power/powersink.rsi
       state: powersink
-    - type: Tag
-      tags:
-      - GhostOnlyWarp
     - type: WarpPoint
-      location: powersink
-      blacklist:
-        tags:
-        - GhostOnlyWarp
-# Corvax-HiddenDesc-Start
-    - type: HiddenDescription
-      entries:
-      - label: corvax-hidden-desc-PowerSink-syndicate
-        whitelistMind:
-          mindRoles:
-          - TraitorRole
-          - NukeopsRole
-      - label: corvax-hidden-desc-PowerSink-engineering
-        jobRequired:
-          - ChiefEngineer
-          - AtmosphericTechnician
-          - StationEngineer
-          - TechnicalAssistant
-      - label: corvax-hidden-desc-PowerSink-research
-        jobRequired:
-          - ResearchAssistant
-          - ResearchDirector
-          - Scientist
-          - Borg
-# Corvax-HiddenDesc-End
+      location: location-powersink
     - type: StaticPrice
       price: 3000

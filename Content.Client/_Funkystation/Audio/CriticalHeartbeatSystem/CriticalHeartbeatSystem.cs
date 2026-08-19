@@ -10,11 +10,11 @@ using Robust.Shared.Player;
 
 namespace Content.Client._Funkystation.Audio
 {
-    public sealed class CriticalHeartbeatSystem : EntitySystem
+    public sealed partial class CriticalHeartbeatSystem : EntitySystem
     {
-        [Dependency] private readonly AudioSystem _audio = default!;
-        [Dependency] private readonly IGameTiming _timing = default!;
-        [Dependency] private readonly MobThresholdSystem _mobThresholdSystem = default!;
+        [Dependency] private AudioSystem _audio = default!;
+        [Dependency] private IGameTiming _timing = default!;
+        [Dependency] private MobThresholdSystem _mobThresholdSystem = default!;
 
         private EntityUid? _trackedEntity;
         private bool _playing;
@@ -43,7 +43,7 @@ namespace Content.Client._Funkystation.Audio
         private void OnPlayerAttach(LocalPlayerAttachedEvent args)
         {
             _trackedEntity = args.Entity;
-            if (EntityManager.TryGetComponent(_trackedEntity, out MobStateComponent? mob) && mob.CurrentState == MobState.Critical)
+            if (TryComp(_trackedEntity, out MobStateComponent? mob) && mob.CurrentState == MobState.Critical)
             {
                 StartHeartbeat();
             }
@@ -107,7 +107,7 @@ namespace Content.Client._Funkystation.Audio
 
             // Prefer damage-based progress (how close to death).
             float progress;
-            if (EntityManager.TryGetComponent(_trackedEntity, out DamageableComponent? damageable) &&
+            if (TryComp(_trackedEntity, out DamageableComponent? damageable) &&
                 _mobThresholdSystem.TryGetDeadPercentage(_trackedEntity.Value, damageable.TotalDamage, out var pct))
             {
                 progress = MathF.Min(1f, MathF.Max(0f, pct.Value.Float()));
@@ -133,7 +133,7 @@ namespace Content.Client._Funkystation.Audio
             }
 
             // if entity is dead or otherwise not critical anymore, stop
-            if (EntityManager.TryGetComponent(_trackedEntity, out MobStateComponent? mobState))
+            if (TryComp(_trackedEntity, out MobStateComponent? mobState))
             {
                 if (mobState.CurrentState != MobState.Critical)
                 {

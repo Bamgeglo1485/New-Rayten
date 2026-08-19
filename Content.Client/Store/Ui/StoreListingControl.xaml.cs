@@ -50,9 +50,13 @@ public sealed partial class StoreListingControl : Control
                 if (severity.ShowDepartmentsAndJobs)
                 {
                     description.PushNewline();
-                    description.AddMarkupPermissive(contrSys.GenerateDepartmentExamineMessage(component.AllowedDepartments, component.AllowedJobs));
+                    description.AddMarkupPermissive(contrSys.GenerateDepartmentExamineMessage(
+                        component.AllowedDepartments,
+                        component.AllowedJobs,
+                        severity.Color,
+                        ContrabandItemType.Item
+                    ));
                 }
-
             }
             else
             {

@@ -5,13 +5,14 @@ using Content.Shared.Vanilla.Entities.DangerScanner;
 using Content.Shared.Station;
 using Content.Shared.Contraband;
 using Content.Shared.Security;
+using Content.Shared.StationRecords.Systems;
 
 namespace Content.Server.Vanilla.Entities.DangerScanner;
 
 public sealed partial class DangerScannerSystem : SharedDangerScannerSystem
 {
-    [Dependency] private SharedStationRecordsSystem _records = default!;
     [Dependency] private CriminalRecordsSystem _criminalRecords = default!;
+    [Dependency] private StationRecordsSystem _records = default!;
     [Dependency] private SharedStationSystem _station = default!;
     [Dependency] private RadioSystem _radio = default!;
 

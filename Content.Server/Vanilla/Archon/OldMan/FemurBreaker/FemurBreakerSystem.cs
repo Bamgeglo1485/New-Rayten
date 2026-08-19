@@ -233,8 +233,6 @@ public sealed partial class FemurBreakerSystem : EntitySystem
                 continue;
             if (!HasComp<VocalComponent>(victim))
                 continue;
-            if (HasComp<MutedComponent>(victim))
-                continue;
             _jittering.AddJitter(victim, 5, 20);
             anyFemurs = true;
 

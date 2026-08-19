@@ -36,20 +36,18 @@ public sealed partial class InvisibleHatSystem : EntitySystem
         var pacified = EnsureComp<PacifiedComponent>(args.Wearer);
         pacified.DisallowDisarm = true;
         pacified.DisallowAllCombat = true;
-        EnsureComp<MutedComponent>(args.Wearer);
         EnsureComp<BlockInteractionComponent>(args.Wearer);
     }
 
     private void OnClothingUnequip(Entity<InvisibleHatComponent> ent, ref ClothingGotUnequippedEvent args)
     {
-        if (TryComp<StealthComponent>(args.Wearer, out var stealh))
-            _stealth.SetVisibility(args.Wearer, 1f, stealh);
+        if (HasComp<StealthComponent>(args.Wearer))
+            RemComp<StealthComponent>(args.Wearer);
 
         if (!_timing.IsFirstTimePredicted)
             return;
 
         RemComp<PacifiedComponent>(args.Wearer);
-        RemComp<MutedComponent>(args.Wearer);
         RemComp<BlockInteractionComponent>(args.Wearer);
     }
 }

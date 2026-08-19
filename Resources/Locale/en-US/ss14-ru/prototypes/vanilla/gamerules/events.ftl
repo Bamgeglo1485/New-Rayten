@@ -1,2 +1,2 @@
-ent-MTFSquadSpawn = { ent-BaseGameRule }
+ent-SoulTieRule = { ent-BaseGameRule }
     .desc = { ent-BaseGameRule.desc }

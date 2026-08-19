@@ -33,7 +33,7 @@
     state: preview
   - type: DistortedCloneSpawner
     settings: Distorted
-    agressiveChance: 1.0
+    agressiveChance: 0.4
     components:
     - type: Vocalizer
       maxVocalizeInterval: 20
@@ -44,6 +44,32 @@
       learnChance: 1.0
     - type: ActiveListener
       range: 150
+    - type: MovementSpeedModifier
+      baseSprintSpeed: 2.5
+      baseWalkSpeed: 2.5
+    - type: Hands
+    - type: MeleeWeapon
+      altDisarm: false
+      attackRate: 0.3
+      angle: 0
+      animation: WeaponArcBite
+      soundHit:
+        path: /Audio/Effects/bite.ogg
+      damage:
+        types:
+          Slash: 25
+    - type: MeleeThrowOnHit
+      speed: 10
+      distance: 2
+      unanchorOnHit: Unanchorable
+      stunTime: 0.5
+    - type: Destructible
+      thresholds:
+      - trigger:
+          !type:DamageTrigger
+          damage: 349
+        behaviors:
+        - !type:GibBehavior
 
 - type: entity
   id: DistortedCloneSpawnerAgressive

@@ -2,7 +2,6 @@ using Content.Server.GameTicking.Rules.Components;
 using Content.Server.Station.Systems;
 using Content.Shared.Chat;
 using Content.Shared.GameTicking.Components;
-using Content.Shared.Mind;
 using Content.Shared.Mobs;
 using Content.Shared.Players;
 using Robust.Shared.Network;
@@ -40,7 +39,6 @@ public sealed partial class SoulTieRuleSystem : GameRuleSystem<SoulTieRuleCompon
     [Dependency] private AtmosphereSystem _atmos = default!;
     [Dependency] private SharedMindSystem _mind = default!;
     [Dependency] private IRobustRandom _random = default!;
-    [Dependency] private TargetSystem _target = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private AudioSystem _audio = default!;
 

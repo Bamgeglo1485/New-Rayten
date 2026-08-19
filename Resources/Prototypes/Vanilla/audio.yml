@@ -4,9 +4,15 @@
     params:
       volume: -9
     collection: Ambience939
-  rules: Near939
   priority: 5
   fadeIn: true
+  conditions:
+    - !type:NearbyEntitiesCondition
+      count: 1
+      range: 15
+      whitelist:
+        tags:
+          - WithManyVoices
 
 - type: ambientMusic
   id: 173Ambient
@@ -14,9 +20,15 @@
     params:
       volume: -10
     collection: Ambience173
-  rules: Near173
   priority: 5
   fadeIn: true
+  conditions:
+    - !type:NearbyEntitiesCondition
+      count: 1
+      range: 15
+      whitelist:
+        tags:
+          - Sculpture
 
 - type: ambientMusic
   id: 096Ambient
@@ -24,9 +36,15 @@
     params:
       volume: -10
     collection: Ambience096
-  rules: Near096
   priority: 5
   fadeIn: true
+  conditions:
+    - !type:NearbyEntitiesCondition
+      count: 1
+      range: 15
+      whitelist:
+        tags:
+          - ShyGuy
 
 - type: ambientMusic
   id: BackroomsAmbient
@@ -34,8 +52,14 @@
     params:
       volume: -10
     collection: AmbienceBackrooms
-  rules: Backrooms
   priority: 10
+  conditions:
+    - !type:NearbyEntitiesCondition
+      count: 1
+      range: 15
+      whitelist:
+        tags:
+          - Backrooms
 
 #- type: ambientMusic
 #  id: ArchonticAmbient
@@ -43,9 +67,15 @@
 #    params:
 #      volume: -10
 #    collection: AmbienceArchontic
-#  rules: NearArchontic
 #  priority: 3
 #  fadeIn: true
+#  conditions:
+#    - !type:NearbyComponentsCondition
+#      count: 1
+#      range: 5
+#      components:
+#        - ArchonAnalyzer
+#        - ArchonBeacon
 
 #- type: ambientMusic
 #  id: ArchonAmbient
@@ -53,64 +83,14 @@
 #    params:
 #      volume: -8
 #    collection: AmbienceArchon
-#  rules: NearArchon
 #  priority: 3
 #  fadeIn: true
-
-- type: rules
-  id: Near939
-  rules:
-    - !type:NearbyEntitiesRule
-      count: 1
-      whitelist:
-        tags:
-          - WithManyVoices
-
-- type: rules
-  id: Near173
-  rules:
-    - !type:NearbyEntitiesRule
-      count: 1
-      whitelist:
-        tags:
-          - Sculpture
-
-- type: rules
-  id: Near096
-  rules:
-    - !type:NearbyEntitiesRule
-      count: 1
-      whitelist:
-        tags:
-          - ShyGuy
-
-- type: rules
-  id: Backrooms
-  rules:
-    - !type:NearbyEntitiesRule
-      count: 1
-      whitelist:
-        tags:
-          - Backrooms
-
-#- type: rules
-#  id: NearArchontic
-#  rules:
-#    - !type:NearbyComponentsRule
-#      count: 1
-#      range: 5
-#      components:
-#        - type: ArchonAnalyzer
-#        - type: ArchonBeacon
-
-#- type: rules
-#  id: NearArchon
-#  rules:
-#    - !type:NearbyComponentsRule
+#  conditions:
+#    - !type:NearbyComponentsCondition
 #      count: 2
-#      components:
-#        - type: ArchonData
 #      range: 5
+#      components:
+#        - ArchonData
 
 - type: soundCollection
   id: Ambience939
@@ -138,7 +118,6 @@
     - /Audio/Vanilla/Ambience/Backrooms/mod.flip-flap.ogg
     - /Audio/Vanilla/Ambience/Backrooms/pwmur.ogg
     - /Audio/Vanilla/Ambience/Backrooms/space_asshole.ogg
-
 
 #- type: soundCollection
 #  id: AmbienceArchontic

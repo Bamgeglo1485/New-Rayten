@@ -243,6 +243,7 @@
   - type: StationEvent
     weight: 6
     duration: null
+    occursDuringRoundEnd: false
     earliestStart: 30
     reoccurrenceDelay: 20
     minimumPlayers: 15 # rayten
@@ -273,6 +274,7 @@
   - type: StationEvent
     weight: 5
     duration: null
+    occursDuringRoundEnd: false
     earliestStart: 20
     reoccurrenceDelay: 20
     minimumPlayers: 10
@@ -301,6 +303,7 @@
   - type: StationEvent
     weight: 7.5
     duration: 1
+    occursDuringRoundEnd: false
     earliestStart: 45
     minimumPlayers: 15 # rayten
   - type: RandomSpawnRule
@@ -713,6 +716,7 @@
     reoccurrenceDelay: 20
     minimumPlayers: 0
     duration: null
+    occursDuringRoundEnd: false
   - type: SpaceSpawnRule
     spawnDistance: 0
 

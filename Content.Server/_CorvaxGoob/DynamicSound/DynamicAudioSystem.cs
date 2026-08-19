@@ -9,12 +9,12 @@ using Content.Server.Atmos.Components;
 
 namespace Content.Server._CorvaxGoob.DynamicSound;
 
-public sealed class DynamicAudioSystem : EntitySystem
+public sealed partial class DynamicAudioSystem : EntitySystem
 {
-    [Dependency] private readonly AtmosphereSystem _atmos = default!;
-    [Dependency] private readonly ISharedPlayerManager _playerManager = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private AtmosphereSystem _atmos = default!;
+    [Dependency] private ISharedPlayerManager _playerManager = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     private float _soundBarotraumaMoles = 10;
 

@@ -122,9 +122,6 @@
   - type: SiliconLawProvider
     laws: RedspaceLaw
   - type: Polymorphable
-  - type: ActionGun
-    action: FistfulOfDollarAction
-    gunProto: FistfulOfDollar
   - type: ShowHealthBars
   - type: ShowHealthIcons
   - type: IonStormTarget
@@ -183,6 +180,7 @@
   - type: ActionGrant
     actions:
     - ActionViewLaws
+    - FistfulOfDollarAction
     - ActionSlam
     - ActionDash
     - ActionToggleLighting
@@ -197,6 +195,7 @@
     actions:
     - ActionViewLaws
     - ActionSlam
+    - FistfulOfDollarAction
     - ActionDash
     - ActionToggleLighting
 
@@ -330,11 +329,9 @@
     actions:
     - ActionViewLaws
     - ActionSlam
+    - FistfulOfDollarAction
     - ActionDashR2
     - ActionToggleLighting
-  - type: ActionGun
-    action: FistfulOfDollarAction
-    gunProto: FistfulOfDollar
   - type: ContainerFill
     containers:
       borg_brain:

@@ -44,14 +44,13 @@
       speechVerb: LargeMob
     - type: Vocal
     - type: ActiveListener
-      range: 15
+      range: 101
     - type: ParrotListener
       whitelist:
         requireAll: true
         components:
         - MobState
         - Vocal
-    - type: Muted
     - type: ParrotMemory
       learnChance: .25
     - type: Prying

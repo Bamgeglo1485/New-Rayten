@@ -19,9 +19,9 @@ namespace Content.Server.AlternateDimension;
 public sealed class SpawnAlternateDimensionJob : Job<bool>
 {
     private readonly IEntityManager _entManager;
-    private readonly IMapManager _mapManager;
     private readonly IPrototypeManager _prototypeManager;
     private readonly SharedMapSystem _mapSystem;
+    private readonly SharedMapSystem _mapManager;
     private readonly ITileDefinitionManager _tileDefManager;
     private readonly TileSystem _tileSystem;
     private readonly EntityLookupSystem _lookup;
@@ -39,7 +39,7 @@ public sealed class SpawnAlternateDimensionJob : Job<bool>
     public SpawnAlternateDimensionJob(
         double maxTime,
         IEntityManager entManager,
-        IMapManager mapManager,
+        SharedMapSystem mapManager,
         IPrototypeManager protoManager,
         SharedMapSystem map,
         ITileDefinitionManager tileDefManager,
@@ -100,7 +100,7 @@ public sealed class SpawnAlternateDimensionJob : Job<bool>
             var mirroredY = minY + (gridHeight - 1) - (originalIndex.Y - minY);
             var mirroredIndex = new Vector2i(originalIndex.X, mirroredY);
 
-            var tileVariant = _tileSystem.PickVariant((ContentTileDefinition)tileDef, random);
+            var tileVariant = _tileSystem.PickVariant((ContentTileDefinition)tileDef, random.Next());
             alternateTiles.Add((mirroredIndex, new Tile(tileDef.TileId, variant: tileVariant)));
         }
         _mapSystem.SetTiles((_alternateGrid, alternateGridComp), alternateTiles);
@@ -149,8 +149,8 @@ public sealed class SpawnAlternateDimensionJob : Job<bool>
         }
 
         //Final
-        _mapManager.DoMapInitialize(_alternateMapId);
-        _mapManager.SetMapPaused(_alternateMapId, false);
+        _mapManager.InitializeMap(_alternateMapId);
+        _mapManager.SetPaused(_alternateMapId, false);
 
         ProcessWallReplacements(indexedDimension);
 

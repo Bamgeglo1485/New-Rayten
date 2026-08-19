@@ -11,14 +11,13 @@ using System.Linq;
 
 namespace Content.Shared._Funkystation.WashingMachine;
 
-public abstract class SharedWashingMachineSystem : EntitySystem
+public abstract partial class SharedWashingMachineSystem : EntitySystem
 {
-    [Dependency] protected readonly IGameTiming Timing = null!;
-    [Dependency] protected readonly SharedAudioSystem Audio = null!;
-    [Dependency] private readonly SharedPowerReceiverSystem _power = null!;
-    [Dependency] protected readonly SharedEntityStorageSystem Storage = null!;
-    [Dependency] protected readonly SharedAppearanceSystem Appearance = null!;
-    [Dependency] private readonly SharedPopupSystem _popup = null!;
+    [Dependency] protected IGameTiming Timing = null!;
+    [Dependency] protected SharedAudioSystem Audio = null!;
+    [Dependency] protected SharedEntityStorageSystem Storage = null!;
+    [Dependency] protected SharedAppearanceSystem Appearance = null!;
+    [Dependency] protected SharedPopupSystem _popup = null!;
 
     public override void Initialize()
     {

@@ -8,11 +8,11 @@ using Robust.Shared.Timing;
 
 namespace Content.Client.Vanilla.Stinger;
 
-public sealed class StingerSystem : EntitySystem
+public sealed partial class StingerSystem : EntitySystem
 {
-    [Dependency] private readonly AudioSystem _audio = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly IGameTiming _gameTiming = default!;
+    [Dependency] private AudioSystem _audio = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private IGameTiming _gameTiming = default!;
 
     private readonly SoundSpecifier _death = new SoundPathSpecifier("/Audio/Vanilla/Effects/Stingers/deathStinger.ogg");
     private readonly SoundSpecifier _revive = new SoundPathSpecifier("/Audio/Vanilla/Effects/Stingers/reviveStinger.ogg");

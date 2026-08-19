@@ -19,3 +19,7 @@ ent-BibleRatvar = скрижаль Ратвара
     .desc = Священная реликвия Часового Культа, благословлённая самим Судией Механизмов — Ратваром.
 ent-BibleNanoTrasen = кодекс Нанотрасенус
     .desc = Знакомая книга, содержащая Священные Операционные Процедуры.
+ent-HolyLightEffect = { "" }
+    .desc = { "" }
+ent-EvilLightEffect = { ent-HolyLightEffect }
+    .desc = { ent-HolyLightEffect.desc }

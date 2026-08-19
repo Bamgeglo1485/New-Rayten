@@ -4,8 +4,8 @@ meta:
   engineVersion: 277.0.0
   forkId: ""
   forkVersion: ""
-  time: 08/16/2026 22:07:02
-  entityCount: 11409
+  time: 08/17/2026 19:32:16
+  entityCount: 11440
 maps:
 - 658
 grids:
@@ -802,7 +802,7 @@ entities:
             2: 57344
           8,5:
             0: 272
-            4: 17472
+            3: 17472
           8,6:
             2: 65345
           8,7:
@@ -843,10 +843,10 @@ entities:
             0: 53759
           11,2:
             0: 4319
-            3: 49152
+            4: 49152
           11,3:
             0: 61457
-            3: 204
+            4: 204
           11,-1:
             0: 30583
           11,4:
@@ -858,9 +858,9 @@ entities:
             0: 28791
           12,2:
             0: 119
-            3: 28672
+            4: 28672
           12,3:
-            3: 119
+            4: 119
             0: 61440
           12,-1:
             0: 29311
@@ -978,7 +978,8 @@ entities:
             0: 12288
             2: 35056
           -9,-8:
-            0: 65356
+            0: 64332
+            5: 1024
             2: 1
           -8,-7:
             0: 33008
@@ -1281,17 +1282,17 @@ entities:
           8,8:
             2: 65534
           9,5:
-            5: 4368
-            3: 17472
+            6: 4368
+            4: 17472
           9,6:
             2: 7936
           10,5:
-            3: 4368
-            6: 17472
+            4: 4368
+            7: 17472
           10,6:
             2: 3840
           11,5:
-            3: 21840
+            4: 21840
           11,6:
             2: 3856
           12,5:
@@ -1419,11 +1420,16 @@ entities:
           moles: {}
         - volume: 2500
           temperature: 293.15
-          moles: {}
-        - volume: 2500
-          temperature: 293.15
           moles:
             Nitrogen: 6666.982
+        - volume: 2500
+          temperature: 293.15
+          moles: {}
+        - volume: 2500
+          temperature: 293.14975
+          moles:
+            Oxygen: 21.824879
+            Nitrogen: 82.10312
         - volume: 2500
           temperature: 293.15
           moles:
@@ -5808,6 +5814,11 @@ entities:
     components:
     - type: Transform
       pos: 29.46184,-1.6702437
+      parent: 31
+  - uid: 9360
+    components:
+    - type: Transform
+      pos: -32.3264,-29.013369
       parent: 31
 - proto: AppraisalTool
   entities:
@@ -18800,6 +18811,71 @@ entities:
     - type: Transform
       pos: 54.5,7.5
       parent: 31
+  - uid: 9242
+    components:
+    - type: Transform
+      pos: 60.5,12.5
+      parent: 31
+  - uid: 9243
+    components:
+    - type: Transform
+      pos: 60.5,13.5
+      parent: 31
+  - uid: 9244
+    components:
+    - type: Transform
+      pos: 59.5,13.5
+      parent: 31
+  - uid: 9245
+    components:
+    - type: Transform
+      pos: 58.5,13.5
+      parent: 31
+  - uid: 9246
+    components:
+    - type: Transform
+      pos: 57.5,13.5
+      parent: 31
+  - uid: 9247
+    components:
+    - type: Transform
+      pos: 56.5,13.5
+      parent: 31
+  - uid: 9248
+    components:
+    - type: Transform
+      pos: 55.5,13.5
+      parent: 31
+  - uid: 9249
+    components:
+    - type: Transform
+      pos: 54.5,13.5
+      parent: 31
+  - uid: 9250
+    components:
+    - type: Transform
+      pos: 53.5,13.5
+      parent: 31
+  - uid: 9251
+    components:
+    - type: Transform
+      pos: 53.5,12.5
+      parent: 31
+  - uid: 9259
+    components:
+    - type: Transform
+      pos: 53.5,11.5
+      parent: 31
+  - uid: 9264
+    components:
+    - type: Transform
+      pos: 53.5,10.5
+      parent: 31
+  - uid: 9357
+    components:
+    - type: Transform
+      pos: 53.5,9.5
+      parent: 31
   - uid: 9390
     components:
     - type: Transform
@@ -26281,6 +26357,44 @@ entities:
       parent: 31
     - type: Fixtures
       fixtures: {}
+- proto: CleanerGrenade
+  entities:
+  - uid: 9386
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: -36.317436,-29.43939
+      parent: 31
+  - uid: 9387
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: -36.30181,-29.392515
+      parent: 31
+  - uid: 9388
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: -36.317436,-29.486265
+      parent: 31
+  - uid: 9391
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: -36.30181,-29.43939
+      parent: 31
+  - uid: 9392
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: -36.30181,-29.43939
+      parent: 31
+  - uid: 9395
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: -36.30181,-29.423765
+      parent: 31
 - proto: ClosetBombFilled
   entities:
   - uid: 5116
@@ -26831,7 +26945,7 @@ entities:
   - uid: 11225
     components:
     - type: Transform
-      pos: -29.520256,-9.469171
+      pos: -30.401333,-9.185341
       parent: 31
 - proto: ClothingHandsGlovesColorYellow
   entities:
@@ -28178,6 +28292,30 @@ entities:
     - type: Transform
       pos: 48.5,7.5
       parent: 31
+- proto: CrateEngineeringCableBulk
+  entities:
+  - uid: 9377
+    components:
+    - type: Transform
+      pos: -33.5,-29.5
+      parent: 31
+    - type: ContainerContainer
+      containers:
+        entity_storage: !type:Container
+          showEnts: False
+          occludes: True
+          ents:
+          - 9379
+          - 9380
+          - 9381
+          - 9382
+          - 9383
+          - 9384
+          - 9385
+        paper_label: !type:ContainerSlot
+          showEnts: False
+          occludes: True
+          ent: null
 - proto: CrateEngineeringCableHV
   entities:
   - uid: 11208
@@ -44793,6 +44931,16 @@ entities:
     - type: Transform
       pos: 12.447606,-4.278471
       parent: 31
+- proto: GeneratorBasic15kW
+  entities:
+  - uid: 9358
+    components:
+    - type: Transform
+      anchored: False
+      pos: -32.5,-29.5
+      parent: 31
+    - type: Physics
+      bodyType: Dynamic
 - proto: GlowstickBlue
   entities:
   - uid: 10987
@@ -49101,6 +49249,14 @@ entities:
     components:
     - type: Transform
       pos: -3.5,-43.5
+      parent: 31
+- proto: MachinePowerTransmissionLaser
+  entities:
+  - uid: 9237
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: 60.5,13.5
       parent: 31
 - proto: MagazinePistol
   entities:
@@ -53696,12 +53852,6 @@ entities:
     - type: Transform
       pos: -7.5,24.5
       parent: 31
-  - uid: 11228
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: -28.5,-9.5
-      parent: 31
   - uid: 11231
     components:
     - type: Transform
@@ -55516,6 +55666,38 @@ entities:
     - type: Transform
       pos: 18.530792,8.475061
       parent: 31
+  - uid: 9380
+    components:
+    - type: Transform
+      parent: 9377
+    - type: Physics
+      canCollide: False
+    - type: InsideEntityStorage
+      storage: 9377
+  - uid: 9381
+    components:
+    - type: Transform
+      parent: 9377
+    - type: Physics
+      canCollide: False
+    - type: InsideEntityStorage
+      storage: 9377
+  - uid: 9382
+    components:
+    - type: Transform
+      parent: 9377
+    - type: Physics
+      canCollide: False
+    - type: InsideEntityStorage
+      storage: 9377
+  - uid: 9383
+    components:
+    - type: Transform
+      parent: 9377
+    - type: Physics
+      canCollide: False
+    - type: InsideEntityStorage
+      storage: 9377
 - proto: SheetGlass10
   entities:
   - uid: 10993
@@ -55660,6 +55842,30 @@ entities:
     - type: Transform
       pos: -13.701841,18.488804
       parent: 31
+  - uid: 9379
+    components:
+    - type: Transform
+      parent: 9377
+    - type: Physics
+      canCollide: False
+    - type: InsideEntityStorage
+      storage: 9377
+  - uid: 9384
+    components:
+    - type: Transform
+      parent: 9377
+    - type: Physics
+      canCollide: False
+    - type: InsideEntityStorage
+      storage: 9377
+  - uid: 9385
+    components:
+    - type: Transform
+      parent: 9377
+    - type: Physics
+      canCollide: False
+    - type: InsideEntityStorage
+      storage: 9377
 - proto: SheetSteel10
   entities:
   - uid: 941
@@ -58488,6 +58694,14 @@ entities:
     - type: Transform
       pos: -11.5,-33.5
       parent: 31
+  - uid: 9359
+    components:
+    - type: Transform
+      anchored: False
+      pos: -32.5,-28.5
+      parent: 31
+    - type: Physics
+      bodyType: Dynamic
   - uid: 10025
     components:
     - type: MetaData
@@ -59835,12 +60049,6 @@ entities:
     components:
     - type: Transform
       pos: -7.5,26.5
-      parent: 31
-  - uid: 10582
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: -29.5,-9.5
       parent: 31
   - uid: 10642
     components:
@@ -69948,6 +70156,18 @@ entities:
       parent: 31
     - type: WarpPoint
       location: library
+- proto: WashingMachine
+  entities:
+  - uid: 9236
+    components:
+    - type: Transform
+      pos: -29.5,-9.5
+      parent: 31
+  - uid: 9238
+    components:
+    - type: Transform
+      pos: -28.5,-9.5
+      parent: 31
 - proto: WaterCooler
   entities:
   - uid: 1156

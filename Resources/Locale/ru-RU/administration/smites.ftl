@@ -64,6 +64,7 @@ admin-smite-crawler-name = Ползун
 admin-smite-homing-rod-name = Неподвижный стержень
 admin-smite-homing-rod-slow-name = Медленный неподвижный стержень
 admin-smite-silicon-laws-bound-name = Сделать силиконом
+admin-smite-make-stinky-name = Make Stinky
 
 ## Smite descriptions
 
@@ -113,6 +114,7 @@ admin-smite-omni-accent-description = Заставляет цель говори
 admin-smite-crawler-description = Жертва валится на пол и остаётся там. Удалите ей руки — пусть ползает как червяк!
 admin-smite-homing-rod-description = Запускает самонаводящийся неподвижный стержень прямо в цель.
 admin-smite-homing-rod-slow-description = Запускает медленно движущийся самонаводящийся неподвижный стержень прямо в цель.
+admin-smite-make-stinky-description = Makes the target stinky by making them release ammonia. Ew!
 admin-smite-silicon-laws-bound-description = Привязывает цель к законам синтетиков. Закон 2: выпрыгни в окно.
 admin-smite-super-bonk-lite-description = Заставляет цель удариться о каждый стол на станции и за её пределами. Прекращает действовать после смерти цели.
 

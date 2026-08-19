@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using Content.Client.Lobby;
 using Content.Shared.Corvax.Interface;
 using Content.Shared.Preferences;
@@ -60,13 +60,13 @@ public sealed partial class HumanoidProfileEditor
             SetVoicePitch(args.Value);
         };
 
-        VoiceButton.OnItemSelected += args =>
+        BarkVoiceButton.OnItemSelected += args =>
         {
-            VoiceButton.SelectId(args.Id);
-            SetVoice(_voiceList[args.Id].ID);
+            BarkVoiceButton.SelectId(args.Id);
+            SetBarkVoice(_voiceList[args.Id].ID);
         };
 
-        VoicePlayButton.OnPressed += _ => PlayPreviewTTS();
+        BarkVoicePlayButton.OnPressed += _ => PlayPreviewTTS();
         _sponsorsMgr = IoCManager.Resolve<SharedSponsorManager>();
     }
 
@@ -75,7 +75,7 @@ public sealed partial class HumanoidProfileEditor
         if (Profile is null)
             return;
 
-        VoiceButton.Clear();
+        BarkVoiceButton.Clear();
 
         var firstVoiceChoiceId = 1;
         for (var i = 0; i < _voiceList.Count; i++)
@@ -84,7 +84,7 @@ public sealed partial class HumanoidProfileEditor
             if (!HumanoidCharacterProfile.CanHaveVoice(voice, Profile.Sex))
                 continue;
             var name = voice.Name;
-            VoiceButton.AddItem(name, i);
+            BarkVoiceButton.AddItem(name, i);
 
             if (firstVoiceChoiceId == 1)
                 firstVoiceChoiceId = i;
@@ -94,18 +94,18 @@ public sealed partial class HumanoidProfileEditor
 
             if (voice.SponsorOnly && _sponsorsMgr != null && !_sponsorsMgr.GetSponsorPrototypes().Contains(voice.ID))
             {
-                VoiceButton.SetItemDisabled(VoiceButton.GetIdx(i), true);
+                BarkVoiceButton.SetItemDisabled(BarkVoiceButton.GetIdx(i), true);
             }
         }
 
-        var voiceChoiceId = _voiceList.FindIndex(x => x.ID == Profile.Voice);
-        if (!VoiceButton.TrySelectId(voiceChoiceId) &&
-            VoiceButton.TrySelectId(firstVoiceChoiceId))
+        var voiceChoiceId = _voiceList.FindIndex(x => x.ID == Profile.BarkVoice);
+        if (!BarkVoiceButton.TrySelectId(voiceChoiceId) &&
+            BarkVoiceButton.TrySelectId(firstVoiceChoiceId))
         {
-            SetVoice(_voiceList[firstVoiceChoiceId].ID);
+            SetBarkVoice(_voiceList[firstVoiceChoiceId].ID);
         }
-        Pitch.Value = Profile.VoicePitch;
-        PitchInput.Value = Profile.VoicePitch;
+        Pitch.Value = Profile.BarkVoicePitch;
+        PitchInput.Value = Profile.BarkVoicePitch;
         PitchInput.IsValid = value => value >= 0.5f && value <= 1.5f;
     }
 
@@ -122,14 +122,14 @@ public sealed partial class HumanoidProfileEditor
 
         int _previewBeepIndex = 0;
 
-        var voice = Profile.Voice;
+        var voice = Profile.BarkVoice;
 
         if (!_prototypeManager.TryIndex<VoiceSpeechPrototype>(voice, out var protoVoice))
             return;
 
         var Sound = protoVoice.Voice;
         AudioParams audioparms = AudioParams.Default
-                .WithPitchScale(Profile.VoicePitch)
+                .WithPitchScale(Profile.BarkVoicePitch)
                 .WithVariation(0.05f)
                 .WithVolume(_voiceSys.AdjustVolume(false, protoVoice.Basevolume));
 

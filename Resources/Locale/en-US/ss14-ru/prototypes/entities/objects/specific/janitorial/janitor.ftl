@@ -1,5 +1,11 @@
 ent-MopItem = mop
     .desc = A mop that can't be stopped, viscera cleanup detail awaits.
+ent-SolutionMopSmall = { ent-SolutionMop }
+    .desc = { ent-SolutionMop.desc }
+ent-SolutionMopNormal = { ent-SolutionMop }
+    .desc = { ent-SolutionMop.desc }
+ent-SolutionMopLarge = { ent-SolutionMop }
+    .desc = { ent-SolutionMop.desc }
 ent-AdvMopItem = advanced mop
     .desc = Motorized mop that has a bigger reservoir and quickly replaces reagents inside with water. Automatic Clown Countermeasure not included.
 ent-WetFloorSign = wet floor sign

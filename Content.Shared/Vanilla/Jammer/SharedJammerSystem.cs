@@ -26,7 +26,7 @@ public abstract partial class SharedJammerSystem : EntitySystem
         if (!isjammeractive)
             return;
 
-        _popup.PopupCursor("Блюспейс-система заблокирована. Попробуйте позже.");
+        _popup.PopupCursor("Блюспейс-система заблокирована. Попробуйте позже.", args.User);
         args.Cancel();
     }
     public void RemoveJammer(EntityUid? station = null)

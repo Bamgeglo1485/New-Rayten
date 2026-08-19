@@ -1,6 +1,6 @@
 bwoink-user-title = Сообщение от администратора
 bwoink-admin-title = Admin Help
-bwoink-system-starmute-message-no-other-users = *Система: Никто не доступен для получения вашего сообщения. Попробуйте обратиться к администраторам игры в Discord.
+bwoink-system-starmute-message-no-other-users =  *Система: Никто не доступен для получения вашего сообщения. Попробуйте обратиться к администраторам игры в Discord.
 bwoink-system-messages-being-relayed-to-discord =
     Все сообщения передаются администраторам игры через Discord.
     Проблемы могут быть решены без ответа.
@@ -26,3 +26,4 @@ bwoink-system-player-reconnecting = переподключился.
 bwoink-system-player-banned = был забанен за: { $banReason }
 bwoink-message-admin-only = (админам)
 bwoink-message-silent = (S)
+bwoink-message-name-link = (?)

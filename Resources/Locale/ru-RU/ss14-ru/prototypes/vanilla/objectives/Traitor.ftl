@@ -1,0 +1,14 @@
+ent-BaseTeachALessonObjective = { ent-BaseTargetObjective }
+    .desc = { ent-BaseTargetObjective.desc }
+ent-TeachRandomPersonObjective = { ent-BaseTraitorObjective }
+    .desc = Ваша цель не убить, а наказать. Убедитесь, что цель умрёт МУЧИТЕЛЬНО единожды. Он знает, что натворил.
+ent-TeachRandomHeadObjective = { ent-BaseTraitorObjective }
+    .desc = Ваша цель не убить, а наказать. Убедитесь, что цель умрёт МУЧИТЕЛЬНО единожды. Он знает, что натворил.
+ent-BaseRPObjective = { ent-BaseTargetObjective }
+    .desc = { ent-BaseTargetObjective.desc }
+ent-JailRPObjective = { ent-BaseTraitorObjective }
+    .desc = Он провинился, но у нас нет доказательств. Создайте это доказательство и посадите его в перманентное заключение.
+ent-VerbRPObjective = { ent-BaseTraitorObjective }
+    .desc = Его навыки и знания помогут нам. Попытайтесь завербовать его в Департамент Разведки и дайте ему первое задание.
+ent-VerbEnrageObjective = { ent-BaseTraitorObjective }
+    .desc = Он не подходит на роль главы, так что дайте нам причину для плохой записи в досье.
