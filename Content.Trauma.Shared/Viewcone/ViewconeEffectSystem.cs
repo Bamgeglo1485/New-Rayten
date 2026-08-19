@@ -23,8 +23,6 @@ public sealed partial class ViewconeEffectSystem : EntitySystem
 
     public static readonly EntProtoId TalkEffect = "ViewconeEffectTalk";
 
-    private bool _disabled;
-
     public override void Initialize()
     {
         base.Initialize();
@@ -59,7 +57,7 @@ public sealed partial class ViewconeEffectSystem : EntitySystem
     /// <param name="angleOverride">The local rotation to set the effect to, instead of the parent rotation.</param>
     public void SpawnEffect(EntityUid source, [ForbidLiteral] EntProtoId effect, Angle? angleOverride = null)
     {
-        if (_disabled || !_timing.IsFirstTimePredicted)
+        if (!_timing.IsFirstTimePredicted)
             return;
 
         var ent = PredictedSpawnNextToOrDrop(effect, source);
