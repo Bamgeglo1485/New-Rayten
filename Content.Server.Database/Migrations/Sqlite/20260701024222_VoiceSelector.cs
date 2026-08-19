@@ -1,11 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace Content.Server.Database.Migrations.Sqlite
 {
     /// <inheritdoc />
-    public partial class VoiceSelector : Migration  // Corvax-TTS
+    public partial class VoiceSelector : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

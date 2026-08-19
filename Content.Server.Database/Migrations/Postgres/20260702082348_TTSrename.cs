@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Content.Server.Database.Migrations.Sqlite
+namespace Content.Server.Database.Migrations.Postgres
 {
     /// <inheritdoc />
     public partial class TTSrename : Migration
