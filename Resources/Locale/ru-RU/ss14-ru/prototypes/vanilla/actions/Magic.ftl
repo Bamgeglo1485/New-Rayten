@@ -10,3 +10,5 @@ ent-ActionTimeStop5Sec = { "" }
     .desc = { "" }
 ent-ActionTimeStop10Sec = { ent-ActionTimeStop5Sec }
     .desc = { ent-ActionTimeStop5Sec.desc }
+ent-ActionTimeStop5SecLowDelay = { "" }
+    .desc = { "" }

@@ -176,3 +176,5 @@ ent-ClothingHeadHatSolidHeadband = solid headband
     .desc = "You'll feel like you're Invisible while wearing this! (DISCLAIMER: DOES NOT ACTUALLY MAKE THE WEARER INVISIBLE)"
 ent-ClothingHeadPropellerHat = propeller hat
     .desc = You're the bestest boy.
+ent-ClothingHeadHatMitreClown = honkmother mitre
+    .desc = It's hard for parishoners to see a banana peel on the floor when they're looking up at your glorious chapeau.

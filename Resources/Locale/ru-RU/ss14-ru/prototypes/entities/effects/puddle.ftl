@@ -34,3 +34,5 @@ ent-PuddleSparkle = Блеск
     .desc = { "" }
 ent-Puddle = лужа
     .desc = Лужа жидкости.
+ent-Footprint = footprint
+    .desc = Huh? Whose footprints are these?

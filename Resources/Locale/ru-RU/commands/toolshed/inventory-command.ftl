@@ -8,4 +8,5 @@ command-description-inventory-tryput = Пытается поместить ук�
 command-description-inventory-tryspawn = Пытается создать указанный прототип в первой переданной сущности, имеющей слот с указанным флагом; операция завершается неудачей, если слот уже занят.
 command-description-inventory-ensure = Помещает указанную сущность в первую переданную сущность, имеющую слот с указанным флагом, если слот пуст, и возвращает UID предмета, находящегося в слоте по завершении операции.
 command-description-inventory-ensurespawn = Создаёт указанный прототип в первой переданной сущности, имеющей слот с указанным флагом, если слот пуст, и возвращает UID предмета, находящегося в слоте по завершении операции.
+command-description-inventory-contents = Gets the entities in the inventory slots of the piped entities and passes them along.
 command-description-inventory-query = Возвращает сущности из слотов инвентаря указанных сущностей и передаёт их по цепочке.

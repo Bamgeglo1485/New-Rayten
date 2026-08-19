@@ -1,0 +1,2 @@
+ent-EffectFlashBluespaceExplosion = { "" }
+    .desc = { "" }

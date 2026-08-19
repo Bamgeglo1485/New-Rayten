@@ -1,8 +1,15 @@
+ent-DrinkCanBase = { ent-DrinkBaseMaterialMetal }
+    .desc = { ent-DrinkBaseMaterialMetal.desc }
 ent-DrinkCanBaseFull = { ent-BaseItem }
     .desc = { ent-BaseItem.desc }
     .suffix = Full
+ent-SolutionCanComposite = { ent-SolutionComposite }
+    .desc = { ent-SolutionComposite.desc }
+ent-DrinkColaCanBase = Space Cola can
+    .desc = A sweet, carbonated soft drink.
 ent-DrinkColaCan = баночка Спейс Кола
     .desc = Сладкий газированный безалкогольный напиток.
+    .suffix = Full
 ent-DrinkColaCanEmpty = { ent-DrinkColaCan }
     .suffix = Пустой
     .desc = { ent-DrinkColaCan.desc }

@@ -8,6 +8,7 @@ station-ai-has-no-power-for-upload = Загрузка не удалась — я
 station-ai-is-too-damaged-for-upload = Загрузка не удалась — ядро ИИ нужно починить.
 station-ai-core-losing-power = Ваше ядро ИИ теперь работает на резервной батарее.
 station-ai-core-critical-power = У вашего ядра ИИ критически низкий уровень энергии. Необходимо восстановить внешнее питание, иначе возможна серьёзная порча данных!
+station-ai-core-taking-damage = Your AI core is sustaining physical damage.
 # Ghost role
 station-ai-ghost-role-name = Станционный ИИ
 station-ai-ghost-role-description = Служите экипажу станции в роли бдительного ИИ.

@@ -25,8 +25,12 @@ lathe-category-faux-tile = Искусственная плитка
 lathe-category-maints-tile = Плитка техтоннелей
 lathe-category-supply = Снабжение
 lathe-category-steel-tile = Сталь
+lathe-category-shuttle-tile = Shuttle
 lathe-category-white-tile = Белая плитка
 lathe-category-wood-tile = Дерево
+lathe-category-plastic-tile = Plastic
+lathe-category-precious-tile = Precious
+lathe-category-industrial-tile = Industrial
 # Cutter
 lathe-category-marble = Мрамор
 lathe-category-modules = Модули

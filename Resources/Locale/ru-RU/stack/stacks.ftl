@@ -95,6 +95,11 @@ stack-artifact-fragment =
         [1] фрагментов артефакта
        *[other] фрагментов артефакта
     }
+stack-conveyor-belt =
+    { $amount ->
+        [1] conveyor belt
+       *[other] conveyor belts
+    }
 stack-xenoborg-circuit =
     { $amount ->
         [1] продвинутую плату ксеноборга

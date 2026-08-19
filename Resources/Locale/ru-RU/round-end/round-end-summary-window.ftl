@@ -6,6 +6,14 @@ round-end-summary-window-gamemode-name-label = Игровой режим был 
 round-end-summary-window-duration-label = Он длился [color=yellow]{ $hours } ч., { $minutes } мин., и { $seconds } сек.
 round-end-summary-window-player-info-if-observer-text = [color=gray]{ $playerOOCName }[/color] был [color=lightblue]{ $playerICName }[/color], наблюдатель.
 round-end-summary-window-player-info-if-not-observer-text = [color=gray]{ $playerOOCName }[/color] был [color={ $icNameColor }]{ $playerICName }[/color], в роли [color=orange]{ $playerRole }[/color].
+round-end-summary-window-player-manifest-tab-search-placeholder = Search players, roles, types...
+round-end-summary-window-player-manifest-tab-sort-character = Character
+round-end-summary-window-player-manifest-tab-sort-role = Role
+round-end-summary-window-player-manifest-tab-sort-player-type = Type
+round-end-summary-window-player-manifest-tab-sort-player = Player
+round-end-summary-window-player-manifest-tab-sort-player-type-antag = Antagonist
+round-end-summary-window-player-manifest-tab-sort-player-type-crew = Crew
+round-end-summary-window-player-manifest-tab-sort-player-type-observer = Observer
 round-end-summary-discord-round-id-label = ### Раунд **#{ $roundId }** завершился.
 round-end-summary-discord-gamemode-name-label = Игровой режим был **{ $gamemode }**.
 round-end-summary-discord-duration-label = Он длился **{ $hours } ч., { $minutes } мин., и { $seconds } сек.**

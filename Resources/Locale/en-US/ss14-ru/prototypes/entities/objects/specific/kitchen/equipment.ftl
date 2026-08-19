@@ -1,5 +1,5 @@
-ent-BaseHandheldGrinder = { ent-BaseItem }
-    .desc = { ent-BaseItem.desc }
+ent-BaseHandheldGrinder = { ent-SolutionToolSmall }
+    .desc = { ent-SolutionToolSmall.desc }
 ent-MortarAndPestle = mortar and pestle
     .desc = Used for grinding small amounts of objects.
 ent-MortarAndPestleMakeshift = makeshift mortar and pestle

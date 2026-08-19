@@ -460,6 +460,11 @@ entity-effect-guidebook-plant-phalanximine =
         [1] Восстанавливает
        *[other] восстановить
     } жизнеспособность растения, сделанного нежизнеспособным мутацией
+entity-effect-guidebook-plant-remove-kudzu =
+    { $chance ->
+        [1] Removes
+       *[other] remove
+    } kudzu weed growth from a plant
 entity-effect-guidebook-plant-diethylamine =
     { $chance ->
         [1] Увеличивает
@@ -485,3 +490,13 @@ entity-effect-guidebook-plant-mutate-chemicals =
         [1] Мутирует
        *[other] мутировать
     } растение для производства { $name }
+entity-effect-guidebook-add-reagent-to-bloodstream =
+    { $chance ->
+        [1] Injects
+       *[other] inject
+    } { $quantity } of { $reagent } directly into the bloodstream
+entity-effect-disarm =
+    { $chance ->
+        [1] Disarms
+       *[other] disarms
+    } the entity

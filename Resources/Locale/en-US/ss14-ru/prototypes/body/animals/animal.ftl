@@ -1,8 +1,8 @@
 ent-OrganAnimalMetabolizer = { "" }
     .desc = { "" }
-ent-OrganAnimal = { ent-OrganBase }
+ent-OrganAnimal = { ent-OrganBaseOrganic }
     .suffix = Animal
-    .desc = { ent-OrganBase.desc }
+    .desc = { ent-OrganBaseOrganic.desc }
 ent-OrganAnimalInternal = { ent-OrganAnimal }
     .desc = { ent-OrganAnimal.desc }
 ent-OrganAnimalLungs = { ent-OrganBaseLungs }

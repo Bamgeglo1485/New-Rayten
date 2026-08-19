@@ -18,6 +18,8 @@ comp-kitchen-spike-begin-butcher = { CAPITALIZE($user) } начинает пот
 comp-kitchen-spike-butcher-self = Вы потрошили { $victim }!
 comp-kitchen-spike-butcher = { CAPITALIZE($user) } потрошил(а) { $victim }!
 comp-kitchen-spike-unhook-verb = Снять с крюка
+comp-kitchen-spike-butcher-empty = { CAPITALIZE(THE($victim)) } has no meat left to butcher!
+comp-kitchen-spike-need-tool-quality = { $quality } tool required to butcher { THE($target) }.
 comp-kitchen-spike-hooked = [color=red]{ CAPITALIZE($victim) } на этом крюке![/color]
 comp-kitchen-spike-victim-examine = [color=orange]{ CAPITALIZE(SUBJECT($target)) } looks quite lean.[/color]
 comp-kitchen-spike-begin-hook-self = Вы начинаете насаживать себя на { $this }!

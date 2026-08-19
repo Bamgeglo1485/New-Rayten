@@ -4,3 +4,5 @@ ent-MindRolePlagueDoctor = Чумной доктор
     .desc = { ent-BaseMindRoleAntag.desc }
 ent-MindRoleOldMan = Старик
     .desc = { ent-BaseMindRoleAntag.desc }
+ent-MindRoleDiversionist = Диверсант
+    .desc = { ent-BaseMindRoleAntag.desc }

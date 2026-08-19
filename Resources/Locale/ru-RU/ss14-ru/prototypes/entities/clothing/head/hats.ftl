@@ -176,3 +176,5 @@ ent-ClothingHeadHatSolidHeadband = твёрдая повязка на голов
     .desc = Вы почувствуете себя невидимым, надев это! (ДИСКЛЕЙМЕР: НЕ ДЕЛАЕТ НОСИТЕЛЯ Невидимым)
 ent-ClothingHeadPropellerHat = шляпа с пропеллером
     .desc = Ты самый лучший парень.
+ent-ClothingHeadHatMitreClown = honkmother mitre
+    .desc = It's hard for parishoners to see a banana peel on the floor when they're looking up at your glorious chapeau.

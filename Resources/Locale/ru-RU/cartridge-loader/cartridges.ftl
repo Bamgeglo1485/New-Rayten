@@ -5,6 +5,7 @@ nano-task-program-name = НаноТаск
 news-read-program-name = Новости станции
 crew-manifest-program-name = Манифест экипажа
 crew-manifest-cartridge-loading = Загрузка...
+crew-manifest-cartridge-loading-failed = Failed to load crew manifest!
 net-probe-program-name = Зонд сетей
 net-probe-scan = Просканирован { $device }!
 net-probe-label-name = Название
@@ -15,11 +16,11 @@ log-probe-program-name = Зонд логов
 log-probe-scan = Загружены логи устройства { $device }!
 log-probe-label-time = Время
 log-probe-label-accessor = Использовано:
-log-probe-label-number = #
+log-probe-label-number =  #
 log-probe-print-button = Распечатать логи
 log-probe-printout-device = Сканировано: { $name }
 log-probe-printout-header = Последние логи:
-log-probe-printout-entry = #{ $number } / { $time } / { $accessor }
+log-probe-printout-entry =  #{ $number } / { $time } / { $accessor }
 astro-nav-program-name = АстроНав
 med-tek-program-name = МедТек
 # Wanted list cartridge
@@ -64,15 +65,15 @@ nano-task-printed-medium-priority = Приоритет: средний
 nano-task-printed-low-priority = Приоритет: низкий
 wanted-list-label-no-records = Всё спокойно, ковбой.
 wanted-list-search-placeholder = Поиск по имени и статусу
-wanted-list-age-label = [color=darkgray]Возраст:[/color] [color=white]{ $age }[/color]
-wanted-list-job-label = [color=darkgray]Должность:[/color] [color=white]{ $job }[/color]
-wanted-list-species-label = [color=darkgray]Раса:[/color] [color=white]{ $species }[/color]
-wanted-list-gender-label = [color=darkgray]Гендер:[/color] [color=white]{ $gender }[/color]
-wanted-list-reason-label = [color=darkgray]Причина:[/color] [color=white]{ $reason }[/color]
+wanted-list-age-label =  [color=darkgray]Возраст:[/color] [color=white]{ $age }[/color]
+wanted-list-job-label =  [color=darkgray]Должность:[/color] [color=white]{ $job }[/color]
+wanted-list-species-label =  [color=darkgray]Раса:[/color] [color=white]{ $species }[/color]
+wanted-list-gender-label =  [color=darkgray]Гендер:[/color] [color=white]{ $gender }[/color]
+wanted-list-reason-label =  [color=darkgray]Причина:[/color] [color=white]{ $reason }[/color]
 wanted-list-unknown-reason-label = неизвестная причина
-wanted-list-initiator-label = [color=darkgray]Инициатор:[/color] [color=white]{ $initiator }[/color]
+wanted-list-initiator-label =  [color=darkgray]Инициатор:[/color] [color=white]{ $initiator }[/color]
 wanted-list-unknown-initiator-label = неизвестный инициатор
-wanted-list-status-label = [color=darkgray]статус:[/color] { $status ->
+wanted-list-status-label =  [color=darkgray]статус:[/color] { $status ->
         [suspected] [color=yellow]подозревается[/color]
         [wanted] [color=red]разыскивается[/color]
         [detained] [color=#b18644]под арестом[/color]

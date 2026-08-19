@@ -4,5 +4,3 @@ ent-ClothingEyesNightVisionDeviceEmpty = прибор ночного виден�
 ent-ClothingEyesNightVisionDevice = { ent-ClothingEyesNightVisionDeviceEmpty }
     .suffix = Заполнен
     .desc = { ent-ClothingEyesNightVisionDeviceEmpty.desc }
-ent-ActionToggleNightVision = Включить ПНВ
-    .desc = Всем выйти из сумрака!

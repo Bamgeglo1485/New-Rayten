@@ -1,5 +1,8 @@
 ent-BaseToilet = toilet
     .desc = The HT-451, a torque rotation-based, waste disposal unit for small matter. This one seems remarkably clean.
+ent-ConstructedToilet = toilet
+    .desc = The HT-451, a torque rotation-based, waste disposal unit for small matter. This one seems remarkably clean.
+    .suffix = Constructed, Unplungable
 ent-ToiletEmpty = toilet
     .desc = The HT-451, a torque rotation-based, waste disposal unit for small matter. This one seems remarkably clean.
     .suffix = Empty

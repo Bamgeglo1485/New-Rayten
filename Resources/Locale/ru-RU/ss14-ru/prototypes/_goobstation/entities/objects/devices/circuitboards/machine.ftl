@@ -1,0 +1,10 @@
+ent-RoboticArmCircuitboard = плата манипулятора
+    .desc = { ent-BaseMachineCircuitboard.desc }
+ent-ConstructorCircuitboard = плата сборщика
+    .desc = { ent-BaseMachineCircuitboard.desc }
+ent-StorageBinCircuitboard = плата хранилища
+    .desc = { ent-BaseMachineCircuitboard.desc }
+ent-InteractorCircuitboard = плата интерактора
+    .desc = { ent-BaseMachineCircuitboard.desc }
+ent-PlumbingPumpCircuitboard = плата жидкостного насоса
+    .desc = { ent-BaseMachineCircuitboard.desc }

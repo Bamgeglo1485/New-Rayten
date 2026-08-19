@@ -1,3 +1,11 @@
 ent-MobLing = Урист МакГенка
     .suffix = Не антаг
     .desc = { ent-MobHuman.desc }
+ent-MobHeadSlug = headslug
+    .desc = A small, slug-like creature with a large, gaping maw. It's covered in a thick, slimy mucus.
+ent-ChangelingFleshClothingAbilityStoreDummy = { "" }
+    .desc = { "" }
+ent-ChangelingVoiceMimicDummy = { "" }
+    .desc = { "" }
+ent-ChangelingNightVisionDummy = { "" }
+    .desc = { "" }

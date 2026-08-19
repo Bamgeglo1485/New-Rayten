@@ -49,5 +49,7 @@ ent-SyringeCryostasis = криостазисный шприц
     .desc = Шприц, используемый для хранения химикатов или растворов без протекания реакций.
 ent-Pill = таблетка
     .desc = Засовывать в рот.
+ent-SolutionPill = { ent-SolutionFood }
+    .desc = { ent-SolutionFood.desc }
 ent-PillCanister = контейнер для таблеток
     .desc = Вмещает до 10 таблеток.
