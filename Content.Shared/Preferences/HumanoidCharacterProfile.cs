@@ -846,10 +846,10 @@ namespace Content.Shared.Preferences
                 Species = HumanoidCharacterProfile.DefaultSpecies;
                 speciesPrototype = prototypeManager.Index(Species);
             }
-            if (voicePrototype.SponsorOnly && !sponsorPrototypes.Contains(Voice))
+            if (voicePrototype.SponsorOnly && !sponsorPrototypes.Contains(BarkVoice))
             {
-                BarkVoice = HumanoidCharacterProfile.DefaultVoice;
-                voicePrototype = prototypeManager.Index<VoiceSpeechPrototype>(Voice);
+                BarkVoice = DefaultSexVoice[sex];
+                voicePrototype = prototypeManager.Index<VoiceSpeechPrototype>(BarkVoice);
             }
             // Rayten-End
 
