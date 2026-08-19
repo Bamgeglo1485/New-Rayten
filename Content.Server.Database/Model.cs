@@ -355,8 +355,8 @@ namespace Content.Server.Database
         public string? Voice { get; set; } = null!; // If null, the voice gets defaulted to the sex associated value
         public string Gender { get; set; } = null!;
         public string Species { get; set; } = null!;
-        public string BarkVoice { get; set; } = "Papyrus"; // Rayten-TTS
-        public float BarkVoicePitch { get; set; } = 1.0f; // Rayten-TTS
+        [Column("bark_voice")] public string BarkVoice { get; set; } = "Papyrus"; // Rayten-TTS
+        [Column("bark_voice_pitch")] public float BarkVoicePitch { get; set; } = 1.0f; // Rayten-TTS
         [Column(TypeName = "jsonb")] public JsonDocument? OrganMarkings { get; set; } = null!;
         [Column(TypeName = "jsonb")] public JsonDocument? Markings { get; set; } = null!;
         public string HairName { get; set; } = null!;
