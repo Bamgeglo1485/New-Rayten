@@ -2,7 +2,7 @@
 
 # Shown at the end of a round of Traitor
 traitor-round-end-agent-name = предатель
-objective-issuer-syndicate = [color = #0f1425]Разведка НаноТрейзен[/color]
+objective-issuer-syndicate = [color=crimson]Синдикат[/color]
 objective-issuer-unknown = Неизвестно
 traitor-round-end-codewords = Кодовыми словами были: [color=White]{ $codewords }[/color].
 traitor-title = Предатели
@@ -22,14 +22,14 @@ traitor-death-match-end-round-description-entry = КПК { $originalName }, с {
 
 # TraitorRole
 traitor-role-greeting =
-    Вы - агент Департамента Разведки [color = #374a88]НаноТрейзен[/color], завербованный для выполнения задач вне политики НТ и в обход гуманитарных организаций. [color = #990c24]Вы действуете под прикрытием синдиката, не раскрывайте ничего о действиях НаноТрейзен![/color]
+    Вы - агент организации { $corporation } на задании [color = darkred]Синдиката.[/color].
     Ваши цели и кодовые слова перечислены в меню персонажа.
     Воспользуйтесь своим аплинком, чтобы приобрести всё необходимое для выполнения работы.
-    Слава Nanotrasen!
+    Смерть Nanotrasen!
 traitor-role-codewords =
     Кодовые слова следующие: [color = lightgray]
     { $codewords }.[/color]
-    Кодовые слова можно использовать в обычном разговоре, чтобы незаметно идентифицировать себя для других агентов.
+    Кодовые слова можно использовать в обычном разговоре, чтобы незаметно идентифицировать себя для других агентов Синдиката.
     Прислушивайтесь к ним и храните их в тайне.
 traitor-role-uplink-code =
     Установите рингтон Вашего КПК на [color = lightgray]{ $code }[/color] чтобы заблокировать или разблокировать аплинк.

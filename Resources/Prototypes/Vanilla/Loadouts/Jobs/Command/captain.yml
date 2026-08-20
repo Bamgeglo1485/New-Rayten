@@ -25,6 +25,14 @@
   - !type:GroupLoadoutEffect
     proto: SuperMasterCap
 
+- type: loadout
+  id: UniformJumpsuitNavalCaptain
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitNavalCaptain
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: MasterCap
+
 #head
 - type: loadout
   id: CaptainCapcapWhite
@@ -34,7 +42,22 @@
   - !type:GroupLoadoutEffect
     proto: SuperMasterCap
 
+- type: loadout
+  id: CapNavalCap
+  equipment:
+    head: ClothingHeadHatNavalCap
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: MasterCap
+
 #outer clothing
+- type: loadout
+  id: ClothingOuterCoat
+  equipment:
+    outerClothing: ClothingOuterCoatCaptain
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: MasterCap
 
 - type: loadout
   id: ClothingOuterCoatCaptainWhite
@@ -53,6 +76,10 @@
     proto: MasterCap
 
 # Gloves
+- type: loadout
+  id: CaptainGlovesDefault
+  equipment:
+    gloves: ClothingHandsGlovesCaptain
 
 - type: loadout
   id: CaptainGlovesWhite
@@ -80,8 +107,15 @@
   effects:
   - !type:GroupLoadoutEffect
     proto: SuperMasterCap
-
 #Neck
+
+- type: loadout
+  id: ClothingNeckCaptainWideLoadout
+  equipment:
+    neck: ClothingNeckCaptainWide
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: MasterCap
 
 - type: loadout
   id: CaptainWhiteMantle
@@ -90,6 +124,22 @@
   effects:
   - !type:GroupLoadoutEffect
     proto: SuperMasterCap
+
+- type: loadout
+  id: CaptainCloakRoyal
+  equipment:
+    neck: ClothingNeckCloakRoyalCaptain
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: SuperMasterCap
+
+- type: loadout
+  id: TieDetCap
+  equipment:
+    neck: ClothingNeckTieDet
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: MasterCap
 
 # Backpacks
 

@@ -32,7 +32,7 @@ public sealed partial class ProgrammableDroneSystem : EntitySystem
         if (!_vms.TryGetValue(ent.Owner, out var vm))
             return;
 
-        ent.Comp.Running = true;
+        ent.Comp.IsRunning = true;
         vm.Run(ent.Comp.Code);
     }
 
@@ -41,7 +41,7 @@ public sealed partial class ProgrammableDroneSystem : EntitySystem
         if (!_vms.TryGetValue(ent.Owner, out var vm))
             return;
 
-        ent.Comp.Running = false;
+        ent.Comp.IsRunning = false;
         vm.Run(ent.Comp.Code);
     }
 

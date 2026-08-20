@@ -8,5 +8,5 @@ public sealed partial class ProgrammableDroneComponent : Component
     public string Code = "";
 
     [DataField]
-    public bool Running = false;
+    public bool IsRunning = false;
 }

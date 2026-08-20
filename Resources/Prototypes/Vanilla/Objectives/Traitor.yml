@@ -30,7 +30,6 @@
     title: objective-condition-teach-lesson-title
   - type: PickRandomPerson
 
-
 - type: entity
   parent: [BaseTraitorObjective, BaseTeachALessonObjective]
   id: TeachRandomHeadObjective
@@ -66,7 +65,7 @@
 - type: entity
   parent: [BaseTraitorObjective, BaseRPObjective]
   id: JailRPObjective
-  description: Он провинился, но у нас нет доказательств. Создайте это доказательство и посадите его в перманентное заключение.
+  description: Консорциум Защиты Прав Животных посчитал, что убивать цель - слишком жестоко. Подставьте и посадите его.
   components:
   - type: Objective
     icon:
@@ -80,7 +79,7 @@
 - type: entity
   parent: [BaseTraitorObjective, BaseRPObjective]
   id: VerbRPObjective
-  description: Его навыки и знания помогут нам. Попытайтесь завербовать его в Департамент Разведки и дайте ему первое задание.
+  description: Его навыки и знания помогут нам. Попытайтесь завербовать его в Синдикат и дайте ему первое задание.
   components:
   - type: Objective
     difficulty: 2.0
@@ -94,7 +93,7 @@
 - type: entity
   parent: [BaseTraitorObjective, BaseRPObjective]
   id: VerbEnrageObjective
-  description: Он не подходит на роль главы, так что дайте нам причину для плохой записи в досье.
+  description: Синдикату нужна реклама в НТоке, так что взбесите главу, а мы вырежем это на короткие ролики.
   components:
   - type: Objective
     icon:

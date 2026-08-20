@@ -111,8 +111,8 @@
   components:
   - type: LightBulb
     bulb: Bulb
-    color: "#b1b0d6" # RAYTEN
-    lightEnergy: 0.85
+    color: "#FFD1A3" # 4000K color temp
+    lightEnergy: 1.0
     lightRadius: 6
     lightSoftness: 1.1
   - type: Tag
@@ -128,8 +128,8 @@
   components:
   - type: LightBulb
     bulb: Bulb
-    color: "#b1b0d6" # RAYTEN
-    lightEnergy: 0.85
+    color: "#EEEEFF"
+    lightEnergy: 1
     lightRadius: 8
     lightSoftness: 1
     BurningTemperature: 350 #LEDs are colder than incandescent bulbs
@@ -221,8 +221,8 @@
   description: A light fixture.
   components:
   - type: LightBulb
-    color: "#b1b0d6" # RAYTEN
-    lightEnergy: 0.85
+    color: "#f0f2ff" # 5000K color temp
+    lightEnergy: 0.8
     lightRadius: 10
     lightSoftness: 1
     PowerUse: 25
@@ -234,9 +234,9 @@
   description: An aging light fixture.
   components:
   - type: LightBulb
-    color: "#dad6ff" # old fluorescents are yellower-4500K temp
+    color: "#FFDABB" # old fluorescents are yellower-4500K temp
     lightEnergy: 0.5
-    lightRadius: 5
+    lightRadius: 10
     lightSoftness: 1
     PowerUse: 10
 

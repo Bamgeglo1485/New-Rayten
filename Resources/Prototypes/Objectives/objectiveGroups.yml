@@ -4,7 +4,7 @@
   weights:
     #TraitorObjectiveGroupSteal: 1
     TraitorObjectiveGroupKill: 1
-    TraitorObjectiveGroupState: 1 # RAYTEN НАХУЙ
+    TraitorObjectiveGroupState: 0.5
     #TraitorObjectiveGroupSocial: 1 # RAYTEN НАХУЙ
     #TraitorObjectiveGroupSabotage: 1 # RAYTEN НАХУЙ
     TraitorObjectiveGroupRP: 1 # RAYTEN ДА
@@ -38,7 +38,7 @@
   id: TraitorObjectiveGroupState
   weights:
     #EscapeShuttleObjective: 1
-    DieObjective: 0.05
+    DieObjective: 0.0
     #HijackShuttleObjective: 0.02
 
 - type: weightedRandom
