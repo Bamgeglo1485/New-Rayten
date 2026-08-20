@@ -126,8 +126,8 @@
   loadouts:
   - CaptainJumpsuit
   - CaptainJumpskirt
-  #- CaptainFormalSuit
-  #- CaptainFormalSkirt
+  - CaptainFormalSuit
+  - CaptainFormalSkirt
   # Vanilla-Loadouts-Start
   - UniformJumpsuitWhiteCaptain
   - UniformJumpskirtWhiteCaptain
@@ -138,14 +138,14 @@
   name: loadout-group-captain-neck
   minLimit: 0
   loadouts:
-  #- CaptainCloak
-  #- CaptainCloakFormal
-  #- CaptainMantle
+  - CaptainCloak
+  - CaptainCloakFormal
+  - CaptainMantle
   # Vanilla-Loadouts-Start
   - DetectiveTie
-  #- ClothingNeckCaptainWideLoadout
-  #- CaptainWhiteMantle
-  #- CaptainCloakRoyal
+  - ClothingNeckCaptainWideLoadout
+  - CaptainWhiteMantle
+  - CaptainCloakRoyal
   # Vanilla-Loadouts-end
 
 - type: loadoutGroup
@@ -161,9 +161,9 @@
   id: CaptainOuterClothing
   name: loadout-group-captain-outerclothing
   loadouts:
-  #- CaptainOuterClothing
+  - CaptainOuterClothing
   - CaptainWintercoat
-  #- ClothingOuterCoat
+  - ClothingOuterCoat
   # Vanilla-Loadouts-Start
   - CoatNavalCaptain
   - ClothingOuterCoatCaptainWhite
@@ -1238,9 +1238,9 @@
   id: SecurityOuterClothing
   name: loadout-group-security-outerclothing
   loadouts:
-  #- ArmorVestSec # Corvax # Rayten-Remove
+  - ArmorVestSec # Corvax
   - ArmorVest
-  #- ArmorVestSlim # Rayten-Remove
+  - ArmorVestSlim
   - SecurityOfficerWintercoat
 
 - type: loadoutGroup
@@ -1249,7 +1249,7 @@
   loadouts:
   #- JackSecBoots # Corvax
   - JackBoots
-  #- SecurityWinterBoots # Rayten-Remove
+  - SecurityWinterBoots
 
 - type: loadoutGroup
   id: SecurityPDA

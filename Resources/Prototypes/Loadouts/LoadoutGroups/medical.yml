@@ -196,7 +196,7 @@
 - type: loadoutGroup
   id: ParamedicOuterClothing
   name: loadout-group-paramedic-outerclothing
-  minLimit: 0
+  #minLimit: 0
   loadouts:
   - ParamedicWindbreaker
   - ParamedicWintercoat

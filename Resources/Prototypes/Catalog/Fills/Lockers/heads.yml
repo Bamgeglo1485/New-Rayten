@@ -41,6 +41,7 @@
     - id: MedalCase
     - id: NukeDisk
     - id: NukeCodePaperStation # RAYTEN
+    - id: ClothingOuterArmorCaptainCarapace
     - id: PinpointerNuclear
     - id: PlushieNuke
       prob: 0.1

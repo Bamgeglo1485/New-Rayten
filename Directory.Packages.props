@@ -12,6 +12,9 @@
     <PackageVersion Include="AsmResolver.DotNet" Version="6.0.0-beta.3" />
     <PackageVersion Include="System.Security.Cryptography.Xml" Version="9.0.15" />
     <!-- </Trauma> -->
+    <!-- <Rayten> -->
+      <PackageVersion Include="MoonSharp" Version="2.0.0" />
+    <!-- </Rayten> -->
     <PackageVersion Include="CsvHelper" Version="33.1.0" />
     <PackageVersion Include="ImGui.NET" Version="1.87.3" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.6">

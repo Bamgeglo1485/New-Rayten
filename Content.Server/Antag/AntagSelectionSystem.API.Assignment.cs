@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Content.Server.Antag.Components;
@@ -100,17 +100,17 @@ public sealed partial class AntagSelectionSystem
         switch (def.MultiAntagSetting)
         {
             case AntagAcceptability.None:
-            {
-                if (IsAssignedAntag(player, gameRule))
-                    return false;
-                break;
-            }
+                {
+                    if (IsAssignedAntag(player, gameRule))
+                        return false;
+                    break;
+                }
             case AntagAcceptability.NotExclusive:
-            {
-                if (IsAssignedExclusiveAntag(player, gameRule))
-                    return false;
-                break;
-            }
+                {
+                    if (IsAssignedExclusiveAntag(player, gameRule))
+                        return false;
+                    break;
+                }
         }
 
         return player.AttachedEntity == null || HasComp<GhostComponent>(player.AttachedEntity) || IsEntityValid(player, def);

@@ -2,7 +2,7 @@
 - type: loadout
   id: ParamedicHead
   equipment:
-    head: ClothingHeadHatParamedicsoft
+    head: ClothingHeadHatBeretSecurityMedic
 
 # Jumpsuit
 - type: loadout
@@ -19,12 +19,12 @@
 - type: loadout
   id: ParamedicWindbreaker
   equipment:
-    outerClothing: ClothingOuterCoatParamedicWB
+    outerClothing: ClothingOuterVestArmorMedSec
 
 - type: loadout
   id: ParamedicWintercoat
   equipment:
-    outerClothing: ClothingOuterWinterPara
+    outerClothing: ClothingOuterCoatLabSecurityMedic
 
 # Shoes
 - type: loadout

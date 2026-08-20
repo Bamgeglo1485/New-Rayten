@@ -37,9 +37,6 @@ using Robust.Shared.Random;
 using Robust.Shared.Utility;
 using static Content.Server.Antag.Components.AntagSelectionTime;
 
-using Content.Shared.Vanilla.AntagAccept;
-using Content.Server.Vanilla.AntagAccept;
-
 namespace Content.Server.Antag;
 
 /// <summary>
@@ -75,10 +72,6 @@ public sealed partial class AntagSelectionSystem : GameRuleSystem<AntagSelection
     [Dependency] private PlayTimeTrackingSystem _playTime = default!;
     [Dependency] private RoleSystem _role = default!;
     [Dependency] private TransformSystem _transform = default!;
-
-    // RAYTEN-STARTS
-    private Dictionary<ICommonSession, (Entity<AntagSelectionComponent> GameRule, AntagCount[] Antags, AntagCount CurrentAntag, TimeSpan Timeout, int Index)> _pendingConfirmations = new();
-    // RAYTEN-ENDS
 
     // arbitrary random number to give late joining some mild interest.
     public const float LateJoinRandomChance = 0.5f;
@@ -531,42 +524,27 @@ public sealed partial class AntagSelectionSystem : GameRuleSystem<AntagSelection
             if (!CanBeAntag(player, gameRule, antag.Definition, false))
                 continue;
 
-            // RAYTEN-STARTS
-            if (gameRule.Comp.AntagAcceptMenu)
-            {
-                RequestAntagAccept(gameRule, antag.Definition, player, antags.ToArray(), antag, i);
-                return true;
-            }
-            // RAYTEN-ENDS
+            // Try to get a valid antag entity.
+            if (!TryGetAntagEntity(gameRule, antag.Definition, player, out var antagEnt))
+                continue; // Something has likely gone horribly wrong if this happens, check your error log!
 
-            return AssignPlayerAsAntag(player, gameRule, antags.ToArray(), antag, i);
+            // Pre-select the session, then initialize the antag!
+            PreSelectSession(gameRule, antag.Definition, player);
+            InitializeAntag(gameRule, antag.Definition, antagEnt.Value, player);
+
+            // Reduce the slots left by one
+            // If we finish assigning all slots
+            antag.Count--;
+            if (antag.Count == 0)
+                antags.RemoveSwap(i);
+            else
+                antags[i] = antag;
+
+            return true;
         }
 
+        // If we're here, then we didn't assign a single antag!
         return false;
-    }
-
-    private bool AssignPlayerAsAntag(ICommonSession player,
-        Entity<AntagSelectionComponent> gameRule,
-        AntagCount[] antags,
-        AntagCount currentAntag,
-        int index)
-    {
-        // Try to get a valid antag entity.
-        if (!TryGetAntagEntity(gameRule, currentAntag.Definition, player, out var antagEnt))
-            return false;
-
-        // Pre-select the session, then initialize the antag!
-        PreSelectSession(gameRule, currentAntag.Definition, player);
-        InitializeAntag(gameRule, currentAntag.Definition, antagEnt.Value, player);
-
-        // Reduce the slots left by one
-        currentAntag.Count--;
-        if (currentAntag.Count == 0)
-            antags.RemoveSwap(index);
-        else
-            antags[index] = currentAntag;
-
-        return true;
     }
 
     /// <summary>
@@ -680,7 +658,7 @@ public sealed partial class AntagSelectionSystem : GameRuleSystem<AntagSelection
     private bool TryGetAntagEntity(Entity<AntagSelectionComponent> gameRule,
         AntagSpecifierPrototype prototype,
         ICommonSession player,
-        [NotNullWhen(true)]out EntityUid? antagEnt)
+        [NotNullWhen(true)] out EntityUid? antagEnt)
     {
         antagEnt = GetAntagEntity(gameRule, prototype, player);
         return antagEnt != null;
@@ -711,7 +689,7 @@ public sealed partial class AntagSelectionSystem : GameRuleSystem<AntagSelection
 
         if (player.AttachedEntity is not { } uid)
         {
-            Log.Error($"Tried to make {player.UserId} into an antagonist at Map: { coordinates.Value.MapId } ({ coordinates.Value.X }, { coordinates.Value.Y }) but was unable to find an entity for them. Gamerule {ToPrettyString(gameRule)}. Antag {prototype.ID}");
+            Log.Error($"Tried to make {player.UserId} into an antagonist at Map: {coordinates.Value.MapId} ({coordinates.Value.X}, {coordinates.Value.Y}) but was unable to find an entity for them. Gamerule {ToPrettyString(gameRule)}. Antag {prototype.ID}");
             return null;
         }
 
@@ -729,7 +707,7 @@ public sealed partial class AntagSelectionSystem : GameRuleSystem<AntagSelection
         AntagSpecifierPrototype prototype,
         ICommonSession player,
         MapCoordinates coordinates,
-        [NotNullWhen(true)]out EntityUid? uid)
+        [NotNullWhen(true)] out EntityUid? uid)
     {
         var ev = new AntagSelectEntityEvent(gameRule, prototype, coordinates, player);
         RaiseLocalEvent(gameRule, ref ev, true);

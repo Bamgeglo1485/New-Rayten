@@ -10,11 +10,6 @@
     useMemory: false # forgor
   - type: ViewconeFootstepsEffect # if you can hear it move you will see steps effects on screen
   # </Trauma>
-  # Rayten
-  - type: SinCityOverlay
-  - type: GrainOverlay
-  #- type: VignetteOverlay # Вырубил из-за хуевости
-  # Rayten-End
   - type: Sprite
     noRot: true
     drawdepth: Mobs
