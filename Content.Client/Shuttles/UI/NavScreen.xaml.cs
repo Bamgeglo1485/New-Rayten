@@ -35,26 +35,17 @@ public sealed partial class NavScreen : BoxContainer
         // Frontier
         IFFShuttleToggle.OnToggled += OnIFFShuttleTogglePressed;
         IFFShuttleToggle.Pressed = NavRadar.ShowIFFShuttles;
+        NfInitialize();
         // Frontier end
 
         DockToggle.OnToggled += OnDockTogglePressed;
         DockToggle.Pressed = NavRadar.ShowDocks;
 
-        NfInitialize(); // Frontier Initialization for the NavScreen
-    }
+        CargoDockToggle.OnToggled += OnCargoDockTogglePressed;
+        CargoDockToggle.Pressed = NavRadar.ShowCargoDocks;
 
-    /// <summary>
-    /// Frontier
-    /// </summary>
-    private void OnIffSearchChanged(string text)
-    {
-        text = text.Trim();
-
-        NavRadar.IFFFilter = text.Length == 0
-            ? null // If empty, do not filter
-            : (entity, _, _) =>
-                _entManager.TryGetComponent<MetaDataComponent>(entity, out var metadata) &&
-                metadata.EntityName.Contains(text, StringComparison.OrdinalIgnoreCase);
+        ArrivalDockToggle.OnToggled += OnArrivalDockTogglePressed;
+        ArrivalDockToggle.Pressed = NavRadar.ShowArrivalDocks;
     }
 
     public void SetShuttle(EntityUid? shuttle)
@@ -87,6 +78,18 @@ public sealed partial class NavScreen : BoxContainer
     {
         NavRadar.ShowDocks ^= true;
         args.Button.Pressed = NavRadar.ShowDocks;
+    }
+
+    private void OnCargoDockTogglePressed(BaseButton.ButtonEventArgs args)
+    {
+        NavRadar.ShowCargoDocks ^= true;
+        args.Button.Pressed = NavRadar.ShowCargoDocks;
+    }
+
+    private void OnArrivalDockTogglePressed(BaseButton.ButtonEventArgs args)
+    {
+        NavRadar.ShowArrivalDocks ^= true;
+        args.Button.Pressed = NavRadar.ShowArrivalDocks;
     }
 
     public void UpdateState(NavInterfaceState scc)

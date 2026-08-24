@@ -248,7 +248,7 @@
         VentCrawlerTube: !type:Container
 
 - type: entity
-  parent: [ BaseMachinePowered, ConstructibleMachine ]
+  parent: [ BaseMachinePowered, ConstructibleMachine, BaseConstructibleMachineDestructible ]
   id: BaseGasThermoMachine
   name: thermomachine
   abstract: true
@@ -423,7 +423,7 @@
     board: HellfireHeaterMachineCircuitBoard
 
 - type: entity
-  parent: [ BaseMachinePowered, SmallConstructibleMachine, BaseAutomatedMachine ] # Goob: Automation
+  parent: [ SolutionTank, SolutionHuge, BaseMachinePowered, SmallConstructibleMachine, BaseSmallConstructibleMachineDestructible, BaseAutomatedMachine ] # Goob: Automation
   id: BaseGasCondenser
   name: condenser
   description: Condenses gases into liquids. Now we just need some plumbing.
@@ -486,8 +486,6 @@
         !type:DamageTrigger
         damage: 100
       behaviors:
-      - !type:DoActsBehavior
-        acts: [ "Destruction" ]
       - !type:SpillBehavior
         solution: tank
       - !type:PlaySoundBehavior

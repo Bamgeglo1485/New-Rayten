@@ -190,6 +190,7 @@ public sealed partial class DamageableSystem
         args.State = new DamageableComponentState(
             _netMan.IsServer ? ent.Comp.Damage : ent.Comp.Damage.Clone(),
             ent.Comp.DamageModifierSetId,
+            ent.Comp.Displacement,
             ent.Comp.Bleeding //rayten
         );
     }
@@ -201,6 +202,8 @@ public sealed partial class DamageableSystem
 
         ent.Comp.DamageModifierSetId = state.ModifierSetId;
         ent.Comp.Bleeding = state.Bleeding; //Rayten
+        ent.Comp.Displacement = state.Displacement;
+
         // Has the damage actually changed?
         var newDamage = state.Damage.Clone();
         var delta = newDamage - ent.Comp.Damage;

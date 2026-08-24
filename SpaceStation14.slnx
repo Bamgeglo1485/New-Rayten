@@ -98,17 +98,8 @@
     <File Path="RobustToolbox/README.md" />
     <File Path="RobustToolbox/RELEASE-NOTES.md" />
   </Folder>
-  <Folder Name="/RobustToolbox/Robust.LoaderApi/">
-    <Project Path="RobustToolbox/Robust.LoaderApi/Robust.LoaderApi/Robust.LoaderApi.csproj">
-      <BuildType Solution="DebugOpt|*" Project="Debug" />
-      <BuildType Solution="Tools|*" Project="Release" />
-    </Project>
-  </Folder>
+  <Folder Name="/RobustToolbox/Robust.LoaderApi/" />
   <Folder Name="/RobustToolbox/Roslyn/">
-    <Project Path="RobustToolbox/Robust.Analyzers/Robust.Analyzers.csproj">
-      <BuildType Solution="DebugOpt|*" Project="Debug" />
-      <BuildType Solution="Tools|*" Project="Release" />
-    </Project>
     <Project Path="RobustToolbox/Robust.Client.NameGenerator/Robust.Client.NameGenerator.csproj">
       <BuildType Solution="DebugOpt|*" Project="Debug" />
       <BuildType Solution="Tools|*" Project="Release" />
@@ -120,10 +111,6 @@
   </Folder>
   <Folder Name="/RobustToolbox/Tools/" />
   <Folder Name="/RobustToolbox/XamlX/">
-    <Project Path="RobustToolbox/XamlX/src/XamlX.IL.Cecil/XamlX.IL.Cecil.csproj">
-      <BuildType Solution="DebugOpt|*" Project="Debug" />
-      <BuildType Solution="Tools|*" Project="Release" />
-    </Project>
     <Project Path="RobustToolbox/XamlX/src/XamlX.Runtime/XamlX.Runtime.csproj">
       <BuildType Solution="DebugOpt|*" Project="Debug" />
       <BuildType Solution="Tools|*" Project="Release" />
@@ -144,9 +131,6 @@
       <BuildType Solution="Tools|*" Project="Release" />
     </Project>
     <Project Path="RobustToolbox/Robust.Client.IntegrationTests/Robust.Client.IntegrationTests.csproj" />
-    <Project Path="RobustToolbox/Robust.Packaging.Tests/Robust.Packaging.Tests.csproj" />
-    <Project Path="RobustToolbox/Robust.Packaging/Robust.Packaging.csproj" />
-    <Project Path="RobustToolbox/Robust.Server.IntegrationTests/Robust.Server.IntegrationTests.csproj" />
     <Project Path="RobustToolbox/Robust.Server.Testing/Robust.Server.Testing.csproj" />
     <Project Path="RobustToolbox/Robust.Shared.EntitySystemSubscriptionsGenerator/Robust.Shared.EntitySystemSubscriptionsGenerator.csproj" />
     <Project Path="RobustToolbox/Robust.Shared.IntegrationTests/Robust.Shared.IntegrationTests.csproj" />

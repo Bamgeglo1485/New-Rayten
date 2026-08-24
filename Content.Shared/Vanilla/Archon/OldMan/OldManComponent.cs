@@ -35,8 +35,8 @@ public sealed partial class OldManComponent : Component
     [DataField]
     public ResPath DimensionMap = new ResPath("/Maps/Vanilla/Misc/PocketDimension.yml");
 
-    [DataField("actionTeleport", customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
-    public string ActionId = "Action106Teleport";
+    [DataField]
+    public EntProtoId ActionId = "Action106Teleport";
     public EntityUid? ActionEnt;
     #endregion
     /// <summary>

@@ -1,11 +1,9 @@
-﻿<controls:FancyWindow xmlns="https://spacestation14.io"
-                      xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
+﻿﻿<controls:FancyWindow xmlns="https://spacestation14.io"
                       xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
                       xmlns:customControls="clr-namespace:Content.Client.Administration.UI.CustomControls"
                       Title="{Loc 'research-console-menu-title'}"
                       MinSize="625 400"
-                      SetSize="760 550">
-    <!-- Corvax-Localization -->
+                      SetSize="700 550">
     <BoxContainer Orientation="Vertical"
                   HorizontalExpand="True"
                   VerticalExpand="True">
@@ -14,25 +12,15 @@
                       VerticalExpand="False"
                       MinHeight="85"
                       Margin="10">
-            <BoxContainer Orientation="Vertical"
-                          VerticalExpand="True"
-                          HorizontalExpand="True">
+            <BoxContainer Orientation="Vertical" VerticalExpand="True" HorizontalExpand="True">
                 <RichTextLabel Name="ResearchAmountLabel"/>
-                <RichTextLabel Name="AdvancedResearchAmountLabel"/>
                 <RichTextLabel Name="MainDisciplineLabel"/>
                 <Control VerticalExpand="True"/>
-                <BoxContainer Name="TierDisplayContainer"
-                              Orientation="Horizontal"
-                              HorizontalExpand="True"
-                              VerticalAlignment="Bottom"/>
+                <BoxContainer Name="TierDisplayContainer" Orientation="Horizontal" HorizontalExpand="True" VerticalAlignment="Bottom"/>
                 <!-- This is where we put all of the little graphics that display discipline tiers!-->
             </BoxContainer>
-            <BoxContainer Orientation="Vertical"
-                          VerticalExpand="True"
-                          HorizontalAlignment="Right">
-                <Button Name="ServerButton"
-                        Text="{Loc 'research-console-menu-server-selection-button'}"
-                        MinHeight="40"/>
+            <BoxContainer Orientation="Vertical" VerticalExpand="True" HorizontalAlignment="Right">
+                <Button Name="ServerButton" Text="{Loc 'research-console-menu-server-selection-button'}" MinHeight="40"/>
             </BoxContainer>
         </BoxContainer>
         <BoxContainer Orientation="Horizontal"
@@ -44,14 +32,9 @@
                           SizeFlagsStretchRatio="2"
                           Margin="10 0 10 10"
                           MinWidth="175">
-                <Label Text="{Loc 'research-console-available-text'}"
-                       HorizontalAlignment="Center"/>
-                <customControls:HSeparator StyleClasses="LowDivider"
-                                           Margin="0 0 0 10"/>
-                <PanelContainer VerticalExpand="True">
-                    <PanelContainer.PanelOverride>
-                        <gfx:StyleBoxFlat BackgroundColor="#1B1B1E"/>
-                    </PanelContainer.PanelOverride>
+                <Label Text="{Loc 'research-console-available-text'}" HorizontalAlignment="Center"/>
+                <customControls:HSeparator StyleClasses="LowDivider" Margin="0 0 0 10"/>
+                <PanelContainer VerticalExpand="True" StyleClasses="PanelDeep">
                     <ScrollContainer
                         HScrollEnabled="False"
                         HorizontalExpand="True"
@@ -64,14 +47,9 @@
                     </ScrollContainer>
                 </PanelContainer>
                 <Control MinHeight="10"/>
-                <Label Text="{Loc 'research-console-unlocked-text'}"
-                       HorizontalAlignment="Center"/>
-                <customControls:HSeparator StyleClasses="LowDivider"
-                                           Margin="0 0 0 10"/>
-                <PanelContainer VerticalExpand="True">
-                    <PanelContainer.PanelOverride>
-                        <gfx:StyleBoxFlat BackgroundColor="#1B1B1E"/>
-                    </PanelContainer.PanelOverride>
+                <Label Text="{Loc 'research-console-unlocked-text'}" HorizontalAlignment="Center"/>
+                <customControls:HSeparator StyleClasses="LowDivider" Margin="0 0 0 10"/>
+                <PanelContainer VerticalExpand="True" StyleClasses="PanelDeep">
                     <ScrollContainer
                         HScrollEnabled="False"
                         HorizontalExpand="True"
@@ -89,11 +67,7 @@
                           HorizontalExpand="True"
                           SizeFlagsStretchRatio="3"
                           Margin="0 0 10 10">
-                <PanelContainer VerticalExpand="True"
-                                MinSize="0 200">
-                    <PanelContainer.PanelOverride>
-                        <gfx:StyleBoxFlat BackgroundColor="#1B1B1E"/>
-                    </PanelContainer.PanelOverride>
+                <PanelContainer VerticalExpand="True" MinSize="0 200" StyleClasses="PanelDeep">
                     <ScrollContainer
                         HScrollEnabled="False"
                         HorizontalExpand="True"

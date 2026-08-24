@@ -31,7 +31,8 @@ using System.Linq;
 using Robust.Shared.Physics.Events;
 using Content.Shared.Vanilla.Games.TTT;
 using Content.Shared.Body.Components;
-
+using Content.Shared.Ghost.Systems;
+using Content.Shared.Ghost.Components;
 
 namespace Content.Server.Vanilla.TDM;
 

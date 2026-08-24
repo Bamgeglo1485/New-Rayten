@@ -36,6 +36,7 @@ using Robust.Shared.Physics.Systems;
 using Content.Server.Atmos.Piping.Unary.Components;
 using Content.Server.Nuke;
 using Content.Server.AlertLevel;
+using Content.Shared.AlertLevel;
 using Content.Shared.Light.Components;
 using Content.Server.Power.Components;
 using Content.Shared.Vanilla.Evacuation.Events;

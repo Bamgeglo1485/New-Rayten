@@ -74,7 +74,7 @@ public abstract partial class SharedDominatorSystem : EntitySystem
                 continue;
 
             //если цель за стеной - игнорируем
-            if (!_examine.InRangeUnOccluded(uid, target, 10f, ignoreInsideBlocker: false))
+            if (!_examine.InRangeUnOccluded(uid, target, 10f))
                 continue;
 
             //считаем опасность цели

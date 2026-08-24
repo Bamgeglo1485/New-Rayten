@@ -21,6 +21,7 @@ using Robust.Shared.Audio.Systems;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
+using Content.Shared.Suicide;
 
 namespace Content.Shared._Starfall.Execution;
 

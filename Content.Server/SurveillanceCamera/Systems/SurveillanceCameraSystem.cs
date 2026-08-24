@@ -2,18 +2,14 @@ using Content.Server.Administration.Logs;
 using Content.Server.DeviceNetwork.Systems;
 using Content.Shared.Database;
 using Content.Shared.DeviceNetwork;
+using Content.Shared.DeviceNetwork.Components;
 using Content.Shared.DeviceNetwork.Events;
 using Content.Shared.Power;
 using Content.Shared.SurveillanceCamera;
 using Content.Shared.SurveillanceCamera.Components;
-using Content.Shared.Vanilla.Archon.ShyGuy;
-using Content.Shared.Examine;
-using Content.Shared.Mobs.Components;
-using Robust.Shared.Audio.Systems;
 using Robust.Server.GameObjects;
 using Robust.Shared.Player;
-using Content.Shared.DeviceNetwork.Components;
-using Content.Server.Examine;
+using Robust.Shared.Prototypes;
 
 namespace Content.Server.SurveillanceCamera;
 
@@ -25,10 +21,6 @@ public sealed partial class SurveillanceCameraSystem : SharedSurveillanceCameraS
     [Dependency] private IAdminLogManager _adminLogger = default!;
     [Dependency] private SurveillanceCameraMapSystem _cameraMapSystem = default!;
     [Dependency] private SharedAppearanceSystem _appearance = default!;
-    [Dependency] private ShyGuySystem _shy = default!;
-    [Dependency] private SharedAudioSystem _audio = default!;
-    [Dependency] private EntityLookupSystem _lookup = default!;
-    [Dependency] private ExamineSystem _examine = default!;
 
     // Pings a surveillance camera subnet. All cameras will always respond
     // with a data message if they are on the same subnet.
@@ -91,7 +83,7 @@ public sealed partial class SurveillanceCameraSystem : SharedSurveillanceCameraS
                 { DeviceNetworkConstants.Command, string.Empty },
                 { CameraAddressData, deviceNet.Address },
                 { CameraNameData, component.UseEntityNameAsCameraId ? MetaData(uid).EntityName : component.CameraId },
-                { CameraSubnetData, string.Empty }
+                { CameraSubnetData, null }
             };
 
             var dest = string.Empty;
@@ -117,7 +109,7 @@ public sealed partial class SurveillanceCameraSystem : SharedSurveillanceCameraS
                     payload[DeviceNetworkConstants.Command] = CameraHeartbeatMessage;
                     break;
                 case CameraPingMessage:
-                    if (!args.Data.TryGetValue(CameraSubnetData, out string? subnet))
+                    if (!args.Data.TryGetValue(CameraSubnetData, out ProtoId<DeviceFrequencyPrototype>? subnet))
                     {
                         return;
                     }
@@ -213,9 +205,9 @@ public sealed partial class SurveillanceCameraSystem : SharedSurveillanceCameraS
 
         if (camera.AvailableNetworks.Count == 0)
         {
-            if (deviceNet.ReceiveFrequencyId != null)
+            if (deviceNet.ReceiveFrequencyId is { } recvFreq)
             {
-                camera.AvailableNetworks.Add(deviceNet.ReceiveFrequencyId);
+                camera.AvailableNetworks.Add(recvFreq);
             }
             else if (!camera.NetworkSet)
             {
@@ -321,20 +313,6 @@ public sealed partial class SurveillanceCameraSystem : SharedSurveillanceCameraS
         }
 
         UpdateVisuals(camera, component);
-        //Rayten-ShyGuy-start
-        var shyGuys = _lookup.GetEntitiesInRange<ShyGuyComponent>(Transform(camera).Coordinates, 8f);
-        foreach (var ent in shyGuys)
-        {
-            if (!HasComp<MobStateComponent>(player))
-                return;
-            if (!_examine.InRangeUnOccluded(camera, ent, 8f))
-                return;
-
-            _shy.SetPreparing(ent.Owner, ent.Comp, player);
-
-            _audio.PlayGlobal(ent.Comp.StingerSound, actor.PlayerSession);
-        }
-        //Rayten-ShyGuy-End
     }
 
     public void AddActiveViewers(EntityUid camera, HashSet<EntityUid> players, EntityUid? monitor = null, SurveillanceCameraComponent? component = null)

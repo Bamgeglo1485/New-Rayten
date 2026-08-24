@@ -31,6 +31,9 @@ TYPES_TO_EMOJI = {
     "Tweak":  "⚒️"
 }
 
+EXPERIMENTAL_LABEL = "Intent: Experimental"
+EXPERIMENTAL_EMOJI = "🧪"
+
 ChangelogEntry = dict[str, Any]
 
 def main():
@@ -187,9 +190,10 @@ def send_to_discord(entries: Iterable[ChangelogEntry]) -> None:
                 message = change['message']
                 url = entry.get("url")
 
-                # Rayten-Localization-Start
-                message = translate_to_russian(message)
-                # Rayten-Localization-End
+                if EXPERIMENTAL_LABEL in entry["labels"]:
+                    emoji = f"{emoji}{EXPERIMENTAL_EMOJI}"
+
+                message_lines.append(create_change_line(emoji, message, url))
 
                 if url and url.strip():
                     group_content.write(f"{emoji} - {message} [PR]({url}) \n")

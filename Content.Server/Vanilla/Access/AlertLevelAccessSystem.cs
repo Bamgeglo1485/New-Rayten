@@ -1,6 +1,7 @@
 using Content.Shared.Access;
 using Content.Shared.Access.Components;
 using Content.Server.AlertLevel;
+using Content.Shared.AlertLevel;
 using Content.Server.Station.Systems;
 using Robust.Shared.Prototypes;
 

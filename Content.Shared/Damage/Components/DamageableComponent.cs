@@ -84,10 +84,12 @@ public sealed partial class DamageableComponent : Component
 public sealed class DamageableComponentState(
     DamageSpecifier damage,
     ProtoId<DamageModifierSetPrototype>? modifierSetId,
+    ProtoId<DisplacementDataPrototype>? displacement,
     bool bleeding) //Rayten
     : ComponentState
 {
+    public readonly bool Bleeding = bleeding; // RAYTEN
     public readonly DamageSpecifier Damage = damage;
     public readonly ProtoId<DamageModifierSetPrototype>? ModifierSetId = modifierSetId;
-    public readonly bool Bleeding = bleeding;
+    public readonly ProtoId<DisplacementDataPrototype>? Displacement = displacement;
 }

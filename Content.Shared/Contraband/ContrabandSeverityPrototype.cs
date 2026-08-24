@@ -8,6 +8,10 @@ namespace Content.Shared.Contraband;
 [Prototype]
 public sealed partial class ContrabandSeverityPrototype : IPrototype
 {
+    //Rayten
+    [DataField]
+    public int Danger = 2;
+
     /// <inheritdoc/>
     [IdDataField]
     public string ID { get; private set; } = default!;
@@ -30,7 +34,9 @@ public sealed partial class ContrabandSeverityPrototype : IPrototype
     [DataField]
     public bool ShowDepartmentsAndJobs;
 
-    //Rayten
+    /// <summary>
+    /// Whether this contraband warning should be shown above others, higher number is higher priority.
+    /// </summary>
     [DataField]
-    public int Danger = 2;
+    public int Priority = 1;
 }
