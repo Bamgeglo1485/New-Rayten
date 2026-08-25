@@ -360,3 +360,10 @@
     collection: FootstepHull
   itemDrop: PartRodMetal1 #same case as FloorHull
 
+
+- type: tile
+  id: FloorSteelDirty
+  parent: BaseStationTile
+  name: tiles-steel-floor
+  sprite: /Textures/Tiles/Basic/Gray/gray.png
+  itemDrop: FloorTileItemSteel

@@ -13,6 +13,8 @@
 - type: Tag
   id: MagazineFlamethrower
 - type: Tag
+  id: GasTank
+- type: Tag
   id: Bag
 - type: Tag
   id: EphedronexPiece
