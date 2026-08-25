@@ -12,15 +12,16 @@
       - Item
   - type: Action
     useDelay: 30
-    icon:
-      sprite: Vanilla/Actions/R1.rsi
-      state: Slam
     raiseOnAction: true
     itemIconStyle: BigAction
     sound: !type:SoundPathSpecifier
       path: /Audio/Vanilla/Effects/R1/Slam.ogg
   - type: InstantAction
     event: !type:RepulseAttractActionEvent
+  - type: Sprite
+    sprite: Vanilla/Actions/R1.rsi
+    layers:
+    - state: Slam
 
 - type: entity
   id: ActionDash
@@ -30,12 +31,13 @@
   - type: Action
     useDelay: 20
     itemIconStyle: NoItem
-    icon:
-      sprite: Vanilla/Actions/R1.rsi
-      state: Dash
   - type: InstantAction
     event: !type:PolymorphActionEvent
       protoId: R1Dash
+  - type: Sprite
+    sprite: Vanilla/Actions/R1.rsi
+    layers:
+    - state: Dash
 
 - type: polymorph
   id: R1Dash
@@ -107,7 +109,6 @@
       prototype: ReflectCoin
       projectileSpeed: 6
   - type: Action
-    icon: { sprite : Vanilla/Actions/R1.rsi, state: Fistful }
     priority: -99
     itemIconStyle: BigAction
     sound: !type:SoundPathSpecifier
@@ -115,6 +116,10 @@
   - type: TargetAction
     checkCanAccess: false
     range: 0
+  - type: Sprite
+    sprite: Vanilla/Actions/R1.rsi
+    layers:
+    - state: Fistful
 
 - type: entity
   id: ActionToggleHealing
@@ -125,14 +130,16 @@
     useDelay: 1
     itemIconStyle: BigAction
     priority: -20
-    icon:
-      sprite: Vanilla/Actions/R1.rsi
-      state: Repair
-    iconOn:
-      sprite: Vanilla/Actions/R1.rsi
-      state: Repair2
   - type: InstantAction
     event: !type:ToggleHealingActionEvent
+  - type: Sprite
+    sprite: Vanilla/Actions/R1.rsi
+    layers:
+    - state: "Repair"
+      map: ["enum.ActionVisuals.Icon"]
+    - state: "Repair2"
+      map: ["enum.ActionVisuals.IconToggled"]
+      visible: false
 
 # R-2
 
@@ -144,12 +151,13 @@
   - type: Action
     useDelay: 20
     itemIconStyle: NoItem
-    icon:
-      sprite: Vanilla/Actions/R1.rsi
-      state: Dash
   - type: InstantAction
     event: !type:PolymorphActionEvent
       protoId: R2Dash
+  - type: Sprite
+    sprite: Vanilla/Actions/R1.rsi
+    layers:
+    - state: Dash
 
 - type: polymorph
   id: R2Dash

@@ -29,8 +29,6 @@
 - type: Tag
   id: Teleporter
 - type: Tag
-  id: Stunbaton
-- type: Tag
   id: Dominator
 - type: Tag
   id: BagOfHolding
@@ -66,4 +64,6 @@
   id: Table
 - type: Tag
   id: Vending
+- type: Tag
+  id: Wall
 

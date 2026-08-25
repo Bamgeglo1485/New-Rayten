@@ -1,14 +1,12 @@
 - type: contrabandSeverity
-  id: Minor
-  examineText: contraband-examine-text-Minor
-  color: yellow
-  priority: 1
+  id: FirstLevel
+  examineText: contraband-examine-text-FirstLevel
+  danger: 2
 
 - type: contrabandSeverity
-  id: Major
-  examineText: contraband-examine-text-Major
-  color: red
-  priority: 3
+  id: SecondLevel
+  examineText: contraband-examine-text-SecondLevel
+  danger: 4
 
 - type: contrabandSeverity
   id: ThirdLevel
@@ -19,32 +17,22 @@
   id: FirstLevelRestricted
   examineText: contraband-examine-text-FirstLevel
   showDepartmentsAndJobs: true
-  color: yellow
-  priority: 2
+  danger: 2
+
+- type: contrabandSeverity
+  id: SecondLevelRestricted
+  examineText: contraband-examine-text-SecondLevel
+  showDepartmentsAndJobs: true
+  danger: 4
+
+- type: contrabandSeverity
+  id: ThirdLevelRestricted
+  examineText: contraband-examine-text-ThirdLevel
+  showDepartmentsAndJobs: true
+  danger: 8
 
 - type: contrabandSeverity
   id: GrandTheft
   examineText: contraband-examine-text-GrandTheft
-  color: red
-  priority: 4
-
-# This is highly illegal contraband and is illegal to own IC.
-- type: contrabandSeverity
-  id: HighlyIllegal
-  examineText: contraband-examine-text-Highly-Illegal
-  color: crimson
-  priority: 6
-
-# This is clear syndicate contraband and is illegal to own IC.
-- type: contrabandSeverity
-  id: Syndicate
-  examineText: contraband-examine-text-Syndicate
-  color: crimson
-  priority: 5
-
-# This is magical contraband and not permitted to be used IC.
-- type: contrabandSeverity
-  id: Magical
-  examineText: contraband-examine-text-Magical
-  color: "#b337b3"
-  priority: 7
+  showDepartmentsAndJobs: true
+  danger: 8

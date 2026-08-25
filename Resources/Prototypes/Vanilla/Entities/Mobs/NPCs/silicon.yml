@@ -23,8 +23,8 @@
     - NanoTrasen
   - type: PreventInserting
   - type: MovementSpeedModifier
-    baseWalkSpeed: 3.5
-    baseSprintSpeed: 3.5
+    baseWalkSpeed: 2.5
+    baseSprintSpeed: 2.5
   - type: HTN
     rootTask:
       task: SecuritronCompound
@@ -62,8 +62,6 @@
   - type: DoAfter
   # оружие
   - type: CombatMode
-  - type: Stunbaton
-    energyPerUse: 50
   - type: MeleeWeapon
     angle: 60
     animation: WeaponArcThrust

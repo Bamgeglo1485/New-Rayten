@@ -18,8 +18,13 @@
     - state: on-equipped-BELT
       shader: unshaded
       visible: false
-  - type: Stunbaton
-    energyPerUse: 250
+  - type: MeleeBatteryHitsLeft
+  - type: StaminaDamageOnHitRequiresToggle
+  - type: StaminaDamageOnHitRequiresCharge
+    requiredCharge: 1
+  - type: ItemToggleExaminableStatus
+  - type: ItemToggleRequiresCharge
+    requiredCharge: 1
   - type: ItemToggleSize
     activatedSize: Ginormous
   - type: ItemToggle

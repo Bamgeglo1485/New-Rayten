@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
 - type: tile
   id: FloorWoodParquet
   name: tiles-wood-parquet
@@ -15,7 +17,7 @@
     collection: FootstepWood
   barestepSounds:
     collection: BarestepWood
-  itemDrop: FloorTileItemWood
+  itemDrop: FloorTileItemWoodParquet
   heatCapacity: 10000
 
 - type: tile
@@ -35,7 +37,7 @@
     collection: FootstepWood
   barestepSounds:
     collection: BarestepWood
-  itemDrop: FloorTileItemWood
+  itemDrop: FloorTileItemWoodChess
   heatCapacity: 10000
 
 - type: tile
@@ -75,7 +77,7 @@
     collection: FootstepWood
   barestepSounds:
     collection: BarestepWood
-  itemDrop: FloorTileItemWoodBlack
+  itemDrop: FloorTileItemWoodLargeBlack
   heatCapacity: 10000
 
 - type: tile
@@ -95,7 +97,7 @@
     collection: FootstepWood
   barestepSounds:
     collection: BarestepWood
-  itemDrop: FloorTileItemWoodBlack
+  itemDrop: FloorTileItemWoodParquetBlack
   heatCapacity: 10000
 
 - type: tile
@@ -115,7 +117,7 @@
     collection: FootstepWood
   barestepSounds:
     collection: BarestepWood
-  itemDrop: FloorTileItemWoodBlack
+  itemDrop: FloorTileItemWoodChessBlack
   heatCapacity: 10000
 
 - type: tile
@@ -155,7 +157,7 @@
     collection: FootstepWood
   barestepSounds:
     collection: BarestepWood
-  itemDrop: FloorTileItemWoodDark
+  itemDrop: FloorTileItemWoodLargeDark
   heatCapacity: 10000
 
 - type: tile
@@ -175,7 +177,7 @@
     collection: FootstepWood
   barestepSounds:
     collection: BarestepWood
-  itemDrop: FloorTileItemWoodDark
+  itemDrop: FloorTileItemWoodParquetDark
   heatCapacity: 10000
 
 - type: tile
@@ -195,7 +197,7 @@
     collection: FootstepWood
   barestepSounds:
     collection: BarestepWood
-  itemDrop: FloorTileItemWoodDark
+  itemDrop: FloorTileItemWoodChessDark
   heatCapacity: 10000
 
 - type: tile
@@ -235,7 +237,7 @@
     collection: FootstepWood
   barestepSounds:
     collection: BarestepWood
-  itemDrop: FloorTileItemWoodLight
+  itemDrop: FloorTileItemWoodLargeLight
   heatCapacity: 10000
 
 - type: tile
@@ -255,7 +257,7 @@
     collection: FootstepWood
   barestepSounds:
     collection: BarestepWood
-  itemDrop: FloorTileItemWoodLight
+  itemDrop: FloorTileItemWoodParquetLight
   heatCapacity: 10000
 
 - type: tile
@@ -275,7 +277,7 @@
     collection: FootstepWood
   barestepSounds:
     collection: BarestepWood
-  itemDrop: FloorTileItemWoodLight
+  itemDrop: FloorTileItemWoodChessLight
   heatCapacity: 10000
 
 - type: tile
@@ -315,7 +317,7 @@
     collection: FootstepWood
   barestepSounds:
     collection: BarestepWood
-  itemDrop: FloorTileItemWoodRed
+  itemDrop: FloorTileItemWoodLargeRed
   heatCapacity: 10000
 
 - type: tile
@@ -335,7 +337,7 @@
     collection: FootstepWood
   barestepSounds:
     collection: BarestepWood
-  itemDrop: FloorTileItemWoodRed
+  itemDrop: FloorTileItemWoodParquetRed
   heatCapacity: 10000
 
 - type: tile
@@ -355,95 +357,5 @@
     collection: FootstepWood
   barestepSounds:
     collection: BarestepWood
-  itemDrop: FloorTileItemWoodRed
+  itemDrop: FloorTileItemWoodChessRed
   heatCapacity: 10000
-
-- type: tile
-  id: FloorConcreteOutside
-  name: tiles-concrete-outside
-  parent: FloorConcrete
-  baseTurf: Plating
-  isSubfloor: false
-  deconstructTools: [ Prying ]
-  itemDrop: FloorTileItemConcrete
-  weather: true
-
-- type: tile
-  id: FloorConcreteOutsideMono
-  name: tiles-concrete-outside-slab
-  parent: FloorConcreteMono
-  baseTurf: Plating
-  isSubfloor: false
-  deconstructTools: [ Prying ]
-  itemDrop: FloorTileItemConcrete
-  weather: true
-
-- type: tile
-  id: FloorConcreteOutsideSmooth
-  name: tiles-concrete-outside-smooth
-  parent: FloorConcreteSmooth
-  baseTurf: Plating
-  isSubfloor: false
-  deconstructTools: [ Prying ]
-  itemDrop: FloorTileItemConcrete
-  weather: true
-
-- type: tile
-  id: FloorGrayConcreteOutside
-  name: tiles-gray-concrete-outside
-  parent: FloorGrayConcrete
-  baseTurf: Plating
-  isSubfloor: false
-  deconstructTools: [ Prying ]
-  itemDrop: FloorTileItemGrayConcrete
-  weather: true
-
-- type: tile
-  id: FloorGrayConcreteOutsideMono
-  name: tiles-gray-concrete-outside-slab
-  parent: FloorGrayConcreteMono
-  baseTurf: Plating
-  isSubfloor: false
-  deconstructTools: [ Prying ]
-  itemDrop: FloorTileItemGrayConcrete
-  weather: true
-
-- type: tile
-  id: FloorGrayConcreteOutsideSmooth
-  name: tiles-gray-concrete-outside-smooth
-  parent: FloorGrayConcreteSmooth
-  baseTurf: Plating
-  isSubfloor: false
-  deconstructTools: [ Prying ]
-  itemDrop: FloorTileItemGrayConcrete
-  weather: true
-
-- type: tile
-  id: FloorOldConcreteOutside
-  name: tiles-old-concrete-outside
-  parent: FloorOldConcrete
-  baseTurf: Plating
-  isSubfloor: false
-  deconstructTools: [ Prying ]
-  itemDrop: FloorTileItemOldConcrete
-  weather: true
-
-- type: tile
-  id: FloorOldConcreteOutsideMono
-  name: tiles-old-concrete-outside-slab
-  parent: FloorOldConcreteMono
-  baseTurf: Plating
-  isSubfloor: false
-  deconstructTools: [ Prying ]
-  itemDrop: FloorTileItemOldConcrete
-  weather: true
-
-- type: tile
-  id: FloorOldConcreteOutsideSmooth
-  name: tiles-old-concrete-outside-smooth
-  parent: FloorOldConcreteSmooth
-  baseTurf: Plating
-  isSubfloor: false
-  deconstructTools: [ Prying ]
-  itemDrop: FloorTileItemOldConcrete
-  weather: true

@@ -15,8 +15,8 @@
   metabolisms:
     Digestion:
       effects:
-      - !type:SatiateThirst
-        factor: 2
+      - !type:Satiate
+        satiationType: Thirst
       - !type:AdjustReagent
         reagent: Ethanol
         amount: 0.07
@@ -38,8 +38,8 @@
   metabolisms:
     Digestion:
       effects:
-      - !type:SatiateThirst
-        factor: 2
+      - !type:Satiate
+        satiationType: Thirst
       - !type:AdjustReagent
         reagent: Ethanol
         amount: 0.15
@@ -61,8 +61,8 @@
   metabolisms:
     Digestion:
       effects:
-      - !type:SatiateThirst
-        factor: 2
+      - !type:Satiate
+        satiationType: Thirst
       - !type:AdjustReagent
         reagent: Ethanol
         amount: 0.1
@@ -84,8 +84,8 @@
   metabolisms:
     Digestion:
       effects:
-      - !type:SatiateThirst
-        factor: 2
+      - !type:Satiate
+        satiationType: Thirst
       - !type:AdjustReagent
         reagent: Ethanol
         amount: 0.1
@@ -101,8 +101,8 @@
   metabolisms:
     Digestion:
       effects:
-      - !type:SatiateThirst
-        factor: 2
+      - !type:Satiate
+        satiationType: Thirst
       - !type:AdjustReagent
         reagent: Ethanol
         amount: 0.1
@@ -124,8 +124,8 @@
   metabolisms:
     Digestion:
       effects:
-      - !type:SatiateThirst
-        factor: 2
+      - !type:Satiate
+        satiationType: Thirst
       - !type:AdjustReagent
         reagent: Ethanol
         amount: 0.11
@@ -147,8 +147,8 @@
   metabolisms:
     Digestion:
       effects:
-      - !type:SatiateThirst
-        factor: 2
+      - !type:Satiate
+        satiationType: Thirst
       - !type:AdjustReagent
         reagent: Ethanol
         amount: 0.1
@@ -170,8 +170,8 @@
   metabolisms:
     Digestion:
       effects:
-      - !type:SatiateThirst
-        factor: 2
+      - !type:Satiate
+        satiationType: Thirst
       - !type:AdjustReagent
         reagent: Ethanol
         amount: 0.12
@@ -193,8 +193,8 @@
   metabolisms:
     Digestion:
       effects:
-      - !type:SatiateThirst
-        factor: 2
+      - !type:Satiate
+        satiationType: Thirst
       - !type:AdjustReagent
         reagent: Ethanol
         amount: 0.15
@@ -216,8 +216,8 @@
   metabolisms:
     Digestion:
       effects:
-      - !type:SatiateThirst
-        factor: 2
+      - !type:Satiate
+        satiationType: Thirst
       - !type:AdjustReagent
         reagent: Ethanol
         amount: 0.07
@@ -239,8 +239,8 @@
   metabolisms:
     Digestion:
       effects:
-      - !type:SatiateThirst
-        factor: 2
+      - !type:Satiate
+        satiationType: Thirst
       - !type:AdjustReagent
         reagent: Ethanol
         amount: 0.3

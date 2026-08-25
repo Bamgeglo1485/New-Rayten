@@ -14,7 +14,6 @@
     time: 5h # Vanilla-RoleTime
   - !type:AgeRequirement
     requiredAge: 32 # Vanilla
-  weight: 10
   startingGear: CMOGear
   icon: "JobIconChiefMedicalOfficer"
   supervisors: job-supervisors-captain

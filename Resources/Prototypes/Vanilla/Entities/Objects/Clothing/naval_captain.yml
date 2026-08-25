@@ -39,9 +39,6 @@
     contents:
     - id: SmokingPipeFilledTobacco
     - id: FlippoEngravedLighter
-  - type: TemperatureProtection
-    heatingCoefficient: 1.1
-    coolingCoefficient: 0.2
 
 - type: entity
   parent: ClothingBackpackSatchel

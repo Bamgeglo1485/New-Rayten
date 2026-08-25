@@ -30,7 +30,7 @@
     sprite: Clothing/Uniforms/Jumpsuits/Medical/genetics.rsi
 
 - type: entity
-  parent: [ClothingUniformBase, BaseCommandContraband, ClothingUniformFoldableBase]
+  parent: [ClothingUniformBase, FirstCommandContraband, ClothingUniformFoldableBase]
   id: ClothingUniformJumpsuitCMO
   name: chief medical officer's jumpsuit
   description: It's a jumpsuit worn by those with the experience to be Chief Medical Officer. It provides minor biological protection.
@@ -39,7 +39,7 @@
     sprite: Clothing/Uniforms/Jumpsuits/Medical/cmo.rsi
 
 - type: entity
-  parent: [ClothingUniformBase, BaseCommandContraband]
+  parent: [ClothingUniformBase, FirstCommandContraband]
   id: ClothingUniformJumpsuitCMOTurtle
   name: chief medical officer's turtleneck jumpsuit
   description: It's a turtleneck worn by those with the experience to be Chief Medical Officer. It provides minor biological protection.

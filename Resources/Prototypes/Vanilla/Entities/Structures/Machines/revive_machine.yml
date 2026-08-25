@@ -171,11 +171,11 @@
 
 - type: sinkPort
   id: InventoryTakerReceiver
-  name: инвентаризатор
-  description: присоединяется к машине возрождения
+  name: signal-port-name-inventory-taker
+  description: signal-port-description-inventory-taker
 
 - type: sourcePort
   id: RespawnMachineSender
-  name: машина возрождения
-  description: присоединяется к инвентаризатору
+  name: signal-port-name-respawn-machine
+  description: signal-port-description-respawn-machine
   defaultLinks: [ InventoryTakerReceiver ]

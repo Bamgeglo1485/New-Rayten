@@ -9,9 +9,6 @@
   metabolisms:
     Bloodstream:
       effects:
-      - !type:SatiateHunger
-      - !type:SatiateThirst
-        factor: 2
       - !type:ModifyBloodLevel
         amount: 200
       - !type:EvenHealthChange

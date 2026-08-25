@@ -7,9 +7,6 @@
   - type: Action
     itemIconStyle: BigAction
     useDelay: 10
-    icon:
-      sprite: Vanilla/Actions/Archon.rsi
-      state: neck_snap
     priority: -98
   - type: TargetAction
     interactOnMiss: false
@@ -21,6 +18,9 @@
       - MobState
     canTargetSelf: false
     event: !type:ScragEvent
+  - type: Sprite
+    sprite: Vanilla/Actions/Archon.rsi
+    state: neck_snap
 
 - type: entity
   parent: BaseAction
@@ -31,15 +31,15 @@
   - type: Action
     itemIconStyle: BigAction
     useDelay: 3
-    icon:
-      sprite: Vanilla/Actions/Archon.rsi
-      state: teleport
     priority: -99
   - type: TargetAction
     checkCanAccess: false # чекаем самостоятельно, т.к. нам важны собственные попупы
     range: 20
   - type: WorldTargetAction
     event: !type:SculptureTeleportEvent
+  - type: Sprite
+    sprite: Vanilla/Actions/Archon.rsi
+    state: teleport
 
 - type: entity
   parent: BaseAction
@@ -50,12 +50,12 @@
   - type: Action
     itemIconStyle: BigAction
     useDelay: 120
-    icon:
-      sprite: Vanilla/Actions/Archon.rsi
-      state: teleport
     priority: -99
   - type: InstantAction
     event: !type:OldManTeleportEvent
+  - type: Sprite
+    sprite: Vanilla/Actions/Archon.rsi
+    state: teleport
 
 - type: entity
   parent: BaseAction
@@ -66,12 +66,12 @@
   - type: Action
     itemIconStyle: BigAction
     useDelay: 30
-    icon:
-      sprite: Vanilla/Actions/Archon.rsi
-      state: echo
     priority: -99
   - type: InstantAction
     event: !type:WithManyVoicesExoEvent
+  - type: Sprite
+    sprite: Vanilla/Actions/Archon.rsi
+    state: echo
 
 - type: entity
   parent: BaseAction
@@ -82,9 +82,6 @@
   - type: Action
     itemIconStyle: BigAction
     useDelay: 180
-    icon:
-      sprite: Vanilla/Actions/Archon.rsi
-      state: surgery
   - type: TargetAction
     interactOnMiss: false
     range: 2
@@ -95,6 +92,9 @@
       - Bloodstream
     canTargetSelf: false
     event: !type:Surgery049Event
+  - type: Sprite
+    sprite: Vanilla/Actions/Archon.rsi
+    state: surgery
 
 - type: entity
   parent: BaseAction
@@ -105,9 +105,6 @@
   - type: Action
     itemIconStyle: BigAction
     useDelay: 180
-    icon:
-      sprite: Vanilla/Actions/Archon.rsi
-      state: makevictim
   - type: TargetAction
     interactOnMiss: false
     range: 18
@@ -119,3 +116,6 @@
       - PredatorVisibleMark
     canTargetSelf: false
     event: !type:MarkVictim049Event
+  - type: Sprite
+    sprite: Vanilla/Actions/Archon.rsi
+    state: makevictim

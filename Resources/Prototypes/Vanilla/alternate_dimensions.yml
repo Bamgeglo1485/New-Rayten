@@ -33,7 +33,7 @@
     Table: BackroomsTableSpawner
     Vending: DebugPowerReceiver
     FootstepSound: SpawnGhostNPC
-  portalWallReplacementAverage: 5
+  portalWallReplacementAverage: 10
   portalWallReplacementStdDev: 200
   portalWallReplacements:
   - id: WallSolidBackrooms

@@ -177,7 +177,7 @@
       fix1:
         shape:
           !type:PhysShapeAabb
-          bounds: "0.16,0.24,-0.16,-0.29"
+          bounds: "-0.16,-0.24,0.16,0.29"
         density: 190
         layer:
         - SmallMobLayer
@@ -185,7 +185,7 @@
       projectile:
         shape:
           !type:PhysShapeAabb
-          bounds: "0.17,0.25,-0.17,-0.30"
+          bounds: "-0.17,-0.25,0.17,0.30"
         hard: false
         mask:
         - Impassable

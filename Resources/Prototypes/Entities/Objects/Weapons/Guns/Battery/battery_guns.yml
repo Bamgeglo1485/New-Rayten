@@ -1036,7 +1036,7 @@
     maxAngle: 2
 
 - type: entity
-  parent: [WeaponAdvancedLaser, BaseXenoborgContraband]
+  parent: [WeaponAdvancedLaser, XenoborgContraband]
   id: WeaponBurstFireLaserXenoborg
   name: xenoborg burst fire laser
   description: An alien weapon, channelling a burst-fire laser through a prism, causing targets to burst into fire.
@@ -1067,11 +1067,11 @@
     fireCost: 100
 
 - type: entity
-  parent: [BaseWeaponBatteryNoAmmoCounter, BaseXenoborgContraband]
+  parent: [BaseWeaponBatteryNoAmmoCounter, XenoborgContraband]
   id: WeaponRangeFinderXenoborg
   name: xenoborg range finder
   components:
-  - type: Sprite 
+  - type: Sprite
     sprite: Objects/Weapons/Guns/Battery/xenoborg_range_finder.rsi
     layers:
     - state: icon

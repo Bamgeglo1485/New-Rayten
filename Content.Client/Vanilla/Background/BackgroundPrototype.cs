@@ -4,7 +4,6 @@ using Content.Shared.Vanilla.Background;
 using Content.Shared.Implants;
 using Content.Shared.Roles;
 using JetBrains.Annotations;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.Set;
 using Robust.Shared.Utility;
 
 namespace Content.Client.Vanilla.Background;
@@ -47,8 +46,8 @@ public sealed partial class AddComponentsSpecial : BackgroundSpecial
 }
 public sealed partial class AddImplantSpecial : BackgroundSpecial
 {
-    [DataField("implants", customTypeSerializer: typeof(PrototypeIdHashSetSerializer<EntityPrototype>))]
-    public HashSet<String> Implants { get; private set; } = new();
+    [DataField]
+    public HashSet<EntProtoId > Implants { get; private set; } = new();
     public override void Apply(EntityUid mob)
     {
     }

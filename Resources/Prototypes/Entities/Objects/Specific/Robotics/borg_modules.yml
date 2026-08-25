@@ -1507,7 +1507,7 @@
     icon: { sprite: Interface/Actions/actions_borg.rsi, state: xenoborg-tool-module }
 
 - type: entity
-  parent: [ BaseXenoborgModuleEngi, BaseProviderBorgModule, BaseXenoborgContraband ]
+  parent: [ BaseXenoborgModuleEngi, BaseProviderBorgModule, XenoborgContraband ]
   id: XenoborgModuleAdvancedTool
   name: advanced tool xenoborg module
   description: Advanced engineering module containing advanced xenoborg technology.
@@ -1606,7 +1606,7 @@
     icon: { sprite: Interface/Actions/actions_borg.rsi, state: xenoborg-construction-module }
 
 - type: entity
-  parent: [ BaseXenoborgModuleEngi, BaseProviderBorgModule, BaseXenoborgContraband ]
+  parent: [ BaseXenoborgModuleEngi, BaseProviderBorgModule, XenoborgContraband ]
   id: XenoborgModuleDeflectorField
   name: deflector field xenoborg module
   description: Module with a self-recharging deflector field projector.
@@ -1672,7 +1672,7 @@
     - XenoborgModuleSecondaryWeapon
 
 - type: entity
-  parent: [ BaseXenoborgModuleEngi, BaseXenoborgContraband ]
+  parent: [ BaseXenoborgModuleEngi, XenoborgContraband ]
   id: XenoborgModuleZap
   name: zap xenoborg module
   description: Module that disables the grounding of the xenoborg, making them electrified. Shocking!
@@ -1690,7 +1690,7 @@
       shockTime: 0.25
 
 - type: entity
-  parent: [ BaseXenoborgModuleEngi, BaseProviderBorgModule, BaseXenoborgContraband ]
+  parent: [ BaseXenoborgModuleEngi, BaseProviderBorgModule, XenoborgContraband ]
   id: XenoborgModuleOilGun
   name: oil gun xenoborg module
   description: Module with a gun that shoots ampoules filled with flammable oil.
@@ -1714,7 +1714,7 @@
     - XenoborgModulePrimaryWeapon
 
 - type: entity
-  parent: [ BaseXenoborgModuleEngi, BaseProviderBorgModule, BaseXenoborgContraband ]
+  parent: [ BaseXenoborgModuleEngi, BaseProviderBorgModule, XenoborgContraband ]
   id: XenoborgModuleNaniteGun
   name: nanite gun xenoborg module
   description: Module that allows Xenoborgs to have a crystal firing nanite gun.
@@ -1796,7 +1796,7 @@
     - XenoborgModulePrimaryWeapon
 
 - type: entity
-  parent: [ BaseXenoborgModuleHeavy, BaseProviderBorgModule, BaseXenoborgContraband ]
+  parent: [ BaseXenoborgModuleHeavy, BaseProviderBorgModule, XenoborgContraband ]
   id: XenoborgModuleGuidedMissileLauncher
   name: guided missile launcher xenoborg module
   description: Module with guided missile launcher and a range finder to set targets.
@@ -1829,7 +1829,7 @@
     - XenoborgModuleWithSimpleOverlay
 
 - type: entity
-  parent: [ BaseXenoborgModuleHeavy, BaseProviderBorgModule, BaseXenoborgContraband ]
+  parent: [ BaseXenoborgModuleHeavy, BaseProviderBorgModule, XenoborgContraband ]
   id: XenoborgModuleRocket
   name: rocket module
   description: A module with a rocket launcher designed to destroy structures.
@@ -1862,7 +1862,7 @@
     - XenoborgModuleWithSimpleOverlay
 
 - type: entity
-  parent: [ BaseXenoborgModuleHeavy, BaseProviderBorgModule, BaseXenoborgContraband ]
+  parent: [ BaseXenoborgModuleHeavy, BaseProviderBorgModule, XenoborgContraband ]
   id: XenoborgModuleBurstFireLaser
   name: burst fire laser xenoborg module
   description: Module with a burst fire incendiary laser.
@@ -1884,7 +1884,7 @@
     - XenoborgModulePrimaryWeapon
 
 - type: entity
-  parent: [ BaseXenoborgModuleHeavy, BaseXenoborgContraband ]
+  parent: [ BaseXenoborgModuleHeavy, XenoborgContraband ]
   id: XenoborgModuleHeavyRadioactive
   name: radioactive xenoborg module
   description: Module that causes a xenoborg to emanate radioactive energy.
@@ -2006,7 +2006,7 @@
     - XenoborgModulePrimaryWeapon
 
 - type: entity
-  parent: [ BaseXenoborgModuleScout, BaseProviderBorgModule, BaseXenoborgContraband ]
+  parent: [ BaseXenoborgModuleScout, BaseProviderBorgModule, XenoborgContraband ]
   id: XenoborgModuleBioKinfe
   name: bio knife xenoborg module
   description: Module with an bio knife.

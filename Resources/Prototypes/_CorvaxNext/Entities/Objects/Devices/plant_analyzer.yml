@@ -58,7 +58,7 @@
   id: PlantAnalyzerDebug
   parent: BasePlantAnalyzer
   suffix: Debug
-  components:
+  #components:
   #- type: PlantAnalyzer
   #  settings:
   #    scanDelay: 0.1

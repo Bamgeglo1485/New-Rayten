@@ -13,7 +13,6 @@
     time: 10h
   - !type:AgeRequirement
     requiredAge: 26
-  weight: 5
   startingGear: WardenGear
   icon: "JobIconWarden"
   supervisors: job-supervisors-hos

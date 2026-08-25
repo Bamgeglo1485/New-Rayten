@@ -21,10 +21,11 @@
   - type: ComponentToggler
     parent: true
     components:
-    - type: PressureImmunity
+    - type: PermanentStatusEffects
+      statusEffects:
+      - StatusEffectPressureImmunity
     - type: TemperatureProtection
-      heatingCoefficient: 0.01
-      coolingCoefficient: 0.01
+      coefficient: 0.001
   - type: PowerCellDraw
     drawRate: 0
   - type: ToggleCellDraw

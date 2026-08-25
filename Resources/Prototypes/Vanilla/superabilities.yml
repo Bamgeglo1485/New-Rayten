@@ -19,8 +19,10 @@
     duration: 10
     action: ActionBlueSpaceSyncSuper
   unremovableComponents:
-  - type: Hunger
-    baseDecayRate: 0.1
+  - type: Satiation
+    satiations:
+      Hunger:
+        prototype: SuperHunger
   - type: Stamina
     baseCritThreshold: 50
 
@@ -138,8 +140,8 @@
   - type: DangerMob
   components:
   - type: RatKing
-    hungerPerArmyUse: 50
-    hungerPerDomainUse: 50
+    hungerPerArmyUse: 15
+    hungerPerDomainUse: 15
   - type: MobsterAccent
 
 - type: superAbility
@@ -165,14 +167,9 @@
   id: Strength
   description: Сверхсила. Ваши кулаки намного быстрее и откидывают людей. Но теперь вы неуклюжи.
   unremovableComponents:
-    - type: Clumsy
-      gunShootFailDamage:
-        types:
-          Blunt: 20
-          Piercing: 20
-      catchingFailDamage:
-        types:
-          Blunt: 1
+    - type: PermanentStatusEffects
+      statusEffects:
+      - StatusEffectClumsyClown
   components:
   - type: MeleeWeapon
     hidden: false
@@ -197,14 +194,9 @@
   actions:
   - ActionForceWall
   unremovableComponents:
-    - type: Clumsy
-      gunShootFailDamage:
-        types:
-          Blunt: 20
-          Piercing: 20
-      catchingFailDamage:
-        types:
-          Blunt: 1
+    - type: PermanentStatusEffects
+      statusEffects:
+      - StatusEffectClumsyClown
   components:
   - type: Reflect
     reflectProb: 1.0
@@ -277,3 +269,12 @@
         Cold: -2
         Heat: -2
         Shock: -2
+  - type: Satiation
+    satiations:
+      Hunger:
+        prototype: SuperHunger
+
+- type: satiation
+  id: SuperHunger
+  parent: NormalSatiationHunger
+  baseChangeRate: -0.1

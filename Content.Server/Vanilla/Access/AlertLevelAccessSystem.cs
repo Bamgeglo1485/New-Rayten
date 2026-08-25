@@ -16,7 +16,7 @@ public sealed partial class SharedAssSystem : EntitySystem
         SubscribeLocalEvent<AlertLevelChangedEvent>(OnAlertChanged);
     }
 
-    private void OnAlertChanged(AlertLevelChangedEvent args)
+    private void OnAlertChanged(ref AlertLevelChangedEvent args)
     {
         var query = EntityQueryEnumerator<AlertLevelAccessComponent, AccessComponent>();
         while (query.MoveNext(out var uid, out var extraAccessComp, out var accessComp))

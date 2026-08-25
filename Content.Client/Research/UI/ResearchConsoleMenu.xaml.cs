@@ -185,4 +185,3 @@ public sealed partial class ResearchConsoleMenu : FancyWindow
         }
     }
 }
-

@@ -120,9 +120,6 @@
   description: Позволяет заползти в ухо и присосаться к мозгу.
   components:
   - type: Action
-    icon:
-      sprite: Vanilla/Interface/Actions/brainworm.rsi
-      state: insertbrain
     priority: -99
   - type: TargetAction
     accessMask:
@@ -131,6 +128,9 @@
     range: 1
   - type: EntityTargetAction
     event: !type:InsertInBrainEvent
+  - type: Sprite
+    sprite: Vanilla/Interface/Actions/brainworm.rsi
+    state: insertbrain
 
 - type: entity
   parent: BaseAction
@@ -140,12 +140,12 @@
   components:
   - type: Action
     useDelay: 15
-    icon:
-      sprite: Vanilla/Interface/Actions/brainworm.rsi
-      state: mindcontrol
     priority: -100
   - type: InstantAction
     event: !type:MindControlEvent
+  - type: Sprite
+    sprite: Vanilla/Interface/Actions/brainworm.rsi
+    state: mindcontrol
 
 - type: entity
   parent: BaseAction
@@ -154,12 +154,12 @@
   description: Вы покидаете тело носителя через ухо.
   components:
   - type: Action
-    icon:
-      sprite: Vanilla/Interface/Actions/brainworm.rsi
-      state: ejectbrain
     priority: -99
   - type: InstantAction
     event: !type:EjectBrainEvent
+  - type: Sprite
+    sprite: Vanilla/Interface/Actions/brainworm.rsi
+    state: ejectbrain
 
 - type: entity
   parent: BaseAction
@@ -168,12 +168,12 @@
   description: ввести в кровь носителя химикаты
   components:
   - type: Action
-    icon:
-      sprite: Vanilla/Interface/Actions/brainworm.rsi
-      state: chemicals
     priority: -98
   - type: InstantAction
     event: !type:BrainWormChemicalsActionEvent
+  - type: Sprite
+    sprite: Vanilla/Interface/Actions/brainworm.rsi
+    state: chemicals
 
 - type: entity
   parent: BaseAction
@@ -182,12 +182,12 @@
   description: получение новых способностей
   components:
   - type: Action
-    icon:
-      sprite: Vanilla/Interface/Actions/brainworm.rsi
-      state: evolution
     priority: -97
   - type: InstantAction
     event: !type:BrainWormShopActionEvent
+  - type: Sprite
+    sprite: Vanilla/Interface/Actions/brainworm.rsi
+    state: evolution
 
 - type: entity
   parent: BaseAction
@@ -196,12 +196,12 @@
   description: Вернуть носителю контроль над собственным телом
   components:
   - type: Action
-    icon:
-      sprite: Vanilla/Interface/Actions/brainworm.rsi
-      state: returncontrol
     priority: -98
   - type: InstantAction
     event: !type:BrainWormReturnControlActionEvent
+  - type: Sprite
+    sprite: Vanilla/Interface/Actions/brainworm.rsi
+    state: returncontrol
 
 - type: entity
   parent: BaseAction
@@ -210,12 +210,12 @@
   description: Носитель выблевывает нового мозгового червя.
   components:
   - type: Action
-    icon:
-      sprite: Vanilla/Interface/Actions/brainworm.rsi
-      state: reproduce
     priority: -99
   - type: InstantAction
     event: !type:BrainWormReproduceEvent
+  - type: Sprite
+    sprite: Vanilla/Interface/Actions/brainworm.rsi
+    state: reproduce
 
 - type: entity
   parent: BaseAction
@@ -224,6 +224,8 @@
   description: Заставьте носителя сказать какую-то несусветную чушь, которая взбредет в ваш паразитический ум.
   components:
   - type: Action
-    icon: /Textures/Interface/Emotes/vocal.png
   - type: InstantAction
     event: !type:BrainWormForceSayActionEvent
+  - type: Sprite
+    sprite: Vanilla/Interface/Actions/brainworm.rsi
+    state: mindcontrol

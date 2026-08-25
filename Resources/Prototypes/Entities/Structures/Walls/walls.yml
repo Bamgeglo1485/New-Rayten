@@ -9,6 +9,11 @@
     snap:
     - Wall
   components:
+    ## RAYTEN STARTS
+  - type: Tag
+    tags:
+    - Wall
+    ## RAYTEN ENDS
   - type: Anchorable
     flags:
     - Anchorable

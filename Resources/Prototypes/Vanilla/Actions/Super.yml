@@ -6,11 +6,12 @@
   components:
   - type: Action
     useDelay: 20
-    icon:
-      sprite: Interface/Actions/jump.rsi
-      state: icon
   - type: InstantAction
     event: !type:BlueSpaceSyncEvent {}
+  - type: Sprite
+    sprite: Interface/Actions/jump.rsi
+    layers:
+    - state: icon
 
 - type: entity
   parent: BaseAction
@@ -20,8 +21,9 @@
   components:
   - type: Action
     useDelay: 2
-    icon:
-      sprite: Vanilla/Actions/Super.rsi
-      state: fly
   - type: InstantAction
     event: !type:FlyActionEvent {}
+  - type: Sprite
+    sprite: Vanilla/Actions/Super.rsi
+    layers:
+    - state: fly

@@ -141,7 +141,7 @@
   - type: Appearance
 
 - type: entity
-  parent: [ BaseItem, BaseXenoborgContraband ]
+  parent: [ BaseItem, XenoborgContraband ]
   id: WeaponGuidedMissileLauncherXenoborg
   name: XB GML-78 # Xenoborg Guided Missile Launcher 78
   description: A guided missile launcher.
@@ -217,7 +217,7 @@
   - type: Appearance
 
 - type: entity
-  parent: [ BaseItem, BaseXenoborgContraband ]
+  parent: [ BaseItem, XenoborgContraband ]
   id: WeaponRocketLauncherXenoborg
   name: XB MRL-97-D # Xenoborg Multi Rocket Launcher 97 D (Demolition)
   description: A alien rocket launcher fitted with special demolition rockets.

@@ -146,7 +146,7 @@
   group: Narcotics
   desc: reagent-desc-stimulants
   physicalDesc: reagent-physical-desc-energizing
-  contrabandSeverity: ThirdLevel
+  contrabandSeverity: FirstLevel
   flavor: sharp
   color: "#9A040E"
   boilingPoint: 212.0
@@ -288,7 +288,7 @@
         type: Add
       - !type:Vomit # Vomiting is a symptom of brain damage
         probability: 0.05
-      - !type:Drunk # Headaches and slurring are major symptoms of brain damage, this is close enough
+      - !type:Drunk # Headaches and slurring are FirstLevel symptoms of brain damage, this is close enough
         boozePower: 5
 
 - type: reagent
@@ -330,7 +330,7 @@
   group: Narcotics
   desc: reagent-desc-nocturine
   physicalDesc: reagent-physical-desc-powdery
-  contrabandSeverity: ThirdLevel
+  contrabandSeverity: FirstLevelLevel
   color: "#128e80"
   boilingPoint: 444.0
   meltingPoint: 128.0
@@ -373,7 +373,7 @@
   group: Special
   desc: reagent-desc-tacitic-acid
   physicalDesc: reagent-physical-desc-syrupy
-  contrabandSeverity: Major
+  contrabandSeverity: FirstLevel
   color: "#000000"
   boilingPoint: 255.0
   meltingPoint: 36.0
@@ -499,7 +499,7 @@
   group: Narcotics
   desc: reagent-desc-StrawberryIce
   physicalDesc: reagent-physical-desc-fizzy
-  contrabandSeverity: Minor
+  contrabandSeverity: SecondLevel
   flavor: fizzy
   color: "#FF36AE"
   metabolisms:

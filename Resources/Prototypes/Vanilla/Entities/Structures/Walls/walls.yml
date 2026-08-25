@@ -120,9 +120,9 @@
   description: Очень странная стена...
   components:
   - type: Sprite
-    sprite: Structures/Walls/solid_rust.rsi
+    sprite: Structures/Walls/solid-rust.rsi
   - type: Icon
-    sprite: Structures/Walls/solid_rust.rsi
+    sprite: Structures/Walls/solid-rust.rsi
     state: full
   - type: Construction
     graph: Girder
@@ -163,7 +163,7 @@
       portalFixture:
         shape:
           !type:PhysShapeAabb
-          bounds: "-0.25,-0.48,0.25,0.48"
+          bounds: "-0.48,-0.48,0.48,0.48"
         mask:
         - FullTileMask
         layer:
@@ -203,7 +203,7 @@
       portalFixture:
         shape:
           !type:PhysShapeAabb
-          bounds: "-0.25,-0.48,0.25,0.48"
+          bounds: "-0.48,-0.48,0.48,0.48"
         mask:
         - FullTileMask
         layer:

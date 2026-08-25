@@ -127,17 +127,6 @@
     damageRecovery:
       types:
         Asphyxiation: -1.0
-  - type: Hunger
-    thresholds:
-      Overfed: 300
-      Okay: 250
-      Peckish: 200
-      Starving: 150
-      Dead: 0
-    baseDecayRate: 0.12
-    starvationDamage:
-      types:
-        Bloodloss: 1.0
   - type: Stamina
     baseCritThreshold: 120
   - type: TemperatureDamage

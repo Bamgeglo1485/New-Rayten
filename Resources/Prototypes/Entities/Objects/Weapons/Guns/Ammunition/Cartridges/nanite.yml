@@ -1,5 +1,5 @@
 - type: entity
-  parent: [ BaseCartridge, BaseXenoborgContraband ]
+  parent: [ BaseCartridge, XenoborgContraband ]
   id: CartridgeNanite
   name: nanite crystal
   description: A high-power nanite crystal used by xenoborgs.

@@ -122,7 +122,7 @@
 
 - type: entity
   name: xenoborg jaws of death
-  parent: [JawsOfLife, BaseXenoborgContraband ]
+  parent: [JawsOfLife, XenoborgContraband ]
   id: XenoborgJawsOfLife
   description: Useful for prying open bolted doors where organics are hiding.
   components:

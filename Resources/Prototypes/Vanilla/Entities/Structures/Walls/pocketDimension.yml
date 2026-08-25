@@ -4,21 +4,11 @@
   name: гнилая масса
   description: Довольно противно.
   components:
-    - type: Sprite
-      sprite: Structures/Walls/rock.rsi
-      layers:
-      - state: rock_chromite
-      - map: [ "enum.EdgeLayer.South" ]
-        state: rock_chromite_south
-      - map: [ "enum.EdgeLayer.East" ]
-        state: rock_chromite_east
-      - map: [ "enum.EdgeLayer.North" ]
-        state: rock_chromite_north
-      - map: [ "enum.EdgeLayer.West" ]
-        state: rock_chromite_west
     - type: Icon
-      sprite: Structures/Walls/rock.rsi
-      state: rock_chromite
+      sprite: Structures/Walls/stone-chromite.rsi
+      state: full
+    - type: Sprite
+      sprite: Structures/Walls/stone-chromite.rsi
     - type: IconSmooth
       key: walls
       mode: NoSprite
@@ -45,9 +35,9 @@
   description: Выглядит как что-то, что можно сломать пальцем.
   components:
   - type: Sprite
-    sprite: Structures/Walls/solid_rust.rsi
+    sprite: Structures/Walls/solid-rust.rsi
   - type: Icon
-    sprite: Structures/Walls/solid_rust.rsi
+    sprite: Structures/Walls/solid-rust.rsi
     state: full
   - type: IconSmooth
     key: walls
@@ -60,9 +50,9 @@
   description: Выглядит как что-то, что можно сломать пальцем.
   components:
   - type: Sprite
-    sprite: Structures/Walls/solid_rust.rsi
+    sprite: Structures/Walls/solid-rust.rsi
   - type: Icon
-    sprite: Structures/Walls/solid_rust.rsi
+    sprite: Structures/Walls/solid-rust.rsi
     state: rgeneric
   - type: IconSmooth
     key: walls

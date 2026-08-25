@@ -1,5 +1,5 @@
 - type: entity
-  parent: [BaseItem, BaseXenoborgContraband]
+  parent: [BaseItem, XenoborgContraband]
   id: WeaponNaniteGun
   name: nanite gun
   description: A strange gun that shoots nanites encased in crystal shards that heals borgs but hurts fleshy inferior beings.

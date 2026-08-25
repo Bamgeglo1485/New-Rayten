@@ -72,7 +72,7 @@ public sealed partial class ShowNamesOverlay : Overlay
             if (xform.MapID != args.MapId)
                 continue;
 
-            if (!_examine.InRangeUnOccluded(localPlayer, entity, 30f, ignoreInsideBlocker: true))
+            if (!_examine.InRangeUnOccluded(localPlayer, entity, 30f))
                 continue;
 
             var entityPos = _transformSystem.GetWorldPosition(entity);
