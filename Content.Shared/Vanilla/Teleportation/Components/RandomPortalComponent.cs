@@ -5,9 +5,6 @@ using Robust.Shared.Serialization;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 using Content.Shared.Procedural;
 using Content.Shared.Parallax.Biomes;
-using Content.Client.Parallax.Data;
-using Content.Shared.Procedural;
-using Content.Shared.Parallax.Biomes;
 
 namespace Content.Shared.Vanilla.Teleportation.Components;
 
@@ -50,7 +47,7 @@ public sealed partial class RandomPortalComponent : Component
     ///     Параллаксы данжов
     /// </summary>
     [DataField]
-    public List<ProtoId<ParallaxPrototype>> AllowedParallaxes = new()
+    public List<string> AllowedParallaxes = new()
     {
         "ExoStation",
         "PlasmaStation",
