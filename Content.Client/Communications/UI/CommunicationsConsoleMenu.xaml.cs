@@ -16,6 +16,7 @@ public sealed partial class CommunicationsConsoleMenu : FancyWindow
 {
     public event Action? OnShuttleCalled;
     public event Action? OnShuttleRecalled;
+    public event Action<ProtoId<AlertLevelPrototype>>? OnAlertLevelChanged;
     public event Action<string>? OnRadioAnnounce;
     public event Action<string>? OnScreenBroadcast;
 
@@ -26,6 +27,8 @@ public sealed partial class CommunicationsConsoleMenu : FancyWindow
 
         MessagingControls.OnRadioAnnounce += message => OnRadioAnnounce?.Invoke(message);
         MessagingControls.OnScreenBroadcast += message => OnScreenBroadcast?.Invoke(message);
+
+        AlertLevelControls.OnAlertLevelChanged += newLevel => OnAlertLevelChanged?.Invoke(newLevel);
 
         ShuttleControls.OnShuttleCalled += () => OnShuttleCalled?.Invoke();
         ShuttleControls.OnShuttleRecalled += () => OnShuttleRecalled?.Invoke();
@@ -50,6 +53,9 @@ public sealed partial class CommunicationsConsoleMenu : FancyWindow
     {
         MessagingControls.CanRadioAnnounce = commsState.CanAnnounce;
         MessagingControls.CanScreenBroadcast = commsState.CanBroadcast;
+
+        var alertLevelSelectable = selectableAlertLevels != null && canChangeAlertLevel;
+        AlertLevelControls.UpdateAlertLevels(selectableAlertLevels, currentAlertLevel, alertLevelSelectable);
 
         ShuttleControls.UpdateState(commsState.CanCall, commsState.CountdownStarted, commsState.ExpectedCountdownEnd);
     }
