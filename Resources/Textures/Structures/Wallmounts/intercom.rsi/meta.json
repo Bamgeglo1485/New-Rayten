@@ -21,6 +21,10 @@
             "directions": 4
         },
         {
+            "name": "panel",
+            "directions": 4
+        },
+        {
             "name": "speaker",
             "directions": 4
         },
