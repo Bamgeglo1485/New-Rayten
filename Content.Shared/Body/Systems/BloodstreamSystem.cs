@@ -1,3 +1,8 @@
+// FUNKY STARTS
+using Content.Shared._Funkystation.Fluids;
+using Content.Shared._Funkystation.WallStains;
+using Content.Shared.Inventory;
+// FUNKY ENDS
 using Content.Shared.Alert;
 using Content.Shared.Body.Components;
 using Content.Shared.Body.Events;
@@ -24,11 +29,6 @@ using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
-// FUNKY STARTS
-using Content.Shared._Funkystation.Fluids;
-using Content.Shared._Funkystation.WallStains;
-using Content.Shared.Inventory;
-// FUNKY ENDS
 
 namespace Content.Shared.Body.Systems;
 
@@ -36,6 +36,7 @@ public sealed partial class BloodstreamSystem : EntitySystem
 {
     public static readonly EntProtoId Bloodloss = "StatusEffectBloodloss";
 
+    [Dependency] private EntityLookupSystem _lookup = default!; // FUNKY
     [Dependency] private SharedSolutionContainerSystem _solutionContainer = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
@@ -46,7 +47,6 @@ public sealed partial class BloodstreamSystem : EntitySystem
     [Dependency] private MobStateSystem _mobStateSystem = default!;
     [Dependency] private DamageableSystem _damageableSystem = default!;
     [Dependency] private MetabolizerSystem _metabolizer = default!;
-    private readonly EntityLookupSystem _lookup = default!; // FUNKY
 
     public override void Update(float frameTime)
     {
@@ -227,23 +227,6 @@ public sealed partial class BloodstreamSystem : EntitySystem
         var totalFloat = total.Float();
         TryModifyBleedAmount(ent.AsNullable(), totalFloat);
 
-        // Funky Wall Stains
-        if (totalFloat >= 2f
-            && _solutionContainer.ResolveSolution(ent.Owner, ent.Comp.BloodSolutionName, ref ent.Comp.BloodSolution, out var bloodForSplatter)
-            && bloodForSplatter.Volume > 0)
-        {
-            var splatterAmount = FixedPoint2.Min(FixedPoint2.New(totalFloat * 0.15f), bloodForSplatter.Volume);
-            if (splatterAmount > 0)
-            {
-                var splatterSolution = _solutionContainer.SplitSolution(ent.Comp.BloodSolution.Value, splatterAmount);
-                var splashEv = new SplashOnWallEvent(Transform(ent.Owner).Coordinates, splatterSolution);
-                RaiseLocalEvent(ref splashEv);
-            }
-        }
-
-        /// Critical hit. Causes target to lose blood, using the bleed rate modifier of the weapon, currently divided by 5
-        /// The crit chance is currently the bleed rate modifier divided by 25.
-        /// Higher damage weapons have a higher chance to crit!
         // Critical hit. Causes target to lose blood, using the bleed rate modifier of the weapon, currently divided by 5
         // The crit chance is currently the bleed rate modifier divided by 25.
         // Higher damage weapons have a higher chance to crit!
@@ -403,7 +386,7 @@ public sealed partial class BloodstreamSystem : EntitySystem
     /// <returns>
     /// Solution of removed chemicals or null if none were removed.
     /// </returns>
-    public Solution? FlushChemicals(Entity<BloodstreamComponent?> ent, FixedPoint2 quantity, ProtoId<ReagentPrototype>? excludedReagent = null )
+    public Solution? FlushChemicals(Entity<BloodstreamComponent?> ent, FixedPoint2 quantity, ProtoId<ReagentPrototype>? excludedReagent = null)
     {
         if (!Resolve(ent, ref ent.Comp, logMissing: false)
             || !_solutionContainer.ResolveSolution(ent.Owner, ent.Comp.BloodSolutionName, ref ent.Comp.BloodSolution, out var bloodSolution))
@@ -474,7 +457,7 @@ public sealed partial class BloodstreamSystem : EntitySystem
             else if (error < 0)
             {
                 // invert the error since we're removing reagents...
-                error = FixedPoint2.Min( -error, adjustedAmount);
+                error = FixedPoint2.Min(-error, adjustedAmount);
                 bloodSolution.RemoveReagent(referenceReagent, error);
             }
         }
@@ -520,9 +503,7 @@ public sealed partial class BloodstreamSystem : EntitySystem
 
         if (tempSolution.Volume > ent.Comp.BleedPuddleThreshold)
         {
-            var stainEv = new SpilledOnEvent(ent.Owner, tempSolution);
-            RaiseLocalEvent(ent.Owner, stainEv);
-
+            // FUNKY START
             var xform = Transform(ent.Owner);
             foreach (var neighbor in _lookup.GetEntitiesInRange(xform.Coordinates, 1.5f))
             {
@@ -535,9 +516,12 @@ public sealed partial class BloodstreamSystem : EntitySystem
                     break;
             }
 
-            // Funky Wall Stains
             var splashEv = new SplashOnWallEvent(xform.Coordinates, tempSolution.Clone());
             RaiseLocalEvent(ref splashEv);
+
+            var stainEv = new SpilledOnEvent(ent.Owner, tempSolution);
+            RaiseLocalEvent(ent.Owner, stainEv);
+            // FUNKY ENDS
 
             _puddle.TrySpillAt(ent.Owner, tempSolution, out _, sound: false);
 
@@ -598,6 +582,7 @@ public sealed partial class BloodstreamSystem : EntitySystem
             _solutionContainer.RemoveAllSolution(ent.Comp.TemporarySolution.Value);
         }
 
+        // FUNKY START
         var stainEv = new SpilledOnEvent(ent.Owner, tempSol);
         RaiseLocalEvent(ent.Owner, stainEv);
 
@@ -613,9 +598,9 @@ public sealed partial class BloodstreamSystem : EntitySystem
                 break;
         }
 
-        // Funky Wall Stains
         var splashEv = new SplashOnWallEvent(xform.Coordinates, tempSol.Clone());
         RaiseLocalEvent(ref splashEv);
+        // FUNKY END
 
         _puddle.TrySpillAt(ent, tempSol, out _);
     }
@@ -715,7 +700,7 @@ public sealed partial class BloodstreamSystem : EntitySystem
         cloneComp.BloodlossThreshold = source.Comp.BloodlossThreshold;
         cloneComp.BloodlossDamage = new DamageSpecifier(source.Comp.BloodlossDamage);
         cloneComp.BloodlossHealDamage = new DamageSpecifier(source.Comp.BloodlossHealDamage);
-        cloneComp.BloodRefreshAmount =  source.Comp.BloodRefreshAmount;
+        cloneComp.BloodRefreshAmount = source.Comp.BloodRefreshAmount;
         cloneComp.BleedPuddleThreshold = source.Comp.BleedPuddleThreshold;
         cloneComp.DamageBleedModifiers = source.Comp.DamageBleedModifiers;
         cloneComp.MaxVolumeModifier = source.Comp.MaxVolumeModifier;

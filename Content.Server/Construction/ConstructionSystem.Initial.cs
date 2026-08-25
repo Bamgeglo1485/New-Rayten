@@ -326,6 +326,11 @@ namespace Content.Server.Construction
                 completed.PerformAction(newEntity, user, EntityManager);
             }
 
+            // <Goobstation>
+            var constructedEv = new ConstructedEvent(newEntity);
+            RaiseLocalEvent(user, ref constructedEv);
+            // </Goobstation>
+
             return newEntity;
         }
 
