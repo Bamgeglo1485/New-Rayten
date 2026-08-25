@@ -89,7 +89,6 @@
   parent: BaseStationTile
   name: tiles-lime-floor
   sprite: /Textures/Tiles/lime.png
-  variants: 4
   itemDrop: FloorTileItemLime
 
 # Departmental
@@ -360,3 +359,4 @@
   footstepSounds:
     collection: FootstepHull
   itemDrop: PartRodMetal1 #same case as FloorHull
+
