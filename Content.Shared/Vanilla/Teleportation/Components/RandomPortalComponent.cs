@@ -4,7 +4,10 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 using Content.Shared.Procedural;
-using Content.Shared.Parallax.Biomes; 
+using Content.Shared.Parallax.Biomes;
+using Content.Client.Parallax.Data;
+using Content.Shared.Procedural;
+using Content.Shared.Parallax.Biomes;
 
 namespace Content.Shared.Vanilla.Teleportation.Components;
 
@@ -36,7 +39,7 @@ public sealed partial class RandomPortalComponent : Component
     ///     ДанжИ
     /// </summary>
     [DataField]
-    public List<ProtoId> AllowedDungeons = new()
+    public List<ProtoId<DungeonConfigPrototype>> AllowedDungeons = new()
     {
         "Experiment",
         "SnowyLabs",
@@ -47,7 +50,7 @@ public sealed partial class RandomPortalComponent : Component
     ///     Параллаксы данжов
     /// </summary>
     [DataField]
-    public List<ProtoId> AllowedParallaxes = new()
+    public List<ProtoId<ParallaxPrototype>> AllowedParallaxes = new()
     {
         "ExoStation",
         "PlasmaStation",
@@ -63,7 +66,7 @@ public sealed partial class RandomPortalComponent : Component
     ///     Биомы
     /// </summary>
     [DataField]
-    public List<ProtoId> AllowedPlanets = new()
+    public List<ProtoId<BiomeTemplatePrototype>> AllowedPlanets = new()
     {
         "PortalSnow",
         "PortalLava",
