@@ -47,7 +47,7 @@ public sealed partial class BrainWormComponent : Component
 
 
     [DataField]
-    public EntProtoId EvolutionPointsPrototype = "EvolutionPoints";
+    public ProtoId<CurrencyPrototype> EvolutionPointsPrototype = "EvolutionPoints";
     #region chemicals
 
     [Serializable, NetSerializable]

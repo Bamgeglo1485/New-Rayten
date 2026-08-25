@@ -85,5 +85,5 @@ public sealed partial class ShowTTTDetectiveIconsComponent : Component { }
 public sealed partial class TTTTRAITORComponent : Component
 {
     [DataField]
-    public EntProtoId SyndStatusIcon = "SyndicateFaction";
+    public ProtoId<FactionIconPrototype> SyndStatusIcon = "SyndicateFaction";
 }
