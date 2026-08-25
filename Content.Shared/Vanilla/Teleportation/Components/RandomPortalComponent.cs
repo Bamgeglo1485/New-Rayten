@@ -36,7 +36,7 @@ public sealed partial class RandomPortalComponent : Component
     ///     ДанжИ
     /// </summary>
     [DataField]
-    public List<EntProtoId> AllowedDungeons = new()
+    public List<ProtoId> AllowedDungeons = new()
     {
         "Experiment",
         "SnowyLabs",
@@ -47,7 +47,7 @@ public sealed partial class RandomPortalComponent : Component
     ///     Параллаксы данжов
     /// </summary>
     [DataField]
-    public List<EntProtoId> AllowedParallaxes = new()
+    public List<ProtoId> AllowedParallaxes = new()
     {
         "ExoStation",
         "PlasmaStation",
@@ -63,7 +63,7 @@ public sealed partial class RandomPortalComponent : Component
     ///     Биомы
     /// </summary>
     [DataField]
-    public List<EntProtoId> AllowedPlanets = new()
+    public List<ProtoId> AllowedPlanets = new()
     {
         "PortalSnow",
         "PortalLava",

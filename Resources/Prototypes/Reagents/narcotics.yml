@@ -330,7 +330,7 @@
   group: Narcotics
   desc: reagent-desc-nocturine
   physicalDesc: reagent-physical-desc-powdery
-  contrabandSeverity: FirstLevelLevel
+  contrabandSeverity: FirstLevel
   color: "#128e80"
   boilingPoint: 444.0
   meltingPoint: 128.0

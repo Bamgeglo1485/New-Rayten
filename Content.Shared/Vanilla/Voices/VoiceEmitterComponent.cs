@@ -11,7 +11,7 @@ public sealed partial class VoiceEmitterComponent : Component
 {
     [ViewVariables(VVAccess.ReadWrite),AutoNetworkedField]
     [DataField("voice")]
-    public EntProtoId? VoicePrototypeId { get; set; }
+    public ProtoId<VoiceSpeechPrototype>? VoicePrototypeId { get; set; }
 
     [DataField("pitch"), AutoNetworkedField]
     public float Pitch = 1.0f;
