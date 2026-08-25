@@ -16,7 +16,6 @@ public sealed partial class CommunicationsConsoleMenu : FancyWindow
 {
     public event Action? OnShuttleCalled;
     public event Action? OnShuttleRecalled;
-    public event Action<ProtoId<AlertLevelPrototype>>? OnAlertLevelChanged;
     public event Action<string>? OnRadioAnnounce;
     public event Action<string>? OnScreenBroadcast;
 
