@@ -383,8 +383,8 @@ public sealed partial class TDMSystem : EntitySystem
         Timer.Spawn(TimeSpan.FromSeconds(3), () => QueueDel(rule.Arena)); //Удаляем прошлую арену
         if (rule.LastRound)
         {
-            Timer.Spawn(TimeSpan.FromSeconds(3), () => _gameTicker.RestartRound());//рестартим раунд
             SaveMMR();
+            _gameTicker.RestartRound();//рестартим раунд
         }
         else
         {
