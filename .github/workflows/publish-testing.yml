@@ -1,26 +1,19 @@
-name: Publish
+﻿name: Publish Testing
 
 concurrency:
-  group: publish
+  group: publish-testing
   cancel-in-progress: true
 
 on:
   workflow_dispatch:
   schedule:
-   - cron: '0 10 * * *'
+  - cron: '0 10 * * *'
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Fail if we are attempting to run on the master branch
-      if: ${{GITHUB.REF_NAME == 'master' && github.repository == 'space-wizards/space-station-14'}}
-      run: exit 1
-
-    - name: Install dependencies
-      run: sudo apt-get install -y python3-paramiko python3-lxml
-
     - uses: actions/checkout@v7
       with:
         submodules: 'recursive'
@@ -29,11 +22,13 @@ jobs:
       with:
         dotnet-version: 10.0.x
 
+    - name: Install dependencies
+      run: sudo apt-get install -y python3-paramiko python3-lxml
+
     - name: Get Engine Tag
       run: |
         cd RobustToolbox
         git fetch --depth=1
-        git fetch --tags --depth=1
 
     - name: Install dependencies
       run: dotnet restore
@@ -48,16 +43,10 @@ jobs:
       run: dotnet run --project Content.Packaging client --no-wipe-release
 
     - name: Publish version
-      run: Tools/publish_multi_request.py
+      run: Tools/publish_multi_request.py --fork-id wizards-testing
       env:
         PUBLISH_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
         GITHUB_REPOSITORY: ${{ vars.GITHUB_REPOSITORY }}
-
-    - name: Publish changelog (Discord)
-      run: Tools/actions_changelogs_since_last_run.py
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        DISCORD_WEBHOOK_URL: ${{ secrets.CHANGELOG_DISCORD_WEBHOOK }}
 
     - name: Publish changelog (RSS)
       continue-on-error: true
