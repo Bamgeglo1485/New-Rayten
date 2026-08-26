@@ -1,19 +1,26 @@
-name: Publish Testing
+name: Publish
 
 concurrency:
-  group: publish-testing
+  group: publish
   cancel-in-progress: true
 
 on:
   workflow_dispatch:
   schedule:
-  - cron: '0 10 * * *'
+   - cron: '0 10 * * *'
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Fail if we are attempting to run on the master branch
+      if: ${{GITHUB.REF_NAME == 'master' && github.repository == 'space-wizards/space-station-14'}}
+      run: exit 1
+
+    - name: Install dependencies
+      run: sudo apt-get install -y python3-paramiko python3-lxml
+
     - uses: actions/checkout@v7
       with:
         submodules: 'recursive'
@@ -22,27 +29,14 @@ jobs:
       with:
         dotnet-version: 10.0.x
 
-    - name: Install dependencies
-      run: sudo apt-get install -y python3-paramiko python3-lxml
-
     - name: Get Engine Tag
       run: |
         cd RobustToolbox
         git fetch --depth=1
+        git fetch --tags --depth=1
 
     - name: Install dependencies
       run: dotnet restore
-
-    - name: Update changelog
-      run: |
-        dotnet tool install --global SpaceWizards.ChangelogTool --version 1.0.7
-        ss14-changelog update -d Resources/Changelog
-      env:
-        REPO: ${{ github.repository }}
-        BRANCH: master
-        CHANGELOG_REPO_PATH: Resources/Changelog
-        EXTRA_CATEGORIES: Admin,Maps,Rules
-        GITHUB_TOKEN: ${{ secrets.CL_ACCESS_TOKEN }}
 
     - name: Build Packaging
       run: dotnet build Content.Packaging --configuration Release --no-restore /m
@@ -54,10 +48,16 @@ jobs:
       run: dotnet run --project Content.Packaging client --no-wipe-release
 
     - name: Publish version
-      run: Tools/publish_multi_request.py --fork-id wizards-testing
+      run: Tools/publish_multi_request.py
       env:
         PUBLISH_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
         GITHUB_REPOSITORY: ${{ vars.GITHUB_REPOSITORY }}
+
+    - name: Publish changelog (Discord)
+      run: Tools/actions_changelogs_since_last_run.py
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        DISCORD_WEBHOOK_URL: ${{ secrets.CHANGELOG_DISCORD_WEBHOOK }}
 
     - name: Publish changelog (RSS)
       continue-on-error: true
