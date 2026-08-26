@@ -5,8 +5,8 @@
   - type: BasicStationEventScheduler
     minimumTimeUntilFirstEvent: 600 #10 минут
     minMaxEventTiming:
-      min: 900 # 15 мин
-      max: 1500 # 25 мин
+      min: 1800 # 30 мин
+      max: 3600 # 60 мин
     scheduledGameRules: !type:NestedSelector
       tableId: ArchonEventsTable
 
