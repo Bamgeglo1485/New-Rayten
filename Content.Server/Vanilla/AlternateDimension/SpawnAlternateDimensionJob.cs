@@ -79,6 +79,7 @@ public sealed class SpawnAlternateDimensionJob : Job<bool>
             return false;
 
         var random = new Random(_alternateParams.Seed);
+        var mirrorCoordinates = indexedDimension.MirrorCoordinates;
 
         //Add map components
         if (indexedDimension.MapComponents is not null)
@@ -97,8 +98,17 @@ public sealed class SpawnAlternateDimensionJob : Job<bool>
         while (stationTiles.MoveNext(out var tileRef))
         {
             var originalIndex = tileRef.Value.GridIndices;
-            var mirroredY = minY + (gridHeight - 1) - (originalIndex.Y - minY);
-            var mirroredIndex = new Vector2i(originalIndex.X, mirroredY);
+            Vector2i mirroredIndex;
+
+            if (mirrorCoordinates)
+            {
+                var mirroredY = minY + (gridHeight - 1) - (originalIndex.Y - minY);
+                mirroredIndex = new Vector2i(originalIndex.X, mirroredY);
+            }
+            else
+            {
+                mirroredIndex = originalIndex;
+            }
 
             var tileVariant = _tileSystem.PickVariant((ContentTileDefinition)tileDef, random.Next());
             alternateTiles.Add((mirroredIndex, new Tile(tileDef.TileId, variant: tileVariant)));
@@ -124,18 +134,28 @@ public sealed class SpawnAlternateDimensionJob : Job<bool>
                 var position = originalXform.Coordinates.Position;
                 var rotation = originalXform.LocalRotation;
 
-                var tileIndices = _mapSystem.CoordinatesToTile(_originalGrid, stationGridComp,
-                    new EntityCoordinates(_originalGrid, position));
+                Vector2 mirroredPosition;
+                float mirroredRotation;
 
-                var mirroredTileY = minY + (gridHeight - 1) - (tileIndices.Y - minY);
+                if (mirrorCoordinates)
+                {
+                    var tileIndices = _mapSystem.CoordinatesToTile(_originalGrid, stationGridComp,
+                        new EntityCoordinates(_originalGrid, position));
 
-                var tileOffsetX = position.X - tileIndices.X;
-                var tileOffsetY = position.Y - tileIndices.Y;
+                    var mirroredTileY = minY + (gridHeight - 1) - (tileIndices.Y - minY);
 
-                var mirroredY = mirroredTileY + tileOffsetY;
-                var mirroredPosition = new Vector2(position.X, (float)mirroredY);
+                    var tileOffsetX = position.X - tileIndices.X;
+                    var tileOffsetY = position.Y - tileIndices.Y;
 
-                var mirroredRotation = Math.PI - rotation;
+                    var mirroredY = mirroredTileY + tileOffsetY;
+                    mirroredPosition = new Vector2(position.X, (float)mirroredY);
+                    mirroredRotation = Math.PI - rotation;
+                }
+                else
+                {
+                    mirroredPosition = position;
+                    mirroredRotation = rotation;
+                }
 
                 var coord = new EntityCoordinates(_mapSystem.GetMap(_alternateMapId), mirroredPosition);
                 var spawned = _entManager.SpawnEntity(replacement.Value, coord);

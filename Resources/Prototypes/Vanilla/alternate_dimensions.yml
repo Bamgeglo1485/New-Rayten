@@ -37,3 +37,4 @@
   portalWallReplacementStdDev: 200
   portalWallReplacements:
   - id: WallSolidBackrooms
+  mirrorCoordinates: true

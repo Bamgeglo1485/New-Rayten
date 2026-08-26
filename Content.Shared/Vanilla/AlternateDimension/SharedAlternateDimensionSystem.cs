@@ -13,6 +13,7 @@ namespace Content.Shared.AlternateDimension;
 public abstract partial class SharedAlternateDimensionSystem : EntitySystem
 {
     [Dependency] private SharedMapSystem _mapSystem = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
 
     private Vector2 MirrorCoordinates(Vector2 position, EntityUid gridUid, MapGridComponent gridComp)
     {
@@ -60,12 +61,17 @@ public abstract partial class SharedAlternateDimensionSystem : EntitySystem
         if (!TryComp<MapGridComponent>(xform.GridUid, out var gridComp))
             return null;
 
+        if (!_prototypeManager.TryIndex(type, out var indexedDimension))
+            return null;
+
         var alternativeMap = Transform(alternativeGrid).MapUid;
         if (alternativeMap is null)
             return null;
 
-        var mirroredPosition = MirrorCoordinates(xform.Coordinates.Position, xform.GridUid.Value, gridComp);
-        return new EntityCoordinates(alternativeMap.Value, mirroredPosition);
+        var position = xform.Coordinates.Position;
+        if (indexedDimension.MirrorCoordinates)
+            position = MirrorCoordinates(xform.Coordinates.Position, xform.GridUid.Value, gridComp);
+        return new EntityCoordinates(alternativeMap.Value, position);
     }
 
     /// <summary>
@@ -129,6 +135,9 @@ public sealed partial class AlternateDimensionPrototype : IPrototype
     /// </summary>
     [DataField]
     public Dictionary<ProtoId<TagPrototype>, EntProtoId> Replacements = new();
+
+    [DataField]
+    public bool MirrorCoordinates = false;
 
     [DataField]
     public float PortalWallReplacementAverage = 0;
