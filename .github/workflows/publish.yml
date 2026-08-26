@@ -32,8 +32,7 @@ jobs:
     - name: Get Engine Tag
       run: |
         cd RobustToolbox
-        git fetch --unshallow
-        git fetch --tags
+        git fetch --depth=1
 
     - name: Install dependencies
       run: dotnet restore
@@ -46,12 +45,6 @@ jobs:
 
     - name: Package client
       run: dotnet run --project Content.Packaging client --no-wipe-release
-
-    - name: Debug engine tags
-      run: |
-        cd RobustToolbox
-        git tag -l
-        git describe --tags --abbrev=0
 
     - name: Publish version
       run: Tools/publish_multi_request.py
