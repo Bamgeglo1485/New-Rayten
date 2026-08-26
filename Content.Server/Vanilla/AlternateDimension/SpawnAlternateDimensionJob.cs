@@ -75,15 +75,12 @@ public sealed class SpawnAlternateDimensionJob : Job<bool>
         if (!_entManager.TryGetComponent<MapGridComponent>(_alternateGrid, out var alternateGridComp))
             return false;
 
-        if (!_prototypeManager.TryIndex(_alternateParams.Dimension, out var indexedDimension))
-            return false;
-
         var random = new Random(_alternateParams.Seed);
-        var mirrorCoordinates = indexedDimension.MirrorCoordinates;
+        var mirrorCoordinates = _alternateParams.Dimension.MirrorCoordinates;
 
         //Add map components
-        if (indexedDimension.MapComponents is not null)
-            _entManager.AddComponents(_mapSystem.GetMap(_alternateMapId), indexedDimension.MapComponents);
+        if (_alternateParams.Dimension.MapComponents is not null)
+            _entManager.AddComponents(_mapSystem.GetMap(_alternateMapId), _alternateParams.Dimension.MapComponents);
 
         var localAABB = stationGridComp.LocalAABB;
         var minY = (int)Math.Floor(localAABB.Bottom);
@@ -93,7 +90,7 @@ public sealed class SpawnAlternateDimensionJob : Job<bool>
         //silhouette tiles
         var stationTiles = _mapSystem.GetAllTilesEnumerator(_originalGrid, stationGridComp);
         var alternateTiles = new List<(Vector2i Index, Tile Tile)>();
-        var tileDef = _tileDefManager[indexedDimension.DefaultTile];
+        var tileDef = _tileDefManager[_alternateParams.Dimension.DefaultTile];
 
         while (stationTiles.MoveNext(out var tileRef))
         {
@@ -116,8 +113,8 @@ public sealed class SpawnAlternateDimensionJob : Job<bool>
         _mapSystem.SetTiles((_alternateGrid, alternateGridComp), alternateTiles);
 
         //Add grid components
-        if (indexedDimension.GridComponents is not null)
-            _entManager.AddComponents(_alternateGrid, indexedDimension.GridComponents);
+        if (_alternateParams.Dimension.GridComponents is not null)
+            _entManager.AddComponents(_alternateGrid, _alternateParams.Dimension.GridComponents);
 
         //Set alternate dimension entities
         HashSet<Entity<TagComponent, TransformComponent>> taggedEntities = new();
@@ -125,46 +122,64 @@ public sealed class SpawnAlternateDimensionJob : Job<bool>
 
         foreach (var tagged in taggedEntities)
         {
-            foreach (var replacement in indexedDimension.Replacements)
+            var originalXform = tagged.Comp2;
+            var position = originalXform.Coordinates.Position;
+            var rotation = originalXform.LocalRotation;
+
+            Vector2 mirroredPosition;
+            Angle mirroredRotation;
+
+            if (mirrorCoordinates)
             {
-                if (!_tag.HasTag(tagged.Owner, replacement.Key))
-                    continue;
+                var tileIndices = _mapSystem.CoordinatesToTile(_originalGrid, stationGridComp,
+                    new EntityCoordinates(_originalGrid, position));
 
-                var originalXform = tagged.Comp2;
-                var position = originalXform.Coordinates.Position;
-                var rotation = originalXform.LocalRotation;
+                var mirroredTileY = minY + (gridHeight - 1) - (tileIndices.Y - minY);
 
-                Vector2 mirroredPosition;
-                float mirroredRotation;
+                var tileOffsetX = position.X - tileIndices.X;
+                var tileOffsetY = position.Y - tileIndices.Y;
 
-                if (mirrorCoordinates)
+                var mirroredY = mirroredTileY + tileOffsetY;
+                mirroredPosition = new Vector2(position.X, (float)mirroredY);
+                mirroredRotation = new Angle(Math.PI - rotation.Theta);
+            }
+            else
+            {
+                mirroredPosition = position;
+                mirroredRotation = rotation;
+            }
+
+            var coord = new EntityCoordinates(_mapSystem.GetMap(_alternateMapId), mirroredPosition);
+
+            string? spawnedPrototypeId = null;
+
+            if (_entManager.TryGetComponent(tagged.Owner, out MetaDataComponent? metaData) &&
+                metaData.EntityPrototype != null &&
+                _alternateParams.Dimension.PrototypeReplacements.TryGetValue(
+                    new EntProtoId(metaData.EntityPrototype.ID), out var prototypeReplacement))
+            {
+                spawnedPrototypeId = prototypeReplacement;
+            }
+            else
+            {
+                foreach (var replacement in _alternateParams.Dimension.Replacements)
                 {
-                    var tileIndices = _mapSystem.CoordinatesToTile(_originalGrid, stationGridComp,
-                        new EntityCoordinates(_originalGrid, position));
-
-                    var mirroredTileY = minY + (gridHeight - 1) - (tileIndices.Y - minY);
-
-                    var tileOffsetX = position.X - tileIndices.X;
-                    var tileOffsetY = position.Y - tileIndices.Y;
-
-                    var mirroredY = mirroredTileY + tileOffsetY;
-                    mirroredPosition = new Vector2(position.X, (float)mirroredY);
-                    mirroredRotation = Math.PI - rotation;
+                    if (_tag.HasTag(tagged.Owner, replacement.Key))
+                    {
+                        spawnedPrototypeId = replacement.Value;
+                        break;
+                    }
                 }
-                else
-                {
-                    mirroredPosition = position;
-                    mirroredRotation = rotation;
-                }
+            }
 
-                var coord = new EntityCoordinates(_mapSystem.GetMap(_alternateMapId), mirroredPosition);
-                var spawned = _entManager.SpawnEntity(replacement.Value, coord);
+            if (!string.IsNullOrEmpty(spawnedPrototypeId))
+            {
+                var spawned = _entManager.SpawnEntity(spawnedPrototypeId, coord);
 
                 if (_entManager.TryGetComponent<TransformComponent>(spawned, out var spawnedXform))
                 {
-                    spawnedXform.LocalRotation = (float)mirroredRotation;
+                    spawnedXform.LocalRotation = mirroredRotation;
                 }
-                break;
             }
         }
 
@@ -172,7 +187,7 @@ public sealed class SpawnAlternateDimensionJob : Job<bool>
         _mapManager.InitializeMap(_alternateMapId);
         _mapManager.SetPaused(_alternateMapId, false);
 
-        ProcessWallReplacements(indexedDimension);
+        ProcessWallReplacements(_alternateParams.Dimension);
 
         while (_queuedSpawns.TryDequeue(out var tup))
         {
@@ -193,12 +208,12 @@ public sealed class SpawnAlternateDimensionJob : Job<bool>
         return true;
     }
 
-    private void ProcessWallReplacements(AlternateDimensionPrototype indexedDimension)
+    private void ProcessWallReplacements(AlternateDimensionConfig dimension)
     {
-        if (indexedDimension.PortalWallReplacements == null || indexedDimension.PortalWallReplacements.Count == 0)
+        if (dimension.PortalWallReplacements == null || dimension.PortalWallReplacements.Count == 0)
             return;
 
-        var replacementMod = _random.NextGaussian(indexedDimension.PortalWallReplacementAverage, indexedDimension.PortalWallReplacementStdDev);
+        var replacementMod = _random.NextGaussian(dimension.PortalWallReplacementAverage, dimension.PortalWallReplacementStdDev);
         var prob = (float)Math.Clamp(1 / replacementMod, 0f, 1f);
 
         if (prob <= 0)
@@ -235,7 +250,7 @@ public sealed class SpawnAlternateDimensionJob : Job<bool>
 
             _entManager.QueueDeleteEntity(wallUid);
 
-            foreach (var spawn in EntitySpawnCollection.GetSpawns(indexedDimension.PortalWallReplacements, _random))
+            foreach (var spawn in EntitySpawnCollection.GetSpawns(dimension.PortalWallReplacements, _random))
             {
                 _queuedSpawns.Enqueue((spawn, coords, rot));
             }

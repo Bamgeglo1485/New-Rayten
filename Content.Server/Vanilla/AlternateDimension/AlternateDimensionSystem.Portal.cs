@@ -30,7 +30,13 @@ public sealed partial class AlternateDimensionSystem
             return;
         }
 
-        TryCreateAndLinkPortal(ent, GetAlternateRealityCoordinates(ent, ent.Comp.TargetDimension));
+        if (!_prototypeManager.TryIndex(ent.Comp.TargetDimension, out var prototype))
+        {
+            Log.Warning($"Failed to find prototype {ent.Comp.TargetDimension} for station alternate dimension generation.");
+            return;
+        }
+
+        TryCreateAndLinkPortal(ent, GetAlternateRealityCoordinates(ent, prototype));
     }
 
     private void TryCreateAndLinkPortal(Entity<AlternateDimensionAutoPortalComponent> ent, EntityCoordinates? coord)

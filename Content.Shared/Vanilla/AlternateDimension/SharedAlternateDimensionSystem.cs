@@ -33,7 +33,7 @@ public abstract partial class SharedAlternateDimensionSystem : EntitySystem
     /// <summary>
     /// Finds and returns an alternate version of a grid of the specified type.
     /// </summary>
-    public EntityUid? GetAlternateRealityGrid(EntityUid originalGrid, ProtoId<AlternateDimensionPrototype> type)
+    public EntityUid? GetAlternateRealityGrid(EntityUid originalGrid, AlternateDimensionConfig type)
     {
         if (!TryComp<RealDimensionGridComponent>(originalGrid, out var realDimension))
             return null;
@@ -49,7 +49,7 @@ public abstract partial class SharedAlternateDimensionSystem : EntitySystem
     /// in the alternate dimension that the entity is in in the real world at the current moment.
     /// </summary>
     public EntityCoordinates? GetAlternateRealityCoordinates(EntityUid entity,
-        ProtoId<AlternateDimensionPrototype> type)
+        AlternateDimensionConfig type)
     {
         var xform = Transform(entity);
         if (!TryComp<RealDimensionGridComponent>(xform.GridUid, out var realDimension))
@@ -61,15 +61,12 @@ public abstract partial class SharedAlternateDimensionSystem : EntitySystem
         if (!TryComp<MapGridComponent>(xform.GridUid, out var gridComp))
             return null;
 
-        if (!_prototypeManager.TryIndex(type, out var indexedDimension))
-            return null;
-
         var alternativeMap = Transform(alternativeGrid).MapUid;
         if (alternativeMap is null)
             return null;
 
         var position = xform.Coordinates.Position;
-        if (indexedDimension.MirrorCoordinates)
+        if (type.MirrorCoordinates)
             position = MirrorCoordinates(xform.Coordinates.Position, xform.GridUid.Value, gridComp);
         return new EntityCoordinates(alternativeMap.Value, position);
     }
@@ -90,28 +87,34 @@ public abstract partial class SharedAlternateDimensionSystem : EntitySystem
         if (!TryComp<MapGridComponent>(alternateComp.RealDimensionGrid, out var realGridComp))
             return null;
 
-        var mirroredPosition = MirrorCoordinates(
-            xform.Coordinates.Position,
-            alternateComp.RealDimensionGrid.Value,
-            realGridComp);
+        var position = xform.Coordinates.Position;
+        if (alternateComp.DimensionType.MirrorCoordinates)
+            position = MirrorCoordinates(
+                xform.Coordinates.Position,
+                alternateComp.RealDimensionGrid.Value,
+                realGridComp);
 
-        return new EntityCoordinates(alternateComp.RealDimensionGrid.Value, mirroredPosition);
+        return new EntityCoordinates(alternateComp.RealDimensionGrid.Value, position);
     }
 }
 
-[Serializable, NetSerializable]
 public sealed record AlternateDimensionParams
 {
     public int Seed;
-    public ProtoId<AlternateDimensionPrototype> Dimension = new();
+    public AlternateDimensionConfig Dimension = new();
 }
 
 [Prototype]
-public sealed partial class AlternateDimensionPrototype : IPrototype
+public sealed partial class AlternateDimensionPrototype : AlternateDimensionConfig, IPrototype
 {
     [IdDataField]
     public string ID { get; set; } = default!;
+}
 
+[DataDefinition]
+[Virtual]
+public partial class AlternateDimensionConfig
+{
     /// <summary>
     /// The floor of the alternate reality will be made up of this tile
     /// </summary>
@@ -135,6 +138,9 @@ public sealed partial class AlternateDimensionPrototype : IPrototype
     /// </summary>
     [DataField]
     public Dictionary<ProtoId<TagPrototype>, EntProtoId> Replacements = new();
+
+    [DataField]
+    public Dictionary<EntProtoId, EntProtoId> PrototypeReplacements = new();
 
     [DataField]
     public bool MirrorCoordinates = false;

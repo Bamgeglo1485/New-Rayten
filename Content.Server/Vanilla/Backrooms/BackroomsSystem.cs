@@ -29,9 +29,22 @@ public sealed partial class BackroomsSystem : EntitySystem
     [Dependency] private SharedContainerSystem _container = default!;
     [Dependency] private SharedScaleVisualsSystem ScaleVisuals = default!;
     [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedTransformSystem _transformSystem = default!;
 
     public static readonly ProtoId<TagPrototype> _tableTag = new("Table");
     public static readonly ProtoId<TagPrototype> _pipeTag = new("Pipe");
+
+    private static readonly Vector2[] _directions = new Vector2[]
+{
+        new(1, 0),
+        new(-1, 0),
+        new(0, 1),
+        new(0, -1),
+        new(1, 1),
+        new(-1, 1),
+        new(1, -1),
+        new(-1, -1)
+};
 
     public override void Initialize()
     {
@@ -123,11 +136,14 @@ public sealed partial class BackroomsSystem : EntitySystem
 
     public void Copy(Entity<BackroomsComponent> ent)
     {
+        if (ent.Comp.DimensionType == null)
+            return;
+
         var realGrid = ent.Comp.RealGrid;
         if (realGrid == null)
             return;
 
-        var entitiesToCopy = new List<(string PrototypeId, EntityCoordinates Coordinates, Angle Rotation)>();
+        var entitiesToCopy = new List<(string PrototypeId, EntityCoordinates Coordinates, Angle Rotation, EntityUid Source)>();
 
         var query = AllEntityQuery<AnimateableComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out _, out var xform))
@@ -158,10 +174,10 @@ public sealed partial class BackroomsSystem : EntitySystem
             if (coords == null)
                 continue;
 
-            entitiesToCopy.Add((prototypeId, coords.Value, xform.LocalRotation));
+            entitiesToCopy.Add((prototypeId, coords.Value, xform.LocalRotation, uid));
         }
 
-        foreach (var (prototypeId, coords, rotation) in entitiesToCopy)
+        foreach (var (prototypeId, coords, rotation, source) in entitiesToCopy)
         {
             var spawned = Spawn(prototypeId, coords);
             if (TryComp(spawned, out TransformComponent? spawnedXform))
@@ -171,11 +187,50 @@ public sealed partial class BackroomsSystem : EntitySystem
 
             var scale = new Vector2(_random.NextFloat(0.7f, 1.5f), _random.NextFloat(0.5f, 2.0f));
             ScaleVisuals.SetSpriteScale(spawned, scale);
+
+            if (_random.Prob(ent.Comp.LineCopyChance))
+            {
+                var lineLength = _random.Next(ent.Comp.MinLine, ent.Comp.MaxLine + 1);
+                var direction = _random.Pick(_directions);
+                var spacing = ent.Comp.LineSpacing;
+
+                var sourceCoords = _alternate.GetAlternateRealityCoordinates(source, ent.Comp.DimensionType);
+                if (sourceCoords != null)
+                {
+                    for (int i = 1; i <= lineLength; i++)
+                    {
+                        var offset = direction * (spacing * i);
+                        var linePosition = new Vector2(
+                            sourceCoords.Value.X + offset.X,
+                            sourceCoords.Value.Y + offset.Y
+                        );
+
+                        var lineCoords = new EntityCoordinates(sourceCoords.Value.EntityId, linePosition);
+
+                        var lineSpawn = Spawn(prototypeId, lineCoords);
+                        if (TryComp(lineSpawn, out TransformComponent? lineXform))
+                        {
+                            lineXform.LocalRotation = rotation + new Angle(_random.NextFloat(-0.5f, 0.5f));
+                        }
+
+                        var lineScale = new Vector2(
+                            _random.NextFloat(0.5f, 1.8f),
+                            _random.NextFloat(0.4f, 2.2f));
+                        ScaleVisuals.SetSpriteScale(lineSpawn, lineScale);
+
+                        if (i % 5 == 0)
+                            _transformSystem.SetCoordinates(lineSpawn, lineCoords);
+                    }
+                }
+            }
         }
     }
 
     public void CopyHuman(Entity<BackroomsComponent> ent)
     {
+        if (ent.Comp.DimensionType == null)
+            return;
+
         var realGrid = ent.Comp.RealGrid;
         if (realGrid == null)
             return;

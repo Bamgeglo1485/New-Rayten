@@ -9,7 +9,7 @@ namespace Content.Shared.AlternateDimension;
 public sealed partial class AlternateDimensionGridComponent : Component
 {
     [DataField]
-    public ProtoId<AlternateDimensionPrototype> DimensionType = default!;
+    public AlternateDimensionConfig DimensionType = default!;
 
     [DataField]
     public EntityUid? RealDimensionGrid;

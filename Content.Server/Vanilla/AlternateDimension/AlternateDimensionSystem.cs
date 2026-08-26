@@ -75,7 +75,7 @@ public sealed partial class AlternateDimensionSystem : SharedAlternateDimensionS
         dimensionComp.RealDimensionGrid = originalGrid;
         _metaData.SetEntityName(
             alternateGrid,
-            $"{gridMetaData.EntityName} ({args.Dimension})");
+            $"{gridMetaData.EntityName} (Alternate)");
 
         realGridComp.AlternativeGrids.Add(args.Dimension, alternateGrid);
 
@@ -109,7 +109,7 @@ public sealed partial class AlternateDimensionSystem : SharedAlternateDimensionS
     /// </summary>
     /// <param name="originalGrid">A real grid located on the main game maps. </param>
     /// <param name="type">The type of alternate version of the grid to be deleted. (A large number of different types of alternate grid versions are supported)</param>
-    public bool RemoveAlternateRealityGrid(EntityUid originalGrid, ProtoId<AlternateDimensionPrototype> type)
+    public bool RemoveAlternateRealityGrid(EntityUid originalGrid, AlternateDimensionConfig type)
     {
         if (!TryComp<RealDimensionGridComponent>(originalGrid, out var realDimension))
             return false;

@@ -12,6 +12,18 @@ public sealed partial class BackroomsComponent : Component
     public float CopyChance = 0.05f;
 
     [DataField]
+    public float LineCopyChance = 0.1f;
+
+    [DataField]
+    public int MaxLine = 6;
+
+    [DataField]
+    public int MinLine = 3;
+
+    [DataField]
+    public float LineSpacing = 1.5f;
+
+    [DataField]
     public TimeSpan HumanCopyDelay { get; set; } = TimeSpan.FromSeconds(600);
 
     [DataField]
@@ -30,5 +42,5 @@ public sealed partial class BackroomsComponent : Component
     public EntityUid? RealGrid = null;
 
     [DataField]
-    public ProtoId<AlternateDimensionPrototype> DimensionType = "Backrooms";
+    public AlternateDimensionConfig? DimensionType = null;
 }

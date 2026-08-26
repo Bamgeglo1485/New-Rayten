@@ -12,5 +12,5 @@ public sealed partial class RealDimensionGridComponent : Component
     /// Stores references to all alternate reality grids generated from this grid.
     /// </summary>
     [DataField]
-    public Dictionary<ProtoId<AlternateDimensionPrototype>, EntityUid> AlternativeGrids = new();
+    public Dictionary<AlternateDimensionConfig, EntityUid> AlternativeGrids = new();
 }
