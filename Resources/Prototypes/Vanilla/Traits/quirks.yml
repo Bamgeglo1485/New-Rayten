@@ -38,12 +38,3 @@
       sounds:
         collection: Paracusia
 
-- type: trait
-  id: PainNumbness
-  name: trait-painnumbness-name
-  description: trait-painnumbness-desc
-  category: Quirks
-  specials:
-  - !type:ApplyStatusEffectSpecial
-    statusEffects:
-    - TraitStatusEffectPainNumbness
