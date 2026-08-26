@@ -50,6 +50,7 @@ public sealed partial class MachineFrameSystem : EntitySystem
     {
         if (args.Handled)
             return;
+
         if (!component.HasBoard)
         {
             if (TryInsertBoard(uid, args.Used, component))

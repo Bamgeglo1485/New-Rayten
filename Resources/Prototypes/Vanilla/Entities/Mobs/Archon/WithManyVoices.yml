@@ -19,7 +19,6 @@
       pointsModifier: 4
       aPointsModifier: 4
     - type: Temperature
-      atmosTemperatureTransferEfficiency: 1
     - type: MovementSpeedModifier
       baseWalkSpeed: 2.5
       baseSprintSpeed: 4.5

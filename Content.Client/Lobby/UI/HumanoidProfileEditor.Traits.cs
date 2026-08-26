@@ -79,20 +79,46 @@ public sealed partial class HumanoidProfileEditor
             List<TraitPreferenceSelector?> selectors = new();
             var selectionCount = 0;
 
+            // Сначала вычисляем общую стоимость выбранных трейтов
+            foreach (var trait in sortedCategoryTraits)
+            {
+                if (Profile?.TraitPreferences.Contains(trait.ID) == true)
+                    selectionCount += trait.Cost;
+            }
+
             // RAYTEN STARTS
             foreach (var trait in sortedCategoryTraits)
             // RAYTEN ENDS
             {
+                var isSelected = Profile?.TraitPreferences.Contains(trait.ID) == true;
                 var selector = new TraitPreferenceSelector(trait);
+                selector.Preference = isSelected;
 
-                selector.Preference = Profile?.TraitPreferences.Contains(trait.ID) == true;
-                if (selector.Preference)
-                    selectionCount += trait.Cost;
+                var canSelect = true;
+                if (category is { MaxTraitPoints: >= 0 } && !isSelected)
+                {
+                    var newTotal = selectionCount + trait.Cost;
+                    canSelect = newTotal <= category.MaxTraitPoints;
+                }
 
                 selector.PreferenceChanged += preference =>
                 {
                     if (preference)
                     {
+                        if (category is { MaxTraitPoints: >= 0 })
+                        {
+                            var currentTotal = 0;
+                            foreach (var t in sortedCategoryTraits)
+                            {
+                                if (Profile?.TraitPreferences.Contains(t.ID) == true)
+                                    currentTotal += t.Cost;
+                            }
+                            if (currentTotal + trait.Cost > category.MaxTraitPoints)
+                            {
+                                RefreshTraits();
+                                return;
+                            }
+                        }
                         Profile = Profile?.WithTraitPreference(trait.ID, _prototypeManager);
                     }
                     else
@@ -101,8 +127,19 @@ public sealed partial class HumanoidProfileEditor
                     }
 
                     SetDirty();
-                    RefreshTraits(); // If too many traits are selected, they will be reset to the real value.
+                    RefreshTraits();
                 };
+
+                if (!canSelect && !isSelected)
+                {
+                    selector.Checkbox.Disabled = true;
+                    selector.Checkbox.Label.FontColorOverride = Color.Gray;
+                }
+                else if (category is { MaxTraitPoints: >= 0 } && isSelected)
+                {
+                    selector.Checkbox.Label.FontColorOverride = null;
+                }
+
                 selectors.Add(selector);
             }
 
@@ -120,12 +157,6 @@ public sealed partial class HumanoidProfileEditor
             {
                 if (selector == null)
                     continue;
-
-                if (category is { MaxTraitPoints: >= 0 } &&
-                    selector.Cost + selectionCount > category.MaxTraitPoints)
-                {
-                    selector.Checkbox.Label.FontColorOverride = Color.Red;
-                }
 
                 TraitsList.AddChild(selector);
             }

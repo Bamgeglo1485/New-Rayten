@@ -29,7 +29,7 @@ public sealed partial class SpacetimeAbilitySystem : EntitySystem
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private SharedSolutionContainerSystem _solutionContainerSystem = default!;
-    [Dependency] private SharedBloodstreamSystem _blood = default!;
+    [Dependency] private BloodstreamSystem _blood = default!;
 
 
     public override void Initialize()

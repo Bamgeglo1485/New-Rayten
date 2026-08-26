@@ -20,19 +20,22 @@ public sealed partial class SharedRushingSystem : EntitySystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<InputMoverComponent, KnockedDownEvent>(OnDown);
+        SubscribeLocalEvent<RusherComponent, KnockedDownEvent>(OnDown);
     }
 
     // харкод да и похуй
-    private void OnDown(Entity<InputMoverComponent> ent, ref KnockedDownEvent ev)
+    private void OnDown(Entity<RusherComponent> ent, ref KnockedDownEvent ev)
     {
-        if (!ent.Comp.HasDirectionalMovement)
+        if (!TryComp<InputMoverComponent>(ent, out var input))
+            return;
+
+        if (!input.HasDirectionalMovement)
             return;
 
         if (_gravity.IsWeightless(ent.Owner))
             return;
 
-        if (!TryComp<StaminaComponent>(ent, out var stamina) || stamina.CritThreshold - stamina.StaminaDamage <= 25)
+        if (!TryComp<StaminaComponent>(ent, out var stamina) || stamina.CritThreshold - stamina.StaminaDamage <= ent.Comp.StaminaLoss)
             return;
 
         if (!TryComp<KnockedDownComponent>(ent, out var knockedDown))
@@ -42,9 +45,9 @@ public sealed partial class SharedRushingSystem : EntitySystem
             return;
 
         var transform = Transform(ent);
-        var direction = transform.Coordinates.Offset(transform.LocalRotation.ToWorldVec());
+        var direction = input.WishDir * ent.Comp.DistanceModifier;
 
-        _throwing.TryThrow(ent, direction, 6f);
-        _stamina.TakeStaminaDamage(ent, 25, null, ent, ent, ignoreResist: true);
+        _throwing.TryThrow(ent, direction, ent.Comp.Speed);
+        _stamina.TakeStaminaDamage(ent, ent.Comp.StaminaLoss, null, ent, ent, ignoreResist: true);
     }
 }

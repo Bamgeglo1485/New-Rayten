@@ -1,0 +1,22 @@
+- type: alertLevel
+  id: Apollyon
+  name: alert-level-apollyon
+  announcement: alert-level-apollyon-announcement
+  instructions: alert-level-apollyon-instructions
+  sound: /Audio/Vanilla/Misc/apollyon_alarm.ogg
+  color: "#8b8faf"
+  emergencyLightColor: "#8b8faf"
+  forceEnableEmergencyLights: true
+  shuttleTime: 600
+
+- type: alertLevel
+  id: Nirvana
+  name: alert-level-nirvana
+  announcement: alert-level-nirvana-announcement
+  instructions: alert-level-nirvana-instructions
+  selectable: false
+  sound: /Audio/Vanilla/Effects/Alarms/Nirvana.ogg
+  disableSelection: true
+  color: "#940d3a"
+  emergencyLightColor: "#940d3a"
+  forceEnableEmergencyLights: true

@@ -92,7 +92,7 @@
   - type: SolutionTransfer
     maxTransferAmount: 2
   - type: Tool
-    qualities: Slicing
+    qualities: [ Slicing ]
     speedModifier: 0.5 #It's a bayonet
   - type: GunRequiresWield
   - type: StaticPrice
@@ -114,7 +114,7 @@
     sprite: Vanilla/Objects/Weapons/Guns/Snipers/heavy_sniper.rsi # Rayten-Resprites
   - type: GunRequiresWield
   - type: Gun
-    fireRate: 0.4
+    fireRate: 0.5
     selectedMode: SemiAuto
     availableModes:
     - SemiAuto

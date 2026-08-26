@@ -61,7 +61,7 @@
     - SimpleHostile
     - Zombie
   - type: MovementSpeedModifier
-    baseSprintSpeed: 4.1
+    baseSprintSpeed: 3
   - type: VoiceEmitter
     voice: PlagueDoctor
   - type: Emoting

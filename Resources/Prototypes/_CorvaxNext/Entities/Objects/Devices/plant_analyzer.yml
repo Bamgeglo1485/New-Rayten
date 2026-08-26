@@ -14,19 +14,19 @@
       shader: unshaded
   - type: Item
     storedRotation: -90
-  - type: ActivatableUI
-    key: enum.PlantAnalyzerUiKey.Key
-    inHandsOnly: true
-  - type: UserInterface
-    interfaces:
-      enum.PlantAnalyzerUiKey.Key:
-        type: PlantAnalyzerBoundUserInterface
-  - type: PlantAnalyzer
-    settings:
-      scanDelay: 2
-      advScanDelay: 4
-    scanningEndSound:
-      path: "/Audio/Items/Medical/healthscanner.ogg"
+  #- type: ActivatableUI
+  #  key: enum.PlantAnalyzerUiKey.Key
+  #  inHandsOnly: true
+  #- type: UserInterface
+  #  interfaces:
+  #    enum.PlantAnalyzerUiKey.Key:
+  #      type: PlantAnalyzerBoundUserInterface
+  #- type: PlantAnalyzer
+  #  settings:
+  #    scanDelay: 2
+  #    advScanDelay: 4
+  #  scanningEndSound:
+  #    path: "/Audio/Items/Medical/healthscanner.ogg"
   - type: Appearance
   - type: GenericVisualizer
     visuals:
@@ -58,8 +58,8 @@
   id: PlantAnalyzerDebug
   parent: BasePlantAnalyzer
   suffix: Debug
-  components:
-  - type: PlantAnalyzer
-    settings:
-      scanDelay: 0.1
-      advScanDelay: 0.5
+  #components:
+  #- type: PlantAnalyzer
+  #  settings:
+  #    scanDelay: 0.1
+  #    advScanDelay: 0.5

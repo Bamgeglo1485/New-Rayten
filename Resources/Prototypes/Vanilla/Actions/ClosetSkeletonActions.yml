@@ -9,10 +9,10 @@
     itemIconStyle: BigAction
     sound: !type:SoundPathSpecifier
       path: /Audio/Magic/forcewall.ogg
-    icon:
-      sprite: Objects/Consumable/Food/Baked/pie.rsi
-      state: happy
   - type: InstantAction
     event: !type:InstantSpawnSpellEvent
       prototype: FoodPieBananaCream
       posData: !type:TargetInFrontSingle
+  - type: Sprite
+    sprite: Objects/Consumable/Food/Baked/pie.rsi
+    state: happy

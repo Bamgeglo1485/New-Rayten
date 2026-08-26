@@ -3,9 +3,8 @@ using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.List;
 using Content.Shared.Procedural;
-using Content.Shared.Parallax.Biomes; 
+using Content.Shared.Parallax.Biomes;
 
 namespace Content.Shared.Vanilla.Teleportation.Components;
 
@@ -18,8 +17,8 @@ public sealed partial class RandomPortalComponent : Component
     /// <summary>
     ///     Прототип выходного портала
     /// </summary>
-    [DataField("secondPortalPrototype", customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
-    public string SecondPortalPrototype = "RandomPortalExit";
+    [DataField]
+    public EntProtoId SecondPortalPrototype = "RandomPortalExit";
 
     /// <summary>
     ///     Телепортирует на любые тайлы на карте
@@ -36,8 +35,8 @@ public sealed partial class RandomPortalComponent : Component
     /// <summary>
     ///     ДанжИ
     /// </summary>
-    [DataField("allowedDungeons", customTypeSerializer: typeof(PrototypeIdListSerializer<DungeonConfigPrototype>))]
-    public List<string> AllowedDungeons = new()
+    [DataField]
+    public List<ProtoId<DungeonConfigPrototype>> AllowedDungeons = new()
     {
         "Experiment",
         "SnowyLabs",
@@ -47,7 +46,7 @@ public sealed partial class RandomPortalComponent : Component
     /// <summary>
     ///     Параллаксы данжов
     /// </summary>
-    [DataField("allowedParallaxes")]
+    [DataField]
     public List<string> AllowedParallaxes = new()
     {
         "ExoStation",
@@ -63,8 +62,8 @@ public sealed partial class RandomPortalComponent : Component
     /// <summary>
     ///     Биомы
     /// </summary>
-    [DataField("allowedPlanets", customTypeSerializer: typeof(PrototypeIdListSerializer<BiomeTemplatePrototype>))]
-    public List<string> AllowedPlanets = new()
+    [DataField]
+    public List<ProtoId<BiomeTemplatePrototype>> AllowedPlanets = new()
     {
         "PortalSnow",
         "PortalLava",

@@ -1,5 +1,4 @@
-﻿using Content.Server.Atmos.Components;
-using Content.Server.Forensics;
+using Content.Server.Atmos.Components;
 using Content.Shared._Funkystation.WallStains;
 using Content.Shared._Funkystation.WallStains.Components;
 using Content.Shared.Chemistry;
@@ -20,12 +19,14 @@ using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
+using Content.Shared.Forensics.Systems;
+using Content.Shared.Forensics.Components;
+using Content.Shared.Wall;
 
 namespace Content.Server._Funkystation.WallStains.Systems;
 
 public sealed partial class WallStainSystem : EntitySystem
 {
-    private static readonly ProtoId<TagPrototype> WallTag = "Wall";
     private static readonly ProtoId<TagPrototype> WindowTag = "Window";
     private static readonly ProtoId<TagPrototype> SoapTag = "Soap";
 
@@ -107,7 +108,7 @@ public sealed partial class WallStainSystem : EntitySystem
 
     private bool IsWall(EntityUid uid)
     {
-        return HasComp<AirtightComponent>(uid) || _tag.HasTag(uid, WallTag) || _tag.HasTag(uid, WindowTag);
+        return HasComp<AirtightComponent>(uid) || HasComp<WallComponent>(uid) || _tag.HasTag(uid, WindowTag);
     }
 
     private FixedPoint2 ApplyStainToWall(EntityUid wallUid, Solution solution, Vector2i direction, float fraction = 1.0f)

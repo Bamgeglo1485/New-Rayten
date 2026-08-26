@@ -7,15 +7,16 @@
     useDelay: 3
     itemIconStyle: BigAction
     priority: -20
-    icon:
-      sprite: Vanilla/Actions/Splode.rsi
-      state: ItemSplode
     raiseOnAction: true
   - type: InstantAction
     event: !type:SplodeMarkingEvent
   - type: ActionUpgrade
     effectedLevels:
       2: ActionSplodeItemII
+  - type: Sprite
+    sprite: Vanilla/Actions/Splode.rsi
+    layers:
+    - state: ItemSplode
 
 - type: entity
   id: ActionSplodeItemII
@@ -48,14 +49,15 @@
     useDelay: 10
     itemIconStyle: BigAction
     priority: -20
-    icon:
-      sprite: Vanilla/Actions/Splode.rsi
-      state: SelfCharge
     raiseOnAction: true
   - type: InstantAction
     event: !type:SelfSplodingEvent
   - type: SpeakOnAction
     sentence: action-speech-self-splode
+  - type: Sprite
+    sprite: Vanilla/Actions/Splode.rsi
+    layers:
+    - state: SelfCharge
 
 - type: entity
   id: ActionTimeStop5Sec
@@ -64,12 +66,13 @@
     useDelay: 300
     itemIconStyle: BigAction
     priority: -20
-    icon:
-      sprite: Vanilla/Objects/Devices/timestopper.rsi
-      state: icon
   - type: InstantAction
     event: !type:TimeStopEvent
       prototype: TimeStop5sec
+  - type: Sprite
+    sprite: Vanilla/Objects/Devices/timestopper.rsi
+    layers:
+    - state: icon
 
 - type: entity
   parent: ActionTimeStop5Sec
@@ -90,9 +93,10 @@
     useDelay: 30
     itemIconStyle: BigAction
     priority: -20
-    icon:
-      sprite: Vanilla/Objects/Devices/timestopper.rsi
-      state: icon
   - type: InstantAction
     event: !type:TimeStopEvent
       prototype: TimeStop5sec
+  - type: Sprite
+    sprite: Vanilla/Objects/Devices/timestopper.rsi
+    layers:
+    - state: icon

@@ -7,7 +7,7 @@ using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.Destructible;
 using Content.Shared.Storage.Components;
-using Content.Server.Forensics;
+using Content.Shared.Forensics.Systems;
 using Content.Shared.Clothing.Components;
 using Robust.Shared.Audio;
 using Robust.Shared.Prototypes;
@@ -15,6 +15,7 @@ using Robust.Shared.Random;
 using System.Linq;
 using Content.Shared.Chemistry;
 using Content.Shared.Damage.Systems;
+using Content.Shared.Forensics.Components;
 
 // RAYTEN STARTS
 using Content.Server.Physics.Components;

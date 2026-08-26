@@ -10,6 +10,11 @@ namespace Content.Shared.Traits;
 [Prototype]
 public sealed partial class TraitPrototype : IPrototype
 {
+    // RAYTEN START
+    [DataField]
+    public bool Overwrite = false;
+    // RAYTEN END
+
     [ViewVariables]
     [IdDataField]
     public string ID { get; private set; } = default!;

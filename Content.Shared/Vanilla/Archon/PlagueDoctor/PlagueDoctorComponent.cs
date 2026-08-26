@@ -94,8 +94,8 @@ public sealed partial class PlagueDoctorComponent : Component
     [ViewVariables, AutoNetworkedField]
     public HashSet<string> OperatedProtos = [];
     //акшен
-    [DataField(customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
-    public string ActionId = "Action049Surgery";
+    [DataField]
+    public EntProtoId ActionId = "Action049Surgery";
     [ViewVariables, AutoNetworkedField]
     public EntityUid? ActionEnt;
     /// <summary>
@@ -122,8 +122,8 @@ public sealed partial class PlagueDoctorComponent : Component
     };
 
     //акшен
-    [DataField(customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
-    public string MarkActionId = "Action049MarkVictim";
+    [DataField]
+    public EntProtoId MarkActionId = "Action049MarkVictim";
 
     [ViewVariables, AutoNetworkedField]
     public EntityUid? MarkActionEnt;

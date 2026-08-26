@@ -32,6 +32,4 @@
     actions:
     - ActionSpacetimeJump
   - type: ItemActionGrant
-    actions:
-    - ActionSpacetimeJump
     activeIfWorn: true

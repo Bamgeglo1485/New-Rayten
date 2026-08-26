@@ -28,12 +28,12 @@ namespace Content.Server.Construction
 {
     public sealed partial class ConstructionSystem
     {
+        [Dependency] private SharedTransformSystem _transformSystem = default!; // GOOB
         [Dependency] private InventorySystem _inventorySystem = default!;
         [Dependency] private SharedInteractionSystem _interactionSystem = default!;
         [Dependency] private ActionBlockerSystem _actionBlocker = default!;
         [Dependency] private SharedHandsSystem _handsSystem = default!;
         [Dependency] private EntityLookupSystem _lookupSystem = default!;
-        [Dependency] private SharedTransformSystem _transformSystem = default!;
         [Dependency] private EntityWhitelistSystem _whitelistSystem = default!;
 
         // --- WARNING! LEGACY CODE AHEAD! ---
@@ -94,7 +94,7 @@ namespace Content.Server.Construction
                 }
             }
 
-            var pos = _transformSystem.GetMapCoordinates(user);
+            var pos = TransformSystem.GetMapCoordinates(user);
 
             // Goobstation - conflict landmine: replace magic constant with ConstructGrabRange
             foreach (var near in _lookupSystem.GetEntitiesInRange(pos, ConstructGrabRange, LookupFlags.Contained | LookupFlags.Dynamic | LookupFlags.Sundries | LookupFlags.Approximate))
@@ -326,6 +326,11 @@ namespace Content.Server.Construction
                 completed.PerformAction(newEntity, user, EntityManager);
             }
 
+            // <Goobstation>
+            var constructedEv = new ConstructedEvent(newEntity);
+            RaiseLocalEvent(user, ref constructedEv);
+            // </Goobstation>
+
             return newEntity;
         }
 
@@ -539,7 +544,7 @@ namespace Content.Server.Construction
                 return false;
             }
 
-            var mapPos = _transformSystem.ToMapCoordinates(location);
+            var mapPos = TransformSystem.ToMapCoordinates(location);
             var predicate = GetPredicate(constructionPrototype.CanBuildInImpassable, mapPos);
 
             if (!_interactionSystem.InRangeUnobstructed(user, mapPos, predicate: predicate))

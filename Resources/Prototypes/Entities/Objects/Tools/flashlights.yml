@@ -61,7 +61,7 @@
   - type: PointLight
     color: "#e1e0ff" # RAYTEN
     enabled: false
-    mask: /Textures/Effects/LightMasks/cone.png
+    lightMask: ConeSingle
     autoRot: true
     radius: 6
     netsync: false

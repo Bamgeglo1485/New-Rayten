@@ -31,7 +31,8 @@ using System.Linq;
 using Robust.Shared.Physics.Events;
 using Content.Shared.Vanilla.Games.TTT;
 using Content.Shared.Body.Components;
-
+using Content.Shared.Ghost.Systems;
+using Content.Shared.Ghost.Components;
 
 namespace Content.Server.Vanilla.TDM;
 
@@ -382,8 +383,8 @@ public sealed partial class TDMSystem : EntitySystem
         Timer.Spawn(TimeSpan.FromSeconds(3), () => QueueDel(rule.Arena)); //Удаляем прошлую арену
         if (rule.LastRound)
         {
-            Timer.Spawn(TimeSpan.FromSeconds(3), () => _gameTicker.RestartRound());//рестартим раунд
             SaveMMR();
+            _gameTicker.RestartRound();//рестартим раунд
         }
         else
         {

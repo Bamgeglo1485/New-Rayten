@@ -5,21 +5,27 @@ using Robust.Shared.Network;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Mobs.Systems;
+using Robust.Shared.Prototypes;
+using Content.Shared.Damage.Prototypes;
+
 namespace Content.Server.Vanilla.Games.TTT;
 
 public sealed partial class TTTSystem : SharedTTTSystem
 {
     [Dependency] private MobStateSystem _mob = default!;
     [Dependency] private ILogManager _log = default!;
-    private const float KarmaRatio = 0.002f;//модификатор кармы за тимкилл (-)
-    private const float TraitorDamageRatio = 0.0003f;//модификатор кармы за урон по предателю (+)
-    private const float KarmaRoundIncrement = 5f;//карма в конце раунда
-    private const float KarmaCleanBonus = 5f;//дополнительная карма в конце раунда, если игрок не стрелял в союзников.
-    private const float KarmaMax = 1000f;//максимальная карма
-    private const float DefaultKarma = 1000f;//дефолтное значение кармы
+    [Dependency] private IPrototypeManager _prototypeManager = default!; // Добавьте это
+
+    private const float KarmaRatio = 0.002f;
+    private const float TraitorDamageRatio = 0.0003f;
+    private const float KarmaRoundIncrement = 5f;
+    private const float KarmaCleanBonus = 5f;
+    private const float KarmaMax = 1000f;
+    private const float DefaultKarma = 1000f;
 
     private Dictionary<string, float> _karma = new();
     private const string LadderPath = "ttt_karma.json";
+
     private void LoadKarma()
     {
         if (!File.Exists(LadderPath))
@@ -59,9 +65,6 @@ public sealed partial class TTTSystem : SharedTTTSystem
         _karma[id.ToString()] = Math.Clamp(GetKarma(id) + value, -1f, KarmaMax);
     }
 
-    /// <summary>
-    /// уменьшаем карму в зависимости от нанесённого урона
-    /// </summary>
     private void OnDamageChange(EntityUid uid, TTTMarkerComponent component, DamageChangedEvent args)
     {
         if (!args.DamageIncreased
@@ -80,7 +83,6 @@ public sealed partial class TTTSystem : SharedTTTSystem
         var victimRole = component.Role;
         var victimKarma = GetKarma(component.Session.UserId);
 
-        // Тимдамаг
         if (IsSameTeam(attackerRole, victimRole))
         {
             var karmaLoss = damage * victimKarma * KarmaRatio;
@@ -89,7 +91,6 @@ public sealed partial class TTTSystem : SharedTTTSystem
             return;
         }
 
-        // Урон по предателю
         if (attackerRole is TTTRole.Inocent or TTTRole.Detective &&
             victimRole == TTTRole.Traitor)
         {
@@ -98,7 +99,6 @@ public sealed partial class TTTSystem : SharedTTTSystem
         }
     }
 
-    //уменьшаем урон в зависимости от кармы
     private void OnDamageModify(EntityUid uid, TTTMarkerComponent component, DamageModifyEvent args)
     {
         if (!TryComp<TTTMarkerComponent>(args.Origin, out var sourcecomp) || args.Origin == uid)
@@ -109,49 +109,44 @@ public sealed partial class TTTSystem : SharedTTTSystem
             args.Damage = new DamageSpecifier();
             return;
         }
-        ///у детектива 30% резиста
+
+        // У детектива 30% резиста
         if (component.Role == TTTRole.Detective)
         {
             const float detectiveResist = 0.3f;
+
+            // Создаем словарь с типами урона
+            var coefficients = new Dictionary<ProtoId<DamageTypePrototype>, float>();
+
+            // Получаем все типы урона из прототипов
+            var damageTypes = _prototypeManager.EnumeratePrototypes<DamageTypePrototype>();
+            foreach (var damageType in damageTypes)
+            {
+                coefficients[damageType.ID] = detectiveResist;
+            }
+
             var detectiveModify = new DamageModifierSet
             {
-                Coefficients = new Dictionary<string, float>
-                {
-                    ["Slash"] = detectiveResist,
-                    ["Piercing"] = detectiveResist,
-                    ["Blunt"] = detectiveResist,
-                    ["Heat"] = detectiveResist,
-                    ["Shock"] = detectiveResist,
-                    ["Cold"] = detectiveResist,
-                    ["Poison"] = detectiveResist,
-                    ["Radiation"] = detectiveResist,
-                    ["Asphyxiation"] = detectiveResist,
-                    ["Bloodloss"] = detectiveResist
-                }
+                Coefficients = coefficients
             };
             args.Damage = DamageSpecifier.ApplyModifierSet(args.Damage, detectiveModify);
         }
 
-        //  применяем модификатор урона на основе новой кармы
+        // Применяем модификатор урона на основе кармы
         var attackerKarma = GetKarma(sourcecomp.Session.UserId);
         var karmaFraction = Math.Clamp(attackerKarma / 1000f, 0f, 1f);
 
-        var modify = new DamageModifierSet
+        var karmaCoefficients = new Dictionary<ProtoId<DamageTypePrototype>, float>();
+        var allDamageTypes = _prototypeManager.EnumeratePrototypes<DamageTypePrototype>();
+        foreach (var damageType in allDamageTypes)
         {
-            Coefficients = new Dictionary<string, float>
-            {
-                ["Slash"] = karmaFraction,
-                ["Piercing"] = karmaFraction,
-                ["Blunt"] = karmaFraction,
-                ["Heat"] = karmaFraction,
-                ["Shock"] = karmaFraction,
-                ["Cold"] = karmaFraction,
-                ["Poison"] = karmaFraction,
-                ["Radiation"] = karmaFraction,
-                ["Asphyxiation"] = karmaFraction,
-                ["Bloodloss"] = karmaFraction
-            }
+            karmaCoefficients[damageType.ID] = karmaFraction;
+        }
+
+        var karmaModify = new DamageModifierSet
+        {
+            Coefficients = karmaCoefficients
         };
-        args.Damage = DamageSpecifier.ApplyModifierSet(args.Damage, modify);
+        args.Damage = DamageSpecifier.ApplyModifierSet(args.Damage, karmaModify);
     }
 }

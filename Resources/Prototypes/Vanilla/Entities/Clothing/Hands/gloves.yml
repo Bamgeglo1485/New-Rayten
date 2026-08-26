@@ -23,5 +23,3 @@
     - ActionVoidApplause
   - type: ItemActionGrant
     activeIfWorn: true
-    actions:
-    - ActionVoidApplause

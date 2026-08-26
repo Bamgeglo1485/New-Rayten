@@ -17,6 +17,7 @@ using Content.Shared.DeviceNetwork;
 using Content.Shared.DeviceNetwork.Components;
 using Content.Shared.GameTicking;
 using Content.Shared.Audio;
+using Content.Shared.Popups;
 using Robust.Server.GameObjects;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.EntitySerialization.Systems;
@@ -36,9 +37,11 @@ using Robust.Shared.Physics.Systems;
 using Content.Server.Atmos.Piping.Unary.Components;
 using Content.Server.Nuke;
 using Content.Server.AlertLevel;
+using Content.Shared.AlertLevel;
 using Content.Shared.Light.Components;
 using Content.Server.Power.Components;
 using Content.Shared.Vanilla.Evacuation.Events;
+using Content.Server.Access.Systems;
 
 namespace Content.Server.Vanilla.Evacuation;
 
@@ -56,6 +59,8 @@ public sealed partial class EvacuationSystem : EntitySystem
     [Dependency] private SharedPhysicsSystem _physics = default!;
     [Dependency] private AlertLevelSystem _alertLevelSystem = default!;
     [Dependency] private StationSystem _stationSystem = default!;
+    [Dependency] private IdCardSystem _idSystem = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
 
     public enum EvacState
     {
@@ -76,6 +81,10 @@ public sealed partial class EvacuationSystem : EntitySystem
     private SoundSpecifier _announcement = new SoundPathSpecifier("/Audio/Vanilla/Announcements/evac.ogg");
     private SoundSpecifier _music = new SoundPathSpecifier("/Audio/Vanilla/StationEvents/Rise_of_a_Second_Sun.ogg");
 
+    const int _required_requests = 3;
+    private int _requests = 0;
+    private Dictionary<EntityUid, string> _authorized = new();
+
     public override void Initialize()
     {
         base.Initialize();
@@ -86,7 +95,22 @@ public sealed partial class EvacuationSystem : EntitySystem
 
     private void OnEvacuationRequest(EvacuationRequestMessage args)
     {
-        StartEvacuation();
+        var player = args.Actor;
+
+        if (!_idSystem.TryFindIdCard(player, out var idCard))
+        {
+            _popup.PopupCursor(Loc.GetString("emergency-shuttle-console-denied"), player, PopupType.Medium);
+            return;
+        }
+
+        var idCardUid = idCard.Owner;
+
+        if (_authorized.ContainsKey(idCardUid))
+            return;
+
+        _authorized[idCardUid] = MetaData(idCard).EntityName;
+
+        AuthorizeRequest();
     }
 
     public override void Update(float frameTime)
@@ -108,6 +132,18 @@ public sealed partial class EvacuationSystem : EntitySystem
             default:
                 break;
         }
+    }
+
+    public void AuthorizeRequest()
+    {
+        if (_requests == _required_requests)
+            return;
+
+        _requests += 1;
+        if (_requests == _required_requests)
+            StartEvacuation();
+        else
+            _chatSystem.DispatchGlobalAnnouncement($"Зарегистрирован запрос на процедуру Эвакуации. Требуется ещё {_required_requests - _requests} голоса!", colorOverride: Color.Crimson);
     }
 
     public void StartEvacuation(float duration = 240f)
@@ -135,7 +171,7 @@ public sealed partial class EvacuationSystem : EntitySystem
             var stationUid = _stationSystem.GetOwningStation(_nuke);
 
             if (stationUid != null)
-                _alertLevelSystem.SetLevel(stationUid.Value, "nirvana", false, true, true, true);
+                _alertLevelSystem.SetLevel(stationUid.Value, new ProtoId<AlertLevelPrototype>("nirvana"), false, true, true, true);
 
             break;
         }
@@ -219,5 +255,6 @@ public sealed partial class EvacuationSystem : EntitySystem
         _station = null;
         _evac_state = EvacState.Idle;
         _evac_end = TimeSpan.Zero;
+        _requests = 0;
     }
 }

@@ -33,16 +33,16 @@ public sealed partial class BrainWormHostComponent : Component
     /// <summary>
     ///     Размножение
     /// </summary>
-    [DataField("actionBrainWormReproduce", customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
-    public string ActionBrainWormReproduce = "ActionBrainWormReproduce";
+    [DataField]
+    public EntProtoId ActionBrainWormReproduce = "ActionBrainWormReproduce";
 
     public EntityUid? ActionBrainWormReproduceEntity;
 
     /// <summary>
     ///     червь сам возвращает контроль
     /// </summary>
-    [DataField("actionBrainWormReturnControl", customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
-    public string ActionBrainWormReturnControl = "ActionBrainWormReturnControl";
+    [DataField]
+    public EntProtoId ActionBrainWormReturnControl = "ActionBrainWormReturnControl";
 
     public EntityUid? ActionBrainWormReturnControlEntity;
 

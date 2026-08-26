@@ -16,10 +16,10 @@ public sealed partial class WithManyVoicesSystem : SharedWithManyVoicesSystem
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<WithManyVoicesComponent, OnTemperatureChangeEvent>(OnTempChange);
+        SubscribeLocalEvent<WithManyVoicesComponent, TemperatureChangedEvent>(OnTempChange);
     }
 
-    private void OnTempChange(EntityUid uid, WithManyVoicesComponent comp, OnTemperatureChangeEvent args)
+    private void OnTempChange(EntityUid uid, WithManyVoicesComponent comp, TemperatureChangedEvent args)
     {
         float? idealTemp;
 

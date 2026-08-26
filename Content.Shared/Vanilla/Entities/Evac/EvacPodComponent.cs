@@ -12,6 +12,6 @@ public sealed partial class EvacPodComponent : Component
     [DataField]
     public SoundSpecifier PreEvacSound = new SoundPathSpecifier("/Audio/Vanilla/Effects/evac.ogg");
 
-    [DataField(customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
-    public string TeleportEffect = "EffectFlashBluespaceExplosion";
+    [DataField]
+    public EntProtoId TeleportEffect = "EffectFlashBluespaceExplosion";
 }

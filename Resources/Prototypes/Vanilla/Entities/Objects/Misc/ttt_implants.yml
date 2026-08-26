@@ -64,11 +64,12 @@
   - type: Action
     itemIconStyle: BigAction
     priority: -20
-    icon:
-      sprite: Objects/Devices/communication.rsi
-      state: old-radio
   - type: InstantAction
     event: !type:OpenUplinkImplantEvent
+  - type: Sprite
+    sprite: Objects/Devices/communication.rsi
+    layers:
+    - state: old-radio
 
 - type: entity
   parent: BaseAction
@@ -79,11 +80,12 @@
   - type: Action
     itemIconStyle: BigAction
     priority: -20
-    icon:
-      sprite: Objects/Devices/communication.rsi
-      state: old-radio
   - type: InstantAction
     event: !type:OpenUplinkImplantEvent
+  - type: Sprite
+    sprite: Objects/Devices/communication.rsi
+    layers:
+    - state: old-radio
 
 - type: entity
   id: DisguiserImplanter
@@ -107,22 +109,24 @@
 - type: entity
   parent: BaseToggleAction
   id: ActionDisguiser
-  name: Cкрыть имя
+  name: Cкpыть имя
   description: Заменяет ваше имя на "Неизвестный"
   components:
   - type: Action
     raiseOnUser: true
     itemIconStyle: BigAction
     useDelay: 1
-    iconOn:
-      sprite: Objects/Devices/chameleon_projector.rsi
-      state: powered
-    icon:
-      sprite: Objects/Devices/chameleon_projector.rsi
-      state: icon
     priority: 7
   - type: InstantAction
     event: !type:TTTDisguiserActionEvent
+  - type: Sprite
+    sprite: Objects/Devices/chameleon_projector.rsi
+    layers:
+    - state: "icon"
+      map: ["enum.ActionVisuals.Icon"]
+    - state: "powered"
+      map: ["enum.ActionVisuals.IconToggled"]
+      visible: false
 
 - type: entity
   id: TTTRadarImplanter
@@ -156,8 +160,11 @@
   description: Открыть радар, который раз в 30 секунд показывает местоположение всех игроков.
   components:
   - type: Action
-    icon: { sprite: Interface/Actions/pai-map.rsi, state: icon }
     itemIconStyle: NoItem
   - type: InstantAction
     event: !type:OpenUiActionEvent
       key: enum.StationMapUiKey.Key
+  - type: Sprite
+    sprite: Interface/Actions/pai-map.rsi
+    layers:
+    - state: icon

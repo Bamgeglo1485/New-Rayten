@@ -1,4 +1,5 @@
 using Content.Shared.Vanilla.Actions.Components;
+using Content.Shared.Botany.Items.Components;
 using Content.Shared.Vanilla.Actions.Events;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Damage.Prototypes;
@@ -27,7 +28,6 @@ using Robust.Shared.Player;
 using Robust.Shared.Audio;
 
 using Content.Server.Explosion.EntitySystems;
-using Content.Server.Botany.Components;
 
 namespace Content.Server.Vanilla.Actions;
 

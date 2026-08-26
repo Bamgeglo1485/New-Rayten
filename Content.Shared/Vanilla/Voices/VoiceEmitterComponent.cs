@@ -10,8 +10,8 @@ namespace Content.Shared.Vanilla.VoiceSpeech;
 public sealed partial class VoiceEmitterComponent : Component
 {
     [ViewVariables(VVAccess.ReadWrite),AutoNetworkedField]
-    [DataField("voice", customTypeSerializer: typeof(PrototypeIdSerializer<VoiceSpeechPrototype>))]
-    public string? VoicePrototypeId { get; set; }
+    [DataField("voice")]
+    public ProtoId<VoiceSpeechPrototype>? VoicePrototypeId { get; set; }
 
     [DataField("pitch"), AutoNetworkedField]
     public float Pitch = 1.0f;

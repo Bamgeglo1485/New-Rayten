@@ -184,7 +184,7 @@ namespace Content.Server.Construction
             // Iterate until the penultimate node.
             var node = startNode;
             var index = 0;
-            while(node != targetNode)
+            while (node != targetNode)
             {
                 // Can't find path, therefore can't generate guide...
                 if (!node.TryGetEdge(path[index].Name, out var edge))

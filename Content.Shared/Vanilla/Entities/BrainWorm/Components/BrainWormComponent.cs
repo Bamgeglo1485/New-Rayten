@@ -46,8 +46,8 @@ public sealed partial class BrainWormComponent : Component
     public DoAfterId? MindControlDoAfter;
 
 
-    [DataField("evolutionPointsPrototype", customTypeSerializer: typeof(PrototypeIdSerializer<CurrencyPrototype>))]
-    public string EvolutionPointsPrototype = "EvolutionPoints";
+    [DataField]
+    public ProtoId<CurrencyPrototype> EvolutionPointsPrototype = "EvolutionPoints";
     #region chemicals
 
     [Serializable, NetSerializable]
@@ -107,21 +107,21 @@ public sealed partial class BrainWormComponent : Component
     /// <summary>
     ///     Захват управления над телом
     /// </summary>
-    [DataField("actionMindControl", customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
-    public string ActionMindControl = "ActionMindControl";
+    [DataField]
+    public EntProtoId ActionMindControl = "ActionMindControl";
     public EntityUid? ActionMindControlEntity;
 
     /// <summary>
     ///     Захват мозга
     /// </summary>
-    [DataField("actionInsertBrain", customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
-    public string ActionInsertBrain = "ActionInsertBrain";
+    [DataField]
+    public EntProtoId ActionInsertBrain = "ActionInsertBrain";
     public EntityUid? ActionInsertBrainEntity;
     /// <summary>
     ///    Покидание мозга
     /// </summary>
-    [DataField("actionEjectBrain", customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
-    public string ActionEjectBrain = "ActionEjectBrain";
+    [DataField]
+    public EntProtoId ActionEjectBrain = "ActionEjectBrain";
     public EntityUid? ActionEjectBrainEntity;
 
     /// <summary>

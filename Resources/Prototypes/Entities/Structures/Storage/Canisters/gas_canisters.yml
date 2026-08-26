@@ -1,6 +1,6 @@
 - type: entity
   abstract: true
-  parent: [ BaseStructureDynamic, BasePaperLabelableVisualized ]
+  parent: [ BaseStructureDynamic, BasePaperLabelableVisualized, StructureHealthContainerStrong ]
   id: GasCanister
   name: gas canister
   description: A canister that can contain any type of gas. It can be attached to connector ports using a wrench.
@@ -78,27 +78,18 @@
     interfaces:
       enum.GasCanisterUiKey.Key:
         type: GasCanisterBoundUserInterface
+  - type: Damageable
+    damageModifierSet: PlasteelMod
   - type: Destructible
     thresholds:
-    - trigger:
+    - trigger: &DamageContainerStrong
         !type:DamageTrigger
-        damage: 300
+        damage: 140
       behaviors:
       - !type:PlaySoundBehavior
         sound:
           collection: MetalBreak
-      - !type:SpawnEntitiesBehavior
-        spawn:
-          GasCanisterBrokenBase:
-            min: 1
-            max: 1
-      - !type:DoActsBehavior
-        acts: [ "Destruction" ]
       - !type:DumpCanisterBehavior
-  - type: Damageable
-    damageModifierSet: Metallic
-  - type: Injurable
-    damageContainer: Inorganic
   - type: Physics
     bodyType: Dynamic
   - type: Fixtures
@@ -183,21 +174,13 @@
         temperature: 293.15
     - type: Destructible
       thresholds:
-      - trigger:
-          !type:DamageTrigger
-          damage: 300
+      - trigger: *DamageContainerStrong
         behaviors:
-        - !type:PlaySoundBehavior
-          sound:
-            collection: MetalBreak
         - !type:SpawnEntitiesBehavior
           spawn:
             StorageCanisterBroken:
               min: 1
               max: 1
-        - !type:DoActsBehavior
-          acts: [ "Destruction" ]
-        - !type:DumpCanisterBehavior
 
 # Filled canisters, contain 1871.71051 moles each
 
@@ -232,21 +215,13 @@
       temperature: 293.15
   - type: Destructible
     thresholds:
-    - trigger:
-        !type:DamageTrigger
-        damage: 300
+    - trigger: *DamageContainerStrong
       behaviors:
-      - !type:PlaySoundBehavior
-        sound:
-          collection: MetalBreak
       - !type:SpawnEntitiesBehavior
         spawn:
           AirCanisterBroken:
             min: 1
             max: 1
-      - !type:DoActsBehavior
-        acts: [ "Destruction" ]
-      - !type:DumpCanisterBehavior
 
 - type: entity
   parent: GasCanister
@@ -277,21 +252,13 @@
       temperature: 293.15
   - type: Destructible
     thresholds:
-    - trigger:
-        !type:DamageTrigger
-        damage: 300
+    - trigger: *DamageContainerStrong
       behaviors:
-      - !type:PlaySoundBehavior
-        sound:
-          collection: MetalBreak
       - !type:SpawnEntitiesBehavior
         spawn:
           OxygenCanisterBroken:
             min: 1
             max: 1
-      - !type:DoActsBehavior
-        acts: [ "Destruction" ]
-      - !type:DumpCanisterBehavior
 
 - type: entity
   id: LiquidOxygenCanister
@@ -337,21 +304,13 @@
         temperature: 293.15
     - type: Destructible
       thresholds:
-      - trigger:
-          !type:DamageTrigger
-          damage: 300
+      - trigger: *DamageContainerStrong
         behaviors:
-        - !type:PlaySoundBehavior
-          sound:
-            collection: MetalBreak
         - !type:SpawnEntitiesBehavior
           spawn:
             NitrogenCanisterBroken:
               min: 1
               max: 1
-        - !type:DoActsBehavior
-          acts: [ "Destruction" ]
-        - !type:DumpCanisterBehavior
 
 - type: entity
   id: LiquidNitrogenCanister
@@ -397,21 +356,13 @@
         temperature: 293.15
     - type: Destructible
       thresholds:
-      - trigger:
-          !type:DamageTrigger
-          damage: 300
+      - trigger: *DamageContainerStrong
         behaviors:
-        - !type:PlaySoundBehavior
-          sound:
-            collection: MetalBreak
         - !type:SpawnEntitiesBehavior
           spawn:
             CarbonDioxideCanisterBroken:
               min: 1
               max: 1
-        - !type:DoActsBehavior
-          acts: [ "Destruction" ]
-        - !type:DumpCanisterBehavior
     - type: Lock
       locked: true
 
@@ -459,21 +410,13 @@
         temperature: 293.15
     - type: Destructible
       thresholds:
-      - trigger:
-          !type:DamageTrigger
-          damage: 300
+      - trigger: *DamageContainerStrong
         behaviors:
-        - !type:PlaySoundBehavior
-          sound:
-            collection: MetalBreak
         - !type:SpawnEntitiesBehavior
           spawn:
             PlasmaCanisterBroken:
               min: 1
               max: 1
-        - !type:DoActsBehavior
-          acts: [ "Destruction" ]
-        - !type:DumpCanisterBehavior
     - type: Lock
       locked: true
 
@@ -506,21 +449,13 @@
         temperature: 293.15
     - type: Destructible
       thresholds:
-      - trigger:
-          !type:DamageTrigger
-          damage: 300
+      - trigger: *DamageContainerStrong
         behaviors:
-        - !type:PlaySoundBehavior
-          sound:
-            collection: MetalBreak
         - !type:SpawnEntitiesBehavior
           spawn:
             TritiumCanisterBroken:
               min: 1
               max: 1
-        - !type:DoActsBehavior
-          acts: [ "Destruction" ]
-        - !type:DumpCanisterBehavior
     - type: Lock
       locked: true
 
@@ -553,21 +488,13 @@
         temperature: 293.15
     - type: Destructible
       thresholds:
-      - trigger:
-          !type:DamageTrigger
-          damage: 300
+      - trigger: *DamageContainerStrong
         behaviors:
-        - !type:PlaySoundBehavior
-          sound:
-            collection: MetalBreak
         - !type:SpawnEntitiesBehavior
           spawn:
             WaterVaporCanisterBroken:
               min: 1
               max: 1
-        - !type:DoActsBehavior
-          acts: [ "Destruction" ]
-        - !type:DumpCanisterBehavior
 
 - type: entity
   parent: GasCanister
@@ -598,21 +525,13 @@
         temperature: 293.15
     - type: Destructible
       thresholds:
-      - trigger:
-          !type:DamageTrigger
-          damage: 300
+      - trigger: *DamageContainerStrong
         behaviors:
-        - !type:PlaySoundBehavior
-          sound:
-            collection: MetalBreak
         - !type:SpawnEntitiesBehavior
           spawn:
             AmmoniaCanisterBroken:
               min: 1
               max: 1
-        - !type:DoActsBehavior
-          acts: [ "Destruction" ]
-        - !type:DumpCanisterBehavior
     - type: Lock
       locked: true
 
@@ -645,21 +564,13 @@
         temperature: 293.15
     - type: Destructible
       thresholds:
-      - trigger:
-          !type:DamageTrigger
-          damage: 300
+      - trigger: *DamageContainerStrong
         behaviors:
-        - !type:PlaySoundBehavior
-          sound:
-            collection: MetalBreak
         - !type:SpawnEntitiesBehavior
           spawn:
             NitrousOxideCanisterBroken:
               min: 1
               max: 1
-        - !type:DoActsBehavior
-          acts: [ "Destruction" ]
-        - !type:DumpCanisterBehavior
     - type: Lock
       locked: true
 
@@ -692,21 +603,13 @@
       temperature: 293.15
   - type: Destructible
     thresholds:
-    - trigger:
-        !type:DamageTrigger
-        damage: 300
+    - trigger: *DamageContainerStrong
       behaviors:
-      - !type:PlaySoundBehavior
-        sound:
-          collection: MetalBreak
       - !type:SpawnEntitiesBehavior
         spawn:
           FrezonCanisterBroken:
             min: 1
             max: 1
-      - !type:DoActsBehavior
-        acts: [ "Destruction" ]
-      - !type:DumpCanisterBehavior
   - type: Lock
     locked: true
 
@@ -729,16 +632,18 @@
 # Broke Entities
 
 - type: entity
-  parent: BaseStructureDynamic
+  parent: [ BaseStructureDynamic, StructureHealthContainerWeak ]
   id: GasCanisterBrokenBase
   name: broken gas canister
   description: A broken gas canister. Not useless yet, as it can be salvaged for high quality materials.
   components:
+    - type: Damageable
+      damageModifierSet: PlasteelMod
     - type: Destructible
       thresholds:
       - trigger:
           !type:DamageTrigger
-          damage: 100
+          damage: 60
         behaviors:
         - !type:PlaySoundBehavior
           sound:
@@ -748,12 +653,6 @@
             SheetPlasteel1:
               min: 1
               max: 2
-        - !type:DoActsBehavior
-          acts: [ "Destruction" ]
-    - type: Damageable
-      damageModifierSet: Metallic
-    - type: Injurable
-      damageContainer: Inorganic
     - type: InteractionOutline
     - type: Sprite
       sprite: Structures/Storage/canister.rsi
@@ -773,7 +672,7 @@
           - MachineLayer
     - type: PhysicalComposition
       materialComposition:
-        Steel: 500
+        Plasteel: 200
     - type: StaticPrice
       price: 125
 

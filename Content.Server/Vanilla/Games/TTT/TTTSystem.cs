@@ -7,6 +7,8 @@ using Robust.Shared.Player;
 using Content.Shared.Vanilla.TDM;
 using Content.Shared.Vanilla.Games.TTT;
 using Content.Shared.Chat;
+using Content.Shared.Ghost.Systems;
+using Content.Shared.Ghost.Components;
 
 namespace Content.Server.Vanilla.Games.TTT;
 

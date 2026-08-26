@@ -122,7 +122,7 @@ namespace Content.Client.Construction.UI
                     return;
                 if (b)
                     _placementManager.Clear();
-                _placementManager.ToggleEraserHijacked(new ConstructionPlacementHijack(_constructionSystem, null));
+                _placementManager.ToggleEraserHijacked(new ConstructionPlacementHijack(null));
                 _constructionView.EraseButtonPressed = b;
             };
 
@@ -256,6 +256,9 @@ namespace Content.Client.Construction.UI
 
             foreach (var entry in guide.Entries)
             {
+                if (entry.Empty())
+                    continue;
+
                 var text = entry.Arguments != null
                     ? Loc.GetString(entry.Localization, entry.Arguments)
                     : Loc.GetString(entry.Localization);
@@ -297,11 +300,11 @@ namespace Content.Client.Construction.UI
                 }
 
                 _placementManager.BeginPlacing(new PlacementInformation
-                {
-                    IsTile = false,
-                    PlacementOption = _selected.PlacementMode
-                },
-                    new ConstructionPlacementHijack(_constructionSystem, _selected));
+                    {
+                        IsTile = false,
+                        PlacementOption = _selected.PlacementMode
+                    },
+                    new ConstructionPlacementHijack(_selected));
 
                 UpdateGhostPlacement();
             }
@@ -310,6 +313,7 @@ namespace Content.Client.Construction.UI
 
             _constructionView.BuildButtonPressed = pressed;
         }
+
 
         private void OnViewRecipeSelected(object? sender, ConstructionPrototype? constructionProto, bool appendToHistory = true)
         {
@@ -604,14 +608,15 @@ namespace Content.Client.Construction.UI
             var constructSystem = _systemManager.GetEntitySystem<ConstructionSystem>();
 
             _placementManager.BeginPlacing(new PlacementInformation()
-            {
-                IsTile = false,
-                PlacementOption = _selected.PlacementMode,
-            },
-                new ConstructionPlacementHijack(constructSystem, _selected));
+                {
+                    IsTile = false,
+                    PlacementOption = _selected.PlacementMode,
+                },
+                new ConstructionPlacementHijack(_selected));
 
             _constructionView.BuildButtonPressed = true;
         }
+
 
         #endregion
 

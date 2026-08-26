@@ -23,8 +23,8 @@ public sealed partial class BackroomsComponent : Component
     [DataField]
     public TimeSpan NextCleaning { get; set; } = TimeSpan.Zero;
 
-    [DataField(customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
-    public string ClonePrototype = "DistortedCloneSpawner";
+    [DataField]
+    public EntProtoId ClonePrototype = "DistortedCloneSpawner";
 
     [DataField]
     public EntityUid? RealGrid = null;

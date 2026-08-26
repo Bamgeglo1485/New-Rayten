@@ -2,6 +2,7 @@ using Content.Shared.StatusIcon;
 using Robust.Shared.GameStates;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 using Robust.Shared.Player;
+using Robust.Shared.Prototypes;
 
 namespace Content.Shared.Vanilla.Games.TTT;
 
@@ -22,8 +23,8 @@ public sealed partial class TTTMarkerComponent : Component
     [DataField]
     public bool TeamKiller = false;
 
-    [DataField("DecStatusIcon", customTypeSerializer: typeof(PrototypeIdSerializer<FactionIconPrototype>))]
-    public string DecStatusIcon = "TTTDetectiveFaction";
+    [DataField]
+    public EntProtoId DecStatusIcon = "TTTDetectiveFaction";
 
     public Color GetColor()
     {
@@ -83,6 +84,6 @@ public sealed partial class ShowTTTDetectiveIconsComponent : Component { }
 [RegisterComponent, NetworkedComponent]
 public sealed partial class TTTTRAITORComponent : Component
 {
-    [DataField("syndStatusIcon", customTypeSerializer: typeof(PrototypeIdSerializer<FactionIconPrototype>))]
-    public string SyndStatusIcon = "SyndicateFaction";
+    [DataField]
+    public ProtoId<FactionIconPrototype> SyndStatusIcon = "SyndicateFaction";
 }

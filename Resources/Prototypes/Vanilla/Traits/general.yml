@@ -54,7 +54,7 @@
   name: trait-unrevivable-name
   description: trait-unrevivable-desc
   category: General
-  cost: -2
+  cost: -3
   components:
     - type: Unrevivable
       cloneable: true
@@ -78,7 +78,7 @@
   name: trait-hemophilia-name
   description: trait-hemophilia-desc
   category: General
-  cost: -1
+  cost: -2
   specials:
   - !type:ApplyStatusEffectSpecial
     statusEffects:
@@ -90,7 +90,7 @@
   description: trait-impaired-mobility-desc
   traitGear: OffsetCane
   category: General
-  cost: -2
+  cost: -3
   components:
     - type: ImpairedMobility
 
@@ -120,6 +120,7 @@
   description: trait-wimp-desc
   category: General
   cost: -3
+  overwrite: true
   components:
     - type: MobThresholds
       thresholds:
@@ -152,17 +153,19 @@
   description: trait-speed-desc
   category: General
   cost: 2
+  overwrite: true
   components:
-    - type: MovementSpeedModifier
-      baseSprintSpeed: 3
-      baseWalkSpeed: 5
+    - type: Rusher
+      staminaLoss: 15
+      distanceModifier: 0.5
+      speed: 10
 
 - type: trait
   id: Regeneration
   name: trait-regeneration-name
   description: trait-regeneration-desc
   category: General
-  cost: 2
+  cost: 3
   traitGear: NanoRobotsImplanter
 
 - type: trait
@@ -191,7 +194,7 @@
   name: trait-shooter-name
   description: trait-shooter-desc
   category: General
-  cost: 3
+  cost: 2
   traitGear: WeaponPistolMk58
 
 - type: trait
@@ -200,13 +203,14 @@
   description: trait-melee-desc
   category: General
   cost: 2
+  overwrite: true
   components:
     - type: Shoving
-      staminaDamage: 15
+      staminaDamage: 20
     - type: BonusMeleeDamage
       bonusDamage:
         types:
-          Blunt: 5
+          Blunt: 6
 
 - type: trait
   id: Rich
@@ -221,7 +225,8 @@
   name: trait-danger-name
   description: trait-danger-desc
   category: General
-  cost: -2
+  cost: -3
+  overwrite: true
   components:
     - type: DangerMob
       maxDanger: true
@@ -240,3 +245,26 @@
     - type: Unrevivable
       cloneable: false
     - type: TriggerOnSpawn
+
+- type: trait
+  id: PainNumbness
+  name: trait-painnumbness-name
+  description: trait-painnumbness-desc
+  category: Quirks
+  cost: -1
+  specials:
+  - !type:ApplyStatusEffectSpecial
+    statusEffects:
+    - TraitStatusEffectPainNumbness
+
+- type: trait
+  id: NightVision
+  name: trait-nightvision-name
+  description: trait-nightvision-desc
+  category: General
+  cost: 2
+  overwrite: true
+  components:
+    - type: NightVision
+      lightingColor: "#7a7a7a54"
+      overlayColor: "#7a7a7a54"

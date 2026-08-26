@@ -80,6 +80,9 @@ public sealed partial class StoreListingControl : Control
         if (_data.RestockTime > stationTime)
             return false;
 
+        if (_data.Locked)
+            return false;
+
         return true;
     }
 
@@ -90,6 +93,10 @@ public sealed partial class StoreListingControl : Control
         {
             var timeLeftToBuy = stationTime - _data.RestockTime;
             StoreItemBuyButton.Text = timeLeftToBuy.Duration().ToString(@"mm\:ss");
+        }
+        else if (_data.Locked)
+        {
+            StoreItemBuyButton.Text = Loc.GetString("store-listing-locked");
         }
         else
         {

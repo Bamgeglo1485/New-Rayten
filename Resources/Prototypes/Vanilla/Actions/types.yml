@@ -18,11 +18,12 @@
   components:
   - type: Action
     useDelay: 300
-    icon:
-      sprite: Interface/Actions/jump.rsi
-      state: icon
   - type: InstantAction
     event: !type:SpacetimeJumpEvent {}
+  - type: Sprite
+    sprite: Interface/Actions/jump.rsi
+    layers:
+    - state: icon
 
 - type: entity
   parent: BaseAction
@@ -32,8 +33,9 @@
   components:
   - type: Action
     useDelay: 30
-    icon:
-      sprite: Interface/Actions/jump.rsi
-      state: icon
   - type: InstantAction
     event: !type:BlueSpaceSyncEvent {}
+  - type: Sprite
+    sprite: Interface/Actions/jump.rsi
+    layers:
+    - state: icon
