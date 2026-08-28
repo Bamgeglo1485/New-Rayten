@@ -10,12 +10,19 @@ using Content.Shared.Overlays;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Fluids.Components;
 using Content.Shared.Body;
+using Content.Shared.Disposal.Tube;
+using Content.Shared.Teleportation.Components;
 
+using Robust.Shared.Map.Components;
+using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Containers;
 using Robust.Shared.Timing;
+
+using Content.Server.AlternateDimension;
+using Content.Server.Power.Components;
 
 using System.Numerics;
 
@@ -30,12 +37,15 @@ public sealed partial class BackroomsSystem : EntitySystem
     [Dependency] private SharedScaleVisualsSystem ScaleVisuals = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transformSystem = default!;
+    [Dependency] private EntityLookupSystem _entityLookup = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private SharedMapSystem _mapSystem = default!;
 
     public static readonly ProtoId<TagPrototype> _tableTag = new("Table");
     public static readonly ProtoId<TagPrototype> _pipeTag = new("Pipe");
 
     private static readonly Vector2[] _directions = new Vector2[]
-{
+    {
         new(1, 0),
         new(-1, 0),
         new(0, 1),
@@ -44,7 +54,7 @@ public sealed partial class BackroomsSystem : EntitySystem
         new(-1, 1),
         new(1, -1),
         new(-1, -1)
-};
+    };
 
     public override void Initialize()
     {
@@ -52,6 +62,150 @@ public sealed partial class BackroomsSystem : EntitySystem
 
         SubscribeLocalEvent<BackroomsComponent, MapInitEvent>(OnMapInit);
         SubscribeLocalEvent<HumanoidProfileComponent, EntParentChangedMessage>(OnParentChanged);
+        SubscribeLocalEvent<ZeroPointComponent, MapInitEvent>(OnPortalMapInit);
+    }
+
+    private void OnPortalMapInit(Entity<ZeroPointComponent> ent, ref MapInitEvent args)
+    {
+        var xform = Transform(ent);
+
+        if (xform.GridUid is null)
+            return;
+
+        if (!HasComp<RealDimensionGridComponent>(xform.GridUid.Value))
+            return;
+
+        if (!_prototypeManager.TryIndex(ent.Comp.TargetDimension, out var prototype))
+            return;
+
+        var radius = 5f;
+        var center = xform.Coordinates;
+
+        CopyTilesInRadius(ent, center, radius, xform.GridUid.Value, prototype);
+
+        var entitiesToCopy = _entityLookup.GetEntitiesInRange(ent, radius);
+        var copies = new List<EntityUid>();
+
+        foreach (var entity in entitiesToCopy)
+        {
+            if (HasComp<AtmosDeviceComponent>(entity))
+                continue;
+
+            if (HasComp<DisposalTubeComponent>(entity))
+                continue;
+
+            if (HasComp<ExtensionCableProviderComponent>(entity))
+                continue;
+
+            if (HasComp<PortalComponent>(entity))
+                continue;
+
+            if (_tagSystem.HasTag(entity, _pipeTag))
+                continue;
+
+            if (!TryComp(entity, out MetaDataComponent? metaData))
+                continue;
+
+            if (_container.IsEntityOrParentInContainer(entity, metaData, xform))
+                continue;
+
+            var prototypeId = metaData.EntityPrototype?.ID;
+            if (string.IsNullOrEmpty(prototypeId))
+                continue;
+
+            var coords = _alternate.GetAlternateRealityCoordinates(entity, prototype);
+            if (coords == null)
+                continue;
+
+            var spawned = Spawn(prototypeId, coords.Value);
+            copies.Add(spawned);
+
+            if (TryComp(spawned, out TransformComponent? spawnedXform) &&
+                TryComp(entity, out TransformComponent? originalXform))
+            {
+                spawnedXform.LocalRotation = originalXform.LocalRotation;
+                _transformSystem.AnchorEntity(spawned, spawnedXform);
+            }
+
+            if (!HasComp<PlacementReplacementComponent>(spawned))
+            {
+                var scale = new Vector2(_random.NextFloat(0.7f, 1.3f), _random.NextFloat(0.7f, 1.3f));
+                ScaleVisuals.SetSpriteScale(spawned, scale);
+            }
+
+            foreach (var instersectEntity in _entityLookup.GetEntitiesIntersecting(coords.Value))
+            {
+                if (copies.Contains(instersectEntity))
+                    continue;
+                QueueDel(instersectEntity);
+            }
+        }
+    }
+
+    private void CopyTilesInRadius(
+        EntityUid portal,
+        EntityCoordinates center,
+        float radius,
+        EntityUid sourceGrid,
+        AlternateDimensionConfig config)
+    {
+        if (!TryComp<MapGridComponent>(sourceGrid, out var gridComp))
+            return;
+
+        var altGrid = _alternate.GetAlternateRealityGrid(sourceGrid, config);
+        if (altGrid == null)
+            return;
+
+        if (!TryComp<MapGridComponent>(altGrid, out var altGridComp))
+            return;
+
+        var centerTile = _mapSystem.CoordinatesToTile(sourceGrid, gridComp, center);
+        var centerPos = centerTile;
+
+        var tileRadius = (int)Math.Ceiling(radius / gridComp.TileSize);
+
+        var tilesToCopy = new List<(Vector2i Index, Tile Tile)>();
+
+        for (int x = -tileRadius; x <= tileRadius; x++)
+        {
+            for (int y = -tileRadius; y <= tileRadius; y++)
+            {
+                if (x * x + y * y > tileRadius * tileRadius)
+                    continue;
+
+                var tilePos = new Vector2i(centerPos.X + x, centerPos.Y + y);
+
+                if (!_mapSystem.TryGetTileRef(sourceGrid, gridComp, tilePos, out var tileRef))
+                    continue;
+
+                if (tileRef.Tile.IsEmpty)
+                    continue;
+
+                Vector2i mirroredPos;
+                if (config.MirrorCoordinates)
+                {
+                    var localAABB = gridComp.LocalAABB;
+                    var minY = (int)Math.Floor(localAABB.Bottom);
+                    var maxY = (int)Math.Ceiling(localAABB.Top);
+                    var gridHeight = maxY - minY;
+                    var mirroredY = minY + (gridHeight - 1) - (tilePos.Y - minY);
+                    mirroredPos = new Vector2i(tilePos.X, mirroredY);
+                }
+                else
+                {
+                    mirroredPos = tilePos;
+                }
+
+                if (!_mapSystem.TryGetTileRef(altGrid.Value, altGridComp, mirroredPos, out _))
+                    continue;
+
+                var tile = tileRef.Tile;
+                tilesToCopy.Add((mirroredPos, tile));
+            }
+        }
+
+        if (tilesToCopy.Count > 0)
+            _mapSystem.SetTiles((altGrid.Value, altGridComp), tilesToCopy);
     }
 
     private void OnParentChanged(Entity<HumanoidProfileComponent> ent, ref EntParentChangedMessage args)
@@ -181,9 +335,7 @@ public sealed partial class BackroomsSystem : EntitySystem
         {
             var spawned = Spawn(prototypeId, coords);
             if (TryComp(spawned, out TransformComponent? spawnedXform))
-            {
                 spawnedXform.LocalRotation = rotation;
-            }
 
             var scale = new Vector2(_random.NextFloat(0.7f, 1.5f), _random.NextFloat(0.5f, 2.0f));
             ScaleVisuals.SetSpriteScale(spawned, scale);
@@ -202,8 +354,7 @@ public sealed partial class BackroomsSystem : EntitySystem
                         var offset = direction * (spacing * i);
                         var linePosition = new Vector2(
                             sourceCoords.Value.X + offset.X,
-                            sourceCoords.Value.Y + offset.Y
-                        );
+                            sourceCoords.Value.Y + offset.Y);
 
                         var lineCoords = new EntityCoordinates(sourceCoords.Value.EntityId, linePosition);
 

@@ -22,6 +22,8 @@
       - 0
       - 0
   gridComponents:
+  - type: Parallax
+    parallax: Empty
   - type: Gravity
     enabled: true
     inherent: true
@@ -33,7 +35,11 @@
     Table: BackroomsTableSpawner
     Vending: DebugPowerReceiver
     FootstepSound: SpawnGhostNPC
-  portalWallReplacementAverage: 10
+  prototypeReplacements:
+    PortableGeneratorJrPacman: PortableGeneratorJrPacman
+    WeldingFuelTank: WeldingFuelTank
+    SubstationBasic: CrateEngineeringCableBulk
+  portalWallReplacementAverage: 15
   portalWallReplacementStdDev: 200
   portalWallReplacements:
   - id: WallSolidBackrooms

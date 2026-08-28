@@ -11,6 +11,26 @@ public sealed partial class AlternateDimensionSystem
     private void InitializeStation()
     {
         SubscribeLocalEvent<StationAlternateDimensionGeneratorComponent, StationPostInitEvent>(OnStationInit);
+        SubscribeLocalEvent<GridGeneratorComponent, ComponentInit>(OnComponentInit);
+    }
+
+    private void OnComponentInit(Entity<GridGeneratorComponent> ent, ref ComponentInit args)
+    {
+        var prototypeId = _random.Pick(ent.Comp.Dimensions);
+
+        if (!_prototypeManager.TryIndex(prototypeId, out var prototype))
+        {
+            Log.Warning($"Failed to find prototype {prototypeId} for station alternate dimension generation.");
+            return;
+        }
+
+        var alterParams = new AlternateDimensionParams
+        {
+            Seed = _random.Next(),
+            Dimension = prototype,
+        };
+
+        MakeAlternativeRealityGrid(ent.Owner, alterParams);
     }
 
     private void OnStationInit(Entity<StationAlternateDimensionGeneratorComponent> ent, ref StationPostInitEvent args)

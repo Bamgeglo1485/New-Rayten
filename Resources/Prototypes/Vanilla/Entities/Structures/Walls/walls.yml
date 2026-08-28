@@ -172,12 +172,14 @@
   - type: AlternateDimensionAutoPortal
     otherSidePortal: WallSolidBackroomsOtherSide
     targetDimension: Backrooms
+  - type: ZeroPoint
+    targetDimension: Backrooms
   - type: Tag
     tags:
     - Structure
 
 - type: entity
-  parent: [ BackroomsWall, BasePortal ]
+  parent: [ WallSolidRust, BasePortal ]
   id: WallSolidBackroomsOtherSide
   suffix: Телепорт в закулисье
   name: странная стена
@@ -199,15 +201,6 @@
         layer:
         - WallLayer
         density: 1000
-        hard: false
-      portalFixture:
-        shape:
-          !type:PhysShapeAabb
-          bounds: "-0.48,-0.48,0.48,0.48"
-        mask:
-        - FullTileMask
-        layer:
-        - WallLayer
         hard: false
   - type: Tag
     tags:
